@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nhật Đăng - Trang Chủ</title>
-  <link rel="icon" href="/logo.png" type="image/png">
+  <link rel="icon" href="./logo.png" type="image/png">
   <script src="https://unpkg.com/feather-icons"></script>
   <style>
     html, body {
@@ -165,10 +165,8 @@
     .facebook { background: #1877f2; }
     .youtube  { background: #ff0000; }
     .tiktok   { background: #000000; }
-    .canva    { background: #00c4cc; }
-    .bitly    { background: #ee6123; }
-    .email    { background: #d44638; }
-    .zalo     { background: #0180ef; }
+    .email    { background: #ff0000; }
+    .zalo     { background: #1877f2; }
 
     .social a::after {
       content: attr(data-tooltip);
@@ -317,13 +315,13 @@
   </button>
 
   <!-- Background Music -->
-  <audio id="backgroundMusic" src="/nhacnen.mp3" autoplay loop></audio>
+  <audio id="backgroundMusic" src="./nhacnen.mp3" loop></audio>
 
   <!-- Card Content -->
   <div class="card">
-    <img class="avatar" src="/avatar.png" alt="Ảnh đại diện">
+    <img class="avatar" src="./avatar.png" alt="Ảnh đại diện">
     <h1>ND CO., LTD</h1>
-    <p>Chào mừng đến với ND Co., Ltd – được phát triển bởi Nhật Đăng. Tại đây, chúng tôi cung cấp các dịch vụ hoàn toàn miễn phí. Chúc bạn có trải nghiệm thật vui vẻ khi sử dụng dịch vụ. ND Co., Ltd trân trọng cảm ơn!</p>
+    <p>Chào mừng đến với ND Co., Ltd – được phát triển bởi Nhật Đăng. Tại đây cung cấp các công cụ miễn phí. Chúc bạn có trải nghiệm vui vẻ khi sử dụng!</p>
 
     <!-- Social Links -->
     <div class="social">
@@ -336,22 +334,16 @@
       <a href="https://www.tiktok.com/@nhatdang_10" class="tiktok" target="_blank" data-tooltip="TikTok">
         <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok">
       </a>
-      <a href="https://nhat-dang.my.canva.site" class="canva" target="_blank" data-tooltip="Canva">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/canva.svg" alt="Canva">
-      </a>
-      <a href="https://bit.ly/m/nhatdang10" class="bitly" target="_blank" data-tooltip="Bitly">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/bitly.svg" alt="Bitly">
-      </a>
       <a href="mailto:lienhe.nhatdang@gmail.com" class="email" data-tooltip="Email">
         <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email">
       </a>
       <a href="https://zalo.me/0379065349" class="zalo" target="_blank" data-tooltip="Zalo">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zalo.svg" alt="Zalo">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zalo.svg" alt="Zalo" style="width: 34px; height: 34px">
       </a>
     </div>
 
     <!-- Game Button -->
-    <button class="btn game-btn" onclick="window.open('/dino', '_blank')">Dino - Nhật Đăng </button>
+    <button class="btn game-btn" onclick="window.open('/dino', '_blank')">Dino - Nhật Đăng</button>
 
     <!-- TTS Button -->
     <button class="btn tts-btn" onclick="window.open('/tts', '_blank')">Chuyển Văn Bản Thành Giọng Nói - Nhật Đăng</button>
@@ -367,7 +359,7 @@
   </div>
 
   <!-- Toast Notification -->
-  <div class="toast toast-welcome">Trang web có nhạc nền. Cảm ơn bạn đã ghé thăm và ủng hộ chúng tôi!</div>
+  <div class="toast toast-welcome">Trang web có nhạc nền. Cảm ơn bạn đã ghé thăm và ủng hộ!</div>
 
   <script>
     const music = document.getElementById("backgroundMusic");
@@ -390,7 +382,7 @@
     });
 
     function shareWebsite() {
-      const textToCopy = "Trang chủ của ND Co., Ltd: https://nhatdang-0.github.io";
+      const textToCopy = "Trang chủ của ND Co., Ltd: https://nd-site.github.io";
       navigator.clipboard.writeText(textToCopy).then(() => {
         const toast = document.createElement("div");
         toast.className = "toast";
