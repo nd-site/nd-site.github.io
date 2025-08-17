@@ -65,9 +65,46 @@
 <button class="btn" onclick="window.open('https://youtu.be/e5xF_QpxgOc','_blank')">
   Mở trên YouTube
 </button>
-<button class="btn" style="background:#6A64FF; color:white; margin-top:8px;" onclick="window.location.href='https://nd-site.github.io'">
-  Trang chủ
-</button>
-  
+
+  <!-- Đặt ở cuối body -->
+  <div class="home-wrapper">
+    <!-- Nút Trang Chủ -->
+    <a href="https://nd-site.github.io" class="home-btn">
+      <img src="/homebtn.png" alt="Trang chủ">
+    </a>
+
+    <style>
+      .home-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        cursor: pointer;
+        z-index: 9999;
+        animation: float 3s ease-in-out infinite;
+        text-decoration: none;
+      }
+      .home-btn img {
+        max-width: 60%;
+        max-height: 60%;
+        object-fit: contain;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+      .home-btn:hover {
+        transform: scale(1.05);
+        transition: 0.3s;
+      }
+    </style>
+  </div>
 </body>
 </html>
