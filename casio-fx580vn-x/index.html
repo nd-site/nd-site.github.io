@@ -1,74 +1,48 @@
-import React, { useMemo, useRef, useState, useEffect } from "react";
-
-/**
-
-FX‑580VN X – Web Emulator (single file) ✅ Hai dòng hiển thị: biểu thức (trên) + kết quả (dưới) ✅ Giao diện giống thật (tỉ lệ, màu, nhóm phím) ✅ Các chế độ: DEG/RAD, hiển thị NORM/FIX/SCI ✅ Function: + − × ÷, (), %, x^y, x^2, √, 10^x, e^x, sin/cos/tan (+inverse), ln/log, Ans, π, e ✅ Bộ nhớ: MC, MR, M+, M− ✅ Phím SHIFT để gọi chức năng phụ (màu vàng) ✅ Bàn phím máy tính/PC hỗ trợ nhập số và toán tử ⚠️ Ghi chú Đây là phiên bản mô phỏng sát giao diện và bao phủ phần lớn tác vụ phổ biến. Máy gốc có rất nhiều mode nâng cao (ma trận, phương trình, số phức, thống kê, fraction “a b/c”…) mà bạn có thể bổ sung dần trong khối ENGINE ở cuối file (đã để sẵn hook). Cách dùng: import và render ở bất kỳ nơi nào trong app React của bạn. */ 
-
-// ----------------------------- Utils ----------------------------- const clamp = (n, a, b) => Math.min(Math.max(n, a), b);
-
-// Format số theo FIX/SCI/NORM (đơn giản hoá, có thể mở rộng) function formatNumber(value, mode, fixDigits) { if (!isFinite(value)) return "Math Error"; if (mode === "SCI") { return value.toExponential(clamp(fixDigits ?? 9, 0, 10)); } if (mode === "FIX") { return value.toFixed(clamp(fixDigits ?? 2, 0, 10)).replace(/.0+$/, (m)=>m.replace(/0+$/,'')); } // NORM: cắt gọn bớt 0 thừa const s = value.toString(); // Giới hạn 14 chữ số có nghĩa để mô phỏng LCD if (/e/i.test(s)) return value.toExponential(9); let trimmed = value.toPrecision(14).replace(/.0+$/,'').replace(/(.[0-9]*[1-9])0+$/,'$1'); // loại bỏ trường hợp 1.2300000000000 -> 1.23 if (trimmed.includes("e")) return value.toExponential(9); if (Number(trimmed) === Math.trunc(Number(trimmed))) return String(Math.trunc(Number(trimmed))); return trimmed; }
-
-// Giai thừa (n!) với n nguyên không âm, mở rộng dùng Gamma cho số thực dương gần nguyên. function factorial(x) { if (x < 0) return NaN; if (Math.abs(x - Math.round(x)) < 1e-12) { let n = Math.round(x); if (n > 170) return Infinity; // tràn double let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; } // Gamma(x+1) xấp xỉ cho số không nguyên – dùng Stirling giản lược const pi = Math.PI; const twoPi = 2 * pi; const n = x + 1; return Math.sqrt(twoPi / n) * Math.pow(n / Math.E, n); }
-
-// ---------------------- Tokenizer & Parser (RPN) ---------------------- const isDigit = (c) => /[0-9]/.test(c);
-
-function tokenize(expr) { const tokens = []; let i = 0; while (i < expr.length) { const c = expr[i]; if (c === ' ') { i++; continue; } if (isDigit(c) || c === '.') { let j = i + 1; while (j < expr.length && /[0-9.]/.test(expr[j])) j++; tokens.push({ type: 'num', value: expr.slice(i, j) }); i = j; continue; } // identifiers (functions/const): pi, e, sin, cos, tan, ln, log, Ans if (/[a-zA-Zµ]/.test(c)) { let j = i + 1; while (j < expr.length && /[a-zA-Z0-9_]/.test(expr[j])) j++; const id = expr.slice(i, j); tokens.push({ type: 'id', value: id }); i = j; continue; } // operators & parens & comma if ("+-*/^()%!,".includes(c)) { if (c === '%') tokens.push({ type: 'op', value: '%' }); else if (c === '!') tokens.push({ type: 'postfix', value: '!' }); else if (c === ',') tokens.push({ type: 'comma', value: ',' }); else if (c === '(' || c === ')') tokens.push({ type: 'paren', value: c }); else tokens.push({ type: 'op', value: c }); i++; continue; } // implicit multiply: ) ( or number followed by id/( if (c === '√') { tokens.push({ type: 'id', value: 'sqrt' }); i++; continue; } // skip unknowns i++; } return tokens; }
-
-const precedence = { '+':1, '-':1, '*':2, '/':2, '^':3 }; const rightAssoc = { '^': true };
-
-// Coerce implicit multiplication into explicit '' function injectImplicitMultiply(tokens) { const out = []; for (let i = 0; i < tokens.length; i++) { const t = tokens[i]; out.push(t); const a = t; const b = tokens[i+1]; if (!b) continue; const aType = a.type; const bType = b.type; const aIsValue = (aType === 'num' || aType === 'id' || (aType === 'paren' && a.value === ')') || aType === 'postfix'); const bIsStartValue = (bType === 'num' || bType === 'id' || (bType === 'paren' && b.value === '(')); if (aIsValue && bIsStartValue) { // Except: operator between or comma etc. if (!(b.type === 'id' && (b.value === 'sin' || b.value === 'cos' || b.value === 'tan' || b.value === 'ln' || b.value === 'log' || b.value === 'sqrt' || b.value === 'abs' || b.value === 'exp'))) { out.push({ type: 'op', value: '' }); } } } return out; }
-
-function toRPN(tokens) { const output = []; const stack = []; const funcs = new Set(['sin','cos','tan','asin','acos','atan','ln','log','sqrt','abs','exp','pow','min','max']); const idsAsFunc = (t) => t.type === 'id' && funcs.has(t.value); const isFunc = idsAsFunc;
-
-for (let i = 0; i < tokens.length; i++) { const t = tokens[i]; if (t.type === 'num' || (t.type === 'id' && !isFunc(t))) { output.push(t); } else if (isFunc(t)) { stack.push(t); } else if (t.type === 'comma') { while (stack.length && stack[stack.length-1].value !== '(') output.push(stack.pop()); } else if (t.type === 'op') { const o1 = t.value; while (stack.length) { const top = stack[stack.length-1]; if (top.type === 'op') { const o2 = top.value; if ((rightAssoc[o1] && precedence[o1] < precedence[o2]) || (!rightAssoc[o1] && precedence[o1] <= precedence[o2])) { output.push(stack.pop()); continue; } } else if (top.type === 'id' && funcs.has(top.value)) { output.push(stack.pop()); continue; } break; } stack.push(t); } else if (t.type === 'postfix' && t.value === '!') { output.push(t); } else if (t.type === 'paren' && t.value === '(') { stack.push(t); } else if (t.type === 'paren' && t.value === ')') { while (stack.length && stack[stack.length-1].value !== '(') output.push(stack.pop()); stack.pop(); // pop '(' if (stack.length && stack[stack.length-1].type === 'id' && funcs.has(stack[stack.length-1].value)) { output.push(stack.pop()); } } } while (stack.length) output.push(stack.pop()); return output; }
-
-function evaluateRPN(rpn, { modeAngle, constants, Ans }) { const stack = []; const toRad = (x) => modeAngle === 'DEG' ? (x * Math.PI / 180) : x; const fromRad = (x) => modeAngle === 'DEG' ? (x * 180 / Math.PI) : x;
-
-for (const t of rpn) { if (t.type === 'num') { stack.push(parseFloat(t.value)); } else if (t.type === 'id') { if (t.value === 'pi' || t.value === 'π') stack.push(Math.PI); else if (t.value === 'e') stack.push(Math.E); else if (t.value.toLowerCase() === 'ans') stack.push(Ans ?? 0); else { // should not reach (functions handled as ids but consumed later) // push 0 as fallback stack.push(0); } } else if (t.type === 'op') { const b = stack.pop(); const a = stack.pop(); switch (t.value) { case '+': stack.push(a + b); break; case '-': stack.push(a - b); break; case '*': stack.push(a * b); break; case '/': stack.push(b === 0 ? Infinity : a / b); break; case '^': stack.push(Math.pow(a, b)); break; case '%': // tạm thời: a % => a * 0.01 (khi parse đã chèn '%' như op đơn? ở đây xử lý như postfix 1-op) stack.push((a ?? 0) * (b ?? 0) * 0 + (a ?? 0) * 0.01); // không dùng trong pipeline này break; default: stack.push(NaN); } } else if (t.type === 'postfix' && t.value === '!') { const a = stack.pop(); stack.push(factorial(a)); } else if (t.type === 'id') { // no-op here (handled below) } else { // function calls are emitted as id tokens placed after args in RPN // handled via cases below }
-
-// function application when token is id after its args in RPN if (t.type === 'id') { const fn = t.value; switch (fn) { case 'sin': { const a = stack.pop(); stack.push(Math.sin(toRad(a))); break; } case 'cos': { const a = stack.pop(); stack.push(Math.cos(toRad(a))); break; } case 'tan': { const a = stack.pop(); stack.push(Math.tan(toRad(a))); break; } case 'asin': { const a = stack.pop(); stack.push(fromRad(Math.asin(a))); break; } case 'acos': { const a = stack.pop(); stack.push(fromRad(Math.acos(a))); break; } case 'atan': { const a = stack.pop(); stack.push(fromRad(Math.atan(a))); break; } case 'ln': { const a = stack.pop(); stack.push(Math.log(a)); break; } case 'log': { const a = stack.pop(); stack.push(Math.log10(a)); break; } case 'sqrt': { const a = stack.pop(); stack.push(Math.sqrt(a)); break; } case 'abs': { const a = stack.pop(); stack.push(Math.abs(a)); break; } case 'exp': { const a = stack.pop(); stack.push(Math.exp(a)); break; } case 'pow': { const b = stack.pop(); const a = stack.pop(); stack.push(Math.pow(a,b)); break; } case 'min': { const b = stack.pop(); const a = stack.pop(); stack.push(Math.min(a,b)); break; } case 'max': { const b = stack.pop(); const a = stack.pop(); stack.push(Math.max(a,b)); break; } default: break; } } 
-
-} return stack.pop(); }
-
-function safeEvalExpression(expr, ctx) { try { // chuyển % postfix kiểu “50%” => “(500.01)” để thuận parser đơn giản const patched = expr.replace(/([0-9.]+)\s%/g, '(($1)*0.01)'); let tokens = tokenize(patched); tokens = injectImplicitMultiply(tokens); const rpn = toRPN(tokens); const res = evaluateRPN(rpn, ctx); return res; } catch (e) { return NaN; } }
-
-// ----------------------------- UI ----------------------------- const Key = ({ label, sub, onClick, variant = "default", wide = false, active=false }) => { const base = "select-none cursor-pointer rounded-2xl border border-black/50 shadow-sm active:scale-[0.98] transition p-2 text-center flex flex-col items-center justify-center"; const color = variant === 'orange' ? "bg-gradient-to-b from-orange-400 to-amber-500 text-white" : variant === 'gray' ? "bg-gradient-to-b from-gray-200 to-gray-300 text-black" : variant === 'dark' ? "bg-gradient-to-b from-neutral-700 to-neutral-900 text-white" : variant === 'green' ? "bg-gradient-to-b from-emerald-500 to-emerald-600 text-white" : "bg-gradient-to-b from-slate-100 to-slate-200 text-black"; const w = wide ? "col-span-2" : ""; return ( <button onClick={onClick} className={${base} ${color} ${w} relative h-14 ${active? 'ring-2 ring-yellow-400': ''}} > {sub && {sub}} {label} ); };
-
-const Screen = ({ expr, result, modeAngle, dispMode, fixDigits, memFlag, shift }) => { return ( 
-
-<span className={px-1 rounded ${modeAngle==='DEG'?'bg-green-700/40':''}}>DEG <span className={px-1 rounded ${modeAngle==='RAD'?'bg-green-700/40':''}}>RAD | {dispMode}{dispMode==='FIX' ? (${fixDigits}):''} {memFlag && M} {shift && ⇧} 
-
-{expr || '\u00A0'}
-
-{result}
-
-); }; 
-
-export default function Fx580VNX() { const [expr, setExpr] = useState(""); const [result, setResult] = useState("0"); const [Ans, setAns] = useState(0); const [modeAngle, setModeAngle] = useState('DEG'); // or 'RAD' const [dispMode, setDispMode] = useState('NORM'); // NORM | FIX | SCI const [fixDigits, setFixDigits] = useState(2); const [shift, setShift] = useState(false); const [memory, setMemory] = useState(0); const memFlag = memory !== 0;
-
-// preview result live useEffect(() => { if (!expr) { setResult('0'); return; } const val = safeEvalExpression(expr, { modeAngle, Ans }); if (isNaN(val)) setResult('Syntax Error'); else setResult(formatNumber(val, dispMode, fixDigits)); }, [expr, modeAngle, dispMode, fixDigits, Ans]);
-
-const append = (s) => setExpr((e) => (e + s));
-
-const handleEqual = () => { const val = safeEvalExpression(expr, { modeAngle, Ans }); if (!isFinite(val) || isNaN(val)) { setResult('Math Error'); } else { setResult(formatNumber(val, dispMode, fixDigits)); setAns(val); setExpr("" + val); } setShift(false); };
-
-const handleAC = () => { setExpr(""); setResult("0"); setShift(false); }; const handleDEL = () => setExpr((e)=> e.slice(0,-1));
-
-const putFunction = (name, withParen = true) => { append(withParen ? ${name}( : name); };
-
-const handleShift = () => setShift(s=>!s);
-
-const onKey = (e) => { const k = e.key; if (/^[0-9]$/.test(k)) append(k); else if (k === '.') append('.'); else if (k === '+') append('+'); else if (k === '-') append('-'); else if (k === '') append(''); else if (k === '/') append('/'); else if (k === '^') append('^'); else if (k === '(') append('('); else if (k === ')') append(')'); else if (k === 'Enter') handleEqual(); else if (k === 'Backspace') handleDEL(); };
-
-useEffect(()=>{ window.addEventListener('keydown', onKey); return ()=> window.removeEventListener('keydown', onKey); }, [expr, shift, modeAngle, dispMode, fixDigits, Ans]);
-
-// Màn máy + mặt nạ bố cục giống FX-580VN X return ( 
-
-CASIO
-
-fx-580VN X (web)
-
-<Screen expr={expr} result={result} modeAngle={modeAngle} dispMode={dispMode} fixDigits={fixDigits} memFlag={memFlag} shift={shift} /> {/* Khu phím */} <div className="mt-3 grid grid-cols-6 gap-2"> {/* Hàng chức năng trên */} <Key label="SHIFT" variant="orange" onClick={handleShift} active={shift} /> <Key label="MODE" sub="SETUP" variant="gray" onClick={()=>{ // toggle qua ba chế độ hiển thị: NORM -> FIX -> SCI setDispMode((m)=> m==='NORM' ? 'FIX' : (m==='FIX' ? 'SCI' : 'NORM')); }} /> <Key label="DEG" variant="gray" onClick={()=> setModeAngle('DEG')} /> <Key label="RAD" variant="gray" onClick={()=> setModeAngle('RAD')} /> <Key label="x²" sub={shift?"√x":""} onClick={()=>{ if (shift) { putFunction('sqrt'); setShift(false); } else { append('^2'); } }} /> <Key label="^" onClick={()=>append('^')} /> {/* Hàng */} <Key label="sin" sub={"sin⁻¹"} onClick={()=>{ if(shift){ putFunction('asin'); setShift(false);} else putFunction('sin'); }} /> <Key label="cos" sub={"cos⁻¹"} onClick={()=>{ if(shift){ putFunction('acos'); setShift(false);} else putFunction('cos'); }} /> <Key label="tan" sub={"tan⁻¹"} onClick={()=>{ if(shift){ putFunction('atan'); setShift(false);} else putFunction('tan'); }} /> <Key label="ln" onClick={()=> putFunction('ln')} /> <Key label="log" onClick={()=> putFunction('log')} /> <Key label="√" onClick={()=> putFunction('sqrt')} /> {/* Hàng */} <Key label="7" onClick={()=>append('7')} /> <Key label="8" onClick={()=>append('8')} /> <Key label="9" onClick={()=>append('9')} /> <Key label="DEL" variant="dark" onClick={handleDEL} /> <Key label="AC" variant="dark" onClick={handleAC} /> <Key label="÷" onClick={()=>append('/')} /> {/* Hàng */} <Key label="4" onClick={()=>append('4')} /> <Key label="5" onClick={()=>append('5')} /> <Key label="6" onClick={()=>append('6')} /> <Key label="×" onClick={()=>append('*')} /> <Key label="(" onClick={()=>append('(')} /> <Key label=")" onClick={()=>append(')')} /> {/* Hàng */} <Key label="1" onClick={()=>append('1')} /> <Key label="2" onClick={()=>append('2')} /> <Key label="3" onClick={()=>append('3')} /> <Key label="−" onClick={()=>append('-')} /> <Key label="Ans" onClick={()=>append('Ans')} /> <Key label="^y" sub="10^x" onClick={()=>{ if(shift){ putFunction('exp'); setShift(false);} else append('^'); }} /> {/* Hàng */} <Key label="0" onClick={()=>append('0')} /> <Key label="," sub="%" onClick={()=>{ if(shift){ append('%'); setShift(false);} else append(','); }} /> <Key label="." onClick={()=>append('.')} /> <Key label="+" onClick={()=>append('+')} /> <Key label="π" onClick={()=>append('pi')} /> <Key label="e" onClick={()=>append('e')} /> {/* Hàng cuối */} <Key label="x!" onClick={()=>append('!')} /> <Key label="|x|" onClick={()=> putFunction('abs')} /> <Key label="M+" onClick={()=> setMemory((m)=>{ const val = safeEvalExpression(expr||String(Ans), { modeAngle, Ans }); return m + (isFinite(val)? val : 0); })} /> <Key label="M−" onClick={()=> setMemory((m)=>{ const val = safeEvalExpression(expr||String(Ans), { modeAngle, Ans }); return m - (isFinite(val)? val : 0); })} /> <Key label="MR" onClick={()=> append(String(memory))} /> <Key label="MC" onClick={()=> setMemory(0)} /> <Key label="= " variant="green" wide onClick={handleEqual} /> <Key label="FIX" sub="SCI" variant="gray" wide onClick={()=>{ // khi đang FIX thì hỏi số chữ số (giản lược: toggle 0→2→4→6→8) if (dispMode !== 'FIX') { setDispMode('FIX'); return; } setFixDigits((d)=> ({0:2,2:4,4:6,6:8,8:0}[d] ?? 2)); }} /> </div> {/* Hướng dẫn ngắn */} <div className="text-white/80 text-[11px] mt-3 leading-relaxed"> <div><b>Gợi ý:</b> Dùng SHIFT để gọi chức năng phụ in vàng (ví dụ x² ⇄ √x, sin ⇄ sin⁻¹, ^y ⇄ e^x).</div> <div><b>Hiển thị:</b> MODE đổi NORM→FIX→SCI. FIX nhấn nhiều lần để thay số chữ số.</div> <div><b>Góc:</b> DEG/RAD đổi đơn vị cho sin/cos/tan và arc.</div> <div><b>Bộ nhớ:</b> M+/M−/MR/MC giống máy thật. Ans lưu kết quả gần nhất.</div> </div> </div> </div> 
-
-); }
-
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Casio fx-580VN X Emulator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="casio-keypad">
+    <div class="row">
+      <button class="btn orange">SHIFT</button>
+      <button class="btn red">ALPHA</button>
+      <button class="btn gray">MODE</button>
+      <button class="btn gray">SETUP</button>
+    </div>
+    <div class="row">
+      <button class="btn white">7</button>
+      <button class="btn white">8</button>
+      <button class="btn white">9</button>
+      <button class="btn gray">÷</button>
+    </div>
+    <div class="row">
+      <button class="btn white">4</button>
+      <button class="btn white">5</button>
+      <button class="btn white">6</button>
+      <button class="btn gray">×</button>
+    </div>
+    <div class="row">
+      <button class="btn white">1</button>
+      <button class="btn white">2</button>
+      <button class="btn white">3</button>
+      <button class="btn gray">−</button>
+    </div>
+    <div class="row">
+      <button class="btn white">0</button>
+      <button class="btn white">.</button>
+      <button class="btn white">Ans</button>
+      <button class="btn gray">+</button>
+    </div>
+    <div class="row">
+      <button class="btn blue">CALC</button>
+      <button class="btn blue">SOLVE</button>
+      <button class="btn green">=</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
