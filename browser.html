@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Trình duyệt ND - ND Co., Ltd</title>
+  <title>Trình duyệt ND - Nhật Đăng</title>
   <link rel="icon" href="https://nd-site.github.io/logo.png">
   <style>
     :root {
@@ -59,7 +59,7 @@
   </style>
 </head>
 <body>
-  <header>🌐 ND Co., Ltd - Trình duyệt ND</header>
+  <header>ND Co., Ltd - Trình duyệt ND</header>
   <div class="wrap">
     <div class="card">
       <h1>Đi tới URL nếu đúng, nếu sai thì tìm kiếm</h1>
@@ -82,14 +82,11 @@
         </div>
       </div>
       <p class="hint">*Trên web, không thể ép "trình duyệt mặc định của máy". Việc mở ngoài phụ thuộc app/trình duyệt bạn đang dùng.</p>
-      <div class="home-btn">
-        <button onclick="window.location.href='https://nhatdang-0.github.io'">🏠 Trang chủ ND</button>
-      </div>
     </div>
   </div>
   <footer>ND Co., Ltd – Ecosystem</footer>
 
-  <div class="toast" id="toast">Chào mừng bạn đến với Trình duyệt ND 🌐</div>
+  <div class="toast" id="toast">Chào mừng bạn đến với Trình duyệt ND</div>
 
   <script>
     const $q = document.getElementById('q');
@@ -161,5 +158,45 @@
       setTimeout(() => toast.classList.remove('show'), 4000);
     });
   </script>
+  
+  <div class="home-wrapper">
+    <!-- Nút Trang Chủ -->
+    <a href="https://nd-site.github.io" class="home-btn">
+      <img src="/homebtn.png" alt="Trang chủ">
+    </a>
+
+    <style>
+      .home-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        cursor: pointer;
+        z-index: 9999;
+        animation: float 3s ease-in-out infinite;
+        text-decoration: none;
+      }
+      .home-btn img {
+        max-width: 60%;
+        max-height: 60%;
+        object-fit: contain;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+      .home-btn:hover {
+        transform: scale(1.05);
+        transition: 0.3s;
+      }
+    </style>
+  </div>
 </body>
 </html>
