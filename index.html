@@ -1,460 +1,248 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nhật Đăng - Trang Chủ</title>
-  <link rel="icon" href="./logo.png" type="image/png">
-  <script src="https://unpkg.com/feather-icons"></script>
-  <style>
-    html, body {
-      overflow-x: hidden; /* Ẩn thanh cuộn ngang */
-      margin: 0;
-      padding: 10px;
-      font-family: system-ui, sans-serif;
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    /* Global Styles */
-    body {
-      background: linear-gradient(135deg, #d1e8ff, #fefefe);
-      background-attachment: fixed; /* GIỮ NỀN CỐ ĐỊNH */
-      background-repeat: no-repeat;
-      background-size: cover;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
-
-    /* Controls */
-    .controls {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      z-index: 1000;
-    }
-
-    .icon-btn {
-      cursor: pointer;
-      background: #0066cc;
-      color: white;
-      padding: 12px;
-      border-radius: 50%;
-      transition: background 0.3s ease, transform 0.3s ease;
-      border: none;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .icon-btn:hover {
-      background: #004999;
-      transform: scale(1.1);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    #volumeControl {
-      width: 100px;
-      cursor: pointer;
-    }
-
-    /* Share Button */
-    .share-btn {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      background: #0066cc;
-      color: white;
-      border-radius: 50%;
-      padding: 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      border: none;
-    }
-
-    .share-btn:hover {
-      background: #004999;
-      transform: scale(1.1);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Card */
-    .card {
-      background: white;
-      padding: 40px;
-      padding-inline: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      max-width: 500px;
-      width: 100%;
-      margin-bottom: 40px; /* Thêm dòng này */
-    }
-
-    .avatar {
-      width: 170px;
-      height: 170px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 20px;
-    }
-
-    h1 {
-      margin-bottom: 6px;
-      margin-top: -17px;
-      color: #5271ff;
-      font-size: 35px;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    p {
-      font-size: 20px;
-      color: #555;
-      margin-top: 0;
-      margin-bottom: 12px;
-      font-weight: 500;
-      text-align: justify;
-    }
-
-    /* Social Links */
-    .social {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .social a {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .social a:hover {
-      transform: scale(1.1);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .social img {
-      width: 26px;
-      height: 26px;
-      filter: brightness(0) invert(1);
-    }
-
-    .facebook { background: #1877f2; }
-    .youtube  { background: #ff0000; }
-    .tiktok   { background: #000000; }
-    .email    { background: #ff0000; }
-    .zalo     { background: #1877f2; }
-
-    .social a::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: -28px;
-      background: rgba(0, 0, 0, 0.75);
-      color: white;
-      font-size: 12px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-
-    .social a:hover::after {
-      opacity: 1;
-    }
-
-    /* Toast */
-    .toast {
-      position: fixed;
-      left: 50%;
-      background: rgba(0, 102, 204, 0.65);
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      animation: fadeInOut 5s ease;
-      z-index: 1001;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      backdrop-filter: blur(2px);
-    }
-    /* Toast - Welcome */
-    .toast.toast-welcome {
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    /* Toast -Share */
-    .toast.share {
-      bottom: 20px;
-      transform: translateX(-50%);
-    }
-
-    @keyframes fadeInOut {
-      0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
-      10% { opacity: 1; transform: translateX(-50%) translateY(0); }
-      90% { opacity: 1; }
-      100% { opacity: 0; transform: translateX(-50%) translateY(10px); }
-    }
-
-    /* Buttons */
-    .btn {
-      width: 100%; /* Chiếm toàn bộ chiều ngang khung chứa */
-      max-width: 500px; /* Giới hạn tối đa chiều rộng nếu khung lớn */
-      min-width: 280px;
-      margin: 10px auto; /* Điều chỉnh khoảng cách đều hơn */
-      color: white;
-      font-size: 20px;
-      padding: 18px 36px;
-      border-radius: 50vw;
-      border: none;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-      font-weight: bold;
-      text-align: center;
-      display: block; /* Đảm bảo chiếm nguyên dòng và căn giữa */
-    }
-
-    .btn:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .game-btn {
-      background: linear-gradient(135deg, #4caf50, #ffeb3b); /* Gradient xanh lá cây tươi và vàng nhạt */
-    }
-
-    .game-btn:hover {
-      background: linear-gradient(135deg, #66bb6a, #fff176); /* Sáng hơn khi hover */
-    }
-
-    .tts-btn {
-      background: linear-gradient(135deg, #2196f3, #ff7043); /* Gradient xanh dương tươi và cam sáng */
-    }
-
-    .tts-btn:hover {
-      background: linear-gradient(135deg, #42a5f5, #ff8a65); /* Sáng hơn khi hover */
-    }
-
-    .dinhdanganh-btn {
-      background: linear-gradient(135deg, #ff5252, #40e0d0); /* Gradient đỏ tươi và xanh ngọc sáng */
-    }
-
-    .dinhdanganh-btn:hover {
-      background: linear-gradient(135deg, #ff867f, #5ef5e0); /* Sáng hơn khi hover */
-    }
-
-    .maunen-btn {
-      background: linear-gradient(135deg, #ff80ab, #9370db); /* Gradient hồng tươi và tím pastel */
-    }
-
-    .maunen-btn:hover {
-      background: linear-gradient(135deg, #ff99bb, #b39ddb); /* Sáng hơn khi hover */
-    }
-
-    .qr-btn {
-      background: linear-gradient(135deg, #00c6ff, #0072ff); /* Gradient xanh dương tươi sáng */
-    }
-
-    .qr-btn:hover {
-      background: linear-gradient(135deg, #00bfff, #0056b3); /* Sáng hơn khi hover */
-    }
-
-    .tabshare-btn {
-      background: linear-gradient(135deg, #00c4cc, #8a3ffc); /* Gradient xanh dương tươi sáng */
-    }
-
-    .tabshare-btn:hover {
-      background: linear-gradient(135deg, #00b3b3, #7a2ac2); /* Sáng hơn khi hover */
-    }
-
-    .video-btn {
-      background: linear-gradient(135deg, #f83600, #f9d423); /* Gradient cam vàng */
-    }
-
-    .video-btn:hover {
-      background: linear-gradient(135deg, #ff5733, #ffeb66); /* Sáng hơn khi hover */
-    }
-
-    .browser-btn {
-      background: linear-gradient(135deg, #ff5252, #40e0d0); /* Gradient đỏ tươi và xanh ngọc sáng */
-    }
-
-    .browser-btn:hover {
-      background: linear-gradient(135deg, #ff867f, #5ef5e0); /* Sáng hơn khi hover */
-    }
-
-    /* Footer */
-    .footer {
-      margin-top: -20px; /* Giảm khoảng cách với nội dung phía trên */
-      padding: 10px; /* Giảm khoảng cách bên trong */
-      font-size: 16px; /* Kích thước chữ giữ nguyên */
-      color: #ffffff; /* Màu chữ trắng */
-      text-align: center;
-      background: linear-gradient(135deg, #0066cc, #004999); /* Gradient xanh dương đậm */
-      border-radius: 10px; /* Bo góc nhẹ */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng */
-      max-width: 100%; /* Đảm bảo chiều rộng tối đa */
-      position: relative; /* Đặt vị trí tương đối để tránh lỗi bố cục */
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nhật Đăng - Trang Chủ</title>
+    <link rel="icon" href="/logo.png" type="image/png">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        html, body {
+            overflow-x: hidden; margin: 0; padding: 10px; font-family: system-ui, sans-serif;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #d1e8ff, #fefefe); background-attachment: fixed; background-repeat: no-repeat; background-size: cover; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
+        }
+        .controls {
+            position: fixed; top: 15px; left: 15px; display: flex; align-items: center; gap: 15px; z-index: 1000;
+        }
+        .icon-btn {
+            cursor: pointer; background: #0066cc; color: white; padding: 12px; border-radius: 50%; transition: background 0.3s ease, transform 0.3s ease; border: none; font-size: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .icon-btn:hover {
+            background: #004999; transform: scale(1.1); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        #volumeControl { width: 100px; cursor: pointer; }
+        .share-btn {
+            position: fixed; top: 15px; right: 15px; background: #0066cc; color: white; border-radius: 50%; padding: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border: none;
+        }
+        .share-btn:hover {
+            background: #004999; transform: scale(1.1); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        .card {
+            background: white; padding: 40px 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); text-align: center; max-width: 500px; width: 100%; margin-bottom: 40px;
+        }
+        .avatar {
+            width: 170px; height: 170px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;
+        }
+        h1 {
+            margin-bottom: 6px; margin-top: -17px; color: #5271ff; font-size: 35px; font-weight: bold; text-align: center;
+        }
+        p {
+            font-size: 20px; color: #555; margin-top: 0; margin-bottom: 12px; font-weight: 500; text-align: justify;
+        }
+        .social {
+            display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+        }
+        .social a {
+            width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative;
+        }
+        .social a:hover {
+            transform: scale(1.1); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .social img {
+            width: 26px; height: 26px; filter: brightness(0) invert(1);
+        }
+        .facebook { background: #1877f2; }
+        .youtube  { background: #ff0000; }
+        .tiktok   { background: #000000; }
+        .email    { background: #ff0000; }
+        .zalo     { background: #1877f2; }
+        .social a::after {
+            content: attr(data-tooltip); position: absolute; bottom: -28px; background: rgba(0, 0, 0, 0.75); color: white; font-size: 12px; padding: 4px 8px; border-radius: 4px; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; left: 50%; transform: translateX(-50%);
+        }
+        .social a:hover::after { opacity: 1; }
+        .toast {
+            position: fixed; left: 50%; background: rgba(0, 102, 204, 0.65); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; animation: fadeInOut 5s ease; z-index: 1001; display: flex; justify-content: center; align-items: center; text-align: center; backdrop-filter: blur(2px);
+        }
+        .toast.toast-welcome {
+            top: 50%; transform: translate(-50%, -50%);
+        }
+        .toast.share {
+            bottom: 20px; transform: translateX(-50%);
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            90% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+        }
+        .btn {
+            width: 100%; max-width: 500px; min-width: 288px; margin: 10px auto; color: white; font-size: 20px; padding: 18px 36px; border-radius: 50vw; border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; font-weight: bold; text-align: center; display: block;
+        }
+        .btn:hover {
+            transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .btn:active {
+            transform: translateY(2px); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .game-btn {
+            background: linear-gradient(135deg, #4caf50, #ffeb3b);
+        }
+        .game-btn:hover {
+            background: linear-gradient(135deg, #66bb6a, #fff176);
+        }
+        .tts-btn {
+            background: linear-gradient(135deg, #2196f3, #ff7043);
+        }
+        .tts-btn:hover {
+            background: linear-gradient(135deg, #42a5f5, #ff8a65);
+        }
+        .dinhdanganh-btn {
+            background: linear-gradient(135deg, #ff5252, #40e0d0);
+        }
+        .dinhdanganh-btn:hover {
+            background: linear-gradient(135deg, #ff867f, #5ef5e0);
+        }
+        .maunen-btn {
+            background: linear-gradient(135deg, #ff80ab, #9370db);
+        }
+        .maunen-btn:hover {
+            background: linear-gradient(135deg, #ff99bb, #b39ddb);
+        }
+        .qr-btn {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+        }
+        .qr-btn:hover {
+            background: linear-gradient(135deg, #00bfff, #0056b3);
+        }
+        .tabshare-btn {
+            background: linear-gradient(135deg, #00c4cc, #8a3ffc);
+        }
+        .tabshare-btn:hover {
+            background: linear-gradient(135deg, #00b3b3, #7a2ac2);
+        }
+        .video-btn {
+            background: linear-gradient(135deg, #f83600, #f9d423);
+        }
+        .video-btn:hover {
+            background: linear-gradient(135deg, #ff5733, #ffeb66);
+        }
+        .browser-btn {
+            background: linear-gradient(135deg, #ff5252, #40e0d0);
+        }
+        .browser-btn:hover {
+            background: linear-gradient(135deg, #ff867f, #5ef5e0);
+        }
+        .footer {
+            margin-top: -20px; padding: 10px; font-size: 16px; color: #ffffff; text-align: center; background: linear-gradient(135deg, #0066cc, #004999); border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); max-width: 100%; position: relative;
+        }
+    </style>
 </head>
 <body>
-  <!-- Music Controls -->
-  <div class="controls">
-    <button class="icon-btn" id="musicToggleBtn" title="Bật/Tắt nhạc">
-      <i data-feather="play"></i>
-    </button>
-    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" title="Âm lượng" />
-  </div>
-
-  <!-- Share Button -->
-  <button class="share-btn" onclick="shareWebsite()" title="Chia sẻ">
-    <i data-feather="share-2"></i>
-  </button>
-
-  <!-- Background Music -->
-  <audio id="backgroundMusic" src="./nhacnen.mp3" loop></audio>
-
-  <!-- Card Content -->
-  <div class="card">
-    <img class="avatar" src="./avatar.png" alt="Ảnh đại diện">
-    <h1>ND CO., LTD</h1>
-    <p>Chào mừng đến với ND Co., Ltd – được phát triển bởi Nhật Đăng. Tại đây cung cấp các công cụ miễn phí. Chúc bạn có trải nghiệm vui vẻ khi sử dụng!</p>
-
-    <!-- Social Links -->
-    <div class="social">
-      <a href="https://facebook.com/nhatdang10.nd" class="facebook" target="_blank" data-tooltip="Facebook">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook">
-      </a>
-      <a href="https://www.youtube.com/@NhatDang_10" class="youtube" target="_blank" data-tooltip="YouTube">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube">
-      </a>
-      <a href="https://www.tiktok.com/@nhatdang_10" class="tiktok" target="_blank" data-tooltip="TikTok">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok">
-      </a>
-      <a href="mailto:lienhe.nhatdang@gmail.com" class="email" data-tooltip="Email">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email">
-      </a>
-      <a href="https://zalo.me/0379065349" class="zalo" target="_blank" data-tooltip="Zalo">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zalo.svg" alt="Zalo" style="width: 34px; height: 34px">
-      </a>
+    <!-- Music Controls -->
+    <div class="controls">
+        <button class="icon-btn" id="musicToggleBtn" title="Bật/Tắt nhạc">
+            <i data-feather="play"></i>
+        </button>
+        <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" title="Âm lượng" />
     </div>
 
-    <!-- Game Button -->
-    <button class="btn game-btn" onclick="location.href='/dino'">Dino - Nhật Đăng</button>
+    <!-- Share Button -->
+    <button class="share-btn" onclick="shareWebsite()" title="Chia sẻ">
+        <i data-feather="share-2"></i>
+    </button>
 
-    <!-- TTS Button -->
-    <button class="btn tts-btn" onclick="location.href='/chuyen-van-ban-thanh-giong-noi'">Chuyển Văn Bản Thành Giọng Nói - Nhật Đăng</button>
+    <!-- Background Music -->
+    <audio id="backgroundMusic" src="/nhacnen.mp3" loop></audio>
 
-    <!-- dinhdanganh Buton -->
-    <button class="btn dinhdanganh-btn" onclick="location.href='/chuyen-doi-dinh-dang-loai-anh'">Chuyển Đổi Định Dạng Loại Ảnh - Nhật Đăng</button>
+    <!-- Card Content -->
+    <div class="card">
+        <img class="avatar" src="/avatar.png" alt="Ảnh đại diện">
+        <h1>ND CO., LTD</h1>
+        <p>Chào mừng đến với ND Co., Ltd – được phát triển bởi Nhật Đăng. Tại đây cung cấp các công cụ miễn phí. Chúc bạn có trải nghiệm vui vẻ khi sử dụng!</p>
+        <!-- Social Links -->
+        <div class="social">
+            <a href="https://facebook.com/nhatdang10.nd" class="facebook" target="_blank" data-tooltip="Facebook">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook">
+            </a>
+            <a href="https://www.youtube.com/@NhatDang_10" class="youtube" target="_blank" data-tooltip="YouTube">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube">
+            </a>
+            <a href="https://www.tiktok.com/@nhatdang_10" class="tiktok" target="_blank" data-tooltip="TikTok">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok">
+            </a>
+            <a href="mailto:lienhe.nhatdang@gmail.com" class="email" data-tooltip="Email">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email">
+            </a>
+            <a href="https://zalo.me/0379065349" class="zalo" target="_blank" data-tooltip="Zalo">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zalo.svg" alt="Zalo" style="width: 34px; height: 34px">
+            </a>
+        </div>
+        <!-- Buttons -->
+        <button class="btn game-btn" onclick="location.href='/dino'">Dino - Nhật Đăng</button>
+        <button class="btn tts-btn" onclick="location.href='/chuyen-van-ban-thanh-giong-noi'">Chuyển Văn Bản Thành Giọng Nói - Nhật Đăng</button>
+        <button class="btn dinhdanganh-btn" onclick="location.href='/chuyen-doi-dinh-dang-loai-anh'">Chuyển Đổi Định Dạng Loại Ảnh - Nhật Đăng</button>
+        <button class="btn maunen-btn" onclick="location.href='/nen-gradient-pastel'">Nền Gradient Pastel - Nhật Đăng</button>
+        <button class="btn qr-btn" onclick="location.href='/qr'">Tạo Mã QR - Nhật Đăng</button>
+        <button class="btn tabshare-btn" onclick="location.href='/share'">Share - Nhật Đăng</button>
+        <button class="btn video-btn" onclick="location.href='/video'">Video - Nhật Đăng</button>
+        <button class="btn browser-btn" onclick="location.href='/browser'">Trình Duyệt - Nhật Đăng</button>
+        <!-- Nút mẫu
+        <button class="tennut-btn" onclick="location.href='<nơi chuyển tới (web; thư mục;...)>'">Tên nút</button>
+        -->
+    </div>
 
-    <!-- nen-gradient-pastel Button -->
-    <button class="btn maunen-btn" onclick="location.href='/nen-gradient-pastel'">Nền Gradient Pastel - Nhật Đăng</button>
+    <!-- Toast Notification -->
+    <div class="toast toast-welcome">Trang web có nhạc nền. Cảm ơn bạn đã ghé thăm và ủng hộ!</div>
 
-    <!-- qr Button -->
-    <button class="btn qr-btn" onclick="location.href='/qr'">Tạo Mã QR - Nhật Đăng</button>
+    <script>
+        const music = document.getElementById("backgroundMusic");
+        const volumeControl = document.getElementById("volumeControl");
+        const toggleBtn = document.getElementById("musicToggleBtn");
 
-    <!-- share Button -->
-    <button class="btn tabshare-btn" onclick="location.href='/share'">Share - Nhật Đăng</button>
+        toggleBtn.addEventListener("click", () => {
+            if (music.paused) {
+                music.play();
+                toggleBtn.innerHTML = '<i data-feather="pause"></i>';
+            } else {
+                music.pause();
+                toggleBtn.innerHTML = '<i data-feather="play"></i>';
+            }
+            feather.replace();
+        });
 
-    <!-- video Button -->
-    <button class="btn video-btn" onclick="location.href='/video'">Video - Nhật Đăng</button>
+        volumeControl.addEventListener("input", function () {
+            music.volume = this.value;
+        });
 
-    <!-- browser Button -->
-    <button class="btn browser-btn" onclick="location.href='/browser'">Trình Duyệt - Nhật Đăng</button>
-    
-    <!-- Nút mẫu
-    <button class="tennut-btn" onclick="location.href='<nơi chuyển tới (web; thư mục;...)>'">Tên nút</button>
--->
-  </div>
+        function shareWebsite() {
+            const textToCopy = "Trang chủ của ND Co., Ltd: https://nd-site.github.io";
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const toast = document.createElement("div");
+                toast.className = "toast";
+                toast.textContent = "Đã sao chép liên kết vào bộ nhớ tạm!";
+                document.body.appendChild(toast);
+                setTimeout(() => { toast.remove(); }, 5000);
+            });
+        }
 
-  <!-- Toast Notification -->
-  <div class="toast toast-welcome">Trang web có nhạc nền. Cảm ơn bạn đã ghé thăm và ủng hộ!</div>
-
-  <script>
-    const music = document.getElementById("backgroundMusic");
-    const volumeControl = document.getElementById("volumeControl");
-    const toggleBtn = document.getElementById("musicToggleBtn");
-
-    toggleBtn.addEventListener("click", () => {
-      if (music.paused) {
-        music.play();
-        toggleBtn.innerHTML = '<i data-feather="pause"></i>';
-      } else {
-        music.pause();
-        toggleBtn.innerHTML = '<i data-feather="play"></i>';
-      }
-      feather.replace();
-    });
-
-    volumeControl.addEventListener("input", function () {
-      music.volume = this.value;
-    });
-
-    function shareWebsite() {
-      const textToCopy = "Trang chủ của ND Co., Ltd: https://nd-site.github.io";
-      navigator.clipboard.writeText(textToCopy).then(() => {
-        const toast = document.createElement("div");
-        toast.className = "toast";
-        toast.textContent = "Đã sao chép liên kết vào bộ nhớ tạm!";
-        document.body.appendChild(toast);
+        window.addEventListener("load", () => {
+            toggleBtn.innerHTML = music.paused
+                ? '<i data-feather="play"></i>'
+                : '<i data-feather="pause"></i>';
+            feather.replace();
+        });
 
         setTimeout(() => {
-          toast.remove();
+            document.querySelector(".toast").style.display = "none";
         }, 5000);
-      });
-    }
 
-    window.addEventListener("load", () => {
-      toggleBtn.innerHTML = music.paused
-        ? '<i data-feather="play"></i>'
-        : '<i data-feather="pause"></i>';
-      feather.replace();
-    });
-
-    setTimeout(() => {
-      document.querySelector(".toast").style.display = "none";
-    }, 5000);
-
-    feather.replace();
-  </script>
-  <footer class="footer">
-    © 2025 ND Co., Ltd. All rights reserved.
-  </footer>
+        feather.replace();
+    </script>
+    <footer class="footer">
+        © 2025 ND Co., Ltd. All rights reserved.
+    </footer>
 </body>
 </html>
