@@ -18,4 +18,44 @@
 <body>
   <iframe src="https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fnd-site%2Fnd-site.github.io%2Frefs%2Fheads%2Fmain%2Fdocx%2Ffile%2FKT%2520TX1%2520LS10%25202025-2026%2520(Gi%25E1%25BA%25A3%2520%25C4%2591%25E1%25BB%258Bnh).docx"></iframe>
 </body>
+
+  <div class="home-wrapper">
+    <!-- Nút Trang Chủ -->
+    <a href="https://nd-site.github.io" class="home-btn">
+      <img src="/homebtn.png" alt="Trang chủ">
+    </a>
+
+    <style>
+      .home-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        cursor: pointer;
+        z-index: 9999;
+        animation: float 3s ease-in-out infinite;
+        text-decoration: none;
+      }
+      .home-btn img {
+        max-width: 60%;
+        max-height: 60%;
+        object-fit: contain;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+      .home-btn:hover {
+        transform: scale(1.05);
+        transition: 0.3s;
+      }
+    </style>
+  </div>
 </html>
