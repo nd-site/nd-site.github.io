@@ -14,5 +14,6 @@ const data = {
     "ChatGPT-trendtannhacthinhphong01": "https://chatgpt.com/share/68a84616-3f04-800f-aa6d-2d948bb52212",
     "ki-tu-dac-biet": "https://bietmaytinh.com/ki-tu-dac-biet",
     "khao-sat-hoc-sinh-sunshine-01-edit": "https://docs.google.com/forms/d/1eosA5Fkvo2cmK2Wn2h4oUnJ3Vv9heduBfyXgEa8E3pE/edit",
-    "khao-sat-hoc-sinh-sunshine-01": "https://forms.gle/Hk8T2rtZa9fgQTSc8"
+    "khao-sat-hoc-sinh-sunshine-01": "https://forms.gle/Hk8T2rtZa9fgQTSc8",
+    "viustotal-kiam-tra-virus": "https://www.virustotal.com",
 };
