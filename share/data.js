@@ -17,4 +17,5 @@ const data = {
     "khao-sat-hoc-sinh-sunshine-01": "https://forms.gle/Hk8T2rtZa9fgQTSc8",
     "viustotal-kiam-tra-virus": "https://www.virustotal.com",
     "rophim-one-piece": "https://www.rophim.mx/xem-phim/one-piece-dao-hai-tac.sestHLxS",
+    "DS-mau-pptx-01": "https://thcsquantoan.haiphong.edu.vn/tu-lieu-day-hoc/70-mau-tro-choi-cho-thiet-ke-bai-giang-powerpoint/ctmb/14169/11023",
 };
