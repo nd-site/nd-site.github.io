@@ -19,5 +19,6 @@ const data = {
     "rophim-one-piece": "https://www.rophim.mx/xem-phim/one-piece-dao-hai-tac.sestHLxS",
     "DS-mau-pptx-01": "https://thcsquantoan.haiphong.edu.vn/tu-lieu-day-hoc/70-mau-tro-choi-cho-thiet-ke-bai-giang-powerpoint/ctmb/14169/11023",
     "DS-mau-pptx-02": "https://powerpoint.com.vn/tong-hop-cac-tro-choi-tren-powerpoint-hay-nhat/",
-    "huong-dan-lap-orc-k3": "https://drive.google.com/file/d/1AOU1rDx5mYKqH74nHP_x68HPIpPUJIV5/view",
+    "huong-dan-lap-orc-k3-p1": "https://drive.google.com/file/d/1AOU1rDx5mYKqH74nHP_x68HPIpPUJIV5/view",
+    "huong-dan-lap-orc-k3-p2": "https://drive.google.com/file/d/1PFrSXynIh8tJfJVD5Pso4TWYW5MJkm-B/view",
 };
