@@ -23,4 +23,5 @@ const data = {
     "huong-dan-lap-orc-k3-p2": "https://drive.google.com/file/d/1PFrSXynIh8tJfJVD5Pso4TWYW5MJkm-B/view",
     "huong-dan-lap-orc-k3-video": "https://youtu.be/NAhcErfUF6E?si=rM9prH6aURH1NihU",
     "code-mau-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/2iM6eHGGq332fFD9ocretBzJMfb",
+    "code-ND1-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/348quXFqki93P97Hs4vTauAzFqP",
 };
