@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python - Nhật Đăng</title>
+  <link rel="icon" href="/logo.png" type="image/png">
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(90deg, #ffe138, #ff8c00d3);
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    h2 {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 40px;
+    }
+    textarea {
+      width: 80%;
+      height: 200px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #666;
+      resize: none;
+      font-family: monospace;
+      font-size: 15px;
+      background: rgba(255,255,255,0.85);
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #666;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      background: linear-gradient(90deg, #0044ff, #1100ff);
+      color: white;
+      transition: 0.3s;
+    }
+    button:hover { transform: scale(1.05); }
+    pre {
+      margin-top: 15px;
+      width: 80%;
+      background: rgba(0,0,0,0.9);
+      color: #00ff99;
+      padding: 10px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>Python - Nhật Đăng</h2>
+  <textarea id="code">print("Xin chào! Đây là trang chạy code Python của ND Co., Ltd")</textarea>
+  <input id="userInput" placeholder="Nhập dữ liệu cho input() nếu có.">
+  <button onclick="runPython()">Chạy Code</button>
+  <pre id="output">Đang tải Pyodide...</pre>
+
+  <script>
+    let pyodide;
+    (async () => {
+      pyodide = await loadPyodide();
+      document.getElementById("output").textContent = "Xin chào! Đây là trang chạy code Python của ND Co., Ltd";
+    })();
+
+    async function runPython() {
+      const code = document.getElementById("code").value;
+      const output = document.getElementById("output");
+      const userInput = document.getElementById("userInput").value.trim().split(/\s+/);
+      let inputIndex = 0;
+
+      // Hàm input() giả
+      function fakeInput() {
+        if (inputIndex < userInput.length) {
+          return userInput[inputIndex++];
+        } else {
+          throw new Error("Thiếu dữ liệu input()");
+        }
+      }
+
+      output.textContent = "Đang chạy...";
+      try {
+        await pyodide.runPythonAsync(`
+import sys, io, builtins
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+`);
+        // Gán input giả
+        pyodide.globals.set("input", fakeInput);
+        await pyodide.runPythonAsync(code);
+        const stdout = pyodide.runPython("sys.stdout.getvalue()");
+        const stderr = pyodide.runPython("sys.stderr.getvalue()");
+        output.textContent = stdout || stderr || "Hoàn tất (không có output)";
+      } catch (err) {
+        output.textContent = "Lỗi: " + err;
+      }
+    }
+  </script>
+</body>
+</html>
