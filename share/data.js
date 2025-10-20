@@ -28,4 +28,5 @@ const data = {
     "code-ND3-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/34DkdV6eolKMrXLGRlWFt231zA3",
     "AirConsole-game-online": "https://www.airconsole.com/",
     "toan-thuc-te-10-kntt-thay-cu": "https://drive.google.com/file/d/1dB44kyMeZXn2-e4EFJPEwVvg_LvQvvjn/view?usp=drivesdk",
+    "code-GB1-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/34JcjWoP66399F9VXpKqm120a1G",
 };
