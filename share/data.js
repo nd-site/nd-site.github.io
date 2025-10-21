@@ -31,4 +31,5 @@ const data = {
     "code-GB1-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/34JcjWoP66399F9VXpKqm120a1G",
     "code-ĐK-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/347yTgpJAq4gz9WJOCHmob8YIrb",
     "van-01": "https://chatgpt.com/share/68f6524c-1f14-800f-8650-dced75ca569f",
+    "code-GB2-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/34Mg5lRsLSfaIwXArl53lSETaO6",
 };
