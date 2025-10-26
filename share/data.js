@@ -35,4 +35,5 @@ const data = {
     "code-GB3-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/34VTECMhAcEPpPav5uNzeZn7nUg",
     "code-GB4-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/34VfAWWmmhC8rVex4L4RcGXcpWW",
     "code-GB5-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/34XIMd4iGbRTmOgdQP9eNMzUxLI",
+    "tai-video-va-anh-tiktok": "https://snaptik.fit/vi",
 };
