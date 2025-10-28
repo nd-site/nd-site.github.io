@@ -196,7 +196,7 @@
       feather.replace();
     });
     volumeControl.addEventListener("input", function(){ music.volume = this.value; });
-    function shareWebsite(){ navigator.clipboard.writeText("Trang chủ của ND Co., Ltd: https://nd-site.github.io").then(()=>{ const toast=document.createElement("div"); toast.className="toast"; toast.textContent="Đã sao chép liên kết vào bộ nhớ tạm!"; document.body.appendChild(toast); setTimeout(()=>{toast.remove();},5000);}); }
+    function shareWebsite(){ navigator.clipboard.writeText("Trang chủ của ND Labs: https://nd-site.github.io").then(()=>{ const toast=document.createElement("div"); toast.className="toast"; toast.textContent="Đã sao chép liên kết vào bộ nhớ tạm!"; document.body.appendChild(toast); setTimeout(()=>{toast.remove();},5000);}); }
     window.addEventListener("load",()=>{ toggleBtn.innerHTML= music.paused?'<i data-feather="play"></i>':'<i data-feather="pause"></i>'; feather.replace();});
     setTimeout(()=>{document.querySelector(".toast").style.display="none";},5000);
     feather.replace();
