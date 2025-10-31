@@ -38,4 +38,5 @@ const data = {
     "tai-video-va-anh-tiktok": "https://snaptik.fit/vi",
     "code-BĐNG-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/34W9rzIrlpTolo0bNGQpWWNxaxH",
     "code-Vẹo1-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/34pKDzJ1CFQQaz3IRSt0LHXEObC",
+    "icon-svg": "https://www.svgrepo.com/",
 };
