@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Timer ms</title>
+<title>Timer ms Rõ Ràng</title>
 
 <style>
     body {
@@ -16,10 +16,16 @@
         margin: 0;
         background: #f0f0f0;
     }
-    #display {
-        font-size: 60px;
+
+    #sec {
+        font-size: 70px;
         font-weight: bold;
-        margin: 20px 0;
+    }
+
+    #ms {
+        font-size: 40px;
+        color: #444;
+        margin-top: -10px;
     }
 </style>
 </head>
@@ -27,7 +33,8 @@
 <body>
 
 <input id="seconds" type="number" placeholder="Nhập giây">
-<div id="display">0.000</div>
+<div id="sec">0</div>
+<div id="ms">000</div>
 <button id="start">Bắt đầu</button>
 <button id="stop">Dừng</button>
 
@@ -43,36 +50,40 @@ function loop() {
     const diff = endTime - now;
 
     if (diff <= 0) {
-        document.getElementById("display").textContent = "0.000";
+        sec.textContent = "0";
+        ms.textContent = "000";
         running = false;
         return;
     }
 
-    // Hiển thị giây + mili-giây, ví dụ 12.345
-    const sec = (diff / 1000).toFixed(3);
-    document.getElementById("display").textContent = sec;
+    const total = diff / 1000;
+    const s = Math.floor(total);
+    const m = Math.floor((total - s) * 1000);
+
+    sec.textContent = s;
+    ms.textContent = String(m).padStart(3, "0");
 
     rafId = requestAnimationFrame(loop);
 }
 
-document.getElementById("start").addEventListener("click", () => {
-    const input = parseFloat(document.getElementById("seconds").value);
-    if (!input || input <= 0) return;
+start.onclick = () => {
+    const t = parseFloat(seconds.value);
+    if (!t || t <= 0) return;
 
     running = true;
-    endTime = performance.now() + input * 1000;
+    endTime = performance.now() + t * 1000;
 
-    // Hiển thị ngay lập tức, không delay
-    document.getElementById("display").textContent = input.toFixed(3);
+    sec.textContent = Math.floor(t);
+    ms.textContent = "000";
 
     cancelAnimationFrame(rafId);
     requestAnimationFrame(loop);
-});
+};
 
-document.getElementById("stop").addEventListener("click", () => {
+stop.onclick = () => {
     running = false;
     cancelAnimationFrame(rafId);
-});
+};
 </script>
 
 </body>
