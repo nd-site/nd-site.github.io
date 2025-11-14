@@ -13,31 +13,47 @@
         background: #f0f0f0;
         font-family: Arial, sans-serif;
     }
+
     .container {
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+    }
+
+    .row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 25px; 
+    }
+
+    .label {
+        font-size: 30px;
+        width: 180px;
+        text-align: right; 
+    }
+
+    .block {
         text-align: center;
     }
-    .row {
-        margin-bottom: 50px;
-    }
-    .label {
-        font-size: 25px;
-        margin-right: 10px;
-    }
+
     .timer {
         font-size: 60px;
         font-weight: bold;
-        margin-top: 10px;
+        margin: 10px 0 20px;
     }
+
     input {
-        font-size: 25px;
+        font-size: 26px;
         padding: 8px 12px;
-        width: 120px;
+        width: 150px;
         text-align: center;
     }
+
     button {
         font-size: 28px;
         padding: 12px 35px;
-        margin: 10px;
+        margin: 8px;
         border: none;
         border-radius: 10px;
         cursor: pointer;
@@ -50,27 +66,27 @@
 
 <div class="container">
 
-    <!-- Đếm ngược -->
+    <!-- Đếm NGƯỢC -->
     <div class="row">
-        <div>
-            <span class="label">Đếm ngược</span>
+        <div class="label">Đếm ngược</div>
+        <div class="block">
             <input id="countInput" type="number" placeholder="Giây">
+            <div id="countdown" class="timer">0.000</div>
+            <button onclick="startCountdown()">Start</button>
+            <button onclick="stopCountdown()">Dừng</button>
+            <button onclick="resetCountdown()">Reset</button>
         </div>
-        <div id="countdown" class="timer">0.000</div>
-        <button onclick="startCountdown()">Start</button>
-        <button onclick="stopCountdown()">Dừng</button>
-        <button onclick="resetCountdown()">Reset</button>
     </div>
 
-    <!-- Đếm xuôi -->
+    <!-- Đếm XUÔI -->
     <div class="row">
-        <div>
-            <span class="label">Đếm xuôi</span>
+        <div class="label">Đếm xuôi</div>
+        <div class="block">
+            <div id="timerUp" class="timer">0.000</div>
+            <button id="startUp">Start</button>
+            <button id="stopUp">Dừng</button>
+            <button id="resetUp">Reset</button>
         </div>
-        <div id="timerUp" class="timer">0.000</div>
-        <button id="startUp">Start</button>
-        <button id="stopUp">Dừng</button>
-        <button id="resetUp">Reset</button>
     </div>
 
 </div>
@@ -90,7 +106,7 @@ function startCountdown() {
     if (cdRunning) return;
 
     if (cdDuration === 0) {
-        cdDuration = parseInt(document.getElementById("countInput").value || 0) * 1000;
+        cdDuration = (parseInt(document.getElementById("countInput").value) || 0) * 1000;
     }
     if (cdDuration <= 0) return;
 
