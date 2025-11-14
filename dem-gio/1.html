@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Timer Chuẩn</title>
+<title>Timer ms</title>
 
 <style>
     body {
@@ -27,7 +27,7 @@
 <body>
 
 <input id="seconds" type="number" placeholder="Nhập giây">
-<div id="display">0</div>
+<div id="display">0.000</div>
 <button id="start">Bắt đầu</button>
 <button id="stop">Dừng</button>
 
@@ -43,25 +43,27 @@ function loop() {
     const diff = endTime - now;
 
     if (diff <= 0) {
-        document.getElementById("display").textContent = 0;
+        document.getElementById("display").textContent = "0.000";
         running = false;
         return;
     }
 
-    const sec = Math.ceil(diff / 1000);
+    // Hiển thị giây + mili-giây, ví dụ 12.345
+    const sec = (diff / 1000).toFixed(3);
     document.getElementById("display").textContent = sec;
 
     rafId = requestAnimationFrame(loop);
 }
 
 document.getElementById("start").addEventListener("click", () => {
-    const input = parseInt(document.getElementById("seconds").value);
+    const input = parseFloat(document.getElementById("seconds").value);
     if (!input || input <= 0) return;
 
-    // fix delay: render ngay lập tức trước animation frame
     running = true;
     endTime = performance.now() + input * 1000;
-    document.getElementById("display").textContent = input;
+
+    // Hiển thị ngay lập tức, không delay
+    document.getElementById("display").textContent = input.toFixed(3);
 
     cancelAnimationFrame(rafId);
     requestAnimationFrame(loop);
