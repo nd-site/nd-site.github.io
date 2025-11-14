@@ -56,7 +56,7 @@
 
   /* Số hiển thị */
   .display {
-    font-size: 4.5rem; /* Kích thước lớn, dễ đọc */
+    font-size: 4rem; /* Kích thước phù hợp cho SS.mmm */
     font-weight: 700;
     color: #1e88e5; /* Màu xanh nổi bật */
     padding: 10px 20px;
@@ -64,7 +64,7 @@
     background: #f4f7fa;
     width: 100%;
     text-align: center;
-    font-variant-numeric: tabular-nums; /* Giữ độ rộng số ổn định */
+    font-variant-numeric: tabular-nums;
   }
   
   /* Số đếm ngược (đặc biệt) */
@@ -162,7 +162,7 @@
     <label>Đếm Ngược (Timer):</label>
     <div class="countdown-setup">
       <input type="number" id="countdownInput" placeholder="giây" min="0" value="60">
-      <span id="down" class="display">01.000</span>
+      <span id="down" class="display">60.000</span>
     </div>
   </div>
   
@@ -188,14 +188,16 @@ const resetBtn = document.getElementById('reset');
 // Giá trị mặc định ban đầu cho input
 countdownInput.value = '60'; 
 
+/**
+ * Định dạng thời gian từ mili giây sang chuỗi SS.mmm
+ * Tuyệt đối không có phút.
+ */
 function formatTime(ms) {
   const totalSeconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
   const milliseconds = ms % 1000;
   
-  // Định dạng MM:SS.mmm
-  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+  // Định dạng SS.mmm
+  return `${totalSeconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
 }
 
 function updateDisplay() {
