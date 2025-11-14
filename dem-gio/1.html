@@ -24,10 +24,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 2rem;
+    font-size: 2.5rem; /* tăng hiển thị */
   }
   label {
-    width: 100px;
+    width: 120px;
     text-align: right;
     font-weight: bold;
   }
@@ -37,8 +37,8 @@
     gap: 10px;
   }
   input[type="number"] {
-    width: 80px;
-    font-size: 1rem;
+    width: 100px;
+    font-size: 1.2rem;
     text-align: center;
   }
 </style>
@@ -93,16 +93,18 @@ function tick() {
 
 startStopBtn.addEventListener('click', () => {
   if (!running) {
-    // start
-    if (countdownInput.value) downStart = parseInt(countdownInput.value) * 1000;
+    // start hoặc tiếp tục
+    if (upStart === 0 && countdownInput.value) {
+      downStart = parseInt(countdownInput.value) * 1000;
+    }
     interval = setInterval(tick, 10);
     running = true;
     startStopBtn.textContent = 'Dừng';
   } else {
-    // stop
+    // tạm dừng
     clearInterval(interval);
     running = false;
-    startStopBtn.textContent = 'Bắt đầu';
+    startStopBtn.textContent = 'Tiếp tục';
   }
 });
 
@@ -110,7 +112,7 @@ resetBtn.addEventListener('click', () => {
   clearInterval(interval);
   running = false;
   upStart = 0;
-  downStart = countdownInput.value ? parseInt(countdownInput.value)*1000 : 0;
+  downStart = countdownInput.value ? parseInt(countdownInput.value) * 1000 : 0;
   updateDisplay();
   startStopBtn.textContent = 'Bắt đầu';
 });
