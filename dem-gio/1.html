@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Đếm Giây Chuẩn</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đếm Giây + MilliGiây</title>
 
 <style>
     body {
@@ -17,57 +17,57 @@
         background: #f0f0f0;
     }
     #display {
-        font-size: 80px;
-        margin: 20px 0;
+        font-size: 60px;
         font-weight: bold;
+        margin: 20px 0;
     }
     input, button {
         padding: 10px 20px;
-        font-size: 18px;
+        font-size: 20px;
         margin: 5px;
     }
 </style>
 </head>
 
 <body>
-    <input id="seconds" type="number" placeholder="Nhập số giây" />
-    <div id="display">0</div>
-    <button onclick="startTimer()">Bắt đầu</button>
-    <button onclick="stopTimer()">Dừng</button>
+
+<input id="seconds" type="number" placeholder="Nhập giây" />
+<div id="display">0.000</div>
+<button onclick="startTimer()">Bắt đầu</button>
+<button onclick="stopTimer()">Dừng</button>
 
 <script>
 let running = false;
 let endTime = 0;
 let rafId = null;
 
-// Tick cực chuẩn, dựa trên thời gian thực
 function tick() {
     if (!running) return;
 
-    const now = Date.now();
+    const now = performance.now();  // chính xác cao hơn Date.now()
     const diff = endTime - now;
 
     if (diff <= 0) {
-        document.getElementById("display").textContent = 0;
+        document.getElementById("display").textContent = "0.000";
         running = false;
         return;
     }
 
-    const seconds = Math.ceil(diff / 1000);
+    const seconds = (diff / 1000).toFixed(3); // hiển thị giây + ms
     document.getElementById("display").textContent = seconds;
 
     rafId = requestAnimationFrame(tick);
 }
 
 function startTimer() {
-    const total = parseInt(document.getElementById("seconds").value);
+    const total = parseFloat(document.getElementById("seconds").value);
     if (!total || total <= 0) return;
 
     running = true;
-    endTime = Date.now() + total * 1000;
+    endTime = performance.now() + total * 1000;
 
     cancelAnimationFrame(rafId);
-    tick();
+    tick(); // chạy ngay, không delay
 }
 
 function stopTimer() {
@@ -75,5 +75,6 @@ function stopTimer() {
     cancelAnimationFrame(rafId);
 }
 </script>
+
 </body>
 </html>
