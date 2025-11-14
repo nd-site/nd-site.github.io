@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Precise Timer</title>
+<title>Timer</title>
 <style>
     body {
         margin: 0;
@@ -16,14 +16,27 @@
     .container {
         text-align: center;
     }
-    #timer {
-        font-size: 80px;
+    .row {
+        margin-bottom: 50px;
+    }
+    .label {
+        font-size: 25px;
+        margin-right: 10px;
+    }
+    .timer {
+        font-size: 60px;
         font-weight: bold;
-        margin-bottom: 30px;
+        margin-top: 10px;
+    }
+    input {
+        font-size: 25px;
+        padding: 8px 12px;
+        width: 120px;
+        text-align: center;
     }
     button {
-        font-size: 30px;
-        padding: 15px 40px;
+        font-size: 28px;
+        padding: 12px 35px;
         margin: 10px;
         border: none;
         border-radius: 10px;
@@ -31,54 +44,114 @@
         background: #333;
         color: white;
     }
-    button:active {
-        opacity: 0.7;
-    }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="timer">0.000</div>
-    <button id="start">Start</button>
-    <button id="stop">Dừng</button>
-    <button id="reset">Reset</button>
+
+    <!-- Đếm ngược -->
+    <div class="row">
+        <div>
+            <span class="label">Đếm ngược</span>
+            <input id="countInput" type="number" placeholder="Giây">
+        </div>
+        <div id="countdown" class="timer">0.000</div>
+        <button onclick="startCountdown()">Start</button>
+        <button onclick="stopCountdown()">Dừng</button>
+        <button onclick="resetCountdown()">Reset</button>
+    </div>
+
+    <!-- Đếm xuôi -->
+    <div class="row">
+        <div>
+            <span class="label">Đếm xuôi</span>
+        </div>
+        <div id="timerUp" class="timer">0.000</div>
+        <button id="startUp">Start</button>
+        <button id="stopUp">Dừng</button>
+        <button id="resetUp">Reset</button>
+    </div>
+
 </div>
 
 <script>
-let startTime = 0;
-let running = false;
-let interval;
+/* ===== ĐẾM NGƯỢC ===== */
+let cdRunning = false;
+let cdInterval;
+let cdStartTime;
+let cdDuration = 0;
 
-function formatTime(ms) {
-    let totalSeconds = ms / 1000;
-    return totalSeconds.toFixed(3); // luôn hiện mili-giây
+function format(ms) {
+    return (ms / 1000).toFixed(3);
 }
 
-document.getElementById("start").onclick = () => {
-    if (running) return;
-    running = true;
-    startTime = Date.now() - (elapsed || 0);
-    interval = setInterval(() => {
-        elapsed = Date.now() - startTime;
-        document.getElementById("timer").textContent = formatTime(elapsed);
+function startCountdown() {
+    if (cdRunning) return;
+
+    if (cdDuration === 0) {
+        cdDuration = parseInt(document.getElementById("countInput").value || 0) * 1000;
+    }
+    if (cdDuration <= 0) return;
+
+    cdRunning = true;
+    cdStartTime = Date.now();
+    cdInterval = setInterval(() => {
+        let left = cdDuration - (Date.now() - cdStartTime);
+        if (left <= 0) {
+            left = 0;
+            clearInterval(cdInterval);
+            cdRunning = false;
+        }
+        document.getElementById("countdown").textContent = format(left);
     }, 10);
+}
+
+function stopCountdown() {
+    if (!cdRunning) return;
+    cdDuration -= (Date.now() - cdStartTime);
+    clearInterval(cdInterval);
+    cdRunning = false;
+}
+
+function resetCountdown() {
+    cdRunning = false;
+    clearInterval(cdInterval);
+    cdDuration = 0;
+    document.getElementById("countdown").textContent = "0.000";
+}
+
+
+/* ===== ĐẾM XUÔI ===== */
+let upRunning = false;
+let upInterval;
+let upStartTime;
+let upElapsed = 0;
+
+function updateUp() {
+    upElapsed = Date.now() - upStartTime;
+    document.getElementById("timerUp").textContent = format(upElapsed);
+}
+
+document.getElementById("startUp").onclick = () => {
+    if (upRunning) return;
+    upRunning = true;
+    upStartTime = Date.now() - upElapsed;
+    upInterval = setInterval(updateUp, 10);
 };
 
-document.getElementById("stop").onclick = () => {
-    if (!running) return;
-    running = false;
-    clearInterval(interval);
+document.getElementById("stopUp").onclick = () => {
+    if (!upRunning) return;
+    upRunning = false;
+    clearInterval(upInterval);
 };
 
-document.getElementById("reset").onclick = () => {
-    running = false;
-    clearInterval(interval);
-    elapsed = 0;
-    document.getElementById("timer").textContent = "0.000";
+document.getElementById("resetUp").onclick = () => {
+    upRunning = false;
+    clearInterval(upInterval);
+    upElapsed = 0;
+    document.getElementById("timerUp").textContent = "0.000";
 };
-
-let elapsed = 0;
 </script>
 
 </body>
