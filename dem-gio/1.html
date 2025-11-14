@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Đếm Giây + MilliGiây</title>
+<title>Timer Chuẩn</title>
 
 <style>
     body {
@@ -21,59 +21,56 @@
         font-weight: bold;
         margin: 20px 0;
     }
-    input, button {
-        padding: 10px 20px;
-        font-size: 20px;
-        margin: 5px;
-    }
 </style>
 </head>
 
 <body>
 
-<input id="seconds" type="number" placeholder="Nhập giây" />
-<div id="display">0.000</div>
-<button onclick="startTimer()">Bắt đầu</button>
-<button onclick="stopTimer()">Dừng</button>
+<input id="seconds" type="number" placeholder="Nhập giây">
+<div id="display">0</div>
+<button id="start">Bắt đầu</button>
+<button id="stop">Dừng</button>
 
 <script>
 let running = false;
 let endTime = 0;
 let rafId = null;
 
-function tick() {
+function loop() {
     if (!running) return;
 
-    const now = performance.now();  // chính xác cao hơn Date.now()
+    const now = performance.now();
     const diff = endTime - now;
 
     if (diff <= 0) {
-        document.getElementById("display").textContent = "0.000";
+        document.getElementById("display").textContent = 0;
         running = false;
         return;
     }
 
-    const seconds = (diff / 1000).toFixed(3); // hiển thị giây + ms
-    document.getElementById("display").textContent = seconds;
+    const sec = Math.ceil(diff / 1000);
+    document.getElementById("display").textContent = sec;
 
-    rafId = requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(loop);
 }
 
-function startTimer() {
-    const total = parseFloat(document.getElementById("seconds").value);
-    if (!total || total <= 0) return;
+document.getElementById("start").addEventListener("click", () => {
+    const input = parseInt(document.getElementById("seconds").value);
+    if (!input || input <= 0) return;
 
+    // fix delay: render ngay lập tức trước animation frame
     running = true;
-    endTime = performance.now() + total * 1000;
+    endTime = performance.now() + input * 1000;
+    document.getElementById("display").textContent = input;
 
     cancelAnimationFrame(rafId);
-    tick(); // chạy ngay, không delay
-}
+    requestAnimationFrame(loop);
+});
 
-function stopTimer() {
+document.getElementById("stop").addEventListener("click", () => {
     running = false;
     cancelAnimationFrame(rafId);
-}
+});
 </script>
 
 </body>
