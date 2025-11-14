@@ -24,7 +24,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 2.5rem; /* tăng hiển thị */
+    font-size: 3rem;
   }
   label {
     width: 120px;
@@ -47,12 +47,12 @@
 <div class="timer-container">
   <div class="timer-box">
     <label>Đếm xuôi:</label>
-    <span id="up">00:00.000</span>
+    <span id="up">00.000</span>
   </div>
   <div class="timer-box">
     <label>Đếm ngược:</label>
     <input type="number" id="countdownInput" placeholder="s" min="0">
-    <span id="down">00:00.000</span>
+    <span id="down">00.000</span>
   </div>
   <div class="controls">
     <button id="startStop">Bắt đầu</button>
@@ -61,8 +61,8 @@
 </div>
 
 <script>
-let upStart = 0;
-let downStart = 0;
+let upStart = 0;       // mili giây
+let downStart = 0;     // mili giây
 let interval = null;
 let running = false;
 
@@ -73,16 +73,14 @@ const startStopBtn = document.getElementById('startStop');
 const resetBtn = document.getElementById('reset');
 
 function formatTime(ms) {
-  const minutes = Math.floor(ms / 60000);
-  const seconds = Math.floor((ms % 60000) / 1000);
+  const seconds = Math.floor(ms / 1000);
   const milliseconds = ms % 1000;
-  return `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}.${milliseconds.toString().padStart(3,'0')}`;
+  return `${seconds.toString().padStart(2,'0')}.${milliseconds.toString().padStart(3,'0')}`;
 }
 
 function updateDisplay() {
   upDisplay.textContent = formatTime(upStart);
-  let downMs = Math.max(0, downStart);
-  downDisplay.textContent = formatTime(downMs);
+  downDisplay.textContent = formatTime(Math.max(0, downStart));
 }
 
 function tick() {
@@ -93,7 +91,6 @@ function tick() {
 
 startStopBtn.addEventListener('click', () => {
   if (!running) {
-    // start hoặc tiếp tục
     if (upStart === 0 && countdownInput.value) {
       downStart = parseInt(countdownInput.value) * 1000;
     }
@@ -101,7 +98,6 @@ startStopBtn.addEventListener('click', () => {
     running = true;
     startStopBtn.textContent = 'Dừng';
   } else {
-    // tạm dừng
     clearInterval(interval);
     running = false;
     startStopBtn.textContent = 'Tiếp tục';
