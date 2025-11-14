@@ -2,114 +2,83 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Timer ms Rõ Ràng</title>
-
+<title>Precise Timer</title>
 <style>
     body {
-        font-family: sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
         margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background: #f0f0f0;
-        transform: scale(1.5);   /* phóng to toàn màn hình */
-        transform-origin: top center;
+        font-family: Arial, sans-serif;
     }
-
-    #sec {
+    .container {
+        text-align: center;
+    }
+    #timer {
         font-size: 80px;
         font-weight: bold;
+        margin-bottom: 30px;
     }
-
-    #ms {
-        font-size: 45px;
-        color: #444;
-        margin-top: -10px;
-    }
-
-    button, input {
-        padding: 12px 25px;
-        font-size: 28px;
-        margin: 8px;
-        border-radius: 10px;
+    button {
+        font-size: 30px;
+        padding: 15px 40px;
+        margin: 10px;
         border: none;
-        background: #ddd;
+        border-radius: 10px;
+        cursor: pointer;
+        background: #333;
+        color: white;
     }
-
     button:active {
         opacity: 0.7;
     }
 </style>
 </head>
-
 <body>
 
-<input id="seconds" type="number" placeholder="Nhập giây">
-<div id="sec">0</div>
-<div id="ms">000</div>
-<button id="start">Bắt đầu</button>
-<button id="stop">Dừng</button>
-<button id="reset">Reset</button>
+<div class="container">
+    <div id="timer">0.000</div>
+    <button id="start">Start</button>
+    <button id="stop">Dừng</button>
+    <button id="reset">Reset</button>
+</div>
 
 <script>
+let startTime = 0;
 let running = false;
-let endTime = 0;
-let rafId = null;
+let interval;
 
-function loop() {
-    if (!running) return;
-
-    const now = performance.now();
-    const diff = endTime - now;
-
-    if (diff <= 0) {
-        sec.textContent = "0";
-        ms.textContent = "000";
-        running = false;
-        return;
-    }
-
-    const total = diff / 1000;
-    const s = Math.floor(total);
-    const m = Math.floor((total - s) * 1000);
-
-    sec.textContent = s;
-    ms.textContent = String(m).padStart(3, "0");
-
-    rafId = requestAnimationFrame(loop);
+function formatTime(ms) {
+    let totalSeconds = ms / 1000;
+    return totalSeconds.toFixed(3); // luôn hiện mili-giây
 }
 
-// BẮT ĐẦU
-start.onclick = () => {
-    const t = parseFloat(seconds.value);
-    if (!t || t <= 0) return;
-
+document.getElementById("start").onclick = () => {
+    if (running) return;
     running = true;
-    endTime = performance.now() + t * 1000;
-
-    sec.textContent = Math.floor(t);
-    ms.textContent = "000";
-
-    cancelAnimationFrame(rafId);
-    requestAnimationFrame(loop);
+    startTime = Date.now() - (elapsed || 0);
+    interval = setInterval(() => {
+        elapsed = Date.now() - startTime;
+        document.getElementById("timer").textContent = formatTime(elapsed);
+    }, 10);
 };
 
-// DỪNG ngay lập tức
-stop.onclick = () => {
+document.getElementById("stop").onclick = () => {
+    if (!running) return;
     running = false;
-    cancelAnimationFrame(rafId);
+    clearInterval(interval);
 };
 
-// RESET về 0
-reset.onclick = () => {
+document.getElementById("reset").onclick = () => {
     running = false;
-    cancelAnimationFrame(rafId);
-    sec.textContent = "0";
-    ms.textContent = "000";
+    clearInterval(interval);
+    elapsed = 0;
+    document.getElementById("timer").textContent = "0.000";
 };
+
+let elapsed = 0;
 </script>
 
 </body>
