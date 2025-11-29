@@ -1,171 +1,242 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Tạo mã QR - Nhật Đăng</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="icon" href="../logo.png" type="image/png">
   <style>
-    * {
-      box-sizing: border-box;
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;padding:0;overflow:hidden;font-family:system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      background:linear-gradient(90deg,#a1c4fd,#c2e9fb);gap:18px;padding:24px;
     }
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden; /* ✅ Không cho cuộn */
+    h1{margin:0;color:#0b2940;font-size:clamp(18px,4vw,32px)}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center}
+    input[type="text"]{
+      padding:10px 12px;border-radius:10px;border:0;min-width:200px;font-size:14px;max-width:60vw
     }
-    body {
-      font-family: system-ui, sans-serif;
-      background: linear-gradient(to right, #a1c4fd, #c2e9fb);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    button{
+      padding:10px 14px;border-radius:10px;border:0;background:#00c6ff;color:#fff;cursor:pointer;font-weight:600
     }
-    h1 {
-      color: #333;
-      font-size: 4vw;
-      text-align: center;
-      margin-bottom: 2vh;
-    }
-    input, button {
-      padding: 1.2vh 2vw;
-      border: none;
-      border-radius: 1vh;
-      margin: 1vh 0.5vw;
-      font-size: 2.5vw;
-      max-width: 90vw;
-    }
-    input {
-      width: 70vw;
-      max-width: 400px;
-    }
-    button {
-      background: #00c6ff;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0072ff;
-    }
-    #qr-code {
-      margin-top: 3vh;
-    }
-    canvas {
-      max-width: 80vw;
-      height: auto;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 6vw;
-        margin-bottom: 2vh;
-      }
-
-      input, button {
-        font-size: 4vw;
-        padding: 1.5vh 3vw;
-        margin: 1.5vh 1vw;
-      }
-
-      input {
-        width: 80vw;
-        max-width: none;
-      }
-
-      button {
-        width: auto;
-        min-width: 30vw;
-      }
-
-      canvas {
-        max-width: 90vw;
-      }
+    button.secondary{background:#fff;color:#0072ff;border:1px solid rgba(0,114,255,0.12)}
+    #qr-wrap{border-radius:24px;padding:16px;background:linear-gradient(#ffffff, #f7fbff);box-shadow:0 6px 20px rgba(10,30,60,0.12);display:flex;align-items:center;justify-content:center}
+    canvas{display:block;max-width:min(80vw,420px);height:auto;border-radius:12px}
+    @media (max-width:520px){
+      input[type="text"]{min-width:140px;font-size:13px}
+      button{padding:10px 12px;font-size:13px}
     }
   </style>
 </head>
 <body>
   <h1>Tạo mã QR - Nhật Đăng</h1>
-  <input type="text" id="text" placeholder="Nhập nội dung..." />
-  <button onclick="generateQRCode()">Tạo mã QR</button>
-  <button onclick="downloadQR()">Tải ảnh</button>
-  <div id="qr-code"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <div class="controls">
+    <input id="text" type="text" placeholder="Nhập nội dung..." />
+    <button onclick="generateQRCode()">Tạo mã QR</button>
+    <button class="secondary" onclick="downloadQR()">Tải ảnh</button>
+  </div>
+
+  <div id="qr-wrap">
+    <canvas id="qr-canvas"></canvas>
+  </div>
+
+  <!-- Thư viện qrcode-generator (có getModuleCount & isDark) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
   <script>
-    let qrCanvas; // giữ lại canvas để dùng khi tải
+    // Giữ canvas global
+    const canvas = document.getElementById('qr-canvas');
+    const ctx = canvas.getContext('2d');
+    let lastQR = null; // chứa object qr để render lại khi tải
 
     function generateQRCode() {
-      const text = document.getElementById("text").value.trim();
-      const qrContainer = document.getElementById("qr-code");
-      qrContainer.innerHTML = ""; // Xoá cũ
+      const text = document.getElementById('text').value.trim();
+      if (!text) { alert('Vui lòng nhập nội dung.'); return; }
 
-      if (!text) {
-        alert("Vui lòng nhập nội dung.");
-        return;
+      // Tạo QR (typeNumber = 0 => auto, level H để an toàn)
+      const qr = qrcode(0, 'H');
+      qr.addData(text);
+      qr.make();
+
+      lastQR = qr;
+      drawRoundedQR(qr);
+    }
+
+    function drawRoundedQR(qr, opts = {}) {
+      const moduleCount = qr.getModuleCount();
+      // kích thước mong muốn (px)
+      const desired = opts.size || 420; // will be fit by CSS later
+      const paddingModules = opts.paddingModules ?? 4; // quiet zone in modules
+      const bgRadius = opts.bgRadius ?? 28;
+      const darkColor = opts.darkColor || '#0b2540';
+      const lightColor = opts.lightColor || '#ffffff';
+      const moduleRadiusRatio = opts.moduleRadiusRatio ?? 0.38; // bo góc module (0..0.5)
+
+      // calc moduleSize so that whole QR fits into desired - padding
+      const totalModules = moduleCount + paddingModules * 2;
+      let moduleSize = Math.floor((desired) / totalModules);
+      if (moduleSize < 2) moduleSize = 2;
+      const canvasSize = moduleSize * totalModules;
+
+      // retina handling
+      const ratio = Math.max(1, window.devicePixelRatio || 1);
+      canvas.width = canvasSize * ratio;
+      canvas.height = canvasSize * ratio;
+      canvas.style.width = canvasSize + 'px';
+      canvas.style.height = canvasSize + 'px';
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.clearRect(0,0,canvasSize,canvasSize);
+
+      // draw background with rounded corners
+      roundRect(ctx, 0, 0, canvasSize, canvasSize, bgRadius);
+      ctx.fillStyle = lightColor;
+      ctx.fill();
+
+      // top-left offset in pixels where modules start
+      const offset = paddingModules * moduleSize;
+
+      // draw modules as rounded rects; draw detection patterns last as slightly larger shapes to keep scannable
+      ctx.fillStyle = darkColor;
+      for (let r = 0; r < moduleCount; r++) {
+        for (let c = 0; c < moduleCount; c++) {
+          if (!qr.isDark(r, c)) continue;
+          const x = offset + c * moduleSize;
+          const y = offset + r * moduleSize;
+          const radius = Math.min(moduleSize * moduleRadiusRatio, moduleSize * 0.5);
+          roundRect(ctx, x, y, moduleSize, moduleSize, radius);
+          ctx.fill();
+        }
       }
 
-      // Tạo canvas
-      qrCanvas = document.createElement("canvas");
-      window.QRCode.toCanvas(qrCanvas, text, {
-        width: 256,
-        margin: 1,
-        color: {
-          dark: '#000000',
-          light: '#ffffff'
-        }
-      }, function (error) {
-        if (error) {
-          console.error(error);
-          alert("Không thể tạo mã QR.");
-          return;
-        }
-        qrContainer.appendChild(qrCanvas);
-      });
+      // Optionally emphasize the 3 finder patterns (eyes) with cleaner rounded squares
+      drawFinderPattern(qr, 0, 0, moduleSize, offset); // top-left
+      drawFinderPattern(qr, 0, moduleCount - 7, moduleSize, offset); // top-right
+      drawFinderPattern(qr, moduleCount - 7, 0, moduleSize, offset); // bottom-left
+    }
+
+    // helper to draw rounded rect path
+    function roundRect(ctx, x, y, w, h, r) {
+      const radius = Math.max(0, Math.min(r, Math.min(w,h)/2));
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + w, y, x + w, y + h, radius);
+      ctx.arcTo(x + w, y + h, x, y + h, radius);
+      ctx.arcTo(x, y + h, x, y, radius);
+      ctx.arcTo(x, y, x + w, y, radius);
+      ctx.closePath();
+    }
+
+    // draw finder pattern area as clean layered rounded squares to remain scannable
+    function drawFinderPattern(qr, moduleRow, moduleCol, moduleSize, offset) {
+      // finder is 7x7 modules at those positions; draw three layered boxes: outer, inner light, center dark
+      const x = offset + moduleCol * moduleSize;
+      const y = offset + moduleRow * moduleSize;
+      const size = 7 * moduleSize;
+      const outerRadius = moduleSize * 1.2;
+      const innerRadius = moduleSize * 0.8;
+
+      // outer dark
+      roundRect(ctx, x, y, size, size, outerRadius);
+      ctx.fillStyle = '#0b2540';
+      ctx.fill();
+
+      // inner light (gap)
+      const gap = moduleSize;
+      roundRect(ctx, x + gap, y + gap, size - gap*2, size - gap*2, innerRadius);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+
+      // center dark 3x3
+      const innerX = x + gap*2;
+      const innerY = y + gap*2;
+      const centerSize = 3 * moduleSize;
+      roundRect(ctx, innerX, innerY, centerSize, centerSize, moduleSize * 0.6);
+      ctx.fillStyle = '#0b2540';
+      ctx.fill();
     }
 
     function downloadQR() {
-      if (!qrCanvas) {
-        alert("Bạn chưa tạo mã QR.");
-        return;
+      if (!lastQR) { alert('Bạn chưa tạo mã QR.'); return; }
+      // Tạo canvas xuất file lớn hơn để nét cao
+      const exportSize = 1200; // px chính thức xuất
+      const paddingModules = 4;
+      const moduleCount = lastQR.getModuleCount();
+      const totalModules = moduleCount + paddingModules * 2;
+      const moduleSize = Math.floor(exportSize / totalModules);
+      const finalSize = moduleSize * totalModules;
+
+      // new canvas for export
+      const exportCanvas = document.createElement('canvas');
+      const ratio = 1; // file already large
+      exportCanvas.width = finalSize * ratio;
+      exportCanvas.height = finalSize * ratio;
+      const ectx = exportCanvas.getContext('2d');
+      ectx.setTransform(ratio,0,0,ratio,0,0);
+
+      // background rounded
+      const bgRadius = Math.round(finalSize * 0.06);
+      roundRect(ectx, 0, 0, finalSize, finalSize, bgRadius);
+      ectx.fillStyle = '#ffffff';
+      ectx.fill();
+
+      // draw modules
+      const offset = paddingModules * moduleSize;
+      ectx.fillStyle = '#0b2540';
+      const radius = Math.max(1, Math.floor(moduleSize * 0.36));
+      for (let r = 0; r < moduleCount; r++){
+        for (let c = 0; c < moduleCount; c++){
+          if (!lastQR.isDark(r,c)) continue;
+          const x = offset + c * moduleSize;
+          const y = offset + r * moduleSize;
+          roundRect(ectx, x, y, moduleSize, moduleSize, radius);
+          ectx.fill();
+        }
       }
 
-      const size = 300;
-      const padding = 20;
-      const radius = 24;
+      // finder patterns
+      drawFinderPatternExport(ectx, lastQR, 0, 0, moduleSize, offset);
+      drawFinderPatternExport(ectx, lastQR, 0, moduleCount - 7, moduleSize, offset);
+      drawFinderPatternExport(ectx, lastQR, moduleCount - 7, 0, moduleSize, offset);
 
-      // Tạo canvas phụ để bo tròn
-      const finalCanvas = document.createElement("canvas");
-      finalCanvas.width = size;
-      finalCanvas.height = size;
-      const ctx = finalCanvas.getContext("2d");
-
-      // Bo tròn nền trắng
-      ctx.fillStyle = "#ffffff";
-      ctx.beginPath();
-      ctx.moveTo(radius, 0);
-      ctx.lineTo(size - radius, 0);
-      ctx.quadraticCurveTo(size, 0, size, radius);
-      ctx.lineTo(size, size - radius);
-      ctx.quadraticCurveTo(size, size, size - radius, size);
-      ctx.lineTo(radius, size);
-      ctx.quadraticCurveTo(0, size, 0, size - radius);
-      ctx.lineTo(0, radius);
-      ctx.quadraticCurveTo(0, 0, radius, 0);
-      ctx.closePath();
-      ctx.fill();
-
-      // Vẽ mã QR lên giữa canvas
-      ctx.drawImage(qrCanvas, padding, padding, size - 2 * padding, size - 2 * padding);
-
-      // Tải về ảnh PNG
-      const link = document.createElement("a");
-      link.href = finalCanvas.toDataURL("image/png");
-      link.download = "nd-site-qr-code.png";
+      // tạo link tải
+      const link = document.createElement('a');
+      link.href = exportCanvas.toDataURL('image/png');
+      link.download = 'nd-site-qr-code.png';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
+
+    function drawFinderPatternExport(ectx, qr, moduleRow, moduleCol, moduleSize, offset) {
+      const x = offset + moduleCol * moduleSize;
+      const y = offset + moduleRow * moduleSize;
+      const size = 7 * moduleSize;
+      const outerRadius = Math.round(moduleSize * 1.2);
+      const innerRadius = Math.round(moduleSize * 0.8);
+      // outer dark
+      roundRect(ectx, x, y, size, size, outerRadius);
+      ectx.fillStyle = '#0b2540';
+      ectx.fill();
+      // inner light
+      const gap = moduleSize;
+      roundRect(ectx, x+gap, y+gap, size-gap*2, size-gap*2, innerRadius);
+      ectx.fillStyle = '#ffffff';
+      ectx.fill();
+      // center dark 3x3
+      const innerX = x + gap*2;
+      const innerY = y + gap*2;
+      const centerSize = 3 * moduleSize;
+      roundRect(ectx, innerX, innerY, centerSize, centerSize, Math.round(moduleSize*0.6));
+      ectx.fillStyle = '#0b2540';
+      ectx.fill();
+    }
+
+    // vẽ QR mặc định nếu có giá trị trong input lúc load (tiện)
+    window.addEventListener('load', () => {
+      const t = document.getElementById('text').value.trim();
+      if (t) generateQRCode();
+    });
   </script>
 </body>
 </html>
