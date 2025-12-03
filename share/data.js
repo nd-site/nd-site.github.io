@@ -40,5 +40,6 @@ const data = {
     "code-Vẹo1-orc-k3": "https://app.ohstem.vn/#!/share/yolouno/34pKDzJ1CFQQaz3IRSt0LHXEObC",
     "icon-svg": "https://www.svgrepo.com/",
     "canva-10a7": "https://www.canva.com/design/DAG6JHleGJ8/NvnHnyEeD-DvJTCpc6EObw/view?utm_content=DAG6JHleGJ8&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=he4c5042f43&fbclid=IwZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNDM3NjI2MzE2OTczNzg4AAEem-MOJKxABDFDz1O2YwHLcByZvMUitaei2kci_o9xbS9wlqYcWkrzk8SjDXo_aem_BjBlf35ggXr12ZJtsjPdGw",
-    "Bao-Cao-KHKT-NDGB": "https://www.canva.com/design/DAG6XHn2pd8/RaOddEmnqCuyDq6pmnT0mg/edit",
+    "Bao-Cao-KHKT-NDGB-edit": "https://www.canva.com/design/DAG6XHn2pd8/RaOddEmnqCuyDq6pmnT0mg/edit",
+    "Bao-Cao-KHKT-NDGB": "https://www.canva.com/design/DAG6XHn2pd8/Tosj2QCYRJWLDtTE3IvO_w/view?utm_content=DAG6XHn2pd8&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hf353026ec6",
 };
