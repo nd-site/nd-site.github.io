@@ -42,4 +42,6 @@ const data = {
     "canva-10a7": "https://www.canva.com/design/DAG6JHleGJ8/NvnHnyEeD-DvJTCpc6EObw/view?utm_content=DAG6JHleGJ8&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=he4c5042f43&fbclid=IwZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNDM3NjI2MzE2OTczNzg4AAEem-MOJKxABDFDz1O2YwHLcByZvMUitaei2kci_o9xbS9wlqYcWkrzk8SjDXo_aem_BjBlf35ggXr12ZJtsjPdGw",
     "Bao-Cao-KHKT-NDGB-edit": "https://www.canva.com/design/DAG6XHn2pd8/RaOddEmnqCuyDq6pmnT0mg/edit",
     "Bao-Cao-KHKT-NDGB": "https://www.canva.com/design/DAG6XHn2pd8/Tosj2QCYRJWLDtTE3IvO_w/view?utm_content=DAG6XHn2pd8&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hf353026ec6",
+    "Bảng tính Khảo sát 1 - NDGB": "https://docs.google.com/spreadsheets/d/1qk5pNwTeKMC461qTzkN3zUbQ-6_ijRat-TqipNn_ZKg/edit?resourcekey=&gid=655872183#gid=655872183",
+    "Khảo sát 1 - NDGB": "https://docs.google.com/forms/d/1m83eQhURYy0N2GOG3EYjefDb5tekvxcmF8yraK323Lg/edit#responses",
 };
