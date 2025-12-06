@@ -237,5 +237,46 @@
   function escapeAttr(s){ return escapeHtml(s).replace(/"/g,'&quot;') }
 
 </script>
+<!-- Đặt ở cuối body -->
+  <div class="home-wrapper">
+    <!-- Nút Trang Chủ -->
+    <a href="/index.html" class="home-btn">
+      <img src="/homebtn.png" alt="Trang chủ">
+    </a>
+
+    <style>
+      .home-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        background: #666666;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        cursor: pointer;
+        z-index: 9999;
+        animation: float 3s ease-in-out infinite;
+        text-decoration: none;
+      }
+      .home-btn img {
+        max-width: 60%;
+        max-height: 60%;
+        object-fit: contain;
+        filter: brightness(0) invert(1);
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+      .home-btn:hover {
+        transform: scale(1.05);
+        transition: 0.3s;
+      }
+    </style>
+  </div>
 </body>
 </html>
