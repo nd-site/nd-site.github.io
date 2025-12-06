@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Wrapped - ND Labs</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="/logo.png">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="/logo.png" alt="ND Labs Logo" class="site-logo">
+            <h1>TikTok Wrapped - ND Labs</h1>
+        </div>
+    </header>
+        
+    <main>
+        <h2>Tải lên Tệp Dữ liệu TikTok Wrapped</h2>
+        
+        <div 
+            id="dropZone" 
+            class="drop-zone"
+            ondragover="event.preventDefault()" 
+            ondrop="handleDrop(event)">
+            <p id="dropText">
+                Kéo & thả tệp JSON vào đây, hoặc nhấn để chọn tệp.
+            </p>
+            <input type="file" id="jsonFile" accept=".json" style="display: none;">
+        </div>
+        
+        <button onclick="processFile()" id="processButton" style="display: none;">Xem Wrapped</button>
+
+        <div id="results" class="results-container">
+            </div>
+    </main>
+
+    <footer>
+        <p>Phân tích bởi ND Labs</p>
+        <div class="tiktok-brand">
+            <img src="/tiktok/wrapped/tiktok-icon.png" alt="TikTok Logo" class="tiktok-logo">
+            <span>TikTok</span>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
