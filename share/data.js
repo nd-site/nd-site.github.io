@@ -45,6 +45,8 @@ const data = {
     "Bảng tính Khảo sát 1 - NDGB": "https://docs.google.com/spreadsheets/d/1qk5pNwTeKMC461qTzkN3zUbQ-6_ijRat-TqipNn_ZKg/edit?resourcekey=&gid=655872183#gid=655872183",
     "Khảo sát 1 - NDGB": "https://docs.google.com/forms/d/1m83eQhURYy0N2GOG3EYjefDb5tekvxcmF8yraK323Lg/edit#responses",
     "https://www.canva.com/design/DAG61BsfwBw/hkq5GUYdXhOGcazxP4V30Q/edit?utm_content=DAG61BsfwBw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton": "https://nd-site.github.io/share",
+    "HSG Tin Học - Cô Thủy": "https://drive.google.com/drive/folders/14zzvbqpB60lSKT_AD5-hWagwwfc5-XJ7?usp=drive_link",
 };
+
 
 
