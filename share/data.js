@@ -48,7 +48,9 @@ const data = {
     "HSG Tin Học - Cô Thủy": "https://drive.google.com/drive/folders/14zzvbqpB60lSKT_AD5-hWagwwfc5-XJ7?usp=drive_link",
     "csn1": "https://quickshare.samsungcloud.com/mKvBGRfXbjxq",
     "Folder HSG Tin Học - Cô Thủy": "https://drive.google.com/drive/folders/14zzvbqpB60lSKT_AD5-hWagwwfc5-XJ7",
+    "EduSpace 1 - Gemini": "https://gemini.google.com/share/1b9f70ed0268",
 };
+
 
 
 
