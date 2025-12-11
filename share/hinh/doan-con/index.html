@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chia Sẻ Hình Ảnh Độc Đáo</title>
+    
+    <link rel="icon" href="/logo.png" type="image/png">
+    
+    <style>
+        /* 🎨 Nền web Gradient Xanh Dương */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #00c4cc, #8a3ffc);
+            box-sizing: border-box; /* Quan trọng để padding không làm tràn màn hình */
+        }
+
+        /* Khung chứa nội dung */
+        .container {
+            background-color: rgba(255, 255, 255, 0.95); /* Nền trắng trong suốt nhẹ */
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 500px; 
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        /* 🖼️ Định dạng Hình Ảnh Nội Dung */
+        .image-wrapper {
+            display: inline-block;
+            /* Viền trắng 1px theo yêu cầu */
+            border: 1px solid #ffffff; 
+            /* Bo góc nhẹ */
+            border-radius: 8px; 
+            /* Thêm shadow nhẹ để tách biệt hình ảnh khỏi nền container */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+            line-height: 0; /* Loại bỏ khoảng trắng dưới ảnh */
+            margin-bottom: 25px;
+            overflow: hidden; /* Cần thiết để đảm bảo viền và bo góc hoạt động tốt */
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px; /* Bo góc ảnh bên trong, trùng với wrapper */
+        }
+
+        /* Nút Tải Xuống */
+        .download-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .download-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .data-table {
+            /* Đảm bảo bảng chiếm toàn bộ chiều rộng khu vực chứa nó */
+            width: 100%;
+            /* Xóa khoảng cách giữa các ô */
+            border-collapse: collapse;
+            /* Khoảng cách lề trên/dưới */
+            margin: 20px 0; 
+            font-size: 0.9em;
+            text-align: left;
+            /* Tạo hiệu ứng nổi nhẹ */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+            /* Bo góc cho toàn bộ bảng */
+            border-radius: 6px;
+            overflow: hidden; /* Cần thiết để bo góc hoạt động tốt */
+        }
+
+        .data-table th, .data-table td {
+            /* Khoảng cách đệm bên trong ô */
+            padding: 10px 15px;
+            /* Viền dưới */
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            /* Màu nền cho hàng tiêu đề */
+            background-color: #e9ecef;
+            /* Màu chữ tiêu đề */
+            color: #495057;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        /* Loại bỏ viền dưới ở hàng cuối cùng để bảng trông gọn gàng hơn */
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ Hình Ảnh Của Bạn ✨</h1>
+        
+        <div class="image-wrapper">
+            <img src="image.png" alt="Hình ảnh code bài đoạn con mẫu">
+        </div>
+        
+        <h2>Đề bài đoạn con mẫu:</h2>
+        <p>Tìm tổng đoạn con liên tiếp có tổng lớn nhất trong mảng số nguyên.</p>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>INPUT</th>
+                    <th>OUTPUT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>7</td>
+                    <td>7</td>
+                </tr>
+                <tr>
+                    <td>1 2 -4 4 2 1 -5</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="image.png" download class="download-btn">
+            Tải Xuống Hình Ảnh
+        </a>
+    </div>
+
+    <!-- Đặt ở cuối body -->
+    <div class="home-wrapper">
+        <!-- Nút Trang Chủ -->
+        <a href="/index.html" class="home-btn">
+            <img src="/homebtn.png" alt="Trang chủ">
+        </a>
+
+        <style>
+            .home-btn {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 55px;
+                height: 55px;
+                background: #fff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                cursor: pointer;
+                z-index: 9999;
+                animation: float 3s ease-in-out infinite;
+                text-decoration: none;
+            }
+            .home-btn img {
+                max-width: 60%;
+                max-height: 60%;
+                object-fit: contain;
+            }
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-6px); }
+            }
+            .home-btn:hover {
+                transform: scale(1.05);
+                transition: 0.3s;
+            }
+        </style>
+    </div>
+</body>
+</html>
