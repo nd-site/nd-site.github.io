@@ -1,14 +1,14 @@
 const data = {
-    "trang-chu": "https://nd-site.github.io",
-    "BTVN-EN-01": "https://nd-site.github.io/video/btvn-en-01",
-    "BTVN-EN-02": "https://nd-site.github.io/video/btvn-en-02",
-    "BTVN-EN-03": "https://nd-site.github.io/video/btvn-en-03",
-    "BTVN-EN-04": "https://nd-site.github.io/video/btvn-en-04",
+    "trang-chu": "/index.html",
+    "BTVN-EN-01": "/video/btvn-en-01",
+    "BTVN-EN-02": "/video/btvn-en-02",
+    "BTVN-EN-03": "/video/btvn-en-03",
+    "BTVN-EN-04": "/video/btvn-en-04",
     "lac-ngoai-khong-gian": "https://www.rophim.li/xem-phim/lac-ngoai-khong-gian.Gam4bgGk",
     "lost-in-space": "https://www.rophim.li/xem-phim/lac-ngoai-khong-gian.Gam4bgGk",
     "Canva-Sunshine-01": "https://www.canva.com/design/DAGvetfI_es/uqV1o3aT6huZrg-dEfXuAg/edit?utm_content=DAGvetfI_es&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton",
-    "video-khai-truong-sunshine-01": "https://nd-site.github.io/video/khai-truong-sunshine-01",
-    "video-khai-truong-sunshine-02": "https://nd-site.github.io/video/khai-truong-sunshine-02",
+    "video-khai-truong-sunshine-01": "/video/khai-truong-sunshine-01",
+    "video-khai-truong-sunshine-02": "/video/khai-truong-sunshine-02",
     "nhap-code-playtogether-vng": "https://giftcode.vnggames.com/vn/redeem/661",
     "binh-dan-hoc-vu-so": "https://binhdanhocvuso.gov.vn",
     "ChatGPT-trendtannhacthinhphong01": "https://chatgpt.com/share/68a84616-3f04-800f-aa6d-2d948bb52212",
@@ -51,6 +51,7 @@ const data = {
     "EduSpace 1 - Gemini": "https://gemini.google.com/share/1b9f70ed0268",
     "Đoạn con - Bài mẫu": "/share/hinh/doan-con",
 };
+
 
 
 
