@@ -5,276 +5,242 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tìm kiếm - ND Labs</title>
     <link rel="icon" href="/logo.png" type="image/png">
-    
     <style>
-        /* --- CẤU HÌNH MÀU SẮC & CƠ BẢN --- */
+        /* Tông màu xanh dương tươi sáng */
         :root {
-            --primary-blue: #007bff;       /* Xanh dương tươi */
-            --primary-hover: #0056b3;      /* Xanh đậm khi di chuột */
-            --bg-color: #f4f8fb;           /* Nền xanh xám rất nhạt */
+            --bright-blue: #00d2ff;
+            --deep-blue: #0078ff;
+            --bg-light: #f0f7ff;
             --white: #ffffff;
-            --text-dark: #333333;
-            --text-gray: #666666;
-            --shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+            --shadow: 0 10px 30px rgba(0, 120, 255, 0.15);
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            color: #333;
         }
 
-        /* --- HEADER --- */
+        /* Thanh điều hướng */
         header {
-            background-color: var(--white);
+            background: var(--white);
             padding: 15px 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: sticky;
             top: 0;
-            z-index: 100;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
+            z-index: 1000;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
             text-decoration: none;
-            color: var(--text-dark);
+            gap: 10px;
         }
 
         .brand img {
             height: 40px;
-            width: auto;
+            width: 40px;
+            object-fit: contain;
         }
 
         .brand span {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-blue);
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--deep-blue), var(--bright-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* --- PHẦN TÌM KIẾM --- */
-        .search-section {
-            padding: 60px 0 40px;
+        /* Khu vực tìm kiếm */
+        .search-area {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
             text-align: center;
         }
 
-        .search-title {
-            margin-bottom: 20px;
-            color: var(--primary-blue);
-            font-size: 2rem;
+        .search-area h2 {
+            font-weight: 300;
+            margin-bottom: 25px;
+            color: var(--deep-blue);
         }
 
-        .search-box-wrapper {
+        .input-group {
             position: relative;
-            max-width: 600px;
-            margin: 0 auto;
+            background: var(--white);
+            border-radius: 50px;
+            padding: 5px;
+            box-shadow: var(--shadow);
+            display: flex;
+            border: 2px solid transparent;
+            transition: 0.3s;
         }
 
-        #searchInput {
-            width: 100%;
+        .input-group:focus-within {
+            border-color: var(--bright-blue);
+        }
+
+        input {
+            flex: 1;
+            border: none;
             padding: 15px 25px;
-            padding-right: 50px;
-            font-size: 18px;
-            border: 2px solid #e1e8ed;
             border-radius: 50px;
             outline: none;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
+            font-size: 1.1rem;
         }
 
-        #searchInput:focus {
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+        /* Danh sách kết quả */
+        .results-container {
+            max-width: 800px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
         }
 
-        .search-icon {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-blue);
-            font-size: 20px;
-            pointer-events: none;
-        }
-
-        /* --- KẾT QUẢ --- */
-        #resultsContainer {
-            padding-bottom: 50px;
-            flex-grow: 1;
-        }
-
-        .result-count {
-            margin-bottom: 15px;
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
-
-        .result-card {
+        .repo-card {
             background: var(--white);
+            border-radius: 15px;
             padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            border-left: 5px solid var(--primary-blue);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease;
-        }
-
-        .result-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.15);
-        }
-
-        .result-card a {
+            margin-bottom: 20px;
             text-decoration: none;
+            display: block;
+            transition: 0.3s;
+            border-left: 6px solid var(--bright-blue);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
         }
 
-        .result-title {
-            color: var(--primary-blue);
-            font-size: 1.25rem;
-            font-weight: 600;
+        .repo-card:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow);
+            border-left-color: var(--deep-blue);
+        }
+
+        .repo-name {
+            font-size: 1.3rem;
+            color: var(--deep-blue);
+            font-weight: 700;
             margin-bottom: 8px;
         }
 
-        .result-snippet {
-            color: var(--text-gray);
+        .repo-desc {
+            color: #666;
             font-size: 0.95rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            line-height: 1.5;
         }
 
-        .no-results {
-            text-align: center;
-            color: var(--text-gray);
-            margin-top: 30px;
+        .repo-tags {
+            margin-top: 12px;
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: #999;
         }
 
-        /* --- FOOTER --- */
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: var(--primary-blue);
-            color: var(--white);
-            margin-top: auto;
+        .tag {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
+
+        /* Hiệu ứng loading */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--bright-blue);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container">
-            <a href="/" class="brand">
-                <img src="/logo.png" alt="ND Labs Logo" onerror="this.style.display='none'"> 
-                <span>ND Labs</span>
-            </a>
-        </div>
-    </header>
+<header>
+    <a href="/" class="brand">
+        <img src="/logo.png" alt="ND Labs" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1055/1055687.png'">
+        <span>ND Labs</span>
+    </a>
+</header>
 
-    <div class="container search-section">
-        <h1 class="search-title">Bạn đang tìm gì?</h1>
-        <div class="search-box-wrapper">
-            <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm...">
-            <span class="search-icon">🔍</span>
-        </div>
+<div class="search-area">
+    <h2>Khám phá các dự án của chúng tôi</h2>
+    <div class="input-group">
+        <input type="text" id="searchInput" placeholder="Tìm tên repository hoặc mô tả...">
+    </div>
+    <div id="loader" class="loader"></div>
+    <p id="counter" style="margin-top: 15px; font-size: 0.9rem; color: #888;"></p>
+</div>
+
+<div class="results-container" id="results">
     </div>
 
-    <div class="container" id="resultsContainer">
-        <div id="resultCount" class="result-count"></div>
-        <div id="resultsList"></div>
-    </div>
+<script>
+    const GITHUB_USER = 'nd-site';
+    const searchInput = document.getElementById('searchInput');
+    const resultsDiv = document.getElementById('results');
+    const loader = document.getElementById('loader');
+    const counter = document.getElementById('counter');
 
-    <footer>
-        &copy; 2025 ND Labs. All rights reserved.
-    </footer>
+    let projects = [];
 
-    <script>
-        const searchInput = document.getElementById('searchInput');
-        const resultsList = document.getElementById('resultsList');
-        const resultCount = document.getElementById('resultCount');
-        
-        let siteData = [];
-    
-        // Tự động tìm đường dẫn gốc (Base URL)
-        const getBaseUrl = () => {
-            const path = window.location.pathname;
-            const repoName = path.split('/')[1];
-            // Kiểm tra xem trang web có đang chạy ở sub-directory không
-            if (window.location.hostname.includes('github.io') && path.includes(repoName)) {
-                return `/${repoName}`;
-            }
-            return '';
-        };
-    
-        async function fetchSearchData() {
-            try {
-                const baseUrl = getBaseUrl();
-                // Thử tải file từ cả 2 nguồn (gốc và sub-folder)
-                const response = await fetch(`${baseUrl}/search.json`);
-                if (!response.ok) throw new Error('Không tìm thấy file search.json');
-                
-                siteData = await response.json();
-                console.log("Đã tải dữ liệu:", siteData);
-            } catch (error) {
-                console.error("Lỗi tải dữ liệu:", error);
-                resultCount.innerText = "Đang tải dữ liệu hoặc file search.json chưa sẵn sàng...";
-            }
+    // Hàm lấy dữ liệu từ GitHub API
+    async function fetchProjects() {
+        loader.style.display = 'block';
+        try {
+            const response = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=pushed`);
+            projects = await response.json();
+            counter.innerText = `Đã kết nối với hệ thống. Tổng cộng ${projects.length} dự án.`;
+        } catch (error) {
+            counter.innerText = "Lỗi khi tải danh sách dự án.";
+            console.error(error);
+        } finally {
+            loader.style.display = 'none';
         }
-    
-        fetchSearchData();
-    
-        function removeVietnameseTones(str) {
-            if (!str) return "";
-            return str.normalize('NFD')
-                      .replace(/[\u0300-\u036f]/g, '')
-                      .replace(/đ/g, 'd').replace(/Đ/g, 'D')
-                      .toLowerCase();
-        }
-    
-        searchInput.addEventListener('input', (e) => {
-            const query = removeVietnameseTones(e.target.value.trim());
-            resultsList.innerHTML = ''; 
-    
-            if (query.length < 2) { // Chỉ tìm khi gõ từ 2 ký tự
-                resultCount.innerText = '';
-                return;
-            }
-    
-            const filteredData = siteData.filter(item => {
-                const title = removeVietnameseTones(item.title);
-                const desc = removeVietnameseTones(item.description);
-                return title.includes(query) || desc.includes(query);
-            });
-    
-            if (filteredData.length > 0) {
-                resultCount.innerText = `Tìm thấy ${filteredData.length} kết quả`;
-                filteredData.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'result-card';
-                    div.innerHTML = `
-                        <a href="${item.url}">
-                            <div class="result-title">${item.title}</div>
-                            <div class="result-snippet">${item.description}</div>
-                        </a>
-                    `;
-                    resultsList.appendChild(div);
-                });
-            } else {
-                resultsList.innerHTML = `<div class="no-results">Không tìm thấy bài viết nào cho "${e.target.value}"</div>`;
-            }
+    }
+
+    // Hàm hiển thị
+    function displayProjects(list) {
+        resultsDiv.innerHTML = '';
+        list.forEach(repo => {
+            const card = document.createElement('a');
+            card.className = 'repo-card';
+            card.href = repo.html_url;
+            card.target = "_blank";
+            
+            card.innerHTML = `
+                <div class="repo-name">📦 ${repo.name}</div>
+                <div class="repo-desc">${repo.description || 'Dự án này chưa có mô tả chi tiết.'}</div>
+                <div class="repo-tags">
+                    <span class="tag">⭐ ${repo.stargazers_count}</span>
+                    <span class="tag">🍴 ${repo.forks_count}</span>
+                    <span class="tag">🔹 ${repo.language || 'HTML'}</span>
+                </div>
+            `;
+            resultsDiv.appendChild(card);
         });
-    </script>
+    }
+
+    // Sự kiện tìm kiếm
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = projects.filter(p => 
+            p.name.toLowerCase().includes(term) || 
+            (p.description && p.description.toLowerCase().includes(term))
+        );
+        displayProjects(filtered);
+    });
+
+    // Chạy khi tải trang
+    fetchProjects();
+</script>
+
 </body>
 </html>
