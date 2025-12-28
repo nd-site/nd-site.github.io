@@ -201,78 +201,65 @@
     </footer>
 
     <script>
-        // --- LOGIC TỰ ĐỘNG LẤY DỮ LIỆU ---
         const searchInput = document.getElementById('searchInput');
         const resultsList = document.getElementById('resultsList');
         const resultCount = document.getElementById('resultCount');
         
-        let siteData = []; // Mảng chứa dữ liệu sẽ được tải về tự động
-
-        // Hàm tải dữ liệu từ search.json
+        let siteData = [];
+    
+        // Tự động tìm đường dẫn gốc (Base URL)
+        const getBaseUrl = () => {
+            const path = window.location.pathname;
+            const repoName = path.split('/')[1];
+            // Kiểm tra xem trang web có đang chạy ở sub-directory không
+            if (window.location.hostname.includes('github.io') && path.includes(repoName)) {
+                return `/${repoName}`;
+            }
+            return '';
+        };
+    
         async function fetchSearchData() {
             try {
-                // Hiển thị trạng thái đang tải
-                resultCount.innerText = "Đang khởi tạo dữ liệu tìm kiếm...";
-                
-                const response = await fetch('/search.json');
-                if (!response.ok) throw new Error('Không thể tải dữ liệu');
+                const baseUrl = getBaseUrl();
+                // Thử tải file từ cả 2 nguồn (gốc và sub-folder)
+                const response = await fetch(`${baseUrl}/search.json`);
+                if (!response.ok) throw new Error('Không tìm thấy file search.json');
                 
                 siteData = await response.json();
-                resultCount.innerText = ""; // Xóa thông báo khi tải xong
-                console.log("Đã tải xong " + siteData.length + " trang.");
+                console.log("Đã tải dữ liệu:", siteData);
             } catch (error) {
-                console.error("Lỗi:", error);
-                resultCount.innerText = "Lỗi: Không thể tải dữ liệu tìm kiếm (Hãy kiểm tra file search.json).";
+                console.error("Lỗi tải dữ liệu:", error);
+                resultCount.innerText = "Đang tải dữ liệu hoặc file search.json chưa sẵn sàng...";
             }
         }
-
-        // Gọi hàm tải dữ liệu ngay khi trang web mở
+    
         fetchSearchData();
-
-        // --- HÀM XỬ LÝ TÌM KIẾM (GIỮ NGUYÊN LOGIC CŨ) ---
+    
         function removeVietnameseTones(str) {
-            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
-            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
-            str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
-            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
-            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
-            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
-            str = str.replace(/đ/g,"d");
-            // ... (bạn có thể giữ nguyên phần regex đầy đủ ở code cũ) ...
-            return str;
+            if (!str) return "";
+            return str.normalize('NFD')
+                      .replace(/[\u0300-\u036f]/g, '')
+                      .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+                      .toLowerCase();
         }
-
+    
         searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const queryNoTone = removeVietnameseTones(query);
-            
+            const query = removeVietnameseTones(e.target.value.trim());
             resultsList.innerHTML = ''; 
-
-            if (query.length === 0) {
+    
+            if (query.length < 2) { // Chỉ tìm khi gõ từ 2 ký tự
                 resultCount.innerText = '';
                 return;
             }
-
-            // Nếu dữ liệu chưa tải xong thì không tìm
-            if (siteData.length === 0) {
-                resultCount.innerText = 'Đang tải dữ liệu, vui lòng đợi giây lát...';
-                return;
-            }
-
+    
             const filteredData = siteData.filter(item => {
-                // Kiểm tra null/undefined để tránh lỗi
-                const title = item.title ? item.title.toLowerCase() : "";
-                const desc = item.description ? item.description.toLowerCase() : "";
-                const titleNoTone = removeVietnameseTones(title);
-                
-                return title.includes(query) || 
-                       desc.includes(query) || 
-                       titleNoTone.includes(queryNoTone);
+                const title = removeVietnameseTones(item.title);
+                const desc = removeVietnameseTones(item.description);
+                return title.includes(query) || desc.includes(query);
             });
-
+    
             if (filteredData.length > 0) {
-                resultCount.innerText = `Tìm thấy ${filteredData.length} kết quả cho "${e.target.value}"`;
-                
+                resultCount.innerText = `Tìm thấy ${filteredData.length} kết quả`;
                 filteredData.forEach(item => {
                     const div = document.createElement('div');
                     div.className = 'result-card';
@@ -285,14 +272,9 @@
                     resultsList.appendChild(div);
                 });
             } else {
-                resultCount.innerText = '';
-                resultsList.innerHTML = `<div class="no-results">Không tìm thấy kết quả nào phù hợp.</div>`;
+                resultsList.innerHTML = `<div class="no-results">Không tìm thấy bài viết nào cho "${e.target.value}"</div>`;
             }
         });
-        
-        window.onload = function() {
-            searchInput.focus();
-        };
     </script>
 </body>
 </html>
