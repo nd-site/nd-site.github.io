@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm kiếm - ND Labs</title>
+    <link rel="icon" href="/logo.png" type="image/png">
+    
+    <style>
+        /* --- CẤU HÌNH MÀU SẮC & CƠ BẢN --- */
+        :root {
+            --primary-blue: #007bff;       /* Xanh dương tươi */
+            --primary-hover: #0056b3;      /* Xanh đậm khi di chuột */
+            --bg-color: #f4f8fb;           /* Nền xanh xám rất nhạt */
+            --white: #ffffff;
+            --text-dark: #333333;
+            --text-gray: #666666;
+            --shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--white);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .brand img {
+            height: 40px;
+            width: auto;
+        }
+
+        .brand span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        /* --- PHẦN TÌM KIẾM --- */
+        .search-section {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .search-title {
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+            font-size: 2rem;
+        }
+
+        .search-box-wrapper {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 15px 25px;
+            padding-right: 50px;
+            font-size: 18px;
+            border: 2px solid #e1e8ed;
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        #searchInput:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            font-size: 20px;
+            pointer-events: none;
+        }
+
+        /* --- KẾT QUẢ --- */
+        #resultsContainer {
+            padding-bottom: 50px;
+            flex-grow: 1;
+        }
+
+        .result-count {
+            margin-bottom: 15px;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .result-card {
+            background: var(--white);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary-blue);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.15);
+        }
+
+        .result-card a {
+            text-decoration: none;
+        }
+
+        .result-title {
+            color: var(--primary-blue);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .result-snippet {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .no-results {
+            text-align: center;
+            color: var(--text-gray);
+            margin-top: 30px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary-blue);
+            color: var(--white);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <a href="/" class="brand">
+                <img src="/logo.png" alt="ND Labs Logo" onerror="this.style.display='none'"> 
+                <span>ND Labs</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container search-section">
+        <h1 class="search-title">Bạn đang tìm gì?</h1>
+        <div class="search-box-wrapper">
+            <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm...">
+            <span class="search-icon">🔍</span>
+        </div>
+    </div>
+
+    <div class="container" id="resultsContainer">
+        <div id="resultCount" class="result-count"></div>
+        <div id="resultsList"></div>
+    </div>
+
+    <footer>
+        &copy; 2025 ND Labs. All rights reserved.
+    </footer>
+
+    <script>
+        // --- CẤU HÌNH DỮ LIỆU TÌM KIẾM ---
+        // Vì đây là GitHub Pages (tĩnh), bạn cần khai báo danh sách các trang web của bạn ở đây.
+        // Hoặc bạn có thể dùng fetch('data.json') nếu bạn có file JSON.
+        
+        const siteData = [
+            {
+                title: "Trang chủ ND Labs",
+                url: "/",
+                description: "Chào mừng đến với ND Labs. Nơi chia sẻ kiến thức về lập trình, công nghệ và mã nguồn mở."
+            },
+            {
+                title: "Giới thiệu về chúng tôi",
+                url: "/about.html",
+                description: "Đội ngũ ND Labs bao gồm những kỹ sư đam mê sáng tạo và đổi mới công nghệ."
+            },
+            {
+                title: "Hướng dẫn Deploy Github Pages",
+                url: "/blog/deploy-github-pages.html",
+                description: "Bài viết hướng dẫn chi tiết cách đưa website tĩnh lên Github Pages hoàn toàn miễn phí."
+            },
+            {
+                title: "Dự án nguồn mở ReactJS",
+                url: "/projects/react-open-source.html",
+                description: "Tổng hợp các component ReactJS giao diện xanh dương đẹp mắt cho cộng đồng."
+            }
+            // THÊM CÁC TRANG CỦA BẠN VÀO ĐÂY
+        ];
+
+        // --- XỬ LÝ LOGIC TÌM KIẾM ---
+        const searchInput = document.getElementById('searchInput');
+        const resultsList = document.getElementById('resultsList');
+        const resultCount = document.getElementById('resultCount');
+
+        // Hàm chuyển đổi tiếng Việt có dấu thành không dấu để tìm kiếm chính xác hơn
+        function removeVietnameseTones(str) {
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
+            str = str.replace(/đ/g,"d");
+            str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+            str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+            str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+            str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+            str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+            str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+            str = str.replace(/Đ/g, "D");
+            return str;
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const queryNoTone = removeVietnameseTones(query);
+            
+            resultsList.innerHTML = ''; // Xóa kết quả cũ
+
+            if (query.length === 0) {
+                resultCount.innerText = '';
+                return;
+            }
+
+            // Lọc dữ liệu
+            const filteredData = siteData.filter(item => {
+                const title = item.title.toLowerCase();
+                const desc = item.description.toLowerCase();
+                const titleNoTone = removeVietnameseTones(title);
+                
+                return title.includes(query) || 
+                       desc.includes(query) || 
+                       titleNoTone.includes(queryNoTone);
+            });
+
+            // Hiển thị số lượng
+            if (filteredData.length > 0) {
+                resultCount.innerText = `Tìm thấy ${filteredData.length} kết quả cho "${e.target.value}"`;
+                
+                filteredData.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'result-card';
+                    div.innerHTML = `
+                        <a href="${item.url}">
+                            <div class="result-title">${item.title}</div>
+                            <div class="result-snippet">${item.description}</div>
+                        </a>
+                    `;
+                    resultsList.appendChild(div);
+                });
+            } else {
+                resultCount.innerText = '';
+                resultsList.innerHTML = `<div class="no-results">Không tìm thấy kết quả nào phù hợp với "${e.target.value}"</div>`;
+            }
+        });
+        
+        // Tự động focus vào ô tìm kiếm khi tải trang
+        window.onload = function() {
+            searchInput.focus();
+        };
+    </script>
+</body>
+</html>
