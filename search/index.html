@@ -57,11 +57,17 @@
 </div>
 
 <script>
-    // --- CẤU HÌNH ---
+    // --- CẤU HÌNH ĐA REPO ---
     const CONFIG = {
         username: 'nd-site',
-        repo: 'nd-site.github.io', // Thay bằng tên Repository chứa trang web của bạn
-        branch: 'main' // Thường là main hoặc master
+        // Danh sách các Repo bạn muốn quét dữ liệu
+        repositories: [
+            'nd-site.github.io', 
+            'test', 
+            'windows12'
+            // Bạn có thể thêm bao nhiêu repo tùy thích vào đây
+        ],
+        branch: 'main'
     };
 
     const searchInput = document.getElementById('searchInput');
@@ -69,33 +75,39 @@
     const status = document.getElementById('status');
     let searchDatabase = [];
 
-    // 1. Tự động quét toàn bộ file trong Repo bằng GitHub API (Recursive Tree)
-    async function getAllHtmlFiles() {
-        status.innerText = "🔍 Đang quét danh sách file trên hệ thống...";
+    // 1. Hàm lấy file từ MỘT repo cụ thể
+    async function getFilesFromRepo(repoName) {
         try {
-            const treeUrl = `https://api.github.com/repos/${CONFIG.username}/${CONFIG.repo}/git/trees/${CONFIG.branch}?recursive=1`;
+            const treeUrl = `https://api.github.com/repos/${CONFIG.username}/${repoName}/git/trees/${CONFIG.branch}?recursive=1`;
             const response = await fetch(treeUrl);
-            const data = await response.json();
+            if (!response.ok) return [];
             
-            // Chỉ lấy các file kết thúc bằng .html và không phải là chính trang search.html
+            const data = await response.json();
             return data.tree
                 .filter(file => file.path.endsWith('.html') && file.path !== 'search.html')
-                .map(file => '/' + file.path.replace('index.html', ''));
+                .map(file => {
+                    // Xây dựng URL dẫn đến trang web tương ứng
+                    // Nếu là repo chính (username.github.io) thì path là /, nếu repo khác thì path là /repo/
+                    const baseUrl = repoName === `${CONFIG.username}.github.io` 
+                                    ? `https://${CONFIG.username}.github.io/` 
+                                    : `https://${CONFIG.username}.github.io/${repoName}/`;
+                    return baseUrl + file.path.replace('index.html', '');
+                });
         } catch (e) {
-            status.innerText = "⚠️ Lỗi khi kết nối GitHub API.";
+            console.error(`Lỗi quét repo ${repoName}:`, e);
             return [];
         }
     }
 
-    // 2. Đọc nội dung từng file
+    // 2. Hàm đọc nội dung (Crawl) nội dung file
     async function crawlPage(url) {
         try {
             const response = await fetch(url);
+            if (!response.ok) return null;
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             
-            // Loại bỏ các phần không cần thiết khi tìm nội dung
             doc.querySelectorAll('script, style, nav, footer').forEach(el => el.remove());
 
             const title = doc.querySelector('h1')?.innerText || doc.querySelector('title')?.innerText || url;
@@ -110,44 +122,48 @@
         } catch (e) { return null; }
     }
 
-    // 3. Khởi chạy hệ thống
+    // 3. Khởi chạy: Quét tất cả repo trong danh sách
     async function init() {
-        const filePaths = await getAllHtmlFiles();
-        if (filePaths.length === 0) {
-            status.innerText = "Không tìm thấy dữ liệu.";
+        status.innerText = "🚀 Đang quét dữ liệu từ các hệ thống ND Labs...";
+        
+        let allFilePaths = [];
+        
+        // Quét lần lượt từng Repo
+        for (const repo of CONFIG.repositories) {
+            const paths = await getFilesFromRepo(repo);
+            allFilePaths = allFilePaths.concat(paths);
+        }
+
+        if (allFilePaths.length === 0) {
+            status.innerText = "Không tìm thấy dữ liệu HTML nào.";
             return;
         }
 
-        status.innerText = `📄 Đang lập chỉ mục ${filePaths.length} trang...`;
+        status.innerText = `📄 Đang lập chỉ mục ${allFilePaths.length} trang từ ${CONFIG.repositories.length} dự án...`;
         
-        const promises = filePaths.map(path => crawlPage(path));
+        // Đọc nội dung tất cả file đã tìm thấy
+        const promises = allFilePaths.map(path => crawlPage(path));
         const results = await Promise.all(promises);
         
         searchDatabase = results.filter(item => item !== null);
         
-        status.innerText = `✅ Đã sẵn sàng tìm kiếm trên toàn bộ Website!`;
+        status.innerText = `✅ Đã sẵn sàng! Tìm thấy nội dung trong ${searchDatabase.length} trang.`;
         searchInput.disabled = false;
         searchInput.focus();
         setTimeout(() => status.style.opacity = '0.5', 3000);
     }
 
-    // 4. Xử lý tìm kiếm
+    // 4. Xử lý tìm kiếm (Giữ nguyên logic cũ)
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase().trim();
         resultsList.innerHTML = '';
-
         if (query.length < 1) return;
 
-        // Tìm trong Site
         const matches = searchDatabase.filter(item => item.fullText.includes(query));
+        matches.forEach(item => renderCard(item.title, item.url, item.snippet, 'site'));
 
-        matches.forEach(item => {
-            renderCard(item.title, item.url, item.snippet, 'site');
-        });
-
-        // Luôn đề xuất Google (Web)
         const googleUrl = `https://www.google.com/search?q=site:${CONFIG.username}.github.io+${encodeURIComponent(query)}`;
-        renderCard(`Tìm "${query}" mở rộng qua Google`, googleUrl, `Nếu không thấy kết quả ưng ý, hãy thử tìm kiếm toàn diện hơn với Google Search.`, 'web');
+        renderCard(`Tìm "${query}" trên toàn hệ thống (Google)`, googleUrl, `Mở rộng tìm kiếm ra các trang chưa được lập chỉ mục cục bộ.`, 'web');
     });
 
     function renderCard(title, url, desc, type) {
@@ -169,6 +185,5 @@
 
     init();
 </script>
-
 </body>
 </html>
