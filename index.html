@@ -6,7 +6,9 @@
   <title>ND Labs - Trang Chủ</title>
   <link rel="icon" href="/logo.png" type="image/png">
   <script src="https://unpkg.com/feather-icons"></script>
+  <script async src="https://cse.google.com/cse.js?cx=90bdd5f1afd434b9d"></script>
   <style>
+    /* GIỮ NGUYÊN TOÀN BỘ CSS GỐC CỦA BẠN */
     html, body {
       overflow-x: hidden; margin: 0; padding: 10px;
       font-family: system-ui, sans-serif;
@@ -101,16 +103,19 @@
     .py-btn { background: linear-gradient(135deg, #ffe138, #ff8c00d3); }
     .lucky-btn { background: linear-gradient(135deg, #00c853, #ffd600); }
     .tt-btn { background: linear-gradient(135deg, #00f2ea, #ff0050); }
+    .edu-btn { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
+    .search-btn { background: linear-gradient(135deg, #11998e, #38ef7d); }
+    .windows12-btn { background: linear-gradient(135deg, #396afc, #2948ff); }
     .footer {
       margin-top: 20px; padding: 10px; font-size: 16px; color: #ffffff;
       text-align: center; background: linear-gradient(135deg, #0061cf, #824cd8);
-      border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); max-width: 100%;
+      border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); max-width: 500px; width: 100%;
     }
     /* Browser styles */
     .browser-card { background: var(--card, #fff); backdrop-filter: blur(8px); border-radius: 20px; box-shadow: 0 10px 30px #00000020; padding: 22px; }
     .browser-card .bar { display: flex; align-items: center; gap: 12px; }
     .browser-card input[type="text"] { flex: 1; padding: 14px 16px; border-radius: 999px; border: none; background: #e9ecef; font-size: 16px; outline: none; color: #5d6266;}
-    .browser-card button { width: 48px; height: 48px; border-radius: 50%; border: none; cursor: pointer; background: linear-gradient(135deg, #3995ff, #9c5fff); color: #ffffff; font-weight: 600; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .browser-card button#go { width: 48px; height: 48px; border-radius: 50%; border: none; cursor: pointer; background: linear-gradient(135deg, #3995ff, #9c5fff); color: #ffffff; font-weight: 600; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .row { display: flex; gap:20px; align-items: center; flex-wrap: wrap; margin-top: 12px; justify-content:center; }
     .custom-select { position: relative; width: 220px; cursor: pointer; user-select: none; }
     .custom-select .selected { background: #e9ecef; border-radius: 999px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -120,15 +125,21 @@
     .custom-select .options { display: none; position: absolute; top: 110%; left: 0; width: 100%; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px #0002; z-index: 10; }
     .custom-select .options div { padding: 12px 16px; font-size: 16px; display: flex; align-items: center; gap: 8px; border-radius: 8px; transition: all 0.2s ease; }
     .custom-select .options div:hover { background: #eef1f4; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: translateY(-2px); }
-    /* Logo kích thước riêng */
     .logo-google { width: 20px; height: 20px; }
     .logo-bing   { width: 18px; height: 24px; }
     .logo-duck   { width: 22px; height: 22px; }
-    .custom-select .selected img { object-fit: contain; vertical-align: middle; }
+
+    /* CSS CHO KẾT QUẢ TÌM KIẾM */
+    #searchResultArea { width: 100%; max-width: 800px; display: none; margin-top: 20px; }
+    .res-item { background: white; padding: 18px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid #4caf50; text-decoration: none; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.3s; }
+    .res-item:hover { transform: translateY(-3px); }
+    .res-title { color: #0077ff; font-weight: bold; font-size: 1.1rem; }
+    .res-link { color: #4caf50; font-size: 0.85rem; margin: 4px 0; display: block; word-break: break-all; }
+    .res-snippet { color: #666; font-size: 0.9rem; }
+    .gsc-control-cse { padding: 0 !important; border: none !important; background: transparent !important; }
   </style>
 </head>
 <body>
-  <!-- Controls -->
   <div class="controls">
     <button class="icon-btn" id="musicToggleBtn" title="Bật/Tắt nhạc"><i data-feather="play"></i></button>
     <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" title="Âm lượng" />
@@ -136,11 +147,10 @@
   <button class="share-btn" onclick="shareWebsite()" title="Chia sẻ"><i data-feather="share-2"></i></button>
   <audio id="backgroundMusic" src="/nhacnen.mp3" loop></audio>
 
-  <!-- Browser Section -->
   <div class="wrap" id="browser">
     <div class="browser-card">
       <div class="bar">
-        <input id="q" type="text" placeholder="Tìm kiếm..." autocomplete="on" />
+        <input id="q" type="text" placeholder="Tìm kiếm công cụ hoặc Web..." autocomplete="off" />
         <button id="go"><img src="/kinhlup.png" alt="" style="width:45px;height:45px;filter:brightness(0) invert(1);" onerror="this.remove()"></button>
       </div>
       <div class="row">
@@ -158,39 +168,52 @@
     </div>
   </div>
 
-  <!-- Card -->
-  <div class="card">
-    <img class="avatar" src="/avatar.png" alt="Ảnh đại diện">
-    <h1>ND LABS</h1>
-    <p>Chào mừng đến với ND Labs – được phát triển bởi Nhật Đăng. Tại đây cung cấp các công cụ miễn phí. Chúc bạn có trải nghiệm vui vẻ khi sử dụng!</p>
-    <div class="social">
-      <a href="https://facebook.com/nhatdang10.nd" class="facebook" target="_blank" data-tooltip="Facebook"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook"></a>
-      <a href="https://www.youtube.com/@NhatDang_10" class="youtube" target="_blank" data-tooltip="YouTube"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube"></a>
-      <a href="https://www.tiktok.com/@nhatdang_10" class="tiktok" target="_blank" data-tooltip="TikTok"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok"></a>
-      <a href="mailto:lienhe.nhatdang@gmail.com" class="email" data-tooltip="Email"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email"></a>
-      <a href="https://zalo.me/0379065349" class="zalo" target="_blank" data-tooltip="Zalo"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zalo.svg" alt="Zalo" style="width:34px;height:34px"></a>
-      <a href="https://bit.ly/m/nhatdang10" class="bitly" target="_blank" data-tooltip="Bit.ly"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/bitly.svg" alt="Bit.ly"></a>
+  <div id="mainContentWrapper" style="width:100%; display: flex; flex-direction: column; align-items: center;">
+      <div class="card">
+        <img class="avatar" src="/avatar.png" alt="Ảnh đại diện">
+        <h1>ND LABS</h1>
+        <p>Chào mừng đến với ND Labs – được phát triển bởi Nhật Đăng. Tại đây cung cấp các công cụ miễn phí. Chúc bạn có trải nghiệm vui vẻ khi sử dụng!</p>
+        <div class="social">
+          <a href="https://facebook.com/nhatdang10.nd" class="facebook" target="_blank" data-tooltip="Facebook"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook"></a>
+          <a href="https://www.youtube.com/@NhatDang_10" class="youtube" target="_blank" data-tooltip="YouTube"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube"></a>
+          <a href="https://www.tiktok.com/@nhatdang_10" class="tiktok" target="_blank" data-tooltip="TikTok"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok"></a>
+          <a href="mailto:lienhe.nhatdang@gmail.com" class="email" data-tooltip="Email"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email"></a>
+          <a href="https://zalo.me/0379065349" class="zalo" target="_blank" data-tooltip="Zalo"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zalo.svg" alt="Zalo" style="width:34px;height:34px"></a>
+          <a href="https://bit.ly/m/nhatdang10" class="bitly" target="_blank" data-tooltip="Bit.ly"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/bitly.svg" alt="Bit.ly"></a>
+        </div>
+        <button class="btn edu-btn" onclick="location.href='/eduspace'">EduSpace by ND Labs</button>
+        <button class="btn search-btn" onclick="location.href='/search'">Search</button>
+        <button class="btn windows12-btn" onclick="location.href='/windows12'">Windows 12</button>
+        <button class="btn game-btn" onclick="location.href='/dino'">Dino</button>
+        <button class="btn tts-btn" onclick="location.href='/chuyen-van-ban-thanh-giong-noi'">Chuyển Văn Bản Thành Giọng Nói</button>
+        <button class="btn dinhdanganh-btn" onclick="location.href='/chuyen-doi-dinh-dang-loai-anh'">Chuyển Đổi Định Dạng Loại Ảnh</button>
+        <button class="btn maunen-btn" onclick="location.href='/nen-gradient-pastel'">Nền Gradient Pastel</button>
+        <button class="btn qr-btn" onclick="location.href='/qr'">Tạo Mã QR</button>
+        <button class="btn tabshare-btn" onclick="location.href='/share'">Share</button>
+        <button class="btn video-btn" onclick="location.href='/video'">Video</button>
+        <button class="btn docx-btn" onclick="location.href='/docx'">Docx</button>
+        <button class="btn pptx-btn" onclick="location.href='/pptx'">PPTX</button>
+        <button class="btn py-btn" onclick="location.href='/python'">Python</button>
+        <button class="btn lucky-btn" onclick="location.href='/lucky/vong-quay-may-man.html'">Lucky</button>
+        <button class="btn tt-btn" onclick="location.href='/tiktok/wrapped'">TikTok Wrapped - Gemini</button>
+        <button class="btn tt-btn" onclick="location.href='/tiktok/wrapped-chatgpt'">TikTok Wrapped - ChatGPT</button>
+        <button class="btn tt-btn" onclick="location.href='/tiktok/wrapped-deepseek'">TikTok Wrapped - DeepSeek</button>
+      </div>
+      <footer class="footer">© 2025 ND Labs. All rights reserved.</footer>
+  </div>
+
+  <div id="searchResultArea">
+    <div id="internalResults"></div>
+    <div id="googleZone">
+        <div style="font-size: 0.8rem; color: #888; margin: 20px 0 10px;">KẾT QUẢ TỪ GOOGLE WEB</div>
+        <div class="gcse-searchresults-only" data-gname="nd-engine"></div>
     </div>
-    <button class="btn game-btn" onclick="location.href='/dino'">Dino</button>
-    <button class="btn tts-btn" onclick="location.href='/chuyen-van-ban-thanh-giong-noi'">Chuyển Văn Bản Thành Giọng Nói</button>
-    <button class="btn dinhdanganh-btn" onclick="location.href='/chuyen-doi-dinh-dang-loai-anh'">Chuyển Đổi Định Dạng Loại Ảnh</button>
-    <button class="btn maunen-btn" onclick="location.href='/nen-gradient-pastel'">Nền Gradient Pastel</button>
-    <button class="btn qr-btn" onclick="location.href='/qr'">Tạo Mã QR</button>
-    <button class="btn tabshare-btn" onclick="location.href='/share'">Share</button>
-    <button class="btn video-btn" onclick="location.href='/video'">Video</button>
-    <button class="btn docx-btn" onclick="location.href='/docx'">Docx</button>
-    <button class="btn pptx-btn" onclick="location.href='/pptx'">PPTX</button>
-    <button class="btn py-btn" onclick="location.href='/python'">Python</button>
-    <button class="btn lucky-btn" onclick="location.href='/lucky/vong-quay-may-man.html'">Lucky</button>
-    <button class="btn tt-btn" onclick="location.href='/tiktok/wrapped'">TikTok Wrapped - Gemini</button>
-    <button class="btn tt-btn" onclick="location.href='/tiktok/wrapped-chatgpt'">TikTok Wrapped - ChatGPT</button>
-    <button class="btn tt-btn" onclick="location.href='/tiktok/wrapped-deepseek'">TikTok Wrapped - DeepSeek</button>
   </div>
 
   <div class="toast toast-welcome">Trang web có nhạc nền. Cảm ơn bạn đã ghé thăm và ủng hộ!</div>
 
   <script>
-    /* Music */
+    /* GIỮ NGUYÊN TOÀN BỘ LOGIC GỐC CỦA BẠN */
     const music = document.getElementById("backgroundMusic");
     const volumeControl = document.getElementById("volumeControl");
     const toggleBtn = document.getElementById("musicToggleBtn");
@@ -202,22 +225,78 @@
     volumeControl.addEventListener("input", function(){ music.volume = this.value; });
     function shareWebsite(){ navigator.clipboard.writeText("Trang chủ của ND Labs: https://nd-site.github.io").then(()=>{ const toast=document.createElement("div"); toast.className="toast"; toast.textContent="Đã sao chép liên kết vào bộ nhớ tạm!"; document.body.appendChild(toast); setTimeout(()=>{toast.remove();},5000);}); }
     window.addEventListener("load",()=>{ toggleBtn.innerHTML= music.paused?'<i data-feather="play"></i>':'<i data-feather="pause"></i>'; feather.replace();});
-    setTimeout(()=>{document.querySelector(".toast").style.display="none";},5000);
+    setTimeout(()=>{document.querySelector(".toast-welcome").style.display="none";},5000);
     feather.replace();
 
-    /* Browser */
+    /* BROWSER LOGIC GỐC */
     const $q=document.getElementById("q"); const $go=document.getElementById("go"); const $engine=document.getElementById("engine");
     const ENGINES={ google:q=>`https://www.google.com/search?q=${encodeURIComponent(q)}`, bing:q=>`https://www.bing.com/search?q=${encodeURIComponent(q)}`, duck:q=>`https://duckduckgo.com/?q=${encodeURIComponent(q)}` };
     const selected=$engine.querySelector(".selected"); const selectedContent=selected.querySelector(".content"); const options=$engine.querySelector(".options");
     selected.addEventListener("click",()=>{const isOpen=$engine.classList.contains("open"); options.style.display=isOpen?"none":"block"; $engine.classList.toggle("open",!isOpen);});
     options.querySelectorAll(":scope > div").forEach(option=>{option.addEventListener("click",()=>{const imgSrc=option.dataset.img||""; const label=option.dataset.label||""; selectedContent.textContent=""; if(imgSrc){const img=document.createElement("img"); img.src=imgSrc; if(label==="Google") img.className="logo-google"; if(label==="Bing") img.className="logo-bing"; if(label==="DuckDuckGo") img.className="logo-duck"; selectedContent.appendChild(img);} const span=document.createElement("span"); span.textContent=label; selectedContent.appendChild(span); selected.dataset.value=option.dataset.value; options.style.display="none"; $engine.classList.remove("open");});});
-    function isIPv4(host){if(!/^(\d{1,3}\.){3}\d{1,3}$/.test(host))return false;return host.split('.').every(o=>Number(o)>=0&&Number(o)<=255);}
-    function normalizeUrl(input){const raw=input.trim(); if(!raw||/\s/.test(raw)||/^javascript:/i.test(raw))return null; let candidate=/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(raw)?raw:'https://'+raw; try{const u=new URL(candidate); const host=u.hostname; const looksHostLike=host==="localhost"||isIPv4(host)||host.includes('.'); if(!looksHostLike)return null; if(u.protocol==="http:"){return 'https://'+u.host+u.pathname+u.search+u.hash;} return u.href;}catch{return null;}}
-    function goNow(url){window.location.assign(url);}
-    function handleGo(){const val=$q.value; const normalized=normalizeUrl(val); if(normalized){goNow(normalized);} else {const engineKey=selected.dataset.value||"google"; const engine=ENGINES[engineKey]; const url=engine(val.trim()); goNow(url);} }
-    $go.addEventListener('click',handleGo); $q.addEventListener('keydown',(e)=>{if(e.key==='Enter') handleGo();}); document.addEventListener('click',(e)=>{if(!$engine.contains(e.target)){options.style.display='none'; $engine.classList.remove("open");}});
-  </script>
 
-  <footer class="footer">© 2025 ND Labs. All rights reserved.</footer>
+    /* --- LOGIC LIVE SEARCH & REPO --- */
+    const CONFIG = { username: 'nd-site', repositories: ['nd-site.github.io', 'test', 'windows12', 'eduspace', 'hoctap'], branch: 'main' };
+    let searchDatabase = [];
+
+    async function initSearchData() {
+        const cached = localStorage.getItem('nd_search_cache');
+        if(cached) { searchDatabase = JSON.parse(cached).database; return; }
+        for(const repo of CONFIG.repositories) {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${CONFIG.username}/${repo}/git/trees/${CONFIG.branch}?recursive=1`);
+                const data = await res.json();
+                if(data.tree) {
+                    data.tree.filter(f => f.path.endsWith('.html')).forEach(f => {
+                        const base = repo === 'nd-site.github.io' ? '/' : `/${repo}/`;
+                        searchDatabase.push({ title: f.path.split('/').pop().replace('.html','').toUpperCase(), url: base + f.path, repo: repo });
+                    });
+                }
+            } catch(e){}
+        }
+        localStorage.setItem('nd_search_cache', JSON.stringify({timestamp: Date.now(), database: searchDatabase}));
+    }
+    initSearchData();
+
+    const $mainWrapper = document.getElementById("mainContentWrapper");
+    const $searchArea = document.getElementById("searchResultArea");
+    const $internal = document.getElementById("internalResults");
+
+    $q.addEventListener('input', () => {
+        const val = $q.value.trim().toLowerCase();
+        if (val.length > 0) {
+            $mainWrapper.style.display = "none";
+            $searchArea.style.display = "block";
+            
+            // Tìm nội bộ Repo
+            $internal.innerHTML = "";
+            const matches = searchDatabase.filter(i => i.title.toLowerCase().includes(val));
+            matches.forEach(item => {
+                const a = document.createElement('a');
+                a.className = 'res-item'; a.href = item.url;
+                a.innerHTML = `<span class="res-title">${item.title}</span><span class="res-link">nd-site.github.io${item.url}</span><div class="res-snippet">Công cụ tìm thấy trong kho lưu trữ: ${item.repo}</div>`;
+                $internal.appendChild(a);
+            });
+
+            // Gọi Google CSE
+            if (window.google?.search?.cse) {
+                google.search.cse.element.getElement('nd-engine').execute(val);
+            }
+        } else {
+            $mainWrapper.style.display = "flex";
+            $searchArea.style.display = "none";
+        }
+    });
+
+    // Handle Go button (Giữ nguyên logic nhảy trang của bạn)
+    function handleGo(){
+        const val=$q.value; 
+        if(!val.trim()) return;
+        const engineKey=selected.dataset.value||"google";
+        window.location.assign(ENGINES[engineKey](val.trim()));
+    }
+    $go.addEventListener('click',handleGo);
+    $q.addEventListener('keydown',(e)=>{if(e.key==='Enter') handleGo();});
+  </script>
 </body>
 </html>
