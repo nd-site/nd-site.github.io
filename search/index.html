@@ -260,4 +260,63 @@
 
     // Hàm hiển thị các liên kết tìm kiếm bổ sung
     function displayAdditionalSearchLinks(query) {
-        const githubSearchUrl = `
+        const githubSearchUrl = `https://github.com/search?q=user%3A${GITHUB_USER}+${encodeURIComponent(query)}&type=Code`;
+        const googleSiteSearchUrl = `https://www.google.com/search?q=site%3A${GITHUB_PAGES_DOMAIN}+${encodeURIComponent(query)}`;
+        // Nếu bạn dùng custom domain, thay GITHUB_PAGES_DOMAIN bằng CUSTOM_DOMAIN
+        // const googleSiteSearchUrl = `https://www.google.com/search?q=site%3A${SEARCH_DOMAIN}+${encodeURIComponent(query)}`;
+
+
+        // Liên kết Google Search (Tìm nội dung trên GitHub Pages site)
+        const googleCard = document.createElement('a');
+        googleCard.className = 'search-link-card';
+        googleCard.href = googleSiteSearchUrl;
+        googleCard.target = "_blank";
+        googleCard.innerHTML = `
+            <div class="link-title">🔍 Tìm "${query}" trên trang ND Labs</div>
+            <div class="link-desc">Sử dụng Google để tìm các bài viết, trang, nội dung chi tiết trong trang web này.</div>
+            <span class="result-label" style="background-color: #4285F4;">Site</span>
+        `;
+        resultsDiv.appendChild(googleCard);
+
+        // Liên kết GitHub Search (Tìm thư mục/file/code trong tất cả repos của bạn)
+        const githubCodeCard = document.createElement('a');
+        githubCodeCard.className = 'search-link-card';
+        githubCodeCard.href = githubSearchUrl;
+        githubCodeCard.target = "_blank";
+        githubCodeCard.innerHTML = `
+            <div class="link-title">📄 Tìm "${query}" trong các file & code trên GitHub</div>
+            <div class="link-desc">Tìm kiếm sâu hơn vào tên file, thư mục và nội dung code trong tất cả các kho lưu trữ của ${GITHUB_USER}.</div>
+            <span class="result-label" style="background-color: #333;">Code</span>
+        `;
+        resultsDiv.appendChild(githubCodeCard);
+    }
+
+    // Sự kiện tìm kiếm chính
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase().trim();
+        resultsDiv.innerHTML = ''; // Xóa kết quả cũ
+
+        if (term.length < 2) { // Chỉ tìm khi gõ từ 2 ký tự
+            statusMessage.innerText = 'Nhập ít nhất 2 ký tự để tìm kiếm.';
+            return;
+        }
+        
+        statusMessage.innerText = `Tìm kiếm cho: "${e.target.value}"`;
+
+        // 1. Tìm kiếm trong danh sách repo đã tải
+        const filteredRepos = projects.filter(p => 
+            p.name.toLowerCase().includes(term) || 
+            (p.description && p.description.toLowerCase().includes(term))
+        );
+        displayRepoResults(filteredRepos);
+
+        // 2. Luôn hiển thị các liên kết tìm kiếm bổ sung (Google & GitHub)
+        displayAdditionalSearchLinks(term);
+    });
+
+    // Chạy khi tải trang lần đầu
+    fetchProjects();
+</script>
+
+</body>
+</html>
