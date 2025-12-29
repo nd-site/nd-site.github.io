@@ -11,6 +11,7 @@
             --blue-dark: #0077ff;
             --bg: #f8fbff;
             --white: #ffffff;
+            --url-color: #008a00; /* Màu xanh lá cho đường dẫn giống Google */
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: #333; }
         
@@ -29,7 +30,11 @@
         .result-item { background: var(--white); padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 6px solid var(--blue-main); transition: 0.3s; position: relative; text-decoration: none; display: block; overflow: hidden; }
         .result-item:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
         
-        .title { color: var(--blue-dark); font-weight: bold; font-size: 1.2rem; margin-bottom: 5px; padding-right: 60px; }
+        .title { color: var(--blue-dark); font-weight: bold; font-size: 1.2rem; margin-bottom: 2px; padding-right: 60px; }
+        
+        /* CSS cho địa chỉ dẫn tới trang */
+        .url-display { color: var(--url-color); font-size: 0.8rem; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+        
         .snippet { color: #666; font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         
         .badge { position: absolute; top: 20px; right: 20px; font-size: 0.65rem; font-weight: bold; padding: 4px 10px; border-radius: 4px; letter-spacing: 1px; }
@@ -57,18 +62,14 @@
 </div>
 
 <script>
-    // --- CẤU HÌNH ĐA REPO ---
     const CONFIG = {
         username: 'nd-site',
-        // Danh sách các Repo bạn muốn quét dữ liệu
         repositories: [
             'nd-site.github.io', 
             'test', 
             'windows12',
             'eduspace',
-            'hoctap',
-            '-'
-            // Bạn có thể thêm bao nhiêu repo tùy thích vào đây
+            'hoctap'
         ],
         branch: 'main'
     };
@@ -78,7 +79,6 @@
     const status = document.getElementById('status');
     let searchDatabase = [];
 
-    // 1. Hàm lấy file từ MỘT repo cụ thể
     async function getFilesFromRepo(repoName) {
         try {
             const treeUrl = `https://api.github.com/repos/${CONFIG.username}/${repoName}/git/trees/${CONFIG.branch}?recursive=1`;
@@ -89,8 +89,6 @@
             return data.tree
                 .filter(file => file.path.endsWith('.html') && file.path !== 'search.html')
                 .map(file => {
-                    // Xây dựng URL dẫn đến trang web tương ứng
-                    // Nếu là repo chính (username.github.io) thì path là /, nếu repo khác thì path là /repo/
                     const baseUrl = repoName === `${CONFIG.username}.github.io` 
                                     ? `https://${CONFIG.username}.github.io/` 
                                     : `https://${CONFIG.username}.github.io/${repoName}/`;
@@ -102,7 +100,6 @@
         }
     }
 
-    // 2. Hàm đọc nội dung (Crawl) nội dung file
     async function crawlPage(url) {
         try {
             const response = await fetch(url);
@@ -125,13 +122,10 @@
         } catch (e) { return null; }
     }
 
-    // 3. Khởi chạy: Quét tất cả repo trong danh sách
     async function init() {
         status.innerText = "🚀 Đang quét dữ liệu từ các hệ thống ND Labs...";
-        
         let allFilePaths = [];
         
-        // Quét lần lượt từng Repo
         for (const repo of CONFIG.repositories) {
             const paths = await getFilesFromRepo(repo);
             allFilePaths = allFilePaths.concat(paths);
@@ -142,9 +136,7 @@
             return;
         }
 
-        status.innerText = `📄 Đang lập chỉ mục ${allFilePaths.length} trang từ ${CONFIG.repositories.length} dự án...`;
-        
-        // Đọc nội dung tất cả file đã tìm thấy
+        status.innerText = `📄 Đang lập chỉ mục ${allFilePaths.length} trang...`;
         const promises = allFilePaths.map(path => crawlPage(path));
         const results = await Promise.all(promises);
         
@@ -156,7 +148,6 @@
         setTimeout(() => status.style.opacity = '0.5', 3000);
     }
 
-    // 4. Xử lý tìm kiếm (Giữ nguyên logic cũ)
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase().trim();
         resultsList.innerHTML = '';
@@ -166,7 +157,7 @@
         matches.forEach(item => renderCard(item.title, item.url, item.snippet, 'site'));
 
         const googleUrl = `https://www.google.com/search?q=site:${CONFIG.username}.github.io+${encodeURIComponent(query)}`;
-        renderCard(`Tìm "${query}" trên toàn hệ thống (Google)`, googleUrl, `Mở rộng tìm kiếm ra các trang chưa được lập chỉ mục cục bộ.`, 'web');
+        renderCard(`Tìm "${query}" trên Google`, googleUrl, `Mở rộng tìm kiếm ra toàn bộ hệ thống web.`, 'web');
     });
 
     function renderCard(title, url, desc, type) {
@@ -178,9 +169,13 @@
         const badgeClass = type === 'site' ? 'badge-site' : 'badge-web';
         const badgeText = type === 'site' ? 'SITE' : 'WEB';
 
+        // Hiển thị đẹp hơn đường dẫn: rút gọn các giao thức để dễ nhìn
+        const displayUrl = url.replace('https://', '').replace('http://', '');
+
         a.innerHTML = `
             <span class="badge ${badgeClass}">${badgeText}</span>
             <div class="title">${title}</div>
+            <span class="url-display">${displayUrl}</span>
             <div class="snippet">${desc}</div>
         `;
         resultsList.appendChild(a);
