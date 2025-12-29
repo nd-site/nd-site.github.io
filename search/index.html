@@ -11,37 +11,109 @@
             --blue-dark: #0077ff;
             --bg: #f8fbff;
             --white: #ffffff;
-            --url-color: #008a00; /* Màu xanh lá cho đường dẫn giống Google */
+            --url-color: #008a00;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: #333; }
+
+        /* Tối ưu hóa toàn bộ trang */
+        * { box-sizing: border-box; } 
+
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            color: #333; 
+            overflow-x: hidden; /* Chống cuộn ngang tuyệt đối */
+        }
         
-        header { background: var(--white); padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        /* 1. Ghim Header */
+        header { 
+            background: var(--white); 
+            padding: 15px; 
+            text-align: center; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+        }
         .brand { display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; }
         .brand img { height: 40px; }
         .brand span { font-size: 1.5rem; font-weight: 800; color: var(--blue-dark); }
 
-        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
-        .search-wrapper { position: relative; margin-bottom: 20px; }
-        input { width: 100%; padding: 16px 25px; border-radius: 50px; border: 2px solid var(--blue-main); outline: none; font-size: 17px; box-shadow: 0 8px 20px rgba(0,168,255,0.1); transition: 0.3s; }
-        input:focus { box-shadow: 0 8px 25px rgba(0,168,255,0.25); }
-        
-        #status { font-size: 0.85rem; text-align: center; color: var(--blue-dark); margin-bottom: 15px; min-height: 20px; }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 0 15px; /* Tạo khoảng cách an toàn 2 bên mép màn hình */
+        }
 
-        .result-item { background: var(--white); padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 6px solid var(--blue-main); transition: 0.3s; position: relative; text-decoration: none; display: block; overflow: hidden; }
+        /* 2. Ghim thanh tìm kiếm ngay dưới Header */
+        .search-sticky-container {
+            position: sticky;
+            top: 70px; /* Nằm ngay dưới độ cao của header */
+            background: var(--bg);
+            padding: 15px 0;
+            z-index: 999;
+            margin-bottom: 10px;
+        }
+        
+        #status { 
+            font-size: 0.85rem; 
+            text-align: center; 
+            color: var(--blue-dark); 
+            margin-bottom: 10px; 
+            min-height: 20px; 
+        }
+
+        .search-wrapper { position: relative; width: 100%; }
+        
+        /* Sửa lỗi tràn viền tại đây */
+        input { 
+            width: 100%; 
+            padding: 14px 25px; 
+            border-radius: 50px; 
+            border: 2px solid var(--blue-main); 
+            outline: none; 
+            font-size: 16px; 
+            box-shadow: 0 8px 20px rgba(0,168,255,0.1); 
+            transition: 0.3s;
+            display: block;
+        }
+        input:focus { box-shadow: 0 8px 25px rgba(0,168,255,0.25); border-color: var(--blue-dark); }
+
+        /* Kết quả tìm kiếm */
+        #resultsList { padding-bottom: 30px; }
+
+        .result-item { 
+            background: var(--white); 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin-bottom: 15px; 
+            border-left: 6px solid var(--blue-main); 
+            transition: 0.3s; 
+            position: relative; 
+            text-decoration: none; 
+            display: block; 
+            overflow: hidden; 
+        }
         .result-item:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
         
-        .title { color: var(--blue-dark); font-weight: bold; font-size: 1.2rem; margin-bottom: 2px; padding-right: 60px; }
+        .title { color: var(--blue-dark); font-weight: bold; font-size: 1.1rem; margin-bottom: 2px; padding-right: 60px; line-height: 1.3; }
+        .url-display { color: var(--url-color); font-size: 0.75rem; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+        .snippet { color: #666; font-size: 0.85rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
         
-        /* CSS cho địa chỉ dẫn tới trang */
-        .url-display { color: var(--url-color); font-size: 0.8rem; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
-        
-        .snippet { color: #666; font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        
-        .badge { position: absolute; top: 20px; right: 20px; font-size: 0.65rem; font-weight: bold; padding: 4px 10px; border-radius: 4px; letter-spacing: 1px; }
+        .badge { position: absolute; top: 15px; right: 15px; font-size: 0.6rem; font-weight: bold; padding: 3px 8px; border-radius: 4px; letter-spacing: 1px; }
         .badge-site { background: #e3f2fd; color: #1976d2; border: 1px solid #1976d2; }
         .badge-web { background: #fff3e0; color: #f57c00; border: 1px solid #f57c00; }
 
-        .no-results { text-align: center; padding: 40px; color: #999; }
+        /* Tối ưu Mobile */
+        @media (max-width: 600px) {
+            header { padding: 10px; }
+            .brand img { height: 32px; }
+            .brand span { font-size: 1.2rem; }
+            .search-sticky-container { top: 52px; padding: 10px 0; }
+            input { padding: 12px 20px; font-size: 15px; }
+            .result-item { padding: 15px; }
+            .title { font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
@@ -54,23 +126,20 @@
 </header>
 
 <div class="container">
-    <div id="status">Đang khởi tạo hệ thống...</div>
-    <div class="search-wrapper">
-        <input type="text" id="searchInput" placeholder="Tìm kiếm file, bài viết hoặc nội dung..." disabled>
+    <div class="search-sticky-container">
+        <div id="status">Đang khởi tạo hệ thống...</div>
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm file, bài viết hoặc nội dung..." disabled>
+        </div>
     </div>
+    
     <div id="resultsList"></div>
 </div>
 
 <script>
     const CONFIG = {
         username: 'nd-site',
-        repositories: [
-            'nd-site.github.io', 
-            'test', 
-            'windows12',
-            'eduspace',
-            'hoctap'
-        ],
+        repositories: ['nd-site.github.io', 'test', 'windows12', 'eduspace', 'hoctap'],
         branch: 'main'
     };
 
@@ -84,7 +153,6 @@
             const treeUrl = `https://api.github.com/repos/${CONFIG.username}/${repoName}/git/trees/${CONFIG.branch}?recursive=1`;
             const response = await fetch(treeUrl);
             if (!response.ok) return [];
-            
             const data = await response.json();
             return data.tree
                 .filter(file => file.path.endsWith('.html') && file.path !== 'search.html')
@@ -94,10 +162,7 @@
                                     : `https://${CONFIG.username}.github.io/${repoName}/`;
                     return baseUrl + file.path.replace('index.html', '');
                 });
-        } catch (e) {
-            console.error(`Lỗi quét repo ${repoName}:`, e);
-            return [];
-        }
+        } catch (e) { return []; }
     }
 
     async function crawlPage(url) {
@@ -107,12 +172,9 @@
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            
             doc.querySelectorAll('script, style, nav, footer').forEach(el => el.remove());
-
             const title = doc.querySelector('h1')?.innerText || doc.querySelector('title')?.innerText || url;
             const content = doc.body.innerText.replace(/\s+/g, ' ').trim();
-            
             return {
                 title: title.trim(),
                 url: url,
@@ -123,39 +185,32 @@
     }
 
     async function init() {
-        status.innerText = "🚀 Đang quét dữ liệu từ các hệ thống ND Labs...";
+        status.innerText = "🚀 Đang quét dữ liệu ND Labs...";
         let allFilePaths = [];
-        
         for (const repo of CONFIG.repositories) {
             const paths = await getFilesFromRepo(repo);
             allFilePaths = allFilePaths.concat(paths);
         }
-
         if (allFilePaths.length === 0) {
-            status.innerText = "Không tìm thấy dữ liệu HTML nào.";
+            status.innerText = "Không tìm thấy dữ liệu.";
             return;
         }
-
         status.innerText = `📄 Đang lập chỉ mục ${allFilePaths.length} trang...`;
         const promises = allFilePaths.map(path => crawlPage(path));
         const results = await Promise.all(promises);
-        
         searchDatabase = results.filter(item => item !== null);
-        
-        status.innerText = `✅ Đã sẵn sàng! Tìm thấy nội dung trong ${searchDatabase.length} trang.`;
+        status.innerHTML = `✅ Sẵn sàng! Tìm thấy <b>${searchDatabase.length}</b> nội dung.`;
         searchInput.disabled = false;
         searchInput.focus();
-        setTimeout(() => status.style.opacity = '0.5', 3000);
+        setTimeout(() => { status.style.opacity = '0.6'; }, 3000);
     }
 
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase().trim();
         resultsList.innerHTML = '';
         if (query.length < 1) return;
-
         const matches = searchDatabase.filter(item => item.fullText.includes(query));
         matches.forEach(item => renderCard(item.title, item.url, item.snippet, 'site'));
-
         const googleUrl = `https://www.google.com/search?q=site:${CONFIG.username}.github.io+${encodeURIComponent(query)}`;
         renderCard(`Tìm "${query}" trên Google`, googleUrl, `Mở rộng tìm kiếm ra toàn bộ hệ thống web.`, 'web');
     });
@@ -165,13 +220,9 @@
         a.className = 'result-item';
         a.href = url;
         if(type === 'web') a.target = "_blank";
-        
         const badgeClass = type === 'site' ? 'badge-site' : 'badge-web';
         const badgeText = type === 'site' ? 'SITE' : 'WEB';
-
-        // Hiển thị đẹp hơn đường dẫn: rút gọn các giao thức để dễ nhìn
         const displayUrl = url.replace('https://', '').replace('http://', '');
-
         a.innerHTML = `
             <span class="badge ${badgeClass}">${badgeText}</span>
             <div class="title">${title}</div>
@@ -180,7 +231,6 @@
         `;
         resultsList.appendChild(a);
     }
-
     init();
 </script>
 </body>
