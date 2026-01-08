@@ -1,4 +1,5 @@
 const data = {
+    "Đề 2 HSG Tin 25-26 - Nhật Đăng 8/1/26 2:10": "https://www.mediafire.com/file/tizs143batmqy3r/NUER.py/file",
     "trang-chu": "/index.html",
     "BTVN-EN-01": "/video/btvn-en-01",
     "BTVN-EN-02": "/video/btvn-en-02",
@@ -51,6 +52,7 @@ const data = {
     "EduSpace 1 - Gemini": "https://gemini.google.com/share/1b9f70ed0268",
     "Đoạn con - Bài mẫu": "/share/hinh/doan-con",
 };
+
 
 
 
