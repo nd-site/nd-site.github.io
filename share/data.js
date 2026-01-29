@@ -53,18 +53,3 @@ const data = {
     "EduSpace 1 - Gemini": "https://gemini.google.com/share/1b9f70ed0268",
     "Đoạn con - Bài mẫu": "/share/hinh/doan-con",
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
