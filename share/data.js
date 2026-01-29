@@ -1,4 +1,5 @@
 const data = {
+    "hình nền 1": "https://quickshare.samsungcloud.com/vZxJEwppt5UR",
     "Đề 2 HSG Tin 25-26 - Nhật Đăng 8/1/26 2:10": "https://app.mediafire.com/folder/znzbm8pupk1uh", /** https://app.mediafire.com/folder/vbrb6r6dhgo01 */
     "trang-chu": "/index.html",
     "BTVN-EN-01": "/video/btvn-en-01",
@@ -52,6 +53,7 @@ const data = {
     "EduSpace 1 - Gemini": "https://gemini.google.com/share/1b9f70ed0268",
     "Đoạn con - Bài mẫu": "/share/hinh/doan-con",
 };
+
 
 
 
