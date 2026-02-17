@@ -1,302 +1,1051 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ND Labs - Trang Chủ</title>
   <link rel="icon" href="/logo.png" type="image/png">
-  <script src="https://unpkg.com/feather-icons"></script>
+  <!-- Phosphor Icons (Premium Icons) -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script async src="https://cse.google.com/cse.js?cx=90bdd5f1afd434b9d"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
-    /* GIỮ NGUYÊN TOÀN BỘ CSS GỐC CỦA BẠN */
-    html, body {
-      overflow-x: hidden; margin: 0; padding: 10px;
-      font-family: system-ui, sans-serif;
+    :root {
+      --primary: #0070f3;
+      --primary-gradient: linear-gradient(135deg, #0070f3, #00b4d8);
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.6);
+      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+      --text-main: #1e293b;
+      --text-sub: #64748b;
     }
-    *, *::before, *::after { box-sizing: border-box; }
-    body {
-      background: linear-gradient(135deg, #d1e8ff, #fefefe);
-      background-attachment: fixed; background-repeat: no-repeat;
-      background-size: cover; color: #333;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; min-height: 100vh;
-    }
-    .controls {
-      position: fixed; top: 15px; left: 15px;
-      display: flex; align-items: center; gap: 15px; z-index: 1000;
-    }
-    .icon-btn {
-      cursor: pointer; background: linear-gradient(135deg, #0278ff, #9c5fff); color: white;
-      padding: 12px; border-radius: 50%;
-      transition: background 0.3s ease, transform 0.3s ease;
-      border: none; font-size: 24px; display: flex;
-      align-items: center; justify-content: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .icon-btn:hover {
-      background: linear-gradient(135deg, #0061cf, #824cd8); transform: scale(1.1);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-    }
-    #volumeControl { width: 100px; cursor: pointer; }
-    .share-btn {
-      position: fixed; top: 15px; right: 15px; background: linear-gradient(135deg, #0278ff, #9c5fff); color: white;
-      border-radius: 50%; padding: 12px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; font-size: 24px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: none; z-index: 2000;
-    }
-    .share-btn:hover {
-      background: linear-gradient(135deg, #0061cf, #824cd8); transform: scale(1.1);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-    }
-    .card {
-      background: white; padding: 40px 20px; border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      text-align: center; max-width: 500px; width: 100%; margin-top: 20px;
-    }
-    .avatar { width: 170px; height: 170px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; }
-    h1 { margin-bottom: 6px; margin-top: -17px; color: #3a5efd; font-size: 35px; font-weight: bold; text-align: center; }
-    p { font-size: 20px; color: #555; margin-top: 0; margin-bottom: 12px; font-weight: 500; text-align: justify; }
-    .social { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .social a { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; }
-    .social a:hover { transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-    .social img { width: 26px; height: 26px; filter: brightness(0) invert(1); }
-    .facebook { background: #1877f2; }
-    .youtube  { background: #ff0000; }
-    .tiktok   { background: #000000; }
-    .email    { background: #ff0000; }
-    .zalo     { background: #1877f2; }
-    .bitly { background: #EE6123; }
-    .social a::after {
-      content: attr(data-tooltip); position: absolute; bottom: -28px;
-      background: rgba(0,0,0,0.75); color: white; font-size: 12px;
-      padding: 4px 8px; border-radius: 4px; opacity: 0;
-      transition: opacity 0.3s; pointer-events: none; white-space: nowrap;
-      left: 50%; transform: translateX(-50%);
-    }
-    .social a:hover::after { opacity: 1; }
-    .toast {
-      position: fixed; left: 50%; background: rgba(0,102,204,0.65); color: white;
-      padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600;
-      animation: fadeInOut 5s ease; z-index: 1001;
-      display: flex; justify-content: center; align-items: center; text-align: center; backdrop-filter: blur(2px);
-    }
-    .toast.toast-welcome { top: 50%; transform: translate(-50%, -50%); }
-    @keyframes fadeInOut { 0%{opacity:0; transform:translateX(-50%) translateY(10px);} 10%{opacity:1; transform:translateX(-50%) translateY(0);} 90%{opacity:1;} 100%{opacity:0; transform:translateX(-50%) translateY(10px);} }
-    .btn {
-      width: 100%; max-width: 500px; min-width: 288px; margin: 10px auto;
-      color: white; font-size: 20px; padding: 18px 36px; border-radius: 50vw;
-      border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-      font-weight: bold; text-align: center; display: block;
-    }
-    .btn:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
-    .btn:active { transform: translateY(2px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .game-btn { background: linear-gradient(135deg, #4caf50, #ffeb3b); }
-    .tts-btn { background: linear-gradient(135deg, #2196f3, #ff7043); }
-    .dinhdanganh-btn { background: linear-gradient(135deg, #ff5252, #40e0d0); }
-    .maunen-btn { background: linear-gradient(135deg, #ff80ab, #9370db); }
-    .qr-btn { background: linear-gradient(135deg, #00c6ff, #0072ff); }
-    .tabshare-btn { background: linear-gradient(135deg, #00c4cc, #8a3ffc); }
-    .video-btn { background: linear-gradient(135deg, #f83600, #f9d423); }
-    .docx-btn { background: linear-gradient(135deg, #2e3cff, #1c00b8); }
-    .pptx-btn { background: linear-gradient(135deg, #f83600, #fc2424); }
-    .py-btn { background: linear-gradient(135deg, #ffe138, #ff8c00d3); }
-    .lucky-btn { background: linear-gradient(135deg, #00c853, #ffd600); }
-    .tt-btn { background: linear-gradient(135deg, #00f2ea, #ff0050); }
-    .edu-btn { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
-    .search-btn { background: linear-gradient(135deg, #11998e, #38ef7d); }
-    .windows12-btn { background: linear-gradient(135deg, #396afc, #2948ff); }
-    .footer {
-      margin-top: 20px; padding: 10px; font-size: 16px; color: #ffffff;
-      text-align: center; background: linear-gradient(135deg, #0061cf, #824cd8);
-      border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); max-width: 500px; width: 100%;
-    }
-    /* Browser styles */
-    .browser-card { background: var(--card, #fff); backdrop-filter: blur(8px); border-radius: 20px; box-shadow: 0 10px 30px #00000020; padding: 22px; }
-    .browser-card .bar { display: flex; align-items: center; gap: 12px; }
-    .browser-card input[type="text"] { flex: 1; padding: 14px 16px; border-radius: 999px; border: none; background: #e9ecef; font-size: 16px; outline: none; color: #5d6266;}
-    .browser-card button#go { width: 48px; height: 48px; border-radius: 50%; border: none; cursor: pointer; background: linear-gradient(135deg, #3995ff, #9c5fff); color: #ffffff; font-weight: 600; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-    .row { display: flex; gap:20px; align-items: center; flex-wrap: wrap; margin-top: 12px; justify-content:center; }
-    .custom-select { position: relative; width: 220px; cursor: pointer; user-select: none; }
-    .custom-select .selected { background: #e9ecef; border-radius: 999px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .custom-select .content { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center; }
-    .custom-select .arrow img { width: 10px; transition: transform 0.2s ease; }
-    .custom-select.open .arrow img { transform: rotate(180deg); }
-    .custom-select .options { display: none; position: absolute; top: 110%; left: 0; width: 100%; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px #0002; z-index: 10; }
-    .custom-select .options div { padding: 12px 16px; font-size: 16px; display: flex; align-items: center; gap: 8px; border-radius: 8px; transition: all 0.2s ease; }
-    .custom-select .options div:hover { background: #eef1f4; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: translateY(-2px); }
-    .logo-google { width: 20px; height: 20px; }
-    .logo-bing   { width: 18px; height: 24px; }
-    .logo-duck   { width: 22px; height: 22px; }
 
-    /* CSS CHO KẾT QUẢ TÌM KIẾM */
-    #searchResultArea { width: 100%; max-width: 800px; display: none; margin-top: 20px; }
-    .res-item { background: white; padding: 18px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid #4caf50; text-decoration: none; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.3s; }
-    .res-item:hover { transform: translateY(-3px); }
-    .res-title { color: #0077ff; font-weight: bold; font-size: 1.1rem; }
-    .res-link { color: #4caf50; font-size: 0.85rem; margin: 4px 0; display: block; word-break: break-all; }
-    .res-snippet { color: #666; font-size: 0.9rem; }
-    .gsc-control-cse { padding: 0 !important; border: none !important; background: transparent !important; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      color: var(--text-main);
+      background: radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(0, 112, 243, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
+        #f8fafc;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 40px;
+    }
+
+    /* --- Background Blobs --- */
+    .blob {
+      position: fixed;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.6;
+      border-radius: 50%;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .blob-1 {
+      top: -10%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: #c084fc;
+      animation-delay: 0s;
+    }
+
+    .blob-2 {
+      bottom: -10%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: #60a5fa;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      33% {
+        transform: translate(30px, -50px) rotate(10deg);
+      }
+
+      66% {
+        transform: translate(-20px, 20px) rotate(-5deg);
+      }
+    }
+
+    /* --- Controls (Top Left/Right) --- */
+    .controls-area {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 100;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .share-area {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-size: 20px;
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      color: var(--primary);
+    }
+
+    /* --- Layout Container --- */
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      margin-top: 40px;
+    }
+
+    /* --- Profile Header --- */
+    .profile-card {
+      text-align: center;
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 20px;
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid white;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transition: transform 0.5s ease;
+    }
+
+    .avatar:hover {
+      transform: rotate(5deg) scale(1.02);
+    }
+
+    .brand-name {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .brand-desc {
+      font-size: 1.1rem;
+      color: var(--text-sub);
+      max-width: 600px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+
+    /* --- Social Links --- */
+    .social-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .social-link {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .social-link img {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s;
+    }
+
+    .social-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .social-link:hover img {
+      transform: scale(1.1);
+    }
+
+    /* --- Search Bar (Browser Style) --- */
+    .search-wrapper {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 50;
+    }
+
+    .browser-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid white;
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .browser-card:focus-within {
+      transform: translateY(-2px);
+      box-shadow: 0 25px 50px -10px rgba(0, 70, 243, 0.15);
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 1.1rem;
+      padding: 12px 16px;
+      outline: none;
+      color: var(--text-main);
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .search-engine-select {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      user-select: none;
+      position: relative;
+    }
+
+    .search-engine-select img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    .search-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 20px;
+    }
+
+    .search-btn:hover {
+      background: #0060df;
+    }
+
+    /* Engine Dropdown */
+    .engine-dropdown {
+      position: absolute;
+      top: 120%;
+      right: 0;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      width: 160px;
+      padding: 8px;
+      display: none;
+      z-index: 100;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .engine-dropdown.show {
+      display: block;
+    }
+
+    .engine-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .engine-option:hover {
+      background: #f8fafc;
+    }
+
+    .engine-option img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    /* --- App Grid System --- */
+    .app-section {
+      width: 100%;
+      animation: fadeInUp 0.8s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 30px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      color: var(--primary);
+      font-size: 1.4rem;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: #e2e8f0;
+      border-radius: 2px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .app-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid white;
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-card:hover {
+      transform: translateY(-5px);
+      background: white;
+      box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* New Premium Icon Styling */
+    .app-icon {
+      width: 64px;
+      /* Larger */
+      height: 64px;
+      border-radius: 18px;
+      /* Softer */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      /* Bigger Icon */
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 10px 20px -5px currentColor;
+      /* Glow effect */
+      transition: transform 0.3s ease;
+    }
+
+    .app-card:hover .app-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .app-info {
+      flex: 1;
+    }
+
+    .app-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .app-desc {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    /* Custom icon colors (Vibrant Gradients) */
+    .icon-edu {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: rgba(59, 130, 246, 0.3);
+    }
+
+    .icon-psy {
+      background: linear-gradient(135deg, #7c3aed, #a78bfa);
+      color: rgba(139, 92, 246, 0.3);
+    }
+
+
+
+    .icon-search {
+      background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+      color: rgba(14, 165, 233, 0.3);
+    }
+
+    .icon-tts {
+      background: linear-gradient(135deg, #f97316, #fb923c);
+      color: rgba(249, 115, 22, 0.3);
+    }
+
+    .icon-qr {
+      background: linear-gradient(135deg, #334155, #64748b);
+      color: rgba(71, 85, 105, 0.3);
+    }
+
+    .icon-share {
+      background: linear-gradient(135deg, #8b5cf6, #c084fc);
+      color: rgba(139, 92, 246, 0.3);
+    }
+
+    .icon-img {
+      background: linear-gradient(135deg, #db2777, #f472b6);
+      color: rgba(219, 39, 119, 0.3);
+    }
+
+    .icon-bg {
+      background: linear-gradient(135deg, #c026d3, #e879f9);
+      color: rgba(192, 38, 211, 0.3);
+    }
+
+    .icon-doc {
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      color: rgba(37, 99, 235, 0.3);
+    }
+
+    .icon-code {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      color: rgba(245, 158, 11, 0.3);
+    }
+
+    .icon-win {
+      background: linear-gradient(135deg, #0078d4, #00bcf2);
+      color: rgba(0, 120, 212, 0.3);
+    }
+
+    .icon-game {
+      background: linear-gradient(135deg, #4b5563, #9ca3af);
+      color: rgba(75, 85, 99, 0.3);
+    }
+
+    .icon-lucky {
+      background: linear-gradient(135deg, #ea580c, #fdba74);
+      color: rgba(234, 88, 12, 0.3);
+    }
+
+    .icon-video {
+      background: linear-gradient(135deg, #ef4444, #f87171);
+      color: rgba(239, 68, 68, 0.3);
+    }
+
+    .icon-tiktok {
+      background: #000000;
+      color: rgba(0, 0, 0, 0.3);
+    }
+
+    .app-icon i {
+      color: white;
+    }
+
+    /* --- Footer --- */
+    .site-footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--text-sub);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 20px;
+      border-top: 1px solid #e2e8f0;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    /* --- Animations --- */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* --- Search Results --- */
+    #searchResultArea {
+      width: 100%;
+      max-width: 800px;
+      display: none;
+      margin-top: 20px;
+    }
+
+    .res-item {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      border-left: 5px solid var(--primary);
+      text-decoration: none;
+      display: block;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      transition: 0.3s;
+    }
+
+    .res-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .res-title {
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .res-link {
+      color: #10b981;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      display: block;
+      font-weight: 600;
+    }
+
+    .res-snippet {
+      color: #64748b;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      left: 50%;
+      top: 20px;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 99px;
+      font-weight: 600;
+      animation: fadeInDown 0.5s ease;
+      z-index: 2000;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
   </style>
 </head>
+
 <body>
-  <div class="controls">
-    <button class="icon-btn" id="musicToggleBtn" title="Bật/Tắt nhạc"><i data-feather="play"></i></button>
-    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" title="Âm lượng" />
-  </div>
-  <button class="share-btn" onclick="shareWebsite()" title="Chia sẻ"><i data-feather="share-2"></i></button>
+
+  <!-- Background Elements -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <!-- Music Audio -->
   <audio id="backgroundMusic" src="/nhacnen.mp3" loop></audio>
 
-  <div class="wrap" id="browser">
-    <div class="browser-card">
-      <div class="bar">
-        <input id="q" type="text" placeholder="Tìm kiếm công cụ hoặc Web..." autocomplete="off" />
-        <button id="go"><img src="/kinhlup.png" alt="" style="width:45px;height:45px;filter:brightness(0) invert(1);" onerror="this.remove()"></button>
-      </div>
-      <div class="row">
-        <div class="custom-select" id="engine">
-          <div class="selected" data-value="google">
-            <div class="content"><img src="/logogoogle.png" alt="Google" class="logo-google"><span>Google</span></div>
-          </div>
-          <div class="options">
-            <div data-value="google" data-label="Google" data-img="/logogoogle.png"><img src="/logogoogle.png" class="logo-google"><span>Google</span></div>
-            <div data-value="bing" data-label="Bing" data-img="/logobing.png"><img src="/logobing.png" class="logo-bing"><span>Bing</span></div>
-            <div data-value="duck" data-label="DuckDuckGo" data-img="/logoduckduckgo.png"><img src="/logoduckduckgo.png" class="logo-duck"><span>DuckDuckGo</span></div>
-          </div>
-        </div>
-      </div>
+  <!-- Controls -->
+  <div class="controls-area">
+    <button class="icon-btn" id="musicToggleBtn" title="Bật/Tắt nhạc">
+      <i class="ph-fill ph-play-circle"></i>
+    </button>
+    <div
+      style="background: rgba(255,255,255,0.8); border-radius: 12px; padding: 0 10px; height: 44px; display: flex; align-items: center;">
+      <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" title="Âm lượng"
+        style="width: 80px; accent-color: var(--primary);">
     </div>
   </div>
 
-  <div id="mainContentWrapper" style="width:100%; display: flex; flex-direction: column; align-items: center;">
-      <div class="card">
-        <img class="avatar" src="/avatar.png" alt="Ảnh đại diện">
-        <h1>ND LABS</h1>
-        <p>Chào mừng đến với ND Labs – được phát triển bởi Nhật Đăng. Tại đây cung cấp các công cụ miễn phí. Chúc bạn có trải nghiệm vui vẻ khi sử dụng!</p>
-        <div class="social">
-          <a href="https://facebook.com/nhatdang10.nd" class="facebook" target="_blank" data-tooltip="Facebook"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook"></a>
-          <a href="https://www.youtube.com/@NhatDang_10" class="youtube" target="_blank" data-tooltip="YouTube"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube"></a>
-          <a href="https://www.tiktok.com/@nhatdang_10" class="tiktok" target="_blank" data-tooltip="TikTok"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok"></a>
-          <a href="mailto:lienhe.nhatdang@gmail.com" class="email" data-tooltip="Email"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email"></a>
-          <a href="https://zalo.me/0379065349" class="zalo" target="_blank" data-tooltip="Zalo"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zalo.svg" alt="Zalo" style="width:34px;height:34px"></a>
-          <a href="https://bit.ly/m/nhatdang10" class="bitly" target="_blank" data-tooltip="Bit.ly"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/bitly.svg" alt="Bit.ly"></a>
-        </div>
-        <button class="btn edu-btn" onclick="location.href='/eduspace'">EduSpace by ND Labs</button>
-        <button class="btn search-btn" onclick="location.href='/search'">Search</button>
-        <button class="btn windows12-btn" onclick="location.href='/windows12'">Windows 12</button>
-        <button class="btn game-btn" onclick="location.href='/dino'">Dino</button>
-        <button class="btn tts-btn" onclick="location.href='/chuyen-van-ban-thanh-giong-noi'">Chuyển Văn Bản Thành Giọng Nói</button>
-        <button class="btn dinhdanganh-btn" onclick="location.href='/chuyen-doi-dinh-dang-loai-anh'">Chuyển Đổi Định Dạng Loại Ảnh</button>
-        <button class="btn maunen-btn" onclick="location.href='/nen-gradient-pastel'">Nền Gradient Pastel</button>
-        <button class="btn qr-btn" onclick="location.href='/qr'">Tạo Mã QR</button>
-        <button class="btn tabshare-btn" onclick="location.href='/share'">Share</button>
-        <button class="btn video-btn" onclick="location.href='/video'">Video</button>
-        <button class="btn docx-btn" onclick="location.href='/docx'">Docx</button>
-        <button class="btn pptx-btn" onclick="location.href='/pptx'">PPTX</button>
-        <button class="btn py-btn" onclick="location.href='/python'">Python</button>
-        <button class="btn lucky-btn" onclick="location.href='/lucky/vong-quay-may-man.html'">Lucky</button>
-        <button class="btn tt-btn" onclick="location.href='/tiktok/wrapped'">TikTok Wrapped - Gemini</button>
-        <button class="btn tt-btn" onclick="location.href='/tiktok/wrapped-chatgpt'">TikTok Wrapped - ChatGPT</button>
-        <button class="btn tt-btn" onclick="location.href='/tiktok/wrapped-deepseek'">TikTok Wrapped - DeepSeek</button>
+  <div class="share-area">
+    <button class="icon-btn" onclick="shareWebsite()" title="Chia sẻ">
+      <i class="ph-fill ph-share-network"></i>
+    </button>
+  </div>
+
+  <div class="container" id="mainContentWrapper">
+
+    <!-- Header / Profile -->
+    <div class="profile-card">
+      <div class="avatar-wrapper">
+        <img src="/avatar.png" alt="ND Labs" class="avatar">
       </div>
-      <footer class="footer">© 2025 ND Labs. All rights reserved.</footer>
-  </div>
+      <h1 class="brand-name">ND LABS</h1>
+      <p class="brand-desc">Chào mừng bạn đến với hệ sinh thái công cụ sáng tạo & giáo dục của Nhật Đăng. Khám phá, học
+        tập và trải nghiệm những điều thú vị!</p>
 
-  <div id="searchResultArea">
-    <div id="internalResults"></div>
-    <div id="googleZone">
-        <div style="font-size: 0.8rem; color: #888; margin: 20px 0 10px;">KẾT QUẢ TỪ GOOGLE WEB</div>
-        <div class="gcse-searchresults-only" data-gname="nd-engine"></div>
+      <div class="social-row">
+        <a href="https://facebook.com/nhatdang10.nd" class="social-link" target="_blank" title="Facebook"><img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook"></a>
+        <a href="https://www.youtube.com/@NhatDang_10" class="social-link" target="_blank" title="YouTube"><img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube"></a>
+        <a href="https://www.tiktok.com/@nhatdang_10" class="social-link" target="_blank" title="TikTok"><img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok"></a>
+        <a href="mailto:lienhe.nhatdang@gmail.com" class="social-link" title="Email"><img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email"></a>
+        <a href="https://zalo.me/0379065349" class="social-link" target="_blank" title="Zalo"><img
+            src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zalo.svg" alt="Zalo"></a>
+      </div>
     </div>
-  </div>
 
-  <div class="toast toast-welcome">Trang web có nhạc nền. Cảm ơn bạn đã ghé thăm và ủng hộ!</div>
+    <!-- Search Tool -->
+    <div class="search-wrapper">
+      <div class="browser-card">
+        <div class="search-engine-select" id="engineSelect">
+          <img src="/logogoogle.png" id="currEngineImg" alt="Engine">
+          <span id="currEngineName">Google</span>
+          <i class="ph-bold ph-caret-down"></i>
+
+          <div class="engine-dropdown" id="engineDropdown">
+            <div class="engine-option" data-val="google" data-img="/logogoogle.png" data-name="Google">
+              <img src="/logogoogle.png"> Google
+            </div>
+            <div class="engine-option" data-val="bing" data-img="/logobing.png" data-name="Bing">
+              <img src="/logobing.png"> Bing
+            </div>
+            <div class="engine-option" data-val="duck" data-img="/logoduckduckgo.png" data-name="DuckDuckGo">
+              <img src="/logoduckduckgo.png"> DuckDuckGo
+            </div>
+          </div>
+        </div>
+
+        <input type="text" id="q" class="search-input" placeholder="Tìm kiếm công cụ hoặc Web..." autocomplete="off">
+
+        <button class="search-btn" id="go">
+          <i class="ph-bold ph-magnifying-glass"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Results Area (Initially Hidden) -->
+    <div id="searchResultArea">
+      <div style="text-align:center; margin-bottom: 20px;">
+        <button onclick="closeSearch()"
+          style="padding: 8px 16px; background: #e2e8f0; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">←
+          Quay lại trang chủ</button>
+      </div>
+      <div id="internalResults"></div>
+      <div id="googleZone">
+        <div style="font-size: 0.8rem; color: #888; margin: 20px 0 10px; font-weight:700; text-align:center">KẾT QUẢ TỪ
+          GOOGLE WEB</div>
+        <!-- Added linkTarget to open in new tab -->
+        <div class="gcse-searchresults-only" data-gname="nd-engine" data-linkTarget="_blank"></div>
+      </div>
+    </div>
+
+    <div id="homeContent" style="width: 100%; display: flex; flex-direction: column; gap: 60px; align-items: center;">
+
+      <!-- Featured Apps -->
+      <div class="app-section" style="animation-delay: 0.1s;">
+        <div class="section-title"><i class="ph-duotone ph-star"></i> Nổi Bật</div>
+        <div class="grid-container">
+          <a href="/eduspace" class="app-card">
+            <div class="app-icon icon-edu"><i class="ph-duotone ph-graduation-cap"></i></div>
+            <div class="app-info">
+              <span class="app-name">EduSpace</span>
+              <span class="app-desc">Nền tảng học tập & ôn luyện kiến thức toàn diện.</span>
+            </div>
+          </a>
+          <a href="/psychology" class="app-card">
+            <div class="app-icon icon-psy"><i class="ph-duotone ph-brain"></i></div>
+            <div class="app-info">
+              <span class="app-name">ND Psychology</span>
+              <span class="app-desc">Trung tâm tâm lý, trắc nghiệm MBTI & Sức khỏe tinh thần.</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Utility Tools -->
+      <div class="app-section" style="animation-delay: 0.2s;">
+        <div class="section-title"><i class="ph-duotone ph-wrench"></i> Tiện Ích</div>
+        <div class="grid-container">
+          <a href="/search" class="app-card">
+            <div class="app-icon icon-search"><i class="ph-duotone ph-magnifying-glass"></i></div>
+            <div class="app-info"><span class="app-name">Search AI</span><span class="app-desc">Công cụ tìm kiếm thông
+                minh.</span></div>
+          </a>
+          <a href="/chuyen-van-ban-thanh-giong-noi" class="app-card">
+            <div class="app-icon icon-tts"><i class="ph-duotone ph-speaker-high"></i></div>
+            <div class="app-info"><span class="app-name">Text to Speech</span><span class="app-desc">Chuyển văn bản
+                thành
+                giọng nói.</span></div>
+          </a>
+          <a href="/qr" class="app-card">
+            <div class="app-icon icon-qr"><i class="ph-duotone ph-qr-code"></i></div>
+            <div class="app-info"><span class="app-name">QR Code</span><span class="app-desc">Tạo mã QR nhanh
+                chóng.</span></div>
+          </a>
+          <a href="/share" class="app-card">
+            <div class="app-icon icon-share"><i class="ph-duotone ph-share-network"></i></div>
+            <div class="app-info"><span class="app-name">Quick Share</span><span class="app-desc">Chia sẻ file dễ
+                dàng.</span></div>
+          </a>
+          <a href="/chuyen-doi-dinh-dang-loai-anh" class="app-card">
+            <div class="app-icon icon-img"><i class="ph-duotone ph-images"></i></div>
+            <div class="app-info"><span class="app-name">Image Convert</span><span class="app-desc">Đổi đuôi ảnh hàng
+                loạt.</span></div>
+          </a>
+          <a href="/nen-gradient-pastel" class="app-card">
+            <div class="app-icon icon-bg"><i class="ph-duotone ph-paint-brush-broad"></i></div>
+            <div class="app-info"><span class="app-name">Pastel BG</span><span class="app-desc">Kho nền Gradient
+                đẹp.</span></div>
+          </a>
+          <a href="/docx" class="app-card">
+            <div class="app-icon icon-doc"><i class="ph-duotone ph-file-doc"></i></div>
+            <div class="app-info"><span class="app-name">Docx View</span><span class="app-desc">Trình xem tài
+                liệu.</span>
+            </div>
+          </a>
+          <a href="/python" class="app-card">
+            <div class="app-icon icon-code"><i class="ph-duotone ph-code"></i></div>
+            <div class="app-info"><span class="app-name">Python</span><span class="app-desc">Công cụ Python.</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Explore & Fun -->
+      <div class="app-section" style="animation-delay: 0.3s;">
+        <div class="section-title"><i class="ph-duotone ph-compass"></i> Khám Phá & Giải Trí</div>
+        <div class="grid-container">
+          <a href="/windows12" class="app-card">
+            <div class="app-icon icon-win"><i class="ph-duotone ph-desktop"></i></div>
+            <div class="app-info"><span class="app-name">Windows 12 Web</span><span class="app-desc">Trải nghiệm giao
+                diện
+                Concept.</span></div>
+          </a>
+          <a href="/dino" class="app-card">
+            <div class="app-icon icon-game"><i class="ph-duotone ph-game-controller"></i></div>
+            <div class="app-info"><span class="app-name">Dino Game</span><span class="app-desc">Game khủng long huyền
+                thoại.</span></div>
+          </a>
+          <a href="/lucky/vong-quay-may-man.html" class="app-card">
+            <div class="app-icon icon-lucky"><i class="ph-duotone ph-clover"></i></div>
+            <div class="app-info"><span class="app-name">Lucky Wheel</span><span class="app-desc">Vòng quay may
+                mắn.</span></div>
+          </a>
+          <a href="/video" class="app-card">
+            <div class="app-icon icon-video"><i class="ph-duotone ph-film-strip"></i></div>
+            <div class="app-info"><span class="app-name">Video Hub</span><span class="app-desc">Kho video giải
+                trí.</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- TikTok Wrapped Special -->
+      <div class="app-section" style="animation-delay: 0.4s;">
+        <div class="section-title"><i class="ph-duotone ph-trend-up"></i> TikTok Analytics</div>
+        <div class="grid-container">
+          <a href="/tiktok/wrapped" class="app-card" style="border-left: 4px solid #000;">
+            <div class="app-icon icon-tiktok"><i class="ph-duotone ph-tiktok-logo"></i></div>
+            <div class="app-info"><span class="app-name">Wrapped (Gemini)</span><span class="app-desc">Phân tích bằng
+                Google Gemini.</span></div>
+          </a>
+          <a href="/tiktok/wrapped-chatgpt" class="app-card" style="border-left: 4px solid #10a37f;">
+            <div class="app-icon icon-tiktok" style="background:#10a37f"><i class="ph-duotone ph-tiktok-logo"></i></div>
+            <div class="app-info"><span class="app-name">Wrapped (ChatGPT)</span><span class="app-desc">Phân tích bằng
+                OpenAI Tech.</span></div>
+          </a>
+          <a href="/tiktok/wrapped-deepseek" class="app-card" style="border-left: 4px solid #3b82f6;">
+            <div class="app-icon icon-tiktok" style="background:#3b82f6"><i class="ph-duotone ph-tiktok-logo"></i></div>
+            <div class="app-info"><span class="app-name">Wrapped (DeepSeek)</span><span class="app-desc">Phân tích
+                chuyên
+                sâu R1.</span></div>
+          </a>
+        </div>
+      </div>
+
+      <footer class="site-footer">
+        © 2026 ND Labs. All rights reserved.
+      </footer>
+    </div> <!-- End homeContent -->
+
+  </div> <!-- End MainContentWrapper -->
+
+  <div class="toast toast-welcome">Chào mừng bạn trở lại ND Labs! 🎵</div>
 
   <script>
-    /* GIỮ NGUYÊN TOÀN BỘ LOGIC GỐC CỦA BẠN */
+    /* --- Music & UI Logic --- */
     const music = document.getElementById("backgroundMusic");
     const volumeControl = document.getElementById("volumeControl");
     const toggleBtn = document.getElementById("musicToggleBtn");
+
     toggleBtn.addEventListener("click", () => {
-      if (music.paused) { music.play(); toggleBtn.innerHTML='<i data-feather="pause"></i>'; }
-      else { music.pause(); toggleBtn.innerHTML='<i data-feather="play"></i>'; }
-      feather.replace();
+      const icon = toggleBtn.querySelector('i');
+      if (music.paused) {
+        music.play();
+        icon.classList.remove('ph-play-circle');
+        icon.classList.add('ph-pause-circle');
+      } else {
+        music.pause();
+        icon.classList.remove('ph-pause-circle');
+        icon.classList.add('ph-play-circle');
+      }
     });
-    volumeControl.addEventListener("input", function(){ music.volume = this.value; });
-    function shareWebsite(){ navigator.clipboard.writeText("Trang chủ của ND Labs: https://nd-site.github.io").then(()=>{ const toast=document.createElement("div"); toast.className="toast"; toast.textContent="Đã sao chép liên kết vào bộ nhớ tạm!"; document.body.appendChild(toast); setTimeout(()=>{toast.remove();},5000);}); }
-    window.addEventListener("load",()=>{ toggleBtn.innerHTML= music.paused?'<i data-feather="play"></i>':'<i data-feather="pause"></i>'; feather.replace();});
-    setTimeout(()=>{document.querySelector(".toast-welcome").style.display="none";},5000);
-    feather.replace();
 
-    /* BROWSER LOGIC GỐC */
-    const $q=document.getElementById("q"); const $go=document.getElementById("go"); const $engine=document.getElementById("engine");
-    const ENGINES={ google:q=>`https://www.google.com/search?q=${encodeURIComponent(q)}`, bing:q=>`https://www.bing.com/search?q=${encodeURIComponent(q)}`, duck:q=>`https://duckduckgo.com/?q=${encodeURIComponent(q)}` };
-    const selected=$engine.querySelector(".selected"); const selectedContent=selected.querySelector(".content"); const options=$engine.querySelector(".options");
-    selected.addEventListener("click",()=>{const isOpen=$engine.classList.contains("open"); options.style.display=isOpen?"none":"block"; $engine.classList.toggle("open",!isOpen);});
-    options.querySelectorAll(":scope > div").forEach(option=>{option.addEventListener("click",()=>{const imgSrc=option.dataset.img||""; const label=option.dataset.label||""; selectedContent.textContent=""; if(imgSrc){const img=document.createElement("img"); img.src=imgSrc; if(label==="Google") img.className="logo-google"; if(label==="Bing") img.className="logo-bing"; if(label==="DuckDuckGo") img.className="logo-duck"; selectedContent.appendChild(img);} const span=document.createElement("span"); span.textContent=label; selectedContent.appendChild(span); selected.dataset.value=option.dataset.value; options.style.display="none"; $engine.classList.remove("open");});});
+    volumeControl.addEventListener("input", function () { music.volume = this.value; });
 
-    /* --- LOGIC LIVE SEARCH & REPO --- */
+    window.addEventListener("load", () => {
+      const icon = toggleBtn.querySelector('i');
+      if (music.paused) {
+        icon.classList.remove('ph-pause-circle');
+        icon.classList.add('ph-play-circle');
+      } else {
+        icon.classList.remove('ph-play-circle');
+        icon.classList.add('ph-pause-circle');
+      }
+
+      setTimeout(() => {
+        const toast = document.querySelector(".toast-welcome");
+        if (toast) {
+          toast.style.opacity = '0';
+          setTimeout(() => toast.remove(), 500);
+        }
+      }, 4000);
+    });
+
+    function shareWebsite() {
+      navigator.clipboard.writeText("Trang chủ của ND Labs: https://nd-site.github.io").then(() => {
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        toast.textContent = "Đã sao chép liên kết!";
+        document.body.appendChild(toast);
+        setTimeout(() => { toast.remove(); }, 3000);
+      });
+    }
+
+    /* --- Search Engine Dropdown --- */
+    const engineSelect = document.getElementById('engineSelect');
+    const engineDropdown = document.getElementById('engineDropdown');
+    const currEngineImg = document.getElementById('currEngineImg');
+    const currEngineName = document.getElementById('currEngineName');
+    let currentEngine = 'google';
+
+    engineSelect.addEventListener('click', (e) => {
+      e.stopPropagation();
+      engineDropdown.classList.toggle('show');
+    });
+
+    document.querySelectorAll('.engine-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        currentEngine = opt.dataset.val;
+        currEngineName.textContent = opt.dataset.name;
+        currEngineImg.src = opt.dataset.img;
+        engineDropdown.classList.remove('show');
+      });
+    });
+
+    window.addEventListener('click', () => {
+      engineDropdown.classList.remove('show');
+    });
+
+    /* --- Search Logic --- */
+    const $q = document.getElementById("q");
+    const $go = document.getElementById("go");
+    const $mainWrapper = document.getElementById("mainContentWrapper");
+    const $homeContent = document.getElementById("homeContent");
+    const $searchArea = document.getElementById("searchResultArea");
+    const $internal = document.getElementById("internalResults");
+
+    const ENGINES = {
+      google: q => `https://www.google.com/search?q=${encodeURIComponent(q)}`,
+      bing: q => `https://www.bing.com/search?q=${encodeURIComponent(q)}`,
+      duck: q => `https://duckduckgo.com/?q=${encodeURIComponent(q)}`
+    };
+
     const CONFIG = { username: 'nd-site', repositories: ['nd-site.github.io', 'test', 'windows12', 'eduspace', 'hoctap'], branch: 'main' };
     let searchDatabase = [];
 
     async function initSearchData() {
-        const cached = localStorage.getItem('nd_search_cache');
-        if(cached) { searchDatabase = JSON.parse(cached).database; return; }
-        for(const repo of CONFIG.repositories) {
-            try {
-                const res = await fetch(`https://api.github.com/repos/${CONFIG.username}/${repo}/git/trees/${CONFIG.branch}?recursive=1`);
-                const data = await res.json();
-                if(data.tree) {
-                    data.tree.filter(f => f.path.endsWith('.html')).forEach(f => {
-                        const base = repo === 'nd-site.github.io' ? '/' : `/${repo}/`;
-                        searchDatabase.push({ title: f.path.split('/').pop().replace('.html','').toUpperCase(), url: base + f.path, repo: repo });
-                    });
-                }
-            } catch(e){}
+      // Simple cache
+      const cached = localStorage.getItem('nd_search_cache_v2');
+      if (cached) {
+        const data = JSON.parse(cached);
+        // Cache valid for 1 day
+        if (Date.now() - data.timestamp < 86400000) {
+          searchDatabase = data.database;
+          return;
         }
-        localStorage.setItem('nd_search_cache', JSON.stringify({timestamp: Date.now(), database: searchDatabase}));
+      }
+
+      // Fetch new
+      let tempDB = [];
+      for (const repo of CONFIG.repositories) {
+        try {
+          const res = await fetch(`https://api.github.com/repos/${CONFIG.username}/${repo}/git/trees/${CONFIG.branch}?recursive=1`);
+          const data = await res.json();
+          if (data.tree) {
+            data.tree.filter(f => f.path.endsWith('.html')).forEach(f => {
+              const base = repo === 'nd-site.github.io' ? '/' : `/${repo}/`;
+              tempDB.push({ title: f.path.split('/').pop().replace('.html', '').toUpperCase(), url: base + f.path, repo: repo });
+            });
+          }
+        } catch (e) { }
+      }
+      searchDatabase = tempDB;
+      localStorage.setItem('nd_search_cache_v2', JSON.stringify({ timestamp: Date.now(), database: searchDatabase }));
     }
     initSearchData();
 
-    const $mainWrapper = document.getElementById("mainContentWrapper");
-    const $searchArea = document.getElementById("searchResultArea");
-    const $internal = document.getElementById("internalResults");
-
     $q.addEventListener('input', () => {
-        const val = $q.value.trim().toLowerCase();
-        if (val.length > 0) {
-            $mainWrapper.style.display = "none";
-            $searchArea.style.display = "block";
-            
-            // Tìm nội bộ Repo
-            $internal.innerHTML = "";
-            const matches = searchDatabase.filter(i => i.title.toLowerCase().includes(val));
-            matches.forEach(item => {
-                const a = document.createElement('a');
-                a.className = 'res-item'; a.href = item.url;
-                a.innerHTML = `<span class="res-title">${item.title}</span><span class="res-link">nd-site.github.io${item.url}</span><div class="res-snippet">Công cụ tìm thấy trong kho lưu trữ: ${item.repo}</div>`;
-                $internal.appendChild(a);
-            });
+      const val = $q.value.trim().toLowerCase();
+      if (val.length > 0) {
+        $homeContent.style.display = "none";
+        $searchArea.style.display = "block";
 
-            // Gọi Google CSE
-            if (window.google?.search?.cse) {
-                google.search.cse.element.getElement('nd-engine').execute(val);
-            }
-        } else {
-            $mainWrapper.style.display = "flex";
-            $searchArea.style.display = "none";
+        // Search Internal
+        $internal.innerHTML = "";
+        const matches = searchDatabase.filter(i => i.title.toLowerCase().includes(val)).slice(0, 10);
+
+        if (matches.length > 0) {
+          const title = document.createElement('div');
+          title.style.marginBottom = '10px';
+          title.style.fontWeight = '700';
+          title.style.color = '#334155';
+          title.textContent = 'KẾT QUẢ TỪ ND LABS';
+          $internal.appendChild(title);
         }
+
+        matches.forEach(item => {
+          const a = document.createElement('a');
+          a.className = 'res-item'; a.href = item.url;
+          a.innerHTML = `<span class="res-title">${item.title}</span><span class="res-link">nd-site.github.io${item.url}</span><div class="res-snippet">Công cụ tìm thấy trong kho lưu trữ: ${item.repo}</div>`;
+          $internal.appendChild(a);
+        });
+
+        // Do NOT trigger Google automatically here
+      } else {
+        closeSearch();
+      }
     });
 
-    // Handle Go button (Giữ nguyên logic nhảy trang của bạn)
-    function handleGo(){
-        const val=$q.value; 
-        if(!val.trim()) return;
-        const engineKey=selected.dataset.value||"google";
-        window.location.assign(ENGINES[engineKey](val.trim()));
+    function closeSearch() {
+      $homeContent.style.display = "block";
+      $searchArea.style.display = "none";
+      $q.value = '';
+      $internal.innerHTML = "";
+
+      // Attempt to clear Google Developer Console results gracefully
+      try {
+        if (window.google?.search?.cse?.element) {
+          const element = google.search.cse.element.getElement('nd-engine');
+          if (element) element.clearAllResults();
+        }
+      } catch (e) {
+        // Fallback: manually hide/clear if API fails
+        const gRoot = document.getElementById('googleZone').querySelector('.gsc-control-cse');
+        if (gRoot) gRoot.innerHTML = '';
+      }
     }
-    $go.addEventListener('click',handleGo);
-    $q.addEventListener('keydown',(e)=>{if(e.key==='Enter') handleGo();});
+
+    function handleGo() {
+      const val = $q.value.trim();
+      if (!val) return;
+      // Open search results in a new tab for all engines
+      window.open(ENGINES[currentEngine](val), '_blank');
+    }
+
+    $go.addEventListener('click', handleGo);
+    $q.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleGo(); });
   </script>
 </body>
+
 </html>
