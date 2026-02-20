@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm kiếm - ND Labs</title>
+    <link rel="icon" href="/logo.png" type="image/png">
+    
+    <script async src="https://cse.google.com/cse.js?cx=90bdd5f1afd434b9d"></script>
+
+    <style>
+        :root {
+            --blue-main: #00a8ff;
+            --blue-dark: #0077ff;
+            --bg: #f8fbff;
+            --white: #ffffff;
+            --link-green: #008a00;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; overflow: auto !important; }
+        header { background: var(--white); padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .brand { display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-size: 1.5rem; font-weight: 800; color: var(--blue-dark); }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 15px; }
+
+        .search-area { position: sticky; top: 70px; background: var(--bg); padding: 15px 0; z-index: 999; }
+        #status { font-size: 0.85rem; text-align: center; color: var(--blue-dark); margin-bottom: 10px; min-height: 20px; }
+        input { width: 100%; padding: 14px 25px; border-radius: 50px; border: 2px solid var(--blue-main); outline: none; font-size: 16px; box-shadow: 0 8px 20px rgba(0,168,255,0.1); transition: 0.3s; }
+
+        /* KẾT QUẢ NỘI BỘ (REPO) */
+        .result-item { background: var(--white); padding: 20px; border-radius: 18px; margin-bottom: 15px; border-left: 6px solid var(--blue-main); text-decoration: none; display: block; transition: 0.2s; position: relative; }
+        .result-item:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        
+        .result-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .title { color: var(--blue-dark); font-weight: bold; font-size: 1.15rem; margin-bottom: 2px; }
+        
+        /* Hiển thị Link (Khoanh xanh lá) */
+        .display-link { color: var(--link-green); font-size: 0.85rem; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .snippet { color: #555; font-size: 0.9rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* Thẻ tag góc phải (SITE / WEB) */
+        .badge { font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 4px; border: 1px solid currentColor; text-transform: uppercase; }
+        .badge-site { color: var(--blue-dark); }
+        .badge-web { color: #f39c12; }
+
+        /* THẺ TÌM KIẾM GOOGLE (Khoanh đỏ) */
+        .google-trigger-card { border-left-color: #f39c12; }
+
+        .google-header { font-size: 0.9rem; font-weight: bold; color: #7f8c8d; margin: 30px 0 10px 0; display: flex; align-items: center; gap: 10px; }
+        .google-header::after { content: ""; flex: 1; height: 1px; background: #ddd; }
+
+        /* DIỆT OVERLAY GOOGLE CSE */
+        .gsc-modal-background-wide { display: none !important; }
+        .gsc-results-wrapper-overlay { position: relative !important; top: auto !important; left: auto !important; width: 100% !important; display: block !important; box-shadow: none !important; background: transparent !important; z-index: 1 !important; padding: 0 !important; }
+        body.gsc-overflow-hidden { overflow: auto !important; }
+        .gsc-results-close-btn, .gsc-search-box, .gsc-adBlock { display: none !important; }
+        .gsc-control-cse { background-color: transparent !important; border: none !important; padding: 0 !important; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="brand"><span>ND Labs</span></a>
+</header>
+
+<div class="container">
+    <div class="search-area">
+        <div id="status">Đang khởi tạo hệ thống...</div>
+        <input type="text" id="searchInput" placeholder="Gõ từ khóa tìm kiếm..." disabled>
+    </div>
+    
+    <div id="internalResults"></div>
+
+    <div id="googleSection" style="display:none;">
+        <div class="google-header">Kết quả tự động từ Google Web</div>
+        <div class="gcse-searchresults-only" data-gname="ndlabs-engine"></div>
+    </div>
+</div>
+
+<script>
+    const CONFIG = {
+        username: 'nd-site',
+        repositories: ['nd-site.github.io', 'test', 'windows12', 'eduspace', 'hoctap', '-'],
+        branch: 'main',
+        cacheTime: 86400000 
+    };
+
+    let searchDatabase = [];
+    const searchInput = document.getElementById('searchInput');
+    const internalResults = document.getElementById('internalResults');
+    const googleSection = document.getElementById('googleSection');
+
+    // --- LOGIC CRAWLER & CACHE ---
+    function getCache() {
+        const cached = localStorage.getItem('nd_search_db');
+        if (!cached) return null;
+        const data = JSON.parse(cached);
+        return (Date.now() - data.time) > CONFIG.cacheTime ? null : data.db;
+    }
+
+    async function init() {
+        const cached = getCache();
+        if (cached) {
+            searchDatabase = cached;
+        } else {
+            document.getElementById('status').innerText = "🚀 Đang quét dữ liệu mới...";
+            let paths = [];
+            for (const repo of CONFIG.repositories) {
+                try {
+                    const res = await fetch(`https://api.github.com/repos/${CONFIG.username}/${repo}/git/trees/${CONFIG.branch}?recursive=1`);
+                    const data = await res.json();
+                    if (data.tree) {
+                        paths = paths.concat(data.tree.filter(f => f.path.endsWith('.html') && !f.path.includes('index.html') && f.path !== 'search.html').map(f => {
+                            const base = repo === 'nd-site.github.io' ? `https://${CONFIG.username}.github.io/` : `https://${CONFIG.username}.github.io/${repo}/`;
+                            return { url: base + f.path, repo: repo };
+                        }));
+                    }
+                } catch(e){}
+            }
+            const contents = await Promise.all(paths.map(async p => {
+                try {
+                    const res = await fetch(p.url);
+                    const html = await res.text();
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    const title = doc.title || p.url;
+                    const text = doc.body.innerText.replace(/\s+/g, ' ').trim();
+                    return { title, url: p.url, repo: p.repo, fullText: (title + text).toLowerCase(), snippet: text.substring(0, 150) + "..." };
+                } catch { return null; }
+            }));
+            searchDatabase = contents.filter(c => c !== null);
+            localStorage.setItem('nd_search_db', JSON.stringify({time: Date.now(), db: searchDatabase}));
+        }
+        searchInput.disabled = false;
+        document.getElementById('status').innerText = `✅ Sẵn sàng! Tìm thấy ${searchDatabase.length} nội dung.`;
+    }
+
+    // --- HÀM TÌM KIẾM ---
+    function performSearch(query) {
+        const q = query.toLowerCase().trim();
+        internalResults.innerHTML = '';
+        if (q.length < 1) { googleSection.style.display = 'none'; return; }
+
+        googleSection.style.display = 'block';
+        
+        // Gọi Google CSE
+        if (window.google?.search?.cse) {
+            const element = google.search.cse.element.getElement('ndlabs-engine');
+            if (element) element.execute(q);
+        }
+
+        // 1. Lọc nội bộ
+        const matches = searchDatabase.filter(item => item.fullText.includes(q));
+
+        // 2. Hiển thị kết quả Repo
+        matches.forEach(item => {
+            const div = document.createElement('a');
+            div.className = 'result-item';
+            div.href = item.url;
+            div.innerHTML = `
+                <div class="result-header">
+                    <div class="title">${item.title}</div>
+                    <span class="badge badge-site">SITE</span>
+                </div>
+                <div class="display-link">${item.url.replace('https://', '')}</div>
+                <div class="snippet">${item.snippet}</div>
+            `;
+            internalResults.appendChild(div);
+        });
+
+        // 3. Hiển thị thẻ Tìm kiếm nhanh Google (Khoanh đỏ)
+        const googleCard = document.createElement('a');
+        googleCard.className = 'result-item google-trigger-card';
+        googleCard.href = `https://www.google.com/search?q=site:nd-site.github.io+${encodeURIComponent(q)}`;
+        googleCard.target = "_blank";
+        googleCard.innerHTML = `
+            <div class="result-header">
+                <div class="title">Tìm "${query}" trên Google</div>
+                <span class="badge badge-web">WEB</span>
+            </div>
+            <div class="display-link">www.google.com/search?q=site:nd-site.github.io+${q}</div>
+            <div class="snippet">Mở rộng tìm kiếm ra toàn bộ hệ thống web.</div>
+        `;
+        internalResults.appendChild(googleCard);
+    }
+
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(window.st);
+        window.st = setTimeout(() => performSearch(e.target.value), 300);
+    });
+
+    init();
+</script>
+</body>
+</html>

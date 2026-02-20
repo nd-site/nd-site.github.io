@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Docx - Nhật Đăng</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/logo.png" type="image/png">
+    <style>
+        html, body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, sans-serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f12aa, #00a6ff);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding: 16px;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .container h2 {
+            font-size: 28px;
+            color: #1b31f0;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background-color: #1b31f0;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0044ff;
+        }
+
+        .error {
+            color: red;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 440px;
+                padding: 32px;
+            }
+
+            .container h2 {
+                font-size: 32px;
+            }
+
+            input, button {
+                font-size: 20px;
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Docx - Nhật Đăng</h2>
+        <input type="text" id="code" placeholder="Ví dụ: file-01" />
+        <div id="error" class="error"></div>
+        <button onclick="goToPage()">Truy cập</button>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+
+        let code = '';
+        if (window.location.search.length > 1) {
+            code = window.location.search.substring(1);
+        } else if (window.location.hash.length > 1) {
+            code = window.location.hash.substring(1);
+        }
+        if (code && data[code]) {
+            window.location.href = data[code];
+        }
+
+        function goToPage() {
+            const code = document.getElementById('code').value.trim();
+            const errorElement = document.getElementById('error');
+
+            if (data[code]) {
+                window.location.href = data[code];
+            } else {
+                errorElement.textContent = "Nhập sai mã!";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputElement = document.getElementById('code');
+            const datalist = document.createElement('datalist');
+            datalist.id = 'codeSuggestions';
+
+            const sortedKeys = Object.keys(data).sort();
+            sortedKeys.forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                datalist.appendChild(option);
+            });
+
+            inputElement.setAttribute('list', 'codeSuggestions');
+            document.body.appendChild(datalist);
+
+            inputElement.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    goToPage();
+                    inputElement.blur();
+                    setTimeout(() => {
+                        inputElement.removeAttribute('list');
+                        inputElement.setAttribute('list', 'codeSuggestions');
+                    }, 0);
+                }
+            });
+
+            inputElement.addEventListener('blur', () => {
+                setTimeout(() => {
+                    inputElement.removeAttribute('list');
+                    inputElement.setAttribute('list', 'codeSuggestions');
+                }, 0);
+            });
+        });
+    </script>
+
+  <!-- Đặt ở cuối body -->
+  <div class="home-wrapper">
+    <!-- Nút Trang Chủ -->
+    <a href="https://nd-site.github.io" class="home-btn">
+      <img src="/homebtn.png" alt="Trang chủ">
+    </a>
+
+    <style>
+      .home-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        cursor: pointer;
+        z-index: 9999;
+        animation: float 3s ease-in-out infinite;
+        text-decoration: none;
+      }
+      .home-btn img {
+        max-width: 60%;
+        max-height: 60%;
+        object-fit: contain;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+      .home-btn:hover {
+        transform: scale(1.05);
+        transition: 0.3s;
+      }
+    </style>
+  </div>
+</body>
+</html>

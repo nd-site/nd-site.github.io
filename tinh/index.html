@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máy Tính Biểu Thức Đơn Giản</title>
+    <style>
+        /* CSS tùy chọn để trang web trông đẹp hơn */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: calc(100% - 10px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px dashed #007bff;
+            background-color: #e9f7ff;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Máy Tính Biểu Thức</h1>
+    <p>Nhập các giá trị để tính: **5a + 8b + 12c + 10x + 20y**</p>
+
+    <div class="input-group">
+        <label for="a">Giá trị a (Số bóng tầng 1, dưới):</label>
+        <input type="number" id="a" value="0">
+    </div>
+    <div class="input-group">
+        <label for="b">Giá trị b (Số bóng tầng 2, giữa):</label>
+        <input type="number" id="b" value="0">
+    </div>
+    <div class="input-group">
+        <label for="c">Giá trị c (Số bóng tầng 3, trên):</label>
+        <input type="number" id="c" value="0">
+    </div>
+    <div class="input-group">
+        <label for="x">Giá trị x (Số ô mầm che được):</label>
+        <input type="number" id="x" value="0">
+    </div>
+    <div class="input-group">
+        <label for="y">Giá trị y (Số quả bóng trên đài nông sản đã rớt):</label>
+        <input type="number" id="y" value="0">
+    </div>
+
+    <button onclick="calculate()">Tính Kết Quả</button>
+
+    <div id="result">Kết quả sẽ hiển thị ở đây</div>
+</div>
+
+<script>
+    function calculate() {
+        // 1. Lấy giá trị từ các ô nhập liệu (input fields)
+        // Dùng parseFloat để đảm bảo giá trị là số (có thể là số thập phân)
+        const a = parseFloat(document.getElementById('a').value) || 0;
+        const b = parseFloat(document.getElementById('b').value) || 0;
+        const c = parseFloat(document.getElementById('c').value) || 0;
+        const x = parseFloat(document.getElementById('x').value) || 0;
+        const y = parseFloat(document.getElementById('y').value) || 0;
+
+        // 2. Thực hiện phép tính
+        const resultValue = (5 * a) + (8 * b) + (12 * c) + (10 * x) + (20 * y);
+
+        // 3. Hiển thị kết quả ra màn hình
+        document.getElementById('result').innerHTML = `Kết quả: **${resultValue.toFixed(2)}**`;
+        // toFixed(2) dùng để làm tròn kết quả đến 2 chữ số thập phân, nếu cần.
+    }
+</script>
+
+</body>
+</html>
