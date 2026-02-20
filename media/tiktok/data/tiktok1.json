@@ -1,0 +1,37 @@
+{
+  "video_id": "1234567890",
+  "description": "Video hài hước về mèo",
+  "author": {
+    "user_id": "u001",
+    "username": "meo_hai_huoc",
+    "followers": 15200,
+    "verified": false
+  },
+  "stats": {
+    "views": 250000,
+    "likes": 15000,
+    "shares": 1200,
+    "comments": 350
+  },
+  "comments": [
+    {
+      "comment_id": "c001",
+      "user": "user_a",
+      "text": "Dễ thương quá!",
+      "likes": 120
+    },
+    {
+      "comment_id": "c002",
+      "user": "user_b",
+      "text": "Xem đi xem lại vẫn cười 😂",
+      "likes": 95
+    }
+  ],
+  "music": {
+    "music_id": "m001",
+    "title": "Funny Cat Song",
+    "artist": "DJ Kitty",
+    "duration": 30
+  },
+  "created_at": "2025-12-06T09:58:00Z"
+}

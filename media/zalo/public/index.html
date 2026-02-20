@@ -1,0 +1,110 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Zalo AI OCR - ND Labs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; }
+    .card { max-width: 720px; margin: 0 auto; padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 12px; }
+    .row { display: flex; gap: 1rem; align-items: flex-start; }
+    .preview { width: 320px; height: 240px; border: 1px dashed #9ca3af; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; background: #f9fafb; }
+    img { max-width: 100%; height: auto; }
+    .result { white-space: pre-wrap; background: #f3f4f6; padding: 1rem; border-radius: 8px; min-height: 120px; }
+    button { padding: 0.6rem 1rem; border-radius: 8px; border: none; background: #2563eb; color: white; cursor: pointer; }
+    button:disabled { background: #93c5fd; cursor: not-allowed; }
+    input[type="file"] { padding: 0.5rem; }
+    .error { color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Zalo AI OCR</h1>
+    <p>Chọn ảnh có chữ, hệ thống sẽ trích xuất văn bản bằng API OCR.</p>
+
+    <div class="row">
+      <div>
+        <input id="fileInput" type="file" accept="image/*" />
+        <div style="margin-top: 1rem;">
+          <button id="ocrBtn" disabled>Nhận diện chữ</button>
+        </div>
+        <p id="msg" class="error"></p>
+      </div>
+
+      <div class="preview" id="preview">
+        <span>Ảnh xem trước</span>
+      </div>
+    </div>
+
+    <h2>Kết quả</h2>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const ocrBtn = document.getElementById('ocrBtn');
+    const preview = document.getElementById('preview');
+    const resultEl = document.getElementById('result');
+    const msgEl = document.getElementById('msg');
+
+    let selectedFile = null;
+
+    fileInput.addEventListener('change', () => {
+      msgEl.textContent = '';
+      resultEl.textContent = '';
+      const file = fileInput.files[0];
+      selectedFile = file || null;
+      ocrBtn.disabled = !selectedFile;
+
+      preview.innerHTML = '';
+      if (selectedFile) {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(selectedFile);
+        preview.appendChild(img);
+      } else {
+        preview.textContent = 'Ảnh xem trước';
+      }
+    });
+
+    ocrBtn.addEventListener('click', async () => {
+      if (!selectedFile) return;
+      ocrBtn.disabled = true;
+      msgEl.textContent = 'Đang xử lý...';
+      resultEl.textContent = '';
+
+      try {
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+
+        const res = await fetch('/api/ocr', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData?.message || errData?.error || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        // Tuỳ vào cấu trúc trả về của Zalo AI OCR, điều chỉnh parse:
+        // Ví dụ giả định: { data: { text: "..." } } hoặc { result: "..." }
+        const text =
+          data?.data?.text ||
+          data?.result ||
+          JSON.stringify(data, null, 2);
+
+        resultEl.textContent = text;
+        msgEl.textContent = '';
+      } catch (e) {
+        console.error(e);
+        msgEl.textContent = 'Có lỗi khi gọi OCR: ' + e.message;
+      } finally {
+        ocrBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

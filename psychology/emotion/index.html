@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Cảm Xúc - Psychology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --bg-main: #f5f3ff;
+        }
+
+        html,
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: #1e293b;
+        }
+
+        .bg-blob {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+            animation: blob-bounce 10s infinite ease-in-out;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px -12px rgba(139, 92, 246, 0.1);
+            border-radius: 24px;
+        }
+
+        .breathing-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary-light), var(--primary));
+            animation: circleBreathe 8s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+        }
+
+        @keyframes circleBreathe {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: scale(1.6);
+                opacity: 1;
+            }
+        }
+
+        @keyframes blob-bounce {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(20px, -20px);
+            }
+        }
+
+        .playing-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 12px;
+        }
+
+        .playing-bars span {
+            width: 2px;
+            background: var(--primary);
+            animation: barGrow 1s infinite ease-in-out;
+        }
+
+        .playing-bars span:nth-child(1) {
+            height: 100%;
+            animation-delay: 0s;
+        }
+
+        .playing-bars span:nth-child(2) {
+            height: 60%;
+            animation-delay: 0.2s;
+        }
+
+        .playing-bars span:nth-child(3) {
+            height: 80%;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes barGrow {
+
+            0%,
+            100% {
+                height: 40%;
+            }
+
+            50% {
+                height: 100%;
+            }
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+
+<body class="min-h-screen flex flex-col items-center p-4 relative overflow-hidden">
+    <div class="bg-blob" style="top: -100px; left: -100px;"></div>
+    <div class="bg-blob"
+        style="bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, rgba(255, 255, 255, 0) 70%);">
+    </div>
+
+    <div class="w-full max-w-5xl z-10">
+        <header class="flex items-center justify-between mt-4 mb-12">
+            <a href="../index.html"
+                class="flex items-center gap-2 text-slate-500 hover:text-violet-600 transition-colors font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Quay lại
+            </a>
+            <div class="text-violet-600 font-extrabold text-xl tracking-tight">Psychology • Quản Lý Cảm Xúc</div>
+        </header>
+
+        <main>
+            <h2
+                class="text-4xl font-extrabold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600">
+                Góc Bình Yên</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Breathing Exercise -->
+                <div class="glass-card p-8 flex flex-col items-center">
+                    <h3 class="text-xl font-bold mb-2">Hít thở sâu</h3>
+                    <p class="text-sm text-slate-500 mb-8 text-center">Theo nhịp vòng tròn để giải tỏa căng thẳng</p>
+                    <div class="flex justify-center items-center my-12">
+                        <div class="breathing-circle"></div>
+                    </div>
+                    <div class="flex gap-8 mt-4 font-bold text-violet-600 text-sm">
+                        <span>Hít vào (4s)</span>
+                        <span>Thở ra (4s)</span>
+                    </div>
+                </div>
+
+                <!-- Music Tracks -->
+                <div class="glass-card p-8">
+                    <h3 class="text-xl font-bold mb-6">Giai điệu thư giãn</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 p-4 bg-violet-50 rounded-2xl border border-violet-100">
+                            <div class="w-10 h-10 bg-violet-600 rounded-xl flex items-center justify-center text-white">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-bold text-sm">Tiếng mưa rơi</div>
+                                <div class="text-xs text-slate-400">Âm thanh tự nhiên</div>
+                            </div>
+                            <div class="playing-bars"><span></span><span></span><span></span></div>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-transparent hover:border-violet-100 transition-colors cursor-pointer">
+                            <div
+                                class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-bold text-sm">Sóng biển rì rào</div>
+                                <div class="text-xs text-slate-400">Thư giãn sâu</div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-transparent hover:border-violet-100 transition-colors cursor-pointer">
+                            <div
+                                class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-bold text-sm">Piano không lời</div>
+                                <div class="text-xs text-slate-400">Tăng sự tập trung</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Exercises -->
+                <div class="glass-card p-8">
+                    <h3 class="text-xl font-bold mb-6">Bài tập tâm trí</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-4 pb-4 border-b border-slate-50">
+                            <span class="text-2xl">🧘</span>
+                            <span class="text-sm font-medium">Quan sát hơi thở trong 10 nhịp</span>
+                        </li>
+                        <li class="flex items-center gap-4 pb-4 border-b border-slate-50">
+                            <span class="text-2xl">🙆</span>
+                            <span class="text-sm font-medium">Thả lỏng cơ bắp từ vùng vai</span>
+                        </li>
+                        <li class="flex items-center gap-4 pb-4 border-b border-slate-50">
+                            <span class="text-2xl">✍️</span>
+                            <span class="text-sm font-medium">Viết ra 3 điều biết ơn hôm nay</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <span class="text-2xl">🦶</span>
+                            <span class="text-sm font-medium">Cảm nhận sự tiếp xúc của đôi chân</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <footer class="mt-12 py-8 text-center text-slate-400 text-sm">
+            <p>© 2026 ND Labs. Psychology • Tìm thấy sự bình yên trong từng hơi thở.</p>
+        </footer>
+    </div>
+</body>
+
+</html>

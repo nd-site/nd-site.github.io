@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ô Ăn Quan Online - Pro V4.5</title>
+    <link rel="icon" href="/logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar placeholder (if needed) -->
+    <div id="authPage" class="page active">
+        <div class="card auth-card">
+            <i class="ph ph-shield-check" style="font-size: 56px; color: var(--accent); margin-bottom: 20px;"></i>
+            <h1>Định Danh ND</h1>
+            <p style="opacity:0.6; margin-bottom: 25px;">Nhập ID ND Labs để đồng bộ dữ liệu</p>
+            <input type="text" id="playerIDInput" class="input-field" placeholder="ID của bạn (VD: ND_123)">
+            <button onclick="login()" class="btn btn-primary" style="width: 100%;">Tiếp tục</button>
+        </div>
+    </div>
+
+    <div id="lobbyPage" class="page">
+        <div class="lobby-container">
+            <div class="lobby-header">
+                <div>
+                    <h1 id="userGreeting">ID: UNKNOWN</h1>
+                    <p style="opacity: 0.6;">Phiên bản Chuyên nghiệp 4.5</p>
+                </div>
+                <div class="lobby-nav">
+                    <button onclick="logout()" class="btn btn-outline" style="color: #ef4444;"><i
+                            class="ph ph-sign-out"></i> Thoát</button>
+                </div>
+            </div>
+
+            <div class="lobby-grid">
+                <div class="card">
+                    <h3 class="card-title"><i class="ph ph-swords"></i> Chế độ chơi</h3>
+                    <div class="btn-stack">
+                        <button onclick="openCreateModal()" class="btn btn-primary">Tạo phòng Online</button>
+                        <div class="join-box">
+                            <input type="text" id="joinCodeInput" class="input-field" placeholder="Mã phòng...">
+                            <button onclick="joinByCode()" class="btn btn-secondary">Vào</button>
+                        </div>
+                        <hr class="separator">
+                        <button onclick="startMode('bot')" class="btn btn-outline">Đấu với Bot (AI)</button>
+                        <button onclick="startMode('offline')" class="btn btn-outline">Chơi hai người (Offline)</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title"><i class="ph ph-globe"></i> Phòng công khai</h3>
+                    <div id="publicRooms" class="public-list">
+                        <p class="empty-msg">Đang quét phòng...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="gamePage" class="page">
+        <div id="gameUIHeader">
+            <div id="roomBadge">ROOM: <span id="currentRoomID">-</span></div>
+
+            <div class="score-row">
+                <div id="scoreBoxP2" class="score-card p2">
+                    <span class="p-label">Đối thủ</span>
+                    <span id="p2Score" class="p-val">0</span>
+                </div>
+                <div id="scoreBoxP1" class="score-card p1">
+                    <span class="p-label">Bạn</span>
+                    <span id="p1Score" class="p-val">0</span>
+                </div>
+            </div>
+
+            <div id="turnStatus">ĐANG CHUẨN BỊ...</div>
+        </div>
+
+        <div id="gameContainer">
+            <canvas id="gameCanvas" width="1000" height="420"></canvas>
+        </div>
+
+        <div id="gameBottomUI">
+            <div class="spectator-badge">
+                <i class="ph ph-eye"></i> <span id="viewCount">0</span>
+            </div>
+            <div class="game-actions">
+                <button onclick="toggleFullscreen()" class="btn btn-square"><i class="ph ph-corners-out"></i></button>
+                <button onclick="requestQuit()" class="btn btn-square" style="color: #ef4444;"><i
+                        class="ph ph-door-open"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="createModal" class="modal-wrapper">
+        <div class="card modal-card">
+            <h2>Cấu hình phòng</h2>
+            <div class="form-group">
+                <label>TÊN PHÒNG</label>
+                <input type="text" id="roomNameInput" class="input-field" placeholder="Phòng của tôi">
+
+                <label>MẬT KHẨU (TÙY CHỌN)</label>
+                <input type="password" id="roomPassInput" class="input-field"
+                    placeholder="Nhập nếu muốn đặt phòng riêng">
+
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="publicToggle" checked> Công khai</label>
+                    <label><input type="checkbox" id="spectateToggle" checked> Cho xem</label>
+                </div>
+
+                <div class="modal-actions">
+                    <button onclick="closeCreateModal()" class="btn btn-outline">Hủy</button>
+                    <button onclick="confirmCreate()" class="btn btn-primary">Bắt đầu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="passwordModal" class="modal-wrapper">
+        <div class="card modal-card">
+            <h2>Phòng có mật khẩu</h2>
+            <p style="opacity:0.6; margin-bottom: 20px;">Vui lòng nhập mật khẩu để vào phòng này</p>
+            <input type="password" id="roomJoinPassInput" class="input-field" placeholder="Mật khẩu...">
+            <div class="modal-actions">
+                <button onclick="closePassModal()" class="btn btn-outline">Hủy</button>
+                <button onclick="confirmJoinWithPass()" class="btn btn-primary">Vào phòng</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="winModal" class="modal-wrapper">
+        <div class="card modal-card" style="text-align: center;">
+            <h1 id="winStatusText">THẮNG TRẬN!</h1>
+            <p id="rematchSubtext" style="opacity:0.6; margin-bottom: 25px;">Bạn muốn làm gì tiếp theo?</p>
+            <div class="btn-stack">
+                <button id="btnRematch" onclick="requestRematch()" class="btn btn-primary">Yêu cầu Tái đấu</button>
+                <button onclick="window.location.reload()" class="btn btn-outline">Quay về Sảnh</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="game.js?v=4.5.1"></script>
+</body>
+
+</html>

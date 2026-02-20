@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Wrapped - ND Labs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #111;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            background: linear-gradient(45deg, #000, #222);
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background-color: #00f2ea;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .logo-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        .site-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00f2ea, #ff0050);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: 500px;
+        }
+
+        .upload-section {
+            flex: 1;
+            padding: 40px 30px;
+            background-color: #151515;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #333;
+        }
+
+        .upload-icon {
+            font-size: 80px;
+            color: #00f2ea;
+            margin-bottom: 20px;
+        }
+
+        .upload-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .upload-description {
+            color: #aaa;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            max-width: 400px;
+        }
+
+        .file-input-container {
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .drop-zone {
+            display: block;
+            background-color: #222;
+            border: 2px dashed #444;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .drop-zone.drag-over {
+            background-color: #252525;
+            border-color: #00f2ea;
+            border-style: solid;
+        }
+
+        .drop-zone:hover {
+            background-color: #252525;
+            border-color: #00f2ea;
+        }
+
+        .file-info {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .file-name {
+            font-weight: bold;
+            color: #00f2ea;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+
+        .file-size {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .remove-file {
+            color: #ff0050;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, #00f2ea, #0088ff);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, opacity 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .upload-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .upload-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        .privacy-notice {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 25px;
+            font-size: 13px;
+            color: #aaa;
+            max-width: 400px;
+        }
+
+        .privacy-notice h3 {
+            color: #00f2ea;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .results-section {
+            flex: 1;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .results-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff0050, #ff7f00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .results-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .stat-card {
+            background-color: #222;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00f2ea;
+        }
+
+        .stat-title {
+            font-size: 18px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .stat-highlight {
+            color: #ff0050;
+        }
+
+        .top-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+        }
+
+        .item-rank {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00f2ea;
+            width: 30px;
+        }
+
+        .item-name {
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .item-count {
+            color: #ff7f00;
+            font-weight: bold;
+        }
+
+        .empty-results {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px 20px;
+        }
+
+        .legal-disclaimer {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        .legal-disclaimer h3 {
+            color: #ff7f00;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .footer {
+            background-color: #000;
+            padding: 25px;
+            text-align: center;
+            border-top: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tiktok-logo {
+            font-size: 40px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tiktok-brand {
+            font-size: 24px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+
+        .tiktok-trademark {
+            font-size: 12px;
+            vertical-align: super;
+        }
+
+        .copyright {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .company-info {
+            color: #888;
+            font-size: 13px;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #222;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00f2ea;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .upload-section {
+                border-right: none;
+                border-bottom: 1px solid #333;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="/logo.png" alt="ND Labs Logo" class="logo-image">
+                <div>
+                    <h1 class="site-title">TikTok Wrapped - ND Labs</h1>
+                    <div class="subtitle">Xem thống kê TikTok của bạn từ file JSON - Hoàn toàn cục bộ & bảo mật</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="upload-section">
+                <div class="upload-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h2 class="upload-title">Tải lên file JSON TikTok Wrapped</h2>
+                <p class="upload-description">
+                    Kéo thả file JSON hoặc nhấn để chọn file. Dữ liệu được xử lý hoàn toàn trên trình duyệt của bạn,
+                    không gửi lên máy chủ.
+                </p>
+
+                <div class="file-input-container">
+                    <input type="file" id="jsonFile" class="file-input" accept=".json">
+                    <div id="dropZone" class="drop-zone">
+                        <i class="fas fa-cloud-upload-alt"
+                            style="font-size: 40px; margin-bottom: 15px; color: #00f2ea;"></i>
+                        <div style="font-size: 18px; margin-bottom: 5px;">Kéo thả file JSON vào đây</div>
+                        <div style="color: #888; font-size: 14px;">hoặc nhấn để chọn file</div>
+                        <div style="margin-top: 10px; color: #666; font-size: 13px;">Chỉ hỗ trợ file JSON</div>
+                    </div>
+
+                    <div id="fileInfo" class="file-info" style="display: none;">
+                        <div class="file-name" id="fileName">Tên file sẽ hiển thị ở đây</div>
+                        <div class="file-size" id="fileSize">Kích thước file</div>
+                        <div class="remove-file" id="removeFile"><i class="fas fa-times"></i> Xóa file</div>
+                    </div>
+                </div>
+
+                <button id="processBtn" class="upload-btn" disabled>
+                    <i class="fas fa-chart-pie"></i> Xem TikTok Wrapped
+                </button>
+
+                <div class="privacy-notice">
+                    <h3><i class="fas fa-shield-alt"></i> Cam kết bảo mật</h3>
+                    <p>• Dữ liệu được xử lý hoàn toàn trên trình duyệt của bạn</p>
+                    <p>• Không lưu trữ, gửi hoặc chia sẻ dữ liệu của bạn với bên thứ ba</p>
+                    <p>• Không yêu cầu đăng nhập hoặc thông tin cá nhân</p>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <h2 class="results-title">Thống Kê TikTok Của Bạn</h2>
+                <div class="results-container" id="resultsContainer">
+                    <div class="empty-results">
+                        <i class="fas fa-music" style="font-size: 50px; margin-bottom: 20px; color: #333;"></i>
+                        <h3>Chưa có dữ liệu</h3>
+                        <p>Tải lên file JSON TikTok Wrapped để xem thống kê của bạn</p>
+                    </div>
+                </div>
+
+                <div class="legal-disclaimer">
+                    <h3><i class="fas fa-gavel"></i> Tuyên bố miễn trừ trách nhiệm</h3>
+                    <p>Trang web này là công cụ phân tích độc lập, không liên kết với TikTok Inc. Tất cả nhãn hiệu thuộc
+                        về chủ sở hữu tương ứng. Dữ liệu được xử lý cục bộ và không được lưu trữ. Người dùng chịu trách
+                        nhiệm về việc tuân thủ Điều khoản dịch vụ của TikTok khi sử dụng dữ liệu cá nhân.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="tiktok-logo">
+                <i class="fab fa-tiktok"></i>
+                <span class="tiktok-brand">TikTok<span class="tiktok-trademark">®</span></span>
+            </div>
+            <div class="copyright">
+                © 2026 TikTok Wrapped - ND Labs. Dữ liệu được cung cấp bởi TikTok.
+            </div>
+            <div class="company-info">
+                ND Labs là một dự án độc lập không liên kết với TikTok Inc. Trang web này chỉ cung cấp công cụ phân tích
+                dữ liệu cá nhân và không lưu trữ bất kỳ thông tin nào của người dùng.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileInput = document.getElementById('jsonFile');
+            const dropZone = document.getElementById('dropZone');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeFile = document.getElementById('removeFile');
+            const processBtn = document.getElementById('processBtn');
+            const resultsContainer = document.getElementById('resultsContainer');
+
+            let selectedFile = null;
+
+            // Xử lý kéo thả file
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                dropZone.classList.add('drag-over');
+            }
+
+            function unhighlight() {
+                dropZone.classList.remove('drag-over');
+            }
+
+            // Xử lý thả file
+            dropZone.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+
+                if (files.length > 0) {
+                    handleFileSelection(files[0]);
+                }
+            }
+
+            // Xử lý click vào drop zone
+            dropZone.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // Xử lý chọn file thông thường
+            fileInput.addEventListener('change', function () {
+                if (this.files.length > 0) {
+                    handleFileSelection(this.files[0]);
+                }
+            });
+
+            // Xử lý file được chọn
+            function handleFileSelection(file) {
+                // Kiểm tra loại file
+                if (!file.name.toLowerCase().endsWith('.json')) {
+                    alert('Vui lòng chọn file JSON (định dạng .json)');
+                    return;
+                }
+
+                selectedFile = file;
+
+                // Hiển thị thông tin file
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                fileInfo.style.display = 'block';
+
+                // Kích hoạt nút xử lý
+                processBtn.disabled = false;
+            }
+
+            // Định dạng kích thước file
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Xóa file đã chọn
+            removeFile.addEventListener('click', function () {
+                selectedFile = null;
+                fileInput.value = '';
+                fileInfo.style.display = 'none';
+                processBtn.disabled = true;
+                resetResults();
+            });
+
+            // Xử lý sự kiện khi nhấn nút "Xem TikTok Wrapped"
+            processBtn.addEventListener('click', function () {
+                if (!selectedFile) {
+                    alert('Vui lòng chọn file JSON trước!');
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        displayResults(data);
+                    } catch (error) {
+                        alert('File JSON không hợp lệ! Vui lòng kiểm tra lại.');
+                        console.error('Lỗi phân tích JSON:', error);
+                        resetResults();
+                    }
+                };
+
+                reader.onerror = function () {
+                    alert('Lỗi khi đọc file. Vui lòng thử lại!');
+                    resetResults();
+                };
+
+                reader.readAsText(selectedFile);
+            });
+
+            // Hiển thị kết quả từ dữ liệu JSON
+            function displayResults(data) {
+                // Xóa nội dung cũ
+                resultsContainer.innerHTML = '';
+
+                // Kiểm tra xem dữ liệu có cấu trúc mong đợi không
+                if (!data || typeof data !== 'object') {
+                    resultsContainer.innerHTML = `
+                        <div class="empty-results">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 50px; margin-bottom: 20px; color: #ff0050;"></i>
+                            <h3>Dữ liệu không hợp lệ</h3>
+                            <p>File JSON không chứa dữ liệu TikTok Wrapped đúng định dạng.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Tạo HTML cho các thống kê
+                let html = '';
+
+                // Tổng quan
+                if (data.totalVideos || data.totalLikes || data.totalFollowers) {
+                    html += `
+                        <div class="stat-card">
+                            <div class="stat-title">Tổng Quan</div>
+                            <div class="stat-value">
+                                ${data.totalVideos ? `<div>${data.totalVideos} video đã đăng</div>` : ''}
+                                ${data.totalLikes ? `<div>${data.totalLikes.toLocaleString()} lượt thích</div>` : ''}
+                                ${data.totalFollowers ? `<div>${data.totalFollowers.toLocaleString()} người theo dõi</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Video phổ biến nhất
+                if (data.topVideo) {
+                    html += `
+                        <div class="stat-card">
+                            <div class="stat-title">Video Phổ Biến Nhất</div>
+                            <div class="stat-value">${data.topVideo.title || 'Không có tiêu đề'}</div>
+                            <div style="margin-top: 10px; color: #aaa;">
+                                ${data.topVideo.views ? `${data.topVideo.views.toLocaleString()} lượt xem` : ''}
+                                ${data.topVideo.likes ? ` • ${data.topVideo.likes.toLocaleString()} lượt thích` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Hashtag phổ biến
+                if (data.topHashtags && data.topHashtags.length > 0) {
+                    html += `
+                        <div class="stat-card">
+                            <div class="stat-title">Hashtag Sử Dụng Nhiều Nhất</div>
+                            <div style="margin-top: 15px;">
+                                ${data.topHashtags.slice(0, 5).map((tag, index) => `
+                                    <div class="top-item">
+                                        <div class="item-rank">#${index + 1}</div>
+                                        <div class="item-name">${tag.name || 'Hashtag'}</div>
+                                        <div class="item-count">${tag.count || 0} lần</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Thời gian hoạt động
+                if (data.activeHours) {
+                    html += `
+                        <div class="stat-card">
+                            <div class="stat-title">Thời Gian Hoạt Động Nhiều Nhất</div>
+                            <div class="stat-value">${data.activeHours}</div>
+                        </div>
+                    `;
+                }
+
+                // Loại nội dung
+                if (data.contentTypes && data.contentTypes.length > 0) {
+                    html += `
+                        <div class="stat-card">
+                            <div class="stat-title">Loại Nội Dung Phổ Biến</div>
+                            <div style="margin-top: 15px;">
+                                ${data.contentTypes.slice(0, 5).map((type, index) => `
+                                    <div class="top-item">
+                                        <div class="item-rank">${index + 1}</div>
+                                        <div class="item-name">${type.name || 'Loại nội dung'}</div>
+                                        <div class="item-count">${type.percentage || 0}%</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Thời gian sử dụng
+                if (data.totalWatchTime) {
+                    html += `
+                        <div class="stat-card">
+                            <div class="stat-title">Tổng Thời Gian Xem</div>
+                            <div class="stat-value">${data.totalWatchTime}</div>
+                        </div>
+                    `;
+                }
+
+                // Nếu không có dữ liệu, hiển thị thông báo
+                if (html === '') {
+                    html = `
+                        <div class="empty-results">
+                            <i class="fas fa-chart-line" style="font-size: 50px; margin-bottom: 20px; color: #00f2ea;"></i>
+                            <h3>Dữ liệu TikTok Wrapped</h3>
+                            <p>Đã tải lên thành công nhưng file không chứa dữ liệu thống kê.</p>
+                            <p style="margin-top: 15px; font-size: 12px;">Hãy đảm bảo bạn sử dụng file JSON đúng định dạng từ TikTok.</p>
+                        </div>
+                    `;
+                }
+
+                resultsContainer.innerHTML = html;
+
+                // Cuộn đến phần kết quả trên mobile
+                if (window.innerWidth <= 768) {
+                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            // Reset kết quả
+            function resetResults() {
+                resultsContainer.innerHTML = `
+                    <div class="empty-results">
+                        <i class="fas fa-music" style="font-size: 50px; margin-bottom: 20px; color: #333;"></i>
+                        <h3>Chưa có dữ liệu</h3>
+                        <p>Tải lên file JSON TikTok Wrapped để xem thống kê của bạn</p>
+                    </div>
+                `;
+            }
+
+            // Hiển thị thông báo tuân thủ khi trang tải
+            window.addEventListener('load', function () {
+                console.log('TikTok Wrapped Viewer - ND Labs');
+                console.log('Tất cả dữ liệu được xử lý cục bộ trên trình duyệt của bạn.');
+                console.log('Không có dữ liệu nào được gửi đến máy chủ.');
+            });
+        });
+    </script>
+
+    <!-- Đặt ở cuối body -->
+    <div class="home-wrapper">
+        <!-- Nút Trang Chủ -->
+        <a href="/index.html" class="home-btn">
+            <img src="/homebtn.png" alt="Trang chủ">
+        </a>
+
+        <style>
+            .home-btn {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 55px;
+                height: 55px;
+                background: #fff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                z-index: 9999;
+                animation: float 3s ease-in-out infinite;
+                text-decoration: none;
+            }
+
+            .home-btn img {
+                max-width: 60%;
+                max-height: 60%;
+                object-fit: contain;
+            }
+
+            @keyframes float {
+
+                0%,
+                100% {
+                    transform: translateY(0px);
+                }
+
+                50% {
+                    transform: translateY(-6px);
+                }
+            }
+
+            .home-btn:hover {
+                transform: scale(1.05);
+                transition: 0.3s;
+            }
+        </style>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,1450 @@
+﻿<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vòng Quay May Mắn - ND Labs</title>
+  <link rel="icon" href="/logo.png" type="image/png">
+  <meta property="og:title" content="Vòng Quay May Mắn - ND Labs">
+  <meta property="og:description" content="Tạo vòng quay may mắn tùy chỉnh chuyên nghiệp với ND Labs.">
+  <meta property="og:image" content="/banner-main.png">
+  <meta property="og:type" content="website">
+  <style>
+    :root {
+      --primary: #7C3AED;
+      --primary-light: #8B5CF6;
+      --primary-dark: #6D28D9;
+      --secondary: #10B981;
+      --accent: #F59E0B;
+      --danger: #EF4444;
+      --light: #F9FAFB;
+      --dark: #1F2937;
+      --gray: #6B7280;
+      --gray-light: #E5E7EB;
+      --border-radius: 10px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --transition: all 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dark);
+    }
+
+    .container {
+      width: 1000px;
+      max-width: 100%;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Panel điều khiển */
+    .control-panel {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-light);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .panel-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .logo {
+      font-size: 13px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    /* Textarea */
+    .input-section {
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 140px;
+      border: 1px solid var(--gray-light);
+      padding: 12px;
+      border-radius: 8px;
+      resize: vertical;
+      font-size: 14px;
+      line-height: 1.4;
+      transition: var(--transition);
+      background: white;
+      color: var(--dark);
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    }
+
+    /* Nút điều khiển */
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--dark);
+      border: 1px solid var(--gray-light);
+    }
+
+    .btn-secondary:hover {
+      background: var(--light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #DC2626;
+    }
+
+    /* Kết quả */
+    .result-section {
+      background: var(--light);
+      border-radius: 8px;
+      padding: 14px;
+      margin-top: 12px;
+      text-align: center;
+      border: 1px solid var(--gray-light);
+    }
+
+    .result-label {
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 6px;
+    }
+
+    #result {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      min-height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .winning-text {
+      color: var(--secondary);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.8;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    /* Cài đặt */
+    .settings-section {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--gray-light);
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .setting-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .setting-label {
+      font-size: 12px;
+      color: var(--dark);
+      font-weight: 500;
+    }
+
+    .setting-control {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--gray-light);
+      background: white;
+      color: var(--dark);
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .setting-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+    }
+
+    /* Panel vòng quay */
+    .wheel-panel {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid var(--gray-light);
+    }
+
+    .wheel-container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      margin: 0 auto 16px;
+    }
+
+    canvas {
+      background: transparent;
+      display: block;
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Kim chỉ */
+    .pointer {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28px;
+      height: 35px;
+      z-index: 20;
+    }
+
+    .pointer:before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 28px solid var(--danger);
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+    }
+
+    /* Nút quay trung tâm */
+    .center-spin-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: var(--transition);
+    }
+
+    .center-spin-btn:hover:not(:disabled) {
+      transform: translate(-50%, -50%) scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .center-spin-btn:active:not(:disabled) {
+      transform: translate(-50%, -50%) scale(0.98);
+    }
+
+    .center-spin-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .spin-text {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 0.5px;
+    }
+
+    .center-spin-btn.spinning .spin-text {
+      display: none;
+    }
+
+    .spin-icon {
+      display: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: var(--primary);
+      animation: spin 1s linear infinite;
+    }
+
+    .center-spin-btn.spinning .spin-icon {
+      display: block;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Legend */
+    .legend-container {
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    .legend-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 8px;
+      max-height: 180px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .legend-grid::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .legend-grid::-webkit-scrollbar-track {
+      background: var(--gray-light);
+      border-radius: 3px;
+    }
+
+    .legend-grid::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: var(--light);
+      border: 1px solid var(--gray-light);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .legend-item:hover {
+      background: white;
+      border-color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .legend-item.winner {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--secondary);
+      border-width: 2px;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      box-shadow: inset 0 -1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .legend-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .legend-number {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      background: white;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--gray-light);
+    }
+
+    /* Lịch sử */
+    .history-panel {
+      grid-column: 1 / -1;
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-top: 16px;
+      border: 1px solid var(--gray-light);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .history-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .history-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .history-controls .btn {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .history-stats {
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 8px;
+    }
+
+    .history-list {
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .history-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .history-list::-webkit-scrollbar-track {
+      background: var(--gray-light);
+      border-radius: 3px;
+    }
+
+    .history-list::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--gray-light);
+      transition: var(--transition);
+    }
+
+    .history-item:hover {
+      background: var(--light);
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-text {
+      font-size: 13px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .history-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .history-time {
+      font-size: 11px;
+      color: var(--gray);
+      white-space: nowrap;
+    }
+
+    .history-index {
+      font-size: 11px;
+      color: var(--primary);
+      background: rgba(124, 58, 237, 0.1);
+      padding: 2px 6px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    /* Nút home */
+    .home-btn {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      width: 50px;
+      height: 50px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      z-index: 1000;
+      transition: var(--transition);
+      border: 1px solid var(--gray-light);
+      text-decoration: none;
+    }
+
+    .home-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .home-btn img {
+      max-width: 60%;
+      max-height: 60%;
+      object-fit: contain;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .page-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--gray-light);
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .page-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .page-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Info */
+    .info-text {
+      font-size: 12px;
+      color: var(--gray);
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 20px;
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    .empty-state i {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: var(--gray-light);
+    }
+  </style>
+    <script src="/nd-navbar.js" defer></script></head>
+
+<body>
+  <div class="container">
+    <!-- Panel điều khiển bên trái -->
+    <div class="control-panel">
+      <div class="panel-header">
+        <div class="panel-title">Vòng Quay May Mắn</div>
+        <div class="logo">ND Labs</div>
+      </div>
+
+      <div class="input-section">
+        <div class="section-title">
+          <i class="fas fa-list"></i>
+          <span>Danh sách phần thưởng</span>
+        </div>
+        <textarea id="names" placeholder="Nhập mỗi dòng là một phần thưởng hoặc người tham gia...">Giải nhất
+Giải nhì
+Giải ba
+Giải tư
+Giải năm
+Giải sáu
+Giải bảy
+Giải tám
+Giải chín
+Giải mười</textarea>
+      </div>
+
+      <div class="button-group">
+        <button id="spinBtn" class="btn btn-primary">
+          <i class="fas fa-play"></i>
+          <span>Quay ngay</span>
+        </button>
+        <button id="randBtn" class="btn btn-secondary">
+          <i class="fas fa-palette"></i>
+          <span>Đổi màu</span>
+        </button>
+        <button id="clearBtn" class="btn btn-danger">
+          <i class="fas fa-trash"></i>
+          <span>Xóa hết</span>
+        </button>
+        <button id="addBtn" class="btn btn-secondary">
+          <i class="fas fa-plus"></i>
+          <span>Thêm mẫu</span>
+        </button>
+      </div>
+
+      <div class="result-section">
+        <div class="result-label">KẾT QUẢ</div>
+        <div id="result">
+          <i class="fas fa-gift"></i>
+          <span class="result-text">Sẵn sàng quay</span>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="section-title">
+          <i class="fas fa-cog"></i>
+          <span>Cài đặt</span>
+        </div>
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label class="setting-label">Tốc độ</label>
+            <select id="speedSelect" class="setting-control">
+              <option value="slow">Chậm</option>
+              <option value="normal" selected>Bình thường</option>
+              <option value="fast">Nhanh</option>
+            </select>
+          </div>
+          <div class="setting-item">
+            <label class="setting-label">Hiệu ứng</label>
+            <select id="effectSelect" class="setting-control">
+              <option value="none" selected>Không</option>
+              <option value="simple">Đơn giản</option>
+            </select>
+          </div>
+        </div>
+        <div class="info-text">Tất cả dữ liệu được lưu tự động</div>
+      </div>
+    </div>
+
+    <!-- Panel vòng quay bên phải -->
+    <div class="wheel-panel">
+      <div class="wheel-container">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="400" height="400"></canvas>
+        <!-- Nút quay trung tâm -->
+        <button id="centerSpinBtn" class="center-spin-btn">
+          <span class="spin-text">QUAY</span>
+          <div class="spin-icon"></div>
+        </button>
+      </div>
+
+      <div class="legend-container">
+        <div class="legend-title">
+          <i class="fas fa-award"></i>
+          <span>Danh sách phần thưởng</span>
+          <span id="itemCount" class="badge badge-primary">10 items</span>
+        </div>
+        <div class="legend-grid" id="legend"></div>
+      </div>
+    </div>
+
+    <!-- Lịch sử quay -->
+    <div class="history-panel">
+      <div class="history-header">
+        <div class="history-title">
+          <i class="fas fa-history"></i>
+          <span>Lịch sử quay</span>
+        </div>
+        <div class="history-controls">
+          <button id="clearHistoryBtn" class="btn btn-secondary">
+            <i class="fas fa-trash-alt"></i>
+            <span>Xóa lịch sử</span>
+          </button>
+          <button id="exportHistoryBtn" class="btn btn-secondary">
+            <i class="fas fa-download"></i>
+            <span>Xuất file</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="history-stats" id="historyStats">
+        Tổng cộng: 0 lượt quay
+      </div>
+
+      <div class="history-list" id="historyList">
+        <div class="empty-state">
+          <i class="fas fa-history"></i>
+          <div>Chưa có lịch sử quay</div>
+        </div>
+      </div>
+
+      <div class="pagination" id="pagination" style="display: none;">
+        <button class="page-btn" id="prevPage" disabled>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <span id="pageInfo">Trang 1/1</span>
+        <button class="page-btn" id="nextPage" disabled>
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nút trang chủ -->
+  <a href="https://nd-site.github.io" class="home-btn">
+    <img src="/homebtn.png" alt="Trang chủ">
+  </a>
+
+  <script>
+    // ========== KHỞI TẠO BIẾN ==========
+    const $names = document.getElementById('names');
+    const $wheel = document.getElementById('wheel');
+    const ctx = $wheel.getContext('2d');
+    const $spin = document.getElementById('spinBtn');
+    const $centerSpin = document.getElementById('centerSpinBtn');
+    const $rand = document.getElementById('randBtn');
+    const $clear = document.getElementById('clearBtn');
+    const $add = document.getElementById('addBtn');
+    const $result = document.getElementById('result');
+    const $resultText = $result.querySelector('.result-text');
+    const $legend = document.getElementById('legend');
+    const $historyList = document.getElementById('historyList');
+    const $historyStats = document.getElementById('historyStats');
+    const $clearHistory = document.getElementById('clearHistoryBtn');
+    const $exportHistory = document.getElementById('exportHistoryBtn');
+    const $itemCount = document.getElementById('itemCount');
+    const $speedSelect = document.getElementById('speedSelect');
+    const $effectSelect = document.getElementById('effectSelect');
+    const $pagination = document.getElementById('pagination');
+    const $prevPage = document.getElementById('prevPage');
+    const $nextPage = document.getElementById('nextPage');
+    const $pageInfo = document.getElementById('pageInfo');
+
+    let entries = [];
+    let colors = [];
+    let rotation = 0;
+    let isSpinning = false;
+    let spinAnim = null;
+    let spinHistory = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    // Màu sắc định sẵn
+    const PREDEFINED_COLORS = [
+      '#8B5CF6', '#10B981', '#F59E0B', '#EF4444', '#3B82F6',
+      '#EC4899', '#14B8A6', '#F97316', '#6366F1', '#84CC16',
+      '#06B6D4', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444',
+      '#3B82F6', '#EC4899', '#14B8A6', '#F97316', '#6366F1'
+    ];
+
+    // ========== LƯU VÀ TẢI DỮ LIỆU ==========
+    function saveToStorage() {
+      try {
+        localStorage.setItem('wheelEntries', $names.value);
+        localStorage.setItem('wheelHistory', JSON.stringify(spinHistory));
+        localStorage.setItem('wheelColors', JSON.stringify(colors));
+
+        const settings = {
+          speed: $speedSelect.value,
+          effect: $effectSelect.value
+        };
+        localStorage.setItem('wheelSettings', JSON.stringify(settings));
+      } catch (e) {
+        console.log("Lỗi khi lưu:", e);
+      }
+    }
+
+    function loadFromStorage() {
+      try {
+        // Tải danh sách
+        const savedEntries = localStorage.getItem('wheelEntries');
+        if (savedEntries) {
+          $names.value = savedEntries;
+        }
+
+        // Tải lịch sử
+        const savedHistory = localStorage.getItem('wheelHistory');
+        if (savedHistory) {
+          spinHistory = JSON.parse(savedHistory) || [];
+          updateHistoryDisplay();
+          updateHistoryStats();
+        }
+
+        // Tải màu sắc
+        const savedColors = localStorage.getItem('wheelColors');
+        if (savedColors) {
+          colors = JSON.parse(savedColors) || [];
+        }
+
+        // Tải cài đặt
+        const savedSettings = localStorage.getItem('wheelSettings');
+        if (savedSettings) {
+          const settings = JSON.parse(savedSettings);
+          if (settings.speed) $speedSelect.value = settings.speed;
+          if (settings.effect) $effectSelect.value = settings.effect;
+        }
+      } catch (e) {
+        console.log("Lỗi khi tải:", e);
+      }
+    }
+
+    // ========== XỬ LÝ DỮ LIỆU ==========
+    function parseNames(text) {
+      return text.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    }
+
+    function generateColors(count) {
+      const newColors = [];
+      for (let i = 0; i < count; i++) {
+        newColors.push(PREDEFINED_COLORS[i % PREDEFINED_COLORS.length]);
+      }
+      return newColors;
+    }
+
+    function rebuild() {
+      entries = parseNames($names.value);
+      $itemCount.textContent = `${entries.length} items`;
+
+      if (entries.length === 0) {
+        colors = [];
+        drawWheel();
+        renderLegend();
+        $resultText.textContent = 'Chưa có dữ liệu';
+        saveToStorage();
+        return;
+      }
+
+      // Tạo màu mới nếu cần
+      if (colors.length !== entries.length) {
+        colors = generateColors(entries.length);
+      }
+
+      drawWheel();
+      renderLegend();
+      $resultText.textContent = 'Sẵn sàng quay!';
+      saveToStorage();
+    }
+
+    // ========== VẼ VÒNG QUAY ==========
+    function drawWheel() {
+      const size = 400;
+      const dpr = window.devicePixelRatio || 1;
+
+      // Đặt kích thước canvas
+      $wheel.width = size * dpr;
+      $wheel.height = size * dpr;
+      ctx.scale(dpr, dpr);
+
+      // Clear canvas
+      ctx.clearRect(0, 0, size, size);
+
+      const cx = size / 2;
+      const cy = size / 2;
+      const r = size / 2 - 10;
+      const n = Math.max(1, entries.length);
+      const slice = (Math.PI * 2) / n;
+
+      // Vẽ các phần
+      for (let i = 0; i < n; i++) {
+        const start = rotation + i * slice;
+        const end = start + slice;
+
+        // Vẽ hình quạt
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, end);
+        ctx.closePath();
+        ctx.fillStyle = colors[i] || '#E5E7EB';
+        ctx.fill();
+
+        // Đường viền
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, end);
+        ctx.closePath();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Vẽ chữ (chỉ khi ít items)
+        if (n <= 20) {
+          ctx.save();
+          const ang = start + slice / 2;
+          ctx.translate(cx, cy);
+          ctx.rotate(ang);
+          ctx.textAlign = 'right';
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 13px "Segoe UI"';
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+          ctx.shadowBlur = 2;
+
+          const label = n > 12 ? `#${i + 1}` : entries[i] || `#${i + 1}`;
+          const maxWidth = r - 30;
+          const textWidth = ctx.measureText(label).width;
+
+          if (textWidth <= maxWidth) {
+            ctx.fillText(label, r - 15, 4);
+          }
+
+          ctx.restore();
+        }
+      }
+
+      // Vẽ trung tâm
+      ctx.beginPath();
+      ctx.arc(cx, cy, 35, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // ========== HIỂN THỊ LEGEND ==========
+    function renderLegend() {
+      $legend.innerHTML = '';
+
+      entries.forEach((name, i) => {
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        item.dataset.index = i;
+        item.innerHTML = `
+          <div class="legend-number">${i + 1}</div>
+          <div class="legend-color" style="background: ${colors[i]}"></div>
+          <div class="legend-text" title="${escapeHtml(name)}">
+            ${escapeHtml(name.length > 20 ? name.substring(0, 20) + '...' : name)}
+          </div>
+        `;
+
+        item.addEventListener('click', () => {
+          highlightItem(i);
+        });
+
+        $legend.appendChild(item);
+      });
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function highlightItem(index) {
+      document.querySelectorAll('.legend-item').forEach(item => {
+        item.classList.remove('winner');
+      });
+
+      const item = document.querySelector(`.legend-item[data-index="${index}"]`);
+      if (item) {
+        item.classList.add('winner');
+        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // ========== QUAY VÒNG QUAY ==========
+    function spin() {
+      if (isSpinning || entries.length === 0) return;
+
+      $centerSpin.classList.add('spinning');
+      $centerSpin.disabled = true;
+      $spin.disabled = true;
+      isSpinning = true;
+      $resultText.textContent = 'Đang quay...';
+      $resultText.classList.remove('winning-text');
+
+      document.querySelectorAll('.legend-item').forEach(item => {
+        item.classList.remove('winner');
+      });
+
+      const n = entries.length;
+      const minSpins = 3;
+      const extraRounds = minSpins + Math.floor(Math.random() * 2);
+      const target = Math.floor(Math.random() * n);
+      const slice = (Math.PI * 2) / n;
+
+      const pointerAngle = -Math.PI / 2;
+      const desired = pointerAngle - (target * slice + slice / 2);
+      const current = rotation % (Math.PI * 2);
+
+      let delta = desired - current;
+      delta = ((delta % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+      const total = delta + extraRounds * (Math.PI * 2);
+
+      let baseDuration = 3000;
+      switch ($speedSelect.value) {
+        case 'slow': baseDuration = 4500; break;
+        case 'fast': baseDuration = 2000; break;
+        default: baseDuration = 3000;
+      }
+
+      const duration = baseDuration;
+      const startTime = Date.now();
+      const startRot = rotation;
+
+      function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Easing function
+        let ease;
+        if (progress < 0.8) {
+          ease = progress * (2 - progress);
+        } else {
+          ease = 0.96 + (progress - 0.8) * 0.2;
+        }
+
+        rotation = startRot + total * ease;
+        drawWheel();
+
+        if (progress < 1) {
+          spinAnim = requestAnimationFrame(animate);
+        } else {
+          finishSpin(target);
+        }
+      }
+
+      spinAnim = requestAnimationFrame(animate);
+    }
+
+    function finishSpin(targetIndex) {
+      isSpinning = false;
+      $spin.disabled = false;
+      $centerSpin.disabled = false;
+      $centerSpin.classList.remove('spinning');
+
+      drawWheel();
+
+      const winner = entries[targetIndex] || `#${targetIndex + 1}`;
+      $resultText.textContent = winner;
+      $resultText.classList.add('winning-text');
+
+      addToHistory(winner, targetIndex);
+      highlightItem(targetIndex);
+
+      if ($effectSelect.value === 'simple') {
+        showSimpleEffect(targetIndex);
+      }
+
+      saveToStorage();
+    }
+
+    function showSimpleEffect(index) {
+      const originalColor = colors[index];
+      let flashCount = 0;
+
+      const flashInterval = setInterval(() => {
+        if (flashCount % 2 === 0) {
+          colors[index] = '#FFFFFF';
+        } else {
+          colors[index] = originalColor;
+        }
+
+        drawWheel();
+        flashCount++;
+
+        if (flashCount > 4) {
+          colors[index] = originalColor;
+          drawWheel();
+          clearInterval(flashInterval);
+        }
+      }, 200);
+    }
+
+    // ========== LỊCH SỬ ==========
+    function addToHistory(winner, index) {
+      const now = new Date();
+      const dateString = now.toLocaleDateString('vi-VN');
+      const timeString = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+      const historyItem = {
+        winner,
+        index,
+        date: dateString,
+        time: timeString,
+        timestamp: now.getTime()
+      };
+
+      spinHistory.unshift(historyItem);
+      updateHistoryDisplay();
+      updateHistoryStats();
+      updatePagination();
+
+      currentPage = 1;
+      updateHistoryDisplay();
+    }
+
+    function updateHistoryStats() {
+      const total = spinHistory.length;
+      if (total > 0) {
+        const firstDate = new Date(spinHistory[spinHistory.length - 1].timestamp);
+        const lastDate = new Date(spinHistory[0].timestamp);
+        $historyStats.innerHTML = `
+          Tổng cộng: <strong>${total}</strong> lượt quay<br>
+          <small>Từ ${firstDate.toLocaleDateString('vi-VN')} đến ${lastDate.toLocaleDateString('vi-VN')}</small>
+        `;
+      } else {
+        $historyStats.textContent = 'Tổng cộng: 0 lượt quay';
+      }
+    }
+
+    function updateHistoryDisplay() {
+      const total = spinHistory.length;
+
+      if (total === 0) {
+        $historyList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-history"></i>
+            <div>Chưa có lịch sử quay</div>
+          </div>
+        `;
+        $pagination.style.display = 'none';
+        return;
+      }
+
+      const totalPages = Math.ceil(total / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, total);
+      const pageItems = spinHistory.slice(startIndex, endIndex);
+
+      $historyList.innerHTML = '';
+
+      pageItems.forEach((item, i) => {
+        const globalIndex = startIndex + i + 1;
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        historyItem.innerHTML = `
+          <div class="history-text">
+            <i class="fas fa-trophy" style="color: ${colors[item.index] || '#7C3AED'}"></i>
+            <span title="${escapeHtml(item.winner)}">
+              ${escapeHtml(item.winner.length > 30 ? item.winner.substring(0, 30) + '...' : item.winner)}
+            </span>
+          </div>
+          <div class="history-info">
+            <span class="history-index">#${item.index + 1}</span>
+            <span class="history-time">${item.date} ${item.time}</span>
+          </div>
+        `;
+
+        historyItem.addEventListener('click', () => {
+          highlightItem(item.index);
+        });
+
+        $historyList.appendChild(historyItem);
+      });
+
+      if (totalPages > 1) {
+        $pagination.style.display = 'flex';
+        $pageInfo.textContent = `Trang ${currentPage}/${totalPages}`;
+        $prevPage.disabled = currentPage === 1;
+        $nextPage.disabled = currentPage === totalPages;
+      } else {
+        $pagination.style.display = 'none';
+      }
+    }
+
+    function updatePagination() {
+      const total = spinHistory.length;
+      const totalPages = Math.ceil(total / itemsPerPage);
+
+      if (totalPages > 1) {
+        $pagination.style.display = 'flex';
+        $pageInfo.textContent = `Trang ${currentPage}/${totalPages}`;
+        $prevPage.disabled = currentPage === 1;
+        $nextPage.disabled = currentPage === totalPages;
+      } else {
+        $pagination.style.display = 'none';
+      }
+    }
+
+    function clearHistory() {
+      if (spinHistory.length === 0) return;
+
+      if (confirm(`Bạn có chắc muốn xóa toàn bộ ${spinHistory.length} lượt quay trong lịch sử?`)) {
+        spinHistory = [];
+        currentPage = 1;
+        updateHistoryDisplay();
+        updateHistoryStats();
+        saveToStorage();
+      }
+    }
+
+    function exportHistory() {
+      if (spinHistory.length === 0) {
+        alert('Không có dữ liệu lịch sử để xuất');
+        return;
+      }
+
+      let csvContent = "STT,Phần thưởng,Số thứ tự,Ngày,Giờ\n";
+
+      spinHistory.forEach((item, index) => {
+        const row = [
+          index + 1,
+          `"${item.winner.replace(/"/g, '""')}"`,
+          item.index + 1,
+          item.date,
+          item.time
+        ];
+        csvContent += row.join(',') + '\n';
+      });
+
+      const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      const now = new Date();
+      const filename = `lich-su-quay-${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}.csv`;
+
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // ========== SỰ KIỆN ==========
+    $names.addEventListener('input', rebuild);
+    $spin.addEventListener('click', spin);
+    $centerSpin.addEventListener('click', spin);
+
+    $rand.addEventListener('click', () => {
+      if (entries.length) {
+        colors = generateColors(entries.length);
+        drawWheel();
+        renderLegend();
+        saveToStorage();
+      }
+    });
+
+    $clear.addEventListener('click', () => {
+      if (confirm('Bạn có chắc muốn xóa tất cả dữ liệu?')) {
+        $names.value = '';
+        rebuild();
+        $resultText.textContent = 'Đã xóa dữ liệu';
+        $resultText.classList.remove('winning-text');
+      }
+    });
+
+    $add.addEventListener('click', () => {
+      const samples = [
+        "Giải đặc biệt",
+        "Vé xem phim",
+        "Voucher 500K",
+        "Tai nghe Bluetooth",
+        "Balo thời trang"
+      ];
+
+      const currentText = $names.value.trim();
+      const newItems = samples.slice(0, 3).join('\n');
+
+      if (currentText) {
+        $names.value = currentText + '\n' + newItems;
+      } else {
+        $names.value = newItems;
+      }
+
+      rebuild();
+    });
+
+    $clearHistory.addEventListener('click', clearHistory);
+    $exportHistory.addEventListener('click', exportHistory);
+
+    $prevPage.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        updateHistoryDisplay();
+      }
+    });
+
+    $nextPage.addEventListener('click', () => {
+      const totalPages = Math.ceil(spinHistory.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        updateHistoryDisplay();
+      }
+    });
+
+    $speedSelect.addEventListener('change', saveToStorage);
+    $effectSelect.addEventListener('change', saveToStorage);
+
+    // ========== KHỞI ĐỘNG ==========
+    window.addEventListener('DOMContentLoaded', () => {
+      loadFromStorage();
+      rebuild();
+      drawWheel();
+    });
+
+    window.addEventListener('resize', () => {
+      drawWheel();
+    });
+
+    // Auto-save
+    setInterval(saveToStorage, 30000);
+    window.addEventListener('beforeunload', saveToStorage);
+  </script>
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="/notify.js"></script>
+</body>
+
+</html>

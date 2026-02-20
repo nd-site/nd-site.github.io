@@ -1,0 +1,549 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Tính Cách MBTI - Psychology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --secondary: #ec4899;
+            --bg-main: #f5f3ff;
+        }
+
+        html,
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: #1e293b;
+        }
+
+        .bg-blob {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+            animation: blob-bounce 10s infinite ease-in-out;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px -12px rgba(139, 92, 246, 0.1);
+            border-radius: 24px;
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 8px 16px -4px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -4px rgba(139, 92, 246, 0.5);
+            background: linear-gradient(135deg, #7c3aed 0%, var(--primary) 100%);
+        }
+
+        .option-btn {
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .option-selected {
+            border-color: var(--primary);
+            background-color: #ede9fe;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Scale Option Specifics */
+        .scale-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .scale-circle:hover {
+            border-color: var(--primary);
+            background-color: #f3f4f6;
+        }
+
+        .scale-circle.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .progress-bar-fill {
+            transition: width 0.4s ease-in-out;
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+
+    <!-- Background Elements -->
+    <div class="bg-blob" style="top: -100px; left: -100px;"></div>
+    <div class="bg-blob"
+        style="bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, rgba(255, 255, 255, 0) 70%);">
+    </div>
+
+    <div class="w-full max-w-3xl z-10">
+
+        <!-- Header -->
+        <header class="flex items-center justify-between mb-8">
+            <a href="../index.html"
+                class="flex items-center gap-2 text-slate-500 hover:text-violet-600 transition-colors font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Quay lại
+            </a>
+            <div class="text-violet-600 font-extrabold text-xl tracking-tight">Psychology • MBTI</div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="app-container" class="glass-card min-h-[400px] flex flex-col relative overflow-hidden">
+
+            <!-- VIEW 1: WELCOME SCREEN -->
+            <div id="welcome-screen"
+                class="p-8 md:p-12 text-center flex flex-col items-center justify-center h-full animate-fade-in">
+                <div
+                    class="w-20 h-20 bg-violet-100 rounded-full flex items-center justify-center text-4xl mb-6 shadow-inner text-violet-600">
+                    🧩
+                </div>
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Khám Phá Tính Cách Của Bạn</h1>
+                <p class="text-slate-500 text-lg mb-8 max-w-lg mx-auto">
+                    Bài trắc nghiệm MBTI giúp bạn hiểu rõ hơn về điểm mạnh, điểm yếu và cách bạn tương tác với thế giới
+                    xung quanh.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                    <button onclick="startTest()"
+                        class="btn-main px-8 py-3.5 rounded-full font-bold text-lg shadow-xl w-full sm:w-auto">
+                        Bắt đầu ngay
+                    </button>
+                </div>
+                <p class="mt-6 text-sm text-slate-400">Thời gian ước tính: 5-10 phút • 24 câu hỏi</p>
+            </div>
+
+            <!-- VIEW 2: QUIZ SCREEN -->
+            <div id="quiz-screen" class="hidden flex-col h-full w-full">
+                <!-- Progress Bar -->
+                <div class="w-full h-2 bg-slate-100">
+                    <div id="progress-bar" class="h-full bg-violet-600 progress-bar-fill w-0"></div>
+                </div>
+
+                <div
+                    class="flex-grow flex flex-col items-center justify-center p-6 md:p-12 text-center animate-fade-in">
+                    <span id="question-number"
+                        class="text-violet-500 font-bold text-sm tracking-widest uppercase mb-4">Câu hỏi 1/24</span>
+                    <h2 id="question-text"
+                        class="text-xl md:text-2xl font-bold text-slate-800 mb-10 min-h-[80px] flex items-center justify-center">
+                        Bạn thường cảm thấy tràn đầy năng lượng sau khi tham gia các buổi tiệc tùng đông người.
+                    </h2>
+
+                    <!-- Options Scale -->
+                    <div class="w-full max-w-xl mx-auto">
+                        <div
+                            class="flex justify-between items-center mb-2 px-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                            <span>Rất không đồng ý</span>
+                            <span>Rất đồng ý</span>
+                        </div>
+                        <div class="flex justify-between items-center gap-2 md:gap-4 relative py-4">
+                            <!-- Line behind circles -->
+                            <div
+                                class="absolute w-[94%] left-[3%] top-1/2 -translate-y-1/2 h-1 bg-slate-200 -z-10 rounded-full">
+                            </div>
+
+                            <button onclick="selectOption(1)"
+                                class="scale-circle w-12 h-12 md:w-14 md:h-14 bg-white border-2 border-slate-300 text-slate-400 hover:border-red-400 hover:text-red-500 hover:bg-red-50"
+                                data-value="1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            <button onclick="selectOption(2)"
+                                class="scale-circle w-10 h-10 md:w-12 md:h-12 bg-white border-2 border-slate-300 text-slate-400 hover:border-red-300 hover:text-red-400 hover:bg-red-50"
+                                data-value="2">
+                            </button>
+                            <button onclick="selectOption(3)"
+                                class="scale-circle w-8 h-8 md:w-10 md:h-10 bg-white border-2 border-slate-300 text-slate-400 hover:border-slate-400 hover:text-slate-500"
+                                data-value="3">
+                            </button>
+                            <button onclick="selectOption(4)"
+                                class="scale-circle w-10 h-10 md:w-12 md:h-12 bg-white border-2 border-slate-300 text-slate-400 hover:border-violet-300 hover:text-violet-400 hover:bg-violet-50"
+                                data-value="4">
+                            </button>
+                            <button onclick="selectOption(5)"
+                                class="scale-circle w-12 h-12 md:w-14 md:h-14 bg-white border-2 border-slate-300 text-slate-400 hover:border-violet-500 hover:text-violet-600 hover:bg-violet-50"
+                                data-value="5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 border-t border-slate-100 flex justify-between">
+                    <button onclick="prevQuestion()" id="prev-btn"
+                        class="text-slate-400 hover:text-slate-600 px-4 py-2 rounded-lg font-medium invisible">
+                        ← Quay lại
+                    </button>
+                    <!-- Skip button removed, force answer -->
+                </div>
+            </div>
+
+            <!-- VIEW 3: LOADING SCREEN -->
+            <div id="loading-screen" class="hidden flex-col items-center justify-center h-full p-12 text-center">
+                <div class="relative w-24 h-24 mb-8">
+                    <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
+                    <div
+                        class="absolute inset-0 border-4 border-violet-600 rounded-full border-t-transparent animate-spin">
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center text-2xl">🧠</div>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Đang phân tích kết quả...</h2>
+                <p class="text-slate-500">Hệ thống đang tổng hợp các câu trả lời của bạn</p>
+            </div>
+
+            <!-- VIEW 4: RESULT SCREEN -->
+            <div id="result-screen" class="hidden flex-col h-full animate-fade-in relative z-10 w-full">
+                <!-- Confetti placeholder or background effect -->
+                <div
+                    class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500">
+                </div>
+
+                <div class="p-8 md:p-10 flex flex-col items-center text-center">
+                    <span class="text-slate-500 font-bold uppercase tracking-widest text-sm mb-2">Kết quả của bạn
+                        là</span>
+                    <h1 id="result-type"
+                        class="text-6xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-violet-600 to-indigo-600 mb-4">
+                        INFJ</h1>
+                    <h2 id="result-title" class="text-2xl font-bold text-slate-800 mb-6">Người Che Chở</h2>
+
+                    <div class="w-full max-w-2xl bg-violet-50 rounded-2xl p-6 mb-8 text-left border border-violet-100">
+                        <p id="result-desc" class="text-slate-700 leading-relaxed mb-4">
+                            INFJ là những người lý tưởng hóa thầm lặng và đầy bí ẩn, nhưng cũng rất truyền cảm hứng và
+                            không biết mệt mỏi. Bạn nhìn thế giới với chiều sâu tư duy, luôn tìm kiếm ý nghĩa và sự kết
+                            nối trong các ý tưởng, mối quan hệ và của cải vật chất.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                            <div>
+                                <h4 class="font-bold text-violet-700 mb-2 flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z">
+                                        </path>
+                                    </svg>
+                                    Điểm mạnh
+                                </h4>
+                                <ul id="result-strengths" class="text-sm text-slate-600 space-y-1 list-disc pl-4">
+                                    <li>Sáng tạo và sâu sắc</li>
+                                    <li>Đam mê và tận tụy</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-red-500 mb-2 flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    Điểm yếu
+                                </h4>
+                                <ul id="result-weaknesses" class="text-sm text-slate-600 space-y-1 list-disc pl-4">
+                                    <li>Nhạy cảm với chỉ trích</li>
+                                    <li>Dễ bị kiệt sức (Burnout)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="location.reload()"
+                            class="px-6 py-2.5 rounded-full border-2 border-violet-100 text-violet-600 font-bold hover:bg-violet-50 transition-colors">
+                            Làm lại
+                        </button>
+                        <a href="../index.html"
+                            class="btn-main px-6 py-2.5 rounded-full font-bold shadow-lg flex items-center gap-2">
+                            Khám phá thêm
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="mt-8 text-center text-slate-400 text-sm">
+            <p>© 2026 ND Labs. Psychology • Kết quả chỉ mang tính chất tham khảo.</p>
+        </footer>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // --- DATA ---
+        const questions = [
+            // E vs I (Extraversion vs Introversion)
+            { id: 1, text: "Bạn cảm thấy hứng khởi khi ở trong đám đông hơn là ở một mình.", dim: 'E', rev: false },
+            { id: 2, text: "Bạn thường là người bắt đầu cuộc trò chuyện với người lạ.", dim: 'E', rev: false },
+            { id: 3, text: "Bạn thích làm việc một mình yên tĩnh hơn là làm việc nhóm ồn ào.", dim: 'E', rev: true }, // I favor
+            { id: 4, text: "Sau một tuần làm việc căng thẳng, bạn muốn ra ngoài chơi hơn là ở nhà nghỉ ngơi.", dim: 'E', rev: false },
+            { id: 5, text: "Bạn suy nghĩ kỹ trước khi nói thay vì nói ra ngay suy nghĩ của mình.", dim: 'E', rev: true }, // I favor
+            { id: 6, text: "Việc trở thành tâm điểm của sự chú ý khiến bạn không thoải mái.", dim: 'E', rev: true }, // I favor
+
+            // N vs S (Intuition vs Sensing)
+            { id: 7, text: "Bạn quan tâm đến ý nghĩa ẩn sau sự việc hơn là những chi tiết thực tế.", dim: 'N', rev: false },
+            { id: 8, text: "Bạn thường mơ mộng về tương lai hơn là tập trung vào hiện tại.", dim: 'N', rev: false },
+            { id: 9, text: "Bạn tin vào kinh nghiệm thực tế hơn là những lý thuyết trừu tượng.", dim: 'N', rev: true }, // S favor
+            { id: 10, text: "Bạn thích những hướng dẫn cụ thể, rõ ràng từng bước một.", dim: 'N', rev: true }, // S favor
+            { id: 11, text: "Bạn thường nhìn thấy bức tranh toàn cảnh trước khi đi vào chi tiết.", dim: 'N', rev: false },
+            { id: 12, text: "Bạn thích sự mới lạ và sáng tạo hơn là những quy trình đã được kiểm chứng.", dim: 'N', rev: false },
+
+            // T vs F (Thinking vs Feeling)
+            { id: 13, text: "Khi giải quyết vấn đề, bạn dựa vào logic hơn là cảm xúc.", dim: 'T', rev: false },
+            { id: 14, text: "Bạn coi trọng sự công bằng và nhất quán hơn là sự hòa hợp và khoan dung.", dim: 'T', rev: false },
+            { id: 15, text: "Bạn thường bị đánh giá là người lạnh lùng hoặc quá lý trí.", dim: 'T', rev: false },
+            { id: 16, text: "Bạn dễ bị ảnh hưởng bởi cảm xúc của người khác.", dim: 'T', rev: true }, // F favor
+            { id: 17, text: "Trong một cuộc tranh luận, sự thật quan trọng hơn là không làm tổn thương ai đó.", dim: 'T', rev: false },
+            { id: 18, text: "Bạn đưa ra quyết định dựa trên trái tim mách bảo hơn là phân tích số liệu.", dim: 'T', rev: true }, // F favor
+
+            // J vs P (Judging vs Perceiving)
+            { id: 19, text: "Bạn thích lên kế hoạch chi tiết cho mọi việc trước khi bắt đầu.", dim: 'J', rev: false },
+            { id: 20, text: "Bạn cảm thấy khó chịu khi mọi thứ không diễn ra theo kế hoạch.", dim: 'J', rev: false },
+            { id: 21, text: "Bạn thích để mọi thứ tự nhiên, tùy cơ ứng biến hơn là sắp đặt trước.", dim: 'J', rev: true }, // P favor
+            { id: 22, text: "Bạn thường hoàn thành công việc trước thời hạn rất lâu.", dim: 'J', rev: false },
+            { id: 23, text: "Bạn thích giữ cho các lựa chọn của mình luôn mở thay vì chốt phương án sớm.", dim: 'J', rev: true }, // P favor
+            { id: 24, text: "Sự ngăn nắp và trật tự là rất quan trọng đối với bạn.", dim: 'J', rev: false },
+        ];
+
+        const types = {
+            "ISTJ": { title: "Người Trách Nhiệm", desc: "Nghiêm túc, thực tế và đáng tin cậy. Họ coi trọng truyền thống và sự trật tự.", strengths: ["Có trách nhiệm", "Tỉ mỉ", "Trung thực"], weaknesses: ["Cứng nhắc", "Khó thích nghi", "Hay phán xét"] },
+            "ISFJ": { title: "Người Nuôi Dưỡng", desc: "Ấm áp, tận tụy và luôn quan tâm đến người khác. Họ làm việc chăm chỉ để đảm bảo sự hài hòa.", strengths: ["Hỗ trợ tốt", "Đáng tin cậy", "Kiên nhẫn"], weaknesses: ["Quá nhún nhường", "Ngại thay đổi", "Dễ bị lợi dụng"] },
+            "INFJ": { title: "Người Che Chở", desc: "Sâu sắc, lý tưởng hóa và đầy lòng trắc ẩn. Họ luôn tìm kiếm ý nghĩa sâu xa trong cuộc sống.", strengths: ["Sáng tạo", "Thấu hiểu", "Quyết tâm"], weaknesses: ["Nhạy cảm", "Dễ kiệt sức", "Cầu toàn"] },
+            "INTJ": { title: "Nhà Kiến Tạo", desc: "Tư duy chiến lược, độc lập và có tầm nhìn xa. Họ luôn tìm cách cải tiến mọi thứ.", strengths: ["Thông minh", "Tự tin", "Chiến lược"], weaknesses: ["Kiêu ngạo", "Quá phân tích", "Thiếu kiên nhẫn"] },
+            "ISTP": { title: "Nhà Kỹ Thuật", desc: "Thực tế, linh hoạt và giỏi giải quyết vấn đề. Họ thích tìm hiểu cách mọi thứ vận hành.", strengths: ["Lạc quan", "Sáng tạo", "Thực tế"], weaknesses: ["Cứng đầu", "Rủi ro cao", "Kín đáo"] },
+            "ISFP": { title: "Người Nghệ Sĩ", desc: "Nhẹ nhàng, thân thiện và yêu cái đẹp. Họ thích sống trong hiện tại và tận hưởng từng khoảnh khắc.", strengths: ["Duyên dáng", "Nghệ thuật", "Đam mê"], weaknesses: ["Dễ căng thẳng", "Cạnh tranh kém", "Khó đoán"] },
+            "INFP": { title: "Người Hòa Giải", desc: "Lý tưởng, trung thành và luôn tìm kiếm sự tốt đẹp trong mọi người. Họ sống theo giá trị riêng.", strengths: ["Đồng cảm", "Sáng tạo", "Cởi mở"], weaknesses: ["Mơ mộng quá mức", "Dễ tổn thương", "Thiếu thực tế"] },
+            "INTP": { title: "Nhà Tư Duy", desc: "Sáng tạo, logic và tò mò. Họ thích phân tích các hệ thống và ý tưởng trừu tượng.", strengths: ["Phân tích tốt", "Tư duy mở", "Khách quan"], weaknesses: ["Lơ đãng", "Thiếu tổ chức", "Vô tâm"] },
+            "ESTP": { title: "Người Thực Thi", desc: "Năng động, thực tế và thích hành động ngay lập tức. Họ giải quyết vấn đề một cách linh hoạt.", strengths: ["Táo bạo", "Hòa đồng", "Thẳng thắn"], weaknesses: ["Thiếu kiên nhẫn", "Rủi ro cao", "Mau chán"] },
+            "ESFP": { title: "Người Trình Diễn", desc: "Vui vẻ, nhiệt tình và thích là trung tâm của sự chú ý. Họ làm cho cuộc sống trở nên thú vị.", strengths: ["Táo bạo", "Thực tế", "Thẩm mỹ tốt"], weaknesses: ["Khó tập trung", "Dễ tự ái", "Kém quy hoạch"] },
+            "ENFP": { title: "Người Truyền Cảm Hứng", desc: "Nhiệt tình, sáng tạo và hòa đồng. Họ luôn tìm thấy khả năng trong mọi việc.", strengths: ["Tò mò", "Giao tiếp tốt", "Năng lượng cao"], weaknesses: ["Thiếu tập trung", "Suy nghĩ quá nhiều", "Dễ căng thẳng"] },
+            "ENTP": { title: "Người Tranh Biện", desc: "Thông minh, nhanh trí và thích thử thách các ý tưởng. Họ giỏi tìm ra giải pháp mới.", strengths: ["Hiểu biết rộng", "Tư duy nhanh", "Sáng tạo"], weaknesses: ["Thích tranh cãi", "Tàn nhẫn", "Mau chán"] },
+            "ESTJ": { title: "Người Điều Hành", desc: "Thực tế, quyết đoán và giỏi tổ chức. Họ thích quản lý mọi việc theo quy trình rõ ràng.", strengths: ["Tận tụy", "Mạnh mẽ", "Tổ chức tốt"], weaknesses: ["Cứng nhắc", "Khó thư giãn", "Phán xét"] },
+            "ESFJ": { title: "Người Chăm Sóc", desc: "Tận tâm, hòa đồng và thích giúp đỡ người khác. Họ coi trọng sự hòa hợp và truyền thống.", strengths: ["Trung thành", "Nhạy cảm", "Giỏi kết nối"], weaknesses: ["Cần được khen", "Thiếu linh hoạt", "Dễ bị chỉ trích"] },
+            "ENFJ": { title: "Người Chỉ Dẫn", desc: "Lôi cuốn, đáng tin cậy và giỏi lãnh đạo. Họ luôn nhìn thấy tiềm năng ở người khác.", strengths: ["Khoan dung", "Đáng tin cậy", "Lôi cuốn"], weaknesses: ["Quá duy tâm", "Quá nhạy cảm", "Hay lo lắng"] },
+            "ENTJ": { title: "Nhà Lãnh Đạo", desc: "Thẳng thắn, quyết đoán và có khả năng nhìn xa trông rộng. Họ giỏi vạch ra kế hoạch dài hạn.", strengths: ["Hiệu quả", "Tự tin", "Lý trí"], weaknesses: ["Độc đoán", "Kiêu ngạo", "Lạnh lùng"] }
+        };
+
+        // --- STATE ---
+        let currentQuestionIndex = 0;
+        let answers = {}; // { qID: value }
+        let isTransitioning = false;
+
+        // --- ELEMENT REFS ---
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const loadingScreen = document.getElementById('loading-screen');
+        const resultScreen = document.getElementById('result-screen');
+
+        const questionText = document.getElementById('question-text');
+        const questionNumber = document.getElementById('question-number');
+        const progressBar = document.getElementById('progress-bar');
+        const prevBtn = document.getElementById('prev-btn');
+
+        // --- FUNCTIONS ---
+
+        function startTest() {
+            welcomeScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            quizScreen.classList.add('flex');
+            loadQuestion(0);
+        }
+
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const q = questions[index];
+
+            // Text Animation
+            questionText.style.opacity = '0';
+            setTimeout(() => {
+                questionText.textContent = q.text;
+                questionText.style.opacity = '1';
+                questionText.style.transition = 'opacity 0.3s';
+            }, 200);
+
+            questionNumber.textContent = `Câu hỏi ${index + 1}/${questions.length}`;
+
+            // Progress Bar
+            const progress = ((index) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Reset options state
+            document.querySelectorAll('.scale-circle').forEach(btn => {
+                btn.classList.remove('active');
+                // Restore previous answer if any
+                if (answers[q.id] && parseInt(btn.dataset.value) === answers[q.id]) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Prev Button visibility
+            prevBtn.style.visibility = index === 0 ? 'hidden' : 'visible';
+        }
+
+        function selectOption(value) {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            const q = questions[currentQuestionIndex];
+            answers[q.id] = value;
+
+            // Highlight selected immediately
+            document.querySelectorAll('.scale-circle').forEach(btn => {
+                if (parseInt(btn.dataset.value) === value) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            // Wait a bit then move next
+            setTimeout(() => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    loadQuestion(currentQuestionIndex + 1);
+                } else {
+                    finishTest();
+                }
+                isTransitioning = false;
+            }, 400);
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function finishTest() {
+            quizScreen.classList.add('hidden');
+            quizScreen.classList.remove('flex');
+            loadingScreen.classList.remove('hidden');
+            loadingScreen.classList.add('flex');
+
+            setTimeout(() => {
+                calculateResult();
+            }, 2000);
+        }
+
+        function calculateResult() {
+            let scores = { E: 0, I: 0, N: 0, S: 0, T: 0, F: 0, J: 0, P: 0 };
+
+            questions.forEach(q => {
+                let val = answers[q.id] || 3; // Default middle if missing (shouldn't happen)
+                // Normalize to -2 to +2 scale logic
+                // 1: Strongly Disagree, 5: Strongly Agree
+                // If not reversed: 5 adds to Dimension (e.g. E), 1 adds to Opposite (e.g. I)
+
+                let points = 0;
+                let targetDim = q.dim;
+                let oppDim = getOpposite(q.dim);
+
+                if (q.rev) {
+                    // Reversed question (e.g. Introverted question for E dimension)
+                    // High score (5) means Introvert -> Add to I
+                    if (val > 3) scores[oppDim] += (val - 3);
+                    else if (val < 3) scores[targetDim] += (3 - val);
+                } else {
+                    // Straight question
+                    // High score (5) means Extrovert -> Add to E
+                    if (val > 3) scores[targetDim] += (val - 3);
+                    else if (val < 3) scores[oppDim] += (3 - val);
+                }
+            });
+
+            // Determine Type
+            let type = "";
+            type += scores.E >= scores.I ? "E" : "I";
+            type += scores.N >= scores.S ? "N" : "S";
+            type += scores.T >= scores.F ? "T" : "F";
+            type += scores.J >= scores.P ? "J" : "P";
+
+            showResult(type);
+        }
+
+        function getOpposite(dim) {
+            if (dim === 'E') return 'I';
+            if (dim === 'N') return 'S';
+            if (dim === 'T') return 'F';
+            if (dim === 'J') return 'P';
+            return '';
+        }
+
+        function showResult(type) {
+            const data = types[type] || types['ISTJ']; // Fallback
+
+            document.getElementById('result-type').textContent = type;
+            document.getElementById('result-title').textContent = data.title;
+            document.getElementById('result-desc').textContent = data.desc;
+
+            const sList = document.getElementById('result-strengths');
+            sList.innerHTML = data.strengths.map(s => `<li>${s}</li>`).join('');
+
+            const wList = document.getElementById('result-weaknesses');
+            wList.innerHTML = data.weaknesses.map(w => `<li>${w}</li>`).join('');
+
+            loadingScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('flex');
+        }
+
+    </script>
+</body>
+
+</html>

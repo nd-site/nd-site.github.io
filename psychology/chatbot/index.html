@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tâm Lý - Psychology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --bg-main: #f5f3ff;
+        }
+
+        html,
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: #1e293b;
+        }
+
+        .bg-blob {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+            animation: blob-bounce 10s infinite ease-in-out;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px -12px rgba(139, 92, 246, 0.1);
+            border-radius: 24px;
+        }
+
+        .chat-container {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.9375rem;
+            line-height: 1.5;
+        }
+
+        .message.ai {
+            align-self: flex-start;
+            background: white;
+            color: #1e293b;
+            border-bottom-left-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 0.25rem;
+        }
+
+        .chat-input-wrapper {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid #e2e8f0;
+            border-radius: 999px;
+            padding: 0.625rem 1.25rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-send {
+            background: var(--primary);
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border-radius: 999px;
+            font-weight: 700;
+            transition: opacity 0.2s;
+        }
+
+        .btn-send:hover {
+            opacity: 0.9;
+        }
+
+        @keyframes blob-bounce {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(20px, -20px);
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div class="bg-blob" style="top: -100px; left: -100px;"></div>
+    <div class="bg-blob"
+        style="bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, rgba(255, 255, 255, 0) 70%);">
+    </div>
+
+    <div class="w-full max-w-2xl z-10">
+        <header class="flex items-center justify-between mb-8">
+            <a href="../index.html"
+                class="flex items-center gap-2 text-slate-500 hover:text-violet-600 transition-colors font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Quay lại
+            </a>
+            <div class="text-violet-600 font-extrabold text-xl tracking-tight">Psychology • AI Tâm Lý</div>
+        </header>
+
+        <main class="glass-card overflow-hidden">
+            <div class="chat-container">
+                <div class="p-4 border-bottom bg-white text-center">
+                    <h3 class="font-bold text-lg">Người bạn đồng hành AI</h3>
+                    <p class="text-xs text-slate-400">Mọi bí mật của bạn đều được bảo mật tuyệt đối</p>
+                </div>
+                <div id="messages-list" class="messages-list">
+                    <div class="message ai">Chào bạn, mình là trợ lý AI của Psychology. Hôm nay bạn cảm thấy thế nào?
+                        Hãy chia sẻ với mình nhé.</div>
+                </div>
+                <form id="chat-form" class="chat-input-wrapper">
+                    <input id="chat-input" class="chat-input" type="text" placeholder="Nhập tin nhắn..."
+                        autocomplete="off">
+                    <button type="submit" class="btn-send">Gửi</button>
+                </form>
+            </div>
+        </main>
+
+        <footer class="mt-8 text-center text-slate-400 text-sm">
+            <p>© 2026 ND Labs. Psychology • Trò chuyện mang tính chất hỗ trợ tinh thần.</p>
+        </footer>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const messagesList = document.getElementById('messages-list');
+
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // User message
+            addMessage(text, 'user');
+            chatInput.value = '';
+
+            // Simulated AI response
+            setTimeout(() => {
+                let aiResponse = "Mình ở đây để lắng nghe bạn. Những gì bạn đang trải qua thật không dễ dàng, nhưng hãy nhớ rằng bạn không đơn độc.";
+                const lower = text.toLowerCase();
+                if (lower.includes('mệt') || lower.includes('áp lực')) {
+                    aiResponse = "Mình cảm nhận được sự mệt mỏi của bạn. Áp lực đôi khi khiến chúng ta cảm thấy quá tải. Bạn hãy thử dành 5 phút hít thở sâu nhé.";
+                } else if (lower.includes('buồn') || lower.includes('cô đơn')) {
+                    aiResponse = "Cảm ơn bạn đã tin tưởng chia sẻ nỗi buồn với mình. Bạn là một người mạnh mẽ khi dám đối diện với cảm xúc của chính mình.";
+                }
+                addMessage(aiResponse, 'ai');
+            }, 1000);
+        });
+
+        function addMessage(text, role) {
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            div.textContent = text;
+            messagesList.appendChild(div);
+            messagesList.scrollTop = messagesList.scrollHeight;
+        }
+    </script>
+</body>
+
+</html>

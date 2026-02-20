@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ND Labs - Trang Chủ</title>
+    <link rel="icon" href="/logo.png" type="image/png">
+    <!-- Phosphor Icons (Premium Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script async src="https://cse.google.com/cse.js?cx=90bdd5f1afd434b9d"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="/nd-navbar.js" defer></script>
+    <style>
+        :root {
+            --primary: #0070f3;
+            --primary-gradient: linear-gradient(135deg, #0070f3, #00b4d8);
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            color: var(--text-main);
+            background: radial-gradient(at 0% 0%, rgba(0, 112, 243, 0.14) 0px, transparent 52%),
+                radial-gradient(at 100% 0%, rgba(0, 180, 216, 0.12) 0px, transparent 52%),
+                radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.1) 0px, transparent 52%),
+                radial-gradient(at 0% 100%, rgba(56, 189, 248, 0.1) 0px, transparent 52%),
+                #f0f7ff;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 40px;
+        }
+
+        /* --- Background Blobs --- */
+        .blob {
+            position: fixed;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .blob-1 {
+            top: -10%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(0, 112, 243, 0.35);
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            bottom: -10%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: rgba(0, 180, 216, 0.3);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -50px) rotate(10deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) rotate(-5deg);
+            }
+        }
+
+        /* --- Inline Toolbar (was fixed, now in-flow) --- */
+        .top-toolbar {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0 0;
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .toolbar-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 20px;
+        }
+
+        .icon-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            color: var(--primary);
+        }
+
+        /* --- Layout Container --- */
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        /* --- Profile Header --- */
+        .profile-card {
+            text-align: center;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s ease;
+        }
+
+        .avatar:hover {
+            transform: rotate(5deg) scale(1.02);
+        }
+
+        .brand-name {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0070f3 0%, #00b4d8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .brand-desc {
+            font-size: 1.1rem;
+            color: var(--text-sub);
+            max-width: 600px;
+            margin: 0 auto 24px;
+            line-height: 1.6;
+        }
+
+        /* --- Social Links --- */
+        .social-row {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .social-link {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .social-link img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-link:hover img {
+            transform: scale(1.1);
+        }
+
+        /* --- Search Bar (Browser Style) --- */
+        .search-wrapper {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 50;
+        }
+
+        .browser-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid white;
+            border-radius: 20px;
+            padding: 12px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .browser-card:focus-within {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 50px -10px rgba(0, 70, 243, 0.15);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            padding: 12px 16px;
+            outline: none;
+            color: var(--text-main);
+            font-family: inherit;
+            font-weight: 500;
+        }
+
+        .search-engine-select {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            user-select: none;
+            position: relative;
+        }
+
+        .search-engine-select img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .search-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 20px;
+        }
+
+        .search-btn:hover {
+            background: #0060df;
+        }
+
+        /* Engine Dropdown */
+        .engine-dropdown {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 160px;
+            padding: 8px;
+            display: none;
+            z-index: 100;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .engine-dropdown.show {
+            display: block;
+        }
+
+        .engine-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .engine-option:hover {
+            background: #f8fafc;
+        }
+
+        .engine-option img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        /* --- App Grid System --- */
+        .app-section {
+            width: 100%;
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid white;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            background: white;
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New Premium Icon Styling */
+        .app-icon {
+            width: 64px;
+            /* Larger */
+            height: 64px;
+            border-radius: 18px;
+            /* Softer */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            /* Bigger Icon */
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 10px 20px -5px currentColor;
+            /* Glow effect */
+            transition: transform 0.3s ease;
+        }
+
+        .app-card:hover .app-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .app-info {
+            flex: 1;
+        }
+
+        .app-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .app-desc {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+
+        /* Custom icon colors (Vibrant Gradients) */
+        .icon-edu {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: rgba(59, 130, 246, 0.3);
+        }
+
+        .icon-psy {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            color: rgba(139, 92, 246, 0.3);
+        }
+
+
+
+        .icon-search {
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            color: rgba(14, 165, 233, 0.3);
+        }
+
+        .icon-tts {
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            color: rgba(249, 115, 22, 0.3);
+        }
+
+        .icon-qr {
+            background: linear-gradient(135deg, #334155, #64748b);
+            color: rgba(71, 85, 105, 0.3);
+        }
+
+        .icon-share {
+            background: linear-gradient(135deg, #8b5cf6, #c084fc);
+            color: rgba(139, 92, 246, 0.3);
+        }
+
+        .icon-img {
+            background: linear-gradient(135deg, #db2777, #f472b6);
+            color: rgba(219, 39, 119, 0.3);
+        }
+
+        .icon-bg {
+            background: linear-gradient(135deg, #c026d3, #e879f9);
+            color: rgba(192, 38, 211, 0.3);
+        }
+
+        .icon-doc {
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+            color: rgba(37, 99, 235, 0.3);
+        }
+
+        .icon-code {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: rgba(245, 158, 11, 0.3);
+        }
+
+        .icon-win {
+            background: linear-gradient(135deg, #0078d4, #00bcf2);
+            color: rgba(0, 120, 212, 0.3);
+        }
+
+        .icon-game {
+            background: linear-gradient(135deg, #4b5563, #9ca3af);
+            color: rgba(75, 85, 99, 0.3);
+        }
+
+        .icon-lucky {
+            background: linear-gradient(135deg, #ea580c, #fdba74);
+            color: rgba(234, 88, 12, 0.3);
+        }
+
+        .icon-video {
+            background: linear-gradient(135deg, #ef4444, #f87171);
+            color: rgba(239, 68, 68, 0.3);
+        }
+
+        .icon-tiktok {
+            background: #000000;
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        .app-icon i {
+            color: white;
+        }
+
+        /* --- Footer --- */
+        .site-footer {
+            margin-top: 40px;
+            text-align: center;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* --- Search Results --- */
+        #searchResultArea {
+            width: 100%;
+            max-width: 800px;
+            display: none;
+            margin-top: 20px;
+        }
+
+        .res-item {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--primary);
+            text-decoration: none;
+            display: block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: 0.3s;
+        }
+
+        .res-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .res-title {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .res-link {
+            color: #10b981;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .res-snippet {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            left: 50%;
+            top: 62px;
+            /* 50px navbar + 12px gap */
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 99px;
+            font-weight: 600;
+            animation: fadeInDown 0.5s ease;
+            z-index: 200000;
+            /* above navbar */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Elements -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <!-- Music Audio -->
+    <audio id="backgroundMusic" src="/nhacnen.mp3" loop></audio>
+
+    <div class="container" id="mainContentWrapper">
+
+        <!-- Top Toolbar (music + share) -->
+        <div class="top-toolbar">
+            <div class="toolbar-left">
+                <button class="icon-btn" id="musicToggleBtn" title="Bật/Tắt nhạc">
+                    <i class="ph-fill ph-play-circle"></i>
+                </button>
+                <div
+                    style="background:rgba(255,255,255,0.8);border-radius:12px;padding:0 12px;height:44px;display:flex;align-items:center;">
+                    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" title="Âm lượng"
+                        style="width:80px;accent-color:var(--primary);">
+                </div>
+            </div>
+            <div class="toolbar-right">
+                <button class="icon-btn" onclick="shareWebsite()" title="Chia sẻ">
+                    <i class="ph-fill ph-share-network"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Header / Profile -->
+        <div class="profile-card">
+            <div class="avatar-wrapper">
+                <img src="/avatar.png" alt="ND Labs" class="avatar">
+            </div>
+            <h1 class="brand-name">ND LABS</h1>
+            <p class="brand-desc">Chào mừng bạn đến với hệ sinh thái công cụ sáng tạo & giáo dục của Nhật Đăng. Khám
+                phá, học
+                tập và trải nghiệm những điều thú vị!</p>
+
+            <div class="social-row">
+                <a href="https://facebook.com/nhatdang10.nd" class="social-link" target="_blank" title="Facebook"><img
+                        src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg"
+                        alt="Facebook"></a>
+                <a href="https://www.youtube.com/@NhatDang_10" class="social-link" target="_blank" title="YouTube"><img
+                        src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube"></a>
+                <a href="https://www.tiktok.com/@nhatdang_10" class="social-link" target="_blank" title="TikTok"><img
+                        src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok"></a>
+                <a href="mailto:lienhe.nhatdang@gmail.com" class="social-link" title="Email"><img
+                        src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email"></a>
+                <a href="https://zalo.me/0379065349" class="social-link" target="_blank" title="Zalo"><img
+                        src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zalo.svg" alt="Zalo"></a>
+            </div>
+        </div>
+
+        <!-- Search Tool -->
+        <div class="search-wrapper">
+            <div class="browser-card">
+                <div class="search-engine-select" id="engineSelect">
+                    <img src="/logogoogle.png" id="currEngineImg" alt="Engine">
+                    <span id="currEngineName">Google</span>
+                    <i class="ph-bold ph-caret-down"></i>
+
+                    <div class="engine-dropdown" id="engineDropdown">
+                        <div class="engine-option" data-val="google" data-img="/logogoogle.png" data-name="Google">
+                            <img src="/logogoogle.png"> Google
+                        </div>
+                        <div class="engine-option" data-val="bing" data-img="/logobing.png" data-name="Bing">
+                            <img src="/logobing.png"> Bing
+                        </div>
+                        <div class="engine-option" data-val="duck" data-img="/logoduckduckgo.png"
+                            data-name="DuckDuckGo">
+                            <img src="/logoduckduckgo.png"> DuckDuckGo
+                        </div>
+                    </div>
+                </div>
+
+                <input type="text" id="q" class="search-input" placeholder="Tìm kiếm công cụ hoặc Web..."
+                    autocomplete="off">
+
+                <button class="search-btn" id="go">
+                    <i class="ph-bold ph-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Category Nav Row -->
+        <div id="categoryNav" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px;">
+            <a href="/EduSpace"
+                style="display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:50px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:white;font-weight:700;font-size:0.85rem;text-decoration:none;box-shadow:0 4px 12px rgba(37,99,235,0.25);transition:all 0.2s;"
+                onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <i class="ph-bold ph-graduation-cap"></i> EduSpace
+            </a>
+            <a href="/games"
+                style="display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:50px;background:linear-gradient(135deg,#4b5563,#6b7280);color:white;font-weight:700;font-size:0.85rem;text-decoration:none;box-shadow:0 4px 12px rgba(75,85,99,0.25);transition:all 0.2s;"
+                onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <i class="ph-bold ph-game-controller"></i> Game
+            </a>
+            <a href="/media"
+                style="display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:50px;background:linear-gradient(135deg,#ef4444,#f87171);color:white;font-weight:700;font-size:0.85rem;text-decoration:none;box-shadow:0 4px 12px rgba(239,68,68,0.25);transition:all 0.2s;"
+                onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <i class="ph-bold ph-film-strip"></i> Media
+            </a>
+            <a href="/utils"
+                style="display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:50px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);color:white;font-weight:700;font-size:0.85rem;text-decoration:none;box-shadow:0 4px 12px rgba(14,165,233,0.25);transition:all 0.2s;"
+                onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <i class="ph-bold ph-wrench"></i> Tiện Ích
+            </a>
+            <a href="/psychology"
+                style="display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:50px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:white;font-weight:700;font-size:0.85rem;text-decoration:none;box-shadow:0 4px 12px rgba(124,58,237,0.25);transition:all 0.2s;"
+                onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <i class="ph-bold ph-brain"></i> Psychology
+            </a>
+        </div>
+
+        <!-- Search Results Area (Initially Hidden) -->
+        <div id="searchResultArea">
+            <div style="text-align:center; margin-bottom: 20px;">
+                <button onclick="closeSearch()"
+                    style="padding: 8px 16px; background: #e2e8f0; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">←
+                    Quay lại trang chủ</button>
+            </div>
+            <div id="internalResults"></div>
+            <div id="googleZone">
+                <div style="font-size: 0.8rem; color: #888; margin: 20px 0 10px; font-weight:700; text-align:center">KẾT
+                    QUẢ TỪ
+                    GOOGLE WEB</div>
+                <!-- Added linkTarget to open in new tab -->
+                <div class="gcse-searchresults-only" data-gname="nd-engine" data-linkTarget="_blank"></div>
+            </div>
+        </div>
+
+        <div id="homeContent"
+            style="width: 100%; display: flex; flex-direction: column; gap: 60px; align-items: center;">
+
+            <!-- Featured Apps -->
+            <div class="app-section" style="animation-delay: 0.1s;">
+                <div class="section-title"><i class="ph-duotone ph-star"></i> Nổi Bật</div>
+                <div class="grid-container">
+                    <a href="/EduSpace" class="app-card">
+                        <div class="app-icon icon-edu"><i class="ph-duotone ph-graduation-cap"></i></div>
+                        <div class="app-info">
+                            <span class="app-name">EduSpace</span>
+                            <span class="app-desc">Nền tảng học tập & ôn luyện kiến thức toàn diện.</span>
+                        </div>
+                    </a>
+                    <a href="https://dnaai-site.vercel.app" class="app-card" target="_blank">
+                        <div class="app-icon" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"><i
+                                class="ph-duotone ph-heart"></i></div>
+                        <div class="app-info">
+                            <span class="app-name">HeartSpace by DNA AI</span>
+                            <span class="app-desc">Ứng dụng tâm lý và AI hỗ trợ tinh thần.</span>
+                        </div>
+                    </a>
+                    <a href="/psychology" class="app-card">
+                        <div class="app-icon icon-psy"><i class="ph-duotone ph-brain"></i></div>
+                        <div class="app-info">
+                            <span class="app-name">Psychology</span>
+                            <span class="app-desc">Trung tâm tâm lý, trắc nghiệm MBTI & Sức khỏe tinh thần.</span>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Utility Tools -->
+            <div class="app-section" style="animation-delay: 0.2s;">
+                <div class="section-title"><i class="ph-duotone ph-wrench"></i> Tiện Ích</div>
+                <div class="grid-container">
+                    <a href="/utils/search" class="app-card">
+                        <div class="app-icon icon-search"><i class="ph-duotone ph-magnifying-glass"></i></div>
+                        <div class="app-info"><span class="app-name">Search AI</span><span class="app-desc">Công cụ tìm
+                                kiếm thông
+                                minh.</span></div>
+                    </a>
+                    <a href="/utils/chuyen-van-ban-thanh-giong-noi" class="app-card">
+                        <div class="app-icon icon-tts"><i class="ph-duotone ph-speaker-high"></i></div>
+                        <div class="app-info"><span class="app-name">Text to Speech</span><span class="app-desc">Chuyển
+                                văn bản
+                                thành
+                                giọng nói.</span></div>
+                    </a>
+                    <a href="/utils/qr" class="app-card">
+                        <div class="app-icon icon-qr"><i class="ph-duotone ph-qr-code"></i></div>
+                        <div class="app-info"><span class="app-name">QR Code</span><span class="app-desc">Tạo mã QR
+                                nhanh
+                                chóng.</span></div>
+                    </a>
+                    <a href="/media/share" class="app-card">
+                        <div class="app-icon icon-share"><i class="ph-duotone ph-share-network"></i></div>
+                        <div class="app-info"><span class="app-name">Quick Share</span><span class="app-desc">Chia sẻ
+                                file dễ dàng.</span></div>
+                    </a>
+                    <a href="/utils/chuyen-doi-dinh-dang-loai-anh" class="app-card">
+                        <div class="app-icon icon-img"><i class="ph-duotone ph-images"></i></div>
+                        <div class="app-info"><span class="app-name">Image Convert</span><span class="app-desc">Đổi đuôi
+                                ảnh hàng
+                                loạt.</span></div>
+                    </a>
+                    <a href="/utils/nen-gradient-pastel" class="app-card">
+                        <div class="app-icon icon-bg"><i class="ph-duotone ph-paint-brush-broad"></i></div>
+                        <div class="app-info"><span class="app-name">Pastel BG</span><span class="app-desc">Kho nền
+                                Gradient
+                                đẹp.</span></div>
+                    </a>
+                    <a href="/media/docx" class="app-card">
+                        <div class="app-icon icon-doc"><i class="ph-duotone ph-file-doc"></i></div>
+                        <div class="app-info"><span class="app-name">Docx View</span><span class="app-desc">Trình xem
+                                tài liệu.</span>
+                        </div>
+                    </a>
+                    <a href="/media/pptx" class="app-card">
+                        <div class="app-icon"
+                            style="background: linear-gradient(135deg, #c43e1c, #d35230); color: rgba(255,255,255,0.9); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                            <i class="ph-duotone ph-file-pptx"></i>
+                        </div>
+                        <div class="app-info"><span class="app-name">PPTX View</span><span class="app-desc">Trình xem
+                                trình chiếu.</span></div>
+                    </a>
+                    <a href="/media/editdoc" class="app-card">
+                        <div class="app-icon"
+                            style="background: linear-gradient(135deg, #059669, #10b981); color: rgba(255,255,255,0.9); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                            <i class="ph-duotone ph-note-pencil"></i>
+                        </div>
+                        <div class="app-info"><span class="app-name">Edit Doc</span><span class="app-desc">Chỉnh sửa
+                                tài liệu.</span></div>
+                    </a>
+                    <a href="/EduSpace/python" class="app-card">
+                        <div class="app-icon icon-code"><i class="ph-duotone ph-code"></i></div>
+                        <div class="app-info"><span class="app-name">Python</span><span class="app-desc">Công cụ
+                                Python.</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Explore & Fun -->
+            <div class="app-section" style="animation-delay: 0.3s;">
+                <div class="section-title"><i class="ph-duotone ph-compass"></i> Khám Phá & Giải Trí</div>
+                <div class="grid-container">
+                    <a href="/windows12" class="app-card">
+                        <div class="app-icon icon-win"><i class="ph-duotone ph-desktop"></i></div>
+                        <div class="app-info"><span class="app-name">Windows 12 Web</span><span class="app-desc">Trải
+                                nghiệm giao
+                                diện
+                                Concept.</span></div>
+                    </a>
+                    <a href="/games/dino" class="app-card">
+                        <div class="app-icon icon-game"><i class="ph-duotone ph-game-controller"></i></div>
+                        <div class="app-info"><span class="app-name">Dino Game</span><span class="app-desc">Game khủng
+                                long huyền
+                                thoại.</span></div>
+                    </a>
+                    <a href="/games/lucky/vong-quay-may-man.html" class="app-card">
+                        <div class="app-icon icon-lucky"><i class="ph-duotone ph-clover"></i></div>
+                        <div class="app-info"><span class="app-name">Lucky Wheel</span><span class="app-desc">Vòng quay
+                                may
+                                mắn.</span></div>
+                    </a>
+                    <a href="/media/video" class="app-card">
+                        <div class="app-icon icon-video"><i class="ph-duotone ph-film-strip"></i></div>
+                        <div class="app-info"><span class="app-name">Video Hub</span><span class="app-desc">Kho video
+                                giải
+                                trí.</span>
+                        </div>
+                    </a>
+                    <a href="/games/đếm-giờ" class="app-card">
+                        <div class="app-icon" style="background: linear-gradient(135deg, #10b981, #34d399);"><i
+                                class="ph-duotone ph-timer"></i></div>
+                        <div class="app-info"><span class="app-name">Countdown</span><span class="app-desc">Công cụ đếm
+                                ngược thời gian.</span></div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- TikTok Wrapped Special -->
+            <div class="app-section" style="animation-delay: 0.4s;">
+                <div class="section-title"><i class="ph-duotone ph-trend-up"></i> TikTok Analytics</div>
+                <div class="grid-container">
+                    <a href="/media/tiktok/wrapped" class="app-card" style="border-left: 4px solid #000;">
+                        <div class="app-icon icon-tiktok"><i class="ph-duotone ph-tiktok-logo"></i></div>
+                        <div class="app-info"><span class="app-name">Wrapped (Gemini)</span><span class="app-desc">Phân
+                                tích bằng Google Gemini.</span></div>
+                    </a>
+                    <a href="/media/tiktok/wrapped-chatgpt" class="app-card" style="border-left: 4px solid #10a37f;">
+                        <div class="app-icon icon-tiktok" style="background:#10a37f"><i
+                                class="ph-duotone ph-tiktok-logo"></i></div>
+                        <div class="app-info"><span class="app-name">Wrapped (ChatGPT)</span><span class="app-desc">Phân
+                                tích bằng OpenAI Tech.</span></div>
+                    </a>
+                    <a href="/media/tiktok/wrapped-deepseek" class="app-card" style="border-left: 4px solid #3b82f6;">
+                        <div class="app-icon icon-tiktok" style="background:#3b82f6"><i
+                                class="ph-duotone ph-tiktok-logo"></i></div>
+                        <div class="app-info"><span class="app-name">Wrapped (DeepSeek)</span><span
+                                class="app-desc">Phân tích chuyên sâu R1.</span></div>
+                    </a>
+                </div>
+            </div>
+
+            <footer class="site-footer">
+                © 2026 ND Labs. All rights reserved.
+            </footer>
+        </div> <!-- End homeContent -->
+
+    </div> <!-- End MainContentWrapper -->
+
+    <div class="toast toast-welcome">Chào mừng bạn trở lại ND Labs! 🎵</div>
+
+    <script>
+        /* --- Music & UI Logic --- */
+        const music = document.getElementById("backgroundMusic");
+        const volumeControl = document.getElementById("volumeControl");
+        const toggleBtn = document.getElementById("musicToggleBtn");
+
+        toggleBtn.addEventListener("click", () => {
+            const icon = toggleBtn.querySelector('i');
+            if (music.paused) {
+                music.play();
+                icon.classList.remove('ph-play-circle');
+                icon.classList.add('ph-pause-circle');
+            } else {
+                music.pause();
+                icon.classList.remove('ph-pause-circle');
+                icon.classList.add('ph-play-circle');
+            }
+        });
+
+        volumeControl.addEventListener("input", function () { music.volume = this.value; });
+
+        window.addEventListener("load", () => {
+            const icon = toggleBtn.querySelector('i');
+            if (music.paused) {
+                icon.classList.remove('ph-pause-circle');
+                icon.classList.add('ph-play-circle');
+            } else {
+                icon.classList.remove('ph-play-circle');
+                icon.classList.add('ph-pause-circle');
+            }
+
+            setTimeout(() => {
+                const toast = document.querySelector(".toast-welcome");
+                if (toast) {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 500);
+                }
+            }, 4000);
+        });
+
+        function shareWebsite() {
+            navigator.clipboard.writeText("Trang chủ của ND Labs: https://nd-site.github.io").then(() => {
+                const toast = document.createElement("div");
+                toast.className = "toast";
+                toast.textContent = "Đã sao chép liên kết!";
+                document.body.appendChild(toast);
+                setTimeout(() => { toast.remove(); }, 3000);
+            });
+        }
+
+        /* --- Search Engine Dropdown --- */
+        const engineSelect = document.getElementById('engineSelect');
+        const engineDropdown = document.getElementById('engineDropdown');
+        const currEngineImg = document.getElementById('currEngineImg');
+        const currEngineName = document.getElementById('currEngineName');
+        let currentEngine = 'google';
+
+        engineSelect.addEventListener('click', (e) => {
+            e.stopPropagation();
+            engineDropdown.classList.toggle('show');
+        });
+
+        document.querySelectorAll('.engine-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                currentEngine = opt.dataset.val;
+                currEngineName.textContent = opt.dataset.name;
+                currEngineImg.src = opt.dataset.img;
+                engineDropdown.classList.remove('show');
+            });
+        });
+
+        window.addEventListener('click', () => {
+            engineDropdown.classList.remove('show');
+        });
+
+        /* --- Search Logic --- */
+        const $q = document.getElementById("q");
+        const $go = document.getElementById("go");
+        const $mainWrapper = document.getElementById("mainContentWrapper");
+        const $homeContent = document.getElementById("homeContent");
+        const $searchArea = document.getElementById("searchResultArea");
+        const $internal = document.getElementById("internalResults");
+
+        const ENGINES = {
+            google: q => `https://www.google.com/search?q=${encodeURIComponent(q)}`,
+            bing: q => `https://www.bing.com/search?q=${encodeURIComponent(q)}`,
+            duck: q => `https://duckduckgo.com/?q=${encodeURIComponent(q)}`
+        };
+
+        const CONFIG = { username: 'nd-site', repositories: ['nd-site.github.io', 'test', 'windows12', 'eduspace', 'hoctap'], branch: 'main' };
+        let searchDatabase = [];
+
+        async function initSearchData() {
+            // Simple cache
+            const cached = localStorage.getItem('nd_search_cache_v2');
+            if (cached) {
+                const data = JSON.parse(cached);
+                // Cache valid for 1 day
+                if (Date.now() - data.timestamp < 86400000) {
+                    searchDatabase = data.database;
+                    return;
+                }
+            }
+
+            // Fetch new
+            let tempDB = [];
+            for (const repo of CONFIG.repositories) {
+                try {
+                    const res = await fetch(`https://api.github.com/repos/${CONFIG.username}/${repo}/git/trees/${CONFIG.branch}?recursive=1`);
+                    const data = await res.json();
+                    if (data.tree) {
+                        data.tree.filter(f => f.path.endsWith('.html')).forEach(f => {
+                            const base = repo === 'nd-site.github.io' ? '/' : `/${repo}/`;
+                            tempDB.push({ title: f.path.split('/').pop().replace('.html', '').toUpperCase(), url: base + f.path, repo: repo });
+                        });
+                    }
+                } catch (e) { }
+            }
+            searchDatabase = tempDB;
+            localStorage.setItem('nd_search_cache_v2', JSON.stringify({ timestamp: Date.now(), database: searchDatabase }));
+        }
+        initSearchData();
+
+        $q.addEventListener('input', () => {
+            const val = $q.value.trim().toLowerCase();
+            if (val.length > 0) {
+                $homeContent.style.display = "none";
+                $searchArea.style.display = "block";
+
+                // Search Internal
+                $internal.innerHTML = "";
+                const matches = searchDatabase.filter(i => i.title.toLowerCase().includes(val)).slice(0, 10);
+
+                if (matches.length > 0) {
+                    const title = document.createElement('div');
+                    title.style.marginBottom = '10px';
+                    title.style.fontWeight = '700';
+                    title.style.color = '#334155';
+                    title.textContent = 'KẾT QUẢ TỪ ND LABS';
+                    $internal.appendChild(title);
+                }
+
+                matches.forEach(item => {
+                    const a = document.createElement('a');
+                    a.className = 'res-item'; a.href = item.url;
+                    a.innerHTML = `<span class="res-title">${item.title}</span><span class="res-link">nd-site.github.io${item.url}</span><div class="res-snippet">Công cụ tìm thấy trong kho lưu trữ: ${item.repo}</div>`;
+                    $internal.appendChild(a);
+                });
+
+                // Do NOT trigger Google automatically here
+            } else {
+                closeSearch();
+            }
+        });
+
+        function closeSearch() {
+            $homeContent.style.display = "block";
+            $searchArea.style.display = "none";
+            $q.value = '';
+            $internal.innerHTML = "";
+
+            // Attempt to clear Google Developer Console results gracefully
+            try {
+                if (window.google?.search?.cse?.element) {
+                    const element = google.search.cse.element.getElement('nd-engine');
+                    if (element) element.clearAllResults();
+                }
+            } catch (e) {
+                // Fallback: manually hide/clear if API fails
+                const gRoot = document.getElementById('googleZone').querySelector('.gsc-control-cse');
+                if (gRoot) gRoot.innerHTML = '';
+            }
+        }
+
+        function handleGo() {
+            const val = $q.value.trim();
+            if (!val) return;
+            // Open search results in a new tab for all engines
+            window.open(ENGINES[currentEngine](val), '_blank');
+        }
+
+        $go.addEventListener('click', handleGo);
+        $q.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleGo(); });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ô Ăn Quan - Version 3 (Premium UI)</title>
+    <link rel="icon" href="/logo.png" type="image/png">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --p1: #ef4444;
+            --p2: #3b82f6;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .score-box {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 20px 40px;
+            border-radius: 20px;
+            text-align: center;
+            border-bottom: 5px solid transparent;
+        }
+
+        .p1 {
+            border-color: var(--p1);
+        }
+
+        .p2 {
+            border-color: var(--p2);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        canvas {
+            background: #1e293b;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .status {
+            margin-top: 20px;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .btn-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../" class="btn-home"><i class="ph ph-arrow-left"></i> Quay lại</a>
+    <div class="score-box">
+        <div class="card p2">
+            <div style="font-size: 12px; opacity:0.6;">ĐỐI THỦ</div>
+            <h1 id="scoreP2">0</h1>
+        </div>
+        <div class="card p1">
+            <div style="font-size: 12px; opacity:0.6;">BẠN</div>
+            <h1 id="scoreP1">0</h1>
+        </div>
+    </div>
+    <canvas id="gameCanvas" width="1000" height="400"></canvas>
+    <div id="status" class="status">ĐẾN LƯỢT BẠN</div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let board = [10, 5, 5, 5, 5, 5, 10, 5, 5, 5, 5, 5];
+        let p1Score = 0, p2Score = 0, current = 1;
+
+        function draw() {
+            ctx.clearRect(0, 0, 1000, 400);
+            document.getElementById('scoreP1').innerText = p1Score;
+            document.getElementById('scoreP2').innerText = p2Score;
+            document.getElementById('status').innerText = current === 1 ? "ĐẾN LƯỢT BẠN (P1)" : "ĐẾN LƯỢT ĐỐI THỦ (P2)";
+
+            // Vẽ bàn
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath();
+            ctx.roundRect(150, 100, 700, 200, 20);
+            ctx.fill();
+
+            for (let i = 0; i < 12; i++) {
+                let x, y, w, h;
+                if (i === 0) { x = 50, y = 100, w = 100, h = 200; }
+                else if (i === 6) { x = 850, y = 100, w = 100, h = 200; }
+                else if (i < 6) { x = 150 + (i - 1) * 140, y = 200, w = 140, h = 100; }
+                else { x = 150 + (11 - i) * 140, y = 100, w = 140, h = 100; }
+
+                ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                ctx.lineWidth = 2;
+                if (i === 0 || i === 6) {
+                    ctx.beginPath(); ctx.ellipse(x + w / 2, y + h / 2, 45, 95, 0, 0, Math.PI * 2); ctx.stroke();
+                } else {
+                    ctx.strokeRect(x + 5, y + 5, w - 10, h - 10);
+                }
+
+                ctx.fillStyle = "white";
+                ctx.font = "bold 24px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText(board[i], x + w / 2, y + h / 2 + 10);
+            }
+        }
+        draw();
+    </script>
+</body>
+
+</html>

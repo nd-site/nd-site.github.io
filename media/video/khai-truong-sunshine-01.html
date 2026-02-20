@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Khai Trương SUNSHINE 01 - ND Labs</title>
+<link rel="icon" href="/logo.png" type="image/png">
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    background: white;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  h1 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    text-align: center;
+  }
+  .video-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    aspect-ratio: 16/9;
+    border: 1px solid black;
+    border-radius: 20px;
+    overflow: hidden;
+    background: black;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .btn {
+    margin-top: 15px;
+    background: #ff0000; /* đỏ tươi */
+    border: 1px solid black;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .btn:hover {
+    background: #cc0000;
+  }
+</style>
+</head>
+<body>
+
+<h1>Video Khai Trương SUNSHINE 01 - ND Labs</h1>
+<div class="video-container">
+  <iframe 
+    src="https://www.youtube-nocookie.com/embed/Esfk94WTkkI?rel=0&showinfo=0"
+    title="YouTube video player"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen>
+  </iframe>
+</div>
+<button class="btn" onclick="window.open('https://youtu.be/Esfk94WTkkI','_blank')">
+  Mở trên YouTube
+</button>
+
+  <!-- Đặt ở cuối body -->
+  <div class="home-wrapper">
+    <!-- Nút Trang Chủ -->
+    <a href="https://nd-site.github.io" class="home-btn">
+      <img src="/homebtn.png" alt="Trang chủ">
+    </a>
+
+    <style>
+      .home-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        cursor: pointer;
+        z-index: 9999;
+        animation: float 3s ease-in-out infinite;
+        text-decoration: none;
+      }
+      .home-btn img {
+        max-width: 60%;
+        max-height: 60%;
+        object-fit: contain;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+      .home-btn:hover {
+        transform: scale(1.05);
+        transition: 0.3s;
+      }
+    </style>
+  </div>
+</body>
+</html>

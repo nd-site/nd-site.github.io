@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ô Ăn Quan - Archive & Versions - ND Labs</title>
+    <link rel="icon" href="/logo.png" type="image/png">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="/nd-navbar.js" defer></script>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --accent: #6366f1;
+            --primary: #ef4444;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0f172a 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ef4444, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        .ver-card {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 20px;
+            border-radius: 32px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ver-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .ver-card i {
+            font-size: 48px;
+            color: var(--accent);
+        }
+
+        .ver-card span {
+            font-weight: 800;
+            font-size: 20px;
+        }
+
+        .ver-card p {
+            font-size: 13px;
+            opacity: 0.5;
+            font-weight: 500;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 99px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Ô Ăn Quan</h1>
+        <p style="opacity: 0.6; font-weight: 500;">Chọn phiên bản bạn muốn trải nghiệm</p>
+
+        <div class="grid">
+            <a href="v1/" class="ver-card">
+                <i class="ph ph-seedling"></i>
+                <span>Version 1</span>
+                <p>Bản gốc đơn giản</p>
+                <div class="tag">Classic</div>
+            </a>
+            <a href="v2/" class="ver-card">
+                <i class="ph ph-broadcast"></i>
+                <span>Version 2</span>
+                <p>Đồng bộ Multiplayer</p>
+                <div class="tag">Sync Fix</div>
+            </a>
+            <a href="v3/" class="ver-card">
+                <i class="ph ph-palette"></i>
+                <span>Version 3</span>
+                <p>Premium UI (Đỏ/Xanh)</p>
+                <div class="tag">Visual Update</div>
+            </a>
+            <a href="v4/" class="ver-card">
+                <i class="ph ph-crown"></i>
+                <span>Version 4</span>
+                <p>Chuyên nghiệp & ID</p>
+                <div class="tag">Active / Pro</div>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
