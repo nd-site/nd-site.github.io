@@ -11,13 +11,99 @@
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
     <link rel="stylesheet" href="/auth/auth.css">
     <script src="/nd-navbar.js" defer></script>
+    <style>
+        .google-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1.5px solid #edf2f7;
+            gap: 12px;
+        }
+
+        .google-row-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .google-row-left img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .google-linked-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .btn-unlink {
+            padding: 8px 14px;
+            border-radius: 10px;
+            border: 1.5px solid #fecaca;
+            background: #fef2f2;
+            color: #ef4444;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-unlink:hover {
+            background: #fee2e2;
+        }
+
+        .btn-link-small {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1.5px solid #e2e8f0;
+            background: white;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-link-small img {
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-link-small:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+    </style>
 </head>
 
 <body>
     <div class="settings-main">
         <aside class="settings-nav">
-            <a href="#account" class="active"><i class="ph-duotone ph-user-circle"></i><span>Tài khoản</span></a>
-            <a href="/privacy/"><i class="ph-duotone ph-shield-check"></i><span>Bảo mật</span></a>
+            <a href="/auth/settings/" class="active">
+                <i class="ph-duotone ph-user-circle"></i><span>Tài khoản</span>
+            </a>
+            <a href="/privacy/">
+                <i class="ph-duotone ph-shield-check"></i><span>Chính sách</span>
+            </a>
         </aside>
 
         <main class="settings-panel">
@@ -58,15 +144,29 @@
 
             <div class="divider" style="margin: 36px 0;"><span>Liên kết tài khoản</span></div>
 
-            <!-- Google linking -->
-            <div id="google-link-row"
-                style="display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; background: #f8fafc; border-radius: 16px; border: 1.5px solid #edf2f7;">
-                <div style="display: flex; align-items: center; gap: 12px; font-weight: 700;">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
-                    <span id="google-status-text">Chưa liên kết Google</span>
+            <!-- Google linking row -->
+            <div class="google-row">
+                <div class="google-row-left">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                    <div>
+                        <div style="font-size: 14px;">Google</div>
+                        <div id="google-email-sub"
+                            style="font-size: 12px; color: var(--text-soft); font-weight: 500; margin-top: 2px;">Chưa
+                            liên kết</div>
+                    </div>
                 </div>
-                <button id="link-google-btn" class="btn-google"
-                    style="width: auto; padding: 8px 16px; border-radius: 10px; font-size: 13px;">Liên kết</button>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span id="google-linked-badge" class="google-linked-badge hidden">
+                        <i class="ph-bold ph-check"></i> Đã liên kết
+                    </span>
+                    <button id="link-google-btn" class="btn-link-small">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
+                        Liên kết
+                    </button>
+                    <button id="unlink-google-btn" class="btn-unlink hidden">
+                        <i class="ph-bold ph-link-break"></i> Hủy liên kết
+                    </button>
+                </div>
             </div>
 
             <!-- Logout -->
@@ -79,12 +179,12 @@
         </main>
     </div>
 
-    <!-- Re-auth Modal -->
+    <!-- Re-auth Modal for linking -->
     <div id="reauth-modal" class="modal hidden">
         <div class="modal-content">
             <h3 style="font-weight: 800; font-size: 18px; margin-bottom: 8px;">Xác minh bảo mật</h3>
-            <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 20px;">Nhập lại mật khẩu để liên kết tài
-                khoản Google.</p>
+            <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 20px;" id="reauth-desc">Nhập lại mật khẩu
+                để liên kết tài khoản Google.</p>
             <div class="form-group">
                 <div class="input-container">
                     <i class="ph-duotone ph-key"></i>
@@ -106,11 +206,10 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import {
             getAuth, onAuthStateChanged, updateProfile, signOut,
-            GoogleAuthProvider, linkWithPopup,
+            GoogleAuthProvider, linkWithPopup, unlink,
             reauthenticateWithCredential, EmailAuthProvider
-        }
-            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, setDoc, arrayUnion }
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, arrayUnion }
             from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL }
             from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
@@ -137,6 +236,17 @@
         }
 
         let currentUser = null;
+        // track what we're reauthenticating for: 'link' or 'unlink'
+        let reauthAction = 'link';
+
+        function setGoogleLinked(linked, googleEmail) {
+            document.getElementById('google-linked-badge').classList.toggle('hidden', !linked);
+            document.getElementById('link-google-btn').classList.toggle('hidden', linked);
+            document.getElementById('unlink-google-btn').classList.toggle('hidden', !linked);
+            document.getElementById('google-email-sub').textContent = linked
+                ? (googleEmail || 'Đã liên kết')
+                : 'Chưa liên kết';
+        }
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -146,12 +256,11 @@
             }
             currentUser = user;
 
-            // Display basic info
             document.getElementById('display-name').textContent = user.displayName || 'ND Member';
             document.getElementById('edit-name').value = user.displayName || '';
             if (user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
 
-            // Try to get Firestore data
+            // Firestore data
             try {
                 const snap = await getDoc(doc(db, 'users', user.uid));
                 if (snap.exists()) {
@@ -168,13 +277,9 @@
                 document.getElementById('display-email').textContent = user.email;
             }
 
-            // Check Google link status
-            const linked = user.providerData.some(p => p.providerId === 'google.com');
-            if (linked) {
-                document.getElementById('google-status-text').textContent = '✅ Đã liên kết Google';
-                document.getElementById('link-google-btn').textContent = 'Đã liên kết';
-                document.getElementById('link-google-btn').disabled = true;
-            }
+            // Google link status
+            const googleProvider = user.providerData.find(p => p.providerId === 'google.com');
+            setGoogleLinked(!!googleProvider, googleProvider?.email);
         });
 
         // Avatar upload
@@ -188,14 +293,10 @@
                 await updateProfile(currentUser, { photoURL: url });
                 document.getElementById('user-avatar').src = url;
                 try { await updateDoc(doc(db, 'users', currentUser.uid), { photoURL: url }); } catch (_) { }
-                // Update localStorage
                 const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
-                s.photoURL = url;
-                localStorage.setItem('nd_user', JSON.stringify(s));
+                s.photoURL = url; localStorage.setItem('nd_user', JSON.stringify(s));
                 showStatus('Cập nhật ảnh đại diện thành công!', 'success');
-            } catch (err) {
-                showStatus('Lỗi tải ảnh: ' + err.message, 'error');
-            }
+            } catch (err) { showStatus('Lỗi tải ảnh: ' + err.message, 'error'); }
         });
 
         // Profile form
@@ -207,18 +308,25 @@
                 await updateProfile(currentUser, { displayName: newName });
                 document.getElementById('display-name').textContent = newName;
                 try { await updateDoc(doc(db, 'users', currentUser.uid), { fullname: newName }); } catch (_) { }
-                // Update localStorage
                 const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
-                s.displayName = newName;
-                localStorage.setItem('nd_user', JSON.stringify(s));
+                s.displayName = newName; localStorage.setItem('nd_user', JSON.stringify(s));
                 showStatus('Lưu thành công!', 'success');
-            } catch (err) {
-                showStatus('Lỗi: ' + err.message, 'error');
-            }
+            } catch (err) { showStatus('Lỗi: ' + err.message, 'error'); }
         });
 
-        // Google link button → show modal
+        // Link Google → show reauth modal
         document.getElementById('link-google-btn').addEventListener('click', () => {
+            reauthAction = 'link';
+            document.getElementById('reauth-desc').textContent = 'Nhập lại mật khẩu để liên kết tài khoản Google.';
+            document.getElementById('reauth-password').value = '';
+            document.getElementById('reauth-modal').classList.remove('hidden');
+        });
+
+        // Unlink Google → show reauth modal
+        document.getElementById('unlink-google-btn').addEventListener('click', () => {
+            reauthAction = 'unlink';
+            document.getElementById('reauth-desc').textContent = 'Nhập lại mật khẩu để xác nhận hủy liên kết Google.';
+            document.getElementById('reauth-password').value = '';
             document.getElementById('reauth-modal').classList.remove('hidden');
         });
 
@@ -234,21 +342,20 @@
                 await reauthenticateWithCredential(currentUser, credential);
                 document.getElementById('reauth-modal').classList.add('hidden');
 
-                const provider = new GoogleAuthProvider();
-                const result = await linkWithPopup(currentUser, provider);
-
-                document.getElementById('google-status-text').textContent = '✅ Đã liên kết Google';
-                document.getElementById('link-google-btn').textContent = 'Đã liên kết';
-                document.getElementById('link-google-btn').disabled = true;
-
-                // Save google email to Firestore
-                const googleEmail = result.user.providerData.find(p => p.providerId === 'google.com')?.email;
-                if (googleEmail) {
+                if (reauthAction === 'link') {
+                    const provider = new GoogleAuthProvider();
+                    const result = await linkWithPopup(currentUser, provider);
+                    const googleEmail = result.user.providerData.find(p => p.providerId === 'google.com')?.email;
+                    setGoogleLinked(true, googleEmail);
                     try { await updateDoc(doc(db, 'users', currentUser.uid), { emails: arrayUnion(googleEmail) }); } catch (_) { }
+                    showStatus('🎉 Liên kết Google thành công!', 'success');
+                } else {
+                    await unlink(currentUser, 'google.com');
+                    setGoogleLinked(false, null);
+                    showStatus('Đã hủy liên kết Google.', 'success');
                 }
-                showStatus('🎉 Liên kết Google thành công!', 'success');
             } catch (err) {
-                showStatus('Xác thực thất bại: ' + err.message, 'error');
+                showStatus('Thao tác thất bại: ' + err.message, 'error');
             }
         });
 
