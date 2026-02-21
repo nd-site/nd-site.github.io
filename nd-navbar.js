@@ -11,7 +11,7 @@
 
   const NAV_LINKS = [
     { href: '/', label: 'Trang Chủ', icon: 'ph-house-simple' },
-    { href: '/EduSpace', label: 'EduSpace', icon: 'ph-graduation-cap' },
+    { href: '/eduspace', label: 'EduSpace', icon: 'ph-graduation-cap' },
     { href: '/games', label: 'Game', icon: 'ph-game-controller' },
     { href: '/media', label: 'Media', icon: 'ph-film-strip' },
     { href: '/utils', label: 'Tiện Ích', icon: 'ph-wrench' },
