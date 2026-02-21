@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/logo.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập NDID - ND Labs</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="/nd-navbar.js" defer></script>
+  <script type="module" crossorigin src="/assets/login-Dl3E6B3C.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/firebase-MFGuTdBG.js">
+  <link rel="stylesheet" crossorigin href="/assets/firebase-CkRsMp_p.css">
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="logo">
+                        <img src="/logo.png" alt="ND Labs Logo">
+                    </div>
+                    <h1>Đăng nhập NDID</h1>
+                    <p>Chào mừng bạn trở lại với ND Labs</p>
+                </div>
+
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="ndid">Tài khoản NDID</label>
+                        <div class="input-rel">
+                            <i class="ph-duotone ph-user-circle"></i>
+                            <input type="text" id="ndid" placeholder="Nhập NDID của bạn" autocomplete="username"
+                                required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <div class="input-rel">
+                            <i class="ph-duotone ph-lock"></i>
+                            <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"
+                                required />
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn-submit">
+                        <span>Đăng nhập</span>
+                        <i class="ph-bold ph-arrow-right"></i>
+                    </button>
+
+                    <div class="divider"><span>Hoặc</span></div>
+
+                    <button type="button" id="google-btn" class="google-btn">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
+                        <span>Tiếp tục với Google</span>
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>Chưa có tài khoản? <a href="/auth/register/" class="link-text">Tạo NDID ngay</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

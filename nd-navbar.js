@@ -195,9 +195,39 @@
     linksDiv.appendChild(a);
   });
 
+  /* ── User Session Context ── */
+  const userSection = document.createElement('div');
+  userSection.id = 'nd-navbar-user';
+  userSection.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-left: 10px; flex-shrink: 0;';
+
+  // Try to get user from localStorage
+  const storedUser = localStorage.getItem('nd_user');
+  if (storedUser) {
+    try {
+      const u = JSON.parse(storedUser);
+      userSection.innerHTML = `
+        <a href="/auth/settings/" class="nd-nav-link" title="Cài đặt tài khoản">
+          <img src="${u.photoURL || '/logo.png'}" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+          <span class="nd-lbl">${u.ndid || 'ND Member'}</span>
+        </a>
+      `;
+    } catch (e) { storageClear(); }
+  } else {
+    userSection.innerHTML = `
+      <a href="/auth/login/" class="nd-nav-link" style="color: #0070f3;">Đăng nhập</a>
+      <a href="/auth/register/" class="nd-nav-link nd-active" style="padding: 5px 10px;">NDID</a>
+    `;
+  }
+
+  function storageClear() {
+    localStorage.removeItem('nd_user');
+    window.location.reload();
+  }
+
   inner.appendChild(brand);
   inner.appendChild(sep);
   inner.appendChild(linksDiv);
+  inner.appendChild(userSection);
   nav.appendChild(inner);
 
   /* ─── Spacer: pushes page content below fixed bar ──────── */
