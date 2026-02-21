@@ -2,83 +2,79 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <link rel="icon" href="/logo.png" type="image/png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tạo NDID - ND Labs</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <script src="/nd-navbar.js" defer></script>
-  <script type="module" crossorigin src="/assets/register-DSkhlUti.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/firebase-MFGuTdBG.js">
-  <link rel="stylesheet" crossorigin href="/assets/firebase-CkRsMp_p.css">
+  <script type="module" crossorigin src="/assets/register-DSrRQC60.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/firebase-DLphYnwd.js">
+  <link rel="stylesheet" crossorigin href="/assets/firebase-DQ3oFVkv.css">
 </head>
 
 <body>
-    <div class="app-wrapper">
-        <div class="auth-container">
-            <div class="auth-card">
-                <div class="auth-header">
-                    <div class="logo">
-                        <img src="/logo.png" alt="ND Labs Logo">
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="/logo.png" alt="Logo" class="auth-logo">
+                <h1>Tạo NDID</h1>
+                <p>Khởi tạo định danh ND duy nhất của bạn</p>
+            </div>
+
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label>Chọn NDID của bạn</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-identification-card"></i>
+                        <input type="text" id="ndid" placeholder="VD: dang_2026" required>
                     </div>
-                    <h1>Đăng ký NDID</h1>
-                    <p>Tạo một tài khoản duy nhất cho mọi dịch vụ</p>
                 </div>
 
-                <form id="register-form">
-                    <div class="form-group">
-                        <label for="ndid">Tạo NDID của bạn</label>
-                        <div class="input-rel">
-                            <i class="ph-duotone ph-identification-card"></i>
-                            <input type="text" id="ndid" placeholder="Chuỗi tên đăng nhập viết liền" required />
-                        </div>
-                        <span class="ndid-hint">ID này không thể thay đổi sau khi tạo.</span>
+                <div class="form-group">
+                    <label>Họ và tên</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-user"></i>
+                        <input type="text" id="fullname" placeholder="Nhập tên của bạn" required>
                     </div>
-
-                    <div class="form-group">
-                        <label for="fullname">Họ và tên</label>
-                        <div class="input-rel">
-                            <i class="ph-duotone ph-user"></i>
-                            <input type="text" id="fullname" placeholder="Họ tên thật của bạn" required />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email khôi phục</label>
-                        <div class="input-rel">
-                            <i class="ph-duotone ph-envelope-simple"></i>
-                            <input type="email" id="email" placeholder="Sử dụng để tìm lại mật khẩu" required />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Mật khẩu</label>
-                        <div class="input-rel">
-                            <i class="ph-duotone ph-lock"></i>
-                            <input type="password" id="password" placeholder="Tối thiểu 6 ký tự" required />
-                        </div>
-                    </div>
-
-                    <div class="policy-wrap">
-                        <input type="checkbox" id="policy" required />
-                        <label for="policy">Tôi đã đọc và đồng ý với <a href="/privacy/" target="_blank"
-                                class="link-text">Chính sách bảo mật</a> của ND Labs.</label>
-                    </div>
-
-                    <button type="submit" id="submit-btn" class="btn-submit">
-                        <span>Tạo tài khoản</span>
-                        <i class="ph-bold ph-user-plus"></i>
-                    </button>
-                </form>
-
-                <div class="auth-footer">
-                    <p>Đã có NDID? <a href="/auth/login/" class="link-text">Đăng nhập ngay</a></p>
                 </div>
+
+                <div class="form-group">
+                    <label>Email khôi phục</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-envelope-simple"></i>
+                        <input type="email" id="email" placeholder="email@gmail.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Mật khẩu</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-lock"></i>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="policy-wrap" style="display: flex; gap: 10px; font-size: 13px; color: var(--text-soft);">
+                    <input type="checkbox" id="policy" required style="margin-top: 3px;">
+                    <label for="policy">Tôi đồng ý với <a href="/privacy/"
+                            style="color: var(--primary); font-weight:700;">Chính sách bảo mật</a></label>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-primary">
+                    <span>Khởi tạo ngay</span>
+                    <i class="ph-bold ph-sparkle"></i>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Đã có tài khoản? <a href="/auth/login/">Đăng nhập</a></p>
             </div>
         </div>
-    </div>
+    </div>
+    <div id="status-toast" class="status-toast"></div>
 </body>
 
 </html>

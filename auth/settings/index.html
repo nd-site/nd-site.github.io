@@ -2,22 +2,20 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <link rel="icon" href="/logo.png" type="image/png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cài đặt tài khoản - ND Labs</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <script src="/nd-navbar.js" defer></script>
-  <script type="module" crossorigin src="/assets/settings-CiGiSvUB.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/firebase-MFGuTdBG.js">
-  <link rel="stylesheet" crossorigin href="/assets/firebase-CkRsMp_p.css">
+  <script type="module" crossorigin src="/assets/settings-nzjeoDIY.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/firebase-DLphYnwd.js">
+  <link rel="stylesheet" crossorigin href="/assets/firebase-DQ3oFVkv.css">
 </head>
 
 <body>
-    <!-- Navbar will be mounted here by script -->
-
     <div class="settings-main">
         <aside class="settings-nav">
             <a href="#" class="active"><i class="ph-duotone ph-user"></i> Tài khoản</a>
@@ -26,84 +24,80 @@
 
         <main class="settings-panel">
             <section id="account-section">
-                <div class="panel-header">
-                    <h2>Quản lý tài khoản</h2>
-                    <p>Chào mừng <strong id="ndid-display">...</strong>, cập nhật thông tin cá nhân của bạn tại đây.</p>
+                <div class="panel-header" style="margin-bottom: 30px;">
+                    <h2 style="font-weight: 800; font-size: 24px;">Cài đặt NDID</h2>
+                    <p style="color: var(--text-soft); font-size: 14px;">Quản lý hồ sơ định danh <strong
+                            id="ndid-display" style="color: var(--primary);">...</strong></p>
                 </div>
 
                 <div class="avatar-section">
                     <div class="avatar-rel">
                         <img id="user-avatar" src="/logo.png" alt="Avatar">
-                        <label for="avatar-upload" class="cam-btn" title="Đổi ảnh đại diện">
+                        <label for="avatar-upload" class="cam-btn">
                             <i class="ph-bold ph-camera"></i>
                         </label>
                         <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
                     </div>
                     <div>
                         <h3 id="display-name" style="font-weight: 800; font-size: 18px;">ND Member</h3>
-                        <p id="display-email" style="font-size: 13px; color: var(--text-soft);">email@example.com</p>
+                        <p id="display-email" style="font-size: 13px; color: var(--text-soft);">id@ndlabs.com</p>
                     </div>
                 </div>
 
-                <form id="profile-form">
+                <form id="profile-form" class="auth-form" style="max-width: 400px;">
                     <div class="form-group">
                         <label>Họ và tên hiển thị</label>
-                        <div class="input-rel">
+                        <div class="input-container">
                             <i class="ph-duotone ph-user"></i>
-                            <input type="text" id="edit-name" placeholder="Tên của bạn" />
+                            <input type="text" id="edit-name" placeholder="Tên của bạn">
                         </div>
                     </div>
-                    <button type="submit" class="btn-submit" style="width: auto; padding: 12px 24px;">Lưu thay
+                    <button type="submit" class="btn-primary" style="width: auto; padding: 12px 24px;">Lưu thay
                         đổi</button>
                 </form>
 
-                <div class="divider"><span>Bảo mật</span></div>
+                <div class="divider" style="margin: 40px 0;"><span>Liên kết bảo mật</span></div>
 
-                <div class="form-group">
-                    <label>Phương thức liên kết</label>
-                    <div
-                        style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f8fafc; border-radius: 14px; border: 1px solid #e2e8f0;">
-                        <div style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 14px;">
-                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
-                            <span>Tài khoản Google</span>
-                        </div>
-                        <button id="link-google-btn" class="google-btn"
-                            style="width: auto; padding: 8px 16px; font-size: 13px;">Liên kết</button>
+                <div
+                    style="display: flex; align-items: center; justify-content: space-between; padding: 20px; background: #f8fafc; border-radius: 16px; border: 1.5px solid #edf2f7;">
+                    <div style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 15px;">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+                        <span>Tài khoản Google</span>
                     </div>
+                    <button id="link-google-btn" class="btn-google" style="width: auto; padding: 8px 16px;">Liên
+                        kết</button>
                 </div>
 
-                <div style="margin-top: 40px; border-top: 1px solid #fee2e2; padding-top: 24px;">
+                <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #fee2e2;">
                     <button id="logout-btn"
-                        style="background: #fee2e2; color: #ef4444; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                        <i class="ph-bold ph-sign-out"></i> Đăng xuất tài khoản
+                        style="background: #fee2e2; color: #ef4444; border: none; padding: 14px 20px; border-radius: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.2s;">
+                        <i class="ph-bold ph-sign-out"></i> Đăng xuất
                     </button>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- Re-auth Modal -->
     <div id="reauth-modal" class="modal hidden">
         <div class="modal-content">
-            <h3 style="font-weight: 800; margin-bottom: 8px;">Xác minh danh tính</h3>
-            <p style="font-size: 14px; color: var(--text-soft); margin-bottom: 20px;">Vui lòng nhập lại mật khẩu ND Labs
-                để tiếp tục thao tác bảo mật.</p>
+            <h3 style="font-weight: 800; margin-bottom: 8px;">Xác minh bảo mật</h3>
+            <p style="font-size: 14px; color: var(--text-soft); margin-bottom: 24px;">Vui lòng nhập lại mật khẩu để thực
+                hiện liên kết tài khoản.</p>
             <div class="form-group">
-                <div class="input-rel">
+                <div class="input-container">
                     <i class="ph-duotone ph-key"></i>
                     <input type="password" id="reauth-password" placeholder="Mật khẩu của bạn">
                 </div>
             </div>
-            <div class="modal-btns">
-                <button id="cancel-reauth">Hủy</button>
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                <button id="cancel-reauth"
+                    style="padding: 10px 20px; border-radius: 10px; border:none; background:#f1f5f9; font-weight:700; cursor:pointer;">Hủy</button>
                 <button id="confirm-reauth" class="btn-primary"
-                    style="background: var(--primary); color: white; padding: 10px 20px; border-radius: 10px; font-weight: 700;">Xác
-                    nhận</button>
+                    style="width: auto; margin-top:0; padding: 10px 20px;">Xác nhận</button>
             </div>
         </div>
     </div>
 
-    <div id="status-container"></div>
 </body>
 
 </html>
