@@ -122,10 +122,17 @@
             submitBtn.innerHTML = '<span>Đang khởi tạo...</span>';
 
             try {
-                // Kiểm tra NDID đã tồn tại chưa
-                const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
-                if (ndidSnap.exists()) {
-                    return showStatus('NDID này đã được sử dụng. Hãy chọn tên khác.', 'error');
+                // Kiểm tra NDID đã tồn tại (bỏ qua nếu Firestore chưa sẵn sàng)
+                try {
+                    const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
+                    if (ndidSnap.exists()) {
+                        showStatus('NDID này đã được sử dụng. Hãy chọn tên khác.', 'error');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<span>Khởi tạo NDID</span><i class="ph-bold ph-sparkle"></i>';
+                        return;
+                    }
+                } catch (fsErr) {
+                    console.warn('Firestore chưa sẵn sàng, bỏ qua kiểm tra NDID:', fsErr.message);
                 }
 
                 const internalEmail = `${ndid}@ndlabs.com`;
@@ -134,13 +141,17 @@
 
                 await updateProfile(user, { displayName: fullname });
 
-                // Lưu vào Firestore
-                await setDoc(doc(db, 'ndids', ndid), { uid: user.uid, recoveryEmail: email });
-                await setDoc(doc(db, 'users', user.uid), {
-                    ndid, fullname,
-                    emails: [email],
-                    createdAt: new Date().toISOString()
-                });
+                // Lưu vào Firestore (bỏ qua nếu lỗi)
+                try {
+                    await setDoc(doc(db, 'ndids', ndid), { uid: user.uid, recoveryEmail: email });
+                    await setDoc(doc(db, 'users', user.uid), {
+                        ndid, fullname,
+                        emails: [email],
+                        createdAt: new Date().toISOString()
+                    });
+                } catch (fsErr) {
+                    console.warn('Không thể lưu Firestore (sẽ đồng bộ sau):', fsErr.message);
+                }
 
                 localStorage.setItem('nd_user', JSON.stringify({
                     displayName: fullname, email, photoURL: null, uid: user.uid, ndid
@@ -151,7 +162,14 @@
 
             } catch (err) {
                 console.error(err);
-                showStatus('Lỗi: ' + (err.message || err.code), 'error');
+                // Dịch lỗi Firebase sang tiếng Việt
+                const msgs = {
+                    'auth/email-already-in-use': 'NDID này đã tồn tại. Hãy chọn NDID khác hoặc đăng nhập.',
+                    'auth/weak-password': 'Mật khẩu quá yếu. Cần ít nhất 6 ký tự.',
+                    'auth/invalid-email': 'Định dạng NDID không hợp lệ.',
+                    'auth/network-request-failed': 'Mất kết nối mạng. Vui lòng thử lại.',
+                };
+                showStatus(msgs[err.code] || ('Lỗi: ' + err.message), 'error');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<span>Khởi tạo NDID</span><i class="ph-bold ph-sparkle"></i>';
             }
