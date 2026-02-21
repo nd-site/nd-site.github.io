@@ -3,51 +3,46 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="/logo.png" type="image/png">
+    <link rel="icon" href="/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập NDID - ND Labs</title>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+    <link rel="stylesheet" href="/auth/auth.css">
     <script src="/nd-navbar.js" defer></script>
-  <script type="module" crossorigin src="/assets/login-z5gUuxt3.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/firebase-DLphYnwd.js">
-  <link rel="stylesheet" crossorigin href="/assets/firebase-DQ3oFVkv.css">
 </head>
 
 <body>
     <div class="auth-wrapper">
         <div class="auth-card">
             <div class="auth-header">
-                <img src="/logo.png" alt="Logo" class="auth-logo">
+                <img src="/logo.png" alt="ND Labs" class="auth-logo">
                 <h1>Đăng nhập</h1>
                 <p>Chào mừng trở lại với ND Labs</p>
             </div>
 
             <form id="login-form" class="auth-form">
                 <div class="form-group">
-                    <label>NDID của bạn</label>
+                    <label for="ndid">NDID của bạn</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-user-circle"></i>
-                        <input type="text" id="ndid" placeholder="Nhập NDID" required>
+                        <input type="text" id="ndid" placeholder="Nhập NDID" autocomplete="username" required>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label>Mật khẩu</label>
+                    <label for="password">Mật khẩu</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-lock"></i>
-                        <input type="password" id="password" placeholder="••••••••" required>
+                        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"
+                            required>
                     </div>
                 </div>
-
                 <button type="submit" id="submit-btn" class="btn-primary">
                     <span>Tiếp tục</span>
                     <i class="ph-bold ph-arrow-right"></i>
                 </button>
-
                 <div class="divider"><span>Hoặc</span></div>
-
                 <button type="button" id="google-btn" class="btn-google">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
                     <span>Đăng nhập với Google</span>
@@ -60,8 +55,101 @@
         </div>
     </div>
 
-    <div id="status-toast" class="status-toast"></div>
-
+    <div id="status-msg" class="status-msg"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDIHXhqSNYhIIozxC5dZ-mTcfXAPzPZgog",
+            authDomain: "ndlabs-0.firebaseapp.com",
+            projectId: "ndlabs-0",
+            storageBucket: "ndlabs-0.firebasestorage.app",
+            messagingSenderId: "600040258053",
+            appId: "1:600040258053:web:617a19f62aafeb35d13a6c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const loginForm = document.getElementById('login-form');
+        const ndidInput = document.getElementById('ndid');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submit-btn');
+        const googleBtn = document.getElementById('google-btn');
+        const statusEl = document.getElementById('status-msg');
+
+        function showStatus(text, type) {
+            statusEl.textContent = text;
+            statusEl.className = `status-msg show ${type}`;
+            setTimeout(() => statusEl.className = 'status-msg', 4000);
+        }
+
+        // Nếu đã đăng nhập → về trang chủ
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const stored = localStorage.getItem('nd_user');
+                if (!stored) {
+                    localStorage.setItem('nd_user', JSON.stringify({
+                        displayName: user.displayName,
+                        email: user.email,
+                        photoURL: user.photoURL,
+                        uid: user.uid,
+                        ndid: user.email.split('@')[0]
+                    }));
+                }
+                window.location.href = '/';
+            }
+        });
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const ndid = ndidInput.value.trim().toLowerCase();
+            const password = passwordInput.value;
+            if (!ndid || !password) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Đang xác thực...</span>';
+
+            try {
+                const email = `${ndid}@ndlabs.com`;
+                const cred = await signInWithEmailAndPassword(auth, email, password);
+                localStorage.setItem('nd_user', JSON.stringify({
+                    displayName: cred.user.displayName,
+                    email: cred.user.email,
+                    photoURL: cred.user.photoURL,
+                    uid: cred.user.uid,
+                    ndid: ndid
+                }));
+                showStatus('Đăng nhập thành công!', 'success');
+                setTimeout(() => window.location.href = '/', 800);
+            } catch (err) {
+                showStatus('NDID hoặc mật khẩu không đúng.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Tiếp tục</span><i class="ph-bold ph-arrow-right"></i>';
+            }
+        });
+
+        googleBtn.addEventListener('click', async () => {
+            try {
+                const provider = new GoogleAuthProvider();
+                const result = await signInWithPopup(auth, provider);
+                const u = result.user;
+                localStorage.setItem('nd_user', JSON.stringify({
+                    displayName: u.displayName,
+                    email: u.email,
+                    photoURL: u.photoURL,
+                    uid: u.uid,
+                    ndid: u.email.split('@')[0]
+                }));
+                window.location.href = '/';
+            } catch (err) {
+                showStatus('Lỗi đăng nhập với Google.', 'error');
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -3,101 +3,262 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="/logo.png" type="image/png">
+    <link rel="icon" href="/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cài đặt tài khoản - ND Labs</title>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <title>Cài đặt NDID - ND Labs</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+    <link rel="stylesheet" href="/auth/auth.css">
     <script src="/nd-navbar.js" defer></script>
-  <script type="module" crossorigin src="/assets/settings-nzjeoDIY.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/firebase-DLphYnwd.js">
-  <link rel="stylesheet" crossorigin href="/assets/firebase-DQ3oFVkv.css">
 </head>
 
 <body>
     <div class="settings-main">
         <aside class="settings-nav">
-            <a href="#" class="active"><i class="ph-duotone ph-user"></i> Tài khoản</a>
-            <a href="/privacy/"><i class="ph-duotone ph-shield-check"></i> Bảo mật & Quyền riêng tư</a>
+            <a href="#account" class="active"><i class="ph-duotone ph-user-circle"></i><span>Tài khoản</span></a>
+            <a href="/privacy/"><i class="ph-duotone ph-shield-check"></i><span>Bảo mật</span></a>
         </aside>
 
         <main class="settings-panel">
-            <section id="account-section">
-                <div class="panel-header" style="margin-bottom: 30px;">
-                    <h2 style="font-weight: 800; font-size: 24px;">Cài đặt NDID</h2>
-                    <p style="color: var(--text-soft); font-size: 14px;">Quản lý hồ sơ định danh <strong
-                            id="ndid-display" style="color: var(--primary);">...</strong></p>
+            <div style="margin-bottom: 28px;">
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Cài đặt NDID</h2>
+                <p style="font-size: 14px; color: var(--text-soft);">Quản lý hồ sơ <strong id="ndid-display"
+                        style="color: var(--primary);">...</strong></p>
+            </div>
+
+            <!-- Avatar Section -->
+            <div class="avatar-section">
+                <div class="avatar-rel">
+                    <img id="user-avatar" src="/logo.png" alt="Avatar">
+                    <label for="avatar-upload" class="cam-btn" title="Đổi ảnh">
+                        <i class="ph-bold ph-camera"></i>
+                    </label>
+                    <input type="file" id="avatar-upload" accept="image/*" style="display:none">
                 </div>
+                <div>
+                    <h3 id="display-name" style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">ND Member</h3>
+                    <p id="display-email" style="font-size: 13px; color: var(--text-soft);">email@ndlabs.com</p>
+                </div>
+            </div>
 
-                <div class="avatar-section">
-                    <div class="avatar-rel">
-                        <img id="user-avatar" src="/logo.png" alt="Avatar">
-                        <label for="avatar-upload" class="cam-btn">
-                            <i class="ph-bold ph-camera"></i>
-                        </label>
-                        <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
-                    </div>
-                    <div>
-                        <h3 id="display-name" style="font-weight: 800; font-size: 18px;">ND Member</h3>
-                        <p id="display-email" style="font-size: 13px; color: var(--text-soft);">id@ndlabs.com</p>
+            <!-- Edit profile -->
+            <form id="profile-form" class="auth-form" style="max-width: 400px;">
+                <div class="form-group">
+                    <label>Họ và tên</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-user"></i>
+                        <input type="text" id="edit-name" placeholder="Tên của bạn">
                     </div>
                 </div>
+                <button type="submit" class="btn-primary" style="width: auto; padding: 11px 24px; margin-top: 4px;">
+                    <i class="ph-bold ph-floppy-disk"></i> Lưu thay đổi
+                </button>
+            </form>
 
-                <form id="profile-form" class="auth-form" style="max-width: 400px;">
-                    <div class="form-group">
-                        <label>Họ và tên hiển thị</label>
-                        <div class="input-container">
-                            <i class="ph-duotone ph-user"></i>
-                            <input type="text" id="edit-name" placeholder="Tên của bạn">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-primary" style="width: auto; padding: 12px 24px;">Lưu thay
-                        đổi</button>
-                </form>
+            <div class="divider" style="margin: 36px 0;"><span>Liên kết tài khoản</span></div>
 
-                <div class="divider" style="margin: 40px 0;"><span>Liên kết bảo mật</span></div>
-
-                <div
-                    style="display: flex; align-items: center; justify-content: space-between; padding: 20px; background: #f8fafc; border-radius: 16px; border: 1.5px solid #edf2f7;">
-                    <div style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 15px;">
-                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
-                        <span>Tài khoản Google</span>
-                    </div>
-                    <button id="link-google-btn" class="btn-google" style="width: auto; padding: 8px 16px;">Liên
-                        kết</button>
+            <!-- Google linking -->
+            <div id="google-link-row"
+                style="display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; background: #f8fafc; border-radius: 16px; border: 1.5px solid #edf2f7;">
+                <div style="display: flex; align-items: center; gap: 12px; font-weight: 700;">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+                    <span id="google-status-text">Chưa liên kết Google</span>
                 </div>
+                <button id="link-google-btn" class="btn-google"
+                    style="width: auto; padding: 8px 16px; border-radius: 10px; font-size: 13px;">Liên kết</button>
+            </div>
 
-                <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #fee2e2;">
-                    <button id="logout-btn"
-                        style="background: #fee2e2; color: #ef4444; border: none; padding: 14px 20px; border-radius: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.2s;">
-                        <i class="ph-bold ph-sign-out"></i> Đăng xuất
-                    </button>
-                </div>
-            </section>
+            <!-- Logout -->
+            <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #fecaca;">
+                <button id="logout-btn"
+                    style="background: #fef2f2; color: #ef4444; border: 1.5px solid #fecaca; padding: 12px 20px; border-radius: 14px; font-weight: 800; font-family: inherit; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                    <i class="ph-bold ph-sign-out"></i> Đăng xuất
+                </button>
+            </div>
         </main>
     </div>
 
+    <!-- Re-auth Modal -->
     <div id="reauth-modal" class="modal hidden">
         <div class="modal-content">
-            <h3 style="font-weight: 800; margin-bottom: 8px;">Xác minh bảo mật</h3>
-            <p style="font-size: 14px; color: var(--text-soft); margin-bottom: 24px;">Vui lòng nhập lại mật khẩu để thực
-                hiện liên kết tài khoản.</p>
+            <h3 style="font-weight: 800; font-size: 18px; margin-bottom: 8px;">Xác minh bảo mật</h3>
+            <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 20px;">Nhập lại mật khẩu để liên kết tài
+                khoản Google.</p>
             <div class="form-group">
                 <div class="input-container">
                     <i class="ph-duotone ph-key"></i>
                     <input type="password" id="reauth-password" placeholder="Mật khẩu của bạn">
                 </div>
             </div>
-            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
                 <button id="cancel-reauth"
-                    style="padding: 10px 20px; border-radius: 10px; border:none; background:#f1f5f9; font-weight:700; cursor:pointer;">Hủy</button>
+                    style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; font-family: inherit; cursor: pointer;">Hủy</button>
                 <button id="confirm-reauth" class="btn-primary"
-                    style="width: auto; margin-top:0; padding: 10px 20px;">Xác nhận</button>
+                    style="width: auto; margin-top: 0; padding: 10px 20px;">Xác nhận</button>
             </div>
         </div>
     </div>
-
+
+    <div id="status-msg" class="status-msg"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import {
+            getAuth, onAuthStateChanged, updateProfile, signOut,
+            GoogleAuthProvider, linkWithPopup,
+            reauthenticateWithCredential, EmailAuthProvider
+        }
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, setDoc, arrayUnion }
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL }
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDIHXhqSNYhIIozxC5dZ-mTcfXAPzPZgog",
+            authDomain: "ndlabs-0.firebaseapp.com",
+            projectId: "ndlabs-0",
+            storageBucket: "ndlabs-0.firebasestorage.app",
+            messagingSenderId: "600040258053",
+            appId: "1:600040258053:web:617a19f62aafeb35d13a6c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        const statusEl = document.getElementById('status-msg');
+        function showStatus(text, type) {
+            statusEl.textContent = text;
+            statusEl.className = `status-msg show ${type}`;
+            setTimeout(() => statusEl.className = 'status-msg', 4000);
+        }
+
+        let currentUser = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                localStorage.removeItem('nd_user');
+                window.location.href = '/auth/login/';
+                return;
+            }
+            currentUser = user;
+
+            // Display basic info
+            document.getElementById('display-name').textContent = user.displayName || 'ND Member';
+            document.getElementById('edit-name').value = user.displayName || '';
+            if (user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
+
+            // Try to get Firestore data
+            try {
+                const snap = await getDoc(doc(db, 'users', user.uid));
+                if (snap.exists()) {
+                    const data = snap.data();
+                    document.getElementById('ndid-display').textContent = data.ndid || user.email.split('@')[0];
+                    document.getElementById('display-email').textContent = data.emails?.[0] || user.email;
+                    document.getElementById('edit-name').value = data.fullname || user.displayName || '';
+                } else {
+                    document.getElementById('ndid-display').textContent = user.email.split('@')[0];
+                    document.getElementById('display-email').textContent = user.email;
+                }
+            } catch (_) {
+                document.getElementById('ndid-display').textContent = user.email.split('@')[0];
+                document.getElementById('display-email').textContent = user.email;
+            }
+
+            // Check Google link status
+            const linked = user.providerData.some(p => p.providerId === 'google.com');
+            if (linked) {
+                document.getElementById('google-status-text').textContent = '✅ Đã liên kết Google';
+                document.getElementById('link-google-btn').textContent = 'Đã liên kết';
+                document.getElementById('link-google-btn').disabled = true;
+            }
+        });
+
+        // Avatar upload
+        document.getElementById('avatar-upload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file || !currentUser) return;
+            try {
+                const storageRef = ref(storage, `avatars/${currentUser.uid}`);
+                await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(storageRef);
+                await updateProfile(currentUser, { photoURL: url });
+                document.getElementById('user-avatar').src = url;
+                try { await updateDoc(doc(db, 'users', currentUser.uid), { photoURL: url }); } catch (_) { }
+                // Update localStorage
+                const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
+                s.photoURL = url;
+                localStorage.setItem('nd_user', JSON.stringify(s));
+                showStatus('Cập nhật ảnh đại diện thành công!', 'success');
+            } catch (err) {
+                showStatus('Lỗi tải ảnh: ' + err.message, 'error');
+            }
+        });
+
+        // Profile form
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+            const newName = document.getElementById('edit-name').value.trim();
+            try {
+                await updateProfile(currentUser, { displayName: newName });
+                document.getElementById('display-name').textContent = newName;
+                try { await updateDoc(doc(db, 'users', currentUser.uid), { fullname: newName }); } catch (_) { }
+                // Update localStorage
+                const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
+                s.displayName = newName;
+                localStorage.setItem('nd_user', JSON.stringify(s));
+                showStatus('Lưu thành công!', 'success');
+            } catch (err) {
+                showStatus('Lỗi: ' + err.message, 'error');
+            }
+        });
+
+        // Google link button → show modal
+        document.getElementById('link-google-btn').addEventListener('click', () => {
+            document.getElementById('reauth-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('cancel-reauth').addEventListener('click', () => {
+            document.getElementById('reauth-modal').classList.add('hidden');
+        });
+
+        document.getElementById('confirm-reauth').addEventListener('click', async () => {
+            const password = document.getElementById('reauth-password').value;
+            if (!password || !currentUser) return;
+            try {
+                const credential = EmailAuthProvider.credential(currentUser.email, password);
+                await reauthenticateWithCredential(currentUser, credential);
+                document.getElementById('reauth-modal').classList.add('hidden');
+
+                const provider = new GoogleAuthProvider();
+                const result = await linkWithPopup(currentUser, provider);
+
+                document.getElementById('google-status-text').textContent = '✅ Đã liên kết Google';
+                document.getElementById('link-google-btn').textContent = 'Đã liên kết';
+                document.getElementById('link-google-btn').disabled = true;
+
+                // Save google email to Firestore
+                const googleEmail = result.user.providerData.find(p => p.providerId === 'google.com')?.email;
+                if (googleEmail) {
+                    try { await updateDoc(doc(db, 'users', currentUser.uid), { emails: arrayUnion(googleEmail) }); } catch (_) { }
+                }
+                showStatus('🎉 Liên kết Google thành công!', 'success');
+            } catch (err) {
+                showStatus('Xác thực thất bại: ' + err.message, 'error');
+            }
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await signOut(auth);
+            localStorage.removeItem('nd_user');
+            window.location.href = '/';
+        });
+    </script>
 </body>
 
 </html>
