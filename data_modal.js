@@ -1,11 +1,12 @@
 /**
  * EduSpace AI Data Modal & Logic
  * Centralized script for all Gemini AI features in EduSpace.
+ * NOTE: Gemini 2.0 is no longer supported. Using Gemini 1.5 Flash as the baseline.
  */
 
 const eduspaceAI = (function () {
     // Configuration & State
-    let sessionModel = { model: 'gemini-1.5-flash', version: 'v1beta' };
+    let sessionModel = { model: window.getStableModel?.() || 'gemini-1.5-flash', version: 'v1' };
     let discoveredModels = [];
 
     // --- Core API Logic ---
