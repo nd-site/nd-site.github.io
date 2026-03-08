@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luyện tập: Tính lượng ion dư 1 - EduSpace by ND Labs</title>
+    <link rel="icon" href="/logo.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+        body { font-family: 'Nunito', sans-serif; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+<body class="bg-blue-50 min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-2xl w-full bg-white rounded-2xl shadow-xl overflow-hidden" id="app">
+        <!-- Header -->
+        <div class="bg-blue-600 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold mb-2">Luyện tập: So sánh giới hạn</h1>
+            <p class="opacity-90 text-sm">Chủ đề: Đổi đơn vị (mg ↔ g) và tính phần trăm</p>
+            
+            <!-- Progress Bar -->
+            <div class="mt-4 flex justify-center space-x-2">
+                <div class="h-2 w-1/3 rounded-full transition-all duration-300" :class="step >= 1 ? 'bg-yellow-400' : 'bg-blue-800'"></div>
+                <div class="h-2 w-1/3 rounded-full transition-all duration-300" :class="step >= 2 ? 'bg-yellow-400' : 'bg-blue-800'"></div>
+                <div class="h-2 w-1/3 rounded-full transition-all duration-300" :class="step >= 3 ? 'bg-yellow-400' : 'bg-blue-800'"></div>
+            </div>
+            <div class="mt-1 text-xs text-right" id="progress-text">Câu 1/3</div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="p-6">
+            
+            <!-- Intro Screen -->
+            <div id="intro" class="text-center py-8">
+                <div class="text-6xl mb-4">📝</div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Sẵn sàng luyện tập chưa?</h2>
+                <p class="text-gray-600 mb-6">Chúng ta sẽ làm 3 bài toán thực tế. Hãy chuẩn bị máy tính và giấy nháp nhé!</p>
+                <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg text-left text-sm text-yellow-800 mb-6 mx-auto max-w-sm">
+                    <strong>Gợi ý:</strong>
+                    <ul class="list-disc ml-5 mt-1">
+                        <li>1 g = 1000 mg</li>
+                        <li>Muốn đổi <strong>mg</strong> sang <strong>g</strong>: Chia cho 1000</li>
+                        <li>Muốn đổi <strong>g</strong> sang <strong>mg</strong>: Nhân với 1000</li>
+                    </ul>
+                </div>
+                <button onclick="startGame()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg">
+                    Bắt đầu làm bài
+                </button>
+            </div>
+
+            <!-- Question Containers (Hidden by default) -->
+            <div id="quiz-container" class="hidden">
+                <!-- Question Content will be injected here -->
+                <div id="question-content" class="fade-in"></div>
+
+                <!-- Input Area -->
+                <div id="input-area" class="mt-6 border-t pt-6">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2">1. Lượng chất này có vượt mức khuyến cáo không?</label>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center space-x-2 cursor-pointer p-3 border rounded-lg hover:bg-gray-50 w-1/2">
+                                <input type="radio" name="answer_bool" value="yes" class="form-radio text-blue-600 h-5 w-5">
+                                <span>Có vượt mức</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer p-3 border rounded-lg hover:bg-gray-50 w-1/2">
+                                <input type="radio" name="answer_bool" value="no" class="form-radio text-blue-600 h-5 w-5">
+                                <span>Không vượt mức</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-bold mb-2">2. Tính tỉ lệ % lượng nạp vào so với giới hạn:</label>
+                        <div class="flex items-center">
+                            <input type="number" id="answer_num" placeholder="Nhập số (VD: 120)" class="flex-1 p-3 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <span class="bg-gray-100 p-3 border border-l-0 rounded-r-lg text-gray-600 font-bold">%</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Gợi ý: Lấy (Lượng thực tế / Giới hạn) x 100. Làm tròn đến số nguyên.</p>
+                    </div>
+
+                    <button id="btn-check" onclick="checkAnswer()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow-md transition">
+                        Kiểm tra đáp án
+                    </button>
+                </div>
+
+                <!-- Feedback & Explanation (Hidden initially) -->
+                <div id="feedback-area" class="hidden mt-6 bg-gray-50 rounded-xl p-5 border border-gray-200 fade-in">
+                    <div id="feedback-status" class="font-bold text-lg mb-2"></div>
+                    
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="text-blue-600 font-bold mb-2"><i class="fas fa-lightbulb mr-2"></i>Lời giải chi tiết:</h3>
+                        <div id="explanation-content" class="text-gray-700 space-y-2 leading-relaxed"></div>
+                    </div>
+
+                    <button id="btn-next" onclick="nextQuestion()" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-md transition flex justify-center items-center">
+                        Câu tiếp theo <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result Screen -->
+            <div id="result-screen" class="hidden text-center py-8 fade-in">
+                <div class="text-6xl mb-4 text-green-500"><i class="fas fa-check-circle"></i></div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Hoàn thành xuất sắc!</h2>
+                <p class="text-gray-600 mb-6">Bạn đã hoàn thành tất cả các bài tập luyện tập.</p>
+                <div class="grid grid-cols-2 gap-4 max-w-xs mx-auto mb-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-600" id="score-display">0/3</div>
+                        <div class="text-xs text-gray-500">Số câu đúng</div>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-600">Master</div>
+                        <div class="text-xs text-gray-500">Danh hiệu</div>
+                    </div>
+                </div>
+                <button onclick="location.reload()" class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-full transition">
+                    Làm lại từ đầu
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Data for questions
+        const questions = [
+            {
+                id: 1,
+                title: "Bài 1: Trà sữa & Đường (mg sang g)",
+                limitText: "Giới hạn đường khuyến cáo: <b>25 g</b>/ngày.",
+                itemText: "Một cốc trà sữa chứa: <b>34.000 mg</b> đường.",
+                question: "Nếu uống 1 cốc trà sữa này, lượng đường nạp vào có vượt mức không?",
+                correctBool: 'yes',
+                correctNum: 136, // (34000/1000) / 25 * 100
+                unit: 'g',
+                convertLogic: `
+                    <p><b>Bước 1: Đổi đơn vị về cùng loại (g)</b></p>
+                    <p>Vì giới hạn tính bằng gam (g), ta đổi lượng đường trong trà sữa từ mg sang g:</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded text-center">34.000 mg : 1000 = 34 g</p>
+                    
+                    <p class="mt-2"><b>Bước 2: So sánh</b></p>
+                    <p>Lượng nạp vào: 34 g</p>
+                    <p>Giới hạn: 25 g</p>
+                    <p>➜ <b>34 g > 25 g</b>. Vậy đã <span class="text-red-600 font-bold">VƯỢT MỨC</span>.</p>
+
+                    <p class="mt-2"><b>Bước 3: Tính phần trăm</b></p>
+                    <p>Tỉ lệ = (34 : 25) × 100 = <b>136%</b></p>
+                    <p class="text-sm text-gray-500 italic">(Tức là vượt quá giới hạn 36%)</p>
+                `
+            },
+            {
+                id: 2,
+                title: "Bài 2: Nước tăng lực & Caffeine (g sang mg)",
+                limitText: "Giới hạn Caffeine an toàn: <b>400 mg</b>/ngày.",
+                itemText: "Một lon nước tăng lực chứa: <b>0,16 g</b> caffeine. <br>Tài xế uống <b>3 lon</b>.",
+                question: "Tổng lượng caffeine nạp vào từ 3 lon có vượt mức an toàn không?",
+                correctBool: 'yes',
+                correctNum: 120, 
+                unit: 'mg',
+                convertLogic: `
+                    <p><b>Bước 1: Đổi đơn vị về cùng loại (mg)</b></p>
+                    <p>Đổi lượng caffeine trong 1 lon từ g sang mg:</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded text-center">0,16 g × 1000 = 160 mg</p>
+                    
+                    <p class="mt-2"><b>Bước 2: Tính tổng lượng nạp vào</b></p>
+                    <p>Uống 3 lon nên tổng là: 160 × 3 = <b>480 mg</b></p>
+
+                    <p class="mt-2"><b>Bước 3: So sánh</b></p>
+                    <p>Thực tế: 480 mg</p>
+                    <p>Giới hạn: 400 mg</p>
+                    <p>➜ <b>480 mg > 400 mg</b>. Vậy đã <span class="text-red-600 font-bold">VƯỢT MỨC</span>.</p>
+
+                    <p class="mt-2"><b>Bước 4: Tính phần trăm</b></p>
+                    <p>Tỉ lệ = (480 : 400) × 100 = <b>120%</b></p>
+                `
+            },
+            {
+                id: 3,
+                title: "Bài 3: Mì tôm & Muối (mg sang g)",
+                limitText: "Giới hạn Muối (Natri) khuyến cáo: <b>2.000 mg</b>/ngày.",
+                itemText: "Một gói mì tôm chứa khoảng: <b>1,8 g</b> Natri.",
+                question: "Ăn 1 gói mì tôm nạp vào bao nhiêu % lượng muối cho phép?",
+                correctBool: 'no',
+                correctNum: 90, 
+                unit: 'mg',
+                convertLogic: `
+                    <p><b>Bước 1: Đổi đơn vị về cùng loại (mg)</b></p>
+                    <p>Ta có thể đổi g sang mg để dễ so sánh:</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded text-center">1,8 g × 1000 = 1.800 mg</p>
+                    
+                    <p class="mt-2"><b>Bước 2: So sánh</b></p>
+                    <p>Thực tế: 1.800 mg</p>
+                    <p>Giới hạn: 2.000 mg</p>
+                    <p>➜ <b>1.800 mg < 2.000 mg</b>. Vậy <span class="text-green-600 font-bold">CHƯA VƯỢT MỨC</span> (nhưng cũng đã rất gần giới hạn).</p>
+
+                    <p class="mt-2"><b>Bước 3: Tính phần trăm</b></p>
+                    <p>Tỉ lệ = (1.800 : 2.000) × 100 = <b>90%</b></p>
+                `
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+
+        function startGame() {
+            document.getElementById('intro').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentStep];
+            
+            // Update Progress UI
+            document.getElementById('progress-text').innerText = `Câu ${currentStep + 1}/${questions.length}`;
+            const bars = document.querySelectorAll('.rounded-full'); // Rough selection, better to use ID in real app
+            
+            // Render Content
+            const contentDiv = document.getElementById('question-content');
+            contentDiv.innerHTML = `
+                <div class="flex items-center space-x-2 text-blue-600 font-bold uppercase text-sm mb-2">
+                    <span class="bg-blue-100 px-2 py-1 rounded">${q.title}</span>
+                </div>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mb-4">
+                    <p class="text-gray-700 mb-2"><i class="fas fa-info-circle mr-2"></i>${q.limitText}</p>
+                    <p class="text-gray-800 text-lg">${q.itemText}</p>
+                </div>
+                <p class="font-bold text-gray-800 text-lg">${q.question}</p>
+            `;
+
+            // Reset Inputs
+            const radios = document.getElementsByName('answer_bool');
+            radios.forEach(r => r.checked = false);
+            document.getElementById('answer_num').value = '';
+            
+            // Reset UI states
+            document.getElementById('input-area').classList.remove('hidden');
+            document.getElementById('feedback-area').classList.add('hidden');
+            
+            // Scroll to top
+            document.getElementById('app').scrollIntoView({behavior: 'smooth'});
+        }
+
+        function checkAnswer() {
+            const q = questions[currentStep];
+            
+            // Get inputs
+            const radios = document.getElementsByName('answer_bool');
+            let userBool = null;
+            for (let r of radios) {
+                if (r.checked) userBool = r.value;
+            }
+            const userNum = parseFloat(document.getElementById('answer_num').value);
+
+            // Validate
+            if (!userBool || isNaN(userNum)) {
+                alert("Bạn vui lòng chọn Có/Không và nhập số phần trăm nhé!");
+                return;
+            }
+
+            // Check correctness
+            const isBoolCorrect = userBool === q.correctBool;
+            // Allow small margin of error for numbers (+- 1)
+            const isNumCorrect = Math.abs(userNum - q.correctNum) <= 1;
+            
+            const isTotalCorrect = isBoolCorrect && isNumCorrect;
+
+            if (isTotalCorrect) score++;
+
+            // Show feedback
+            const feedbackStatus = document.getElementById('feedback-status');
+            if (isTotalCorrect) {
+                feedbackStatus.innerHTML = `<span class="text-green-600"><i class="fas fa-check-circle mr-2"></i>Chính xác!</span>`;
+            } else {
+                feedbackStatus.innerHTML = `<span class="text-red-500"><i class="fas fa-times-circle mr-2"></i>Chưa đúng rồi. Hãy xem lời giải nhé!</span>`;
+            }
+
+            document.getElementById('explanation-content').innerHTML = q.convertLogic;
+            
+            document.getElementById('input-area').classList.add('hidden');
+            document.getElementById('feedback-area').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('score-display').innerText = `${score}/${questions.length}`;
+            document.querySelector('.h-2.w-1\\/3:nth-child(3)').classList.add('bg-yellow-400'); // Fill last bar
+        }
+
+    </script>
+</body>
+</html>

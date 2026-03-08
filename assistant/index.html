@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduAI Assistant - Đang bảo trì | EduSpace by ND Labs</title>
+    <link rel="icon" href="/logo.png" type="image/x-icon">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f0fe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 52px 44px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 24px 64px rgba(0, 112, 243, 0.10), 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .icon-wrap {
+            width: 88px;
+            height: 88px;
+            background: linear-gradient(135deg, #fff7ed, #ffedd5);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 44px;
+            box-shadow: 0 8px 24px rgba(234, 88, 12, 0.15);
+        }
+
+        .badge {
+            display: inline-block;
+            background: #fff7ed;
+            color: #c2410c;
+            border: 1.5px solid #fed7aa;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 14px;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.75;
+            margin: 0 0 36px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #0070f3;
+            color: white;
+            border-radius: 9999px;
+            padding: 15px 36px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 6px 20px rgba(0, 112, 243, 0.3);
+        }
+
+        .btn:hover {
+            background: #0060d3;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0, 112, 243, 0.35);
+        }
+
+        .footer-note {
+            margin-top: 28px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script>
+</head>
+
+<body>
+    <div class="bg-blob"
+        style="width:500px;height:500px;background:radial-gradient(circle,rgba(0,112,243,0.08),transparent);top:-150px;right:-100px;">
+    </div>
+    <div class="bg-blob"
+        style="width:400px;height:400px;background:radial-gradient(circle,rgba(99,102,241,0.07),transparent);bottom:-100px;left:-100px;">
+    </div>
+
+    <div class="card">
+        <div class="icon-wrap">🔧</div>
+        <div class="badge">Đang bảo trì</div>
+        <h1>EduAI Assistant</h1>
+        <p>
+            Tính năng EduAI Assistant đang được <strong>nâng cấp và cải thiện</strong> để phục vụ bạn tốt hơn.
+            Chúng tôi dự kiến sẽ hoàn tất sớm. Trong thời gian này, bạn vẫn có thể sử dụng AI hỗ trợ trực tiếp trong các
+            trang bài kiểm tra và luyện tập.
+        </p>
+        <a href="/eduspace" class="btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Quay về EduSpace
+        </a>
+        <p class="footer-note">EduSpace by ND Labs © 2026</p>
+    </div>
+</body>
+
+</html>

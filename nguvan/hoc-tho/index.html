@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học thơ - EduSpace by ND Labs</title>
+    <link rel="icon" type="image/png" href="/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary: #3b82f6;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Hiệu ứng rung khi sai */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
+        }
+
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+
+        /* Hiệu ứng zoom nhẹ khi đúng */
+        @keyframes success-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); border-color: var(--success); }
+            100% { transform: scale(1); }
+        }
+
+        .success-animate { animation: success-pop 0.4s ease-out; }
+
+        .progress-bar { transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        .input-focus-ring:focus {
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            border-color: var(--primary);
+        }
+
+        .btn-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+<body class="text-slate-900 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md border-b sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <a href="/eduspace" class="text-slate-400 hover:text-blue-600 transition-colors">
+                    <i class="fa-solid fa-house text-xl"></i>
+                </a>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center justify-center overflow-hidden">
+                        <img src="/logo.png" alt="Logo" class="h-8 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="hidden bg-blue-600 p-1.5 rounded-lg shadow-lg shadow-blue-200 items-center justify-center">
+                            <img src="https://ui-avatars.com/api/?name=ES&background=3b82f6&color=fff" alt="Fallback Logo" class="h-6 w-6 rounded">
+                        </div>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">EduSpace</span>
+                </div>
+            </div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] hidden sm:block">
+                Học thơ • EduSpace by ND Labs
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-6 py-12">
+        <!-- Input Section -->
+        <div id="setup-section" class="space-y-8">
+            <div class="text-center space-y-3">
+                <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">Ghi nhớ thơ thật dễ dàng</h1>
+                <p class="text-slate-500 text-lg">Học nhanh hơn, nhớ lâu hơn với phương pháp phản xạ tức thì.</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-3xl shadow-xl border border-slate-200/60">
+                <textarea id="poem-textarea" class="w-full poem-input p-6 bg-slate-50/50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none text-lg leading-relaxed transition-all" placeholder="Dán bài thơ của bạn vào đây..."></textarea>
+                
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <button onclick="startPractice('missing')" class="btn-hover flex flex-col items-center p-6 bg-white border border-slate-100 rounded-2xl hover:border-blue-500 group">
+                        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+                            <i class="fa-solid fa- crossword text-xl text-blue-600 group-hover:text-white"></i>
+                        </div>
+                        <span class="font-bold text-slate-700">Điền từ ẩn</span>
+                        <span class="text-xs text-slate-400 text-center mt-2">Ẩn ngẫu nhiên từ trong câu</span>
+                    </button>
+                    <button onclick="startPractice('next-line')" class="btn-hover flex flex-col items-center p-6 bg-white border border-slate-100 rounded-2xl hover:border-blue-500 group">
+                        <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-indigo-600 transition-colors">
+                            <i class="fa-solid fa-list-ol text-xl text-indigo-600 group-hover:text-white"></i>
+                        </div>
+                        <span class="font-bold text-slate-700">Viết tiếp câu</span>
+                        <span class="text-xs text-slate-400 text-center mt-2">Gợi ý 1 dòng, viết dòng tiếp</span>
+                    </button>
+                    <button onclick="startPractice('full')" class="btn-hover flex flex-col items-center p-6 bg-white border border-slate-100 rounded-2xl hover:border-blue-500 group">
+                        <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition-colors">
+                            <i class="fa-solid fa-pen-nib text-xl text-emerald-600 group-hover:text-white"></i>
+                        </div>
+                        <span class="font-bold text-slate-700">Viết nguyên bài</span>
+                        <span class="text-xs text-slate-400 text-center mt-2">Chép phạt kỹ thuật số</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practice-section" class="hidden space-y-6">
+            <div class="flex items-center justify-between px-2">
+                <button onclick="backToSetup()" class="text-slate-400 hover:text-slate-800 flex items-center gap-2 font-semibold transition-colors">
+                    <i class="fa-solid fa-chevron-left text-sm"></i> Thoát
+                </button>
+                <div class="flex flex-col items-end gap-2">
+                    <div class="flex items-center gap-3">
+                        <span id="score-display" class="font-bold text-blue-600 text-sm tracking-wider">0 / 0</span>
+                        <div class="w-40 h-2 bg-slate-200 rounded-full overflow-hidden shadow-inner">
+                            <div id="progress-inner" class="progress-bar h-full bg-gradient-to-r from-blue-500 to-indigo-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="game-container-wrapper" class="glass-card p-10 rounded-[2.5rem] shadow-2xl border border-white min-h-[350px] flex flex-col justify-center transition-all duration-300">
+                <div id="game-container"></div>
+            </div>
+
+            <div id="feedback-area" class="h-16 flex items-center justify-center text-center font-bold text-lg"></div>
+        </div>
+
+        <!-- Result Section -->
+        <div id="result-section" class="hidden text-center space-y-8 py-16">
+            <div class="relative inline-block">
+                <div class="absolute inset-0 bg-green-400 blur-2xl opacity-20 animate-pulse"></div>
+                <div class="relative bg-white w-24 h-24 rounded-3xl shadow-xl flex items-center justify-center text-green-500 text-4xl border border-green-50">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <h2 class="text-5xl font-black text-slate-800 italic">Tuyệt vời!</h2>
+                <p class="text-slate-500 text-xl" id="final-stats"></p>
+            </div>
+            <div class="flex justify-center gap-4">
+                <button onclick="backToSetup()" class="btn-hover px-10 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl shadow-blue-200">
+                    Thử bài thơ khác
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentMode = '';
+        let originalLines = [];
+        let currentIndex = 0;
+        let score = 0;
+
+        function normalize(text) {
+            return text.trim().toLowerCase().replace(/[.,!?;:"-]/g, "").replace(/\s+/g, " ");
+        }
+
+        function backToSetup() {
+            document.getElementById('setup-section').classList.remove('hidden');
+            document.getElementById('practice-section').classList.add('hidden');
+            document.getElementById('result-section').classList.add('hidden');
+        }
+
+        function startPractice(mode) {
+            const text = document.getElementById('poem-textarea').value.trim();
+            if (!text) {
+                showMessage("Nhập thơ đã bạn ơi!", "error");
+                return;
+            }
+
+            currentMode = mode;
+            originalLines = text.split('\n').filter(line => line.trim() !== '');
+            currentIndex = 0;
+            score = 0;
+
+            document.getElementById('setup-section').classList.add('hidden');
+            document.getElementById('practice-section').classList.remove('hidden');
+            updateProgress();
+            renderStep();
+        }
+
+        function renderStep() {
+            const container = document.getElementById('game-container');
+            const wrapper = document.getElementById('game-container-wrapper');
+            const feedback = document.getElementById('feedback-area');
+            
+            feedback.innerHTML = '';
+            container.innerHTML = '';
+            wrapper.classList.remove('shake', 'success-animate');
+
+            if (currentIndex >= originalLines.length) {
+                showFinalResults();
+                return;
+            }
+
+            const currentLine = originalLines[currentIndex];
+
+            if (currentMode === 'missing') {
+                renderMissingMode(currentLine);
+            } else if (currentMode === 'next-line') {
+                renderNextLineMode();
+            } else if (currentMode === 'full') {
+                renderFullMode(currentLine);
+            }
+        }
+
+        function renderMissingMode(line) {
+            const container = document.getElementById('game-container');
+            const words = line.split(/\s+/);
+            const hideIdx = Math.floor(Math.random() * words.length);
+            
+            const div = document.createElement('div');
+            div.className = "text-3xl leading-relaxed text-center font-medium text-slate-700";
+            
+            words.forEach((word, idx) => {
+                if (idx === hideIdx) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = "border-b-4 border-blue-200 outline-none px-2 w-40 text-center bg-transparent focus:border-blue-500 transition-all mx-2 input-focus-ring rounded-lg";
+                    input.placeholder = "...";
+                    input.onkeypress = (e) => {
+                        if (e.key === 'Enter') handleValidation(input.value, word);
+                    };
+                    div.appendChild(input);
+                    setTimeout(() => input.focus(), 100);
+                } else {
+                    const span = document.createElement('span');
+                    span.innerText = word + " ";
+                    div.appendChild(span);
+                }
+            });
+            container.appendChild(div);
+        }
+
+        function renderNextLineMode() {
+            const container = document.getElementById('game-container');
+            const prevLine = currentIndex > 0 ? originalLines[currentIndex - 1] : "Bắt đầu:";
+            const targetLine = originalLines[currentIndex];
+
+            container.innerHTML = `
+                <div class="text-center space-y-10">
+                    <div class="text-slate-300 italic text-2xl font-light">"${prevLine}"</div>
+                    <div class="space-y-4">
+                        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Câu tiếp theo là gì?</p>
+                        <input type="text" id="line-input" class="w-full text-center p-4 text-3xl border-b-4 border-blue-200 outline-none bg-transparent input-focus-ring rounded-2xl transition-all" autocomplete="off" placeholder="Nhập tại đây...">
+                    </div>
+                </div>
+            `;
+            const input = document.getElementById('line-input');
+            input.focus();
+            input.onkeypress = (e) => {
+                if (e.key === 'Enter') handleValidation(input.value, targetLine);
+            };
+        }
+
+        function renderFullMode(line) {
+            const container = document.getElementById('game-container');
+            container.innerHTML = `
+                <div class="text-center space-y-10">
+                    <div class="text-slate-400 text-xs font-bold uppercase tracking-widest">Dòng số ${currentIndex + 1}</div>
+                    <div class="space-y-4">
+                        <p class="text-3xl font-bold text-slate-700">Viết lại chính xác dòng này</p>
+                        <input type="text" id="full-input" class="w-full text-center p-4 text-3xl border-b-4 border-blue-200 outline-none bg-transparent input-focus-ring rounded-2xl transition-all" autocomplete="off" placeholder="...">
+                    </div>
+                </div>
+            `;
+            const input = document.getElementById('full-input');
+            input.focus();
+            input.onkeypress = (e) => {
+                if (e.key === 'Enter') handleValidation(input.value, line);
+            };
+        }
+
+        function handleValidation(userVal, correctVal) {
+            const wrapper = document.getElementById('game-container-wrapper');
+            const feedback = document.getElementById('feedback-area');
+            const isCorrect = normalize(userVal) === normalize(correctVal);
+
+            wrapper.classList.remove('shake', 'success-animate');
+
+            if (isCorrect) {
+                score++;
+                currentIndex++;
+                wrapper.classList.add('success-animate');
+                feedback.innerHTML = '<span class="text-green-500 animate-bounce">Chính xác! ✨</span>';
+                
+                // Hiệu ứng pháo giấy nhỏ khi đúng
+                confetti({
+                    particleCount: 40,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#3b82f6', '#10b981']
+                });
+
+                updateProgress();
+                setTimeout(renderStep, 800);
+            } else {
+                // Rung và báo lỗi
+                wrapper.classList.add('shake');
+                feedback.innerHTML = `<span class="text-red-500">Sai rồi! Đáp án đúng: <span class="underline">"${correctVal}"</span></span>`;
+                
+                const inputs = document.querySelectorAll('input');
+                inputs.forEach(i => {
+                    i.classList.remove('border-blue-200', 'border-blue-500');
+                    i.classList.add('border-red-500');
+                    i.onkeypress = (e) => {
+                        if (e.key === 'Enter') {
+                            currentIndex++;
+                            updateProgress();
+                            renderStep();
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateProgress() {
+            const total = originalLines.length;
+            const percent = (currentIndex / total) * 100;
+            document.getElementById('progress-inner').style.width = percent + '%';
+            document.getElementById('score-display').innerText = `${currentIndex} / ${total}`;
+        }
+
+        function showFinalResults() {
+            document.getElementById('practice-section').classList.add('hidden');
+            document.getElementById('result-section').classList.remove('hidden');
+            document.getElementById('final-stats').innerText = `Bạn đã hoàn thành bài thơ với ${score}/${originalLines.length} câu đúng!`;
+            
+            // Pháo giấy rực rỡ khi hoàn thành
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#3b82f6', '#10b981']
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#3b82f6', '#10b981']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        function showMessage(msg, type) {
+            const div = document.createElement('div');
+            div.className = `fixed bottom-8 left-1/2 -translate-x-1/2 px-8 py-4 rounded-2xl text-white font-bold shadow-2xl z-[100] transition-all duration-500 flex items-center gap-3 ${type === 'error' ? 'bg-red-500' : 'bg-green-500'}`;
+            div.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-check-circle'}"></i> ${msg}`;
+            document.body.appendChild(div);
+            setTimeout(() => {
+                div.style.opacity = '0';
+                div.style.transform = 'translate(-50%, 20px)';
+                setTimeout(() => div.remove(), 500);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

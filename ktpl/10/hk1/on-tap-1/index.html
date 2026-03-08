@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KTPL 10 - Ôn tập học kì 1 - EduSpace by ND Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f7ff;
+            color: #1e3a8a;
+            line-height: 1.4;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191, 219, 254, 0.5);
+            border-radius: 20px;
+        }
+
+        .option-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 52px;
+        }
+
+        .option-card:hover {
+            transform: translateY(-1px);
+            background-color: #f8fbff;
+            border-color: #93c5fd;
+        }
+
+        .option-card.selected {
+            background-color: #eff6ff;
+            border-color: #2563eb;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            transition: all 0.3s;
+        }
+
+        .btn-home {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+
+        .explanation-box {
+            border-left: 4px solid #3b82f6;
+            background-color: #f8fafc;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+<body class="min-h-screen p-3 md:p-6">
+
+    <div class="max-w-2xl mx-auto">
+        <header class="flex items-center justify-between mb-4 glass-card p-3 shadow-sm">
+            <div class="flex items-center gap-2">
+                <a href="/index.html" class="p-1.5 btn-home rounded-lg shadow-sm" title="Quay lại Trang chủ">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                </a>
+                <img src="https://cdn-icons-png.flaticon.com/512/3429/3429156.png" alt="Logo" class="w-8 h-8 object-contain">
+                <div>
+                    <h1 class="font-bold text-base text-blue-900 leading-tight">KTPL 10</h1>
+                    <p class="text-[10px] text-blue-500 font-medium tracking-wide uppercase">Chân trời sáng tạo - HK1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span id="progress-text" class="text-xs font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded-full border border-blue-200">Câu 1/15</span>
+            </div>
+        </header>
+
+        <main id="game-container">
+            <div id="question-card" class="glass-card p-5 md:p-6 shadow-lg fade-in">
+                <div id="question-content"></div>
+                <div id="options-container" class="space-y-2.5 mt-5"></div>
+
+                <div id="action-area" class="mt-6 flex justify-end">
+                    <button id="submit-btn" class="btn-primary text-white font-bold py-2.5 px-8 rounded-xl shadow-md disabled:opacity-40 text-sm">
+                        Kiểm tra đáp án
+                    </button>
+                </div>
+
+                <div id="explanation-container" class="mt-6 hidden">
+                    <div class="explanation-box p-4 rounded-r-xl border border-blue-100 shadow-sm">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span id="result-badge" class="px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider"></span>
+                        </div>
+                        <h3 class="font-bold text-blue-900 mb-2 flex items-center gap-2 text-base">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Giải thích
+                        </h3>
+                        <div id="explanation-text" class="text-slate-700 leading-relaxed text-sm bg-white p-4 rounded-lg border border-slate-100"></div>
+                        <div class="mt-6 flex justify-end">
+                            <button id="next-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-8 rounded-xl shadow-md transition-all flex items-center gap-2 text-sm">
+                                <span>Tiếp theo</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="mt-6 text-center text-blue-400 text-[10px] font-medium uppercase tracking-widest">
+            &copy; EduSpace by ND Labs &bull; KTPL 10
+        </footer>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                question: "Trong nền kinh tế xã hội, hoạt động đóng vai trò cơ bản nhất, quyết định các hoạt động khác của đời sống xã hội là hoạt động",
+                options: ["Sản xuất", "Phân phối", "Tiêu dùng", "Trao đổi"],
+                correct: 0,
+                explanation: "Hoạt động sản xuất tạo ra sản phẩm, là gốc rễ của mọi hoạt động kinh tế khác."
+            },
+            {
+                id: 2,
+                question: "Trong nền kinh tế, chủ thể nào dưới đây tiến hành hoạt động mua hàng hóa, dịch vụ để thỏa mãn nhu cầu tiêu dùng?",
+                options: ["Chủ thể tiêu dùng", "Chủ thể trung gian", "Chủ thể nhà nước", "Chủ thể sản xuất"],
+                correct: 0,
+                explanation: "Chủ thể tiêu dùng là người sử dụng hàng hóa, dịch vụ để thỏa mãn các nhu cầu của mình."
+            },
+            {
+                id: 3,
+                question: "Trong nền kinh tế, một trong những chức năng cơ bản của thị trường là chức năng",
+                options: ["Điều tiết tiêu dùng", "Nộp thuế sử dụng đất", "Phương tiện lưu thông", "Trả nợ tiền vật liệu"],
+                correct: 0,
+                explanation: "Thị trường có các chức năng: thừa nhận, thông tin, và điều tiết/kích thích sản xuất - tiêu dùng."
+            },
+            {
+                id: 4,
+                question: "Phát biểu nào sau đây không đúng khi nói về ưu điểm của cơ chế thị trường?",
+                options: ["Kích thích tính năng động sáng tạo", "Phân bổ lại các nguồn lực hợp lý", "Thúc đẩy các hoạt động đầu cơ, độc quyền", "Đáp ứng tốt hơn các nhu cầu"],
+                correct: 2,
+                explanation: "Đầu cơ, tích trữ và độc quyền là những nhược điểm (khuyết tật) của cơ chế thị trường."
+            },
+            {
+                id: 5,
+                question: "Một trong những chức năng của giá cả thị trường là góp phần cung cấp",
+                options: ["Tài chính", "Nhân lực", "Thông tin", "Địa bàn"],
+                correct: 2,
+                explanation: "Giá cả cung cấp thông tin để các chủ thể kinh tế điều chỉnh hành vi."
+            },
+            {
+                id: 6,
+                question: "Việc làm nào dưới đây không thể hiện trách nhiệm của công dân trong việc thực hiện pháp luật ngân sách?",
+                options: ["Giám sát việc thu chi địa phương", "Sử dụng hồ sơ giả để hưởng chế độ", "Kê khai và nộp đầy đủ thuế", "Tố cáo hành vi gian lận thuế"],
+                correct: 1,
+                explanation: "Sử dụng hồ sơ giả là hành vi vi phạm pháp luật ngân sách nhà nước."
+            },
+            {
+                id: 7,
+                question: "Loại thuế nào dưới đây có đặc điểm đó là người nộp thuế đồng thời là người chịu thuế?",
+                options: ["Thuế trực thu", "Thuế gián thu", "Thuế xuất khẩu", "Thuế nhập khẩu"],
+                correct: 0,
+                explanation: "Thuế trực thu là thuế đánh trực tiếp vào thu nhập hoặc tài sản của chính người nộp."
+            },
+            {
+                id: 8,
+                question: "Tổ chức có tư cách pháp nhân do ít nhất 05 thành viên chính thức tự nguyện thành lập là mô hình nào?",
+                options: ["Mô hình kinh tế hợp tác xã", "Mô hình kinh tế hộ gia đình", "Mô hình công ty cổ phần", "Mô hình doanh nghiệp tư nhân"],
+                correct: 0,
+                explanation: "Đặc điểm ít nhất 05 thành viên và tương trợ là của Hợp tác xã."
+            },
+            {
+                id: 9,
+                question: "Tín dụng không có vai trò nào dưới đây?",
+                options: ["Thúc đẩy lưu thông hàng hoá", "Thúc đẩy kinh doanh, đầu tư", "Gia tăng mối quan hệ chủ nợ - con nợ", "Thúc đẩy quá trình tập trung vốn"],
+                correct: 2,
+                explanation: "Gia tăng quan hệ nợ nần không được coi là một vai trò kinh tế tích cực của tín dụng."
+            },
+            {
+                id: 10,
+                question: "Quan hệ cho vay ngân hàng trên nguyên tắc người vay phải có tài sản đảm bảo là loại tín dụng nào?",
+                options: ["Vay thấu chi", "Vay thế chấp", "Vay tín chấp", "Vay trả góp"],
+                correct: 1,
+                explanation: "Vay thế chấp là hình thức cho vay cần có tài sản đảm bảo."
+            },
+            {
+                id: 11,
+                question: "Sản xuất kinh doanh không có vai trò nào dưới đây?",
+                options: ["Tao ra sản phẩm", "Đáp ứng nhu cầu", "Tạo việc làm", "Thúc đẩy khủng hoảng"],
+                correct: 3,
+                explanation: "Sản xuất kinh doanh đóng góp cho sự phát triển, không phải thúc đẩy khủng hoảng."
+            },
+            {
+                id: 12,
+                question: "Người có thu nhập cao phải trích một khoản tiền nộp ngân sách theo loại thuế gì?",
+                options: ["Thuế giá trị gia tăng", "Thuế thu nhập cá nhân", "Thuế tiêu thụ đặc biệt", "Thuế nhập khẩu"],
+                correct: 1,
+                explanation: "Thuế thu nhập cá nhân điều tiết thu nhập của người có thu nhập cao."
+            },
+            {
+                id: 13,
+                question: "Loại thuế nhằm điều tiết việc sản xuất và tiêu dùng xã hội hàng hoá xa xỉ được gọi là:",
+                options: ["Thuế giá trị gia tăng", "Thuế thu nhập cá nhân", "Thuế nhập khẩu", "Thuế tiêu thụ đặc biệt"],
+                correct: 3,
+                explanation: "Thuế tiêu thụ đặc biệt áp dụng cho hàng hóa dịch vụ cần điều tiết tiêu dùng."
+            },
+            {
+                id: 14,
+                question: "Doanh nghiệp sản xuất ô tô gây khói bụi ô nhiễm môi trường phải đóng loại thuế gì?",
+                options: ["Thuế giá trị gia tăng", "Thuế bảo vệ môi trường", "Thuế nhập khẩu", "Thuế tiêu thụ đặc biệt"],
+                correct: 1,
+                explanation: "Thuế bảo vệ môi trường đánh vào các sản phẩm gây hại cho môi trường."
+            },
+            {
+                id: 15,
+                question: "Loại thuế nào sau đây không thuộc thuế trực thu?",
+                options: ["Thuế thu nhập doanh nghiệp", "Thuế sử dụng đất nông nghiệp", "Thuế sử dụng đất phi nông nghiệp", "Thuế xuất khẩu, nhập khẩu"],
+                correct: 3,
+                explanation: "Thuế xuất khẩu, nhập khẩu là thuế gián thu."
+            }
+        ];
+
+        let currentIndex = 0;
+        let selectedIdx = null;
+
+        function load() {
+            const q = questions[currentIndex];
+            selectedIdx = null;
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').classList.remove('hidden');
+            document.getElementById('explanation-container').classList.add('hidden');
+            document.getElementById('progress-text').innerText = `Câu ${currentIndex + 1}/${questions.length}`;
+            document.getElementById('question-content').innerHTML = `
+                <h2 class="text-base font-bold text-blue-900 mb-1.5 uppercase">Câu hỏi ${currentIndex + 1}</h2>
+                <p class="text-base text-slate-700 font-medium">${q.question}</p>
+            `;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('div');
+                btn.className = 'option-card p-3 rounded-lg bg-white shadow-sm border-2 border-slate-100';
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3 flex-1">
+                        <span class="w-7 h-7 shrink-0 flex items-center justify-center rounded-full bg-blue-50 text-blue-600 font-bold text-xs border border-blue-100">${String.fromCharCode(65 + i)}</span>
+                        <span class="font-medium text-slate-700 text-sm flex-1">${opt}</span>
+                    </div>
+                    <div class="icon-placeholder w-5 h-5 ml-2 shrink-0"></div>
+                `;
+                btn.onclick = () => {
+                    if (!document.getElementById('explanation-container').classList.contains('hidden')) return;
+                    selectedIdx = i;
+                    document.getElementById('submit-btn').disabled = false;
+                    document.querySelectorAll('.option-card').forEach(o => o.classList.remove('selected', 'border-blue-500'));
+                    btn.classList.add('selected', 'border-blue-500');
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        document.getElementById('submit-btn').onclick = () => {
+            const q = questions[currentIndex];
+            const items = document.querySelectorAll('.option-card');
+            const win = selectedIdx === q.correct;
+            const badge = document.getElementById('result-badge');
+            
+            badge.innerText = win ? "Chính xác" : "Cần xem lại";
+            badge.className = win ? "px-3 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-700" : "px-3 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-700";
+
+            items.forEach((item, i) => {
+                const icon = item.querySelector('.icon-placeholder');
+                if (i === q.correct) {
+                    item.classList.add('bg-emerald-50', 'border-emerald-500');
+                    icon.innerHTML = `<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M5 13l4 4L19 7"></path></svg>`;
+                } else if (i === selectedIdx) {
+                    item.classList.add('bg-rose-50', 'border-rose-500');
+                    icon.innerHTML = `<svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"></path></svg>`;
+                }
+                item.style.pointerEvents = 'none';
+            });
+
+            document.getElementById('explanation-text').innerHTML = q.explanation;
+            document.getElementById('explanation-container').classList.remove('hidden');
+            document.getElementById('submit-btn').classList.add('hidden');
+        };
+
+        document.getElementById('next-btn').onclick = () => {
+            currentIndex++;
+            if (currentIndex < questions.length) load();
+            else {
+                document.getElementById('game-container').innerHTML = `
+                    <div class="glass-card p-10 text-center fade-in border-2 border-blue-100">
+                        <div class="text-5xl mb-4">🎉</div>
+                        <h2 class="text-2xl font-bold text-blue-900 mb-3">Hoàn thành bài tập!</h2>
+                        <p class="text-sm text-slate-600 mb-6">Bạn đã xuất sắc vượt qua các câu hỏi ôn tập học kì 1 môn KTPL 10.</p>
+                        <div class="flex flex-col gap-3 justify-center items-center">
+                            <button onclick="location.reload()" class="btn-primary text-white font-bold py-3 px-10 rounded-xl shadow-lg w-full max-w-[200px] text-sm transform transition hover:scale-105">Luyện tập lại</button>
+                            <a href="/index.html" class="bg-white border-2 border-slate-200 text-slate-700 font-bold py-3 px-10 rounded-xl shadow-sm w-full max-w-[200px] text-sm transform transition hover:scale-105 hover:bg-slate-50 flex items-center justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                                Trang chủ
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+        };
+
+        window.onload = load;
+    </script>
+</body>
+</html>
