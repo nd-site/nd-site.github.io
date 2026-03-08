@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học tập tương tác - EduSpace by ND Labs</title>
+    <link rel="icon" href="/logo.png" type="image/x-icon">
+    <style>
+        :root {
+            --primary-blue: #3a86ff;
+            --soft-blue: #eef5ff;
+            --success-green: #38b000;
+            --error-red: #d00000;
+            --text-main: #2b2d42;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .app-container {
+            background: white;
+            max-width: 700px;
+            width: 100%;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(58, 134, 255, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo { max-width: 100px; margin-bottom: 10px; }
+
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .question-section h2 {
+            color: var(--primary-blue);
+            font-size: 1.4rem;
+            margin-top: 0;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="number"] {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid var(--soft-blue);
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="number"]:focus { border-color: var(--primary-blue); }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-submit { background: var(--primary-blue); color: white; }
+        .btn-next { background: var(--success-green); color: white; display: none; margin-top: 15px; }
+
+        .feedback-area {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 16px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .feedback-correct { background: #d8f3dc; border: 1px solid var(--success-green); }
+        .feedback-wrong { background: #ffd6d6; border: 1px solid var(--error-red); }
+
+        .knowledge-box {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            border-left: 4px solid var(--primary-blue);
+            padding-left: 15px;
+            color: #555;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <img src="/logo.png" alt="EduSpace Logo" class="logo">
+        <div style="font-weight: bold; color: #888;">EduSpace by ND Labs</div>
+    </div>
+
+    <div class="progress-bar"><div id="progress-fill"></div></div>
+
+    <div id="quiz-content">
+        </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            title: "Bài 1: Kiểm soát Sodium (Na+)",
+            content: "Một gói mì ăn liền chứa 1,8g Na+. Giới hạn khuyến cáo là 2300mg/ngày. Nếu ăn 2 gói mì, lượng Na+ vượt quá giới hạn bao nhiêu %? (Làm tròn đến chữ số thập phân thứ nhất)",
+            answer: 56.5,
+            unit: "%",
+            explanation: "2 gói mì chứa: 1,8g x 2 = 3,6g = 3600mg. Lượng vượt quá: 3600 - 2300 = 1300mg. Phần trăm vượt: (1300 / 2300) x 100 ≈ 56,5%.",
+            knowledge: "<b>Cơ bản:</b> 1g = 1000mg. <br><b>Nâng cao:</b> Ion Na+ giữ nước trong máu, nạp quá nhiều gây áp lực lên thành mạch dẫn đến cao huyết áp."
+        },
+        {
+            title: "Bài 2: Nồng độ dung dịch đường",
+            content: "Một lon nước ngọt 330ml có nồng độ đường là 10% (khối lượng/thể tích). Để không quá giới hạn 50g đường/ngày, bạn chỉ được uống tối đa bao nhiêu ml loại nước này? (Làm tròn số nguyên)",
+            answer: 500,
+            unit: "ml",
+            explanation: "Nồng độ 10% nghĩa là 100ml có 10g đường. Để có 50g đường, thể tích cần là: (50 / 10) x 100 = 500ml.",
+            knowledge: "<b>Cơ bản:</b> C% (w/v) = (m chất tan / V dung dịch) x 100. <br><b>Thực tế:</b> Một lon nước ngọt thường đã chiếm 2/3 lượng đường cho phép cả ngày."
+        }
+    ];
+
+    let currentStep = 0;
+
+    function renderQuestion() {
+        const q = questions[currentStep];
+        const progress = ((currentStep) / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = progress + "%";
+
+        const html = `
+            <div class="question-section">
+                <h2>${q.title}</h2>
+                <p class="problem-text">${q.content}</p>
+                <div class="input-group">
+                    <input type="number" id="user-input" placeholder="Nhập kết quả...">
+                    <span>${q.unit}</span>
+                </div>
+                <button class="btn-submit" onclick="checkAnswer()">Nộp bài</button>
+                
+                <div id="feedback" class="feedback-area">
+                    <strong id="status-text"></strong>
+                    <p id="explanation-text"></p>
+                    <div class="knowledge-box" id="knowledge-text"></div>
+                    <button class="btn-next" id="next-btn" onclick="nextQuestion()">Câu tiếp theo →</button>
+                </div>
+            </div>
+        `;
+        document.getElementById('quiz-content').innerHTML = html;
+    }
+
+    function checkAnswer() {
+        const userVal = parseFloat(document.getElementById('user-input').value);
+        const q = questions[currentStep];
+        const feedback = document.getElementById('feedback');
+        const status = document.getElementById('status-text');
+        
+        feedback.style.display = "block";
+        
+        if (Math.abs(userVal - q.answer) < 0.2) {
+            status.innerHTML = "✅ Chính xác!";
+            feedback.className = "feedback-area feedback-correct";
+        } else {
+            status.innerHTML = "❌ Chưa đúng!";
+            feedback.className = "feedback-area feedback-wrong";
+        }
+
+        document.getElementById('explanation-text').innerHTML = "<b>Giải thích:</b> " + q.explanation;
+        document.getElementById('knowledge-text').innerHTML = q.knowledge;
+        document.getElementById('next-btn').style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentStep++;
+        if (currentStep < questions.length) {
+            renderQuestion();
+        } else {
+            document.getElementById('progress-fill').style.width = "100%";
+            document.getElementById('quiz-content').innerHTML = `
+                <div style="text-align:center">
+                    <h2>🎉 Hoàn thành bài học!</h2>
+                    <p>Bạn đã nắm vững kiến thức về nồng độ và ứng dụng thực tế.</p>
+                    <button class="btn-submit" onclick="location.reload()">Luyện tập lại</button>
+                </div>`;
+        }
+    }
+
+    // Khởi tạo câu đầu tiên
+    renderQuestion();
+</script>
+
+</body>
+</html>

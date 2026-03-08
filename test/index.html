@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSpace by ND Labs - Danh Sách Bài Tập</title>
+    <link rel="icon" type="image/png" href="/logo.png">
+    <meta property="og:title" content="EduSpace by ND Labs">
+    <meta property="og:description" content="Nền tảng học tập & ôn luyện kiến thức toàn diện cho học sinh.">
+    <meta property="og:image" content="/banner-eduspace.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/nd-navbar.js" defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+        :root {
+            --primary: #0070f3;
+            --lesson: #10b981;
+            --hot: #ff0000;
+            --bg-main: #f8fafc;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: #1e293b;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(0, 112, 243, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-content {
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .pill-shape {
+            border-radius: 9999px;
+        }
+
+        .round-card {
+            border-radius: 28px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .quiz-card:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            border-color: rgba(0, 112, 243, 0.2);
+        }
+
+        .btn-action {
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            overflow: hidden;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        .btn-action:active {
+            transform: scale(0.96);
+        }
+
+        /* DROP_DOWN CUSTOM DESIGN */
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-trigger {
+            display: inline-flex;
+            align-items: center;
+            background: white;
+            padding: 10px 24px;
+            border-radius: 9999px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            min-width: 140px;
+            justify-content: space-between;
+        }
+
+        .dropdown-trigger:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 112, 243, 0.08);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 220px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            padding: 8px;
+            overflow: hidden;
+        }
+
+        .dropdown-container.active .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dropdown-item:hover {
+            background: #f1f5f9;
+            color: var(--primary);
+        }
+
+        .dropdown-item.selected {
+            background: #eff6ff;
+            color: var(--primary);
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 24px 16px 56px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 9999px;
+            font-weight: 600;
+            color: #334155;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(0, 112, 243, 0.08);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .type-badge {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        /* HOT CARD STYLES */
+        .hot-card {
+            border: 2px solid rgba(255, 0, 0, 0.4) !important;
+            animation: pulse-red-border 2.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+
+        @keyframes pulse-red-border {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.3);
+                border-color: rgba(255, 0, 0, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.15);
+                border-color: rgba(255, 0, 0, 0.8);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+                border-color: rgba(255, 0, 0, 0.4);
+            }
+        }
+
+        .hot-badge {
+            background: #ff0000;
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.4);
+        }
+
+        /* COMING SOON CARD STYLES - Gradient & Shine Effect */
+        .coming-soon-card {
+            border: 2px solid transparent !important;
+            background-image: linear-gradient(white, white), linear-gradient(135deg, #0070f3, #10b981) !important;
+            background-origin: border-box !important;
+            background-clip: padding-box, border-box !important;
+            overflow: hidden;
+        }
+
+        .coming-soon-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0) 30%,
+                    rgba(255, 255, 255, 0.6) 50%,
+                    rgba(255, 255, 255, 0) 70%,
+                    transparent 100%);
+            transform: skewX(-25deg);
+            animation: shine 4s infinite;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -150%;
+            }
+
+            20% {
+                left: 150%;
+            }
+
+            100% {
+                left: 150%;
+            }
+        }
+
+        .coming-soon-badge {
+            background: linear-gradient(135deg, #0070f3, #10b981);
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 112, 243, 0.3);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen py-10 px-6">
+    <div class="max-w-6xl mx-auto animate-content">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+            <div>
+                <a href="/index.html" class="flex items-center gap-3 mb-6 group w-fit">
+                    <div
+                        class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 transition-transform group-hover:scale-105">
+                        <img src="/logo.png" alt="Logo" class="w-8 h-8 object-contain">
+                    </div>
+                    <span class="text-slate-900 font-extrabold tracking-tight text-2xl">
+                        EduSpace
+                        <span class="text-blue-600 font-bold text-lg ml-1">by ND Labs</span>
+                        <span class="text-blue-600">.</span>
+                    </span>
+                </a>
+                <h1 class="text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                    Nâng tầm kiến thức <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-500">mỗi ngày
+                        của bạn</span>
+                </h1>
+                <div class="mt-6 flex gap-4 flex-wrap">
+                    <a href="https://dnaai-site.vercel.app" target="_blank"
+                        class="inline-flex items-center gap-2 px-6 py-2 bg-indigo-50 text-indigo-600 rounded-full font-bold text-sm border border-indigo-100 hover:bg-indigo-100 transition-colors">
+                        🚀 HeartSpace by DNA AI
+                    </a>
+                    <a href="/eduspace/python"
+                        class="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-600 rounded-full font-bold text-sm border border-blue-100 hover:bg-blue-100 transition-colors">
+                        🐍 Python Online
+                    </a>
+                </div>
+            </div>
+
+            <div
+                class="bg-white/80 backdrop-blur px-6 py-4 round-card border border-white shadow-sm inline-flex items-center gap-4">
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tổng cộng</p>
+                    <p id="total-count" class="text-2xl font-black text-slate-800 leading-none">0 mục</p>
+                </div>
+                <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                    </svg>
+                </div>
+            </div>
+        </header>
+
+        <!-- Controls Section -->
+        <div class="space-y-6 mb-12">
+            <div class="search-container">
+                <div class="search-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input type="text" id="search-input" placeholder="Tìm kiếm tên bài tập, chủ đề..." class="search-input">
+            </div>
+
+            <div id="filter-container" class="flex flex-wrap gap-4 items-center">
+                <!-- Dropdowns are injected here -->
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div id="quiz-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Rendered by JavaScript -->
+        </div>
+
+        <footer class="mt-16 text-center text-slate-400 text-sm font-semibold">
+            <p>© 2026 ND Labs. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="list_data.js"></script>
+    <script>
+        const grid = document.getElementById('quiz-grid');
+        const searchInput = document.getElementById('search-input');
+        const countDisplay = document.getElementById('total-count');
+        const filterContainer = document.getElementById('filter-container');
+
+        let activeFilters = {
+            class: '',
+            subject: ''
+        };
+
+        function initDynamicFilters() {
+            filterContainer.innerHTML = '';
+            const filterConfigs = [
+                { key: 'class', label: 'Lớp', prefix: 'Lớp ' },
+                { key: 'subject', label: 'Môn', prefix: '' }
+            ];
+
+            filterConfigs.forEach(config => {
+                const uniqueValues = [...new Set(quizList.map(item => item[config.key]).filter(Boolean))].sort((a, b) => {
+                    return typeof a === 'number' ? a - b : String(a).localeCompare(String(b));
+                });
+
+                if (uniqueValues.length > 0) {
+                    const dropdown = document.createElement('div');
+                    dropdown.className = 'dropdown-container';
+                    dropdown.id = `dropdown-${config.key}`;
+
+                    dropdown.innerHTML = `
+                        <div class="dropdown-trigger" onclick="toggleDropdown('${config.key}')">
+                            <div class="flex flex-col">
+                                <span class="text-[9px] font-black text-slate-400 uppercase tracking-tight">${config.label}</span>
+                                <span id="label-${config.key}" class="text-[13px] font-bold text-slate-700">Tất cả</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400 ml-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item selected" onclick="selectOption('${config.key}', '', 'Tất cả')">Tất cả</div>
+                            ${uniqueValues.map(val => `
+                                <div class="dropdown-item" onclick="selectOption('${config.key}', '${val}', '${config.prefix}${val}')">
+                                    ${config.prefix}${val}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    filterContainer.appendChild(dropdown);
+                }
+            });
+        }
+
+        window.toggleDropdown = function (key) {
+            const el = document.getElementById(`dropdown-${key}`);
+            const isActive = el.classList.contains('active');
+            document.querySelectorAll('.dropdown-container').forEach(d => d.classList.remove('active'));
+            if (!isActive) el.classList.add('active');
+        };
+
+        window.selectOption = function (key, value, label) {
+            activeFilters[key] = value;
+            document.getElementById(`label-${key}`).innerText = label;
+            const container = document.getElementById(`dropdown-${key}`);
+            container.querySelectorAll('.dropdown-item').forEach(item => {
+                item.classList.toggle('selected', item.innerText === label);
+            });
+            container.classList.remove('active');
+            filterQuizzes();
+        };
+
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown-container')) {
+                document.querySelectorAll('.dropdown-container').forEach(d => d.classList.remove('active'));
+            }
+        });
+
+        function filterQuizzes() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
+            let filteredList = quizList.filter(item => {
+                const titleMatch = item.title.toLowerCase().includes(searchTerm);
+                let filtersMatch = true;
+                Object.keys(activeFilters).forEach(key => {
+                    if (activeFilters[key] && String(item[key]) !== activeFilters[key]) {
+                        filtersMatch = false;
+                    }
+                });
+                return titleMatch && filtersMatch;
+            });
+
+            // Priority: Coming Soon > Hot > Default
+            filteredList.sort((a, b) => {
+                if (a.isComingSoon && !b.isComingSoon) return -1;
+                if (!a.isComingSoon && b.isComingSoon) return 1;
+                if (a.isHot && !b.isHot) return -1;
+                if (!a.isHot && b.isHot) return 1;
+                return 0;
+            });
+
+            renderQuizzes(filteredList);
+        }
+
+        function renderQuizzes(listToRender) {
+            grid.innerHTML = '';
+            countDisplay.innerText = `${listToRender.length}`;
+
+            if (!listToRender || listToRender.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-32 text-center text-slate-400 uppercase font-bold text-sm tracking-widest">Không tìm thấy nội dung</div>`;
+                return;
+            }
+
+            listToRender.forEach((item, index) => {
+                const isLesson = item.type === 'lesson';
+                const isHot = item.isHot === true;
+                const isSoon = item.isComingSoon === true;
+
+                const card = document.createElement('div');
+                card.style.animation = `slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${index * 0.05}s`;
+
+                let cardClasses = `quiz-card glass-card round-card p-7 flex flex-col h-full opacity-0 relative`;
+                if (isSoon) cardClasses += ' coming-soon-card';
+                else if (isHot) cardClasses += ' hot-card';
+                card.className = cardClasses;
+
+                // Color Logic
+                let badgeClasses = '';
+                let iconClasses = '';
+                let titleClasses = '';
+                let buttonClasses = '';
+
+                if (isSoon) {
+                    badgeClasses = 'coming-soon-badge text-white';
+                    iconClasses = 'bg-blue-50 text-blue-600';
+                    titleClasses = 'text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-500';
+                    buttonClasses = 'coming-soon-badge';
+                } else if (isHot) {
+                    badgeClasses = 'bg-red-100 text-[#ff0000]';
+                    iconClasses = 'bg-red-50 text-[#ff0000]';
+                    titleClasses = 'text-[#ff0000]';
+                    buttonClasses = 'bg-[#ff0000] shadow-red-200';
+                } else {
+                    badgeClasses = isLesson ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700';
+                    iconClasses = isLesson ? 'bg-emerald-50 text-emerald-500' : 'bg-blue-50 text-blue-500';
+                    titleClasses = 'text-slate-800';
+                    buttonClasses = isLesson ? 'bg-emerald-500 shadow-emerald-200' : 'bg-blue-600 shadow-blue-200';
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="flex flex-col gap-2">
+                            <div class="flex gap-2 items-center">
+                                <span class="${badgeClasses} type-badge">
+                                    ${isLesson ? 'BÀI HỌC' : 'KIỂM TRA'}
+                                </span>
+                                ${isSoon ? `<span class="type-badge coming-soon-badge">SẮP CÓ</span>` : (isHot ? `<span class="type-badge hot-badge">HOT</span>` : '')}
+                            </div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${item.tag || 'Tài liệu'}</span>
+                        </div>
+                        <div class="w-10 h-10 ${iconClasses} rounded-2xl flex items-center justify-center">
+                            ${isLesson
+                        ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253" /></svg>'
+                        : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>'
+                    }
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-extrabold ${titleClasses} mb-4 leading-snug">${item.title}</h3>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        ${item.class ? `<span class="bg-slate-100 text-slate-600 px-3 py-1.5 rounded-xl text-[10px] font-bold">Lớp ${item.class}</span>` : ''}
+                        ${item.subject ? `<span class="bg-slate-100 text-slate-600 px-3 py-1.5 rounded-xl text-[10px] font-bold">${item.subject}</span>` : ''}
+                    </div>
+
+                    <p class="text-slate-500 text-sm font-medium leading-relaxed mb-8 flex-grow line-clamp-3">
+                        ${item.description || 'Nội dung này đang được chuẩn bị và sẽ sớm ra mắt trong thời gian tới.'}
+                    </p>
+
+                    <a href="${isSoon ? '#' : item.url}" class="btn-action pill-shape py-4 px-6 text-center font-extrabold text-xs uppercase tracking-widest text-white shadow-lg ${buttonClasses} ${isSoon ? 'cursor-not-allowed opacity-90' : ''}">
+                        ${isSoon ? 'Sắp ra mắt' : (item.buttonText || (isLesson ? 'Vào học ngay' : 'Làm bài ngay'))}
+                    </a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        searchInput.addEventListener('input', filterQuizzes);
+        window.onload = () => {
+            initDynamicFilters();
+            filterQuizzes();
+        };
+    </script>
+</body>
+
+</html>

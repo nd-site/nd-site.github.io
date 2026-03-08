@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập Hóa học 10 - EduSpace by ND Labs</title>
+    <link rel="icon" href="/logo.png" type="image/x-icon">
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e7f1ff;
+            --dark-blue: #0056b3;
+            --bg-gray: #f8f9fa;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-gray);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 120px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        /* Card Styles */
+        .question-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--primary-blue);
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .problem-text {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        /* Button & Interaction */
+        .btn-solution {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn-solution:hover {
+            background-color: var(--dark-blue);
+        }
+
+        .solution {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: var(--light-blue);
+            border-radius: 10px;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+<body>
+
+    <div class="container">
+        <header>
+            <img src="/logo.png" alt="EduSpace Logo" class="logo">
+            <h1>Bài tập Thực tế Hóa học 10</h1>
+            <p>EduSpace by ND Labs</p>
+        </header>
+
+        <div class="question-card">
+            <span class="question-number">Câu 1: Dinh dưỡng & Sức khỏe</span>
+            <p class="problem-text">
+                Ion $Na^+$ đóng vai trò quan trọng trong việc điều hòa huyết áp. Tuy nhiên, nếu hấp thụ quá $2300 \text{ mg}$ mỗi ngày sẽ gây hại cho thận. Giả sử một lon nước tăng lực chứa khoảng $0,4 \text{ g}$ $Na^+$. Nếu một vận động viên uống 6 lon mỗi ngày và không ăn thêm thực phẩm khác, lượng $Na^+$ nạp vào có vượt mức cho phép không? Nếu có, hãy tính phần trăm vượt mức?
+            </p>
+            <button class="btn-solution" onclick="toggleSolution(this)">Xem hướng dẫn giải</button>
+            <div class="solution">
+                - Tổng lượng $Na^+$: $6 \times 0,4 = 2,4 \text{ g} = 2400 \text{ mg}$.<br>
+                - So với giới hạn: $2400 > 2300 \rightarrow$ <b>Có vượt mức</b>.<br>
+                - Phần trăm vượt: $\frac{2400 - 2300}{2300} \times 100\% \approx 4,35\%$.
+            </div>
+        </div>
+
+        <div class="question-card">
+            <span class="question-number">Câu 2: Thành phần nguyên tử</span>
+            <p class="problem-text">
+                Trong tự nhiên, Đồng (Cu) có hai đồng vị bền là $^{63}\text{Cu}$ và $^{65}\text{Cu}$. Nguyên tử khối trung bình của Đồng là $63,54$. Một nhà máy sản xuất dây điện cần sử dụng $10 \text{ kg}$ đồng nguyên chất. Hãy tính khối lượng của đồng vị $^{63}\text{Cu}$ có trong lượng đồng trên?
+            </p>
+            <button class="btn-solution" onclick="toggleSolution(this)">Xem hướng dẫn giải</button>
+            <div class="solution">
+                - Gọi $x$ là % số nguyên tử của $^{63}\text{Cu}$: $63x + 65(1-x) = 63,54 \rightarrow x = 0,73$ ($73\%$).<br>
+                - Khối lượng $^{63}\text{Cu}$ trong $10 \text{ kg}$: $10 \times 0,73 \times \frac{63}{63,54} \approx 7,24 \text{ kg}$.
+            </div>
+        </div>
+
+        <div class="question-card">
+            <span class="question-number">Câu 3: Nồng độ & Đời sống</span>
+            <p class="problem-text">
+                Theo khuyến cáo, lượng đường bổ sung mỗi ngày không nên quá $50 \text{ g}$. Một chai nước ngọt $500 \text{ mL}$ có ghi nồng độ đường là $12\% \text{ (w/v)}$. Nếu một học sinh uống hết một chai nước ngọt này trong giờ giải lao, lượng đường nạp vào đã chiếm bao nhiêu phần trăm giới hạn cho phép hàng ngày?
+            </p>
+            <button class="btn-solution" onclick="toggleSolution(this)">Xem hướng dẫn giải</button>
+            <div class="solution">
+                - Khối lượng đường trong chai: $500 \times 12\% = 60 \text{ g}$.<br>
+                - Tỷ lệ so với giới hạn: $\frac{60}{50} \times 100\% = 120\%$.<br>
+                - Kết luận: Vượt giới hạn $20\%$.
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2024 - Thành phần bài tập Hóa học 10 - EduSpace by ND Labs
+        </footer>
+    </div>
+
+    <script>
+        function toggleSolution(btn) {
+            const solution = btn.nextElementSibling;
+            if (solution.style.display === "block") {
+                solution.style.display = "none";
+                btn.innerText = "Xem hướng dẫn giải";
+            } else {
+                solution.style.display = "block";
+                btn.innerText = "Ẩn hướng dẫn giải";
+            }
+        }
+    </script>
+</body>
+</html>

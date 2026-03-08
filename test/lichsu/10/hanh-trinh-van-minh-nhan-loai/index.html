@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hành Trình Lịch Sử Văn Minh Thế Giới</title>
+    <link rel="icon" href="/logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        :root {
+            --color-primary: #0F766E;
+            /* Teal 700 */
+            --color-secondary: #C2410C;
+            /* Orange 700 */
+            --color-accent: #1E3A8A;
+            /* Blue 900 */
+            --color-bg: #F8FAFC;
+        }
+
+        .bg-primary {
+            background-color: var(--color-primary);
+        }
+
+        .text-primary {
+            color: var(--color-primary);
+        }
+
+        .border-primary {
+            border-color: var(--color-primary);
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <div class="navigation-buttons" style="margin-top:20px; text-align:center;">
+        <!-- Nút làm bài tập -->
+        <a href="/eduspace/lichsu/10/hanh-trinh-van-minh-nhan-loai/bai-tap/index.html" class="btn"
+            style="padding:10px 20px; margin:5px; background:#4CAF50; color:white; text-decoration:none; border-radius:5px;">
+            Làm bài tập
+        </a>
+
+        <!-- Nút trang chủ -->
+        <a href="/index.html" class="btn"
+            style="padding:10px 20px; margin:5px; background:#2196F3; color:white; text-decoration:none; border-radius:5px;">
+            Trang chủ
+        </a>
+
+        <!-- Nút quay lại -->
+        <a href="/eduspace" class="btn"
+            style="padding:10px 20px; margin:5px; background:#f44336; color:white; text-decoration:none; border-radius:5px;">
+            Quay lại
+        </a>
+    </div>
+
+    <div id="eduspace-page">
+        <!-- Header đồng bộ màu Blue-900 sang Teal-700 -->
+        <header class="bg-gradient-to-r from-teal-800 via-teal-700 to-blue-900 text-white py-16 px-4 shadow-xl">
+            <div class="max-w-5xl mx-auto text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-wide">Hành Trình Văn Minh Nhân Loại</h1>
+                <p class="text-xl md:text-2xl font-light opacity-90 max-w-3xl mx-auto">
+                    Một cái nhìn toàn cảnh dựa trên dữ liệu lịch sử từ các nền văn minh lớn.
+                </p>
+                <div class="mt-8 flex justify-center gap-4">
+                    <div class="bg-white/10 backdrop-blur-md p-4 rounded-lg border border-white/20">
+                        <span class="block text-3xl font-bold">52</span>
+                        <span class="text-sm opacity-80">Điểm Dữ Liệu</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md p-4 rounded-lg border border-white/20">
+                        <span class="block text-3xl font-bold">4</span>
+                        <span class="text-sm opacity-80">Kỷ Nguyên Lớn</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main id="main-content" class="max-w-6xl mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 gap-16">
+
+                <!-- Section 1 -->
+                <section class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 md:order-1">
+                        <h2 class="text-3xl font-bold text-teal-800 mb-4 border-l-4 border-orange-600 pl-4">Cấu Trúc
+                            Lịch Sử</h2>
+                        <p class="mb-6 text-lg leading-relaxed text-slate-600">
+                            Sự chuyển dịch từ các nền văn minh cổ đại sang kỷ nguyên công nghiệp hóa qua các lăng kính
+                            dữ liệu.
+                        </p>
+                        <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100">
+                            <ul class="space-y-4">
+                                <li class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-[#1E3A8A] mr-3"></span>
+                                    <span class="font-bold flex-1">Cổ Đại Phương Đông</span>
+                                    <span class="text-teal-700 font-semibold">48%</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-[#0F766E] mr-3"></span>
+                                    <span class="font-bold flex-1">Cổ Đại Phương Tây</span>
+                                    <span class="text-teal-700 font-semibold">15%</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-[#C2410C] mr-3"></span>
+                                    <span class="font-bold flex-1">Cách Mạng Công Nghiệp</span>
+                                    <span class="text-teal-700 font-semibold">33%</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="order-1 md:order-2 bg-white p-6 rounded-xl shadow-lg border-t-4 border-teal-700">
+                        <h3 class="text-center font-bold text-slate-500 mb-4 uppercase tracking-widest text-xs">Tỉ trọng
+                            các kỷ nguyên</h3>
+                        <div class="chart-container">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 2: Màu sắc đồng bộ với Brand -->
+                <section>
+                    <div class="text-center mb-10">
+                        <h2 class="text-3xl md:text-4xl font-bold text-teal-800 mb-2">Cái Nôi Phương Đông</h2>
+                        <div class="h-1 w-20 bg-orange-600 mx-auto mb-4"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-teal-700">
+                            <h3 class="text-xl font-bold mb-4 text-teal-800">Trung Hoa</h3>
+                            <ul class="text-sm space-y-3">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-orange-600">✔</span>
+                                    <span><strong>Kỹ thuật:</strong> Giấy, In ấn, Thuốc súng</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-orange-600">✔</span>
+                                    <span><strong>Kiến trúc:</strong> Vạn Lý Trường Thành</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6 border-t-4 border-blue-900">
+                            <h3 class="text-lg font-bold text-slate-700 mb-6">Phân tích đóng góp</h3>
+                            <div class="chart-container" style="max-height: 350px;">
+                                <canvas id="ancientEastChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 3: Radar Chart đồng bộ màu -->
+                <section
+                    class="bg-slate-900 rounded-2xl shadow-xl overflow-hidden text-white border-b-8 border-teal-700">
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <div class="p-8 md:p-12 flex flex-col justify-center">
+                            <h2 class="text-3xl font-bold mb-6 text-teal-400">Hy Lạp & La Mã</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-center p-3 bg-white/5 rounded-lg border-l-4 border-teal-500">
+                                    <span class="text-sm">Hy Lạp: Thiên về Triết học & Nghệ thuật</span>
+                                </div>
+                                <div class="flex items-center p-3 bg-white/5 rounded-lg border-l-4 border-orange-500">
+                                    <span class="text-sm">La Mã: Thiên về Luật pháp & Xây dựng</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-slate-800/50 flex items-center justify-center">
+                            <div class="chart-container w-full">
+                                <canvas id="classicalRadarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 4 -->
+                <section class="bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
+                    <h3 class="text-2xl font-bold text-orange-800 mb-8 text-center uppercase tracking-tighter">Bùng nổ
+                        cách mạng công nghiệp</h3>
+                    <div class="chart-container" style="height: 350px;">
+                        <canvas id="industrialChart"></canvas>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer id="page-footer" class="text-center py-12 bg-slate-100 text-slate-500 text-sm">
+            <p>© 2026 Infographic Lịch Sử | EduSpace by ND Labs</p>
+        </footer>
+    </div>
+
+    <script>
+        // Màu sắc chủ đạo đồng bộ
+        const COLORS = {
+            teal: '#0F766E',
+            orange: '#C2410C',
+            blue: '#1E3A8A',
+            slate: '#94A3B8',
+            tealLight: 'rgba(15, 118, 110, 0.2)',
+            orangeLight: 'rgba(194, 65, 12, 0.2)'
+        };
+
+        const wrapLabel = (label) => {
+            const MAX = 14;
+            if (label.length <= MAX) return label;
+            const words = label.split(' ');
+            const lines = []; let cur = words[0];
+            for (let i = 1; i < words.length; i++) {
+                if ((cur + " " + words[i]).length <= MAX) cur += " " + words[i];
+                else { lines.push(cur); cur = words[i]; }
+            }
+            lines.push(cur); return lines;
+        };
+
+        window.onload = function () {
+            Chart.defaults.font.family = "'Roboto', sans-serif";
+            Chart.defaults.color = '#64748b';
+
+            // Distribution
+            new Chart(document.getElementById('distributionChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Cổ Đại Đông', 'Cổ Đại Tây', 'Công Nghiệp', 'Khác'].map(wrapLabel),
+                    datasets: [{
+                        data: [48, 15, 33, 4],
+                        backgroundColor: [COLORS.blue, COLORS.teal, COLORS.orange, COLORS.slate],
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } }
+                }
+            });
+
+            // Ancient East
+            new Chart(document.getElementById('ancientEastChart'), {
+                type: 'bar',
+                indexAxis: 'y',
+                data: {
+                    labels: ['Kỹ Thuật', 'Tôn Giáo', 'Kiến Trúc', 'Văn Học'].map(wrapLabel),
+                    datasets: [{
+                        data: [9.5, 7, 8.5, 6],
+                        backgroundColor: [COLORS.orange, COLORS.teal, COLORS.blue, COLORS.slate],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { x: { grid: { display: false }, beginAtZero: true, max: 10 } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Radar
+            new Chart(document.getElementById('classicalRadarChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Triết Học', 'Ứng Dụng', 'Luật Pháp', 'Nghệ Thuật', 'Khoa Học'].map(wrapLabel),
+                    datasets: [{
+                        label: 'Hy Lạp',
+                        data: [9, 7, 5, 9, 8],
+                        backgroundColor: COLORS.tealLight,
+                        borderColor: COLORS.teal,
+                        pointBackgroundColor: COLORS.teal
+                    }, {
+                        label: 'La Mã',
+                        data: [5, 9, 10, 6, 6],
+                        backgroundColor: COLORS.orangeLight,
+                        borderColor: COLORS.orange,
+                        pointBackgroundColor: COLORS.orange
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { grid: { color: 'rgba(255,255,255,0.1)' }, angleLines: { color: 'rgba(255,255,255,0.1)' }, pointLabels: { color: '#cbd5e1' } } },
+                    plugins: { legend: { labels: { color: '#fff' } } }
+                }
+            });
+
+            // Industrial
+            new Chart(document.getElementById('industrialChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jenny (1764)', 'Watt (1784)', 'Fulton (1807)', 'Stephenson', 'Wright (1903)'].map(wrapLabel),
+                    datasets: [{
+                        label: 'Tác động năng suất',
+                        data: [30, 90, 65, 80, 95],
+                        backgroundColor: COLORS.blue,
+                        hoverBackgroundColor: COLORS.orange,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        };
+    </script>
+</body>
+
+</html>

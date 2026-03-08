@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVoc - Smart Vocabulary by ND Labs</title>
+    <link rel="icon" type="image/png" href="/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0070f3',
+                        secondary: '#64748b',
+                    },
+                    borderRadius: {
+                        '3xl': '1.5rem',
+                        '4xl': '2rem',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="/nd-navbar.js" defer></script></head>
+
+<body>
+
+    <div class="max-w-6xl mx-auto py-10 px-6">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12 animate-up">
+            <div class="flex items-start gap-5">
+                <div class="logo-container group cursor-pointer h-16 w-16 bg-white rounded-3xl flex items-center justify-center shadow-xl border border-slate-100 transition-all hover:scale-110 active:scale-95"
+                    onclick="window.location.href='/eduspace'">
+                    <img id="main-logo" src="/logo.png" alt="EduSpace Logo" class="w-10 h-10 object-contain text-xs">
+                </div>
+                <div>
+                    <h1 class="text-4xl font-black text-slate-900 tracking-tighter leading-none mb-2">
+                        Edu<span class="text-indigo-600">Voc</span>
+                    </h1>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-black uppercase tracking-[0.2em] text-slate-400">ND Labs</span>
+                        <div class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
+                        <span class="text-xs font-bold text-slate-500">Intelligent Learning</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button id="reset-data-btn"
+                    class="px-6 py-3 bg-red-50 text-red-600 rounded-2xl font-bold text-sm hover:bg-red-500 hover:text-white transition-all shadow-sm">Reset</button>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="mb-12 animate-up" style="animation-delay: 0.1s;">
+            <div class="flex flex-wrap gap-4 items-center">
+                <button
+                    class="nav-item active px-8 py-3.5 round-card glass-card text-sm font-black text-slate-500 hover:text-blue-600 transition-all"
+                    data-tab="data-tab">
+                    📂 QUẢN LÝ DỮ LIỆU
+                </button>
+                <button
+                    class="nav-item px-8 py-3.5 round-card glass-card text-sm font-black text-slate-500 hover:text-blue-600 transition-all"
+                    data-tab="practice-tab">
+                    🎮 CHẾ ĐỘ LUYỆN TẬP
+                </button>
+            </div>
+        </nav>
+
+        <main>
+            <!-- TAB 1: DATA & CONFIG -->
+            <div id="data-tab" class="tab-content active animate-up" style="animation-delay: 0.2s;">
+                <!-- Configuration Section -->
+                <section class="grid grid-cols-1 gap-8">
+                    <div class="glass-card round-card p-8">
+                        <h2 class="text-xl font-bold text-slate-800 mb-6">Cấu hình API Gemini</h2>
+                        <div class="space-y-4">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest">API Key
+                                của bạn (lấy tại aistudio.google.com):</label>
+                            <div class="flex gap-4 items-center">
+                                <div class="relative flex-1">
+                                    <input type="password" id="gemini-api-key" placeholder="Nhập API Key..."
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-blue-500 outline-none font-medium transition-all">
+                                    <button type="button" onclick="toggleApiKey()"
+                                        class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-blue-600 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Management Section -->
+                    <div class="glass-card round-card p-8">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                            <h2 class="text-xl font-bold text-slate-800">Danh sách từ vựng</h2>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <div class="relative group">
+                                    <input type="text" id="vocab-search" placeholder="Tìm kiếm từ vựng..."
+                                        class="bg-slate-50 border border-slate-200 rounded-xl py-2.5 pr-5 pl-16 text-sm focus:ring-2 focus:ring-blue-500 outline-none w-full md:w-72 transition-all group-hover:bg-white shadow-sm">
+                                    <span
+                                        class="search-icon-container absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                <button id="fill-ai-btn"
+                                    class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-100 hover:scale-105 transition-all">✨
+                                    Tự động điền AI</button>
+                                <input type="file" id="import-file" accept=".json" class="hidden">
+                                <button id="import-btn"
+                                    class="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all">Nhập
+                                    File</button>
+                                <button id="export-btn"
+                                    class="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all">Xuất
+                                    File</button>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto rounded-2xl border border-slate-100 mb-6">
+                            <table id="vocab-table" class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr
+                                        class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                        <th class="px-6 py-4">Tiếng Anh</th>
+                                        <th class="px-6 py-4">Phiên âm</th>
+                                        <th class="px-6 py-4">Loại từ</th>
+                                        <th class="px-6 py-4">Tiếng Việt</th>
+                                        <th class="px-6 py-4">Ví dụ sử dụng</th>
+                                        <th class="px-6 py-4 text-center">Xóa</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <!-- Rows dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button id="add-row-btn"
+                            class="w-full py-4 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-bold hover:border-blue-500 hover:text-blue-500 transition-all flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
+                            Thêm từ mới
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- TAB 2: PRACTICE -->
+            <div id="practice-tab" class="tab-content">
+                <div id="game-setup">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Chế độ luyện tập</h2>
+                        <p class="text-slate-500 font-medium">Chọn một hình thức để bắt đầu nâng tầm vốn từ của bạn</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="game-mode-grid">
+                        <div class="mode-card glass-card p-6 round-card cursor-pointer group active"
+                            data-mode="mc-mixed">
+                            <div
+                                class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a2 2 0 00-1.96 1.414l-.477 2.387a2 2 0 00.547 1.022l2.121 2.121a2 2 0 002.828 0l2.121-2.121a2 2 0 000-2.828l-2.121-2.121z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 3h6v6" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 14L21 3" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 14l3-3m-3 3l3 3m-3-3h12" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">Trắc nghiệm Hỗn hợp</h3>
+                            <p class="text-xs text-slate-500">Kết hợp Anh-Việt, Việt-Anh và Phiên âm.</p>
+                        </div>
+
+                        <div class="mode-card glass-card p-6 round-card cursor-pointer group"
+                            data-mode="input-viet-eng">
+                            <div
+                                class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">Tự luận: Gõ đáp án</h3>
+                            <p class="text-xs text-slate-500">Luyện kỹ năng viết và nhớ chính xác từng ký tự.</p>
+                        </div>
+
+                        <div class="mode-card glass-card p-6 round-card cursor-pointer group hot-card"
+                            data-mode="mc-ipa-viet">
+                            <div
+                                class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">Chuyên sâu Phiên âm</h3>
+                            <p class="text-xs text-slate-500">Giúp bạn đọc chuẩn và nhớ mặt chữ qua âm thanh.</p>
+                        </div>
+
+                        <div class="mode-card glass-card p-6 round-card cursor-pointer group" data-mode="flashcards">
+                            <div
+                                class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">Flashcards (Ghi nhớ)</h3>
+                            <p class="text-xs text-slate-500">Lật thẻ để ghi nhớ từ vựng một cách trực quan.</p>
+                        </div>
+
+                        <div class="mode-card glass-card p-6 round-card cursor-pointer group" data-mode="speed-run">
+                            <div
+                                class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">Tốc độ (Nhanh tay)</h3>
+                            <p class="text-xs text-slate-500">Thử thách phản xạ nhanh với thời gian giới hạn.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <button id="start-game-btn"
+                            class="px-12 py-5 bg-blue-600 text-white rounded-full font-black text-lg shadow-2xl shadow-blue-200 hover:scale-105 active:scale-95 transition-all">
+                            BẮT ĐẦU LUYỆN TẬP
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Fullscreen Game View -->
+    <div id="game-view">
+        <header class="h-20 bg-white border-b border-slate-100 flex items-center px-8 justify-between shadow-sm">
+            <div class="flex items-center gap-8">
+                <button id="stop-game-btn" class="p-3 hover:bg-slate-100 rounded-xl transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-400" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <div class="h-8 w-[1px] bg-slate-100"></div>
+                <div class="flex items-center gap-6">
+                    <div id="streak-counter" class="font-black text-slate-700">🔥 Chuỗi: 0</div>
+                    <div id="progress-text" class="text-sm font-bold text-slate-400">Câu hỏi 0/20</div>
+                </div>
+            </div>
+            <div class="w-1/3 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-blue-600 transition-all duration-500" style="width: 0%"></div>
+            </div>
+        </header>
+
+        <div class="game-container">
+            <div class="text-center animate-up">
+                <div id="question-area">
+                    <p id="question-hint"></p>
+                    <h2 id="question-text"></h2>
+                </div>
+
+                <div id="options-area" class="hidden">
+                    <!-- Buttons here -->
+                </div>
+
+                <div id="input-area" class="hidden">
+                    <div class="input-game-group">
+                        <input type="text" id="answer-input" placeholder="Nhập đáp án...">
+                        <button id="submit-answer-btn">Gửi</button>
+                    </div>
+                </div>
+
+                <div id="feedback-area" class="hidden">
+                    <p id="feedback-message"></p>
+                    <div id="correct-answer-display" class="hidden">
+                        <span class="correct-answer-label">Đáp án chính xác là</span>
+                        <span id="correct-text"></span>
+                    </div>
+                    <button id="next-question-btn">
+                        TIẾP TỤC (Enter) →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Summary Modal -->
+        <div id="game-summary-modal" class="fixed inset-0 z-[2000] hidden flex items-center justify-center p-6">
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md"></div>
+            <div class="glass-card round-card p-10 max-w-lg w-full relative z-10 text-center animate-fade-in">
+                <div
+                    class="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">
+                    🏆</div>
+                <h2 class="text-3xl font-black text-slate-900 mb-2">Hoàn thành bài tập!</h2>
+                <p class="text-slate-500 font-medium mb-8 text-lg">Bạn đã hoàn thành phiên luyện tập xuất sắc.</p>
+
+                <div class="grid grid-cols-2 gap-4 mb-10">
+                    <div class="p-6 bg-slate-50 rounded-3xl">
+                        <span class="block text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Đúng</span>
+                        <span id="summary-score" class="text-3xl font-black text-indigo-600">0/20</span>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-3xl">
+                        <span class="block text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Tỉ
+                            lệ</span>
+                        <span id="summary-accuracy" class="text-3xl font-black text-emerald-500">0%</span>
+                    </div>
+                </div>
+
+                <button onclick="closeSummary()"
+                    class="w-full py-5 bg-indigo-600 text-white rounded-full font-black text-lg shadow-xl shadow-indigo-200 hover:scale-105 transition-all">QUAY
+                    LẠI BẢNG ĐIỀU KHIỂN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating AI Widget -->
+    <div id="ai-floating-widget" class="fixed bottom-8 right-8 z-[9999] flex flex-col items-end gap-5">
+        <div id="ai-chat-popup"
+            class="hidden glass-card round-card w-[380px] h-[550px] shadow-2xl flex flex-col overflow-hidden border border-blue-100/50 animate-fade-in origin-bottom-right">
+            <header class="p-5 bg-blue-600 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl">🤖</div>
+                    <div>
+                        <h4 class="font-black text-sm uppercase tracking-wider">AI Assistant</h4><span
+                            class="text-[10px] opacity-70">Gemini 1.5 Flash Active</span>
+                    </div>
+                </div>
+                <button id="close-chat-btn" class="p-2 hover:bg-white/10 rounded-xl transition-colors">✕</button>
+            </header>
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-5 space-y-5 bg-slate-50/50"></div>
+            <div class="p-4 bg-white border-t border-slate-100">
+                <div id="attachment-preview" class="flex gap-2 mb-3 hidden"></div>
+                <div class="flex items-end gap-2 bg-slate-50 rounded-2xl p-2.5 border border-slate-200">
+                    <label for="ai-image-upload"
+                        class="w-10 h-10 flex items-center justify-center cursor-pointer hover:bg-slate-200 rounded-xl text-lg opacity-50">📎</label>
+                    <input type="file" id="ai-image-upload" accept="image/*" class="hidden">
+                    <textarea id="chat-input" placeholder="Hỏi AI..." rows="1"
+                        class="flex-1 bg-transparent border-none outline-none py-2 text-sm font-medium resize-none max-h-32"></textarea>
+                    <button id="send-chat-btn"
+                        class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all">➤</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="ai-fab"
+            class="w-16 h-16 bg-blue-600 rounded-full shadow-2xl flex items-center justify-center cursor-pointer active:scale-90 transition-all border-4 border-white group relative">
+            <span class="text-3xl">🤖</span>
+            <div class="absolute inset-0 rounded-full bg-blue-400/20 animate-ping pointer-events-none"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Audio for sound effects -->
+    <audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
+        preload="auto"></audio>
+    <audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"
+        preload="auto"></audio>
+
+    <!-- Scripts -->
+    <script src="ai.js"></script>
+    <script src="practice.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

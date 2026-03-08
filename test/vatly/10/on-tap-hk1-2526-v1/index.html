@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đang nạp bài tập...</title>
+    <!-- Nạp dữ liệu trước để có thông tin tiêu đề -->
+    <script src="data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/logo.png" type="image/x-icon">
+    <script src="/nd-navbar.js" defer></script></head>
+<body class="bg-blue-50">
+    <div id="app-root">
+        <div class="flex justify-center items-center h-screen font-sans text-blue-900">
+            <div class="text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900 mx-auto mb-4"></div>
+                <p class="font-bold">Đang đồng bộ giao diện và dữ liệu...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadViewer() {
+            try {
+                // 1. Tải giao diện từ template.html
+                const response = await fetch('/eduspace/template.html');
+                if (!response.ok) throw new Error("Không thể tải template.html");
+                const htmlText = await response.text();
+
+                // 2. Phân tích DOM
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+
+                // 3. Đồng bộ Tiêu đề từ data.js (Ưu tiên tuyệt đối)
+                if (typeof quizData !== 'undefined') {
+                    const subject = quizData.config?.subject || "AI Smart Quiz";
+                    document.title = subject;
+                    
+                    // Tìm tất cả các vị trí hiển thị tiêu đề trong template để ghi đè
+                    const titleDisplay = doc.getElementById('quiz-title-display');
+                    if (titleDisplay) titleDisplay.innerText = subject;
+                    
+                    const pageTitle = doc.getElementById('page-title');
+                    if (pageTitle) pageTitle.innerText = subject;
+                }
+
+                // 4. Chuyển Styles từ template vào Head
+                const headElements = doc.querySelectorAll('link[rel="stylesheet"], style');
+                headElements.forEach(el => document.head.appendChild(el.cloneNode(true)));
+
+                // 5. Cập nhật Body
+                document.body.innerHTML = doc.body.innerHTML;
+
+                // 6. Thực thi Scripts của template (giữ nguyên logic gốc)
+                const scripts = doc.querySelectorAll('script');
+                for (const oldScript of scripts) {
+                    const newScript = document.createElement("script");
+                    Array.from(oldScript.attributes).forEach(attr => {
+                        newScript.setAttribute(attr.name, attr.value);
+                    });
+                    newScript.text = oldScript.text;
+                    
+                    if (newScript.src) {
+                        await new Promise((resolve) => {
+                            newScript.onload = resolve;
+                            newScript.onerror = resolve;
+                            document.body.appendChild(newScript);
+                        });
+                    } else {
+                        document.body.appendChild(newScript);
+                    }
+                }
+
+                // 7. Khởi chạy các hàm xử lý của template
+                setTimeout(() => {
+                    // Đảm bảo tiêu đề trong JS không bị script template ghi đè lại
+                    const finalTitle = document.getElementById('quiz-title-display');
+                    if (finalTitle && quizData.config?.subject) {
+                        finalTitle.innerText = quizData.config.subject;
+                    }
+                    
+                    // Kích hoạt render công thức và sự kiện load
+                    if (typeof renderMath === 'function') renderMath();
+                    window.dispatchEvent(new Event('load'));
+                }, 100);
+
+            } catch (error) {
+                console.error("Lỗi nạp giao diện:", error);
+                document.getElementById('app-root').innerHTML = `
+                    <div class="p-8 text-red-600 font-bold text-center">
+                        Lỗi: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        loadViewer();
+    </script>
+</body>
+</html>
