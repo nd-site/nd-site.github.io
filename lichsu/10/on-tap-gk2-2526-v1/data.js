@@ -9,7 +9,7 @@ window.quizData = {
             "question": "Cuộc Cách mạng công nghiệp lần thứ ba bắt đầu vào khoảng thời gian nào?",
             "options": [
                 "A. Cuối thế kỉ XIX.",
-                "B. Năm 1914.",
+                "B. Năm 1914\\.",
                 "C. Những năm 40 của thế kỉ XX.",
                 "D. Đầu thế kỉ XXI."
             ],
@@ -65,7 +65,7 @@ window.quizData = {
                 "C. Cuối thế kỉ XIX.",
                 "D. Sau Chiến tranh lạnh."
             ],
-            "correct": -1,
+            "correct": 1,
             "points": 5,
             "explanation": "Cách mạng công nghiệp lần thứ tư bắt đầu từ những năm đầu tiên của thế kỉ XXI."
         },
@@ -104,7 +104,7 @@ window.quizData = {
                 "C. Sản xuất bằng tay.",
                 "D. Công nghệ hơi nước."
             ],
-            "correct": -1,
+            "correct": 1,
             "points": 5,
             "explanation": "Nhà máy thông minh ứng dụng công nghệ tự động hóa và trí tuệ nhân tạo (AI)."
         },
@@ -117,7 +117,7 @@ window.quizData = {
                 "C. Giảm mức tiêu dùng.",
                 "D. Tăng thuế tiêu dùng."
             ],
-            "correct": -1,
+            "correct": 0,
             "points": 5,
             "explanation": "Thương mại điện tử giúp người tiêu dùng mua sắm hàng hóa, dịch vụ bằng hình thức trực tuyến."
         },
@@ -130,7 +130,7 @@ window.quizData = {
                 "C. Tăng dân số quá mức.",
                 "D. Phân chia thuộc địa."
             ],
-            "correct": -1,
+            "correct": 1,
             "points": 5,
             "explanation": "Các cuộc cách mạng công nghiệp hiện đại thúc đẩy quá trình khu vực hóa và toàn cầu hóa kinh tế"
         },
@@ -143,7 +143,7 @@ window.quizData = {
                 "C. Giảm tính tự động.",
                 "D. Suy giảm nguồn nhân lực."
             ],
-            "correct": -1,
+            "correct": 1,
             "points": 5,
             "explanation": "Lực lượng lao động có trình độ chuyên môn cao ngày càng tăng trong kỷ nguyên hiện đại."
         },
@@ -169,7 +169,7 @@ window.quizData = {
                 "C. Tự động hóa và công nghệ rô-bốt.",
                 "D. Công nghệ in 3D."
             ],
-            "correct": 0,
+            "correct": 2,
             "points": 5,
             "explanation": "Tự động hóa và công nghệ rô-bốt giúp giải phóng sức lao động và nâng cao năng suất."
         },
@@ -190,12 +190,12 @@ window.quizData = {
             "type": "multiple",
             "question": "Nội dung nào dưới đây là không phản ánh đúng về cuộc cách mạng công nghiệp lần thứ tư?",
             "options": [
-                "A. Các thành tựu khoa học - công nghệ làm cho tài nguyên thiên nhiên, lao động phổ thông ngày càng mất lợi thế.",
+                "A. Các thành tựu khoa học \\- công nghệ làm cho tài nguyên thiên nhiên, lao động phổ thông ngày càng mất lợi thế.",
                 "B. Tạo ra sự chênh lệch về trình độ phát triển, khoảng cách giàu nghèo giữa các quốc gia có xu hướng mở rộng thêm.",
                 "C. Chỉ tác động đến lĩnh vực khoa học và công nghệ, không ảnh hưởng đến giáo dục đào tạo và lĩnh vực quản lý nhà nước.",
                 "D. Làm xuất hiện nhiều hình thức tội phạm mới, sử dụng công nghệ cao để trốn thuế, lừa đảo, chiếm đoạt tài sản của người khác."
             ],
-            "correct": -1,
+            "correct": 2,
             "points": 5,
             "explanation": "Cách mạng 4.0 tác động sâu rộng đến tất cả các lĩnh vực kinh tế, chính trị và xã hội."
         },
@@ -208,7 +208,7 @@ window.quizData = {
                 "C. tranh giành thuộc địa.",
                 "D. an ninh mạng và quyền riêng tư."
             ],
-            "correct": 1,
+            "correct": 3,
             "points": 5,
             "explanation": "An ninh mạng và quyền riêng tư là những thách thức tiêu cực phát sinh từ Cách mạng 4.0."
         },
@@ -221,7 +221,7 @@ window.quizData = {
                 "C. Thái Bình Dương – Ấn Độ Dương.",
                 "D. Đại Tây Dương – Thái Bình Dương."
             ],
-            "correct": -1,
+            "correct": 2,
             "points": 5,
             "explanation": "Đông Nam Á là cầu nối quan trọng giữa Ấn Độ Dương và Thái Bình Dương."
         },
@@ -234,7 +234,7 @@ window.quizData = {
                 "C. Vùng đất thiêng liêng.",
                 "D. Ngã tư đường, cầu nối của những nền văn minh lớn trên thế giới."
             ],
-            "correct": -1,
+            "correct": 3,
             "points": 5,
             "explanation": "Với vị trí chiến lược, Đông Nam Á là ngã tư đường nối liền các nền văn minh lớn."
         },
@@ -247,7 +247,7 @@ window.quizData = {
                 "C. Sự phát triển của các quốc gia phong kiến.",
                 "D. Sự đô hộ của phương Tây."
             ],
-            "correct": -1,
+            "correct": 2,
             "points": 5,
             "explanation": "Giai đoạn này gắn liền với sự hình thành và phát triển rực rỡ của các quốc gia phong kiến dân tộc."
         },
@@ -286,7 +286,7 @@ window.quizData = {
                 "C. Mi-an-ma.",
                 "D. Việt Nam."
             ],
-            "correct": -1,
+            "correct": 1,
             "points": 5,
             "explanation": "Quần thể kiến trúc Bô-rô-bu-đua là thành tựu văn hóa tiêu biểu của Indonesia."
         },
@@ -299,7 +299,7 @@ window.quizData = {
                 "C. Trung Hoa, phương Tây.",
                 "D. Ấn Độ, Trung Hoa, phương Tây."
             ],
-            "correct": -1,
+            "correct": 0,
             "points": 5,
             "explanation": "Cư dân Đông Nam Á sớm tiếp thu ảnh hưởng từ hai nền văn minh lớn là Ấn Độ và Trung Hoa. Văn minh phương Tây chỉ bắt đầu xâm nhập Đông Nam Á từ thế kỉ XVI."
         },
@@ -351,7 +351,7 @@ window.quizData = {
                 "C. thế kỉ XVI đến thế kỉ XIX.",
                 "D. thế kỉ XIX đến nay."
             ],
-            "correct": -1,
+            "correct": 2,
             "points": 5,
             "explanation": "Đây là thời kỳ các nước thực dân phương Tây đẩy mạnh xâm lược và đô hộ khu vực."
         },
@@ -364,7 +364,7 @@ window.quizData = {
                 "C. Nối liền lục địa châu Á – châu Âu với châu Úc.",
                 "D. Tiếp giáp với bốn châu lục: Á, Phi, Âu, Mỹ."
             ],
-            "correct": -1,
+            "correct": 3,
             "points": 5,
             "explanation": "Đông Nam Á không tiếp giáp trực tiếp với châu Phi và châu Mỹ."
         },
@@ -390,7 +390,7 @@ window.quizData = {
                 "C. Cung cấp nước cho sinh hoạt, sản xuất.",
                 "D. Lũ lụt thường xuyên gây mất mùa."
             ],
-            "correct": -1,
+            "correct": 3,
             "points": 5,
             "explanation": "Lũ lụt thường xuyên là một thách thức của tự nhiên, không phải lợi ích cho sản xuất."
         },
@@ -416,7 +416,7 @@ window.quizData = {
                 "C. phát triển độc lập, đôi lúc có xung đột.",
                 "D. không thể cùng tồn tại, phát triển lâu dài."
             ],
-            "correct": -1,
+            "correct": 0,
             "points": 5,
             "explanation": "Các tôn giáo tại Đông Nam Á nhìn chung luôn tồn tại và phát triển trong sự hòa hợp."
         },
@@ -429,7 +429,7 @@ window.quizData = {
                 "C. sự ra đời và phát triển của các quốc gia đầu tiên.",
                 "D. văn học đạt nhiều thành tựu to lớn."
             ],
-            "correct": -1,
+            "correct": 2,
             "points": 5,
             "explanation": "Giai đoạn này đánh dấu sự hình thành của những quốc gia cổ đầu tiên tại Đông Nam Á."
         },
@@ -468,7 +468,7 @@ window.quizData = {
                 "C. thương nghiệp.",
                 "D. thủ công nghiệp."
             ],
-            "correct": -1,
+            "correct": 1,
             "points": 5,
             "explanation": "Hoạt động kinh tế chủ đạo của cư dân Văn Lang – Âu Lạc là nông nghiệp trồng lúa nước."
         },
@@ -507,7 +507,7 @@ window.quizData = {
                 "C. Nghệ thuật xây dựng các cung điện.",
                 "D. Phát triển kinh tế nông nghiệp lúa nước."
             ],
-            "correct": -1,
+            "correct": 1,
             "points": 5,
             "explanation": "Trước khi tiếp nhận tôn giáo bên ngoài, người Champa duy trì tín ngưỡng thờ cúng tổ tiên và vạn vật."
         },
@@ -520,7 +520,7 @@ window.quizData = {
                 "C. Chăm-pa.",
                 "D. Sa Huỳnh."
             ],
-            "correct": -1,
+            "correct": 2,
             "points": 5,
             "explanation": "Thánh địa Mỹ Sơn là trung tâm tôn giáo và kiến trúc tiêu biểu của vương quốc Champa."
         },
@@ -559,7 +559,7 @@ window.quizData = {
                 "C. chịu ảnh hưởng từ nền văn hóa Trung Hoa.",
                 "D. lấy phát triển thương nghiệp làm kinh tế chính."
             ],
-            "correct": -1,
+            "correct": 1,
             "points": 5,
             "explanation": "Các nền văn minh cổ Việt Nam đều có sự kết hợp giữa văn hóa bản địa và các yếu tố bên ngoài."
         },
@@ -572,105 +572,205 @@ window.quizData = {
                 "C. Kết hợp giữa văn hóa bản địa với văn hóa Ấn Độ.",
                 "D. Kết hợp giữa văn hóa Đại Việt với văn hóa Phù Nam."
             ],
-            "correct": -1,
+            "correct": 2,
             "points": 5,
             "explanation": "Nền văn minh Champa được hình thành trên cơ sở kết hợp văn hóa bản địa với văn hóa Ấn Độ."
         },
         {
             "type": "multiple",
-            "question": "Nội dung nào sau đây không phải là cơ sở hình thành của nhà nước Văn Lang – Âu Lạc?",
-            "options": [],
-            "correct": -1,
+            "question": "Nội dung nào sau đây **không phải** là cơ sở hình thành của nhà nước Văn Lang – Âu Lạc?",
+            "options": [
+                "A. Điều kiện tự nhiên thuận lợi cho phát triển kinh tế nông nghiệp.",
+                "B. Chịu ảnh hưởng từ các nền văn minh bên ngoài: Ấn Độ, Trung Hoa.",
+                "C. Sự tan rã của công xã nguyên thủy dẫn đến sự phân hóa xã hội.",
+                "D. Xuất phát từ nhu cầu đoàn kết phát triển kinh tế, bảo vệ cuộc sống chung."
+            ],
+            "correct": 1,
             "points": 5,
-            "explanation": ""
+            "explanation": "Văn minh Văn Lang – Âu Lạc hình thành chủ yếu từ nguồn lực nội sinh, không phụ thuộc ảnh hưởng bên ngoài."
         },
         {
             "type": "multiple",
-            "question": "Nội dung nào dưới đây không phải là thành tựu tiêu biểu của nền văn minh Chăm-pa?",
-            "options": [],
-            "correct": -1,
+            "question": "Nội dung nào dưới đây **không phải** là thành tựu tiêu biểu của nền văn minh Chăm-pa?",
+            "options": [
+                "A. Xây dựng bộ máy nhà nước quân chủ chuyên chế.",
+                "B. Chịu ảnh hưởng của nền văn minh Trung Hoa.",
+                "C. Có đời sống vật chất và tinh thần phong phú.",
+                "D. Có nền kinh tế nông nghiệp, thương nghiệp phát triển."
+            ],
+            "correct": 1,
             "points": 5,
-            "explanation": ""
+            "explanation": "Văn minh Champa chịu ảnh hưởng sâu sắc từ Ấn Độ thay vì Trung Hoa."
         },
         {
             "type": "multiple",
-            "question": "Nội dung nào sau đây phản ánh đúng đặc điểm của vương quốc Phù Nam?",
-            "options": [],
-            "correct": -1,
+            "question": "Nội dung nào sau đây phản ánh **đúng đặc điểm của vương quốc Phù Nam?**",
+            "options": [
+                "A. Là quốc gia phát triển trên cơ sở văn hóa Sa Huỳnh.",
+                "B. Là quốc gia có kinh tế thương nghiệp phát triển.",
+                "C. Có nền kinh tế phát triển nhất khu vực Đông Nam Á.",
+                "D. Là quốc gia hình thành sớm nhất trên lãnh thổ Việt Nam."
+            ],
+            "correct": 1,
             "points": 5,
-            "explanation": ""
+            "explanation": "Phù Nam nổi tiếng là quốc gia có nền kinh tế thương nghiệp hàng hải rất phát triển."
         },
         {
             "type": "multiple",
-            "question": "Nhận xét nào sau đây thể hiện đúng đặc điểm của bộ máy nhà nước Văn Lang – Âu Lạc?",
-            "options": [],
-            "correct": -1,
+            "question": "Nhận xét nào sau đây thể hiện **đúng đặc điểm của bộ máy nhà nước Văn Lang – Âu Lạc?**",
+            "options": [
+                "A. Xây dựng bộ máy chuyên chế ở trình độ cao.",
+                "B. Bộ máy nhà nước đảm bảo tính dân chủ.",
+                "C. Bộ máy nhà nước sơ khai chưa thể hiện chủ quyền.",
+                "D. Tổ chức đơn giản, sơ khai nhưng thể hiện được chủ quyền."
+            ],
+            "correct": 3,
             "points": 5,
-            "explanation": ""
+            "explanation": "Nhà nước Văn Lang – Âu Lạc có tổ chức sơ khai nhưng đã khẳng định được chủ quyền dân tộc."
         },
         {
-            "type": "multiple",
+            "type": "truefalse",
             "question": "Về hành trình phát triển của văn minh Đông Nam Á:",
-            "options": [],
-            "correct": -1,
-            "points": 5,
-            "explanation": ""
+            "statements": [
+                "Giai đoạn từ đầu Công nguyên đến thế kỉ VII đánh dấu sự ra đời của các quốc gia đầu tiên.",
+                "Từ thế kỉ VII đến cuối thế kỉ XV là giai đoạn văn minh Đông Nam Á bước đầu hình thành.",
+                "Từ thế kỉ XVI đến thế kỉ XIX, văn minh Đông Nam Á có những chuyển biến do sự xâm nhập của phương Tây.",
+                "Nền văn minh bản địa chỉ xuất hiện sau khi tiếp xúc với văn minh Ấn Độ và Trung Hoa."
+            ],
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "points": 20,
+            "explanation": "<ul><li>A) ĐÚNG (Đây là thời kỳ hình thành các nhà nước cổ đại sớm nhất trong khu vực.)</li><li>B) SAI (Giai đoạn này văn minh Đông Nam Á phát triển rực rỡ chứ không phải bước đầu hình thành.)</li><li>C) ĐÚNG (Đây là thời kỳ chủ nghĩa tư bản phương Tây bắt đầu xâm nhập và đô hộ khu vực.)</li><li>D) SAI (Trước khi tiếp xúc, cư dân đã có nền văn minh nông nghiệp lúa nước bản địa.)</li></ul>"
         },
         {
-            "type": "multiple",
+            "type": "truefalse",
             "question": "Về tôn giáo và tín ngưỡng tại Đông Nam Á:",
-            "options": [],
-            "correct": -1,
-            "points": 5,
-            "explanation": ""
+            "statements": [
+                "Phật giáo là tôn giáo duy nhất ảnh hưởng sâu sắc đến văn minh Đông Nam Á cổ đại.",
+                "Hồi giáo bắt đầu du nhập mạnh mẽ vào khu vực từ khoảng thế kỉ XIII thông qua các thương nhân.",
+                "Nhìn chung, các tôn giáo ở Đông Nam Á luôn cùng tồn tại và phát triển trong sự hòa hợp.",
+                "Trước khi tiếp nhận tôn giáo bên ngoài, cư dân đã có các tín ngưỡng bản địa như thờ cúng tổ tiên."
+            ],
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "points": 20,
+            "explanation": "<ul><li>A) SAI (Đông Nam Á còn chịu ảnh hưởng sâu sắc từ nhiều tôn giáo khác như Hồi giáo và Hindu giáo.)</li><li>B) ĐÚNG (Con đường thương mại hàng hải đã đưa Hồi giáo lan tỏa rộng rãi vào khu vực.)</li><li>C) ĐÚNG (Đây là một đặc điểm văn hóa nổi bật, thể hiện tính bao dung của cư dân khu vực.)</li><li>D) ĐÚNG (Thờ cúng tổ tiên và vạn vật hữu linh là những tín ngưỡng gốc của cư dân bản địa.)</li></ul>"
         },
         {
-            "type": "multiple",
+            "type": "truefalse",
             "question": "Về thành tựu chữ viết và văn học:",
-            "options": [],
-            "correct": -1,
-            "points": 5,
-            "explanation": ""
+            "statements": [
+                "Người Việt đã sáng tạo ra chữ Nôm trên cơ sở tiếp thu chữ Phạn của Ấn Độ.",
+                "Các nước Đông Nam Á đã sử dụng chữ cổ của Ấn Độ và Trung Quốc trước khi có chữ viết riêng.",
+                "Chữ Chăm cổ, chữ Khơ-me cổ là những hệ thống chữ viết dùng để ghi ngôn ngữ bản địa.",
+                "Văn học dân gian Đông Nam Á rất phong phú với các thể loại truyền thuyết, cổ tích, thần thoại."
+            ],
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "points": 20,
+            "explanation": "<ul><li>A) SAI (Chữ Nôm được sáng tạo dựa trên việc tiếp thu và biến đổi chữ Hán của Trung Quốc.)</li><li>B) ĐÚNG (Chữ Phạn, Pali và chữ Hán là nền tảng để cư dân sáng tạo ra chữ viết dân tộc.)</li><li>C) ĐÚNG (Các hệ thống này phản ánh nhu cầu khẳng định bản sắc văn hóa riêng của từng dân tộc.)</li><li>D) ĐÚNG (Đây là kho tàng tri thức dân gian đúc kết kinh nghiệm sống và quan niệm về vũ trụ.)</li></ul>"
         },
         {
-            "type": "multiple",
+            "type": "truefalse",
             "question": "Về thành tựu kiến trúc và kinh tế:",
-            "options": [],
-            "correct": -1,
-            "points": 5,
-            "explanation": ""
+            "statements": [
+                "Ăng-co Vát là một trong những công trình kiến trúc tiêu biểu nhất của In-đô-nê-xi-a.",
+                "Hoạt động kinh tế chính xuyên suốt thời cổ \\- trung đại của cư dân là nông nghiệp lúa nước.",
+                "Vị trí địa lí của Đông Nam Á là cầu nối giữa Ấn Độ Dương và Thái Bình Dương.",
+                "Hệ thống sông ngòi dày đặc chỉ gây khó khăn cho cư dân do lũ lụt thường xuyên."
+            ],
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "points": 20,
+            "explanation": "<ul><li>A) SAI (Ăng-co Vát là thành tựu của Campuchia, còn Bô-rô-bu-đua mới thuộc về In-đô-nê-xi-a.)</li><li>B) ĐÚNG (Điều kiện tự nhiên sông ngòi dày đặc rất thuận lợi cho việc canh tác lúa nước.)</li><li>C) ĐÚNG (Vị trí \"ngã tư đường\" này thúc đẩy sự giao thương và giao thoa văn hóa mạnh mẽ.)</li><li>D) SAI (Sông ngòi còn cung cấp phù sa màu mỡ, nguồn nước và là đường giao thông quan trọng.)</li></ul>"
         },
         {
-            "type": "multiple",
+            "type": "truefalse",
             "question": "Về hệ thống chữ viết của cư dân Đông Nam Á:",
-            "options": [],
-            "correct": -1,
-            "points": 5,
-            "explanation": ""
+            "statements": [
+                "Chữ Phạn và chữ Pali từ Ấn Độ được sử dụng phổ biến trước khi cư dân có chữ viết riêng.",
+                "Cư dân các nước đã sáng tạo chữ viết riêng để ghi lại ngôn ngữ bản địa của mình.",
+                "Chữ Nôm của người Việt là hệ thống chữ viết duy nhất không chịu ảnh hưởng từ bên ngoài.",
+                "Các hệ thống chữ cổ như chữ Chăm, chữ Khơ-me chỉ dùng để ghi chép kinh Phật."
+            ],
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                false
+            ],
+            "points": 20,
+            "explanation": "<ul><li>A) ĐÚNG (Đây là những hệ chữ cổ làm nền tảng để cư dân sáng tạo chữ viết dân tộc.)</li><li>B) ĐÚNG (Việc này nhằm khẳng định bản sắc văn hóa riêng của mỗi dân tộc.)</li><li>C) SAI (Chữ Nôm được sáng tạo dựa trên việc tiếp thu và biến đổi từ chữ Hán của Trung Quốc.)</li><li>D) SAI (Các hệ chữ này được dùng rộng rãi để ghi lại ngôn ngữ và đời sống của cư dân bản địa.)</li></ul>"
         },
         {
-            "type": "multiple",
+            "type": "truefalse",
             "question": "Về đặc điểm kinh tế và vị trí địa lý của khu vực:",
-            "options": [],
-            "correct": -1,
-            "points": 5,
-            "explanation": ""
+            "statements": [
+                "Hoạt động kinh tế chính của cư dân là thương nghiệp hàng hải xuyên suốt lịch sử.",
+                "Hệ thống sông ngòi dày đặc cung cấp phù sa và nước tưới cho nông nghiệp lúa nước.",
+                "Vị trí địa lý thuận lợi giúp khu vực trở thành cầu nối giữa các đại dương lớn.",
+                "Điều kiện tự nhiên của khu vực này không có sự khác biệt giữa phần lục địa và hải đảo."
+            ],
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "points": 20,
+            "explanation": "<ul><li>A) SAI (Nông nghiệp trồng lúa nước mới là hoạt động kinh tế chính và quan trọng nhất.)</li><li>B) ĐÚNG (Điều kiện tự nhiên sông ngòi thuận lợi là cơ sở cho sự phát triển của nghề nông.)</li><li>C) ĐÚNG (Đông Nam Á nằm trên đường hàng hải nối liền Ấn Độ Dương và Thái Bình Dương.)</li><li>D) SAI (Hai khu vực này có những đặc điểm địa hình và khí hậu mang sắc thái riêng biệt.)</li></ul>"
         },
         {
-            "type": "multiple",
+            "type": "truefalse",
             "question": "Về tôn giáo và tín ngưỡng của cư dân Đông Nam Á:",
-            "options": [],
-            "correct": -1,
-            "points": 5,
-            "explanation": ""
+            "statements": [
+                "Các tôn giáo từ Ấn Độ đã xóa bỏ hoàn toàn các tín ngưỡng bản địa cổ xưa.",
+                "Phật giáo từ Ấn Độ đã du nhập và để lại dấu ấn sâu sắc trong văn minh khu vực.",
+                "Tín ngưỡng sùng bái tự nhiên là một trong ba nhóm chính của tín ngưỡng bản địa.",
+                "Hồi giáo du nhập vào khu vực chủ yếu thông qua con đường bành trướng quân sự."
+            ],
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "points": 20,
+            "explanation": "<ul><li>A) SAI (Cư dân luôn kết hợp đức tin mới với tín ngưỡng bản địa như thờ cúng tổ tiên.)</li><li>B) ĐÚNG (Đây là tôn giáo có ảnh hưởng lớn đến tư tưởng và kiến trúc của nhiều quốc gia.)</li><li>C) ĐÚNG (Thờ thần Mặt Trời, thần Sông, thần Núi gắn liền với nông nghiệp lúa nước.)</li><li>D) SAI (Hồi giáo lan tỏa mạnh mẽ vào khu vực thông qua các thương nhân và con đường thương mại.)</li></ul>"
         },
         {
-            "type": "multiple",
+            "type": "truefalse",
             "question": "Về các thành tựu kiến trúc tiêu biểu:",
-            "options": [],
-            "correct": -1,
-            "points": 5,
-            "explanation": ""
+            "statements": [
+                "Quần thể kiến trúc Ăng-co Vát là thành tựu rực rỡ của văn minh Campuchia.",
+                "Bô-rô-bu-đua là một công trình kiến trúc Phật giáo tiêu biểu của Việt Nam.",
+                "Các công trình kiến trúc thời kỳ này thường gắn liền với các tôn giáo lớn.",
+                "Thánh địa Mỹ Sơn phản ánh sự giao thoa giữa văn hóa bản địa và văn hóa Ấn Độ."
+            ],
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "points": 20,
+            "explanation": "<ul><li>A) ĐÚNG (Đây là công trình kiến trúc tôn giáo đồ sộ và tiêu biểu nhất của người Khơ-me.)</li><li>B) SAI (Quần thể kiến trúc Bô-rô-bu-đua là thành tựu văn hóa vĩ đại của In-đô-nê-xi-a.)</li><li>C) ĐÚNG (Kiến trúc thường phục vụ cho mục đích tôn vinh Phật giáo hoặc Hindu giáo.)</li><li>D) ĐÚNG (Mỹ Sơn là trung tâm tôn giáo tiêu biểu của vương quốc Champa chịu ảnh hưởng Ấn Độ.)</li></ul>"
         },
         {
             "type": "essay",
