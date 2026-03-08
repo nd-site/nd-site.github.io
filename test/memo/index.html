@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSpace Memo by ND Labs - Thử Thách Trí Nhớ</title>
+    <link rel="icon" href="/logo.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f0fdfa;
+        }
+
+        .bg-gradient-edu {
+            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
+        }
+
+        .input-box {
+            font-size: 1.5rem;
+            background: transparent;
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+
+        .success-flash {
+            animation: flash 0.3s ease-out;
+        }
+
+        @keyframes flash {
+            0% {
+                background-color: transparent;
+            }
+
+            50% {
+                background-color: #ccfbf1;
+            }
+
+            100% {
+                background-color: transparent;
+            }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+
+        .hidden-screen {
+            display: none !important;
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+
+<body class="min-h-screen flex flex-col">
+
+    <header
+        class="bg-white/90 backdrop-blur-md sticky top-0 z-40 shadow-sm border-b border-teal-100 py-3 px-6 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <img src="/logo.png" alt="EduSpace Logo" class="h-10 w-auto object-contain"
+                onerror="this.src='https://ui-avatars.com/api/?name=Edu+Space&background=0ea5e9&color=fff&rounded=true'">
+            <div class="hidden sm:block">
+                <h1 class="text-xl font-extrabold tracking-tight text-slate-800">EduSpace <span
+                        class="text-teal-500 font-medium">Memo</span></h1>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-6">
+            <a href="/eduspace"
+                class="flex items-center space-x-2 text-slate-600 hover:text-teal-600 font-semibold transition-colors">
+                <i class="fas fa-home"></i>
+                <span class="hidden md:inline">Trang chủ</span>
+            </a>
+            <button onclick="showInputScreen()"
+                class="bg-teal-50 text-teal-600 px-4 py-2 rounded-xl text-sm font-bold hover:bg-teal-100 transition">
+                <i class="fas fa-edit mr-1"></i> Đổi văn bản
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto max-w-2xl p-6 flex flex-col">
+
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="flex-grow flex flex-col justify-center items-center py-10">
+            <div class="w-full bg-white rounded-3xl shadow-xl p-8 border border-teal-50">
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Hôm nay bạn học gì?</h2>
+                <p class="text-slate-500 text-sm mb-6">Dán đoạn văn bản vào đây. Sử dụng Gemini API để tự động dịch
+                    nghĩa.</p>
+
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Gemini API
+                        Key</label>
+                    <input type="password" id="api-key-input"
+                        class="w-full p-3 rounded-xl border border-slate-100 focus:border-teal-400 focus:outline-none bg-slate-50/50 text-sm"
+                        placeholder="Dán API Key của bạn tại đây...">
+                </div>
+
+                <textarea id="text-input"
+                    class="w-full h-48 p-5 rounded-2xl border-2 border-slate-100 focus:border-teal-400 focus:outline-none transition-all text-slate-700 leading-relaxed custom-scrollbar bg-slate-50/50"
+                    placeholder="Ví dụ: Learning is a lifelong journey..."></textarea>
+
+                <button onclick="startLearning()"
+                    class="w-full mt-6 bg-gradient-edu text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-teal-200 hover:scale-[1.02] active:scale-95 transition-all">
+                    BẮT ĐẦU HỌC NGAY
+                </button>
+            </div>
+        </div>
+
+        <!-- Learning Screen -->
+        <div id="learning-screen" class="hidden-screen flex flex-col">
+            <div
+                class="mb-4 p-5 bg-white rounded-2xl min-h-[80px] flex flex-wrap gap-2 items-center justify-center border border-teal-100 shadow-sm">
+                <div id="history-container" class="text-slate-400 text-sm leading-relaxed text-center"></div>
+            </div>
+
+            <div class="mb-6 text-center">
+                <div
+                    class="inline-block bg-teal-100 text-teal-700 px-4 py-1 rounded-full text-xs font-bold mb-2 shadow-sm shadow-teal-50">
+                    Từ <span id="current-step">1</span> / <span id="total-steps">0</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2 max-w-xs mx-auto overflow-hidden">
+                    <div id="progress-bar" class="bg-gradient-edu h-full transition-all duration-700 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="main-card"
+                class="bg-white rounded-[2.5rem] shadow-2xl p-8 border border-teal-50 text-center relative overflow-hidden">
+                <div class="mb-6">
+                    <span class="text-slate-400 text-[10px] uppercase tracking-[0.25em] font-black opacity-80">Ký tự cần
+                        gõ</span>
+                    <div id="first-letter-hint" class="text-7xl font-black text-teal-500 mt-2 drop-shadow-sm">-</div>
+                </div>
+
+                <div class="relative max-w-sm mx-auto mb-6">
+                    <div
+                        class="relative flex items-center bg-slate-50 rounded-2xl border-2 border-slate-100 focus-within:border-teal-400 focus-within:ring-4 focus-within:ring-teal-400/10 transition-all">
+                        <input type="text" id="word-input" autocomplete="off"
+                            class="input-box w-full px-6 py-5 focus:outline-none text-slate-800 font-medium"
+                            placeholder="Nhập từ chính xác...">
+                    </div>
+                    <div id="feedback-msg"
+                        class="absolute -bottom-6 left-0 w-full text-[10px] font-extrabold h-4 uppercase tracking-widest transition-all">
+                    </div>
+                </div>
+
+                <div class="mb-8 flex flex-col items-center">
+                    <div class="w-12 h-1 bg-slate-100 rounded-full mb-4"></div>
+                    <p class="text-[10px] text-teal-600 font-bold uppercase tracking-wider mb-1">Ý nghĩa (AI Gợi ý)</p>
+                    <p id="word-translation" class="text-xl font-bold text-slate-700 italic px-4">Đang tải nghĩa...</p>
+                </div>
+
+                <div class="flex justify-between gap-1">
+                    <button onclick="setLevel(1)"
+                        class="flex-1 py-3 rounded-xl border border-rose-100 text-[9px] text-rose-500 hover:bg-rose-50 font-black uppercase transition-all">Quên</button>
+                    <button onclick="setLevel(3)"
+                        class="flex-1 py-3 rounded-xl border border-amber-100 text-[9px] text-amber-500 hover:bg-amber-50 font-black uppercase transition-all">Hơi
+                        nhớ</button>
+                    <button onclick="setLevel(5)"
+                        class="flex-1 py-3 rounded-xl bg-teal-500 text-[9px] text-white font-black uppercase shadow-lg shadow-teal-100 active:scale-95 transition-all">Thuộc</button>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button id="ai-help-btn"
+                    class="bg-white hover:bg-teal-50 px-8 py-3 rounded-2xl text-sm text-teal-600 border border-teal-100 transition-all shadow-sm font-bold group">
+                    <i class="fas fa-sparkles mr-2 text-amber-400 group-hover:rotate-12 transition"></i>Giải thích ngữ
+                    pháp & ngữ cảnh
+                </button>
+            </div>
+        </div>
+    </main>
+    <footer class="py-10 text-center text-slate-400 text-sm font-semibold">
+        <p>© 2026 ND Labs. All rights reserved.</p>
+    </footer>
+
+    <!-- AI Modal -->
+    <div id="ai-modal"
+        class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] max-w-lg w-full shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="bg-gradient-edu p-5 flex justify-between items-center text-white">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-magic"></i>
+                    <span class="font-bold tracking-tight uppercase text-sm">EduSpace AI Detail</span>
+                </div>
+                <button onclick="toggleModal(false)"
+                    class="bg-white/10 hover:bg-white/20 w-8 h-8 rounded-full flex items-center justify-center transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="ai-content"
+                class="p-8 text-slate-600 text-sm leading-relaxed overflow-y-auto custom-scrollbar flex-grow bg-slate-50/50">
+            </div>
+            <div class="p-6 border-t border-slate-100 bg-white">
+                <button onclick="toggleModal(false)"
+                    class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-4 rounded-2xl font-bold transition-all">ĐÓNG</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let words = [];
+        let currentIndex = 0;
+        let userApiKey = "";
+
+        const input = document.getElementById('word-input');
+        const firstLetterHint = document.getElementById('first-letter-hint');
+        const translationDisplay = document.getElementById('word-translation');
+        const mainCard = document.getElementById('main-card');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const currentStepEl = document.getElementById('current-step');
+        const totalStepsEl = document.getElementById('total-steps');
+        const progressBar = document.getElementById('progress-bar');
+        const historyContainer = document.getElementById('history-container');
+        const textInput = document.getElementById('text-input');
+        const apiKeyInput = document.getElementById('api-key-input');
+
+        window.onload = () => {
+            const savedText = localStorage.getItem('eduSpaceLearnContent');
+            const savedKey = localStorage.getItem('eduSpaceApiKey');
+            if (savedText) textInput.value = savedText;
+            if (savedKey) apiKeyInput.value = savedKey;
+        };
+
+        function showInputScreen() {
+            document.getElementById('setup-screen').classList.remove('hidden-screen');
+            document.getElementById('learning-screen').classList.add('hidden-screen');
+        }
+
+        function startLearning() {
+            const text = textInput.value.trim();
+            userApiKey = apiKeyInput.value.trim();
+
+            if (!text) return alert("Vui lòng nhập văn bản!");
+            if (!userApiKey) return alert("Vui lòng nhập Gemini API Key để sử dụng tính năng gợi ý!");
+
+            localStorage.setItem('eduSpaceLearnContent', text);
+            localStorage.setItem('eduSpaceApiKey', userApiKey);
+
+            words = text.split(/\s+/).filter(w => w.length > 0);
+            currentIndex = 0;
+            totalStepsEl.textContent = words.length;
+
+            document.getElementById('setup-screen').classList.add('hidden-screen');
+            document.getElementById('learning-screen').classList.remove('hidden-screen');
+            updateTargetWord();
+        }
+
+        async function fetchTranslation(word) {
+            if (!userApiKey) return "Cần API Key";
+            translationDisplay.textContent = "Đang tra nghĩa...";
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${userApiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Chỉ trả về nghĩa tiếng Việt ngắn gọn (1-3 từ) của từ này: "${word}"` }] }]
+                    })
+                });
+                const data = await response.json();
+                const result = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "Không rõ nghĩa";
+                translationDisplay.textContent = result;
+            } catch (e) {
+                translationDisplay.textContent = "Lỗi kết nối AI";
+            }
+        }
+
+        function updateTargetWord() {
+            if (currentIndex >= words.length) {
+                alert("Chúc mừng! Bạn đã hoàn thành bài học.");
+                showInputScreen();
+                return;
+            }
+            const target = words[currentIndex];
+            firstLetterHint.textContent = target.charAt(0);
+
+            // Gọi AI lấy nghĩa cho từ hiện tại
+            fetchTranslation(target);
+
+            currentStepEl.textContent = currentIndex + 1;
+            progressBar.style.width = Math.round((currentIndex / words.length) * 100) + '%';
+            renderHistory();
+            input.focus();
+        }
+
+        function renderHistory() {
+            if (currentIndex === 0) {
+                historyContainer.innerHTML = '<span class="italic opacity-30 text-[10px] uppercase tracking-widest">Bắt đầu gõ để ghi nhớ...</span>';
+                return;
+            }
+            historyContainer.innerHTML = `<span class="text-teal-600 font-bold leading-relaxed">${words.slice(0, currentIndex).join(' ')}</span>`;
+        }
+
+        input.addEventListener('input', () => {
+            const target = words[currentIndex];
+            const typed = input.value;
+            if (typed === target) {
+                handleSuccess();
+            } else if (typed.length > 0 && !target.startsWith(typed)) {
+                handleError();
+            }
+        });
+
+        function handleSuccess() {
+            mainCard.classList.add('success-flash');
+            feedbackMsg.textContent = "CHÍNH XÁC!";
+            feedbackMsg.className = "absolute -bottom-6 left-0 w-full text-[10px] font-bold text-emerald-500 text-center uppercase tracking-widest";
+            setTimeout(() => {
+                mainCard.classList.remove('success-flash');
+                currentIndex++;
+                input.value = '';
+                updateTargetWord();
+            }, 200);
+        }
+
+        function handleError() {
+            mainCard.classList.add('shake');
+            input.classList.add('text-rose-500');
+            setTimeout(() => {
+                mainCard.classList.remove('shake');
+                input.classList.remove('text-rose-500');
+            }, 400);
+        }
+
+        async function askAI() {
+            const word = words[currentIndex];
+            toggleModal(true);
+            const content = document.getElementById('ai-content');
+            content.innerHTML = '<div class="text-center py-10"><i class="fas fa-spinner fa-spin text-2xl mb-2"></i><p>AI đang phân tích ngữ cảnh...</p></div>';
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${userApiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Giải thích từ "${word}" trong đoạn văn bản tôi đang học. Đưa ra nghĩa, loại từ và ví dụ.` }] }]
+                    })
+                });
+                const data = await response.json();
+                content.innerHTML = marked.parse(data.candidates[0].content.parts[0].text);
+            } catch (e) {
+                content.innerHTML = "Lỗi kết nối AI hoặc sai Key.";
+            }
+        }
+
+        function toggleModal(show) {
+            document.getElementById('ai-modal').classList.toggle('hidden', !show);
+        }
+
+        document.getElementById('ai-help-btn').addEventListener('click', askAI);
+    </script>
+</body>
+
+</html>

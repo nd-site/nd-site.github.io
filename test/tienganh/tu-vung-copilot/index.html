@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduSpace ..... by ND Labs</title>
+  <link rel="icon" href="/logo.png" type="image/png" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #22c55e;
+      --accent-2: #3b82f6;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --border: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(6px);
+      z-index: 10;
+    }
+
+    header img {
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    header h1 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    header .spacer {
+      flex: 1;
+    }
+
+    header .api {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 8px;
+      width: 100%;
+    }
+
+    button {
+      background: var(--accent-2);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button.secondary {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    button.danger {
+      background: var(--danger);
+    }
+
+    button.warning {
+      background: var(--warning);
+      color: #111827;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    h2 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .row3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .row4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      padding: 8px;
+      vertical-align: top;
+    }
+
+    th {
+      text-align: left;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    tr:hover td {
+      background: #0b1220;
+    }
+
+    .progress {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .bar {
+      height: 8px;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .bar>div {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .pill {
+      background: #0b1220;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    .quiz-card {
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .choice {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .choice.correct {
+      border-color: #22c55e;
+    }
+
+    .choice.wrong {
+      border-color: #ef4444;
+    }
+
+    .answer-input {
+      margin-top: 12px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chatbot {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      width: 340px;
+      max-height: 60vh;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+    }
+
+    .chatbot header {
+      position: static;
+      padding: 10px 12px;
+    }
+
+    .chatlog {
+      padding: 12px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .msg {
+      margin-bottom: 10px;
+    }
+
+    .msg .role {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .msg .bubble {
+      background: #0b1220;
+      border: 1px solid var(--border);
+      padding: 8px;
+      border-radius: 8px;
+      margin-top: 4px;
+      white-space: pre-wrap;
+    }
+
+    .toggle {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 21;
+    }
+
+    .toggle button {
+      border-radius: 999px;
+      padding: 10px 14px;
+    }
+
+    @media (max-width: 980px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .choices {
+        grid-template-columns: 1fr;
+      }
+
+      .chatbot {
+        width: calc(100% - 32px);
+      }
+    }
+  </style>
+    <script src="/nd-navbar.js" defer></script></head>
+
+<body>
+  <header>
+    <img src="/logo.png" alt="EduSpace logo" id="logo" />
+    <h1>EduSpace ..... by ND Labs</h1>
+    <div class="spacer"></div>
+    <div class="api">
+      <input id="apiKey" type="text" placeholder="Nhập Gemini API key từ aistudio.com" />
+      <button id="saveKey">Lưu API</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Data & AI panel -->
+    <section>
+      <h2>Dữ liệu từ vựng & AI</h2>
+      <div class="row">
+        <div>
+          <label>Thêm mục mới</label>
+          <div class="row">
+            <input id="enInput" type="text" placeholder="Tiếng Anh" />
+            <input id="viInput" type="text" placeholder="Tiếng Việt" />
+          </div>
+          <div class="row">
+            <input id="phonInput" type="text" placeholder="Phiên âm" />
+            <input id="posInput" type="text" placeholder="Loại từ (noun, verb,...)" />
+          </div>
+          <textarea id="usageInput" rows="2" placeholder="Cách sử dụng (ví dụ câu, collocations)"></textarea>
+          <div class="toolbar" style="margin-top:8px;">
+            <button id="addRow">Thêm vào bảng</button>
+            <button class="secondary" id="aiFill">AI điền thiếu</button>
+          </div>
+        </div>
+        <div>
+          <label>Tải lên / Tải xuống</label>
+          <div class="toolbar" style="margin-top:8px;">
+            <input id="fileInput" type="file" accept=".csv,.json" />
+            <button id="downloadData">Tải về file data (CSV)</button>
+            <button class="warning" id="resetData">Xóa dữ liệu bảng</button>
+          </div>
+          <p style="color:var(--muted); font-size:13px; margin-top:8px;">
+            Định dạng CSV: English,Phonetics,POS,Vietnamese,Usage
+          </p>
+        </div>
+      </div>
+
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Tiếng Anh</th>
+            <th>Phiên âm</th>
+            <th>Loại từ</th>
+            <th>Tiếng Việt</th>
+            <th>Cách sử dụng</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- Quiz panel -->
+    <section>
+      <h2>Kiểm tra & Tiến trình</h2>
+      <div class="row">
+        <div>
+          <label>Chọn hình thức kiểm tra</label>
+          <select id="modeSelect">
+            <option value="mcq_en_vi">Trắc nghiệm bằng tiếng Anh (EN→VI)</option>
+            <option value="mcq_vi_en">Trắc nghiệm tiếng Việt (VI→EN)</option>
+            <option value="mcq_phon_vi">Trắc nghiệm phiên âm (PHON→VI)</option>
+            <option value="mcq_mixed">Trắc nghiệm nhiều hình thức (trộn)</option>
+            <option value="fr_en_vi">Tự luận: nhìn tiếng Anh gõ tiếng Việt</option>
+            <option value="fr_vi_en">Tự luận: nhìn tiếng Việt gõ tiếng Anh</option>
+            <option value="fr_phon_vi">Tự luận: nhìn phiên âm gõ tiếng Việt</option>
+            <option value="fr_mixed">Tự luận nhiều hình thức (trộn)</option>
+          </select>
+        </div>
+        <div>
+          <label>Tùy chọn lặp</label>
+          <div class="row">
+            <input id="repeatCount" type="number" min="0" placeholder="Số lần lặp (0 = vô hạn)" />
+            <input id="maxQuestions" type="number" min="0" placeholder="Số câu tối đa (0 = vô hạn)" />
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar" style="margin-top:8px;">
+        <button id="startQuiz">Bắt đầu</button>
+        <button class="secondary" id="stopQuiz">Dừng</button>
+        <button class="danger" id="clearProgress">Xóa tiến trình học (localStorage)</button>
+      </div>
+
+      <div class="progress">
+        <div class="pill" id="statTotal">Tổng: 0</div>
+        <div class="pill" id="statCorrect">Đúng: 0</div>
+        <div class="pill" id="statStreak">Chuỗi liên tiếp: 0</div>
+        <div class="bar">
+          <div id="progressBar"></div>
+        </div>
+      </div>
+
+      <div class="quiz-card hidden" id="quizCard">
+        <div id="promptLabel" style="color:var(--muted); font-size:13px;"></div>
+        <div id="questionText" style="font-size:20px; font-weight:700; margin-top:4px;"></div>
+
+        <div class="choices hidden" id="choices"></div>
+
+        <div class="answer-input hidden" id="answerBox">
+          <input id="answerInput" type="text" placeholder="Nhập đáp án..." />
+          <div class="toolbar" style="margin-top:8px;">
+            <button id="submitAnswer">Nộp</button>
+            <button class="secondary" id="showAnswer">Hiện đáp án</button>
+          </div>
+          <div id="feedback" style="margin-top:8px; font-size:14px;"></div>
+        </div>
+
+        <div class="footer-actions">
+          <button id="nextQuestion">Câu tiếp</button>
+          <button class="secondary" id="restartQuiz">Học lại</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer style="margin: 40px 0; text-align: center; color: var(--muted); font-size: 13px; font-weight: 600;">
+    <p>© 2026 ND Labs. All rights reserved.</p>
+  </footer>
+
+  <!-- Chatbot toggle -->
+  <div class="toggle">
+    <button id="toggleChat">Chat Gemini</button>
+  </div>
+
+  <!-- Chatbot -->
+  <div class="chatbot hidden" id="chatbot">
+    <header>
+      <strong>Chatbot Gemini</strong>
+    </header>
+    <div class="chatlog" id="chatlog"></div>
+    <div class="chat-input">
+      <input id="chatInput" type="text" placeholder="Hỏi bài... (hỗ trợ Markdown)" />
+      <button id="chatSend">Gửi</button>
+    </div>
+  </div>
+
+  <script>
+    // ---------- State ----------
+    const state = {
+      apiKey: localStorage.getItem('edu_apiKey') || '',
+      data: JSON.parse(localStorage.getItem('edu_data') || '[]'),
+      quiz: {
+        running: false,
+        mode: 'mcq_en_vi',
+        repeatCount: 0,
+        maxQuestions: 0,
+        total: 0,
+        correct: 0,
+        streak: 0,
+        asked: [],
+        current: null,
+        currentMode: null,
+      },
+      chat: [],
+    };
+
+    // ---------- Elements ----------
+    const el = {
+      logo: document.getElementById('logo'),
+      apiKey: document.getElementById('apiKey'),
+      saveKey: document.getElementById('saveKey'),
+      enInput: document.getElementById('enInput'),
+      viInput: document.getElementById('viInput'),
+      phonInput: document.getElementById('phonInput'),
+      posInput: document.getElementById('posInput'),
+      usageInput: document.getElementById('usageInput'),
+      addRow: document.getElementById('addRow'),
+      aiFill: document.getElementById('aiFill'),
+      fileInput: document.getElementById('fileInput'),
+      downloadData: document.getElementById('downloadData'),
+      resetData: document.getElementById('resetData'),
+      dataTableBody: document.querySelector('#dataTable tbody'),
+      modeSelect: document.getElementById('modeSelect'),
+      repeatCount: document.getElementById('repeatCount'),
+      maxQuestions: document.getElementById('maxQuestions'),
+      startQuiz: document.getElementById('startQuiz'),
+      stopQuiz: document.getElementById('stopQuiz'),
+      clearProgress: document.getElementById('clearProgress'),
+      statTotal: document.getElementById('statTotal'),
+      statCorrect: document.getElementById('statCorrect'),
+      statStreak: document.getElementById('statStreak'),
+      progressBar: document.getElementById('progressBar'),
+      quizCard: document.getElementById('quizCard'),
+      promptLabel: document.getElementById('promptLabel'),
+      questionText: document.getElementById('questionText'),
+      choices: document.getElementById('choices'),
+      answerBox: document.getElementById('answerBox'),
+      answerInput: document.getElementById('answerInput'),
+      submitAnswer: document.getElementById('submitAnswer'),
+      showAnswer: document.getElementById('showAnswer'),
+      feedback: document.getElementById('feedback'),
+      nextQuestion: document.getElementById('nextQuestion'),
+      restartQuiz: document.getElementById('restartQuiz'),
+      toggleChat: document.getElementById('toggleChat'),
+      chatbot: document.getElementById('chatbot'),
+      chatlog: document.getElementById('chatlog'),
+      chatInput: document.getElementById('chatInput'),
+      chatSend: document.getElementById('chatSend'),
+    };
+
+    // ---------- Init ----------
+    el.apiKey.value = state.apiKey;
+    renderTable();
+    renderStats();
+
+    // ---------- Navigation ----------
+    el.logo.addEventListener('click', () => {
+      window.location.href = '/eduspace';
+    });
+
+    // ---------- Save API key ----------
+    el.saveKey.addEventListener('click', () => {
+      state.apiKey = el.apiKey.value.trim();
+      localStorage.setItem('edu_apiKey', state.apiKey);
+      toast('Đã lưu API key.');
+    });
+
+    // ---------- Add row ----------
+    el.addRow.addEventListener('click', () => {
+      const row = {
+        en: el.enInput.value.trim(),
+        phon: el.phonInput.value.trim(),
+        pos: el.posInput.value.trim(),
+        vi: el.viInput.value.trim(),
+        usage: el.usageInput.value.trim(),
+      };
+      if (!row.en && !row.vi) {
+        toast('Cần ít nhất Tiếng Anh hoặc Tiếng Việt.');
+        return;
+      }
+      state.data.push(row);
+      persistData();
+      renderTable();
+      clearInputs();
+    });
+
+    function clearInputs() {
+      el.enInput.value = '';
+      el.phonInput.value = '';
+      el.posInput.value = '';
+      el.viInput.value = '';
+      el.usageInput.value = '';
+    }
+
+    // ---------- AI Fill ----------
+    el.aiFill.addEventListener('click', async () => {
+      if (!state.apiKey) { toast('Vui lòng nhập API key trước.'); return; }
+      if (state.data.length === 0) { toast('Bảng đang trống.'); return; }
+      toast('Đang dùng AI để điền thiếu...');
+
+      for (let i = 0; i < state.data.length; i++) {
+        const item = state.data[i];
+        const need = {
+          en: !item.en,
+          vi: !item.vi,
+          phon: !item.phon,
+          pos: !item.pos,
+          usage: !item.usage,
+        };
+        if (!need.en && !need.vi && !need.phon && !need.pos && !need.usage) continue;
+
+        const prompt = buildFillPrompt(item, need);
+        try {
+          const result = await callGeminiText(prompt);
+          const parsed = safeParseAI(result);
+          item.en = item.en || parsed.en || item.en;
+          item.vi = item.vi || parsed.vi || item.vi;
+          item.phon = item.phon || parsed.phon || item.phon;
+          item.pos = item.pos || parsed.pos || item.pos;
+          item.usage = item.usage || parsed.usage || item.usage;
+          persistData();
+          renderTable();
+        } catch (e) {
+          console.warn('AI fill error', e);
+        }
+      }
+      toast('Hoàn tất AI điền thiếu.');
+    });
+
+    function buildFillPrompt(item, need) {
+      const base = `
+Bạn là trợ lý từ vựng. Trả về JSON với các khóa: en, vi, phon, pos, usage.
+- en: từ/cụm từ tiếng Anh
+- vi: nghĩa tiếng Việt ngắn gọn
+- phon: phiên âm IPA
+- pos: loại từ (noun/verb/adj/adv/phrase...)
+- usage: 1-2 câu ví dụ hoặc cách dùng ngắn
+
+Dựa trên dữ liệu hiện có:
+${JSON.stringify(item, null, 2)}
+
+Chỉ điền những trường còn thiếu, nhưng nếu có thể hãy chuẩn hóa đầy đủ.
+Trả về JSON thuần, không giải thích.`;
+      return base.trim();
+    }
+
+    async function callGeminiText(prompt) {
+      // Minimal REST call for Gemini text generation
+      const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + encodeURIComponent(state.apiKey);
+      const body = {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      };
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error('Gemini API error ' + res.status);
+      const data = await res.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      return text;
+    }
+
+    function safeParseAI(text) {
+      try {
+        const cleaned = text.trim().replace(/^```json/, '').replace(/```$/, '');
+        const obj = JSON.parse(cleaned);
+        return {
+          en: obj.en || '',
+          vi: obj.vi || '',
+          phon: obj.phon || '',
+          pos: obj.pos || '',
+          usage: obj.usage || '',
+        };
+      } catch {
+        return { en: '', vi: '', phon: '', pos: '', usage: '' };
+      }
+    }
+
+    // ---------- File upload/download ----------
+    el.fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const text = await file.text();
+      let rows = [];
+      if (file.name.endsWith('.json')) {
+        try { rows = JSON.parse(text); } catch { toast('JSON không hợp lệ.'); return; }
+      } else {
+        rows = parseCSV(text);
+      }
+      // Normalize
+      const normalized = rows.map(r => ({
+        en: r.en || r.English || r[0] || '',
+        phon: r.phon || r.Phonetics || r[1] || '',
+        pos: r.pos || r.POS || r[2] || '',
+        vi: r.vi || r.Vietnamese || r[3] || '',
+        usage: r.usage || r.Usage || r[4] || '',
+      })).filter(x => x.en || x.vi);
+      state.data = normalized;
+      persistData();
+      renderTable();
+      toast('Đã tải dữ liệu.');
+      el.fileInput.value = '';
+    });
+
+    el.downloadData.addEventListener('click', () => {
+      const csv = toCSV(state.data);
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'eduspace_data.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    el.resetData.addEventListener('click', () => {
+      if (!confirm('Xóa toàn bộ dữ liệu bảng?')) return;
+      state.data = [];
+      persistData();
+      renderTable();
+    });
+
+    function parseCSV(text) {
+      const lines = text.split(/\r?\n/).filter(l => l.trim().length);
+      const rows = [];
+      for (const line of lines) {
+        const cols = line.split(',').map(c => c.trim());
+        rows.push(cols);
+      }
+      return rows;
+    }
+
+    function toCSV(rows) {
+      const header = ['English', 'Phonetics', 'POS', 'Vietnamese', 'Usage'].join(',');
+      const body = rows.map(r => [
+        escapeCSV(r.en || ''),
+        escapeCSV(r.phon || ''),
+        escapeCSV(r.pos || ''),
+        escapeCSV(r.vi || ''),
+        escapeCSV(r.usage || ''),
+      ].join(',')).join('\n');
+      return header + '\n' + body;
+    }
+
+    function escapeCSV(s) {
+      if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+        return '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    }
+
+    // ---------- Table render ----------
+    function renderTable() {
+      el.dataTableBody.innerHTML = '';
+      state.data.forEach((row, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td contenteditable="true" data-field="en">${escapeHTML(row.en || '')}</td>
+          <td contenteditable="true" data-field="phon">${escapeHTML(row.phon || '')}</td>
+          <td contenteditable="true" data-field="pos">${escapeHTML(row.pos || '')}</td>
+          <td contenteditable="true" data-field="vi">${escapeHTML(row.vi || '')}</td>
+          <td contenteditable="true" data-field="usage">${escapeHTML(row.usage || '')}</td>
+          <td>
+            <button class="secondary" data-action="delete" data-idx="${idx}">Xóa</button>
+          </td>
+        `;
+        // Edit handlers
+        tr.querySelectorAll('td[contenteditable]').forEach(td => {
+          td.addEventListener('blur', () => {
+            const field = td.getAttribute('data-field');
+            state.data[idx][field] = td.textContent.trim();
+            persistData();
+          });
+        });
+        tr.querySelector('button[data-action="delete"]').addEventListener('click', () => {
+          state.data.splice(idx, 1);
+          persistData();
+          renderTable();
+        });
+        el.dataTableBody.appendChild(tr);
+      });
+    }
+
+    function escapeHTML(s) {
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function persistData() {
+      localStorage.setItem('edu_data', JSON.stringify(state.data));
+    }
+
+    // ---------- Quiz ----------
+    el.modeSelect.addEventListener('change', () => state.quiz.mode = el.modeSelect.value);
+    el.repeatCount.addEventListener('input', () => state.quiz.repeatCount = parseInt(el.repeatCount.value || '0', 10));
+    el.maxQuestions.addEventListener('input', () => state.quiz.maxQuestions = parseInt(el.maxQuestions.value || '0', 10));
+
+    el.startQuiz.addEventListener('click', () => {
+      if (state.data.length === 0) { toast('Chưa có dữ liệu.'); return; }
+      state.quiz.running = true;
+      state.quiz.total = 0;
+      state.quiz.correct = 0;
+      state.quiz.streak = 0;
+      state.quiz.asked = [];
+      el.quizCard.classList.remove('hidden');
+      nextQuestion();
+      renderStats();
+    });
+
+    el.stopQuiz.addEventListener('click', () => {
+      if (!state.quiz.running) return;
+      state.quiz.running = false;
+      el.quizCard.classList.add('hidden');
+      saveProgress();
+      toast('Đã dừng và lưu tiến trình.');
+    });
+
+    el.clearProgress.addEventListener('click', () => {
+      if (!confirm('Xóa tiến trình học hiện tại?')) return;
+      localStorage.removeItem('edu_progress');
+      toast('Đã xóa tiến trình.');
+    });
+
+    el.nextQuestion.addEventListener('click', () => {
+      if (!state.quiz.running) return;
+      nextQuestion();
+    });
+
+    el.restartQuiz.addEventListener('click', () => {
+      if (!state.quiz.running) {
+        state.quiz.running = true;
+        state.quiz.total = 0;
+        state.quiz.correct = 0;
+        state.quiz.streak = 0;
+        state.quiz.asked = [];
+        el.quizCard.classList.remove('hidden');
+        nextQuestion();
+        renderStats();
+      }
+    });
+
+    el.submitAnswer.addEventListener('click', () => {
+      const ans = el.answerInput.value.trim();
+      const { current, currentMode } = state.quiz;
+      const correct = getCorrectAnswer(current, currentMode);
+      const ok = compareAnswer(ans, correct);
+      updateScore(ok);
+      el.feedback.textContent = ok ? 'Đúng!' : `Sai. Đáp án: ${correct}`;
+    });
+
+    el.showAnswer.addEventListener('click', () => {
+      const { current, currentMode } = state.quiz;
+      const correct = getCorrectAnswer(current, currentMode);
+      el.feedback.textContent = `Đáp án: ${correct}`;
+    });
+
+    function nextQuestion() {
+      // Stop conditions
+      if (state.quiz.maxQuestions > 0 && state.quiz.total >= state.quiz.maxQuestions) {
+        state.quiz.running = false;
+        el.quizCard.classList.add('hidden');
+        saveProgress();
+        toast('Đã đạt số câu tối đa. Tiến trình đã lưu.');
+        return;
+      }
+      if (state.quiz.repeatCount > 0 && state.quiz.total >= state.quiz.repeatCount) {
+        state.quiz.running = false;
+        el.quizCard.classList.add('hidden');
+        saveProgress();
+        toast('Đã hoàn thành số lần lặp. Tiến trình đã lưu.');
+        return;
+      }
+
+      const item = pickItem();
+      const mode = pickMode();
+      state.quiz.current = item;
+      state.quiz.currentMode = mode;
+
+      // Render question
+      el.feedback.textContent = '';
+      el.answerInput.value = '';
+      el.choices.innerHTML = '';
+      el.choices.classList.add('hidden');
+      el.answerBox.classList.add('hidden');
+
+      const { prompt, question } = buildQuestion(item, mode);
+      el.promptLabel.textContent = prompt;
+      el.questionText.textContent = question;
+
+      if (mode.startsWith('mcq')) {
+        const options = buildChoices(item, mode, 4);
+        el.choices.classList.remove('hidden');
+        options.forEach(opt => {
+          const div = document.createElement('div');
+          div.className = 'choice';
+          div.textContent = opt.text;
+          div.addEventListener('click', () => {
+            const correct = opt.correct;
+            updateScore(correct);
+            div.classList.add(correct ? 'correct' : 'wrong');
+          });
+          el.choices.appendChild(div);
+        });
+      } else {
+        el.answerBox.classList.remove('hidden');
+      }
+    }
+
+    function pickItem() {
+      // Avoid repeating too soon
+      const pool = state.data;
+      let idx = Math.floor(Math.random() * pool.length);
+      // Try to avoid last asked
+      for (let tries = 0; tries < 5; tries++) {
+        if (!state.quiz.asked.includes(idx)) break;
+        idx = Math.floor(Math.random() * pool.length);
+      }
+      state.quiz.asked.push(idx);
+      if (state.quiz.asked.length > Math.min(20, pool.length)) state.quiz.asked.shift();
+      return pool[idx];
+    }
+
+    function pickMode() {
+      const m = state.quiz.mode;
+      if (m === 'mcq_mixed') {
+        const arr = ['mcq_en_vi', 'mcq_vi_en', 'mcq_phon_vi'];
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+      if (m === 'fr_mixed') {
+        const arr = ['fr_en_vi', 'fr_vi_en', 'fr_phon_vi'];
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+      return m;
+    }
+
+    function buildQuestion(item, mode) {
+      switch (mode) {
+        case 'mcq_en_vi':
+          return { prompt: 'Chọn nghĩa tiếng Việt', question: item.en || '(trống)' };
+        case 'mcq_vi_en':
+          return { prompt: 'Chọn từ tiếng Anh', question: item.vi || '(trống)' };
+        case 'mcq_phon_vi':
+          return { prompt: 'Chọn nghĩa tiếng Việt (từ phiên âm)', question: item.phon || '(trống)' };
+        case 'fr_en_vi':
+          return { prompt: 'Nhập nghĩa tiếng Việt', question: item.en || '(trống)' };
+        case 'fr_vi_en':
+          return { prompt: 'Nhập từ tiếng Anh', question: item.vi || '(trống)' };
+        case 'fr_phon_vi':
+          return { prompt: 'Nhập nghĩa tiếng Việt (từ phiên âm)', question: item.phon || '(trống)' };
+        default:
+          return { prompt: 'Câu hỏi', question: item.en || item.vi || '(trống)' };
+      }
+    }
+
+    function buildChoices(item, mode, count = 4) {
+      const correctText = getCorrectAnswer(item, mode);
+      const distractors = generateDistractors(item, mode, count - 1);
+      const options = [{ text: correctText, correct: true }, ...distractors.map(t => ({ text: t, correct: false }))];
+      // Shuffle
+      for (let i = options.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [options[i], options[j]] = [options[j], options[i]];
+      }
+      return options;
+    }
+
+    function getCorrectAnswer(item, mode) {
+      switch (mode) {
+        case 'mcq_en_vi':
+        case 'fr_en_vi':
+          return item.vi || '';
+        case 'mcq_vi_en':
+          return item.en || '';
+        case 'mcq_phon_vi':
+        case 'fr_phon_vi':
+          return item.vi || '';
+        case 'fr_vi_en':
+          return item.en || '';
+        default:
+          return item.vi || item.en || '';
+      }
+    }
+
+    function generateDistractors(item, mode, n) {
+      const pool = state.data.filter(x => x !== item);
+      const answers = [];
+      for (let i = 0; i < pool.length && answers.length < n; i++) {
+        const candidate = pool[Math.floor(Math.random() * pool.length)];
+        let text = '';
+        if (mode === 'mcq_en_vi' || mode === 'mcq_phon_vi') text = candidate.vi || '';
+        else if (mode === 'mcq_vi_en') text = candidate.en || '';
+        if (text && text !== getCorrectAnswer(item, mode) && !answers.includes(text)) answers.push(text);
+      }
+      // If not enough, pad with variations
+      while (answers.length < n) {
+        answers.push('—');
+      }
+      return answers;
+    }
+
+    function compareAnswer(input, correct) {
+      const a = (input || '').trim().toLowerCase();
+      const b = (correct || '').trim().toLowerCase();
+      return a === b;
+    }
+
+    function updateScore(ok) {
+      state.quiz.total += 1;
+      if (ok) {
+        state.quiz.correct += 1;
+        state.quiz.streak += 1;
+      } else {
+        state.quiz.streak = 0;
+      }
+      renderStats();
+    }
+
+    function renderStats() {
+      el.statTotal.textContent = 'Tổng: ' + state.quiz.total;
+      el.statCorrect.textContent = 'Đúng: ' + state.quiz.correct;
+      el.statStreak.textContent = 'Chuỗi liên tiếp: ' + state.quiz.streak;
+      const pct = state.quiz.total > 0 ? Math.round(100 * state.quiz.correct / state.quiz.total) : 0;
+      el.progressBar.style.width = pct + '%';
+    }
+
+    function saveProgress() {
+      const snapshot = {
+        timestamp: Date.now(),
+        quiz: state.quiz,
+      };
+      localStorage.setItem('edu_progress', JSON.stringify(snapshot));
+    }
+
+    // ---------- Chatbot ----------
+    el.toggleChat.addEventListener('click', () => {
+      el.chatbot.classList.toggle('hidden');
+    });
+
+    el.chatSend.addEventListener('click', sendChat);
+    el.chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendChat();
+    });
+
+    async function sendChat() {
+      const text = el.chatInput.value.trim();
+      if (!text) return;
+      if (!state.apiKey) { toast('Vui lòng nhập API key trước.'); return; }
+      pushChat('user', text);
+      el.chatInput.value = '';
+      try {
+        const reply = await callGeminiText(`Bạn là trợ lý học từ vựng. Trả lời bằng Markdown ngắn gọn, rõ ràng.\n\nCâu hỏi:\n${text}`);
+        pushChat('model', reply);
+      } catch (e) {
+        pushChat('model', 'Xin lỗi, có lỗi khi gọi AI.');
+      }
+    }
+
+    function pushChat(role, content) {
+      state.chat.push({ role, content });
+      renderChat();
+    }
+
+    function renderChat() {
+      el.chatlog.innerHTML = '';
+      state.chat.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = 'msg';
+        const role = document.createElement('div');
+        role.className = 'role';
+        role.textContent = msg.role === 'user' ? 'Bạn' : 'Gemini';
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.innerHTML = renderMarkdown(msg.content);
+        div.appendChild(role);
+        div.appendChild(bubble);
+        el.chatlog.appendChild(div);
+      });
+      el.chatlog.scrollTop = el.chatlog.scrollHeight;
+    }
+
+    // ---------- Minimal Markdown renderer ----------
+    function renderMarkdown(md) {
+      // Very small subset: **bold**, *italic*, `code`, headings, lists, links
+      let html = md
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      html = html.replace(/^###### (.*)$/gm, '<h6>$1</h6>')
+        .replace(/^##### (.*)$/gm, '<h5>$1</h5>')
+        .replace(/^#### (.*)$/gm, '<h4>$1</h4>')
+        .replace(/^### (.*)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.*)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.*)$/gm, '<h1>$1</h1>');
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/
+
+          \[([^\]
+
+] +) \]
+
+      \(([^)] +) \) /g, '<a href="$2" target="_blank" rel="noopener">$1</a > ');
+      // Lists
+      html = html.replace(/^\s*-\s+(.*)$/gm, '<li>$1</li>');
+      html = html.replace(/(<li>.*<\/li>)(\s*<li>.*<\/li>)+/gs, match => `<ul>${match}</ul>`);
+      // Paragraphs
+      html = html.replace(/(^|\n)([^\n<][^\n]*)/g, (m, p1, p2) => `${p1}<p>${p2}</p>`);
+      return html;
+    }
+
+    // ---------- Toast ----------
+    function toast(msg) {
+      const div = document.createElement('div');
+      div.textContent = msg;
+      div.style.position = 'fixed';
+      div.style.left = '50%';
+      div.style.top = '20px';
+      div.style.transform = 'translateX(-50%)';
+      div.style.background = '#111827';
+      div.style.border = '1px solid var(--border)';
+      div.style.color = 'var(--text)';
+      div.style.padding = '8px 12px';
+      div.style.borderRadius = '8px';
+      div.style.zIndex = '100';
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 2000);
+    }
+  </script>
+</body>
+
+</html>

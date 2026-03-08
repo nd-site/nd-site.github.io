@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khám Phá Lịch Sử Văn Minh Thế Giới</title>
+    <link rel="icon" href="/logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&family=Roboto:wght@300;400;500;700&display=swap');
+
+        :root {
+            --color-bg: #FDFBF7;
+            --color-paper: #FFFFFF;
+            --color-ink: #292524;
+            --color-accent: #CA8A04;
+            --color-primary: #9F1239;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-ink);
+        }
+
+        h1, h2, h3, h4, .serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            height: 300px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .info-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn.active {
+            border-bottom: 2px solid #9F1239;
+            color: #9F1239;
+            font-weight: 700;
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-sm border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-rose-800 text-white rounded-full flex items-center justify-center text-xl font-bold serif">L</div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-stone-800 serif">Lịch Sử Văn Minh</h1>
+                    <p class="text-xs text-stone-500">Khám phá & Tương tác Dữ liệu</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-8 items-center">
+                <a href="#dashboard" class="text-stone-600 hover:text-rose-700 font-medium">Tổng Quan</a>
+                <a href="#exploration" class="text-stone-600 hover:text-rose-700 font-medium">Khám Phá</a>
+                <a href="#quiz" class="px-4 py-2 bg-rose-700 text-white rounded-lg hover:bg-rose-800 shadow-sm">Thử Tài</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
+        
+        <section class="mb-4">
+            <p class="text-lg text-stone-700 max-w-4xl leading-relaxed">
+                Chào mừng bạn đến với ứng dụng tương tác <strong>Lịch Sử Văn Minh Thế Giới</strong>. 
+                Hãy sử dụng biểu đồ và thẻ thông tin để khám phá, hoặc thử sức mình trong phần trắc nghiệm.
+            </p>
+        </section>
+
+        <section id="dashboard" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 flex flex-col justify-center">
+                <h2 class="text-lg font-bold text-stone-800 mb-4 serif border-l-4 border-rose-700 pl-3">Chỉ Số Tổng Quan</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-amber-50 p-4 rounded-lg text-center">
+                        <div class="text-3xl font-bold text-amber-700 serif">52</div>
+                        <div class="text-xs text-stone-600 uppercase mt-1">Dữ Liệu</div>
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-lg text-center">
+                        <div class="text-3xl font-bold text-emerald-700 serif">3</div>
+                        <div class="text-xs text-stone-600 uppercase mt-1">Kỷ Nguyên</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                <h2 class="text-lg font-bold text-stone-800 mb-4 serif border-l-4 border-blue-700 pl-3">Phân Bố Chủ Đề</h2>
+                <div class="chart-container">
+                    <canvas id="topicDistributionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="exploration" class="mt-8">
+            <div class="flex border-b border-stone-200 mb-6 overflow-x-auto">
+                <button onclick="switchTab('east')" id="tab-east" class="tab-btn active px-6 py-3 text-stone-500 whitespace-nowrap">Phương Đông</button>
+                <button onclick="switchTab('west')" id="tab-west" class="tab-btn px-6 py-3 text-stone-500 whitespace-nowrap">Phương Tây</button>
+                <button onclick="switchTab('modern')" id="tab-modern" class="tab-btn px-6 py-3 text-stone-500 whitespace-nowrap">Phục Hưng & CMCN</button>
+            </div>
+
+            <div id="content-east" class="tab-content grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
+                <div class="info-card bg-white p-5 rounded-lg shadow-sm border-t-4 border-amber-500">
+                    <h3 class="font-bold text-lg mb-2">Ai Cập</h3>
+                    <p class="text-sm text-stone-600">Chữ tượng hình, Kim tự tháp & Tượng Nhân sư.</p>
+                </div>
+                <div class="info-card bg-white p-5 rounded-lg shadow-sm border-t-4 border-red-600">
+                    <h3 class="font-bold text-lg mb-2">Trung Hoa</h3>
+                    <p class="text-sm text-stone-600">Tứ đại phát minh: Giấy, In, La bàn, Thuốc súng.</p>
+                </div>
+                <div class="info-card bg-white p-5 rounded-lg shadow-sm border-t-4 border-purple-600">
+                    <h3 class="font-bold text-lg mb-2">Ấn Độ</h3>
+                    <p class="text-sm text-stone-600">Quê hương Phật giáo và Hindu giáo.</p>
+                </div>
+            </div>
+
+            <div id="content-west" class="tab-content hidden grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
+                <div class="bg-sky-50 p-6 rounded-xl border border-sky-100">
+                    <h3 class="text-xl font-bold text-sky-900 mb-4">Hy Lạp</h3>
+                    <p class="text-sm">Triết học, Olympic (776 TCN), Pi-ta-go, Ơ-clít.</p>
+                </div>
+                <div class="bg-rose-50 p-6 rounded-xl border border-rose-100">
+                    <h3 class="text-xl font-bold text-rose-900 mb-4">La Mã</h3>
+                    <p class="text-sm">Hệ thống luật pháp, Chữ Latinh, Đấu trường Colosseum.</p>
+                </div>
+            </div>
+
+            <div id="content-modern" class="tab-content hidden space-y-8 animate-fade-in">
+                <div class="bg-white p-6 rounded-xl border border-stone-200">
+                    <h3 class="text-xl font-bold mb-4">Tiến trình Cách mạng Công nghiệp</h3>
+                    <div class="chart-container">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="mt-12 mb-12">
+            <div class="bg-gradient-to-br from-rose-50 to-orange-50 p-8 rounded-2xl border border-rose-100">
+                <div id="quiz-container" class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg min-h-[300px] flex flex-col justify-center">
+                    <div id="quiz-content" class="text-center">
+                        <button onclick="startQuiz()" class="px-8 py-4 bg-rose-600 text-white font-bold rounded-full hover:bg-rose-700 transition-transform hover:scale-105">Bắt Đầu Trắc Nghiệm</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center text-sm">
+        <p>&copy; 2025 Lịch Sử Văn Minh Thế Giới.</p>
+    </footer>
+
+    <script>
+        const quizData = [
+            { topic: 'Ai Cập', q: 'Hệ thống chữ viết cổ nhất của người Ai Cập là?', a: 'Chữ tượng hình', options: ['Chữ tượng thanh', 'Chữ tượng hình', 'Chữ tượng ý', 'Chữ cái Rô-ma'] },
+            { topic: 'Trung Hoa', q: 'Bốn phát minh lớn của Trung Hoa là?', a: 'Giấy, in, la bàn, thuốc súng', options: ['Giấy, in, la bàn, thuốc súng', 'Toán, lý, hóa', 'Lúa gạo, dệt, gốm'] },
+            { topic: 'CMCN', q: 'Ai phát minh máy hơi nước?', a: 'Giêm Oát', options: ['Giêm Oát', 'Edison', 'Watt', 'Newton'] }
+        ];
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+
+        window.onload = () => {
+            new Chart(document.getElementById('topicDistributionChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ai Cập', 'Trung Hoa', 'Ấn Độ', 'Hy Lạp-La Mã', 'Phục Hưng', 'CMCN'],
+                    datasets: [{ data: [5, 15, 10, 20, 20, 30], backgroundColor: ['#F59E0B', '#EF4444', '#9333EA', '#0EA5E9', '#6366F1', '#F97316'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('timelineChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['1764', '1784', '1807', '1903'],
+                    datasets: [{ label: 'Phát minh', data: [10, 20, 30, 40], backgroundColor: '#9F1239' }]
+                },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
+            });
+        };
+
+        let currentIdx = 0;
+        let score = 0;
+
+        function startQuiz() {
+            currentIdx = 0; score = 0;
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            if (currentIdx >= quizData.length) {
+                document.getElementById('quiz-content').innerHTML = `<h3 class="text-2xl font-bold mb-4">Hoàn thành!</h3><p class="text-4xl text-rose-600 font-bold">${score}/${quizData.length}</p><button onclick="startQuiz()" class="mt-6 px-6 py-2 bg-stone-800 text-white rounded">Chơi lại</button>`;
+                return;
+            }
+            const q = quizData[currentIdx];
+            let opts = q.options.map(o => `<button onclick="checkAns('${o}')" class="w-full text-left p-3 border rounded mb-2 hover:bg-rose-50">${o}</button>`).join('');
+            document.getElementById('quiz-content').innerHTML = `<div class="animate-fade-in"><p class="text-sm text-stone-400 mb-2">Câu ${currentIdx+1}</p><h3 class="text-xl font-bold mb-6">${q.q}</h3>${opts}</div>`;
+        }
+
+        function checkAns(selected) {
+            if (selected === quizData[currentIdx].a) score++;
+            currentIdx++;
+            renderQuestion();
+        }
+    </script>
+</body>
+</html>

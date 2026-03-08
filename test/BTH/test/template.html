@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSpace Quiz</title> <link rel="icon" href="/logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="data.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-color: #2563eb; 
+            --primary-dark: #1d4ed8;  
+            --streak-color: #ff9600;
+        }
+
+        body { 
+            font-family: 'Be Vietnam Pro', sans-serif; 
+            background-color: #ffffff;
+            color: #4b4b4b;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* --- CÁC STYLE HIỆU ỨNG (Giữ nguyên như cũ) --- */
+        .fire-glow {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff9600;
+        }
+        
+        .fire-glow::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 150, 0, 0.5) 0%, rgba(255, 100, 0, 0.2) 40%, transparent 70%);
+            filter: blur(20px);
+            z-index: -1;
+            animation: heatPulse 1.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes heatPulse {
+            0% { transform: scale(0.85); opacity: 0.3; }
+            100% { transform: scale(1.2); opacity: 0.9; }
+        }
+
+        @keyframes fireFloat {
+            0% { transform: translateY(0); filter: drop-shadow(0 0 5px rgba(255,150,0,0.5)); }
+            100% { transform: translateY(-12px); filter: drop-shadow(0 0 25px rgba(255,150,0,0.9)); }
+        }
+        
+        .fire-hero { animation: fireFloat 1s ease-in-out infinite alternate; }
+
+        .duo-btn-primary {
+            background-color: var(--primary-color);
+            border-bottom: 5px solid var(--primary-dark);
+            transition: all 0.1s;
+        }
+        .duo-btn-primary:active {
+            border-bottom-width: 0;
+            transform: translateY(5px);
+        }
+
+        .duo-input {
+            border: 2px solid #e5e5e5;
+            border-bottom-width: 5px;
+            transition: all 0.2s;
+        }
+        .duo-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        #share-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #card-preview {
+            width: 350px;
+            height: 350px;
+            background: white;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px;
+            border: 8px solid var(--primary-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <script src="/nd-navbar.js" defer></script></head>
+<body class="flex flex-col">
+
+    <nav class="bg-white border-b-2 border-slate-100 px-6 py-4 flex items-center justify-between z-10">
+        <div class="flex items-center space-x-3">
+            <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 border-b-4 border-slate-200">
+                <i class="fas fa-home"></i>
+            </a>
+            <div class="flex flex-col leading-none">
+                <span class="font-black text-2xl tracking-tight text-[#2563eb]">EduSpace</span>
+                <span id="nav-subject" class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Quiz Game</span>
+            </div>
+        </div>
+        <div id="streakDisplay" class="hidden flex items-center space-x-2 font-extrabold text-[#ff9600]">
+            <div class="fire-glow scale-75">
+                <i class="fas fa-fire text-2xl"></i>
+            </div>
+            <span id="streakValue" class="text-2xl">0</span>
+        </div>
+    </nav>
+
+    <main class="flex-grow relative flex flex-col items-center justify-start pt-10 p-4">
+        <div id="quiz-container" class="w-full max-w-xl">
+            
+            <div id="setup-view" class="text-center space-y-12 flex flex-col items-center">
+                <div class="fire-glow fire-hero text-9xl mt-8">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-black text-slate-800 uppercase italic tracking-tight">Sẵn sàng rực cháy?</h1>
+                    <p id="setup-desc" class="text-slate-400 font-medium mt-2">Thử thách trí nhớ của bạn ngay bây giờ.</p>
+                </div>
+                <button onclick="startQuiz()" class="w-full duo-btn-primary text-white py-4 rounded-2xl font-black text-xl uppercase tracking-widest">Bắt đầu</button>
+            </div>
+
+            <div id="question-view" class="hidden space-y-10">
+                <div class="text-center">
+                    <h2 id="elementName" class="text-xl font-bold text-slate-400 uppercase tracking-widest mb-2">---</h2>
+                    <p id="elementSymbol" class="text-[8rem] leading-none font-black text-slate-800">?</p>
+                </div>
+                <div class="space-y-6">
+                    <input type="number" id="atomicInput" placeholder="Nhập số..." class="w-full text-center text-4xl font-black p-6 duo-input rounded-3xl">
+                    <button onclick="check()" class="w-full duo-btn-primary text-white py-5 rounded-2xl font-black text-xl uppercase tracking-widest">Kiểm tra</button>
+                </div>
+            </div>
+
+            <div id="result-view" class="hidden text-center space-y-6">
+                <div class="fire-glow text-7xl mb-4">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <h2 class="text-3xl font-black text-slate-800 uppercase">Kết thúc!</h2>
+                <div class="bg-slate-50 p-8 rounded-[2rem] border-2 border-slate-200">
+                    <p class="text-slate-400 font-bold uppercase text-xs mb-1">Chuỗi hiện tại</p>
+                    <span id="finalStreakNumber" class="text-8xl font-black text-[#ff9600]">0</span>
+                </div>
+                <div class="flex flex-col space-y-3">
+                    <button onclick="openShareModal()" class="w-full py-4 bg-slate-800 text-white rounded-2xl font-black uppercase shadow-lg">
+                        <i class="fas fa-camera mr-2"></i> Lưu "chuỗi kỷ lục"
+                    </button>
+                    <button onclick="startQuiz()" class="w-full duo-btn-primary text-white py-4 rounded-2xl font-black uppercase">Chơi lại</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer-overlay" class="absolute bottom-0 left-0 w-full p-6 transition-all duration-300 translate-y-full z-50">
+            <div class="max-w-xl mx-auto flex items-center justify-between">
+                <div id="footer-content" class="flex items-center space-x-4"></div>
+                <button onclick="nextQuestion()" class="px-8 py-3 rounded-2xl font-black uppercase bg-white shadow-xl">Tiếp tục</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="share-modal" onclick="closeShareModal()">
+        <div class="flex flex-col items-center space-y-6" onclick="event.stopPropagation()">
+            <div id="card-preview">
+                <div class="text-center">
+                    <div class="text-3xl font-black text-blue-600 leading-none">EduSpace</div>
+                    <div class="text-[10px] font-bold text-slate-400 tracking-[3px] uppercase mt-1">by ND Labs</div>
+                </div>
+                <div class="text-center">
+                    <div id="share-streak-val" class="text-8xl font-black text-orange-500 leading-none">0</div>
+                    <div class="text-lg font-black text-orange-400 uppercase mt-2">Chuỗi rực cháy 🔥</div>
+                </div>
+                <div class="bg-blue-50 w-full py-3 rounded-2xl text-center">
+                    <div class="text-blue-800 font-black">Kỷ lục mới của tôi!</div>
+                </div>
+            </div>
+            <div class="flex flex-col w-full space-y-3">
+                <button onclick="drawAndDownload()" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase text-lg shadow-2xl">
+                    <i class="fas fa-download mr-2"></i> Tải ảnh về
+                </button>
+                <button onclick="closeShareModal()" class="text-white/60 font-bold uppercase text-sm">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- LOGIC KHỞI TẠO TỪ FILE DATA.JS ---
+        // Kiểm tra xem file data.js có được load chưa
+        if (typeof quizConfig === 'undefined') {
+            alert("Lỗi: Không tìm thấy file dữ liệu 'data.js'. Hãy đảm bảo file này nằm cùng thư mục.");
+            var elements = []; // Tránh lỗi crash
+        } else {
+            // Cập nhật giao diện theo config
+            document.title = quizConfig.title + " - EduSpace";
+            document.getElementById('nav-subject').innerText = quizConfig.subject || "ND Labs";
+            document.getElementById('setup-desc').innerText = "Chủ đề: " + quizConfig.title;
+            
+            // Gán dữ liệu
+            var elements = quizConfig.data;
+        }
+
+        let streak = 0, currentIdx = 0, pool = [];
+
+        function startQuiz() {
+            if(elements.length === 0) return alert("Không có dữ liệu câu hỏi!");
+            pool = [...elements].sort(() => Math.random() - 0.5);
+            streak = 0; currentIdx = 0;
+            
+            toggleView('setup-view', false);
+            toggleView('result-view', false);
+            toggleView('question-view', true);
+            
+            document.getElementById('streakDisplay').classList.remove('hidden');
+            document.getElementById('streakValue').innerText = '0';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const el = pool[currentIdx];
+            document.getElementById('elementName').innerText = el.n;
+            document.getElementById('elementSymbol').innerText = el.s;
+            document.getElementById('footer-overlay').classList.add('translate-y-full');
+            
+            const inp = document.getElementById('atomicInput');
+            inp.value = ''; inp.disabled = false;
+            setTimeout(() => inp.focus(), 100);
+        }
+
+        function check() {
+            const el = pool[currentIdx];
+            const inp = document.getElementById('atomicInput');
+            const val = parseInt(inp.value);
+            
+            if (isNaN(val)) return; // Không làm gì nếu chưa nhập số
+            inp.disabled = true;
+
+            const overlay = document.getElementById('footer-overlay');
+            if (val === el.z) {
+                streak++;
+                overlay.className = "absolute bottom-0 left-0 w-full p-6 transition-all duration-300 translate-y-0 z-50 bg-[#dcfce7]";
+                document.getElementById('footer-content').innerHTML = `
+                    <div class="fire-glow scale-50 bg-white rounded-full p-2 text-green-500"><i class="fas fa-check"></i></div>
+                    <div><h3 class="text-green-700 font-black text-xl">Chính xác!</h3></div>`;
+                document.getElementById('streakValue').innerText = streak;
+                setTimeout(nextQuestion, 1200);
+            } else {
+                overlay.className = "absolute bottom-0 left-0 w-full p-6 transition-all duration-300 translate-y-0 z-50 bg-[#fee2e2]";
+                document.getElementById('footer-content').innerHTML = `
+                    <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center text-red-500 shadow-sm"><i class="fas fa-times"></i></div>
+                    <div><h3 class="text-red-700 font-black text-xl">Sai rồi! Đáp án: ${el.z}</h3></div>`;
+                setTimeout(endGame, 1500);
+            }
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if (currentIdx >= pool.length) currentIdx = 0;
+            showQuestion();
+        }
+
+        function endGame() {
+            toggleView('question-view', false);
+            document.getElementById('footer-overlay').classList.add('translate-y-full');
+            toggleView('result-view', true);
+            
+            document.getElementById('finalStreakNumber').innerText = streak;
+            document.getElementById('share-streak-val').innerText = streak;
+        }
+
+        function toggleView(id, show) {
+            const el = document.getElementById(id);
+            if (show) el.classList.remove('hidden');
+            else el.classList.add('hidden');
+        }
+
+        // --- MODAL & DRAW LOGIC (Giữ nguyên) ---
+        function openShareModal() { document.getElementById('share-modal').style.display = 'flex'; }
+        function closeShareModal() { document.getElementById('share-modal').style.display = 'none'; }
+        window.onkeydown = (e) => { if(e.key === 'Enter') check(); };
+
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
+        function drawAndDownload() {
+            const size = 1000;
+            const canvas = document.createElement('canvas');
+            canvas.width = size; canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            const cornerRadius = 120;
+
+            // Clear & Clip
+            ctx.clearRect(0, 0, size, size);
+            ctx.beginPath();
+            ctx.moveTo(cornerRadius, 0); ctx.lineTo(size - cornerRadius, 0);
+            ctx.quadraticCurveTo(size, 0, size, cornerRadius);
+            ctx.lineTo(size, size - cornerRadius);
+            ctx.quadraticCurveTo(size, size, size - cornerRadius, size);
+            ctx.lineTo(cornerRadius, size);
+            ctx.quadraticCurveTo(0, size, 0, size - cornerRadius);
+            ctx.lineTo(0, cornerRadius);
+            ctx.quadraticCurveTo(0, 0, cornerRadius, 0);
+            ctx.closePath();
+            ctx.clip();
+
+            // Background
+            ctx.fillStyle = "#ffffff";
+            roundRect(ctx, 0, 0, size, size, 30);
+            ctx.fill();
+
+            // Text
+            ctx.textAlign = "center";
+            ctx.fillStyle = "#2563eb";
+            ctx.font = "900 85px 'Be Vietnam Pro', sans-serif";
+            ctx.fillText("EduSpace", size/2, 210);
+
+            ctx.fillStyle = "#94a3b8";
+            ctx.font = "800 24px 'Be Vietnam Pro', sans-serif";
+            ctx.fillText("BY ND LABS", size/2, 260);
+
+            ctx.fillStyle = "#ff9600";
+            ctx.font = "900 380px 'Be Vietnam Pro', sans-serif";
+            ctx.fillText(streak, size/2, 620);
+
+            ctx.font = "900 55px 'Be Vietnam Pro', sans-serif";
+            ctx.fillText("CHUỖI RỰC CHÁY 🔥", size/2, 700);
+
+            // Border
+            ctx.save();
+            ctx.lineWidth = 18;
+            ctx.strokeStyle = "#60A5FA";
+            ctx.beginPath();
+            ctx.moveTo(cornerRadius, 0); ctx.lineTo(size - cornerRadius, 0);
+            ctx.quadraticCurveTo(size, 0, size, cornerRadius);
+            ctx.lineTo(size, size - cornerRadius);
+            ctx.quadraticCurveTo(size, size, size - cornerRadius, size);
+            ctx.lineTo(cornerRadius, size);
+            ctx.quadraticCurveTo(0, size, 0, size - cornerRadius);
+            ctx.lineTo(0, cornerRadius);
+            ctx.quadraticCurveTo(0, 0, cornerRadius, 0);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
+
+            // Badge
+            ctx.fillStyle = "#E6F2FF";
+            roundRect(ctx, (size-740)/2, 800, 740, 130, 40);
+            ctx.fill();
+
+            ctx.fillStyle = "#0F172A";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = "800 36px 'Be Vietnam Pro', sans-serif";
+            ctx.fillText("Kỷ lục " + quizConfig.title, size/2, 800 + 65);
+
+            // Download
+            const link = document.createElement('a');
+            link.download = `EduSpace_${streak}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+            closeShareModal();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSpace - Văn Minh Đông Nam Á</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        /* Thay đổi font chữ sang phong cách cổ điển và trang trọng hơn */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600&display=swap');
+        
+        :root {
+            --font-header: 'Playfair Display', serif;
+            --font-body: 'Lora', serif;
+            --font-ui: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            scroll-behavior: smooth;
+            background-color: #fcfaf7;
+            color: #2d2d2d;
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-header);
+        }
+
+        .ui-text {
+            font-family: var(--font-ui);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(180, 83, 9, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgba(180, 83, 9, 0.15);
+            border-color: rgba(180, 83, 9, 0.3);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #78350f, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .floating {
+            animation: floating 4s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .bg-pattern {
+            background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+        }
+
+        .custom-shape-divider {
+            fill: #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-pattern">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-amber-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="/index.html" class="flex items-center space-x-3 group">
+                    <div class="relative">
+                        <img src="/logo.png" alt="Logo" class="h-12 w-12 transition-transform group-hover:scale-110" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3665/3665923.png'">
+                        <div class="absolute -inset-1 bg-amber-500/20 rounded-full blur opacity-0 group-hover:opacity-100 transition"></div>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-2xl font-bold text-amber-900 leading-none">EduSpace</span>
+                        <span class="text-[10px] ui-text uppercase tracking-widest text-amber-700 font-semibold">by ND Labs</span>
+                    </div>
+                </a>
+                <div class="hidden md:flex space-x-10 ui-text text-sm font-medium text-gray-700 uppercase tracking-tight">
+                    <a href="#intro" class="hover:text-amber-600 transition-colors">Giới thiệu</a>
+                    <a href="#core" class="hover:text-amber-600 transition-colors">Giá trị cốt lõi</a>
+                    <a href="#heritage" class="hover:text-amber-600 transition-colors">Di sản</a>
+                </div>
+                <div class="ui-text text-[10px] text-gray-400 font-bold uppercase tracking-tighter hidden sm:block">
+                    Historical Series 01
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="intro" class="relative pt-24 pb-32 overflow-hidden bg-gradient-to-b from-amber-50 to-transparent">
+        <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+            <h1 class="animate__animated animate__fadeInDown text-5xl md:text-7xl font-bold text-gray-900 mb-8 leading-tight">
+                Di Sản Văn Minh <br>
+                <span class="gradient-text italic">Đông Nam Á Cổ Đại</span>
+            </h1>
+            <p class="animate__animated animate__fadeInUp animate__delay-1s text-xl text-gray-700 max-w-3xl mx-auto mb-12 leading-relaxed font-light">
+                Một hành trình ngược dòng thời gian để hiểu về sức sống mãnh liệt của vùng đất "Thống nhất trong đa dạng".
+            </p>
+            <div class="flex justify-center gap-6 animate__animated animate__zoomIn animate__delay-1s ui-text">
+                <a href="#core" class="bg-amber-800 text-white px-10 py-4 rounded-full font-bold hover:bg-amber-950 transition shadow-2xl hover:shadow-amber-900/20 flex items-center gap-2">
+                    Bắt đầu hành trình
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3 Key Columns Section -->
+    <section id="core" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-20">
+                <span class="ui-text text-amber-600 font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Tri thức cốt lõi</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900">3 Trụ Cột Giá Trị Trường Tồn</h2>
+                <div class="h-1 w-24 bg-amber-700 mx-auto mt-6 rounded-full opacity-30"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-10">
+                <!-- Card 1: Tự Cường -->
+                <div class="glass-card p-10 rounded-[2.5rem] border-t-4 border-t-amber-700">
+                    <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-8 floating shadow-inner">
+                        <svg class="w-8 h-8 text-amber-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Sức Mạnh Tự Cường</h3>
+                    <p class="text-gray-600 leading-relaxed mb-8">Khả năng <strong>Bản địa hóa</strong> tinh hoa ngoại lai (Ấn Độ, Trung Hoa) nhưng không bị hòa tan, tạo nên bản sắc độc nhất vô nhị.</p>
+                    <div class="relative overflow-hidden rounded-2xl group">
+                        <img src="https://images.unsplash.com/photo-1596701062351-be5f6a210417?auto=format&fit=crop&w=400&q=80" class="w-full h-48 object-cover transform group-hover:scale-110 transition duration-700" alt="Kiến trúc Chăm Pa">
+                        <div class="absolute inset-0 bg-gradient-to-t from-amber-900/60 to-transparent"></div>
+                        <p class="absolute bottom-4 left-4 text-white ui-text text-xs font-medium">Nghệ thuật điêu khắc Chăm-pa</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Hòa Hợp -->
+                <div class="glass-card p-10 rounded-[2.5rem] border-t-4 border-t-emerald-700">
+                    <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mb-8 floating shadow-inner" style="animation-delay: 0.5s">
+                        <svg class="w-8 h-8 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Giá Trị Hòa Hợp</h3>
+                    <p class="text-gray-600 leading-relaxed mb-8">Hình thành từ <strong>Văn minh lúa nước</strong>: Trọng tình nghĩa, lối sống cộng đồng và tinh thần đoàn kết bền vững.</p>
+                    <div class="relative overflow-hidden rounded-2xl group">
+                        <img src="https://images.unsplash.com/photo-1544084944-15269ec7b5a0?auto=format&fit=crop&w=400&q=80" class="w-full h-48 object-cover transform group-hover:scale-110 transition duration-700" alt="Ruộng bậc thang">
+                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/60 to-transparent"></div>
+                        <p class="absolute bottom-4 left-4 text-white ui-text text-xs font-medium">Canh tác lúa nước truyền thống</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Di Sản -->
+                <div class="glass-card p-10 rounded-[2.5rem] border-t-4 border-t-blue-700">
+                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-8 floating shadow-inner" style="animation-delay: 1s">
+                        <svg class="w-8 h-8 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Di Sản Vĩnh Cửu</h3>
+                    <p class="text-gray-600 leading-relaxed mb-8">Những kỳ tích kiến trúc cổ xưa không chỉ là lịch sử, mà còn là <strong>Nguồn lực phát triển</strong> mạnh mẽ cho tương lai.</p>
+                    <div class="relative overflow-hidden rounded-2xl group">
+                        <img src="https://images.unsplash.com/photo-1558230230-6718d7f6c31d?auto=format&fit=crop&w=400&q=80" class="w-full h-48 object-cover transform group-hover:scale-110 transition duration-700" alt="Angkor Wat">
+                        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 to-transparent"></div>
+                        <p class="absolute bottom-4 left-4 text-white ui-text text-xs font-medium">Quần thể đền tháp Angkor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visual Heritage Section -->
+    <section id="heritage" class="py-24 bg-[#1a140f] text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <div class="md:w-1/2">
+                    <span class="ui-text text-amber-500 font-bold tracking-[0.4em] uppercase text-xs mb-4 block">Tầm nhìn chiến lược</span>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-8 leading-tight">Mỏ neo bản sắc & Bệ phóng tương lai</h2>
+                    <p class="text-amber-100/70 mb-8 leading-relaxed text-lg">
+                        Văn minh Đông Nam Á không bao giờ đứng yên. Nó là một dòng chảy liên tục, nơi quá khứ cung cấp năng lượng cho hiện tại.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-10 h-10 rounded-full border border-amber-500/30 flex items-center justify-center group-hover:bg-amber-500 transition duration-300">
+                                <span class="text-xs font-bold italic">01</span>
+                            </div>
+                            <span class="ui-text text-sm uppercase tracking-wide">Kết nối giao thương biển quốc tế</span>
+                        </div>
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-10 h-10 rounded-full border border-amber-500/30 flex items-center justify-center group-hover:bg-amber-500 transition duration-300">
+                                <span class="text-xs font-bold italic">02</span>
+                            </div>
+                            <span class="ui-text text-sm uppercase tracking-wide">Lễ hội & Nghệ thuật biểu diễn dân gian</span>
+                        </div>
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-10 h-10 rounded-full border border-amber-500/30 flex items-center justify-center group-hover:bg-amber-500 transition duration-300">
+                                <span class="text-xs font-bold italic">03</span>
+                            </div>
+                            <span class="ui-text text-sm uppercase tracking-wide">Triết lý hòa bình & Hợp tác bền vững</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 relative">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="space-y-6">
+                            <img src="https://images.unsplash.com/photo-1541014533921-2a149c4f1c71?auto=format&fit=crop&w=400&q=80" class="rounded-[2rem] grayscale hover:grayscale-0 transition duration-700 shadow-2xl" alt="Di sản 1">
+                            <div class="bg-amber-800 p-8 rounded-[2rem] text-center">
+                                <span class="text-3xl font-bold">11+</span>
+                                <p class="ui-text text-[10px] uppercase tracking-widest mt-2">Quốc gia thành viên</p>
+                            </div>
+                        </div>
+                        <div class="pt-12 space-y-6">
+                            <div class="bg-white/10 backdrop-blur-md p-8 rounded-[2rem] border border-white/10">
+                                <p class="italic text-amber-200">"Thống nhất trong đa dạng"</p>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1563233816-53874313d39f?auto=format&fit=crop&w=400&q=80" class="rounded-[2rem] grayscale hover:grayscale-0 transition duration-700 shadow-2xl" alt="Di sản 2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white py-16 border-t border-amber-100">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex flex-col justify-center items-center space-y-4 mb-8">
+                <img src="/logo.png" alt="Logo" class="h-10 w-10 grayscale opacity-50" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3665/3665923.png'">
+                <div class="flex flex-col">
+                    <span class="text-lg font-bold text-gray-900 leading-none">EduSpace</span>
+                    <span class="text-[9px] ui-text uppercase tracking-widest text-amber-700 font-bold">by ND Labs</span>
+                </div>
+            </div>
+            <div class="h-px w-20 bg-amber-200 mx-auto mb-8"></div>
+            <p class="text-gray-400 ui-text text-[10px] uppercase tracking-widest font-semibold">
+                © 2024 Educational Interactive Platform. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
