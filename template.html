@@ -1597,8 +1597,8 @@
             }
             window._thptqgQuestions = finalQs;
 
-            // If mode is test or thptqg, show intro screen first
-            if (mode === 'test' || mode === 'thptqg') {
+            // If mode is test or thptqg, or if there is a notice, show intro screen first
+            if (mode === 'test' || mode === 'thptqg' || quizData.config?.notice) {
                 showExamIntro(mode, finalQs);
                 return;
             }
