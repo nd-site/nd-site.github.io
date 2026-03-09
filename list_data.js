@@ -250,6 +250,16 @@ const quizList = [
         subject: "Lịch Sử",
     },
     {
+        title: "ÔN TẬP GIỮA HỌC KÌ II - MÔN: CÔNG NGHỆ 10 (2025-2026)",
+        url: "/eduspace/congnghe/10/on-tap-gk2-2526-cncn-v1",
+        description: "Tổng hợp các câu hỏi ôn tập giữa học kỳ II môn Thiết kế và Công nghệ lớp 10 năm học 2025-2026",
+        tag: "Công Nghệ",
+        type: "quiz",
+        class: "10",
+        subject: "Công Nghệ",
+        isHot: true
+    },
+    {
         title: "Ôn tập Giữa học kỳ II - Môn: Lịch Sử 10 (2025-2026)",
         url: "/eduspace/lichsu/10/on-tap-gk2-2526-v1",
         description: "Tổng hợp các câu hỏi ôn tập giữa học kỳ II môn Lịch Sử lớp 10 năm học 2025-2026",

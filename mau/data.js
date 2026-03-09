@@ -2,7 +2,14 @@
 window.quizData = {
     title: "Bài kiểm tra mẫu (Chế độ Test)",
     config: {
-        testDuration: 600  // 10 phút
+        testDuration: 600,  // 10 phút
+        notice: "Chúc các bạn làm bài tốt! Lưu ý đọc kỹ yêu cầu của từng phần trắc nghiệm I, II, III trước khi trả lời.",
+        noticeDuration: 5,
+        examLayout: {
+            multiple: { count: 4, pointsPerQ: 1.0 },
+            truefalse: { count: 2, pointsPerQ: 2.0 },
+            essay: { count: 1, totalPoints: 2.0 }
+        }
     },
     questions: [
         {

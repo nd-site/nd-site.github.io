@@ -926,23 +926,40 @@
             opacity: 1;
         }
 
-        /* Custom Scrollbar for Split View */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 8px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 8px;
-        }
-
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
+        }
+
+        /* History Screen Styles */
+        .history-item {
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .history-item:hover {
+            background-color: #f8fafc;
+            border-left-color: var(--primary);
+            padding-left: 1.25rem;
+        }
+
+        /* Notice animation */
+        @keyframes pulse-border {
+            0% {
+                border-color: rgba(59, 130, 246, 0.5);
+            }
+
+            50% {
+                border-color: rgba(59, 130, 246, 1);
+            }
+
+            100% {
+                border-color: rgba(59, 130, 246, 0.5);
+            }
+        }
+
+        .notice-card {
+            border: 2px solid var(--primary);
+            animation: pulse-border 2s infinite;
         }
     </style>
     <script src="/nd-navbar.js" defer></script>
@@ -1001,6 +1018,22 @@
                         <span>Kiểm tra</span>
                         <span class="kbd">K</span>
                     </button>
+                </div>
+
+                <!-- Lịch sử thu nhỏ trên trang chính -->
+                <div id="history-section" class="mt-10 pt-8 border-t border-slate-100 text-left">
+                    <h3
+                        class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Lịch sử làm bài gần đây
+                    </h3>
+                    <div id="history-list-main" class="space-y-3">
+                        <!-- History items here -->
+                    </div>
                 </div>
             </div>
 
@@ -1081,7 +1114,7 @@
                                 class="mt-8 flex flex-wrap items-center justify-between gap-4 sticky bottom-0 bg-white/95 backdrop-blur py-4 -mx-2 px-2 border-t border-slate-50 lg:static lg:bg-transparent lg:p-0 lg:m-0 lg:border-none">
                                 <div class="flex gap-2">
                                     <button id="prev-btn"
-                                        class="hidden btn-nav-blue pill-shape px-5 py-2 text-[10px] uppercase tracking-widest">Wait</button>
+                                        class="hidden btn-nav-blue pill-shape px-5 py-2 text-[10px] uppercase tracking-widest">Trước</button>
                                     <button id="next-nav-btn"
                                         class="hidden btn-nav-blue pill-shape px-5 py-2 text-[10px] uppercase tracking-widest">Tiếp</button>
                                 </div>
@@ -1128,7 +1161,7 @@
                                     bài kiểm tra</p>
                             </div>
                         </div>
-                        <button onclick="location.reload()"
+                        <button onclick="closeResultScreen()"
                             class="p-2 hover:bg-slate-100 rounded-full transition-colors" title="Thoát">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-500" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
@@ -1213,27 +1246,61 @@
                 <div
                     class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-slate-200 p-4 z-[210] shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
                     <div class="max-w-md mx-auto flex gap-3">
+                        <button onclick="closeResultScreen()"
+                            class="flex-1 bg-slate-100 text-slate-600 hover:bg-slate-200 pill-shape py-3.5 font-bold text-sm transition-transform flex items-center justify-center gap-2">
+                            Quay lại
+                        </button>
                         <button onclick="location.reload()"
                             class="flex-1 btn-main pill-shape py-3.5 font-bold text-sm shadow-lg hover:translate-y-[-2px] transition-transform flex items-center justify-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                            Làm lại
-                        </button>
-                        <button onclick="window.location.href='/eduspace'"
-                            class="flex-1 bg-slate-100 text-slate-600 hover:bg-slate-200 pill-shape py-3.5 font-bold text-sm transition-colors flex items-center justify-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                            </svg>
-                            Trang chủ
+                            Làm bài mới
                         </button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- EXAM INTRO SCREEN (Intermediate) -->
+    <div id="exam-intro-screen" class="hidden fixed inset-0 z-[150] bg-slate-50 overflow-y-auto pt-10 px-4">
+        <div class="max-w-xl mx-auto flex flex-col items-center">
+            <div id="exam-notice-area" class="w-full mb-6"></div>
+            <div id="exam-structure-area" class="w-full mb-8"></div>
+
+            <div class="glass-card round-card p-8 w-full text-center">
+                <p id="intro-timer-msg" class="text-slate-400 font-bold text-xs uppercase mb-4">Bạn có thể bắt đầu sau 5
+                    giây...</p>
+                <div class="flex gap-3">
+                    <button id="start-exam-confirm-btn" disabled
+                        class="flex-1 btn-main pill-shape py-4 font-bold text-sm opacity-50 cursor-not-allowed">
+                        Bắt đầu làm bài
+                    </button>
+                    <button onclick="backToStartFromIntro()"
+                        class="px-6 bg-slate-100 text-slate-500 hover:bg-slate-200 pill-shape font-bold text-sm">
+                        Thoát
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORY SCREEN -->
+    <div id="history-screen" class="hidden fixed inset-0 z-[200] bg-[#f8fafc] flex-col overflow-y-auto fade-in">
+        <div
+            class="sticky top-0 bg-white shadow-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between z-[220]">
+            <h2 class="text-lg font-extrabold text-slate-800 flex items-center gap-2">
+                <span class="text-blue-500 text-xl">📜</span> Lịch sử làm bài
+            </h2>
+            <button onclick="closeHistory()" class="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="max-w-3xl mx-auto w-full p-6" id="history-list">
+            <!-- Items injected here -->
+        </div>
+        <div class="p-10 text-center text-slate-400 text-xs italic">Dữ liệu được lưu cục bộ trên trình duyệt của bạn.
         </div>
     </div>
 
@@ -1275,6 +1342,8 @@
             }
             // API key loaded from config.js automatically
             apiKey = window.getGeminiApiKey();
+            showHistory();
+            checkActiveSession();
         };
 
         function showModal(title, text, type = 'info', onConfirm = null) {
@@ -1297,6 +1366,7 @@
         function goBackToStart() {
             showModal("Xác nhận", "Dữ liệu đang làm sẽ bị mất. Bạn muốn thoát?", "confirm", () => {
                 clearInterval(timerInterval);
+                clearActiveSession();
                 document.getElementById('main-quiz').classList.add('hidden');
                 document.getElementById('start-screen').classList.remove('hidden');
             });
@@ -1312,39 +1382,62 @@
             document.getElementById('start-screen').classList.remove('hidden');
         }
 
+        function closeResultScreen() {
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+            showHistory();
+        }
+
         // --- THPT-QG Exam Builder ---
+        // Xem hướng dẫn tại: /_agent/workflows/coding-standards.md
         function buildThptqgExam() {
             const allQ = quizData.questions;
-            const multipleQs = shuffle(allQ.filter(q => q.type === 'multiple'));
-            const trueFalseQs = shuffle(allQ.filter(q => q.type === 'truefalse'));
-            const shortQs = shuffle(allQ.filter(q => q.type === 'short'));
-            const essayQs = shuffle(allQ.filter(q => q.type === 'essay'));
-
             const examConfig = quizData.config?.examLayout;
             let selected = [];
 
             if (examConfig) {
                 // RULE 1: Use predefined layout from data.js if exists
-                if (examConfig.multiple) {
-                    const take = Math.min(examConfig.multiple.count, multipleQs.length);
-                    selected = selected.concat(multipleQs.slice(0, take).map(q => ({ ...q, points: examConfig.multiple.pointsPerQ })));
-                }
-                if (examConfig.truefalse) {
-                    const take = Math.min(examConfig.truefalse.count, trueFalseQs.length);
-                    selected = selected.concat(trueFalseQs.slice(0, take).map(q => ({ ...q, points: examConfig.truefalse.pointsPerQ })));
-                }
-                if (examConfig.short) {
-                    const take = Math.min(examConfig.short.count, shortQs.length);
-                    selected = selected.concat(shortQs.slice(0, take).map(q => ({ ...q, points: examConfig.short.pointsPerQ })));
-                }
-                if (examConfig.essay) {
-                    const take = Math.min(examConfig.essay.count || essayQs.length, essayQs.length);
-                    const totalEssayPoints = examConfig.essay.totalPoints || 3.0;
-                    const pointsEach = totalEssayPoints / (take || 1);
-                    selected = selected.concat(essayQs.slice(0, take).map(q => ({ ...q, points: Math.round(pointsEach * 100) / 100 })));
-                }
+                const types = ['multiple', 'truefalse', 'short', 'essay'];
+                types.forEach(type => {
+                    const cfg = examConfig[type];
+                    if (!cfg) return;
+
+                    let typeQs = allQ.filter(q => q.type === type);
+                    if (typeQs.length === 0) return;
+
+                    // Assign points based on rules
+                    const take = Math.min(cfg.count || typeQs.length, typeQs.length);
+
+                    typeQs = typeQs.map((q, idx) => {
+                        let p = cfg.pointsPerQ;
+
+                        // New: Support pointsList (Array or Object)
+                        if (cfg.pointsList) {
+                            // Check direct index
+                            if (cfg.pointsList[idx] !== undefined) p = cfg.pointsList[idx];
+                            // Check negative index (e.g., -1 for last)
+                            const negIdx = idx - typeQs.length;
+                            if (cfg.pointsList[negIdx] !== undefined) p = cfg.pointsList[negIdx];
+                        }
+
+                        // Fallback to totalPoints distribution
+                        if (p === undefined && cfg.totalPoints) {
+                            p = cfg.totalPoints / take;
+                        }
+
+                        return { ...q, points: Math.round((p || 0) * 100) / 100 };
+                    });
+
+                    const shuffled = shuffle(typeQs);
+                    selected = selected.concat(shuffled.slice(0, take));
+                });
             } else {
                 // RULE 2: FALLBACK CASCADED RULES
+                const multipleQs = shuffle(allQ.filter(q => q.type === 'multiple'));
+                const trueFalseQs = shuffle(allQ.filter(q => q.type === 'truefalse'));
+                const shortQs = shuffle(allQ.filter(q => q.type === 'short'));
+                const essayQs = shuffle(allQ.filter(q => q.type === 'essay'));
+
                 const hasMC = multipleQs.length > 0;
                 const hasTF = trueFalseQs.length > 0;
                 const hasSH = shortQs.length > 0;
@@ -1443,39 +1536,47 @@
             const essayCount = questions.filter(q => q.type === 'essay').length;
             const totalPts = questions.reduce((s, q) => s + (Number(q.points) || 0), 0);
 
-            let html = `<div id="thptqg-layout-header" class="glass-card round-card p-6 mb-6 fade-in">
-                <h3 class="font-extrabold text-blue-700 text-base mb-3 flex items-center gap-2">📋 Cấu trúc đề thi TN THPT-QG</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">`;
+            let html = `<div id="thptqg-layout-header" class="glass-card round-card p-6 fade-in shadow-sm">
+                <h3 class="font-extrabold text-blue-700 text-sm mb-4 flex items-center gap-2">📋 Cấu trúc đề thi dự kiến</h3>
+                <div class="grid grid-cols-2 gap-3">`;
             if (multipleCount > 0) {
                 const pts = questions.filter(q => q.type === 'multiple').reduce((s, q) => s + Number(q.points || 0), 0);
-                html += `<div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
-                    <div class="text-blue-600 font-black text-lg">${multipleCount}</div>
-                    <div class="text-xs font-bold text-blue-500 uppercase tracking-wide">TN Nhiều lựa chọn</div>
-                    <div class="text-[11px] text-blue-400 mt-1">${pts.toFixed(2)} điểm</div>
+                html += `<div class="bg-blue-50/50 rounded-xl p-3 border border-blue-100/50 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-black">${multipleCount}</div>
+                    <div>
+                        <div class="text-[10px] font-bold text-blue-500 uppercase">Trắc nghiệm I</div>
+                        <div class="text-[10px] text-blue-400">${pts.toFixed(2)} điểm</div>
+                    </div>
                 </div>`;
             }
             if (trueFalseCount > 0) {
                 const pts = questions.filter(q => q.type === 'truefalse').reduce((s, q) => s + Number(q.points || 0), 0);
-                html += `<div class="bg-green-50 rounded-xl p-3 text-center border border-green-100">
-                    <div class="text-green-600 font-black text-lg">${trueFalseCount}</div>
-                    <div class="text-xs font-bold text-green-500 uppercase tracking-wide">TN Đúng/Sai</div>
-                    <div class="text-[11px] text-green-400 mt-1">${pts.toFixed(2)} điểm</div>
+                html += `<div class="bg-green-50/50 rounded-xl p-3 border border-green-100/50 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center font-black">${trueFalseCount}</div>
+                    <div>
+                        <div class="text-[10px] font-bold text-green-500 uppercase">Trắc nghiệm II</div>
+                        <div class="text-[10px] text-green-400">${pts.toFixed(2)} điểm</div>
+                    </div>
                 </div>`;
             }
             if (shortCount > 0) {
                 const pts = questions.filter(q => q.type === 'short').reduce((s, q) => s + Number(q.points || 0), 0);
-                html += `<div class="bg-purple-50 rounded-xl p-3 text-center border border-purple-100">
-                    <div class="text-purple-600 font-black text-lg">${shortCount}</div>
-                    <div class="text-xs font-bold text-purple-500 uppercase tracking-wide">TN Trả lời ngắn</div>
-                    <div class="text-[11px] text-purple-400 mt-1">${pts.toFixed(2)} điểm</div>
+                html += `<div class="bg-purple-50/50 rounded-xl p-3 border border-purple-100/50 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-purple-500 text-white flex items-center justify-center font-black">${shortCount}</div>
+                    <div>
+                        <div class="text-[10px] font-bold text-purple-500 uppercase">Trắc nghiệm III</div>
+                        <div class="text-[10px] text-purple-400">${pts.toFixed(2)} điểm</div>
+                    </div>
                 </div>`;
             }
             if (essayCount > 0) {
                 const pts = questions.filter(q => q.type === 'essay').reduce((s, q) => s + Number(q.points || 0), 0);
-                html += `<div class="bg-orange-50 rounded-xl p-3 text-center border border-orange-100">
-                    <div class="text-orange-600 font-black text-lg">${essayCount}</div>
-                    <div class="text-xs font-bold text-orange-500 uppercase tracking-wide">Tự luận</div>
-                    <div class="text-[11px] text-orange-400 mt-1">${pts.toFixed(2)} điểm</div>
+                html += `<div class="bg-orange-50/50 rounded-xl p-3 border border-orange-100/50 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center font-black">${essayCount}</div>
+                    <div>
+                        <div class="text-[10px] font-bold text-orange-500 uppercase">Tự luận</div>
+                        <div class="text-[10px] text-orange-400">${pts.toFixed(2)} điểm</div>
+                    </div>
                 </div>`;
             }
             html += `</div>
@@ -1486,46 +1587,121 @@
 
         function initQuiz(mode) {
             quizMode = mode;
+
+            // Prepare questions set
+            let finalQs = [];
+            if (mode === 'thptqg') {
+                finalQs = buildThptqgExam();
+            } else {
+                finalQs = getOrganizedQuestions();
+            }
+            window._thptqgQuestions = finalQs;
+
+            // If mode is test or thptqg, show intro screen first
+            if (mode === 'test' || mode === 'thptqg') {
+                showExamIntro(mode, finalQs);
+                return;
+            }
+
+            // Practice mode starts immediately
+            startQuizNow();
+        }
+
+        function showExamIntro(mode, questions) {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('test-mode-selector').classList.add('hidden');
+            document.getElementById('exam-intro-screen').classList.remove('hidden');
+
+            // Notice
+            const noticeArea = document.getElementById('exam-notice-area');
+            const notice = quizData.config?.notice;
+            if (notice) {
+                noticeArea.innerHTML = `
+                    <div class="glass-card round-card p-6 notice-card">
+                        <h4 class="text-blue-600 font-black text-xs uppercase mb-3 flex items-center gap-2">📢 Thông báo từ Giáo viên</h4>
+                        <div class="text-slate-700 font-medium leading-relaxed">${notice}</div>
+                    </div>
+                `;
+                noticeArea.classList.remove('hidden');
+            } else {
+                noticeArea.classList.add('hidden');
+            }
+
+            // Structure
+            const structureArea = document.getElementById('exam-structure-area');
+            if (mode === 'thptqg') {
+                structureArea.innerHTML = buildExamHeaderHtml(questions);
+                structureArea.classList.remove('hidden');
+            } else {
+                structureArea.classList.add('hidden');
+            }
+
+            // Timer countdown for Start Button
+            const startBtn = document.getElementById('start-exam-confirm-btn');
+            const timerMsg = document.getElementById('intro-timer-msg');
+            let waitTime = quizData.config?.noticeDuration || 3;
+            if (!notice && mode !== 'thptqg') waitTime = 0;
+
+            if (waitTime > 0) {
+                startBtn.disabled = true;
+                startBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                let remaining = waitTime;
+
+                const step = () => {
+                    timerMsg.innerText = `Bạn có thể bắt đầu sau ${remaining} giây...`;
+                    if (remaining <= 0) {
+                        startBtn.disabled = false;
+                        startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        timerMsg.innerText = "Sẵn sàng! Nhấn nút bên dưới để bắt đầu.";
+                        return;
+                    }
+                    remaining--;
+                    setTimeout(step, 1000);
+                };
+                step();
+            } else {
+                startBtn.disabled = false;
+                startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                timerMsg.innerText = "Sẵn sàng!";
+            }
+
+            startBtn.onclick = () => {
+                document.getElementById('exam-intro-screen').classList.add('hidden');
+                startQuizNow();
+            };
+        }
+
+        function backToStartFromIntro() {
+            document.getElementById('exam-intro-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+
+        function startQuizNow(isResuming = false) {
+            const mode = quizMode;
+            const selected = window._thptqgQuestions;
+
+            if (!isResuming) {
+                userAnswers = new Array(selected.length).fill(null);
+                questionResults = new Array(selected.length).fill(null);
+                questionEarned = new Array(selected.length).fill(0);
+                aiFeedbacks = new Array(selected.length).fill(null);
+                currentIndex = 0;
+                sessionScore = 0;
+            }
+
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('test-mode-selector').classList.add('hidden');
             document.getElementById('main-quiz').classList.remove('hidden');
 
-            // For THPT-QG mode, build selected question set
-            if (mode === 'thptqg') {
-                const selected = buildThptqgExam();
-                window._thptqgQuestions = selected;
-                userAnswers = new Array(selected.length).fill(null);
-                questionResults = new Array(selected.length).fill(null);
-                questionEarned = new Array(selected.length).fill(0);
-
-                // Inject THPT-QG header before quiz
-                const quizContainer = document.getElementById('quiz-container');
-                if (quizContainer) {
-                    const headerEl = document.createElement('div');
-                    headerEl.innerHTML = buildExamHeaderHtml(selected);
-                    quizContainer.parentElement.insertBefore(headerEl.firstChild, quizContainer);
-                }
-            } else {
-                const organized = getOrganizedQuestions();
-                window._thptqgQuestions = organized;
-                userAnswers = new Array(organized.length).fill(null);
-                questionResults = new Array(organized.length).fill(null);
-                questionEarned = new Array(organized.length).fill(0);
-                aiFeedbacks = new Array(organized.length).fill(null);
-            }
-
-            currentIndex = 0;
-            sessionScore = 0;
-
             const isTest = mode === 'test' || mode === 'thptqg';
             if (isTest) {
-                timerSeconds = quizData.config.testDuration || 600;
+                if (!isResuming) timerSeconds = quizData.config.testDuration || 600;
                 document.getElementById('prev-btn').classList.remove('hidden');
                 document.getElementById('next-nav-btn').classList.remove('hidden');
                 document.getElementById('finish-test-btn').classList.remove('hidden');
                 document.getElementById('submit-btn').classList.add('hidden');
             } else {
-                timerSeconds = 0;
+                if (!isResuming) timerSeconds = 0;
                 document.getElementById('prev-btn').classList.add('hidden');
                 document.getElementById('next-nav-btn').classList.add('hidden');
                 document.getElementById('finish-test-btn').classList.add('hidden');
@@ -1533,6 +1709,7 @@
             }
             startTimer();
             loadQuestion();
+            if (!isResuming) saveActiveSession();
         }
 
 
@@ -1546,6 +1723,9 @@
                 const m = Math.floor(Math.abs(timerSeconds) / 60).toString().padStart(2, '0');
                 const s = (Math.abs(timerSeconds) % 60).toString().padStart(2, '0');
                 display.innerText = `${m}:${s}`;
+
+                // Save session roughly every 5 seconds to reduce storage writes
+                if (Math.abs(timerSeconds) % 5 === 0) saveActiveSession();
             }, 1000);
         }
 
@@ -1765,6 +1945,7 @@
                         if (quizMode === 'practice') {
                             submitBtn.disabled = val.trim().length === 0;
                         }
+                        saveActiveSession();
                     };
                 } else {
                     input.oninput = (e) => {
@@ -1772,6 +1953,7 @@
                         if (quizMode === 'practice') {
                             submitBtn.disabled = e.target.value.trim().length === 0;
                         }
+                        saveActiveSession();
                     };
                 }
                 input.focus();
@@ -1788,6 +1970,7 @@
             const falseBtn = rows[idx].querySelectorAll('.tf-btn')[1];
             trueBtn.classList.toggle('selected', userAnswers[currentIndex][idx] === true);
             falseBtn.classList.toggle('selected', userAnswers[currentIndex][idx] === false);
+            saveActiveSession();
         }
 
         function hasUserAnsweredCurrent() {
@@ -1805,6 +1988,7 @@
             userAnswers[currentIndex] = idx;
             document.querySelectorAll('.option-card').forEach((o, i) => o.classList.toggle('selected', i === idx));
             if (quizMode === 'practice') document.getElementById('submit-btn').disabled = false;
+            saveActiveSession();
         }
 
         async function handlePractice() {
@@ -1972,6 +2156,113 @@
             if (percentage >= 50) {
                 setTimeout(() => fireConfetti(), 500);
             }
+
+            // SAVE TO HISTORY
+            saveToHistory({
+                title: quizData.title,
+                mode: quizMode,
+                score: finalScore,
+                maxScore: maxScore,
+                percentage: percentage,
+                timeSpent: document.getElementById('final-time-display').innerText,
+                date: new Date().toLocaleString('vi-VN'),
+                questions: qs,
+                userAnswers: [...userAnswers],
+                questionEarned: [...questionEarned],
+                aiFeedbacks: [...aiFeedbacks]
+            });
+
+            clearActiveSession();
+        }
+
+        // --- HISTORY MANAGEMENT ---
+        function saveToHistory(record) {
+            try {
+                const history = JSON.parse(localStorage.getItem('eduspace_history') || '[]');
+                history.unshift(record);
+                // Limit to last 20 attempts
+                if (history.length > 20) history.pop();
+                localStorage.setItem('eduspace_history', JSON.stringify(history));
+                showHistory();
+            } catch (e) {
+                console.error("Could not save history", e);
+            }
+        }
+
+        function showHistory() {
+            const list = document.getElementById('history-list-main');
+            if (!list) return;
+            const history = JSON.parse(localStorage.getItem('eduspace_history') || '[]');
+
+            list.innerHTML = '';
+            if (history.length === 0) {
+                list.innerHTML = `<div class="py-10 text-center text-slate-300 font-bold text-xs uppercase tracking-widest">Chưa có dữ liệu</div>`;
+            } else {
+                history.forEach((h, i) => {
+                    const item = document.createElement('div');
+                    item.className = 'history-item bg-white/50 border border-slate-100 rounded-2xl mb-2 p-4 flex items-center justify-between cursor-pointer';
+                    item.onclick = () => reviewAttempt(h);
+
+                    let modeName = h.mode === 'test' ? 'Kiểm tra' : (h.mode === 'thptqg' ? 'THPT-QG' : 'Luyện tập');
+                    let color = h.percentage >= 80 ? 'text-emerald-500' : (h.percentage >= 50 ? 'text-blue-500' : 'text-rose-500');
+
+                    item.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-xl shadow-inner">${h.percentage >= 80 ? '🏆' : '📝'}</div>
+                            <div>
+                                <h4 class="font-extrabold text-slate-800 text-sm line-clamp-1">${h.title}</h4>
+                                <div class="flex gap-3 mt-1">
+                                    <span class="text-[10px] uppercase font-bold text-slate-400">${modeName}</span>
+                                    <span class="text-[10px] text-slate-300">•</span>
+                                    <span class="text-[10px] font-bold text-slate-400">${h.date}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-black ${color}">${h.score}/${h.maxScore}</div>
+                            <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${h.timeSpent}</div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function reviewAttempt(h) {
+            // Hijack result screen to show old attempt
+            currentIndex = 0;
+            window._thptqgQuestions = h.questions;
+            userAnswers = h.userAnswers;
+            questionEarned = h.questionEarned;
+            aiFeedbacks = h.aiFeedbacks || new Array(h.questions.length).fill(null);
+
+            // Set stats manually
+            document.getElementById('final-time-display').innerText = h.timeSpent;
+            document.getElementById('final-percent-display').innerText = Math.round(h.percentage) + '%';
+            document.getElementById('final-correct-count').innerText = `${h.questions.filter((q, i) => Math.abs(h.questionEarned[i] - (q.points || 0)) < 0.01).length}/${h.questions.length}`;
+            document.getElementById('final-max-score-display').innerText = h.maxScore;
+            document.getElementById('final-score-display').innerText = h.score;
+
+            renderDetailResultsNew();
+
+            document.getElementById('start-screen').classList.add('hidden');
+
+            const resultScreen = document.getElementById('result-screen');
+            resultScreen.classList.remove('hidden');
+            resultScreen.style.display = 'flex';
+
+            // Adjust rank and gradient as done in finishTest
+            const p = h.percentage;
+            let rank = "Cần cố gắng", rankEmoji = "🥺", rankColor = "text-slate-500", gradientClass = "from-slate-500 to-slate-700";
+            if (p >= 90) { rank = "Xuất Sắc"; rankEmoji = "👑"; rankColor = "text-yellow-500"; gradientClass = "from-yellow-500 to-amber-600"; }
+            else if (p >= 80) { rank = "Giỏi"; rankEmoji = "😎"; rankColor = "text-emerald-500"; gradientClass = "from-emerald-500 to-teal-600"; }
+            else if (p >= 65) { rank = "Khá"; rankEmoji = "👍"; rankColor = "text-blue-500"; gradientClass = "from-blue-500 to-indigo-600"; }
+            else if (p >= 50) { rank = "Trung Bình"; rankEmoji = "😐"; rankColor = "text-orange-500"; gradientClass = "from-orange-500 to-red-500"; }
+
+            const rd = document.getElementById('final-rank-display');
+            rd.innerHTML = `${rankEmoji} ${rank}`;
+            rd.className = `font-bold text-sm ${rankColor} inline-flex items-center gap-1 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow-sm border border-slate-100`;
+            const sc = document.querySelector('#result-screen .score-gradient');
+            if (sc) sc.className = `flex-1 bg-gradient-to-br ${gradientClass} text-white rounded-[32px] p-8 relative overflow-hidden shadow-xl flex flex-col items-center justify-center text-center min-h-[220px] animate-up score-gradient`;
         }
 
         function animateValue(id, start, end, duration) {
@@ -1991,6 +2282,68 @@
                 }
             };
             window.requestAnimationFrame(step);
+        }
+
+        // --- ACTIVE SESSION PERSISTENCE ---
+        function saveActiveSession() {
+            if (!document.getElementById('main-quiz') || document.getElementById('main-quiz').classList.contains('hidden')) return;
+
+            const session = {
+                quizTitle: quizData.title,
+                mode: quizMode,
+                questions: window._thptqgQuestions,
+                userAnswers: userAnswers,
+                timerSeconds: timerSeconds,
+                currentIndex: currentIndex,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('eduspace_active_session', JSON.stringify(session));
+        }
+
+        function checkActiveSession() {
+            const sessionStr = localStorage.getItem('eduspace_active_session');
+            if (!sessionStr) return;
+
+            try {
+                const session = JSON.parse(sessionStr);
+                // Only allow resume if it's the SAME quiz
+                if (session.quizTitle !== quizData.title) return;
+
+                // Show resume button
+                const container = document.querySelector('#start-screen .flex-col.gap-3');
+                if (!container) return;
+
+                const resumeBtn = document.createElement('button');
+                resumeBtn.id = 'resume-quiz-btn';
+                resumeBtn.className = 'bg-emerald-500 text-white pill-shape py-4 px-10 font-bold text-sm w-full flex items-center justify-center gap-3 shadow-lg shadow-emerald-200 animate-pulse mb-2';
+                resumeBtn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-xl">⏳</span>
+                        <div class="text-left">
+                            <div class="leading-none">Tiếp tục bài đang làm</div>
+                            <div class="text-[9px] opacity-70 mt-1 uppercase tracking-wider">${session.mode === 'thptqg' ? 'Chế độ THPT-QG' : 'Chế độ ' + session.mode}</div>
+                        </div>
+                    </div>
+                `;
+                resumeBtn.onclick = () => resumeSession(session);
+                container.prepend(resumeBtn);
+            } catch (e) { }
+        }
+
+        function resumeSession(session) {
+            quizMode = session.mode;
+            window._thptqgQuestions = session.questions;
+            userAnswers = session.userAnswers;
+            timerSeconds = session.timerSeconds;
+            currentIndex = session.currentIndex;
+
+            startQuizNow(true);
+        }
+
+        function clearActiveSession() {
+            localStorage.removeItem('eduspace_active_session');
+            const btn = document.getElementById('resume-quiz-btn');
+            if (btn) btn.remove();
         }
 
         // Simple Canvas Confetti Logic
@@ -2245,6 +2598,7 @@
             if (currentIndex < qs.length - 1) {
                 currentIndex++;
                 loadQuestion();
+                saveActiveSession();
             } else {
                 if (quizMode === 'test' || quizMode === 'thptqg') {
                     showModal("Nộp bài", "Bạn đã hoàn thành các câu hỏi. Nộp bài ngay?", "confirm", finishTest);
@@ -2268,7 +2622,8 @@
         }
 
         function selectOptionByIndex(index) {
-            const q = quizData.questions[currentIndex];
+            const qs = getActiveQuestions();
+            const q = qs[currentIndex];
             if (q.type !== 'multiple') return;
             if (!document.getElementById('explanation-container').classList.contains('hidden')) return;
 
@@ -2286,7 +2641,8 @@
         }
 
         function handleTrueFalseKey(isTrue) {
-            const q = quizData.questions[currentIndex];
+            const qs = getActiveQuestions();
+            const q = qs[currentIndex];
             if (q.type !== 'truefalse') return;
             if (!document.getElementById('explanation-container').classList.contains('hidden')) return;
 
@@ -2370,7 +2726,8 @@
 
             // === QUIZ SCREEN SHORTCUTS ===
             if (isQuizScreen) {
-                const q = quizData.questions[currentIndex];
+                const qs = getActiveQuestions();
+                const q = qs[currentIndex];
 
                 // ENTER - Submit/Continue
                 if (e.key === 'Enter') {
@@ -2379,7 +2736,7 @@
                         nextStep();
                     } else if (quizMode === 'practice' && !document.getElementById('submit-btn').disabled) {
                         handlePractice();
-                    } else if (quizMode === 'test') {
+                    } else if (quizMode === 'test' || quizMode === 'thptqg') {
                         nextStep();
                     }
                     return;
@@ -2404,8 +2761,9 @@
                 }
                 if (e.key === 'ArrowRight') {
                     e.preventDefault();
-                    if (currentIndex < quizData.questions.length - 1) {
-                        if (quizMode === 'test' || expVisible) {
+                    const qs = getActiveQuestions();
+                    if (currentIndex < qs.length - 1) {
+                        if (quizMode === 'test' || quizMode === 'thptqg' || expVisible) {
                             currentIndex++;
                             currentTFIndex = 0;
                             loadQuestion();

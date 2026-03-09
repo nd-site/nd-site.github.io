@@ -1,7 +1,20 @@
 window.quizData = {
     "title": "ÔN TẬP GIỮA HỌC KÌ II - MÔN: LỊCH SỬ 10 (2025-2026)",
     "config": {
-        "testDuration": 2700
+        "testDuration": 2700,
+        "examLayout": {
+            "multiple": { "count": 12, "pointsPerQ": 0.25 },
+            "truefalse": { "count": 4, "pointsPerQ": 1.0 },
+            "essay": {
+                "count": 4,
+                "pointsList": {
+                    "0": 0.75,
+                    "1": 0.75,
+                    "2": 1.0,
+                    "-1": 0.5
+                }
+            }
+        }
     },
     "questions": [
         {
