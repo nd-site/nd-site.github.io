@@ -19,10 +19,39 @@ const EDU_CONFIG = {
     lastUpdated: "2026-03-08"
 };
 
-// Function to safely get the API key (checks localStorage override first)
-function getGeminiApiKey() {
+let _cachedEnvKey = null;
+
+// Function to safely get the API key (supports local .env overriding GitHub placeholder)
+async function getGeminiApiKey() {
+    // 1. Check local memory cache
+    if (_cachedEnvKey) return _cachedEnvKey;
+
+    // 2. Check localStorage override (if manually set previously)
     const override = localStorage.getItem('eduspace_api_key_override');
-    return override || EDU_CONFIG.geminiApiKey;
+    if (override) {
+        _cachedEnvKey = override;
+        return _cachedEnvKey;
+    }
+
+    // 3. Try fetching from a local .env file (Git-ignored)
+    try {
+        const res = await fetch('/eduspace/.env');
+        if (res.ok) {
+            const text = await res.text();
+            for (const line of text.split('\n')) {
+                if (line.trim().startsWith('GEMINI_API_KEY=')) {
+                    _cachedEnvKey = line.split('=')[1].trim().replace(/['"]/g, '');
+                    return _cachedEnvKey;
+                }
+            }
+        }
+    } catch (e) {
+        // Ignored. Useful for GH Pages where .env might not be deployed.
+    }
+
+    // 4. Fallback to GitHub Secrets replacement placeholder
+    _cachedEnvKey = EDU_CONFIG.geminiApiKey;
+    return _cachedEnvKey;
 }
 
 window.getGeminiApiKey = getGeminiApiKey;

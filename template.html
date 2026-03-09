@@ -1335,13 +1335,15 @@
         let questionEarned = [];
         let aiFeedbacks = []; // To store AI recognition for results display
 
-        window.onload = () => {
+        window.onload = async () => {
             if (typeof quizData !== 'undefined') {
                 document.getElementById('quiz-title-display').innerText = quizData.title || "EduSpace by ND Labs";
                 document.getElementById('page-title').innerText = quizData.title || "EduSpace by ND Labs";
             }
-            // API key loaded from config.js automatically
-            apiKey = window.getGeminiApiKey();
+            // Load API key securely (supports local .env overriding GitHub placeholder)
+            if (window.getGeminiApiKey) {
+                apiKey = await window.getGeminiApiKey();
+            }
             showHistory();
             checkActiveSession();
         };
@@ -2069,7 +2071,7 @@
         }
 
         async function gradeAI(q, u, s) {
-            const currentApiKey = window.getGeminiApiKey();
+            const currentApiKey = await window.getGeminiApiKey();
             if (!currentApiKey) return { score: 0.5, feedback: "<p class='text-amber-600'>Hệ thống: API Key chưa được cấu hình. Vui lòng liên hệ quản trị viên.</p>" };
             try {
                 const model = window.getStableModel?.() || 'gemini-1.5-flash';
@@ -2842,7 +2844,7 @@
             const input = document.getElementById('ai-input');
             const container = document.getElementById('ai-chat-messages');
             const text = input.value.trim();
-            const currentApiKey = window.getGeminiApiKey();
+            const currentApiKey = await window.getGeminiApiKey();
             if (!text) return;
 
             // Hiển thị tin nhắn user

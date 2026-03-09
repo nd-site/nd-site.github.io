@@ -48,7 +48,7 @@ const eduspaceAI = (function () {
     }
 
     async function callGeminiAPI(payload) {
-        const apiKey = window.getGeminiApiKey();
+        const apiKey = await window.getGeminiApiKey();
         if (!apiKey) throw new Error('Thiếu API Key! Vui lòng cấu hình trong cài đặt.');
 
         let models = discoveredModels.length ? discoveredModels : await getBestModel(apiKey);
