@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh sách nền Gradient Pastel - ND Labs</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png">
+  <meta property="og:title" content="Gradient Pastel - ND Labs">
+  <meta property="og:description" content="Khám phá và sử dụng các dải màu Gradient Pastel tuyệt đẹp từ ND Labs.">
+  <meta property="og:image" content="/banner-main.png">
+  <meta property="og:type" content="website">
+  <style>
+    html,
+    body {
+      overflow-x: hidden;
+      /* Ẩn thanh cuộn ngang */
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(to right, #fcd7a3, #fbc2eb);
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 2000
+    }
+
+    .gradient {
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      color: #333;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .info {
+      background: rgba(255, 255, 255, 0.6);
+      padding: 10px;
+      border-radius: 12px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      border: none;
+      background: #667eea;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    #welcome-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(251, 194, 235, 0.8);
+      color: white;
+      text-align: center;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-size: 1.2rem;
+      font-weight: 600;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: rgba(251, 194, 235, 0.8);
+      color: white;
+      text-align: center;
+      border-radius: 12px;
+      padding: 12px 24px;
+      position: fixed;
+      left: 50%;
+      bottom: 40px;
+      transform: translateX(-50%);
+      font-size: 1.2rem;
+      font-weight: 600;
+      font-family: system-ui, sans-serif;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+    }
+
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .container {
+      padding: 0 20px;
+      /* Cách viền trái và phải 20px */
+      max-width: 1200px;
+      /* Giới hạn chiều rộng tối đa nếu muốn */
+      margin: 0 auto;
+      /* Căn giữa khung */
+      box-sizing: border-box;
+      /* Đảm bảo padding tính trong kích thước */
+    }
+  </style>
+    <script src="/assets/js/nd-navbar.js" defer></script>    <script src="/font/font.js"></script>
+</head>
+
+<body>
+  <div class="container"></div>
+  <h1>Danh sách nền Gradient Pastel - ND Labs</h1>
+
+  <div class="gradient" style="background: linear-gradient(to right, #fbc2eb, #fcd7a3);">
+    <strong>🍑 Hồng đào – Vàng nhạt</strong>
+    <div class="info">
+      HEX: #fbc2eb → #fcd7a3<br>
+      RGB: rgb(251,194,235) → rgb(252,215,163)<br>
+      <button onclick="copyGradient('--gradient1')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #fddde6, #d1c4e9);">
+    <strong>🌸 Hồng nhạt – Tím oải hương</strong>
+    <div class="info">
+      HEX: #fddde6 → #d1c4e9<br>
+      RGB: rgb(253,221,230) → rgb(209,196,233)<br>
+      <button onclick="copyGradient('--gradient2')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #b2fefa, #d1f4ff);">
+    <strong>💧Xanh ngọc – Xanh sương</strong>
+    <div class="info">
+      HEX: #b2fefa → #d1f4ff<br>
+      RGB: rgb(178,254,250) → rgb(209,244,255)<br>
+      <button onclick="copyGradient('--gradient3')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #e0c3fc, #8ec5fc);">
+    <strong>💜 Tím sương – Lam thiên thanh</strong>
+    <div class="info">
+      HEX: #e0c3fc → #8ec5fc<br>
+      RGB: rgb(224,195,252) → rgb(142,197,252)<br>
+      <button onclick="copyGradient('--gradient4')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #fcf6bd, #fddde6);">
+    <strong>🌼 Vàng pastel – Hồng phấn</strong>
+    <div class="info">
+      HEX: #fcf6bd → #fddde6<br>
+      RGB: rgb(252,246,189) → rgb(253,221,230)<br>
+      <button onclick="copyGradient('--gradient5')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #c2e9fb, #f9f9f9);">
+    <strong>❄️ Xanh băng – Trắng sữa</strong>
+    <div class="info">
+      HEX: #c2e9fb → #f9f9f9<br>
+      RGB: rgb(194,233,251) → rgb(249,249,249)<br>
+      <button onclick="copyGradient('--gradient6')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #ffdde1, #ee9ca7);">
+    <strong>🍓 Hồng đào – Hồng dâu</strong>
+    <div class="info">
+      HEX: #ffdde1 → #ee9ca7<br>
+      RGB: rgb(255,221,225) → rgb(238,156,167)<br>
+      <button onclick="copyGradient('--gradient7')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #a1c4fd, #c2e9fb);">
+    <strong>🌊 Xanh biển sáng – Xanh băng</strong>
+    <div class="info">
+      HEX: #a1c4fd → #c2e9fb<br>
+      RGB: rgb(161,196,253) → rgb(194,233,251)<br>
+      <button onclick="copyGradient('--gradient8')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #ffecd2, #fcb69f);">
+    <strong>🍊 Cam kem – Cam đào</strong>
+    <div class="info">
+      HEX: #ffecd2 → #fcb69f<br>
+      RGB: rgb(255,236,210) → rgb(252,182,159)<br>
+      <button onclick="copyGradient('--gradient9')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #cfd9df, #e2ebf0);">
+    <strong>🧊 Xám xanh – Lam sương</strong>
+    <div class="info">
+      HEX: #cfd9df → #e2ebf0<br>
+      RGB: rgb(207,217,223) → rgb(226,235,240)<br>
+      <button onclick="copyGradient('--gradient10')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #fde2ff, #e1f0ff);">
+    <strong>🦄 Tím pastel – Xanh sương mai</strong>
+    <div class="info">
+      HEX: #fde2ff → #e1f0ff<br>
+      RGB: rgb(253,226,255) → rgb(225,240,255)<br>
+      <button onclick="copyGradient('--gradient11')">Dùng nền này</button>
+    </div>
+  </div>
+  <div class="gradient" style="background: linear-gradient(to right, #f6fcbf, #fddede);">
+    <strong>🌷 Vàng sáng – Hồng phấn</strong>
+    <div class="info">
+      HEX: #f6fcbf → #fddede<br>
+      RGB: rgb(246,252,191) → rgb(253,222,222)<br>
+      <button onclick="copyGradient('--gradient12')">Dùng nền này</button>
+    </div>
+  </div>
+  <!--
+    <div class="gradient" style="background: linear-gradient(to right, #MÀU1, #MÀU2);">
+        <strong>ICON Tên màu 1 – Tên màu 2</strong>
+        <div class="info">
+        HEX: #MÀU1 → #MÀU2<br>
+        RGB: rgb(R1,G1,B1) → rgb(R2,G2,B2)<br>
+        <button onclick="copyGradient('--gradientX')">Dùng nền này</button>
+        </div>
+    </div>
+-->
+  <div id="welcome-message">
+    ND Labs cảm ơn bạn đã sử dụng trang web!
+  </div>
+
+  <!-- Music Selection Dialog -->
+  <div id="musicDialog"
+    style="position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:99999;">
+    <div
+      style="background:white;padding:30px;border-radius:24px;width:90%;max-width:350px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+      <h3 style="margin-bottom:10px;">Bật nhạc nền?</h3>
+      <p style="color:#64748b;margin-bottom:25px;">Trải nghiệm tốt hơn với âm nhạc thư giãn của ND Labs.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button onclick="handleMusicChoice(true)"
+          style="padding:12px;border-radius:12px;border:none;background:#4f46e5;color:white;font-weight:700;cursor:pointer;">Bật
+          nhạc</button>
+        <button onclick="handleMusicChoice(false)"
+          style="padding:12px;border-radius:12px;border:none;background:#f1f5f9;color:#64748b;font-weight:700;cursor:pointer;">Bỏ
+          qua</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" src="/assets/audio/nhacnen.mp3" loop></audio>
+  <script src="/assets/js/notify.js"></script>
+
+  <script>
+    function copyGradient(gradient) {
+      const gradients = {
+        '--gradient1': 'linear-gradient(to right, #fbc2eb, #fcd7a3)',
+        '--gradient2': 'linear-gradient(to right, #fddde6, #d1c4e9)',
+        '--gradient3': 'linear-gradient(to right, #b2fefa, #d1f4ff)',
+        '--gradient4': 'linear-gradient(to right, #e0c3fc, #8ec5fc)',
+        '--gradient5': 'linear-gradient(to right, #fcf6bd, #fddde6)',
+        '--gradient6': 'linear-gradient(to right, #c2e9fb, #f9f9f9)',
+        '--gradient7': 'linear-gradient(to right, #ffdde1, #ee9ca7)',
+        '--gradient8': 'linear-gradient(to right, #a1c4fd, #c2e9fb)',
+        '--gradient9': 'linear-gradient(to right, #ffecd2, #fcb69f)',
+        '--gradient10': 'linear-gradient(to right, #cfd9df, #e2ebf0)',
+        '--gradient11': 'linear-gradient(to right, #fde2ff, #e1f0ff)',
+        '--gradient12': 'linear-gradient(to right, #f6fcbf, #fddede)'
+      };
+      const text = `background: ${gradients[gradient]};`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('🎉 Gradient đã được sao chép!');
+      }).catch(() => {
+        alert('⚠️ Sao chép thất bại!');
+      });
+    }
+
+    const music = document.getElementById("bgMusic");
+    function handleMusicChoice(play) {
+      if (play) music.play().catch(e => console.log("Autoplay blocked"));
+      document.getElementById('musicDialog').style.display = 'none';
+      localStorage.setItem('musicPrompted', 'true');
+    }
+
+    window.addEventListener('load', () => {
+      if (!localStorage.getItem('musicPrompted')) {
+        setTimeout(() => { document.getElementById('musicDialog').style.display = 'flex'; }, 1000);
+      }
+    });
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const welcome = document.getElementById('welcome-message');
+      if (welcome) {
+        welcome.style.opacity = '1';
+        setTimeout(() => {
+          welcome.style.opacity = '0';
+        }, 5000); // Hiện trong 5 giây
+      }
+    });
+  </script>
+</body>
+
+</html>

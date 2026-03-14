@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Share | ND Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <link rel="icon" href="/assets/images/logo.png" type="image/png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .bg-mesh {
+            position: fixed; inset: 0; z-index: -1;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.05) 0px, transparent 50%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+    <div class="bg-mesh"></div>
+    
+    <div class="max-w-md w-full glass rounded-[2.5rem] p-10 shadow-2xl shadow-violet-100/50 text-center animate-in fade-in zoom-in duration-500">
+        <div class="w-16 h-16 bg-violet-600 rounded-3xl flex items-center justify-center text-white text-3xl mx-auto mb-8 shadow-lg shadow-violet-200">
+            <i class="ph-duotone ph-share-network"></i>
+        </div>
+        
+        <h1 class="text-3xl font-extrabold text-slate-900 mb-2 tracking-tight">Quick Share</h1>
+        <p class="text-slate-500 mb-10 font-medium">Nhập mã truy cập để nhận nội dung chia sẻ.</p>
+        
+        <div class="space-y-4">
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-violet-600 transition-colors">
+                    <i class="ph-bold ph-key"></i>
+                </div>
+                <input type="text" id="share-code" placeholder="Nhập mã tại đây..." 
+                    class="w-full pl-12 pr-5 py-4 bg-white/50 border border-slate-200 rounded-2xl outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-600 transition-all font-bold text-slate-700 uppercase tracking-widest placeholder:normal-case placeholder:font-medium placeholder:tracking-normal">
+            </div>
+            
+            <button onclick="handleShare()" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-extrabold py-4 rounded-2xl shadow-lg shadow-violet-200 transition-all active:scale-95 flex items-center justify-center gap-2">
+                Tiếp tục <i class="ph-bold ph-arrow-right"></i>
+            </button>
+            
+            <div id="status" class="mt-4 text-sm font-bold opacity-0 transition-opacity"></div>
+        </div>
+        
+        <div class="mt-12 pt-8 border-t border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Protected by ND Labs</p>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        const input = document.getElementById('share-code');
+        const status = document.getElementById('status');
+
+        function handleShare() {
+            const code = input.value.trim();
+            if(!code) return showStatus('Vui lòng nhập mã!', 'text-amber-500');
+
+            if(data[code]) {
+                showStatus('Đang chuyển hướng...', 'text-emerald-500');
+                setTimeout(() => {
+                    window.location.href = data[code];
+                }, 800);
+            } else {
+                showStatus('Mã không hợp lệ hoặc đã hết hạn.', 'text-red-500');
+            }
+        }
+
+        function showStatus(text, colorClass) {
+            status.textContent = text;
+            status.className = `mt-4 text-sm font-bold transition-opacity ${colorClass}`;
+            status.style.opacity = '1';
+        }
+
+        // Auto-handle hash
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.substring(1);
+            if(hash && data[hash]) {
+                input.value = hash;
+                handleShare();
+            }
+        });
+
+        input.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') handleShare();
+        });
+    </script>
+</body>
+</html>

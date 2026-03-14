@@ -1,0 +1,756 @@
+﻿<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vòng Quay May Mắn - ND Labs</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png">
+  <meta property="og:title" content="Vòng Quay May Mắn - ND Labs">
+  <meta property="og:description" content="Tạo vòng quay may mắn tùy chỉnh chuyên nghiệp với ND Labs.">
+  <meta property="og:image" content="/banner-main.png">
+  <meta property="og:type" content="website">
+  
+    <script src="/assets/js/nd-navbar.js" defer></script>    <script src="/font/font.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Panel điều khiển bên trái -->
+    <div class="control-panel">
+      <div class="panel-header">
+        <div class="panel-title">Vòng Quay May Mắn</div>
+        <div class="logo">ND Labs</div>
+      </div>
+
+      <div class="input-section">
+        <div class="section-title">
+          <i class="fas fa-list"></i>
+          <span>Danh sách phần thưởng</span>
+        </div>
+        <textarea id="names" placeholder="Nhập mỗi dòng là một phần thưởng hoặc người tham gia...">Giải nhất
+Giải nhì
+Giải ba
+Giải tư
+Giải năm
+Giải sáu
+Giải bảy
+Giải tám
+Giải chín
+Giải mười</textarea>
+      </div>
+
+      <div class="button-group">
+        <button id="spinBtn" class="btn btn-primary">
+          <i class="fas fa-play"></i>
+          <span>Quay ngay</span>
+        </button>
+        <button id="randBtn" class="btn btn-secondary">
+          <i class="fas fa-palette"></i>
+          <span>Đổi màu</span>
+        </button>
+        <button id="clearBtn" class="btn btn-danger">
+          <i class="fas fa-trash"></i>
+          <span>Xóa hết</span>
+        </button>
+        <button id="addBtn" class="btn btn-secondary">
+          <i class="fas fa-plus"></i>
+          <span>Thêm mẫu</span>
+        </button>
+      </div>
+
+      <div class="result-section">
+        <div class="result-label">KẾT QUẢ</div>
+        <div id="result">
+          <i class="fas fa-gift"></i>
+          <span class="result-text">Sẵn sàng quay</span>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="section-title">
+          <i class="fas fa-cog"></i>
+          <span>Cài đặt</span>
+        </div>
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label class="setting-label">Tốc độ</label>
+            <select id="speedSelect" class="setting-control">
+              <option value="slow">Chậm</option>
+              <option value="normal" selected>Bình thường</option>
+              <option value="fast">Nhanh</option>
+            </select>
+          </div>
+          <div class="setting-item">
+            <label class="setting-label">Hiệu ứng</label>
+            <select id="effectSelect" class="setting-control">
+              <option value="none" selected>Không</option>
+              <option value="simple">Đơn giản</option>
+            </select>
+          </div>
+        </div>
+        <div class="info-text">Tất cả dữ liệu được lưu tự động</div>
+      </div>
+    </div>
+
+    <!-- Panel vòng quay bên phải -->
+    <div class="wheel-panel">
+      <div class="wheel-container">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="400" height="400"></canvas>
+        <!-- Nút quay trung tâm -->
+        <button id="centerSpinBtn" class="center-spin-btn">
+          <span class="spin-text">QUAY</span>
+          <div class="spin-icon"></div>
+        </button>
+      </div>
+
+      <div class="legend-container">
+        <div class="legend-title">
+          <i class="fas fa-award"></i>
+          <span>Danh sách phần thưởng</span>
+          <span id="itemCount" class="badge badge-primary">10 items</span>
+        </div>
+        <div class="legend-grid" id="legend"></div>
+      </div>
+    </div>
+
+    <!-- Lịch sử quay -->
+    <div class="history-panel">
+      <div class="history-header">
+        <div class="history-title">
+          <i class="fas fa-history"></i>
+          <span>Lịch sử quay</span>
+        </div>
+        <div class="history-controls">
+          <button id="clearHistoryBtn" class="btn btn-secondary">
+            <i class="fas fa-trash-alt"></i>
+            <span>Xóa lịch sử</span>
+          </button>
+          <button id="exportHistoryBtn" class="btn btn-secondary">
+            <i class="fas fa-download"></i>
+            <span>Xuất file</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="history-stats" id="historyStats">
+        Tổng cộng: 0 lượt quay
+      </div>
+
+      <div class="history-list" id="historyList">
+        <div class="empty-state">
+          <i class="fas fa-history"></i>
+          <div>Chưa có lịch sử quay</div>
+        </div>
+      </div>
+
+      <div class="pagination" id="pagination" style="display: none;">
+        <button class="page-btn" id="prevPage" disabled>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <span id="pageInfo">Trang 1/1</span>
+        <button class="page-btn" id="nextPage" disabled>
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nút trang chủ -->
+  
+
+  <script>
+    // ========== KHỞI TẠO BIẾN ==========
+    const $names = document.getElementById('names');
+    const $wheel = document.getElementById('wheel');
+    const ctx = $wheel.getContext('2d');
+    const $spin = document.getElementById('spinBtn');
+    const $centerSpin = document.getElementById('centerSpinBtn');
+    const $rand = document.getElementById('randBtn');
+    const $clear = document.getElementById('clearBtn');
+    const $add = document.getElementById('addBtn');
+    const $result = document.getElementById('result');
+    const $resultText = $result.querySelector('.result-text');
+    const $legend = document.getElementById('legend');
+    const $historyList = document.getElementById('historyList');
+    const $historyStats = document.getElementById('historyStats');
+    const $clearHistory = document.getElementById('clearHistoryBtn');
+    const $exportHistory = document.getElementById('exportHistoryBtn');
+    const $itemCount = document.getElementById('itemCount');
+    const $speedSelect = document.getElementById('speedSelect');
+    const $effectSelect = document.getElementById('effectSelect');
+    const $pagination = document.getElementById('pagination');
+    const $prevPage = document.getElementById('prevPage');
+    const $nextPage = document.getElementById('nextPage');
+    const $pageInfo = document.getElementById('pageInfo');
+
+    let entries = [];
+    let colors = [];
+    let rotation = 0;
+    let isSpinning = false;
+    let spinAnim = null;
+    let spinHistory = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    // Màu sắc định sẵn
+    const PREDEFINED_COLORS = [
+      '#8B5CF6', '#10B981', '#F59E0B', '#EF4444', '#3B82F6',
+      '#EC4899', '#14B8A6', '#F97316', '#6366F1', '#84CC16',
+      '#06B6D4', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444',
+      '#3B82F6', '#EC4899', '#14B8A6', '#F97316', '#6366F1'
+    ];
+
+    // ========== LƯU VÀ TẢI DỮ LIỆU ==========
+    function saveToStorage() {
+      try {
+        localStorage.setItem('wheelEntries', $names.value);
+        localStorage.setItem('wheelHistory', JSON.stringify(spinHistory));
+        localStorage.setItem('wheelColors', JSON.stringify(colors));
+
+        const settings = {
+          speed: $speedSelect.value,
+          effect: $effectSelect.value
+        };
+        localStorage.setItem('wheelSettings', JSON.stringify(settings));
+      } catch (e) {
+        console.log("Lỗi khi lưu:", e);
+      }
+    }
+
+    function loadFromStorage() {
+      try {
+        // Tải danh sách
+        const savedEntries = localStorage.getItem('wheelEntries');
+        if (savedEntries) {
+          $names.value = savedEntries;
+        }
+
+        // Tải lịch sử
+        const savedHistory = localStorage.getItem('wheelHistory');
+        if (savedHistory) {
+          spinHistory = JSON.parse(savedHistory) || [];
+          updateHistoryDisplay();
+          updateHistoryStats();
+        }
+
+        // Tải màu sắc
+        const savedColors = localStorage.getItem('wheelColors');
+        if (savedColors) {
+          colors = JSON.parse(savedColors) || [];
+        }
+
+        // Tải cài đặt
+        const savedSettings = localStorage.getItem('wheelSettings');
+        if (savedSettings) {
+          const settings = JSON.parse(savedSettings);
+          if (settings.speed) $speedSelect.value = settings.speed;
+          if (settings.effect) $effectSelect.value = settings.effect;
+        }
+      } catch (e) {
+        console.log("Lỗi khi tải:", e);
+      }
+    }
+
+    // ========== XỬ LÝ DỮ LIỆU ==========
+    function parseNames(text) {
+      return text.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    }
+
+    function generateColors(count) {
+      const newColors = [];
+      for (let i = 0; i < count; i++) {
+        newColors.push(PREDEFINED_COLORS[i % PREDEFINED_COLORS.length]);
+      }
+      return newColors;
+    }
+
+    function rebuild() {
+      entries = parseNames($names.value);
+      $itemCount.textContent = `${entries.length} items`;
+
+      if (entries.length === 0) {
+        colors = [];
+        drawWheel();
+        renderLegend();
+        $resultText.textContent = 'Chưa có dữ liệu';
+        saveToStorage();
+        return;
+      }
+
+      // Tạo màu mới nếu cần
+      if (colors.length !== entries.length) {
+        colors = generateColors(entries.length);
+      }
+
+      drawWheel();
+      renderLegend();
+      $resultText.textContent = 'Sẵn sàng quay!';
+      saveToStorage();
+    }
+
+    // ========== VẼ VÒNG QUAY ==========
+    function drawWheel() {
+      const size = 400;
+      const dpr = window.devicePixelRatio || 1;
+
+      // Đặt kích thước canvas
+      $wheel.width = size * dpr;
+      $wheel.height = size * dpr;
+      ctx.scale(dpr, dpr);
+
+      // Clear canvas
+      ctx.clearRect(0, 0, size, size);
+
+      const cx = size / 2;
+      const cy = size / 2;
+      const r = size / 2 - 10;
+      const n = Math.max(1, entries.length);
+      const slice = (Math.PI * 2) / n;
+
+      // Vẽ các phần
+      for (let i = 0; i < n; i++) {
+        const start = rotation + i * slice;
+        const end = start + slice;
+
+        // Vẽ hình quạt
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, end);
+        ctx.closePath();
+        ctx.fillStyle = colors[i] || '#E5E7EB';
+        ctx.fill();
+
+        // Đường viền
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, end);
+        ctx.closePath();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Vẽ chữ (chỉ khi ít items)
+        if (n <= 20) {
+          ctx.save();
+          const ang = start + slice / 2;
+          ctx.translate(cx, cy);
+          ctx.rotate(ang);
+          ctx.textAlign = 'right';
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 13px "Segoe UI"';
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+          ctx.shadowBlur = 2;
+
+          const label = n > 12 ? `#${i + 1}` : entries[i] || `#${i + 1}`;
+          const maxWidth = r - 30;
+          const textWidth = ctx.measureText(label).width;
+
+          if (textWidth <= maxWidth) {
+            ctx.fillText(label, r - 15, 4);
+          }
+
+          ctx.restore();
+        }
+      }
+
+      // Vẽ trung tâm
+      ctx.beginPath();
+      ctx.arc(cx, cy, 35, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // ========== HIỂN THỊ LEGEND ==========
+    function renderLegend() {
+      $legend.innerHTML = '';
+
+      entries.forEach((name, i) => {
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        item.dataset.index = i;
+        item.innerHTML = `
+          <div class="legend-number">${i + 1}</div>
+          <div class="legend-color" style="background: ${colors[i]}"></div>
+          <div class="legend-text" title="${escapeHtml(name)}">
+            ${escapeHtml(name.length > 20 ? name.substring(0, 20) + '...' : name)}
+          </div>
+        `;
+
+        item.addEventListener('click', () => {
+          highlightItem(i);
+        });
+
+        $legend.appendChild(item);
+      });
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function highlightItem(index) {
+      document.querySelectorAll('.legend-item').forEach(item => {
+        item.classList.remove('winner');
+      });
+
+      const item = document.querySelector(`.legend-item[data-index="${index}"]`);
+      if (item) {
+        item.classList.add('winner');
+        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // ========== QUAY VÒNG QUAY ==========
+    function spin() {
+      if (isSpinning || entries.length === 0) return;
+
+      $centerSpin.classList.add('spinning');
+      $centerSpin.disabled = true;
+      $spin.disabled = true;
+      isSpinning = true;
+      $resultText.textContent = 'Đang quay...';
+      $resultText.classList.remove('winning-text');
+
+      document.querySelectorAll('.legend-item').forEach(item => {
+        item.classList.remove('winner');
+      });
+
+      const n = entries.length;
+      const minSpins = 3;
+      const extraRounds = minSpins + Math.floor(Math.random() * 2);
+      const target = Math.floor(Math.random() * n);
+      const slice = (Math.PI * 2) / n;
+
+      const pointerAngle = -Math.PI / 2;
+      const desired = pointerAngle - (target * slice + slice / 2);
+      const current = rotation % (Math.PI * 2);
+
+      let delta = desired - current;
+      delta = ((delta % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+      const total = delta + extraRounds * (Math.PI * 2);
+
+      let baseDuration = 3000;
+      switch ($speedSelect.value) {
+        case 'slow': baseDuration = 4500; break;
+        case 'fast': baseDuration = 2000; break;
+        default: baseDuration = 3000;
+      }
+
+      const duration = baseDuration;
+      const startTime = Date.now();
+      const startRot = rotation;
+
+      function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Easing function
+        let ease;
+        if (progress < 0.8) {
+          ease = progress * (2 - progress);
+        } else {
+          ease = 0.96 + (progress - 0.8) * 0.2;
+        }
+
+        rotation = startRot + total * ease;
+        drawWheel();
+
+        if (progress < 1) {
+          spinAnim = requestAnimationFrame(animate);
+        } else {
+          finishSpin(target);
+        }
+      }
+
+      spinAnim = requestAnimationFrame(animate);
+    }
+
+    function finishSpin(targetIndex) {
+      isSpinning = false;
+      $spin.disabled = false;
+      $centerSpin.disabled = false;
+      $centerSpin.classList.remove('spinning');
+
+      drawWheel();
+
+      const winner = entries[targetIndex] || `#${targetIndex + 1}`;
+      $resultText.textContent = winner;
+      $resultText.classList.add('winning-text');
+
+      addToHistory(winner, targetIndex);
+      highlightItem(targetIndex);
+
+      if ($effectSelect.value === 'simple') {
+        showSimpleEffect(targetIndex);
+      }
+
+      saveToStorage();
+    }
+
+    function showSimpleEffect(index) {
+      const originalColor = colors[index];
+      let flashCount = 0;
+
+      const flashInterval = setInterval(() => {
+        if (flashCount % 2 === 0) {
+          colors[index] = '#FFFFFF';
+        } else {
+          colors[index] = originalColor;
+        }
+
+        drawWheel();
+        flashCount++;
+
+        if (flashCount > 4) {
+          colors[index] = originalColor;
+          drawWheel();
+          clearInterval(flashInterval);
+        }
+      }, 200);
+    }
+
+    // ========== LỊCH SỬ ==========
+    function addToHistory(winner, index) {
+      const now = new Date();
+      const dateString = now.toLocaleDateString('vi-VN');
+      const timeString = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+      const historyItem = {
+        winner,
+        index,
+        date: dateString,
+        time: timeString,
+        timestamp: now.getTime()
+      };
+
+      spinHistory.unshift(historyItem);
+      updateHistoryDisplay();
+      updateHistoryStats();
+      updatePagination();
+
+      currentPage = 1;
+      updateHistoryDisplay();
+    }
+
+    function updateHistoryStats() {
+      const total = spinHistory.length;
+      if (total > 0) {
+        const firstDate = new Date(spinHistory[spinHistory.length - 1].timestamp);
+        const lastDate = new Date(spinHistory[0].timestamp);
+        $historyStats.innerHTML = `
+          Tổng cộng: <strong>${total}</strong> lượt quay<br>
+          <small>Từ ${firstDate.toLocaleDateString('vi-VN')} đến ${lastDate.toLocaleDateString('vi-VN')}</small>
+        `;
+      } else {
+        $historyStats.textContent = 'Tổng cộng: 0 lượt quay';
+      }
+    }
+
+    function updateHistoryDisplay() {
+      const total = spinHistory.length;
+
+      if (total === 0) {
+        $historyList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-history"></i>
+            <div>Chưa có lịch sử quay</div>
+          </div>
+        `;
+        $pagination.style.display = 'none';
+        return;
+      }
+
+      const totalPages = Math.ceil(total / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, total);
+      const pageItems = spinHistory.slice(startIndex, endIndex);
+
+      $historyList.innerHTML = '';
+
+      pageItems.forEach((item, i) => {
+        const globalIndex = startIndex + i + 1;
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        historyItem.innerHTML = `
+          <div class="history-text">
+            <i class="fas fa-trophy" style="color: ${colors[item.index] || '#7C3AED'}"></i>
+            <span title="${escapeHtml(item.winner)}">
+              ${escapeHtml(item.winner.length > 30 ? item.winner.substring(0, 30) + '...' : item.winner)}
+            </span>
+          </div>
+          <div class="history-info">
+            <span class="history-index">#${item.index + 1}</span>
+            <span class="history-time">${item.date} ${item.time}</span>
+          </div>
+        `;
+
+        historyItem.addEventListener('click', () => {
+          highlightItem(item.index);
+        });
+
+        $historyList.appendChild(historyItem);
+      });
+
+      if (totalPages > 1) {
+        $pagination.style.display = 'flex';
+        $pageInfo.textContent = `Trang ${currentPage}/${totalPages}`;
+        $prevPage.disabled = currentPage === 1;
+        $nextPage.disabled = currentPage === totalPages;
+      } else {
+        $pagination.style.display = 'none';
+      }
+    }
+
+    function updatePagination() {
+      const total = spinHistory.length;
+      const totalPages = Math.ceil(total / itemsPerPage);
+
+      if (totalPages > 1) {
+        $pagination.style.display = 'flex';
+        $pageInfo.textContent = `Trang ${currentPage}/${totalPages}`;
+        $prevPage.disabled = currentPage === 1;
+        $nextPage.disabled = currentPage === totalPages;
+      } else {
+        $pagination.style.display = 'none';
+      }
+    }
+
+    function clearHistory() {
+      if (spinHistory.length === 0) return;
+
+      if (confirm(`Bạn có chắc muốn xóa toàn bộ ${spinHistory.length} lượt quay trong lịch sử?`)) {
+        spinHistory = [];
+        currentPage = 1;
+        updateHistoryDisplay();
+        updateHistoryStats();
+        saveToStorage();
+      }
+    }
+
+    function exportHistory() {
+      if (spinHistory.length === 0) {
+        alert('Không có dữ liệu lịch sử để xuất');
+        return;
+      }
+
+      let csvContent = "STT,Phần thưởng,Số thứ tự,Ngày,Giờ\n";
+
+      spinHistory.forEach((item, index) => {
+        const row = [
+          index + 1,
+          `"${item.winner.replace(/"/g, '""')}"`,
+          item.index + 1,
+          item.date,
+          item.time
+        ];
+        csvContent += row.join(',') + '\n';
+      });
+
+      const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      const now = new Date();
+      const filename = `lich-su-quay-${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}.csv`;
+
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // ========== SỰ KIỆN ==========
+    $names.addEventListener('input', rebuild);
+    $spin.addEventListener('click', spin);
+    $centerSpin.addEventListener('click', spin);
+
+    $rand.addEventListener('click', () => {
+      if (entries.length) {
+        colors = generateColors(entries.length);
+        drawWheel();
+        renderLegend();
+        saveToStorage();
+      }
+    });
+
+    $clear.addEventListener('click', () => {
+      if (confirm('Bạn có chắc muốn xóa tất cả dữ liệu?')) {
+        $names.value = '';
+        rebuild();
+        $resultText.textContent = 'Đã xóa dữ liệu';
+        $resultText.classList.remove('winning-text');
+      }
+    });
+
+    $add.addEventListener('click', () => {
+      const samples = [
+        "Giải đặc biệt",
+        "Vé xem phim",
+        "Voucher 500K",
+        "Tai nghe Bluetooth",
+        "Balo thời trang"
+      ];
+
+      const currentText = $names.value.trim();
+      const newItems = samples.slice(0, 3).join('\n');
+
+      if (currentText) {
+        $names.value = currentText + '\n' + newItems;
+      } else {
+        $names.value = newItems;
+      }
+
+      rebuild();
+    });
+
+    $clearHistory.addEventListener('click', clearHistory);
+    $exportHistory.addEventListener('click', exportHistory);
+
+    $prevPage.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        updateHistoryDisplay();
+      }
+    });
+
+    $nextPage.addEventListener('click', () => {
+      const totalPages = Math.ceil(spinHistory.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        updateHistoryDisplay();
+      }
+    });
+
+    $speedSelect.addEventListener('change', saveToStorage);
+    $effectSelect.addEventListener('change', saveToStorage);
+
+    // ========== KHỞI ĐỘNG ==========
+    window.addEventListener('DOMContentLoaded', () => {
+      loadFromStorage();
+      rebuild();
+      drawWheel();
+    });
+
+    window.addEventListener('resize', () => {
+      drawWheel();
+    });
+
+    // Auto-save
+    setInterval(saveToStorage, 30000);
+    window.addEventListener('beforeunload', saveToStorage);
+  </script>
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="/assets/js/notify.js"></script>
+</body>
+
+</html>
