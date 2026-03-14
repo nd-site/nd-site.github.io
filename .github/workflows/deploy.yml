@@ -26,27 +26,25 @@ jobs:
 
       - name: Inject Secrets into Config
         run: |
-          sed -i "s|__GEMINI_API_KEY_PLACEHOLDER__|${{ secrets.GEMINI_API_KEY }}|g" assets/js/config.js
-          sed -i "s|__FIREBASE_API_KEY_PLACEHOLDER__|${{ secrets.FIREBASE_API_KEY }}|g" assets/js/config.js
-          sed -i "s|__FIREBASE_AUTH_DOMAIN_PLACEHOLDER__|${{ secrets.FIREBASE_AUTH_DOMAIN }}|g" assets/js/config.js
-          sed -i "s|__FIREBASE_DATABASE_URL_PLACEHOLDER__|${{ secrets.FIREBASE_DATABASE_URL }}|g" assets/js/config.js
-          sed -i "s|__FIREBASE_PROJECT_ID_PLACEHOLDER__|${{ secrets.FIREBASE_PROJECT_ID }}|g" assets/js/config.js
-          sed -i "s|__FIREBASE_STORAGE_BUCKET_PLACEHOLDER__|${{ secrets.FIREBASE_STORAGE_BUCKET }}|g" assets/js/config.js
-          sed -i "s|__FIREBASE_MESSAGING_SENDER_ID_PLACEHOLDER__|${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}|g" assets/js/config.js
-          sed -i "s|__FIREBASE_APP_ID_PLACEHOLDER__|${{ secrets.FIREBASE_APP_ID }}|g" assets/js/config.js
-          sed -i "s|__FIREBASE_MEASUREMENT_ID_PLACEHOLDER__|${{ secrets.FIREBASE_MEASUREMENT_ID }}|g" assets/js/config.js
+          # Dung kytu @ lam delimiter cho an toan hon |
+          sed -i "s@__GEMINI_API_KEY_PLACEHOLDER__@${{ secrets.GEMINI_API_KEY }}@g" assets/js/config.js
+          sed -i "s@__FIREBASE_API_KEY_PLACEHOLDER__@${{ secrets.FIREBASE_API_KEY }}@g" assets/js/config.js
+          sed -i "s@__FIREBASE_AUTH_DOMAIN_PLACEHOLDER__@${{ secrets.FIREBASE_AUTH_DOMAIN }}@g" assets/js/config.js
+          sed -i "s@__FIREBASE_DATABASE_URL_PLACEHOLDER__@${{ secrets.FIREBASE_DATABASE_URL }}@g" assets/js/config.js
+          sed -i "s@__FIREBASE_PROJECT_ID_PLACEHOLDER__@${{ secrets.FIREBASE_PROJECT_ID }}@g" assets/js/config.js
+          sed -i "s@__FIREBASE_STORAGE_BUCKET_PLACEHOLDER__@${{ secrets.FIREBASE_STORAGE_BUCKET }}@g" assets/js/config.js
+          sed -i "s@__FIREBASE_MESSAGING_SENDER_ID_PLACEHOLDER__@${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}@g" assets/js/config.js
+          sed -i "s@__FIREBASE_APP_ID_PLACEHOLDER__@${{ secrets.FIREBASE_APP_ID }}@g" assets/js/config.js
+          sed -i "s@__FIREBASE_MEASUREMENT_ID_PLACEHOLDER__@${{ secrets.FIREBASE_MEASUREMENT_ID }}@g" assets/js/config.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_site
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload toan bo thu muc goc (khong qua Jekyll)
+          path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
