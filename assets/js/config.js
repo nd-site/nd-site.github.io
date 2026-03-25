@@ -102,23 +102,5 @@ window.getGeminiApiKey = async () => {
     return keys.gemini;
 };
 
-window.getFirebaseApiKey = async () => {
-    const keys = await getEduKeys();
-    return keys.firebase || "AIzaSyDIHXhqSNYhIIozxC5dZ-mTcfXAPzPZgog"; // Fallback to leaked key only if absolutely necessary
-};
-
-window.getFirebaseConfig = async () => {
-    const keys = await getEduKeys();
-    return {
-        apiKey: keys.firebase || "AIzaSyDIHXhqSNYhIIozxC5dZ-mTcfXAPzPZgog",
-        authDomain: keys.fbAuthDomain || "ndlabs-0.firebaseapp.com",
-        databaseURL: keys.fbDatabaseURL || "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: keys.fbProjectId || "ndlabs-0",
-        storageBucket: keys.fbStorageBucket || "ndlabs-0.firebasestorage.app",
-        messagingSenderId: keys.fbMessagingSenderId || "600040258053",
-        appId: keys.fbAppId || "1:600040258053:web:617a19f62aafeb35d13a6c",
-        measurementId: keys.fbMeasurementId || "G-20W5SZ0BKB"
-    };
-};
 
 window.getStableModel = () => EDU_CONFIG.stableModel;
