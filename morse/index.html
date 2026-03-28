@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Morse Decoder Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+        
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .morse-font {
+            font-family: 'JetBrains+Mono', monospace;
+            letter-spacing: 2px;
+        }
+
+        .btn-active:active {
+            transform: scale(0.95);
+            filter: brightness(0.9);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .custom-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tối ưu vùng hiển thị cho Mobile */
+        .display-area {
+            min-height: 80px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-md space-y-4">
+        <!-- Header -->
+        <header class="text-center mb-6">
+            <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">MORSE <span class="text-blue-600">DECODER</span></h1>
+            <p class="text-slate-500 text-sm mt-1 uppercase tracking-widest font-semibold">Công cụ giải mã chuyên nghiệp</p>
+        </header>
+
+        <!-- Output Display -->
+        <div class="glass-panel rounded-2xl p-4 custom-shadow space-y-3 border-l-4 border-blue-500">
+            <div>
+                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Chuỗi Morse nhập vào</rbabel>
+                <div id="morseInput" class="morse-font text-xl font-bold text-blue-700 break-all display-area mt-1 leading-relaxed"></div>
+            </div>
+            <div class="pt-2 border-t border-slate-100">
+                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kết quả giải mã (VĂN BẢN)</label>
+                <div id="textOutput" class="text-2xl font-black text-slate-800 break-all display-area mt-1 uppercase"></div>
+            </div>
+        </div>
+
+        <!-- Controls Grid -->
+        <div class="grid grid-cols-3 gap-3">
+            <!-- Nút Morse Chính -->
+            <button onclick="addChar('.')" class="btn-active col-span-1 h-20 bg-white rounded-2xl shadow-sm border border-slate-200 flex items-center justify-center text-4xl font-bold text-slate-700">.</button>
+            <button onclick="addChar('-')" class="btn-active col-span-1 h-20 bg-white rounded-2xl shadow-sm border border-slate-200 flex items-center justify-center text-4xl font-bold text-slate-700">-</button>
+            <button onclick="addChar(' ')" class="btn-active col-span-1 h-20 bg-blue-50 rounded-2xl shadow-sm border border-blue-100 flex flex-col items-center justify-center text-blue-600">
+                <span class="text-xs font-bold uppercase">Space</span>
+                <span class="text-lg">␣</span>
+            </button>
+
+            <button onclick="addChar('/')" class="btn-active col-span-1 h-16 bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center text-slate-500">
+                <span class="text-[10px] font-bold uppercase">Ngắt từ</span>
+                <span class="text-xl">/</span>
+            </button>
+            
+            <button onclick="backspace()" class="btn-active col-span-1 h-16 bg-orange-50 rounded-2xl shadow-sm border border-orange-100 flex flex-col items-center justify-center text-orange-600">
+                <span class="text-[10px] font-bold uppercase font-sans">Xóa</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z" />
+                </svg>
+            </button>
+
+            <button onclick="resetAll()" class="btn-active col-span-1 h-16 bg-red-50 rounded-2xl shadow-sm border border-red-100 flex flex-col items-center justify-center text-red-600">
+                <span class="text-[10px] font-bold uppercase">Reset</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="decodeNow()" class="h-14 bg-blue-600 text-white rounded-2xl font-bold shadow-lg shadow-blue-200 btn-active text-lg">GIẢI MÃ</button>
+            <button onclick="copyResult()" class="h-14 bg-slate-800 text-white rounded-2xl font-bold shadow-lg shadow-slate-200 btn-active flex items-center justify-center gap-2">
+                <span>COPY</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                </svg>
+            </button>
+        </div>
+
+        <button onclick="toggleHelp()" class="w-full h-12 bg-white border border-slate-200 rounded-2xl text-slate-500 font-semibold btn-active flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+            </svg>
+            HƯỚNG DẪN
+        </button>
+
+        <!-- Help Modal -->
+        <div id="helpModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+            <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h2 class="text-xl font-bold text-slate-800">Cách sử dụng</h2>
+                    <button onclick="toggleHelp()" class="text-slate-400 hover:text-slate-600 font-bold text-2xl">&times;</button>
+                </div>
+                <div class="text-sm text-slate-600 space-y-3 leading-relaxed">
+                    <p>1. Bấm <span class="font-bold">"."</span> và <span class="font-bold">"-"</span> để tạo ký tự.</p>
+                    <p>2. Dùng <span class="font-bold underline text-blue-600">Space</span> để ngăn cách giữa các chữ cái (Ví dụ: <code class="bg-slate-100 p-0.5">... --- ...</code>).</p>
+                    <p>3. Dùng <span class="font-bold underline text-blue-600">/</span> để ngăn cách giữa các từ.</p>
+                    <div class="bg-blue-50 p-3 rounded-xl">
+                        <p class="font-bold text-blue-800 mb-1">Ví dụ:</p>
+                        <ul class="list-disc list-inside">
+                            <li>SOS: <span class="morse-font">... --- ...</span></li>
+                            <li>HELLO: <span class="morse-font">.... . .-.. .-.. ---</span></li>
+                        </ul>
+                    </div>
+                    <p class="text-[11px] italic text-slate-400">* Gợi ý: App hỗ trợ tự động tách ký tự nếu bạn quên bấm Space (Greedy Matching).</p>
+                </div>
+                <button onclick="toggleHelp()" class="w-full h-12 bg-slate-800 text-white rounded-xl font-bold">ĐÃ HIỂU</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MORSE_CODE = {
+            ".-": "A", "-...": "B", "-.-.": "C", "-..": "D", ".": "E", "..-.": "F",
+            "--.": "G", "....": "H", "..": "I", ".---": "J", "-.-": "K", ".-..": "L",
+            "--": "M", "-.": "N", "---": "O", ".--.": "P", "--.-": "Q", ".-.": "R",
+            "...": "S", "-": "T", "..-": "U", "...-": "V", ".--": "W", "-..-": "X",
+            "-.--": "Y", "--..": "Z", "-----": "0", ".----": "1", "..---": "2",
+            "...--": "3", "....-": "4", ".....": "5", "-....": "6", "--...": "7",
+            "---..": "8", "----.": "9", ".-.-.-": ".", "--..--": ",", "---...": ":",
+            "..--..": "?", ".----.": "'", "-....-": "-", "-..-.": "/", ".-..-.": "\"",
+            ".--.-.": "@", "-...-": "=", ".-.-.": "+"
+        };
+
+        let currentMorse = "";
+        const inputEl = document.getElementById('morseInput');
+        const outputEl = document.getElementById('textOutput');
+
+        // Thêm ký tự
+        function addChar(char) {
+            // Chống việc nhập quá nhiều space liên tiếp
+            if (char === ' ' && (currentMorse.endsWith(' ') || currentMorse === "")) return;
+            if (char === '/' && (currentMorse.endsWith('/') || currentMorse === "")) return;
+            
+            currentMorse += char;
+            updateUI();
+        }
+
+        // Xóa 1 ký tự
+        function backspace() {
+            currentMorse = currentMorse.slice(0, -1);
+            updateUI();
+        }
+
+        // Reset
+        function resetAll() {
+            currentMorse = "";
+            updateUI();
+        }
+
+        // Cập nhật giao diện
+        function updateUI() {
+            inputEl.innerText = currentMorse;
+            // Decode realtime
+            decodeNow(true);
+        }
+
+        /**
+         * Logic Giải Mã Chinh
+         * @param {boolean} isRealtime - Nếu true thì không báo lỗi ký tự
+         */
+        function decodeNow(isRealtime = false) {
+            if (!currentMorse && !isRealtime) {
+                outputEl.innerText = "";
+                return;
+            }
+
+            // Chuẩn hóa: Trim và gộp space
+            let normalized = currentMorse.trim().replace(/\s+/g, ' ');
+            
+            // Tách theo từ (dấu /)
+            let words = normalized.split('/');
+            let decodedMessage = [];
+
+            words.forEach(word => {
+                let cleanWord = word.trim();
+                if (!cleanWord) return;
+
+                // Tách theo khoảng trắng (ký tự)
+                let chars = cleanWord.split(' ');
+                let decodedWord = "";
+
+                chars.forEach(code => {
+                    if (code === "") return;
+                    
+                    if (MORSE_CODE[code]) {
+                        decodedWord += MORSE_CODE[code];
+                    } else {
+                        // NẾU KHÔNG KHỚP -> Thử thuật toán Greedy Match (tự tách chuỗi dính)
+                        let greedyResult = greedyDecode(code);
+                        decodedWord += greedyResult;
+                    }
+                });
+                decodedMessage.push(decodedWord);
+            });
+
+            outputEl.innerText = decodedMessage.join(' ');
+        }
+
+        /**
+         * Thuật toán Greedy Decode:
+         * Tìm kiếm chuỗi Morse dài nhất có thể khớp từ đầu chuỗi.
+         */
+        function greedyDecode(code) {
+            let result = "";
+            let remaining = code;
+
+            while (remaining.length > 0) {
+                let found = false;
+                // Thử từ độ dài tối đa (5 cho số, 4 cho chữ) xuống 1
+                for (let len = Math.min(remaining.length, 6); len >= 1; len--) {
+                    let sub = remaining.substring(0, len);
+                    if (MORSE_CODE[sub]) {
+                        result += MORSE_CODE[sub];
+                        remaining = remaining.substring(len);
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (!found) {
+                    // Nếu không tìm thấy bất kỳ sự kết hợp nào hợp lệ cho phần đầu
+                    // Đánh dấu lỗi và bỏ qua 1 ký tự đầu
+                    result += `<span class="text-red-500 font-bold">?</span>`;
+                    remaining = remaining.substring(1);
+                }
+            }
+            return result;
+        }
+
+        function copyResult() {
+            const text = outputEl.innerText;
+            if (!text) return;
+            
+            // Xóa HTML tags nếu có (từ marker ?)
+            const cleanText = text.replace(/<[^>]*>?/gm, '?');
+            
+            const el = document.createElement('textarea');
+            el.value = cleanText;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            // Phản hồi UI
+            const btn = event.currentTarget;
+            const original = btn.innerHTML;
+            btn.innerHTML = "<span>ĐÃ COPY!</span>";
+            btn.classList.replace('bg-slate-800', 'bg-green-600');
+            setTimeout(() => {
+                btn.innerHTML = original;
+                btn.classList.replace('bg-green-600', 'bg-slate-800');
+            }, 1500);
+        }
+
+        function toggleHelp() {
+            const modal = document.getElementById('helpModal');
+            modal.classList.toggle('hidden');
+        }
+
+        // Cho phép dùng phím vật lý nếu có kết nối bàn phím
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '.') addChar('.');
+            if (e.key === '-' || e.key === '_') addChar('-');
+            if (e.key === ' ') {
+                e.preventDefault();
+                addChar(' ');
+            }
+            if (e.key === '/') addChar('/');
+            if (e.key === 'Backspace') backspace();
+            if (e.key === 'Escape') resetAll();
+        });
+    </script>
+</body>
+</html>
+
