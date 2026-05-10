@@ -3,7 +3,7 @@
  * This file handles environment variables and runtime settings.
  * NOTE: The placeholder below is replaced by GitHub Actions during deployment.
  * For local development, use localStorage key 'eduspace_api_key_override'.
- * IMPORTANT: Gemini 2.5 Flash is the baseline.
+ * IMPORTANT: Gemini 3.1 Flash Lite is the stable model (GA from 2026-05-07).
  * Do not use versions lower than 2.5.
  */
 
@@ -18,13 +18,15 @@ const EDU_CONFIG = {
     firebaseMessagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID_PLACEHOLDER__",
     firebaseAppId: "__FIREBASE_APP_ID_PLACEHOLDER__",
     firebaseMeasurementId: "__FIREBASE_MEASUREMENT_ID_PLACEHOLDER__",
+    // URL của Firebase Cloud Function geminiProxy (inject bởi GitHub Actions)
+    geminiFunctionUrl: "__GEMINI_FUNCTION_URL_PLACEHOLDER__",
 
     // AI Settings
-    stableModel: "gemini-2.5-flash",
+    stableModel: "gemini-3.1-flash-lite",
 
     // UI Settings
-    version: "2.7.0",
-    lastUpdated: "2026-03-13"
+    version: "2.8.0",
+    lastUpdated: "2026-05-10"
 };
 
 let _cachedKeys = { 

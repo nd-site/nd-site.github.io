@@ -1,8 +1,13 @@
 auth/
 eduspace/
 node_modules/
+functions/node_modules/
 .DS_Store
 dist/
 build/
 .vscode/
 .env
+firebase-debug.log
+.firebase/
+service-account.json
+set_gemini_key.js
