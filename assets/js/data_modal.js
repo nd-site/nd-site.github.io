@@ -126,15 +126,27 @@ const eduspaceAI = (function () {
         );
 
         let lastError = null;
-        for (const mdl of filteredModels) {
-            for (const apiVer of ['v1', 'v1beta']) {
+        let stopAll = false; // Flag dừng toàn bộ retry khi key lỗi
+
+        // Chỉ dùng model gemini-3.1-flash-lite (Gemini 3.1) làm chính,
+        // fallback sang 2.5-flash nếu model chính chưa accessible.
+        const PREFERRED = ['gemini-3.1-flash-lite', 'gemini-3.1-pro', 'gemini-2.5-flash', 'gemini-2.5-pro'];
+        const orderedModels = [
+            ...PREFERRED.filter(p => filteredModels.some(m => m === p || m.startsWith(p))),
+            ...filteredModels.filter(m => !PREFERRED.some(p => m === p || m.startsWith(p)))
+        ].slice(0, 3); // Tối đa 3 model để tránh spam
+
+        for (const mdl of (orderedModels.length ? orderedModels : filteredModels.slice(0, 2))) {
+            if (stopAll) break;
+            for (const apiVer of ['v1beta', 'v1']) { // v1beta trước vì 3.1 chưa lên v1 stable
+                if (stopAll) break;
                 try {
                     const url = `https://generativelanguage.googleapis.com/${apiVer}/models/${mdl}:generateContent?key=${apiKey}`;
                     const response = await fetch(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            ...payload,
+                            contents: payload.contents,
                             safetySettings: [
                                 { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
                                 { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
@@ -143,22 +155,35 @@ const eduspaceAI = (function () {
                             ]
                         })
                     });
-                    if (response.status === 429) continue;
+
+                    // 429 = rate limit, thử model/endpoint khác
+                    if (response.status === 429) { lastError = new Error('Rate limit. Đang thử model khác...'); continue; }
+
                     const data = await response.json();
                     if (data.error) {
                         const msg = data.error.message || "";
-                        if (msg.toLowerCase().includes("leaked") || msg.toLowerCase().includes("revoked")) {
-                            throw new Error("API Key đã bị lộ hoặc thu hồi. Vui lòng cập nhật key mới.");
+                        const msgLow = msg.toLowerCase();
+                        // Lỗi key: dừng toàn bộ, không thử nữa
+                        if (msgLow.includes("expired") || msgLow.includes("api key expired")) {
+                            stopAll = true;
+                            throw new Error("API Key đã hết hạn. Vui lòng liên hệ quản trị viên để cập nhật khóa mới.");
                         }
-                        if (msg.toLowerCase().includes("api key not found")) {
-                            throw new Error("API Key không hợp lệ.");
+                        if (msgLow.includes("leaked") || msgLow.includes("revoked")) {
+                            stopAll = true;
+                            throw new Error("API Key đã bị lộ hoặc thu hồi. Vui lòng liên hệ quản trị viên.");
                         }
-                        throw new Error(msg);
+                        if (msgLow.includes("api key not valid") || msgLow.includes("api_key_invalid") || msgLow.includes("api key not found")) {
+                            stopAll = true;
+                            throw new Error("API Key không hợp lệ. Vui lòng liên hệ quản trị viên.");
+                        }
+                        // Lỗi model: thử model khác
+                        lastError = new Error(msg);
+                        break; // Không thử cùng model với endpoint khác nữa
                     }
                     return data.candidates?.[0]?.content?.parts?.[0]?.text;
                 } catch (e) {
                     lastError = e;
-                    if (e.message.includes("API Key")) throw e;
+                    if (stopAll || e.message.includes("Key đã") || e.message.includes("không hợp lệ")) throw e;
                 }
             }
         }
