@@ -214,8 +214,14 @@ const eduspaceAI = (function () {
         }
 
         // TẦNG 2 & 3: Lấy API key
-        let apiKey = await getKeyFromDatabase();
-        if (!apiKey) apiKey = await window.getGeminiApiKey?.();
+        // Ưu tiên key tĩnh được inject từ GitHub Actions (nhanh nhất)
+        let apiKey = await window.getGeminiApiKey?.();
+        
+        // Nếu không có key tĩnh, thử lấy từ Firebase Database
+        if (!apiKey || apiKey.includes('PLACEHOLDER')) {
+            apiKey = await getKeyFromDatabase();
+        }
+
         if (!apiKey) throw new Error('Thiếu API Key. Vui lòng liên hệ quản trị viên.');
 
         // Discover & sắp xếp models
