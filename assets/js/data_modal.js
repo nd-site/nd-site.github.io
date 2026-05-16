@@ -106,13 +106,43 @@ const eduspaceAI = (function () {
         try {
             const keys = await window.getEduKeys?.();
             if (!keys?.fbDatabaseURL) return null;
+            
+            // Wait for Firebase to be globally available (injected by firebase-init.js)
+            let retries = 0;
+            while (!window.firebaseAuth && retries < 20) {
+                await new Promise(r => setTimeout(r, 100)); // wait up to 2 seconds
+                retries++;
+            }
+            
             const auth = window.firebaseAuth;
-            if (!auth?.currentUser) return null;
+            if (!auth) {
+                console.warn("[EduAI] Firebase Auth not found after wait.");
+                return null;
+            }
+
+            // Wait for Auth State to resolve (could be signing in anonymously)
+            if (!auth.currentUser) {
+                await new Promise((resolve) => {
+                    const unsubscribe = auth.onAuthStateChanged((user) => {
+                        unsubscribe();
+                        resolve(user);
+                    });
+                });
+            }
+
+            if (!auth.currentUser) {
+                console.warn("[EduAI] No authenticated user found.");
+                return null;
+            }
+
             const token = await auth.currentUser.getIdToken();
             const r = await fetch(`${keys.fbDatabaseURL}/config/geminiKey.json?auth=${token}`);
             if (!r.ok) return null;
             return (await r.json()) || null;
-        } catch { return null; }
+        } catch (e) { 
+            console.error("[EduAI] Database key fetch error:", e);
+            return null; 
+        }
     }
 
     // ─── Core Gemini Call ────────────────────────────────────────────────────

@@ -10,14 +10,14 @@
 const EDU_CONFIG = {
     // These placeholders are replaced by GitHub Actions during deployment for each repo
     geminiApiKey: "__GEMINI_API_KEY_PLACEHOLDER__",
-    firebaseApiKey: "__FIREBASE_API_KEY_PLACEHOLDER__",
-    firebaseAuthDomain: "__FIREBASE_AUTH_DOMAIN_PLACEHOLDER__",
-    firebaseDatabaseURL: "__FIREBASE_DATABASE_URL_PLACEHOLDER__",
-    firebaseProjectId: "__FIREBASE_PROJECT_ID_PLACEHOLDER__",
-    firebaseStorageBucket: "__FIREBASE_STORAGE_BUCKET_PLACEHOLDER__",
-    firebaseMessagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID_PLACEHOLDER__",
-    firebaseAppId: "__FIREBASE_APP_ID_PLACEHOLDER__",
-    firebaseMeasurementId: "__FIREBASE_MEASUREMENT_ID_PLACEHOLDER__",
+    firebaseApiKey: "AIzaSyA1pVwJKrNqgugpMbY6hNZPK5pBmkbN9sY",
+    firebaseAuthDomain: "ndlabs-0.firebaseapp.com",
+    firebaseDatabaseURL: "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app",
+    firebaseProjectId: "ndlabs-0",
+    firebaseStorageBucket: "ndlabs-0.firebasestorage.app",
+    firebaseMessagingSenderId: "600040258053",
+    firebaseAppId: "1:600040258053:web:617a19f62aafeb35d13a6c",
+    firebaseMeasurementId: "G-20W5SZ0BKB",
     // URL của Firebase Cloud Function geminiProxy (inject bởi GitHub Actions)
     geminiFunctionUrl: "__GEMINI_FUNCTION_URL_PLACEHOLDER__",
 
