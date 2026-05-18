@@ -109,6 +109,16 @@ const quizList = [
         isHot: true
     },
     {
+        title: "Thi thử tốt nghiệp THPT 2026 - Môn Ngữ văn (Bản 3)",
+        url: "/eduspace/nguvan/12/thptqg-2026-v3/",
+        description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Ngữ văn (Bản 3) - Cập nhật nghị luận xã hội về tối giản công nghệ số và cảm nhận cội nguồn Đất Nước của Nguyễn Khoa Điềm chuẩn xác.",
+        tag: "THPT 2026",
+        type: "quiz",
+        class: "12",
+        subject: "Ngữ Văn",
+        isHot: true
+    },
+    {
         title: "Thi thử tốt nghiệp THPT 2026 - Môn Tiếng Anh (Bản 1)",
         url: "/eduspace/tienganh/12/thptqg-2026-v1/",
         description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Tiếng Anh (40 câu trắc nghiệm).",
