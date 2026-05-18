@@ -8,15 +8,18 @@ async function initEduFirebase() {
         return;
     }
 
+    // Tải khóa động từ getEduKeys() để hỗ trợ cả biến môi trường .env trên localhost
+    const keys = await getEduKeys();
+
     const firebaseConfig = {
-        apiKey: EDU_CONFIG.firebaseApiKey,
-        authDomain: EDU_CONFIG.firebaseAuthDomain,
-        databaseURL: EDU_CONFIG.firebaseDatabaseURL,
-        projectId: EDU_CONFIG.firebaseProjectId,
-        storageBucket: EDU_CONFIG.firebaseStorageBucket,
-        messagingSenderId: EDU_CONFIG.firebaseMessagingSenderId,
-        appId: EDU_CONFIG.firebaseAppId,
-        measurementId: EDU_CONFIG.firebaseMeasurementId
+        apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
+        authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
+        databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
+        projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
+        storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
+        messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
+        appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
+        measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
     };
 
     try {

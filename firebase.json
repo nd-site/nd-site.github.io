@@ -1,4 +1,24 @@
 {
+  "hosting": {
+    "site": "ndsite",
+    "public": ".",
+    "cleanUrls": true,
+    "trailingSlash": true,
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "package.json",
+      "package-lock.json",
+      "vite.config.ts",
+      "tsconfig.json",
+      "functions/**",
+      ".github/**",
+      "_agent/**",
+      "*.cjs",
+      "*.ts"
+    ]
+  },
   "functions": [
     {
       "source": "functions",

@@ -10,7 +10,7 @@
 const EDU_CONFIG = {
     // These placeholders are replaced by GitHub Actions during deployment for each repo
     geminiApiKey: "__GEMINI_API_KEY_PLACEHOLDER__",
-    firebaseApiKey: "AIzaSyA1pVwJKrNqgugpMbY6hNZPK5pBmkbN9sY",
+    firebaseApiKey: "AIzaSyC6h0Uqg34PiT0p9l_cQOT7p7pt6kVHCHk",
     firebaseAuthDomain: "ndlabs-0.firebaseapp.com",
     firebaseDatabaseURL: "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app",
     firebaseProjectId: "ndlabs-0",
@@ -26,7 +26,7 @@ const EDU_CONFIG = {
 
     // UI Settings
     version: "2.8.0",
-    lastUpdated: "2026-05-10"
+    lastUpdated: "2026-05-18"
 };
 
 let _cachedKeys = { 
