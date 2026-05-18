@@ -339,6 +339,16 @@ const quizList = [
         isHot: true
     },
     {
+        title: "Thi thử tốt nghiệp THPT 2026 - Môn Tin học (Bản 3)",
+        url: "/eduspace/tinhoc/12/thptqg-2026-v3/",
+        description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học (Bản 3) - Cập nhật kiến thức đặc trưng Veracity Big Data, thuật toán nổi bọt và cấu trúc RDBMS chuẩn xác.",
+        tag: "THPT 2026",
+        type: "quiz",
+        class: "12",
+        subject: "Tin Học",
+        isHot: true
+    },
+    {
         title: "Thi thử tốt nghiệp THPT 2026 - Môn Công nghệ (Bản 1)",
         url: "/eduspace/congnghe-nongnghiep/12/thptqg-2026-v1/",
         description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Công nghệ Nông nghiệp (Bản 1) - Canh tác công nghệ cao và an toàn sinh học.",
