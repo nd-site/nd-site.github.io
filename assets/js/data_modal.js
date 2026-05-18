@@ -131,7 +131,7 @@ const eduspaceAI = (function () {
             }
 
             if (!auth.currentUser) {
-                console.warn("[EduAI] No authenticated user found.");
+                console.log("[EduAI] No authenticated user found. Using default API fallback.");
                 return null;
             }
 

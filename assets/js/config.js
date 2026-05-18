@@ -62,35 +62,38 @@ async function getEduKeys() {
     if (_cachedKeys.gemini && _cachedKeys.fbAppId) return _cachedKeys;
 
     // 2. If not in GitHub Environment, fallback to local .env (For development)
-    const paths = ['/.env', './.env', '../.env', '../../.env', '/eduspace/.env'];
-    for (const path of paths) {
-        try {
-            const res = await fetch(path, { cache: 'no-store' });
-            if (res.ok) {
-                const text = await res.text();
-                let foundMatch = false;
-                for (const line of text.split('\n')) {
-                    const trimmed = line.trim();
-                    if (!trimmed || trimmed.startsWith('#')) continue;
-                    const [key, ...valParts] = trimmed.split('=');
-                    if (!key || valParts.length === 0) continue;
-                    const value = valParts.join('=').trim().replace(/['"]/g, '');
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocalhost) {
+        const paths = ['/.env', './.env', '../.env', '../../.env', '/eduspace/.env'];
+        for (const path of paths) {
+            try {
+                const res = await fetch(path, { cache: 'no-store' });
+                if (res.ok) {
+                    const text = await res.text();
+                    let foundMatch = false;
+                    for (const line of text.split('\n')) {
+                        const trimmed = line.trim();
+                        if (!trimmed || trimmed.startsWith('#')) continue;
+                        const [key, ...valParts] = trimmed.split('=');
+                        if (!key || valParts.length === 0) continue;
+                        const value = valParts.join('=').trim().replace(/['"]/g, '');
 
-                    switch(key) {
-                        case 'GEMINI_API_KEY': if (!_cachedKeys.gemini) _cachedKeys.gemini = value; foundMatch = true; break;
-                        case 'FIREBASE_API_KEY': if (!_cachedKeys.firebase) _cachedKeys.firebase = value; foundMatch = true; break;
-                        case 'FIREBASE_AUTH_DOMAIN': if (!_cachedKeys.fbAuthDomain) _cachedKeys.fbAuthDomain = value; foundMatch = true; break;
-                        case 'FIREBASE_DATABASE_URL': if (!_cachedKeys.fbDatabaseURL) _cachedKeys.fbDatabaseURL = value; foundMatch = true; break;
-                        case 'FIREBASE_PROJECT_ID': if (!_cachedKeys.fbProjectId) _cachedKeys.fbProjectId = value; foundMatch = true; break;
-                        case 'FIREBASE_STORAGE_BUCKET': if (!_cachedKeys.fbStorageBucket) _cachedKeys.fbStorageBucket = value; foundMatch = true; break;
-                        case 'FIREBASE_MESSAGING_SENDER_ID': if (!_cachedKeys.fbMessagingSenderId) _cachedKeys.fbMessagingSenderId = value; foundMatch = true; break;
-                        case 'FIREBASE_APP_ID': if (!_cachedKeys.fbAppId) _cachedKeys.fbAppId = value; foundMatch = true; break;
-                        case 'FIREBASE_MEASUREMENT_ID': if (!_cachedKeys.fbMeasurementId) _cachedKeys.fbMeasurementId = value; foundMatch = true; break;
+                        switch(key) {
+                            case 'GEMINI_API_KEY': if (!_cachedKeys.gemini) _cachedKeys.gemini = value; foundMatch = true; break;
+                            case 'FIREBASE_API_KEY': if (!_cachedKeys.firebase) _cachedKeys.firebase = value; foundMatch = true; break;
+                            case 'FIREBASE_AUTH_DOMAIN': if (!_cachedKeys.fbAuthDomain) _cachedKeys.fbAuthDomain = value; foundMatch = true; break;
+                            case 'FIREBASE_DATABASE_URL': if (!_cachedKeys.fbDatabaseURL) _cachedKeys.fbDatabaseURL = value; foundMatch = true; break;
+                            case 'FIREBASE_PROJECT_ID': if (!_cachedKeys.fbProjectId) _cachedKeys.fbProjectId = value; foundMatch = true; break;
+                            case 'FIREBASE_STORAGE_BUCKET': if (!_cachedKeys.fbStorageBucket) _cachedKeys.fbStorageBucket = value; foundMatch = true; break;
+                            case 'FIREBASE_MESSAGING_SENDER_ID': if (!_cachedKeys.fbMessagingSenderId) _cachedKeys.fbMessagingSenderId = value; foundMatch = true; break;
+                            case 'FIREBASE_APP_ID': if (!_cachedKeys.fbAppId) _cachedKeys.fbAppId = value; foundMatch = true; break;
+                            case 'FIREBASE_MEASUREMENT_ID': if (!_cachedKeys.fbMeasurementId) _cachedKeys.fbMeasurementId = value; foundMatch = true; break;
+                        }
                     }
+                    if (foundMatch) break;
                 }
-                if (foundMatch) break;
-            }
-        } catch (e) {}
+            } catch (e) {}
+        }
     }
 
     // Default fallbacks for local/empty state

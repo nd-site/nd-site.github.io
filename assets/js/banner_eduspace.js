@@ -31,14 +31,14 @@ class AnnouncementCarousel {
         this.data = data;
         this.currentIndex = 0;
         this.interval = null;
-        
+
         // Dragging state
         this.isDragging = false;
         this.startX = 0;
         this.currentTranslate = 0;
         this.prevTranslate = 0;
         this.animationID = 0;
-        
+
         this.init();
     }
 
@@ -47,7 +47,7 @@ class AnnouncementCarousel {
         if (!container) {
             container = document.createElement('div');
             container.id = this.containerId;
-            
+
             const target = document.querySelector('#start-screen .glass-card') || document.querySelector('#start-screen') || document.body.firstChild;
             if (target && target.id === 'start-screen') {
                 target.prepend(container);
@@ -55,9 +55,9 @@ class AnnouncementCarousel {
                 target.parentNode.insertBefore(container, target);
             }
         }
-        
+
         container.className = "w-full max-w-4xl mx-auto mb-8 overflow-hidden relative touch-pan-y select-none";
-        
+
         this.renderStructure();
         this.startAutoSlide();
         this.setupEvents();
@@ -73,8 +73,8 @@ class AnnouncementCarousel {
 
         this.data.forEach((item) => {
             const slide = document.createElement('div');
-            slide.className = "w-full flex-shrink-0 px-4 md:px-0"; 
-            
+            slide.className = "w-full flex-shrink-0 px-4 md:px-0";
+
             slide.innerHTML = `
                 <a href="${item.link}" target="_blank" draggable="false"
                    class="relative flex flex-col md:flex-row items-center justify-between p-1 bg-gradient-to-r ${item.gradient} rounded-[1.5rem] shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden">
@@ -117,14 +117,14 @@ class AnnouncementCarousel {
         const dotsContainer = document.createElement('div');
         dotsContainer.id = `${this.containerId}-dots`;
         dotsContainer.className = "flex justify-center gap-1.5 mt-3";
-        
+
         container.innerHTML = '';
         container.appendChild(track);
         container.appendChild(dotsContainer);
 
         this.updateDots();
         if (window.lucide) window.lucide.createIcons();
-        
+
         this.track = track;
     }
 
@@ -148,10 +148,10 @@ class AnnouncementCarousel {
         this.isDragging = true;
         this.startX = this.getPositionX(event);
         this.stopAutoSlide();
-        
+
         this.track.classList.remove('transition-transform');
         this.track.style.transitionDuration = '0ms';
-        
+
         this.animationID = requestAnimationFrame(this.animation.bind(this));
     }
 
@@ -192,7 +192,7 @@ class AnnouncementCarousel {
         const width = this.track.offsetWidth;
         this.currentTranslate = this.currentIndex * -width;
         this.prevTranslate = this.currentTranslate;
-        
+
         this.track.style.transition = 'transform 0.5s ease-in-out';
         this.setSliderPosition();
         this.updateDots();

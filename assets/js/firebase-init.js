@@ -50,12 +50,7 @@ async function initEduFirebase() {
                 }
             } else {
                 localStorage.removeItem('nd_user');
-                // Anonymous auth for AI key fetching
-                try {
-                    await signInAnonymously(auth);
-                } catch (e) {
-                    console.error("Auto anonymous login failed", e);
-                }
+                // Anonymous auth was removed because it is blocked and causes 403 errors in console
             }
         });
 
