@@ -79,6 +79,16 @@ const quizList = [
         isHot: true
     },
     {
+        title: "Thi thử tốt nghiệp THPT 2026 - Môn Toán (Bản 3)",
+        url: "/eduspace/toan/12/thptqg-2026-v3/",
+        description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Toán (Bản 3) với các bài toán tối ưu và xác suất thực tế chuẩn GDPT 2018.",
+        tag: "THPT 2026",
+        type: "quiz",
+        class: "12",
+        subject: "Toán",
+        isHot: true
+    },
+    {
         title: "Thi thử tốt nghiệp THPT 2026 - Môn Ngữ văn (Bản 1)",
         url: "/eduspace/nguvan/12/thptqg-2026-v1/",
         description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Ngữ văn với cấu trúc Đọc hiểu và Viết (Tự luận).",
