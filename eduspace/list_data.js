@@ -169,6 +169,16 @@ const quizList = [
         isHot: true
     },
     {
+        title: "Thi thử tốt nghiệp THPT 2026 - Môn Hóa học (Bản 3)",
+        url: "/eduspace/hoahoc/12/thptqg-2026-v3/",
+        description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Hóa học (Bản 3) - Cập nhật nội dung phức chất amoniac, hiệu suất công nghiệp và hóa nhiệt học chuẩn xác.",
+        tag: "THPT 2026",
+        type: "quiz",
+        class: "12",
+        subject: "Hóa Học",
+        isHot: true
+    },
+    {
         title: "Thi thử tốt nghiệp THPT 2026 - Môn Sinh học (Bản 1)",
         url: "/eduspace/sinhhoc/12/thptqg-2026-v1/",
         description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Sinh học theo cấu trúc mới (Trắc nghiệm I, II, III).",
