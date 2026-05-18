@@ -279,6 +279,16 @@ const quizList = [
         isHot: true
     },
     {
+        title: "Thi thử tốt nghiệp THPT 2026 - Môn Địa lí (Bản 3)",
+        url: "/eduspace/diali/12/thptqg-2026-v3/",
+        description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Địa lí (Bản 3) - Cập nhật kiến thức xói mòn đồi núi, mật độ Đồng bằng sông Hồng và cơ cấu dịch vụ GDP chuẩn xác.",
+        tag: "THPT 2026",
+        type: "quiz",
+        class: "12",
+        subject: "Địa Lý",
+        isHot: true
+    },
+    {
         title: "Thi thử tốt nghiệp THPT 2026 - Môn KT & PL (Bản 1)",
         url: "/eduspace/ktpl/12/thptqg-2026-v1/",
         description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Giáo dục Kinh tế và Pháp luật theo cấu trúc mới.",
