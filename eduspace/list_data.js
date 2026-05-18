@@ -249,6 +249,16 @@ const quizList = [
         isHot: true
     },
     {
+        title: "Thi thử tốt nghiệp THPT 2026 - Môn Lịch sử (Bản 3)",
+        url: "/eduspace/lichsu/12/thptqg-2026-v3/",
+        description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Lịch sử (Bản 3) - Cập nhật kiến thức thành lập Đảng 1930, chuyển đổi phương châm Điện Biên Phủ và công cuộc Đổi mới chuẩn xác.",
+        tag: "THPT 2026",
+        type: "quiz",
+        class: "12",
+        subject: "Lịch Sử",
+        isHot: true
+    },
+    {
         title: "Thi thử tốt nghiệp THPT 2026 - Môn Địa lí (Bản 1)",
         url: "/eduspace/diali/12/thptqg-2026-v1/",
         description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Địa lí theo cấu trúc mới (Trắc nghiệm I, II, III).",
