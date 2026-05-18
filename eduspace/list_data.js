@@ -370,6 +370,17 @@ const quizList = [
         subSubject: "Nông Nghiệp",
         isHot: true
     },
+    {
+        title: "Thi thử tốt nghiệp THPT 2026 - Môn Công nghệ (Bản 3)",
+        url: "/eduspace/congnghe-nongnghiep/12/thptqg-2026-v3/",
+        description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Công nghệ Nông nghiệp (Bản 3) - Cập nhật kiến thức giá thể trồng dâu tây, dịch tả lợn châu Phi và lâm nghiệp bền vững chuẩn xác.",
+        tag: "THPT 2026",
+        type: "quiz",
+        class: "12",
+        subject: "Công Nghệ",
+        subSubject: "Nông Nghiệp",
+        isHot: true
+    },
 
     // ── Lessons & Quizzes ─────────────────────────────────
     {
