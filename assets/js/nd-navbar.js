@@ -242,6 +242,12 @@
     document.body.insertBefore(nav, document.body.firstChild);
     // spacer must be the first element in the normal flow to push content
     document.body.insertBefore(spacer, document.body.firstChild);
+
+    // Automatically load version.js to display version badge globally
+    const vScript = document.createElement('script');
+    vScript.src = '/assets/js/version.js';
+    vScript.defer = true;
+    document.head.appendChild(vScript);
   }
 
   if (document.body) {
