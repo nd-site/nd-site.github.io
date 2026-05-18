@@ -309,6 +309,16 @@ const quizList = [
         isHot: true
     },
     {
+        title: "Thi thử tốt nghiệp THPT 2026 - Môn KT & PL (Bản 3)",
+        url: "/eduspace/ktpl/12/thptqg-2026-v3/",
+        description: "Đề thi thử tốt nghiệp THPT năm 2026 môn KT & PL (Bản 3) - Cập nhật kiến thức thắt chặt chính sách tiền tệ, năng lực pháp lý và quyền học tập suốt đời chuẩn xác.",
+        tag: "THPT 2026",
+        type: "quiz",
+        class: "12",
+        subject: "Kinh Tế và Pháp Luật",
+        isHot: true
+    },
+    {
         title: "Thi thử tốt nghiệp THPT 2026 - Môn Tin học (Bản 1)",
         url: "/eduspace/tinhoc/12/thptqg-2026-v1/",
         description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học (Bản 1) - Chuẩn cấu trúc GDPT 2018 (AI, CSDL, Python, Network).",
