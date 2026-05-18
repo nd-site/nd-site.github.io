@@ -149,6 +149,16 @@ const quizList = [
         isHot: true
     },
     {
+        title: "Thi thử tốt nghiệp THPT 2026 - Môn Vật lý (Bản 3)",
+        url: "/eduspace/vatly/12/thptqg-2026-v3/",
+        description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Vật lý (Bản 3) - Cập nhật kiến thức nhiệt học thực nghiệm, từ học và phóng xạ năng lượng cao chuẩn xác.",
+        tag: "THPT 2026",
+        type: "quiz",
+        class: "12",
+        subject: "Vật Lý",
+        isHot: true
+    },
+    {
         title: "Thi thử tốt nghiệp THPT 2026 - Môn Hóa học (Bản 1)",
         url: "/eduspace/hoahoc/12/thptqg-2026-v1/",
         description: "Đề thi thử tốt nghiệp THPT năm 2026 môn Hóa học theo cấu trúc mới (Trắc nghiệm I, II, III).",
