@@ -15,21 +15,22 @@
         style.textContent = `
             #nd-version-badge {
                 position: fixed !important;
-                bottom: 12px !important;
-                right: 12px !important;
+                bottom: 16px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
                 z-index: 2147483647 !important;
-                padding: 4px 10px !important;
+                padding: 5px 14px !important;
                 font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-                font-size: 10px !important;
+                font-size: 10.5px !important;
                 font-weight: 700 !important;
-                color: #64748b !important;
-                background: rgba(248, 250, 252, 0.75) !important;
+                color: #475569 !important;
+                background: rgba(255, 255, 255, 0.95) !important;
                 backdrop-filter: blur(12px) !important;
                 -webkit-backdrop-filter: blur(12px) !important;
-                border: 1px solid rgba(226, 232, 240, 0.8) !important;
-                border-radius: 8px !important;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 
-                            0 1px 2px rgba(0, 0, 0, 0.02) !important;
+                border: 1px solid rgba(226, 232, 240, 1) !important;
+                border-radius: 99px !important; /* Rounded pill style */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), 
+                            0 1px 3px rgba(0, 0, 0, 0.02) !important;
                 pointer-events: none !important; /* Clicks pass through */
                 user-select: none !important;
                 letter-spacing: 0.5px !important;
@@ -38,9 +39,9 @@
             /* Subtle dark mode support */
             @media (prefers-color-scheme: dark) {
                 #nd-version-badge {
-                    background: rgba(15, 23, 42, 0.75) !important;
-                    color: #94a3b8 !important;
-                    border-color: rgba(51, 65, 85, 0.8) !important;
+                    background: rgba(30, 41, 59, 0.95) !important;
+                    color: #cbd5e1 !important;
+                    border-color: rgba(71, 85, 105, 0.8) !important;
                 }
             }
         `;
