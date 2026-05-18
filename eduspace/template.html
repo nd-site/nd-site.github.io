@@ -697,7 +697,12 @@
                 q.options.forEach((opt, i) => {
                     const card = document.createElement('div');
                     card.className = `option-card p-3.5 flex items-center gap-4 ${userAnswers[currentIndex] === i ? 'selected' : ''}`;
-                    card.onclick = () => selectOption(i);
+                    if (!(quizMode === 'practice' && questionChecked[currentIndex])) {
+                        card.onclick = () => selectOption(i);
+                    } else {
+                        card.style.cursor = 'default';
+                        card.style.opacity = '0.7';
+                    }
                     let optHtml = opt;
                     if (typeof marked !== 'undefined') optHtml = marked.parseInline(optHtml);
                     card.innerHTML = `
@@ -715,8 +720,8 @@
                     row.innerHTML = `
                         <p class="text-sm text-slate-700 flex-1">${optHtml}</p>
                         <div class="flex gap-2">
-                            <button onclick="selectTF(${i}, true)" class="px-3.5 py-1.5 rounded-lg text-[10px] font-black transition-all ${userAnswers[currentIndex]?.[i] === true ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400'}">ĐÚNG</button>
-                            <button onclick="selectTF(${i}, false)" class="px-3.5 py-1.5 rounded-lg text-[10px] font-black transition-all ${userAnswers[currentIndex]?.[i] === false ? 'bg-rose-500 text-white' : 'bg-slate-100 text-slate-400'}">SAI</button>
+                            <button ${quizMode === 'practice' && questionChecked[currentIndex] ? 'disabled' : `onclick="selectTF(${i}, true)"`} class="px-3.5 py-1.5 rounded-lg text-[10px] font-black transition-all ${userAnswers[currentIndex]?.[i] === true ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400'} ${quizMode === 'practice' && questionChecked[currentIndex] ? 'opacity-70 cursor-not-allowed' : ''}">ĐÚNG</button>
+                            <button ${quizMode === 'practice' && questionChecked[currentIndex] ? 'disabled' : `onclick="selectTF(${i}, false)"`} class="px-3.5 py-1.5 rounded-lg text-[10px] font-black transition-all ${userAnswers[currentIndex]?.[i] === false ? 'bg-rose-500 text-white' : 'bg-slate-100 text-slate-400'} ${quizMode === 'practice' && questionChecked[currentIndex] ? 'opacity-70 cursor-not-allowed' : ''}">SAI</button>
                         </div>
                     `;
                     container.appendChild(row);
@@ -738,6 +743,10 @@
                     };
                 } else {
                     textarea.oninput = (e) => { userAnswers[currentIndex] = e.target.value; updateMap(); saveActiveSession(); updateProgressOnly(); updateNavButtons(); };
+                }
+                if (quizMode === 'practice' && questionChecked[currentIndex]) {
+                    textarea.disabled = true;
+                    textarea.classList.add('opacity-70', 'cursor-not-allowed');
                 }
                 container.appendChild(textarea);
             }
@@ -886,20 +895,57 @@
             document.getElementById('test-mode-selector').classList.remove('hidden');
         }
 
-        function startQuizWithLayout(useMatrix) {
-            let activeQs = [];
-            if (useMatrix && quizData.config && quizData.config.examLayout) {
-                const layout = quizData.config.examLayout;
-                ['multiple', 'truefalse', 'short', 'essay'].forEach(type => {
-                    if (layout[type]) {
-                        const qsOfType = quizData.questions.filter(q => q.type === type);
-                        activeQs = activeQs.concat(qsOfType.slice(0, layout[type].count));
+        function shuffleQuestionsAndOptions(questions, useMatrix) {
+            let shuffled = questions.map(q => JSON.parse(JSON.stringify(q)));
+            const types = ['multiple', 'truefalse', 'short', 'essay'];
+            let orderedShuffled = [];
+            
+            types.forEach(type => {
+                let qsOfType = shuffled.filter(q => q.type === type);
+                for (let i = qsOfType.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [qsOfType[i], qsOfType[j]] = [qsOfType[j], qsOfType[i]];
+                }
+                
+                if (useMatrix && quizData.config && quizData.config.examLayout && quizData.config.examLayout[type]) {
+                    qsOfType = qsOfType.slice(0, quizData.config.examLayout[type].count);
+                }
+                orderedShuffled = orderedShuffled.concat(qsOfType);
+            });
+            
+            let unknownQs = shuffled.filter(q => !types.includes(q.type));
+            orderedShuffled = orderedShuffled.concat(unknownQs);
+
+            orderedShuffled.forEach(q => {
+                if (q.type === 'multiple' && q.options) {
+                    const optionsWithIndex = q.options.map((opt, i) => ({ opt, isCorrect: i === q.correct }));
+                    for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
                     }
-                });
-                quizData.activeQuestions = activeQs;
+                    q.options = optionsWithIndex.map(item => item.opt);
+                    q.correct = optionsWithIndex.findIndex(item => item.isCorrect);
+                } else if (q.type === 'truefalse' && q.options) {
+                    const correctArr = q.correctAnswers || q.correct || [];
+                    const optionsWithIndex = q.options.map((opt, i) => ({ opt, isCorrect: correctArr[i] }));
+                    for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+                    }
+                    q.options = optionsWithIndex.map(item => item.opt);
+                    if (q.correctAnswers) q.correctAnswers = optionsWithIndex.map(item => item.isCorrect);
+                    if (q.correct) q.correct = optionsWithIndex.map(item => item.isCorrect);
+                }
+            });
+            return orderedShuffled;
+        }
+
+        function startQuizWithLayout(useMatrix) {
+            if (useMatrix && quizData.config && quizData.config.examLayout) {
+                quizData.activeQuestions = shuffleQuestionsAndOptions(quizData.questions || [], true);
                 timerSeconds = quizData.config.testDuration || 0;
             } else {
-                quizData.activeQuestions = [...(quizData.questions || [])];
+                quizData.activeQuestions = shuffleQuestionsAndOptions(quizData.questions || [], false);
                 const matrixCount = quizData.config && quizData.config.examLayout ? Object.values(quizData.config.examLayout).reduce((sum, item) => sum + item.count, 0) : quizData.questions.length;
                 timerSeconds = ((quizData.config.testDuration || 0) / matrixCount) * quizData.questions.length;
                 if(isNaN(timerSeconds) || !isFinite(timerSeconds) || timerSeconds <= 0) timerSeconds = quizData.activeQuestions.length * 60;
@@ -1070,6 +1116,9 @@
                     questionChecked = session.checked || new Array(userAnswers.length).fill(false);
                     timerSeconds = session.time;
                     currentIndex = session.index;
+                    if (session.activeQuestions) {
+                        quizData.activeQuestions = session.activeQuestions;
+                    }
                     startQuiz(quizMode, true);
                 });
             }
@@ -1081,7 +1130,8 @@
                 answers: userAnswers,
                 checked: questionChecked,
                 time: timerSeconds,
-                index: currentIndex
+                index: currentIndex,
+                activeQuestions: quizData.activeQuestions
             };
             localStorage.setItem('active_session_' + window.location.pathname, JSON.stringify(session));
         }

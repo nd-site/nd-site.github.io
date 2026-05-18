@@ -45,5 +45,10 @@ Hệ thống hỗ trợ cấu hình linh hoạt trong `data.js` -> `config.examL
 - **TUYỆT ĐỐI KHÔNG** viết thường chữ cái thứ hai trở đi trong cụm từ tên môn học (ví dụ: tránh viết `"Hóa học"`, `"Vật lý"`, `"Địa lý"`, `"Tin học"`, `"Ngữ văn"`, `"Lịch sử"`, `"Sinh học"`, `"Công nghệ"`).
 - Quy chuẩn này áp dụng bắt buộc cho tất cả các khai báo thuộc tính `subject` trong `list_data.js`, các tiêu đề `title` trong file `data.js` và tiêu đề trang trong file `index.html` của từng bộ đề thi.
 
+## 8. Quy chuẩn cập nhật phiên bản (Version Control)
+- **BẮT BUỘC** cập nhật số phiên bản trong [version.js](file:///d:/WebSite/EduSpace%20-%20%C4%90%E1%BB%95i%20giao%20di%E1%BB%87n%20150526/assets/js/version.js) sau mỗi lần sửa đổi giao diện, thêm, xóa, sửa quy tắc, hoặc thay đổi code của bất kỳ trang/tính năng nào trên hệ thống.
+- Định dạng phiên bản bắt buộc: `ver:<năm (2025=0, 2026=1, 2027=2, ...)>.<tháng>.<ngày>.<giờ><phút>`.
+    - Ví dụ: Thời gian hiện tại là 18:30 ngày 19/05/2026 -> Version sẽ là `ver:1.5.19.1830`.
+
 ---
 // turbo-all

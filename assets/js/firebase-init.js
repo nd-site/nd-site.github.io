@@ -1,3 +1,12 @@
+/**
+ * EduSpace — Firebase SDK Initializer (Khởi tạo dịch vụ đám mây Firebase)
+ * 
+ * Tác dụng:
+ *   • Sử dụng Firebase Modular SDK để kết nối với cơ sở dữ liệu và xác thực người dùng toàn trang.
+ *   • Đọc cấu hình bảo mật động từ `config.js` để tự động khởi tạo Firebase App, Auth và Realtime Database.
+ *   • Theo dõi trạng thái đăng nhập của thành viên để đồng bộ ảnh đại diện và biệt danh hiển thị trên thanh navbar (`nd-navbar`).
+ */
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";

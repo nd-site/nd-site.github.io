@@ -1,0 +1,1 @@
+Khi làm bài kiểm tra ở chế độ luyện tập, người dùng chọn kiểm tra và đã hiện đáp án đúng là đáp án nào nhưng người dùng vẫn chọn lại được đáp án, và máy tính đúng. Điều này khiến điểm không chính xác. Hãy sửa nó

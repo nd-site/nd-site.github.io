@@ -1,10 +1,13 @@
 /**
- * ND Labs — Global Navigation Bar
- * Behavior: exactly like a browser tab bar.
- *   • Always fixed at the very top of the viewport
- *   • Content always starts below it (spacer pushes everything down)
- *   • Never overlaps anything
- *   • Brand always visible; links scroll horizontally when narrow
+ * ND Labs — Global Navigation Bar (Thanh điều hướng toàn cục)
+ * 
+ * Tác dụng:
+ *   • Đóng vai trò là thanh menu điều hướng chính xuất hiện ở đầu tất cả các trang.
+ *   • Hoạt động tương tự như thanh tab của trình duyệt (Browser tab bar).
+ *   • Luôn cố định ở phía trên cùng của viewport (fixed position).
+ *   • Đảm bảo nội dung trang bắt đầu ngay bên dưới thông qua thẻ spacer động.
+ *   • Hỗ trợ cuộn ngang thanh link trên thiết bị di động nhỏ mà không làm vỡ giao diện.
+ *   • Tự động nạp bộ chỉ báo phiên bản (version.js) và bộ thông báo chạy chữ (announcements.js).
  */
 (function () {
   const NAV_H = 50; // navbar height in px — single source of truth
@@ -248,6 +251,12 @@
     vScript.src = '/assets/js/version.js';
     vScript.defer = true;
     document.head.appendChild(vScript);
+
+    // Tự động tải tệp thông báo chạy chữ dưới navbar
+    const aScript = document.createElement('script');
+    aScript.src = '/assets/js/announcements.js';
+    aScript.defer = true;
+    document.head.appendChild(aScript);
   }
 
   if (document.body) {

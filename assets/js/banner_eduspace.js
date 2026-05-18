@@ -1,7 +1,11 @@
 /**
- * EduSpace Announcement System
- * Manage multiple banners with 5s auto-slide, interactive dragging (like hot section),
- * and touch support.
+ * EduSpace — Announcement Banner Carousel (Trình chiếu Banner Quảng cáo / Thông báo lớn)
+ * 
+ * Tác dụng:
+ *   • Hiển thị các banner quảng cáo lớn (hot news, tính năng mới) trên màn hình khởi đầu (Start Screen).
+ *   • Hỗ trợ tự động chạy slide sau mỗi 5 giây (Auto-slide).
+ *   • Hỗ trợ kéo thả (drag & swipe) mượt mà trên cả máy tính và thiết bị di động cảm ứng.
+ *   • Tự động tích hợp icon Lucide và các nút điều hướng chuyển slide (Dots indicator).
  */
 
 const announcements = [

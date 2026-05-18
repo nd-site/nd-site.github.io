@@ -1,10 +1,10 @@
 /**
- * EduSpace Configuration Management
- * This file handles environment variables and runtime settings.
- * NOTE: The placeholder below is replaced by GitHub Actions during deployment.
- * For local development, use localStorage key 'eduspace_api_key_override'.
- * IMPORTANT: Gemini 3.1 Flash Lite is the stable model (GA from 2026-05-07).
- * Do not use versions lower than 2.5.
+ * EduSpace — Configuration & Keys Management (Quản lý Cấu hình & Khóa bảo mật)
+ * 
+ * Tác dụng:
+ *   • Chứa toàn bộ thông tin cấu hình cho Firebase (AppId, DatabaseURL, API Key) và cài đặt cho Gemini AI.
+ *   • Quản lý việc nạp các biến môi trường nhạy cảm an toàn qua cơ chế GitHub Actions hoặc fallback môi trường Local (.env).
+ *   • Định nghĩa Model AI ổn định chính thức sử dụng cho hệ thống (`gemini-3.1-flash-lite`).
  */
 
 const EDU_CONFIG = {

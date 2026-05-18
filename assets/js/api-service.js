@@ -1,10 +1,11 @@
 /**
- * EduSpace AI Connection & API Service (api-service.js)
- *
- * TÁCH BIỆT KẾT NỐI API & FIREBASE:
- * - Chịu trách nhiệm thực hiện tất cả kết nối tới Gemini AI API.
- * - Tự động định vị và giải mã khóa từ Firebase Realtime Database nếu không có khóa tĩnh.
- * - Hỗ trợ cơ chế bảo mật 3 tầng cực kỳ an toàn.
+ * EduSpace — AI Connection & API Service (Dịch vụ Lõi kết nối Gemini API)
+ * 
+ * Tác dụng:
+ *   • Chịu trách nhiệm thực hiện tất cả kết nối từ phía Client tới Gemini AI API.
+ *   • Tự động định vị và giải mã khóa API bảo mật từ Firebase Realtime Database nếu không tìm thấy khóa tĩnh.
+ *   • Thiết lập cơ chế bảo mật 3 tầng cực kỳ an toàn cho hệ thống.
+ *   • Tự động phát hiện và chuyển đổi dự phòng (failover) giữa danh sách các model AI ưu tiên.
  */
 
 window.eduspaceAI = (function () {

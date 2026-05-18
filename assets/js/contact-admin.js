@@ -1,6 +1,10 @@
 /**
- * Contact Admin FAB Component
- * Shared contact widget for all EduSpace pages.
+ * EduSpace — Contact Admin Floating Action Button (Nút liên hệ hỗ trợ nổi)
+ * 
+ * Tác dụng:
+ *   • Cung cấp nút hỗ trợ khách hàng nổi (Floating Action Button - FAB) ở góc dưới bên trái màn hình.
+ *   • Khi nhấn sẽ bung mở danh sách các kênh liên hệ của Admin và ND Labs (Facebook, Messenger, Telegram).
+ *   • Tự động thu gọn nhãn văn bản sau 3 giây để tối ưu không gian hiển thị trên màn hình.
  */
 
 const contactData = [

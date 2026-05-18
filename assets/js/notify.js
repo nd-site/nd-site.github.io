@@ -1,3 +1,11 @@
+/**
+ * EduSpace — Custom Toast Notification System (Hệ thống thông báo Toast tùy chỉnh)
+ * 
+ * Tác dụng:
+ *   • Thay thế hộp thoại cảnh báo `alert()` mặc định của trình duyệt bằng thông báo dạng Toast sang trọng ở phía dưới màn hình.
+ *   • Hỗ trợ hiển thị mượt mà bằng CSS Keyframe Animations và hiệu ứng mờ nền (backdrop-blur).
+ *   • Tự động biến mất sau 3.5 giây với hiệu ứng trượt mượt mà.
+ */
 (function () {
     // Inject styles
     const style = document.createElement('style');

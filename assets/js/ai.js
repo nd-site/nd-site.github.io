@@ -1,7 +1,11 @@
 /**
- * EduAI UI Component
- * Shared AI widget for all EduSpace pages.
- * Supports: KaTeX, Marked.js, auto-context, and premium glassmorphism.
+ * EduSpace — EduAI UI Component (Giao diện Trợ lý Học tập EduAI)
+ * 
+ * Tác dụng:
+ *   • Cung cấp Widget khung chat EduAI Assistant dùng chung xuất hiện ở góc dưới bên phải màn hình.
+ *   • Hỗ trợ hiển thị công thức Toán học đẹp mắt thông qua KaTeX và văn bản định dạng Markdown bằng Marked.js.
+ *   • Có khả năng đọc ngữ cảnh câu hỏi thi của trang hiện tại để trả lời chuẩn xác.
+ *   • Tự động hiển thị ở chế độ Luyện tập và ẩn đi ở chế độ Thi thử để tránh gian lận.
  */
 
 const eduspaceAI_UI = (function () {

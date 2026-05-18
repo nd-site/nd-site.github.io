@@ -1,10 +1,16 @@
 /**
- * ND Labs & EduSpace Global Version Indicator
- * Generated at: 2026-05-18 16:45
- * Version format: ver:<năm (2025=0)>.<tháng>.<ngày>.<giờ><phút>
+ * EduSpace — Global Version Indicator (Bộ Chỉ báo & Kiểm soát Phiên bản Toàn hệ thống)
+ * Generated at: 2026-05-18 22:32
+ * 
+ * Tác dụng:
+ *   • Khai báo số hiệu phiên bản hiện tại của ứng dụng.
+ *   • Tự động tạo và hiển thị huy hiệu phiên bản (Version Badge) cao cấp ở góc dưới cùng giữa trang.
+ *   • Giúp nhà phát triển và học viên dễ dàng nhận diện và đồng bộ phiên bản mới nhất của hệ thống.
+ * 
+ * Định dạng: ver:<năm (2025=0, 2026=1)>.<tháng>.<ngày>.<giờ><phút>
  */
 (function () {
-    const VERSION = "ver:1.5.18.1645";
+    const VERSION = "ver:1.5.18.2232";
 
     function injectVersionBadge() {
         if (document.getElementById('nd-version-badge')) return;
@@ -51,7 +57,7 @@
         const badge = document.createElement('div');
         badge.id = 'nd-version-badge';
         badge.textContent = VERSION;
-        
+
         document.body.appendChild(badge);
     }
 

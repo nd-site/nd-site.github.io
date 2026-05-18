@@ -1,7 +1,10 @@
 /**
- * EduSpace AI Data Modal Proxy (data_modal.js)
- * Backward-compatibility wrapper for window.eduspaceAI.
- * All API handling and Firebase DB operations have been separated into /assets/js/api-service.js.
+ * EduSpace — AI Data Modal Wrapper (Bộ bọc trung gian kết nối AI)
+ * 
+ * Tác dụng:
+ *   • Đóng vai trò là Wrapper trung gian để duy trì khả năng tương thích ngược (backward compatibility) cho lệnh gọi `eduspaceAI.call`.
+ *   • Tự động kiểm tra và nạp động tệp điều phối API lõi (`api-service.js`) nếu chưa được tải sẵn trên trang.
+ *   • Cung cấp cơ chế chờ tải bất đồng bộ thông minh (up to 2.5s) để ngăn lỗi đồng bộ khi gọi API từ các file script khác.
  */
 
 // Dynamically inject api-service.js if not already loaded to maintain backward compatibility
