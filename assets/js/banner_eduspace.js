@@ -17,7 +17,7 @@ const announcements = [
     {
         title: "Hệ thống luyện thi THPT Quốc Gia 2026 chính thức ra mắt",
         description: "Lộ trình ôn tập toàn diện với cấu trúc đề mới nhất từ Bộ Giáo dục.",
-        link: "/eduspace/thptqg/2026/index.html",
+        link: "/eduspace/thptqg/2026",
         buttonText: "Khám phá ngay",
         tag: "Hot News",
         platform: "EduSpace",
