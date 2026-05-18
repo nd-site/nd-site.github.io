@@ -34,5 +34,7 @@ const eduspaceAI = {
     }
 };
 
-// Expose globally for backward compatibility
-window.eduspaceAI = eduspaceAI;
+// ONLY expose globally if window.eduspaceAI is not already defined by api-service.js
+if (typeof window.eduspaceAI === 'undefined' || !window.eduspaceAI.call || window.eduspaceAI.call === eduspaceAI.call) {
+    window.eduspaceAI = eduspaceAI;
+}

@@ -8,7 +8,7 @@
  */
 
 window.eduspaceAI = (function () {
-    let sessionModel = window.getStableModel?.() || 'gemini-3.1-flash-lite';
+    let sessionModel = window.getStableModel?.() || 'gemini-3-flash';
     let _cachedModels = null;
 
     // Tầng 1: Cloud Function proxy URL
@@ -37,9 +37,10 @@ window.eduspaceAI = (function () {
         );
     }
 
-    /** Danh sách models ưu tiên Gemini 3.1, tối đa 3 */
+    /** Danh sách models ưu tiên Gemini 3, tối đa 3 */
     function buildModelList(discovered) {
         const PRIORITY = [
+            'gemini-3-flash',
             'gemini-3.1-flash-lite',
             'gemini-3.1-pro',
             'gemini-2.5-flash',
