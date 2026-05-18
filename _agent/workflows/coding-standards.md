@@ -40,5 +40,10 @@ Hệ thống hỗ trợ cấu hình linh hoạt trong `data.js` -> `config.examL
 - Luôn hỗ trợ **MathJax/KaTeX** và **Marked.js** để hiển thị công thức toán học và Markdown.
 - Tích hợp Gemini API để chấm điểm tự luận và giải thích câu hỏi.
 
+## 7. Quy chuẩn đặt tên môn học (Subject Naming)
+- **BẮT BUỘC** viết hoa chữ cái đầu của từng từ trong tên môn học để đảm bảo tính nhất quán trên toàn hệ thống (ví dụ: `"Hóa Học"`, `"Vật Lý"`, `"Ngữ Văn"`, `"Địa Lý"`, `"Lịch Sử"`, `"Tin Học"`, `"Công Nghệ"`, `"Tiếng Anh"`, `"Sinh Học"`).
+- **TUYỆT ĐỐI KHÔNG** viết thường chữ cái thứ hai trở đi trong cụm từ tên môn học (ví dụ: tránh viết `"Hóa học"`, `"Vật lý"`, `"Địa lý"`, `"Tin học"`, `"Ngữ văn"`, `"Lịch sử"`, `"Sinh học"`, `"Công nghệ"`).
+- Quy chuẩn này áp dụng bắt buộc cho tất cả các khai báo thuộc tính `subject` trong `list_data.js`, các tiêu đề `title` trong file `data.js` và tiêu đề trang trong file `index.html` của từng bộ đề thi.
+
 ---
 // turbo-all
