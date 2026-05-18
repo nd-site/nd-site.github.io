@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduAI Assistant | ND Labs</title>
+    <link rel="icon" href="/assets/images/logo.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- EduSpace Core -->
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/api-service.js"></script>
+    <script src="/assets/js/data_modal.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #0070f3;
+            --primary-light: #3291ff;
+            --bg-main: #f8fafc;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: #1e293b;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-gradient-mesh {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 112, 243, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(50, 145, 255, 0.05) 0px, transparent 50%);
+        }
+
+        /* Full page Chat Layout */
+        #assistant-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            height: calc(100vh - 50px); /* Adjust for navbar height if any */
+            background: white;
+            box-shadow: 0 0 40px rgba(0,0,0,0.03);
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            scroll-behavior: smooth;
+        }
+
+        .msg {
+            max-width: 85%;
+            padding: 16px 20px;
+            border-radius: 24px;
+            font-size: 15px;
+            line-height: 1.6;
+            animation: fadeIn 0.4s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg-ai {
+            align-self: flex-start;
+            background: #f1f5f9;
+            color: #0f172a;
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg-user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 10px 20px -5px rgba(0, 112, 243, 0.3);
+        }
+
+        /* Input Area */
+        .input-wrapper {
+            padding: 24px;
+            background: white;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .input-box {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-box:focus-within {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0, 112, 243, 0.1);
+            transform: translateY(-2px);
+        }
+
+        #user-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            background: var(--primary);
+            color: white;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .send-btn:hover {
+            background: var(--primary-light);
+            transform: scale(1.05);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Markdown Styles */
+        .markdown-content p { margin-bottom: 0.8em; }
+        .markdown-content pre { 
+            background: #1e293b; 
+            color: #f8fafc; 
+            padding: 16px; 
+            border-radius: 12px; 
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 12px 0;
+            border: 1px solid #334155;
+        }
+        .markdown-content code { background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 6px; font-weight: 600; }
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 { font-weight: 800; margin: 16px 0 8px; color: var(--primary); }
+
+        /* Welcome Screen */
+        #welcome-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .ai-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, #3291ff 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 40px rgba(0, 112, 243, 0.2);
+        }
+
+        .suggestion-chip {
+            padding: 12px 20px;
+            background: #f1f5f9;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .suggestion-chip:hover {
+            border-color: var(--primary);
+            background: white;
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Custom Scrollbar */
+        #chat-messages::-webkit-scrollbar { width: 6px; }
+        #chat-messages::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/font/font.js"></script>
+</head>
+
+<body>
+    <div class="bg-gradient-mesh"></div>
+
+    <main id="assistant-container">
+        <!-- Messages Area -->
+        <div id="chat-messages">
+            <div id="welcome-view">
+                <div class="ai-avatar">✨</div>
+                <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Xin chào! Tôi có thể giúp gì?</h1>
+                <p class="text-slate-500 font-medium mb-12 max-w-md">Tôi là EduAI, trợ lý thông minh giúp bạn học tập và trả lời mọi thắc mắc.</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg">
+                    <div class="suggestion-chip" onclick="useSuggest('Giải thích luật Newton cho mình với')">🍎 Giải thích luật Newton</div>
+                    <div class="suggestion-chip" onclick="useSuggest('Cách học thuộc lòng bảng tuần hoàn nhanh?')">🧪 Mẹo học Bảng tuần hoàn</div>
+                    <div class="suggestion-chip" onclick="useSuggest('Giải bài toán: Tìm x biết 2x + 5 = 15')">📐 Giải bài tập Toán</div>
+                    <div class="suggestion-chip" onclick="useSuggest('Viết một đoạn văn ngắn về tình bạn')">✍️ Viết đoạn văn nghị luận</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-wrapper">
+            <div class="input-box">
+                <input type="text" id="user-input" placeholder="Hỏi EduAI bất cứ điều gì..." autofocus onkeypress="if(event.key==='Enter') sendMessage()">
+                <div onclick="sendMessage()" class="send-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                </div>
+            </div>
+            <p class="text-center text-[10px] text-slate-400 mt-4 font-bold uppercase tracking-widest">Powered by Gemini AI Engine</p>
+        </div>
+    </main>
+
+    <script>
+        const chatContainer = document.getElementById('chat-messages');
+        const welcomeView = document.getElementById('welcome-view');
+        const userInput = document.getElementById('user-input');
+
+        function appendMessage(text, role) {
+            if (welcomeView) welcomeView.remove();
+            
+            const div = document.createElement('div');
+            div.className = `msg msg-${role} ${role === 'ai' ? 'markdown-content' : ''}`;
+            
+            let html = text;
+            if (role === 'ai') {
+                if (typeof marked !== 'undefined') {
+                    html = marked.parse(text);
+                } else {
+                    html = text.replace(/\n/g, '<br>');
+                }
+            }
+            
+            div.innerHTML = html;
+            chatContainer.appendChild(div);
+            
+            // Render Math
+            if (role === 'ai' && typeof renderMathInElement === 'function') {
+                renderMathInElement(div, {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '$', right: '$', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+            
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            appendMessage(text, 'user');
+            userInput.value = '';
+
+            // Loading state
+            const loadingId = 'ai-load-' + Date.now();
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = loadingId;
+            loadingDiv.className = 'msg msg-ai font-bold opacity-50 italic text-sm';
+            loadingDiv.innerHTML = 'EduAI đang suy nghĩ...';
+            chatContainer.appendChild(loadingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                // Use the core eduspaceAI.call from data_modal.js
+                const response = await eduspaceAI.call({
+                    contents: [{ role: 'user', parts: [{ text: text }] }]
+                });
+
+                loadingDiv.remove();
+                appendMessage(response, 'ai');
+            } catch (e) {
+                loadingDiv.innerHTML = `<span class="text-red-500">Lỗi: ${e.message}</span>`;
+            }
+        }
+
+        function useSuggest(text) {
+            userInput.value = text;
+            sendMessage();
+        }
+    </script>
+</body>
+
+</html>

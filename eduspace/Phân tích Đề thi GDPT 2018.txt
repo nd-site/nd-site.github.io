@@ -1,0 +1,796 @@
+BÁO CÁO NGHIÊN CỨU CHUYÊN SÂU VỀ HỆ THỐNG KIỂM TRA ĐÁNH GIÁ NĂNG LỰC HỌC THUẬT THEO CHƯƠNG TRÌNH GIÁO DỤC PHỔ THÔNG 2018
+Tổng quan hệ thống kiểm tra và đánh giá theo định hướng phát triển năng lực
+Hệ thống kiểm tra và đánh giá giáo dục phổ thông Việt Nam đang trải qua một giai đoạn chuyển đổi toàn diện và sâu sắc, đánh dấu sự kết thúc của việc đánh giá dựa trên mức độ ghi nhớ kiến thức lý thuyết đơn thuần của Chương trình Giáo dục phổ thông (GDPT) 2006 để chuyển sang đánh giá toàn diện năng lực hành động và phẩm chất của người học theo Chương trình GDPT 2018.1 Triết lý cốt lõi của sự thay đổi này không chỉ nhằm đo lường xem học sinh "biết những gì", mà quan trọng hơn là đo lường học sinh "làm được những gì" từ những kiến thức đã tích lũy.1
+Đối với hoạt động kiểm tra định kỳ (giữa kỳ và cuối kỳ), hoạt động đánh giá tại các trường Trung học phổ thông (THPT) được thực thi nghiêm ngặt theo các hành lang pháp lý của Thông tư số 22/2021/TT-BGDĐT.4 Điểm số kiểm tra thường xuyên được tính hệ số 1, điểm kiểm tra giữa kỳ tính hệ số 2 và điểm kiểm tra cuối kỳ tính hệ số 3.5 Thời lượng dành cho bài kiểm tra định kỳ từ 45 phút trở lên; cụ thể các môn học có số tiết giảng dạy từ 70 tiết/năm trở xuống áp dụng thời gian làm bài 45 phút, trong khi các môn học trên 70 tiết/năm có thời gian làm bài kéo dài từ 60 phút đến 90 phút.5
+Bước ngoặt lớn nhất trong công tác đánh giá định kỳ bắt đầu từ học kỳ II năm học 2024-2025, khi Bộ Giáo dục và Đào tạo (GD&ĐT) chính thức ban hành Công văn số 7991/BGDĐT-GDTrH quy định về cấu trúc đề kiểm tra định kỳ áp dụng thống nhất cho cấp THCS và THPT.6 Theo hướng dẫn pháp lý này, ma trận đề kiểm tra định kỳ của các môn học đánh giá bằng nhận xét kết hợp điểm số phải được cơ cấu chặt chẽ theo tỷ lệ: Trắc nghiệm khách quan chiếm 7,0 trên thang điểm 10 và Tự luận chiếm 3,0 trên thang điểm 10.6
+Sự thay đổi mang tính hệ thống này không chỉ kế thừa các thành tựu khoa học đo lường hiện đại mà còn tiệm cận sâu sắc với cấu trúc định dạng đề thi tốt nghiệp THPT áp dụng chính thức từ năm 2025 theo Quyết định số 764/QĐ-BGDĐT.9 Điều này đòi hỏi các tổ chuyên môn tại các cơ sở giáo dục phải xây dựng ma trận đặc tả đề thi cực kỳ chuẩn xác, loại bỏ hoàn toàn các câu hỏi ghi nhớ máy móc để tập trung vào các cấp độ tư duy từ nhận biết, thông hiểu đến vận dụng thực tiễn.12
+
+Các môn thi trong Kỳ thi Tốt nghiệp THPT:
+Theo phương án tổ chức kỳ thi tốt nghiệp THPT của Bộ Giáo dục và Đào tạo áp dụng cho Chương trình Giáo dục phổ thông 2018, cấu trúc môn thi được rút gọn theo mô hình 2 + 2. Thí sinh chỉ cần thi tổng cộng 4 môn thay vì 6 môn như trước đây.
+1. Môn thi bắt buộc (2 môn):
+- Toán
+- Ngữ văn
+2. Môn thi lựa chọn (2 môn):
+Thí sinh được chủ động chọn 2 môn trong số các môn học còn lại được giảng dạy ở lớp 12, bao gồm:
+- Ngoại ngữ (Tiếng Anh, Tiếng Nga, Tiếng Pháp, Tiếng Trung, Tiếng Đức, Tiếng Nhật, Tiếng Hàn)
+- Lịch sử
+- Địa lí (Địa lý)
+- Vật lí (Vật lý)
+- Hóa học
+- Sinh học
+- Giáo dục kinh tế và pháp luật (GD KT&PL)
+- Tin học
+- Công nghệ
+
+Hình thức và thời gian thi cụ thể:
+- Ngữ văn: Tự luận - 120 phút
+- Toán: Trắc nghiệm - 90 phút
+- Các môn tự chọn: Trắc nghiệm - 50 phút / môn
+
+________________
+Phân tích chi tiết cấu trúc đánh giá theo từng môn học
+1. Môn Ngữ văn
+I. Tổng quan môn học
+Môn Ngữ văn trong Chương trình GDPT 2018 được định vị là môn học công cụ và thẩm mỹ, tập trung phát triển bốn kỹ năng cốt lõi: đọc, viết, nói và nghe. Định hướng đánh giá môn Ngữ văn có sự thay đổi mang tính cách mạng khi Bộ GD&ĐT quy định tuyệt đối không sử dụng các văn bản ngữ liệu đã học trong sách giáo khoa (bao gồm các bộ sách Cánh Diều, Kết nối tri thức với cuộc sống, Chân trời sáng tạo) để làm ngữ liệu kiểm tra đọc hiểu và viết trong các đề thi định kỳ cũng như thi tốt nghiệp.11 Điều này triệt tiêu hoàn toàn nạn học tủ, học vẹt văn mẫu, bắt buộc học sinh phải hình thành và làm chủ kỹ năng đọc hiểu thể loại văn bản và kỹ năng tạo lập văn bản độc lập.11
+II. Dạng đề giữa kỳ
+* Cấu trúc: Thực hiện theo đặc thù bộ môn và các hướng dẫn chuyên môn riêng, đề kiểm tra định kỳ môn Ngữ văn được xây dựng hoàn toàn dưới hình thức tự luận   .16 Thời gian làm bài phổ biến là 90 phút.5 Đề thi gồm 2 phần độc lập: Phần I Đọc hiểu (4,0 điểm) và Phần II Viết (6,0 điểm).3
+* Ma trận: Cơ cấu ma trận phân bổ theo tỷ lệ nhận thức:    Nhận biết (chỉ ra các yếu tố hình thức, chi tiết hiển thị trong văn bản) -    Thông hiểu (phân tích ý nghĩa chi tiết, thông điệp, giá trị nghệ thuật) -    Vận dụng (liên hệ thực tế, viết đoạn văn nghị luận ngắn hoặc tạo lập bài văn nghị luận hoàn chỉnh).12
+* Dạng câu hỏi: Phần Đọc hiểu thường gồm 4 đến 5 câu hỏi tự luận ngắn, yêu cầu nhận diện thể thơ, phương thức biểu đạt, các biện pháp tu từ, phân tích tác dụng của biện pháp nghệ thuật và rút ra thông điệp từ ngữ liệu.10 Phần Viết yêu cầu tạo lập bài văn nghị luận xã hội hoặc nghị luận văn học về một khía cạnh của tác phẩm ngoài sách giáo khoa.
+* Ví dụ thực tế: Đọc hiểu một bài thơ chữ Nôm của Nguyễn Trãi (nằm ngoài hệ thống ngữ liệu sách giáo khoa lớp 10). Các câu hỏi yêu cầu xác định thể thơ, chỉ ra các từ ngữ biểu thị không gian, thời gian. Câu hỏi thông hiểu yêu cầu giải thích ý nghĩa của hai câu thơ luận. Phần Viết yêu cầu học sinh viết bài văn nghị luận xã hội bàn về tầm quan trọng của sự thấu cảm trong kỷ nguyên số.
+III. Dạng đề cuối kỳ
+   * Cấu trúc: Tự luận    với thời gian làm bài kéo dài 90 phút.5 Cấu trúc phân định rõ ràng giữa Đọc hiểu (4,0 điểm) và Viết (6,0 điểm) để đánh giá năng lực toàn diện của học sinh ở giai đoạn cuối kỳ học.10
+   * Chuyên đề trọng tâm: Đọc hiểu các thể loại văn bản văn học (thơ tự do, truyện ngắn hiện đại, kịch bản văn học, tùy bút, ký) hoặc văn bản nghị luận xã hội/văn bản thông tin đa phương thức. Viết bài văn nghị luận văn học (phân tích một đặc điểm nhân vật, một nét độc đáo nghệ thuật trong tác phẩm truyện/thơ ngoài SGK) kết hợp bài văn nghị luận xã hội bàn về một tư tưởng đạo lý hoặc hiện tượng đời sống.
+   * Dạng phân hóa: Sự phân hóa nằm ở các câu hỏi thông hiểu yêu cầu giải thích các tầng nghĩa ẩn dụ và câu hỏi viết nghị luận văn học yêu cầu học sinh phải tự phát hiện và lập luận về các giá trị thẩm mỹ, nhân văn của một tác phẩm hoàn toàn mới mà không có sự trợ giúp của các bài giảng mẫu.
+IV. Dạng đề thi tốt nghiệp THPT
+      * Cấu trúc chính thức: Hình thức tự luận   , thời gian làm bài 120 phút.3 Đề thi gồm 2 phần: Phần I Đọc hiểu (4,0 điểm) và Phần II Viết (6,0 điểm).3
+      * Tỷ lệ câu hỏi: Phần Đọc hiểu gồm 4 câu hỏi tự luận phân cấp từ nhận biết đến vận dụng. Phần Viết gồm 2 câu hỏi lớn: Câu 1 Nghị luận xã hội (2,0 điểm - yêu cầu viết đoạn văn khoảng 200 chữ) và Câu 2 Nghị luận văn học (4,0 điểm - viết bài văn nghị luận hoàn chỉnh).3
+      * Phân bố chuyên đề: Ngữ liệu đọc hiểu sử dụng một văn bản nghệ thuật (thơ/văn xuôi) hoặc văn bản chính luận nằm ngoài sách giáo khoa. Phần nghị luận văn học yêu cầu học sinh phân tích, đánh giá một khía cạnh nội dung hoặc đặc sắc nghệ thuật của một tác phẩm văn học mở ngoài chương trình.
+      * Dạng bẫy thường gặp: Học sinh dễ bị lạc đề hoặc phân tích hời hợt do thói quen áp dụng các sơ đồ tư duy có sẵn của chương trình cũ 2006; hiểu sai nghĩa của các từ ngữ cổ hoặc các biểu tượng nghệ thuật phức tạp trong ngữ liệu mới; không phân phối hợp lý thời gian giữa phần đọc hiểu và phần viết nghị luận văn học dẫn đến bài viết dang dở.
+V. So sánh giữa các năm
+         * Xu hướng thay đổi: Chuyển dịch triệt để từ việc ra đề dựa trên danh mục các tác phẩm văn học cố định trong sách giáo khoa cũ (ví dụ: Chí Phèo, Vợ nhặt, Tây Tiến của chương trình 2006) sang việc đánh giá dựa trên kỹ năng làm chủ thể loại với ngữ liệu hoàn toàn mới.11
+         * Xu hướng tăng/giảm độ khó: Độ khó tăng mạnh ở kỹ năng tự đọc hiểu và tự lập luận độc lập. Học sinh không thể dựa vào các tài liệu văn mẫu trực tuyến để đối phó mà phải bộc lộ năng lực ngôn ngữ thực chất.
+VI. Dự đoán tương lai
+         * Dự đoán xu hướng ra đề 2026–2030: Đề thi tốt nghiệp THPT sẽ bắt đầu đưa vào các ngữ liệu mang tính thời đại cao, các văn bản thông tin đa phương thức có tích hợp số liệu, biểu đồ để đánh giá năng lực đọc hiểu hiện đại của công dân toàn cầu.
+         * Những chuyên đề có khả năng xuất hiện cao: Nghị luận xã hội về các chủ đề đạo đức công nghệ (như tác động của trí tuệ nhân tạo đối với tư duy con người); nghị luận văn học về các tác phẩm thơ, truyện ngắn hiện đại của thế hệ nhà văn trẻ đương đại Việt Nam.
+VII. Gợi ý xây dựng ngân hàng đề
+         * Những dạng bài bắt buộc phải có: Hệ thống câu hỏi đọc hiểu được thiết kế riêng cho từng thể loại văn học (truyện, thơ, ký, kịch, văn nghị luận); các đề bài nghị luận xã hội mang tính mở và các đề nghị luận văn học sử dụng ngữ liệu văn bản ngoài sách giáo khoa có nguồn gốc rõ ràng, tin cậy.
+         * Phân bổ độ khó: Thiết lập ma trận đặc tả theo tỷ lệ    (   Nhận biết -    Thông hiểu -    Vận dụng) để bảo đảm đánh giá công bằng năng lực học sinh.12
+         * Cách xây dựng đề chuẩn MOET: Trích dẫn ngữ liệu gốc phải ghi rõ tên tác giả, tên tác phẩm, nhà xuất bản và năm công bố; hệ thống câu hỏi đọc hiểu phải bám sát các yêu cầu cần đạt về đặc trưng thể loại được quy định trong chương trình GDPT 2018; hướng dẫn chấm phải mở, tôn trọng các kiến giải độc đáo, hợp lý và sáng tạo của học sinh.
+________________
+2. Môn Toán
+I. Tổng quan môn học
+Môn Toán hướng tới hình thành và phát triển các năng lực toán học cốt lõi: tư duy và lập luận toán học, mô hình hóa toán học, giải quyết vấn đề toán học, giao tiếp toán học và sử dụng công cụ, phương tiện học toán.19 Đề thi môn Toán theo định hướng mới chú trọng đánh giá khả năng liên kết toán học với thực tiễn cuộc sống thông qua các bài toán ứng dụng vật lý, hóa học, sinh học, tài chính và công nghiệp.3
+II. Dạng đề giữa kỳ
+            * Cấu trúc: Thực hiện theo Công văn số 7991/BGDĐT-GDTrH: Đối với khối lớp 10 và 11, cấu trúc bài kiểm tra định kỳ gồm Trắc nghiệm khách quan (  ) và Tự luận (  ).16 Đối với khối lớp 12, để tiệm cận với định dạng đề thi tốt nghiệp, cấu trúc kiểm tra định kỳ tại nhiều trường THPT được điều chỉnh theo tỷ lệ Trắc nghiệm khách quan    và Tự luận   .16 Thời gian làm bài chuẩn là 90 phút.5
+            * Ma trận: Phần trắc nghiệm khách quan (7,0 điểm) được chia thành 3 phần rõ rệt theo đúng chuẩn Công văn 7991 6:
+               * Phần 1: Trắc nghiệm nhiều lựa chọn (3,0 điểm) gồm 12 câu hỏi trắc nghiệm truyền thống chọn 1 trong 4 phương án.10
+               * Phần 2: Trắc nghiệm Đúng/Sai (2,0 điểm) gồm 4 câu hỏi, mỗi câu có 4 ý lựa chọn mệnh đề Đúng hoặc Sai độc lập.6
+               * Phần 3: Trắc nghiệm Trả lời ngắn (2,0 điểm) gồm 4 câu hỏi yêu cầu học sinh tự tính toán và điền đáp số vào phiếu.6
+               * Phần Tự luận chiếm 3,0 điểm (hoặc 1,0 điểm ở lớp 12) gồm các bài toán tự luận truyền thống.16
+               * Dạng câu hỏi: Trắc nghiệm nhiều lựa chọn kiểm tra công thức, lý thuyết nền tảng; Đúng/Sai đánh giá tính chất đồ thị, tiệm cận, đạo hàm; Trả lời ngắn tính giá trị lớn nhất, nhỏ nhất của bài toán thực tế.10
+               * Ví dụ thực tế:
+               * Trắc nghiệm Đúng/Sai: Cho hàm số bậc ba    có đồ thị như hình vẽ. Xét tính đúng/sai của các mệnh đề sau: a) Hàm số đồng biến trên khoảng   ; b) Đồ thị hàm số có hai điểm cực trị; c) Phương trình    có đúng 3 nghiệm phân biệt; d) Giá trị lớn nhất của hàm số trên đoạn    bằng 3.20
+               * Trắc nghiệm Trả lời ngắn: Một doanh nghiệp muốn sản xuất một chiếc hộp hình hộp chữ nhật không nắp có thể tích      . Tìm diện tích toàn phần nhỏ nhất của chiếc hộp đó (đơn vị:   , làm tròn đến hàng đơn vị) để tiết kiệm nguyên liệu sản xuất.20
+III. Dạng đề cuối kỳ
+                  * Cấu trúc: Áp dụng mô hình ma trận phối hợp Trắc nghiệm khách quan (7,0 điểm) và Tự luận (3,0 điểm) đối với lớp 10, 11 và cấu trúc định hướng thi tốt nghiệp đối với lớp 12.6
+                  * Chuyên đề trọng tâm: Lớp 10: Hàm số, phương trình bậc hai, hệ thức lượng, vectơ, tổ hợp và xác suất sơ cấp. Lớp 11: Hàm số lượng giác, dãy số, cấp số cộng, cấp số nhân, giới hạn, đạo hàm, hình học không gian (quan hệ song song, vuông góc). Lớp 12: Ứng dụng đạo hàm để khảo sát hàm số, nguyên hàm - tích phân, hình học tọa độ trong không gian Oxyz, xác suất có điều kiện và công thức Bayes.
+                  * Dạng phân hóa: Phân hóa sâu sắc ở Phần II Đúng/Sai (yêu cầu học sinh hiểu bản chất cấu trúc lý thuyết toán học) và Phần III Trả lời ngắn (các bài toán ứng dụng thực tế phức tạp đòi hỏi năng lực mô hình hóa và tính toán chính xác cao).1
+IV. Dạng đề thi tốt nghiệp THPT
+                  * Cấu trúc chính thức: Trắc nghiệm khách quan   , thời gian làm bài 90 phút, gồm 34 câu hỏi/lệnh hỏi.3
+                  * Tỷ lệ câu hỏi và điểm số: Đề thi được phân định thành 3 phần riêng biệt 10:
+                     * Phần I: 12 câu trắc nghiệm nhiều lựa chọn (chọn 1 trong 4 phương án, mỗi câu trả lời đúng được 0,25 điểm, tổng 3,0 điểm).10
+                     * Phần II: 4 câu trắc nghiệm dạng Đúng/Sai. Mỗi câu hỏi gồm 4 ý lựa chọn độc lập. Điểm tối đa của 1 câu hỏi là 1,0 điểm (làm đúng 1 ý được 0,1 điểm; đúng 2 ý được 0,25 điểm; đúng 3 ý được 0,5 điểm; đúng cả 4 ý được 1,0 điểm, tổng 4,0 điểm).3
+                     * Phần III: 6 câu trắc nghiệm dạng trả lời ngắn. Học sinh tính toán và tô vào ô số tương ứng trên phiếu trả lời. Mỗi câu trả lời đúng được 0,5 điểm, tổng 3,0 điểm.10
+                     * Phân bố chuyên đề: Kiến thức tập trung chủ yếu ở chương trình toán học lớp 12 (khoảng   ) và một phần nhỏ kiến thức lớp 11 liên quan trực tiếp (xác suất, tổ hợp, dãy số).20
+                     * Dạng bẫy thường gặp: Sai dấu khi tính đạo hàm hoặc nguyên hàm; nhầm lẫn giữa giá trị cực trị và điểm cực trị của hàm số; quên điều kiện xác định của phương trình logarit hoặc phương trình chứa căn; nhầm lẫn hệ số tự do trong phương trình mặt phẳng tọa độ Oxyz.20
+V. So sánh giữa các năm
+                        * Xu hướng thay đổi: Chuyển đổi toàn diện từ cấu trúc 50 câu hỏi trắc nghiệm nhiều lựa chọn truyền thống (chương trình 2006) sang cấu trúc 34 câu hỏi/lệnh hỏi đa dạng hóa hình thức trắc nghiệm (chương trình 2018).19
+                        * Xu hướng tăng/giảm độ khó: Độ khó tăng mạnh ở phần Đúng/Sai và Trả lời ngắn.1 Xác suất khoanh bừa đạt điểm tối đa ở phần Đúng/Sai giảm xuống chỉ còn    cho một câu hỏi hoàn chỉnh 1, trong khi phần Trả lời ngắn loại bỏ hoàn toàn khả năng chọn ngẫu nhiên đáp án nhiễu.1
+VI. Dự đoán tương lai
+                           * Dự đoán xu hướng ra đề 2026–2030: Kỳ thi giữ ổn định phương thức thi trên giấy.2 Đề thi sẽ tăng cường kiểm tra các bài toán tích hợp thực tế có chiều sâu (như chuyển động vật lý bằng tích phân, mô hình tăng trưởng sinh học bằng hàm mũ, bài toán tối ưu chi phí vận hành doanh nghiệp).
+                           * Những chuyên đề có khả năng xuất hiện cao: Ứng dụng tích phân để tính diện tích, thể tích các công trình kiến trúc thực tế; xác suất có điều kiện và công thức Bayes trong đánh giá rủi ro y học và tài chính; ứng dụng hình học Oxyz giải quyết các bài toán định vị không gian thực tế.20
+VII. Gợi ý xây dựng ngân hàng đề
+                           * Những dạng bài bắt buộc phải có: Bài toán khảo sát hàm số liên đới đến đồ thị thực nghiệm; các bài toán xác suất Bayes dạng Đúng/Sai; bài tập tính toán hình học tọa độ Oxyz dạng trả lời ngắn.20
+                           * Phân bổ độ khó: Theo tỷ lệ    (   Nhận biết -    Thông hiểu -    Vận dụng) để bảo đảm độ phân hóa sắc nét theo yêu cầu của Bộ GD&ĐT.17
+                           * Cách xây dựng đề chuẩn MOET: Biên soạn câu hỏi Đúng/Sai sao cho các ý có sự liên kết tuần tự hoặc độc lập bổ trợ hợp lý; xây dựng đáp án phần Trả lời ngắn là các số nguyên hoặc số thập phân đơn giản, dễ tô phiếu, tránh các đáp số quá phức tạp gây sai sót cơ học.10
+________________
+3. Môn Tiếng Anh
+I. Tổng quan môn học
+Môn Tiếng Anh trong Chương trình GDPT 2018 được định hướng đánh giá năng lực giao tiếp ngôn ngữ toàn diện của học sinh thông qua các kỹ năng đọc hiểu, phân tích cấu trúc ngôn ngữ và kỹ năng tạo lập văn bản gián tiếp.25 Đề thi chú trọng đánh giá khả năng sử dụng tiếng Anh trong bối cảnh giao tiếp thực tế đời sống, học thuật và nghề nghiệp tương lai, thay vì kiểm tra các kiến thức ngữ pháp cô lập, khô khan.25
+II. Dạng đề giữa kỳ
+                              * Cấu trúc: Thực hiện theo Công văn số 7991/BGDĐT-GDTrH kết hợp đặc thù môn ngoại ngữ: Đối với lớp 10, 11 cấu trúc phổ biến là Trắc nghiệm khách quan    và Tự luận    (viết lại câu, viết đoạn văn ngắn).16 Đối với lớp 12 là Trắc nghiệm khách quan    và Tự luận   .16 Thời gian làm bài từ 45 đến 60 phút.5
+                              * Ma trận: Kiểm tra toàn diện hệ thống từ vựng, ngữ pháp lồng ghép trực tiếp vào các ngữ cảnh giao tiếp thực tế.25 Phần trắc nghiệm bám sát các dạng bài đọc điền khuyết thông tin và đọc hiểu ngắn.25
+                              * Dạng câu hỏi: Chọn từ phù hợp điền vào chỗ trống, đọc hiểu đoạn văn ngắn trả lời câu hỏi, sắp xếp từ thành câu hoàn chỉnh hoặc viết lại câu không đổi nghĩa.
+                              * Ví dụ thực tế: Đọc một thông báo của câu lạc bộ tiếng Anh trường học và điền các mạo từ hoặc giới từ thích hợp vào chỗ trống để hoàn thiện văn bản.27
+III. Dạng đề cuối kỳ
+                                 * Cấu trúc: Tương tự cấu trúc giữa kỳ, tập trung đánh giá năng lực đọc hiểu văn bản dài và kỹ năng liên kết câu, tổ chức văn bản gián tiếp của học sinh.25
+                                 * Chuyên đề trọng tâm: Các chủ điểm từ vựng theo chủ đề sách giáo khoa (phát triển bền vững, di sản văn hóa, công nghệ tương lai); các cấu trúc ngữ pháp như câu giả định, mệnh đề quan hệ rút gọn, sự hòa hợp giữa chủ ngữ và động từ, trật tự tính từ.27
+                                 * Dạng phân hóa: Sử dụng các câu hỏi đọc hiểu yêu cầu suy luận sâu (inferential questions), câu hỏi từ vựng nâng cao mang tính thành ngữ (idioms) hoặc cụm từ cố định (collocations).27
+IV. Dạng đề thi tốt nghiệp THPT
+                                 * Cấu trúc chính thức: Trắc nghiệm khách quan   , thời gian làm bài 50 phút, gồm 40 câu hỏi.10 Môn Ngoại ngữ chỉ sử dụng một dạng thức duy nhất là trắc nghiệm nhiều lựa chọn (Phần I).1
+                                 * Tỷ lệ câu hỏi và điểm số: Mỗi câu trả lời đúng được 0,25 điểm (tổng điểm toàn bài là 10,0 điểm).10
+                                 * Phân bố chuyên đề và các dạng bài: Đề thi gồm 6 dạng bài chính được phân bổ cụ thể như sau 25:
+                                    * Đọc điền thông báo (6 câu).25
+                                    * Đọc điền quảng cáo, tờ rơi (6 câu).25
+                                    * Sắp xếp đoạn hội thoại/lá thư/đoạn văn (5 câu).25
+                                    * Đọc điền khuyết thông tin (5 câu).25
+                                    * Đọc hiểu 1 bài 8 câu (8 câu).25
+                                    * Đọc hiểu 1 bài 10 câu (10 câu).25
+                                    * Dạng bẫy thường gặp: Bẫy trật tự từ và trật tự tính từ; bẫy liên từ logic trong bài sắp xếp văn bản (nhầm lẫn giữa các liên từ tương phản như however, in contrast với liên từ kết quả); bẫy đại từ chỉ định thay thế và bẫy các phương án gây nhiễu gần nghĩa (confusing words) trong bài đọc hiểu.27
+V. So sánh giữa các năm
+                                    * Xu hướng thay đổi: Định dạng đề thi từ năm 2025 lược bỏ hoàn toàn các câu hỏi kiểm tra ngữ âm, trọng âm độc lập, các câu trắc nghiệm đơn lẻ cô lập không có ngữ cảnh, các câu tìm lỗi sai và viết lại câu ngắn truyền thống.25 Đề thi chuyển hướng tập trung hoàn toàn vào đánh giá năng lực đọc hiểu toàn diện.25
+                                    * Xu hướng tăng/giảm độ khó: Độ khó tăng mạnh do số lượng câu hỏi đọc hiểu tăng từ 12 lên 18 câu.25 Dạng bài sắp xếp đoạn văn/lá thư đòi hỏi tư duy logic cực kỳ cao của học sinh để nhận diện mạch liên kết của văn bản.25
+VI. Dự đoán tương lai
+                                    * Dự đoán xu hướng ra đề 2026–2030: Sử dụng các văn bản mang tính thời sự cao từ các nguồn báo chí uy tín toàn cầu (như BBC, CNN, National Geographic), lồng ghép sâu sắc các chủ đề về trí tuệ nhân tạo, biến đổi khí hậu toàn cầu và xu thế hội nhập văn hóa quốc tế.
+                                    * Những chuyên đề có khả năng xuất hiện cao: Chuyển đổi số trong giáo dục; bình đẳng giới và cơ hội nghề nghiệp tương lai; phát triển đô thị thông minh và năng lượng sạch.
+VII. Gợi ý xây dựng ngân hàng đề
+                                    * Những dạng bài bắt buộc phải có: Hệ thống đề đọc điền thông báo, đọc điền tờ rơi quảng cáo; bài tập sắp xếp thứ tự hội thoại/bức thư; các bài đọc hiểu độ dài lớn chứa các câu hỏi dạng TRUE/FALSE/NOT GIVEN hoặc câu hỏi suy luận sâu.26
+                                    * Phân bổ độ khó: Đảm bảo tỷ lệ phân hóa:    Nhận biết (9 câu) -    Thông hiểu (15 câu) -    Vận dụng (16 câu).27
+                                    * Cách xây dựng đề chuẩn MOET: Ngữ liệu đọc hiểu phải được trích xuất từ các văn bản thực tế đời sống; các phương án nhiễu của câu hỏi sắp xếp thứ tự phải được xây dựng dựa trên các lỗi tư duy liên kết logic phổ biến của học sinh Việt Nam.27
+________________
+4. Môn Lịch sử
+I. Tổng quan môn học
+Môn Lịch sử hướng tới phát triển tư duy lịch sử, năng lực tìm hiểu lịch sử, nhận thức và vận dụng các bài học lịch sử để giải quyết các vấn đề thực tiễn xã hội hiện nay.21 Định hướng kiểm tra môn Lịch sử yêu cầu chuyển trọng tâm từ học thuộc lòng ngày tháng sự kiện sang năng lực đọc hiểu và phân tích sử liệu khoa học.21
+II. Dạng đề giữa kỳ
+                                       * Cấu trúc: Thực hiện theo Công văn số 7991/BGDĐT-GDTrH: Đối với lớp 10, 11 cấu trúc gồm Trắc nghiệm khách quan    và Tự luận   .16 Đối với lớp 12 là Trắc nghiệm khách quan    và Tự luận   .16 Thời gian làm bài từ 45 đến 60 phút.5
+                                       * Ma trận: Do môn Lịch sử không có phần Trả lời ngắn trong đề thi tốt nghiệp, phần Trắc nghiệm kiểm tra định kỳ 7,0 điểm được cơ cấu lại: 3,0 điểm trắc nghiệm nhiều lựa chọn (Phần I) và 4,0 điểm trắc nghiệm Đúng/Sai (Phần II - toàn bộ 2,0 điểm của phần trả lời ngắn được chuyển sang Đúng/Sai theo hướng dẫn của Công văn 7991).6 Phần Tự luận chiếm 3,0 điểm (hoặc 1,0 điểm với lớp 12).16
+                                       * Dạng câu hỏi: Nhận biết sự kiện, nhân vật lịch sử căn bản; Đúng/Sai dựa trên việc phân tích các đoạn trích sử liệu ngắn.
+                                       * Ví dụ thực tế: Cho một đoạn trích trong Tuyên ngôn Độc lập năm 1945, yêu cầu học sinh đánh giá tính đúng/sai của các mệnh đề về bối cảnh lịch sử, ý nghĩa thời đại và bài học kinh nghiệm phát huy tinh thần yêu nước dân tộc.
+III. Dạng đề cuối kỳ
+                                          * Cấu trúc: Tương tự cấu trúc giữa kỳ, phối hợp kiểm tra trắc nghiệm khách quan và viết tự luận lập luận lịch sử.6
+                                          * Chuyên đề trọng tâm: Lớp 10: Lịch sử văn minh thế giới và Việt Nam thời kỳ cổ - trung đại. Lớp 11: Cách mạng công nghiệp, chủ nghĩa tư bản hiện đại, quá trình đấu tranh giành độc lập dân tộc ở Đông Nam Á, lịch sử chủ quyền biển đảo Việt Nam. Lớp 12: Lịch sử thế giới hiện đại từ năm 1945 và lịch sử Việt Nam giai đoạn từ năm 1919 đến nay.
+                                          * Dạng phân hóa: Sử dụng các câu hỏi tự luận mở hoặc câu hỏi trắc nghiệm Đúng/Sai phân tích bài học kinh nghiệm về xây dựng khối đại đoàn kết dân tộc và ngoại giao Việt Nam qua các thời kỳ lịch sử.1
+IV. Dạng đề thi tốt nghiệp THPT
+                                          * Cấu trúc chính thức: Trắc nghiệm khách quan   , thời gian làm bài 50 phút, gồm 2 phần thi chính (không có phần trả lời ngắn).10
+                                          * Tỷ lệ câu hỏi và điểm số:
+                                             * Phần I: 24 câu trắc nghiệm nhiều lựa chọn (mỗi câu trả lời đúng được 0,25 điểm, tổng 6,0 điểm).10
+                                             * Phần II: 4 câu trắc nghiệm Đúng/Sai, mỗi câu gồm 4 ý lựa chọn mệnh đề độc lập. Điểm tối đa của 1 câu hỏi là 1,0 điểm (làm đúng 1 ý được 0,1 điểm; đúng 2 ý được 0,25 điểm; đúng 3 ý được 0,5 điểm; đúng cả 4 ý được 1,0 điểm, tổng 4,0 điểm).10
+                                             * Phân bố chuyên đề: Trọng tâm kiến thức nằm ở lịch sử Việt Nam và lịch sử thế giới lớp 12, đặc biệt là các giai đoạn cách mạng giải phóng dân tộc (1930-1945) và kháng chiến chống ngoại xâm (1945-1975).
+                                             * Dạng bẫy thường gặp: Gài bẫy mốc thời gian tiệm cận; nhầm lẫn giữa tính chất nhiệm vụ chiến lược lâu dài và nhiệm vụ khẩn cấp trước mắt của cách mạng; nhầm lẫn nội dung giữa các Hội nghị Ban Chấp hành Trung ương Đảng và các Đại hội toàn quốc.
+V. So sánh giữa các năm
+                                             * Xu hướng thay đổi: Chuyển đổi toàn diện từ việc yêu cầu học sinh ghi nhớ máy móc các con số trận đánh, ngày tháng lịch sử (chương trình cũ 2006) sang việc cung cấp ngữ liệu lịch sử trực tiếp (sử liệu gốc) ngay trong đề để học sinh tự phân tích bản chất sự kiện (chương trình mới 2018).21
+                                             * Xu hướng tăng/giảm độ khó: Độ phân hóa học sinh tăng cao đột biến ở Phần II Đúng/Sai do yêu cầu năng lực đọc hiểu và tư duy phản biện lịch sử sắc bén thay vì chỉ nhớ sự kiện đơn thuần.1
+VI. Dự đoán tương lai
+                                             * Dự đoán xu hướng ra đề 2026–2030: Đề thi sẽ sử dụng nhiều ngữ liệu lịch sử đa dạng, tranh cổ động lịch sử đương thời, bản đồ chiến dịch gốc để đánh giá năng lực tư duy không gian lịch sử của học sinh.
+                                             * Những chuyên đề có khả năng xuất hiện cao: Lịch sử ngoại giao Việt Nam thời kỳ đổi mới và hội nhập quốc tế; lịch sử bảo vệ chủ quyền biển đảo (Trường Sa, Hoàng Sa) và các giá trị văn hóa di sản Đông Nam Á.
+VII. Gợi ý xây dựng ngân hàng đề
+                                             * Những dạng bài bắt buộc phải có: Hệ thống câu hỏi Đúng/Sai xây dựng trên ngữ liệu từ văn kiện Đảng, hồi ký lịch sử hoặc tư liệu báo chí chính thống đương thời.21
+                                             * Phân bổ độ khó: Đảm bảo tỷ lệ    (   Nhận biết -    Thông hiểu -    Vận dụng) để bảo đảm đánh giá công bằng năng lực học sinh.12
+                                             * Cách xây dựng đề chuẩn MOET: Trích dẫn tư liệu lịch sử phải ghi rõ nguồn gốc xuất bản; các câu hỏi Đúng/Sai phải được xây dựng chặt chẽ về mặt khoa học lịch sử, tránh các phát biểu mang tính chủ quan cảm tính.
+________________
+5. Môn Địa lí
+I. Tổng quan môn học
+Môn Địa lí hướng tới hình thành và phát triển các năng lực địa lí cốt lõi: nhận thức khoa học địa lí, tìm hiểu địa lí (thông qua khai thác Atlat, bản đồ, biểu đồ, bảng số liệu) và vận dụng kiến thức, kỹ năng địa lí vào thực tiễn cuộc sống, hướng tới phát triển bền vững.21
+II. Dạng đề giữa kỳ
+                                                * Cấu trúc: Thực hiện theo Công văn số 7991/BGDĐT-GDTrH: Đối với khối lớp 10, 11 cấu trúc gồm Trắc nghiệm khách quan    và Tự luận   .16 Đối với khối lớp 12 là Trắc nghiệm khách quan    và Tự luận   .16 Thời gian làm bài từ 45 đến 60 phút.5
+                                                * Ma trận: Phần trắc nghiệm khách quan (7,0 điểm) gồm 3 phần rõ rệt 6:
+                                                   * Phần 1: Trắc nghiệm nhiều lựa chọn (3,0 điểm).10
+                                                   * Phần 2: Trắc nghiệm Đúng/Sai (2,0 điểm).6
+                                                   * Phần 3: Trắc nghiệm Trả lời ngắn (2,0 điểm).6
+                                                   * Phần Tự luận chiếm 3,0 điểm (hoặc 1,0 điểm với lớp 12).16
+                                                   * Dạng câu hỏi: Trắc nghiệm nhiều lựa chọn sử dụng Atlat Địa lí Việt Nam; Đúng/Sai đánh giá nguyên nhân phát triển kinh tế vùng; Trả lời ngắn yêu cầu tính toán mật độ dân số, tỷ lệ cơ cấu kinh tế hoặc tốc độ tăng trưởng từ bảng số liệu thực tế.21
+                                                   * Ví dụ thực tế: Cho bảng số liệu về GDP của Việt Nam qua các năm, yêu cầu tính toán tốc độ tăng trưởng GDP năm sau so với năm trước dạng trả lời ngắn và đánh giá đúng/sai về xu hướng chuyển dịch cơ cấu kinh tế.
+III. Dạng đề cuối kỳ
+                                                   * Cấu trúc: Áp dụng ma trận trắc nghiệm khách quan (7,0 điểm) phối hợp tự luận thực hành địa lý (3,0 điểm).6
+                                                   * Chuyên đề trọng tâm: Lớp 10: Địa lí tự nhiên đại cương, địa lí dân cư và các ngành kinh tế thế giới. Lớp 11: Địa lí khu vực và một số quốc gia tiêu biểu (ASEAN, Hoa Kỳ, EU, Trung Quốc, Nhật Bản). Lớp 12: Địa lí tự nhiên Việt Nam, địa lí dân cư Việt Nam, các ngành kinh tế và các vùng kinh tế Việt Nam.
+                                                   * Dạng phân hóa: Khai thác sâu sắc kỹ năng xử lý bảng số liệu phức tạp, nhận diện biểu đồ thích hợp và giải thích mối quan hệ nhân quả giữa điều kiện tự nhiên và sự phát triển kinh tế - xã hội.1
+IV. Dạng đề thi tốt nghiệp THPT
+                                                   * Cấu trúc chính thức: Trắc nghiệm khách quan   , thời gian làm bài 50 phút, gồm 3 phần thi riêng biệt.3
+                                                   * Tỷ lệ câu hỏi và điểm số:
+                                                      * Phần I: 18 câu trắc nghiệm nhiều lựa chọn (mỗi câu trả lời đúng được 0,25 điểm, tổng 4,5 điểm).10
+                                                      * Phần II: 4 câu trắc nghiệm Đúng/Sai, mỗi câu gồm 4 ý lựa chọn mệnh đề độc lập (tối đa 1,0 điểm/câu, tổng 4,0 điểm).10
+                                                      * Phần III: 6 câu trắc nghiệm Trả lời ngắn (mỗi câu trả lời đúng được 0,25 điểm, tổng 1,5 điểm).10
+                                                      * Phân bố chuyên đề: Tập trung cao độ vào chương trình Địa lí Việt Nam lớp 12 (Tự nhiên, Dân cư, Kinh tế ngành, Các vùng kinh tế). Thí sinh được sử dụng Atlat Địa lí Việt Nam làm công cụ hỗ trợ trực tiếp.
+                                                      * Dạng bẫy thường gặp: Bẫy tính toán cơ cấu phần trăm (nhầm lẫn giữa số liệu tuyệt đối và số liệu tương đối); bẫy nhận diện loại biểu đồ (miền, cột chồng, đường, tròn); nhầm lẫn đặc điểm tự nhiên của các vùng miền khác nhau.
+V. So sánh giữa các năm
+                                                      * Xu hướng thay đổi: Giảm tải việc học thuộc lòng các số liệu kinh tế vĩ mô đã cũ; tăng cường kỹ năng thực hành Atlat, phân tích bảng số liệu thực tế.21
+                                                      * Xu hướng tăng/giảm độ khó: Độ phân hóa học sinh tăng lên rất cao ở Phần III (Trả lời ngắn) khi yêu cầu học sinh tự tính toán đưa ra đáp số chính xác thay vì chọn từ các phương án có sẵn.1
+VI. Dự đoán tương lai
+                                                      * Dự đoán xu hướng ra đề 2026–2030: Đề thi sẽ lồng ghép sâu sắc các mục tiêu phát triển bền vững (SDGs) của Liên Hợp Quốc, kinh tế tuần hoàn, bảo tồn đa dạng sinh học và phát triển kinh tế biển đảo.
+                                                      * Những chuyên đề có khả năng xuất hiện cao: Tác động của biến đổi khí hậu đối với Đồng bằng sông Cửu Long; chuyển dịch cơ cấu năng lượng sang điện gió, điện mặt trời; liên kết vùng trong phát triển công nghiệp và dịch vụ thông minh.
+VII. Gợi ý xây dựng ngân hàng đề
+                                                      * Những dạng bài bắt buộc phải có: Hệ thống câu hỏi kỹ năng khai thác Atlat Địa lí Việt Nam; bài toán xử lý số liệu địa lý dạng trả lời ngắn; câu hỏi Đúng/Sai đánh giá nguyên nhân phát triển kinh tế vùng kinh tế trọng điểm.
+                                                      * Phân bổ độ khó: Theo cấu trúc ba phần chuẩn của Bộ GD&ĐT:    Nhận biết -    Thông hiểu -    Vận dụng.17
+                                                      * Cách xây dựng đề chuẩn MOET: Đảm bảo các bảng số liệu, biểu đồ được trích xuất từ nguồn Niên giám Thống kê Việt Nam chính thức gần nhất; câu hỏi trả lời ngắn yêu cầu làm tròn số thập phân phải được ghi rõ ràng trong lệnh đề bài để học sinh điền đáp số chuẩn xác.10
+________________
+6. Môn Giáo dục Kinh tế và Pháp luật
+I. Tổng quan môn học
+Môn Giáo dục Kinh tế và Pháp luật (GD KT&PL) hướng tới phát triển năng lực nhận thức kinh tế, pháp luật; năng lực tìm hiểu và tham gia các hoạt động kinh tế - pháp luật; năng lực tự điều chỉnh hành vi và tự chủ phù hợp với các quy chuẩn đạo đức, pháp lý và xu thế phát triển bền vững của đất nước.31
+II. Dạng đề giữa kỳ
+                                                         * Cấu trúc: Thực hiện theo Công văn số 7991/BGDĐT-GDTrH: Đối với khối lớp 10, 11 cấu trúc gồm Trắc nghiệm khách quan    và Tự luận   .16 Đối với khối lớp 12 là Trắc nghiệm khách quan    và Tự luận   .16 Thời gian làm bài từ 45 đến 60 phút.5
+                                                         * Ma trận: Môn GD KT&PL không sử dụng phần Trả lời ngắn trong đề thi tốt nghiệp, do đó phần Trắc nghiệm định kỳ 7,0 điểm được cơ cấu lại: 3,0 điểm trắc nghiệm nhiều lựa chọn (Phần I) và 4,0 điểm trắc nghiệm Đúng/Sai (Phần II - chuyển toàn bộ điểm của phần trả lời ngắn sang Đúng/Sai theo Công văn 7991).6 Phần Tự luận chiếm 3,0 điểm (hoặc 1,0 điểm với lớp 12).16
+                                                         * Dạng câu hỏi: Trắc nghiệm nhiều lựa chọn kiểm tra khái niệm kinh tế, điều luật cơ bản; Đúng/Sai dựa trên các tình huống giả định đa chiều liên quan đến quyền, nghĩa vụ công dân hoặc hoạt động sản xuất kinh doanh.
+                                                         * Ví dụ thực tế: Cho tình huống một doanh nghiệp xả thải trái phép ra sông, yêu cầu học sinh đánh giá đúng/sai về các loại trách nhiệm pháp lý (dân sự, hành chính, hình sự) đối với các cá nhân liên quan.
+III. Dạng đề cuối kỳ
+                                                            * Cấu trúc: Tương tự giữa kỳ, áp dụng ma trận trắc nghiệm khách quan kết hợp tự luận tự xử lý tình huống thực tế.6
+                                                            * Chuyên đề trọng tâm: Lớp 10: Nền kinh tế và các chủ thể kinh tế, ngân sách nhà nước, thuế, pháp luật nước Cộng hòa xã hội chủ nghĩa Việt Nam. Lớp 11: Ý tưởng, cơ hội kinh doanh, năng lực kinh doanh, lạm phát, thất nghiệp, thị trường lao động. Lớp 12: Tăng trưởng và phát triển kinh tế, hội nhập kinh tế quốc tế, quyền và nghĩa vụ công dân trong các lĩnh vực đời sống.
+                                                            * Dạng phân hóa: Thể hiện ở các câu hỏi tình huống phức tạp có nhiều chủ thể tham gia, yêu cầu học sinh bóc tách hành vi của từng chủ thể để xác định tính đúng/sai pháp luật hoặc tính tối ưu kinh tế.1
+IV. Dạng đề thi tốt nghiệp THPT
+                                                            * Cấu trúc chính thức: Trắc nghiệm khách quan   , thời gian làm bài 50 phút, gồm 2 phần thi (không có phần trả lời ngắn).10
+                                                            * Tỷ lệ câu hỏi và điểm số:
+                                                               * Phần I: 24 câu trắc nghiệm nhiều lựa chọn (mỗi câu đúng được 0,25 điểm, tổng 6,0 điểm).10
+                                                               * Phần II: 4 câu trắc nghiệm Đúng/Sai, mỗi câu 4 ý (điểm tối đa 1,0 điểm/câu, tổng 4,0 điểm).10
+                                                               * Phân bổ chuyên đề: Tập trung cao độ vào chương trình lớp 12 (khoảng    số lệnh hỏi) 31, tích hợp sâu các kiến thức kinh tế vĩ mô và các nhóm quyền, nghĩa vụ cơ bản của công dân Việt Nam.
+                                                               * Dạng bẫy thường gặp: Bẫy xác định sai vai trò của các chủ thể trong tình huống kinh tế; nhầm lẫn giữa trách nhiệm pháp lý hành chính và hình sự; bẫy đan xen hành vi đúng và sai của cùng một nhân vật trong tình huống phức hợp.
+V. So sánh giữa các năm
+                                                                  * Xu hướng thay đổi: Chuyển giao mạnh mẽ từ môn Giáo dục công dân (GDCD) cũ vốn nặng về lý thuyết đạo đức trừu tượng và pháp luật cơ bản sang môn GD KT&PL mới mang tính thực tiễn cao.21 Môn học mới đưa vào các phạm trù kinh tế thị trường hiện đại (thất nghiệp, lạm phát, kinh doanh, hội nhập quốc tế) đòi hỏi tư duy phân tích sắc bén.31
+                                                                  * Xu hướng tăng/giảm độ khó: Tỷ trọng câu hỏi nhận biết và thông hiểu tuy chiếm khoảng    tổng số lệnh hỏi trong đề tham khảo, nhưng điểm số chỉ chiếm khoảng    tổng điểm (   điểm);    số điểm (   điểm) còn lại phân bổ cho các câu hỏi vận dụng mức độ cao thông qua định dạng Đúng/Sai phân hóa triệt để.33
+VI. Dự đoán tương lai
+                                                                     * Dự đoán xu hướng ra đề 2026–2030: Tăng cường các câu hỏi tình huống liên quan đến nền kinh tế số (thương mại điện tử, tiền kỹ thuật số, kinh tế chia sẻ), quyền sở hữu trí tuệ và bảo vệ thông tin cá nhân trên không gian mạng.
+                                                                     * Chuyên đề có khả năng xuất hiện cao: Pháp luật về bảo vệ quyền lợi người tiêu dùng trong kỷ nguyên số; khởi nghiệp sáng tạo và nghĩa vụ thuế của hộ kinh doanh cá thể; giải quyết tranh chấp kinh tế quốc tế.
+VII. Gợi ý xây dựng ngân hàng đề
+                                                                     * Những dạng bài bắt buộc phải có: Hệ thống câu hỏi tình huống kinh tế - pháp luật đa dạng (scenario-based questions) phục vụ định dạng Đúng/Sai; câu hỏi nhận diện hành vi vi phạm pháp luật dân sự, hình sự, hành chính, kỷ luật.
+                                                                     * Phân bổ độ khó: Đảm bảo phân hóa rõ rệt ba nhóm học sinh giỏi, khá, trung bình bằng cách tăng dần độ khó của các ý hỏi trong câu Đúng/Sai.23
+                                                                     * Cách xây dựng đề chuẩn MOET: Các tình huống đưa vào đề thi phải bám sát thực tiễn cuộc sống của học sinh THPT, ngôn ngữ diễn đạt trong sáng, không dùng từ ngữ tối nghĩa, bám sát các điều luật hiện hành của Việt Nam.
+________________
+7. Môn Vật lí
+I. Tổng quan môn học
+Môn Vật lí hướng tới phát triển năng lực nhận thức vật lí, tìm hiểu tự nhiên dưới góc độ vật lí, và vận dụng kiến thức, kỹ năng đã học để giải quyết các vấn đề trong thực tiễn. Chương trình mới giảm thiểu tính toán toán học phức tạp vô nghĩa, tăng cường bản chất vật lý và thực nghiệm sinh động.
+II. Dạng đề giữa kỳ
+                                                                     * Cấu trúc: Thực hiện theo Công văn số 7991/BGDĐT-GDTrH: Đối với khối lớp 10, 11 cấu trúc gồm Trắc nghiệm khách quan    và Tự luận   .16 Đối với khối lớp 12 là Trắc nghiệm khách quan    và Tự luận   .16 Thời gian làm bài từ 45 đến 60 phút.5
+                                                                     * Ma trận: Phần trắc nghiệm khách quan (7,0 điểm) gồm 3 phần rõ rệt 6:
+                                                                        * Phần 1: Trắc nghiệm nhiều lựa chọn (3,0 điểm).10
+                                                                        * Phần 2: Trắc nghiệm Đúng/Sai (2,0 điểm).6
+                                                                        * Phần 3: Trắc nghiệm Trả lời ngắn (2,0 điểm).6
+                                                                        * Phần Tự luận chiếm 3,0 điểm (hoặc 1,0 điểm với lớp 12).16
+                                                                        * Dạng câu hỏi: Trắc nghiệm nhiều lựa chọn lý thuyết động lực học, sóng điện từ cơ bản; Đúng/Sai về sơ đồ mạch điện hoặc quá trình biến đổi trạng thái khí; Trả lời ngắn về kết quả tính toán số liệu cụ thể.21
+                                                                        * Ví dụ thực tế: Cho đồ thị biến thiên áp suất theo thể tích của một khối khí lý tưởng trong một chu trình nhiệt, yêu cầu học sinh đánh giá đúng/sai về công và nhiệt lượng trao đổi trong từng quá trình.
+III. Dạng đề cuối kỳ
+                                                                        * Cấu trúc: Áp dụng ma trận trắc nghiệm khách quan (7,0 điểm) phối hợp tự luận thực hành vật lý (3,0 điểm).6
+                                                                        * Chuyên đề trọng tâm: Lớp 10: Động học, động lực học, năng lượng, động lượng, chuyển động tròn. Lớp 11: Dao động cơ, sóng cơ, điện trường, dòng điện không đổi. Lớp 12: Vật lí nhiệt, khí lí tưởng, từ trường, vật lí hạt nhân.
+                                                                        * Dạng phân hóa: Các bài tập phân tích đồ thị thực nghiệm, các câu hỏi Đúng/Sai đòi hỏi hiểu rõ cơ chế vật lí thay vì chỉ áp dụng công thức thuần túy.1
+IV. Dạng đề thi tốt nghiệp THPT
+                                                                        * Cấu trúc chính thức: Trắc nghiệm khách quan   , thời gian làm bài 50 phút, gồm 3 phần thi riêng biệt.3
+                                                                        * Tỷ lệ câu hỏi và điểm số:
+                                                                           * Phần I: 18 câu trắc nghiệm nhiều lựa chọn (mỗi câu trả lời đúng được 0,25 điểm, tổng 4,5 điểm).10
+                                                                           * Phần II: 4 câu trắc nghiệm Đúng/Sai, mỗi câu gồm 4 ý lựa chọn mệnh đề độc lập (tối đa 1,0 điểm/câu, tổng 4,0 điểm).10
+                                                                           * Phần III: 6 câu trắc nghiệm Trả lời ngắn (mỗi câu trả lời đúng được 0,25 điểm, tổng 1,5 điểm).10
+                                                                           * Phân bố chuyên đề: Trọng tâm nằm ở chương trình Vật lí lớp 12 (Vật lí nhiệt, Khí lí tưởng, Từ trường, Vật lí hạt nhân) và các nội dung thực nghiệm tích hợp liên môn khoa học tự nhiên.
+                                                                           * Dạng bẫy thường gặp: Nhầm lẫn các đơn vị đo lường vật lý (đổi từ lít sang   , đổi đơn vị nhiệt độ K sang độ C); bẫy về chiều dòng điện cảm ứng hoặc các đại lượng đặc trưng trong phản ứng hạt nhân.
+V. So sánh giữa các năm
+                                                                              * Xu hướng thay đổi: Chuyển đổi từ đề thi 40 câu trắc nghiệm nhiều lựa chọn thuần túy sang cấu trúc 3 phần tích hợp.21 Trọng tâm bài tập chuyển từ "toán vật lý" (tính toán tích phân, lượng giác phức tạp trong dao động cơ, dòng điện xoay chiều của chương trình 2006) sang đánh giá trực quan hiện tượng nhiệt, chất khí và hạt nhân.21
+                                                                              * Xu hướng tăng/giảm độ khó: Độ phân hóa học sinh tăng cao rõ rệt ở Phần II (Đúng/Sai) và Phần III (Trả lời ngắn) do triệt tiêu khả năng chọn mò đáp án.1
+VI. Dự đoán tương lai
+                                                                              * Dự đoán xu hướng ra đề 2026–2030: Gia tăng các câu hỏi khai thác dữ liệu thực nghiệm từ các phòng thí nghiệm, bài toán thực tế về năng lượng tái tạo, y học hạt nhân và truyền thông tin vô tuyến.
+                                                                              * Chuyên đề có khả năng xuất hiện cao: Ứng dụng mô hình khí lý tưởng trong khí tượng học; tính toán hiệu suất động cơ nhiệt thực tế; phân rã hạt nhân trong chẩn đoán y học.
+VII. Gợi ý xây dựng ngân hàng đề
+                                                                              * Những dạng bài bắt buộc phải có: Câu hỏi Đúng/Sai về chu trình biến đổi chất khí; bài toán tính toán trả lời ngắn về công lượng tử, năng lượng liên kết hạt nhân; phân tích sai số thực nghiệm vật lý.
+                                                                              * Phân bổ độ khó: Theo tỷ lệ    (   Nhận biết -    Thông hiểu -    Vận dụng -    Vận dụng cao) chuyển dịch linh hoạt theo hướng đánh giá năng lực của Bộ GD&ĐT.12
+                                                                              * Cách xây dựng đề chuẩn MOET: Đảm bảo mọi câu hỏi tính toán đều gắn liền với một bối cảnh thực tiễn hoặc thực nghiệm vật lí rõ ràng; hạn chế các bài toán giả lập không có ý nghĩa thực tế vật lý.
+________________
+8. Môn Hóa học
+I. Tổng quan môn học
+Môn Hóa học hướng tới hình thành và phát triển năng lực nhận thức hóa học, tìm hiểu thế giới tự nhiên dưới góc độ hóa học, và vận dụng kiến thức, kỹ năng đã học vào thực tiễn cuộc sống và sản xuất hóa học.
+II. Dạng đề giữa kỳ
+                                                                                 * Cấu trúc: Thực hiện theo Công văn số 7991/BGDĐT-GDTrH: Đối với khối lớp 10, 11 cấu trúc gồm Trắc nghiệm khách quan    và Tự luận   .16 Đối với khối lớp 12 là Trắc nghiệm khách quan    và Tự luận   .16 Thời gian làm bài từ 45 đến 60 phút.5
+                                                                                 * Ma trận: Phần trắc nghiệm khách quan (7,0 điểm) gồm 3 phần rõ rệt 6:
+                                                                                    * Phần 1: Trắc nghiệm nhiều lựa chọn (3,0 điểm).10
+                                                                                    * Phần 2: Trắc nghiệm Đúng/Sai (2,0 điểm).6
+                                                                                    * Phần 3: Trắc nghiệm Trả lời ngắn (2,0 điểm).6
+                                                                                    * Phần Tự luận chiếm 3,0 điểm (hoặc 1,0 điểm với lớp 12).16
+                                                                                    * Dạng câu hỏi: Trắc nghiệm nhiều lựa chọn lý thuyết cấu tạo nguyên tử, phản ứng oxi hóa - khử; Đúng/Sai về sơ đồ thực nghiệm điều chế chất hữu cơ; Trả lời ngắn về tính toán khối lượng sản phẩm, hiệu suất hóa học.21
+                                                                                    * Ví dụ thực tế: Cho sơ đồ thiết bị chưng cất tinh dầu sả chanh, yêu cầu học sinh đánh giá đúng/sai về vai trò của đá bọt, ống ngưng tụ và nguyên lý phân tách các chất hữu cơ.
+III. Dạng đề cuối kỳ
+                                                                                    * Cấu trúc: Áp dụng ma trận trắc nghiệm khách quan (7,0 điểm) phối hợp tự luận thực hành hóa học (3,0 điểm).6
+                                                                                    * Chuyên đề trọng tâm: Lớp 10: Cấu tạo nguyên tử, liên kết hóa học, phản ứng oxi hóa - khử, tốc độ phản ứng, nguyên tố halogen. Lớp 11: Cân bằng hóa học, hóa học vô cơ (Nitrogen - Sulfur), hóa học hữu cơ đại cương, hydrocarbon và dẫn xuất. Lớp 12: Ester - Lipid, carbohydrate, amine - amino acid - protein, polyme, kim loại kiềm, kiềm thổ, nhôm, phức chất và hóa học vô cơ ứng dụng.
+                                                                                    * Dạng phân hóa: Phân hóa mạnh mẽ ở các câu hỏi Đúng/Sai về cơ chế phản ứng hữu cơ, động hóa học và các câu hỏi trả lời ngắn tính toán hằng số cân bằng   .1
+IV. Dạng đề thi tốt nghiệp THPT
+                                                                                       * Cấu trúc chính thức: Trắc nghiệm khách quan   , thời gian làm bài 50 phút, gồm 3 phần thi riêng biệt.3
+                                                                                       * Tỷ lệ câu hỏi và điểm số:
+                                                                                          * Phần I: 18 câu trắc nghiệm nhiều lựa chọn (mỗi câu trả lời đúng được 0,25 điểm, tổng 4,5 điểm).10
+                                                                                          * Phần II: 4 câu trắc nghiệm Đúng/Sai, mỗi câu gồm 4 ý lựa chọn mệnh đề độc lập (tối đa 1,0 điểm/câu, tổng 4,0 điểm).10
+                                                                                          * Phần III: 6 câu trắc nghiệm Trả lời ngắn (mỗi câu trả lời đúng được 0,25 điểm, tổng 1,5 điểm).10
+                                                                                          * Phân bố chuyên đề: Chủ yếu tập trung vào chương trình Hóa học lớp 12 (Ester - Lipid, carbohydrate, phức chất, hóa học vô cơ ứng dụng).
+                                                                                          * Dạng bẫy thường gặp: Bẫy điều kiện phản ứng xúc tác; nhầm lẫn giữa đồng phân cấu tạo và đồng phân hình học; bẫy đếm số phát biểu đúng/sai về carbohydrate.
+V. So sánh giữa các năm
+                                                                                          * Xu hướng thay đổi: Giảm thiểu tối đa các bài toán tính toán phi thực tế (như bài toán quy đổi hỗn hợp quá phức tạp của chương trình 2006). Thay bằng kiểm tra cấu trúc hóa học thực tiễn, phức chất và hóa học ứng dụng xanh.21
+                                                                                          * Xu hướng tăng/giảm độ khó: Độ phân hóa học sinh tăng lên đáng kể thông qua định dạng Đúng/Sai và Trả lời ngắn, yêu cầu học sinh nắm chắc kiến thức thực nghiệm hơn là kỹ xảo toán học.1
+VI. Dự đoán tương lai
+                                                                                          * Dự đoán xu hướng ra đề 2026–2030: Tập trung mạnh vào mảng hóa học môi trường, hóa học xanh, pin điện hóa thế hệ mới và vật liệu nano, polymer thông minh.
+                                                                                          * Chuyên đề có khả năng xuất hiện cao: Cơ chế hoạt động của pin lithium-ion; xử lý khí thải công nghiệp bằng các phản ứng xúc tác; tính toán động hóa học và hằng số cân bằng trong y dược.
+VII. Gợi ý xây dựng ngân hàng đề
+                                                                                          * Những dạng bài bắt buộc phải có: Sơ đồ điều chế thực nghiệm hữu cơ; câu hỏi Đúng/Sai về tính chất của phức chất kim loại chuyển tiếp; câu hỏi trả lời ngắn tính toán điện lượng hoặc pH dung dịch thực tế.
+                                                                                          * Phân bổ độ khó: Đảm bảo cấu trúc    hoặc    phù hợp với tiêu chuẩn đánh giá năng lực của Bộ GD&ĐT.12
+                                                                                          * Cách xây dựng đề chuẩn MOET: Tránh đưa vào các bài toán tính toán phi thực tế; tập trung xây dựng ngữ liệu từ các báo cáo khoa học thực tiễn hoặc quy trình sản xuất công nghiệp thực tế.
+________________
+9. Môn Sinh học
+I. Tổng quan môn học
+Môn Sinh học hướng tới hình thành và phát triển năng lực nhận thức sinh học, tìm hiểu thế giới sống, và vận dụng kiến thức, kỹ năng sinh học để giải quyết các vấn đề liên quan đến y học, nông nghiệp, bảo vệ sức khỏe và môi trường bền vững.
+II. Dạng đề giữa kỳ
+                                                                                             * Cấu trúc: Thực hiện theo Công văn số 7991/BGDĐT-GDTrH: Đối với khối lớp 10, 11 cấu trúc gồm Trắc nghiệm khách quan    và Tự luận   .16 Đối với khối lớp 12 là Trắc nghiệm khách quan    và Tự luận   .16 Thời gian làm bài từ 45 đến 60 phút.5
+                                                                                             * Ma trận: Phần trắc nghiệm khách quan (7,0 điểm) gồm 3 phần rõ rệt 6:
+                                                                                                * Phần 1: Trắc nghiệm nhiều lựa chọn (3,0 điểm).10
+                                                                                                * Phần 2: Trắc nghiệm Đúng/Sai (2,0 điểm).6
+                                                                                                * Phần 3: Trắc nghiệm Trả lời ngắn (2,0 điểm).6
+                                                                                                * Phần Tự luận chiếm 3,0 điểm (hoặc 1,0 điểm với lớp 12).16
+                                                                                                * Dạng câu hỏi: Trắc nghiệm nhiều lựa chọn lý thuyết sinh học phân tử; Đúng/Sai về cơ chế di truyền hoặc sinh thái học; Trả lời ngắn về tính toán số lượng nucleotit, tần số alen.21
+                                                                                                * Ví dụ thực tế: Cho một sơ đồ về chuỗi thức ăn trong hệ sinh thái, yêu cầu học sinh đánh giá đúng/sai về vị trí của các loài và dòng truyền năng lượng qua các bậc dinh dưỡng.
+III. Dạng đề cuối kỳ
+                                                                                                * Cấu trúc: Áp dụng ma trận trắc nghiệm khách quan (7,0 điểm) phối hợp tự luận thực hành sinh học (3,0 điểm).6
+                                                                                                * Chuyên đề trọng tâm: Lớp 10: Sinh học tế bào, vi sinh vật và virus. Lớp 11: Trao đổi chất và chuyển hóa năng lượng ở sinh vật, cảm ứng, sinh trưởng, sinh sản. Lớp 12: Di truyền học, Tiến hóa học, Sinh thái học.
+                                                                                                * Dạng phân hóa: Các câu hỏi Đúng/Sai phân tích quy luật di truyền tương tác gen phức tạp, các bài toán sinh thái học thực tế có sử dụng biểu đồ biến động số lượng cá thể.1
+IV. Dạng đề thi tốt nghiệp THPT
+                                                                                                * Cấu trúc chính thức: Trắc nghiệm khách quan   , thời gian làm bài 50 phút, gồm 3 phần thi riêng biệt.3
+                                                                                                * Tỷ lệ câu hỏi và điểm số:
+                                                                                                   * Phần I: 18 câu trắc nghiệm nhiều lựa chọn (mỗi câu trả lời đúng được 0,25 điểm, tổng 4,5 điểm).10
+                                                                                                   * Phần II: 4 câu trắc nghiệm Đúng/Sai, mỗi câu gồm 4 ý lựa chọn mệnh đề độc lập (tối đa 1,0 điểm/câu, tổng 4,0 điểm).10
+                                                                                                   * Phần III: 6 câu trắc nghiệm Trả lời ngắn (mỗi câu trả lời đúng được 0,25 điểm, tổng 1,5 điểm).10
+                                                                                                   * Phân bố chuyên đề: Chủ yếu tập trung vào chương trình Sinh học lớp 12 (Di truyền học, Tiến hóa, Sinh thái) và tích hợp các ứng dụng công nghệ sinh học hiện đại.
+                                                                                                   * Dạng bẫy thường gặp: Bẫy đếm phát biểu sai về quy luật di truyền liên kết; nhầm lẫn cơ chế tác động của đột biến gen và đột biến nhiễm sắc thể; bẫy về chiều và thành phần tham gia quá trình nhân đôi, phiên mã, dịch mã.
+V. So sánh giữa các năm
+                                                                                                   * Xu hướng thay đổi: Loại bỏ hoàn toàn các bài toán di truyền phi thực tế (bài tập phả hệ quá phức tạp không có cơ sở khoa học thực tiễn của chương trình 2006). Chuyển hướng sang kiểm tra bản chất sinh học, sinh học thực nghiệm, công nghệ gen và bảo vệ môi trường tự nhiên.21
+                                                                                                   * Xu hướng tăng/giảm độ khó: Độ phân hóa nâng cao thông qua việc tích hợp các sơ đồ thí nghiệm thực tế của các nhà khoa học, yêu cầu kỹ năng đọc hiểu và phân tích dữ liệu sinh học vượt trội.1
+VI. Dự đoán tương lai
+                                                                                                   * Dự đoán xu hướng ra đề 2026–2030: Đề tài về công nghệ chỉnh sửa gen CRISPR, nông nghiệp công nghệ cao thích ứng biến đổi khí hậu, sinh học y học cá thể hóa sẽ xuất hiện dày đặc.
+                                                                                                   * Chuyên đề có khả năng xuất hiện cao: Ứng dụng di truyền học biểu sinh (epigenetics); kiểm soát cân bằng sinh thái vĩ mô; phân tích phác đồ điều trị bệnh di truyền bằng liệu pháp gen thế hệ mới.
+VII. Gợi ý xây dựng ngân hàng đề
+                                                                                                   * Những dạng bài bắt buộc phải có: Biện luận sơ đồ lai di truyền thực tế; câu hỏi Đúng/Sai về cơ chế điều hòa hoạt động của gen (mô hình operon Lac); câu hỏi trả lời ngắn tính tần số allele quần thể chịu tác động của nhân tố tiến hóa.
+                                                                                                   * Phân bổ độ khó: Tuân thủ chặt chẽ tỷ lệ    hoặc    theo định hướng chung của Bộ GD&ĐT.12
+                                                                                                   * Cách xây dựng đề chuẩn MOET: Tránh hoàn toàn việc lạm dụng toán học thuần túy để làm khó học sinh trong môn Sinh học; tăng cường các câu hỏi đọc dịch số liệu biểu đồ hoặc sơ đồ thí nghiệm khoa học thực tế.
+________________
+10. Môn Công nghệ
+I. Tổng quan môn học
+Môn Công nghệ hướng tới phát triển năng lực thiết kế công nghệ, đánh giá công nghệ, sử dụng công nghệ an toàn, hiệu quả và định hướng nghề nghiệp kỹ thuật rõ ràng cho học sinh. Môn học được chia thành hai phân môn hoàn toàn độc lập khi tổ chức thi tốt nghiệp: Công nghệ Công nghiệp và Công nghệ Nông nghiệp.1
+II. Dạng đề giữa kỳ
+                                                                                                      * Cấu trúc: Thực hiện theo Công văn số 7991/BGDĐT-GDTrH: Đối với khối lớp 10, 11 cấu trúc gồm Trắc nghiệm khách quan    và Tự luận   .16 Đối với khối lớp 12 là Trắc nghiệm khách quan    và Tự luận   .16 Thời gian làm bài từ 45 đến 60 phút.5
+                                                                                                      * Ma trận: Môn Công nghệ không sử dụng phần Trả lời ngắn trong đề thi tốt nghiệp, do đó phần Trắc nghiệm định kỳ 7,0 điểm được cơ cấu lại: 3,0 điểm trắc nghiệm nhiều lựa chọn (Phần I) và 4,0 điểm trắc nghiệm Đúng/Sai (Phần II - chuyển toàn bộ điểm của phần trả lời ngắn sang Đúng/Sai theo Công văn 7991).6 Phần Tự luận chiếm 3,0 điểm (hoặc 1,0 điểm với lớp 12).16
+                                                                                                      * Dạng câu hỏi: MCQ lý thuyết cơ bản về vẽ kỹ thuật, vật liệu cơ khí hoặc cơ cấu giống cây trồng; Đúng/Sai về sơ đồ mạch điện hoặc quy trình kỹ thuật chăn nuôi/trồng trọt.34
+                                                                                                      * Ví dụ thực tế: (Nông nghiệp) Cho quy trình bón phân cho một loại cây trồng cụ thể, yêu cầu học sinh đánh giá đúng/sai về chủng loại phân bón sử dụng và tác động của nó đến độ chua của đất.35
+III. Dạng đề cuối kỳ
+                                                                                                         * Cấu trúc: Tương tự giữa kỳ, thiết lập đề thi phân hóa rõ rệt theo phân môn Công nghiệp hoặc Nông nghiệp mà học sinh được học.11
+                                                                                                         * Chuyên đề trọng tâm:
+                                                                                                         * Công nghệ Công nghiệp: Thiết kế kỹ thuật, vẽ kỹ thuật cơ khí, mạch điện tử cơ bản, hệ thống điện gia đình và công nghiệp nhẹ.
+                                                                                                         * Công nghệ Nông nghiệp: Trồng trọt công nghệ cao, chăn nuôi thông minh, lâm nghiệp phát triển bền vững và thủy sản tuần hoàn (RAS).34
+                                                                                                         * Dạng phân hóa: Các câu hỏi Đúng/Sai yêu cầu học sinh đề xuất phương án kỹ thuật tối ưu hóa quy trình sản xuất thực tế.1
+IV. Dạng đề thi tốt nghiệp THPT
+                                                                                                         * Cấu trúc chính thức: Trắc nghiệm khách quan   , thời gian làm bài 50 phút, gồm hai phân môn hoàn toàn riêng biệt với mã đề độc lập: Công nghệ Công nghiệp và Công nghệ Nông nghiệp.1 Đề thi gồm 2 phần chính (không có phần trả lời ngắn).10
+                                                                                                         * Tỷ lệ câu hỏi và điểm số:
+                                                                                                            * Phần I: 24 câu trắc nghiệm nhiều lựa chọn (mỗi câu đúng được 0,25 điểm, tổng 6,0 điểm).10
+                                                                                                            * Phần II: 4 câu trắc nghiệm Đúng/Sai, mỗi câu 4 ý (điểm tối đa 1,0 điểm/câu, tổng 4,0 điểm).10
+                                                                                                            * Phân bố chuyên đề thực tế:
+                                                                                                            * Công nghệ Nông nghiệp: Các câu hỏi xoay quanh vai trò và sự phát triển của trồng trọt, chăn nuôi, lâm nghiệp, thủy sản; kỹ thuật canh tác nhà kính; quản lý dịch bệnh sinh học cho cây trồng và vật nuôi.34
+                                                                                                            * Công nghệ Công nghiệp: Tập trung vào các chủ đề thiết kế mạch điện, các hệ thống tự động hóa cơ bản và an toàn lao động công nghiệp.
+                                                                                                            * Dạng bẫy thường gặp: Nhầm lẫn giữa các bước trong quy trình công nghệ (quy trình nhân giống vô tính, quy trình lắp ráp mạch điện); bẫy xác định sai vai trò của các yếu tố sinh học/kỹ thuật trong mô hình sản xuất tuần hoàn.
+V. So sánh giữa các năm
+                                                                                                            * Xu hướng thay đổi: Đây là môn thi tốt nghiệp hoàn toàn mới áp dụng từ năm 2025 theo chương trình GDPT 2018 (chương trình cũ 2006 không tổ chức thi tốt nghiệp môn Công nghệ).3 Đề thi chuyển dịch từ việc kiểm tra ghi nhớ lý thuyết kỹ thuật khô khan sang đánh giá tư duy ứng dụng công nghệ thực hành và định hướng nghề nghiệp kỹ sư/chuyên gia nông nghiệp.3
+                                                                                                            * Xu hướng tăng/giảm độ khó: Đề thi phân hóa rõ rệt năng lực thực hành của học sinh thông qua các tình huống kỹ thuật thực tế yêu cầu xử lý giải pháp công nghệ.3
+VI. Dự đoán tương lai
+                                                                                                            * Dự đoán xu hướng ra đề 2026–2030: Tăng cường ứng dụng các thành tựu Cách mạng công nghiệp 4.0 vào đề thi (IoT trong nông nghiệp, hệ thống điều khiển tự động PLC, năng lượng sinh khối, vật liệu xây dựng thông minh).
+                                                                                                            * Chuyên đề có khả năng xuất hiện cao: Thiết kế hệ thống tưới tiêu tự động thông minh; quản lý rừng ngập mặn ứng phó thiên tai biển 35; tối ưu hóa hệ thống điện mặt trời mái nhà.
+VII. Gợi ý xây dựng ngân hàng đề
+                                                                                                            * Những dạng bài bắt buộc phải có: Sơ đồ kỹ thuật mạch điện tử (Công nghiệp); mô hình hệ thống nuôi thủy sản tuần hoàn RAS hoặc tiêu chuẩn sản xuất sạch VietGAP (Nông nghiệp).34
+                                                                                                            * Phân bổ độ khó: Phân bổ điểm số theo cơ cấu chuẩn hóa    (   Nhận biết -    Thông hiểu -    Vận dụng) dựa trên khung ma trận của Bộ GD&ĐT.17
+                                                                                                            * Cách xây dựng đề chuẩn MOET: Tránh đưa vào các câu hỏi mang tính chất giáo điều lý thuyết; mọi câu hỏi phải xuất phát từ một nhu cầu sản xuất thực tiễn hoặc một mô hình thiết bị kỹ thuật đang được ứng dụng phổ biến.35
+________________
+11. Môn Tin học
+I. Tổng quan môn học
+Môn Tin học hướng tới hình thành và phát triển năng lực số, tư duy máy tính, thiết kế và phát triển hệ thống thông tin, sử dụng công nghệ thông tin một cách an toàn, có trách nhiệm và định hướng nghề nghiệp rõ ràng cho học sinh.
+II. Dạng đề giữa kỳ
+                                                                                                               * Cấu trúc: Thực hiện theo Công văn số 7991/BGDĐT-GDTrH: Đối với khối lớp 10, 11 cấu trúc gồm Trắc nghiệm khách quan    và Tự luận   .16 Đối với khối lớp 12 là Trắc nghiệm khách quan    và Tự luận   .16 Thời gian làm bài từ 45 đến 60 phút.5
+                                                                                                               * Ma trận: Môn Tin học không sử dụng phần Trả lời ngắn trong đề thi tốt nghiệp, do đó phần Trắc nghiệm định kỳ 7,0 điểm được cơ cấu lại: 3,0 điểm trắc nghiệm nhiều lựa chọn (Phần I) và 4,0 điểm trắc nghiệm Đúng/Sai (Phần II - chuyển toàn bộ điểm của phần trả lời ngắn sang Đúng/Sai theo Công văn 7991).6 Phần Tự luận chiếm 3,0 điểm (hoặc 1,0 điểm với lớp 12).16
+                                                                                                               * Dạng câu hỏi: MCQ lý thuyết cơ bản về phần cứng, phần mềm, mạng máy tính; Đúng/Sai về thuật toán, viết mã nguồn Python/C++ hoặc quản trị cơ sở dữ liệu.37
+                                                                                                               * Ví dụ thực tế: Cho một đoạn chương trình Python ngắn tìm số lớn nhất trong mảng, yêu cầu học sinh đánh giá đúng/sai về kết quả đầu ra khi thay đổi giá trị đầu vào hoặc vai trò của các biến trong chương trình.
+III. Dạng đề cuối kỳ
+                                                                                                                  * Cấu trúc: Áp dụng ma trận trắc nghiệm khách quan (7,0 điểm) kết hợp tự luận thực hành viết mã nguồn hoặc thiết kế cơ sở dữ liệu trên giấy (3,0 điểm).6
+                                                                                                                  * Chuyên đề trọng tâm: Lớp 10: Tin học và xử lý thông tin, mạng máy tính và Internet, kiến thức về hệ điều hành và lập trình Python cơ bản. Lớp 11: Cơ sở dữ liệu và thiết kế trang web cơ bản. Lớp 12: Hệ quản trị cơ sở dữ liệu trực tuyến, lập trình mạng máy tính và định hướng nghề nghiệp Tin học.
+                                                                                                                  * Dạng phân hóa: Phân hóa sâu sắc giữa hai nhóm học sinh theo định hướng Khoa học máy tính (CS) và Tin học ứng dụng (ICT) thông qua các câu hỏi Đúng/Sai về giải thuật cấu trúc dữ liệu hoặc truy vấn SQL phức tạp.21
+IV. Dạng đề thi tốt nghiệp THPT
+                                                                                                                  * Cấu trúc chính thức: Trắc nghiệm khách quan   , thời gian làm bài 50 phút, đề gồm 2 phần lớn và phạm vi kiến thức trải rộng xuyên suốt từ lớp 10, 11 đến lớp 12.10
+                                                                                                                  * Tỷ lệ câu hỏi và điểm số:
+                                                                                                                     * Phần I: 24 câu trắc nghiệm nhiều lựa chọn (mỗi câu đúng được 0,25 điểm, tổng 6,0 điểm).10
+                                                                                                                     * Phần II: 4 câu trắc nghiệm Đúng/Sai, mỗi câu 4 ý (điểm tối đa 1,0 điểm/câu, tổng 4,0 điểm).10
+                                                                                                                     * Thiết kế phân hóa định hướng đặc thù: Ở Phần II, đề thi được chia thành hai nhóm câu hỏi A và B 21:
+                                                                                                                     * Nhóm A: Gồm 2 câu hỏi chung áp dụng cho tất cả các thí sinh.21
+                                                                                                                     * Nhóm B: Phần thi riêng biệt gồm 4 câu hỏi, chia làm hai phần dành cho hai đối tượng: thí sinh theo định hướng Khoa học máy tính (CS) và thí sinh theo định hướng Tin học ứng dụng (ICT).21 Thí sinh chỉ được chọn làm một trong hai phần của Nhóm B. Mỗi định hướng tương ứng với 2 câu hỏi Đúng/Sai (tổng 2,0 điểm) tạo nên cấu trúc 10,0 điểm trọn vẹn.
+                                                                                                                     * Dạng bẫy thường gặp: Bẫy cú pháp lập trình (sai dấu thụt dòng trong Python, sai kiểu dữ liệu); nhầm lẫn giữa các câu lệnh truy vấn SQL (SELECT, INSERT, UPDATE, DELETE); bẫy phân biệt địa chỉ IP và giao thức mạng.
+V. So sánh giữa các năm
+                                                                                                                     * Xu hướng thay đổi: Đây là môn thi tốt nghiệp hoàn toàn mới áp dụng từ năm 2025 theo chương trình GDPT 2018 (chương trình cũ 2006 không tổ chức thi tốt nghiệp môn Tin học).3 Đề thi chuyển đổi từ việc kiểm tra sử dụng phần mềm văn phòng đơn thuần sang kiểm tra sâu về tư duy máy tính, tư duy lập trình giải quyết vấn đề và quản trị dữ liệu quy mô lớn.3
+                                                                                                                     * Xu hướng tăng/giảm độ khó: Độ phân hóa cực cao nhờ thiết kế chia nhánh định hướng học tập riêng biệt (CS và ICT).21
+VI. Dự đoán tương lai
+                                                                                                                     * Dự đoán xu hướng ra đề 2026–2030: Tăng cường các câu hỏi liên quan đến Trí tuệ nhân tạo (AI), Máy học (Machine Learning), Điện toán đám mây và An ninh mạng thực tế.
+                                                                                                                     * Chuyên đề có khả năng xuất hiện cao: Phân tích dữ liệu lớn (Big Data); thiết kế truy vấn dữ liệu NoSQL; các nguyên lý bảo mật hệ thống thông tin doanh nghiệp.
+VII. Gợi ý xây dựng ngân hàng đề
+                                                                                                                     * Những dạng bài bắt buộc phải có: Hệ thống câu hỏi lập trình thuật toán cơ bản bằng Python/C++ (định hướng CS); câu hỏi thiết kế mô hình thực thể liên kết ERD và truy vấn SQL (định hướng ICT).21
+                                                                                                                     * Phân bổ độ khó: Đảm bảo cân bằng độ khó giữa nhánh CS và nhánh ICT ở phần tự chọn để bảo đảm tính công bằng tuyệt đối cho thí sinh.21
+                                                                                                                     * Cách xây dựng đề chuẩn MOET: Đoạn mã nguồn đưa vào đề thi phải được tối giản hóa tối đa để tránh mất thời gian đọc của học sinh nhưng vẫn giữ nguyên bản chất thuật toán cần đánh giá.
+________________
+Bảng so sánh cấu trúc đánh giá các môn học
+Bảng dưới đây cung cấp cái nhìn tổng hợp về cấu trúc, thời gian làm bài, cấu trúc câu hỏi và thang điểm của các môn học trong Kỳ thi tốt nghiệp THPT từ năm 2025:
+
+
+Môn học
+	Hình thức thi định kỳ (GK/CK)
+	Hình thức thi tốt nghiệp
+	Thời gian tốt nghiệp
+	Chi tiết cấu trúc câu hỏi tốt nghiệp
+	Thang điểm chi tiết tốt nghiệp
+	Ngữ văn
+	Tự luận    16
+	Tự luận    18
+	120 phút
+	Phần I: Đọc hiểu (4 câu)
+
+
+Phần II: Viết (1 câu đoạn văn, 1 câu bài văn) 3
+	Đọc hiểu: 4,0đ
+
+
+Viết: 6,0đ 10
+	Toán
+	TNKQ (  ) + TL (  ) 16
+	Trắc nghiệm   
+	90 phút
+	Phần I: 12 MCQ
+
+
+Phần II: 4 câu Đúng/Sai
+
+
+Phần III: 6 câu Trả lời ngắn 10
+	Phần I: 3,0đ
+
+
+Phần II: 4,0đ
+
+
+Phần III: 3,0đ 10
+	Tiếng Anh
+	TNKQ kết hợp tự luận
+	Trắc nghiệm   
+	50 phút
+	40 câu trắc nghiệm nhiều lựa chọn (MCQ) 10
+	Mỗi câu đúng được 0,25đ (Tổng 10,0đ) 10
+	Vật lí
+	TNKQ (  ) + TL (  ) 6
+	Trắc nghiệm   
+	50 phút
+	Phần I: 18 MCQ
+
+
+Phần II: 4 câu Đúng/Sai
+
+
+Phần III: 6 câu Trả lời ngắn 10
+	Phần I: 4,5đ
+
+
+Phần II: 4,0đ
+
+
+Phần III: 1,5đ 10
+	Hóa học
+	TNKQ (  ) + TL (  ) 6
+	Trắc nghiệm   
+	50 phút
+	Phần I: 18 MCQ
+
+
+Phần II: 4 câu Đúng/Sai
+
+
+Phần III: 6 câu Trả lời ngắn 10
+	Phần I: 4,5đ
+
+
+Phần II: 4,0đ
+
+
+Phần III: 1,5đ 10
+	Sinh học
+	TNKQ (  ) + TL (  ) 6
+	Trắc nghiệm   
+	50 phút
+	Phần I: 18 MCQ
+
+
+Phần II: 4 câu Đúng/Sai
+
+
+Phần III: 6 câu Trả lời ngắn 10
+	Phần I: 4,5đ
+
+
+Phần II: 4,0đ
+
+
+Phần III: 1,5đ 10
+	Lịch sử
+	TNKQ (  ) + TL (  ) 6
+	Trắc nghiệm   
+	50 phút
+	Phần I: 24 MCQ
+
+
+Phần II: 4 câu Đúng/Sai (Không có Trả lời ngắn) 10
+	Phần I: 6,0đ
+
+
+Phần II: 4,0đ 10
+	Địa lí
+	TNKQ (  ) + TL (  ) 6
+	Trắc nghiệm   
+	50 phút
+	Phần I: 18 MCQ
+
+
+Phần II: 4 câu Đúng/Sai
+
+
+Phần III: 6 câu Trả lời ngắn 10
+	Phần I: 4,5đ
+
+
+Phần II: 4,0đ
+
+
+Phần III: 1,5đ 10
+	GD KT&PL
+	TNKQ (  ) + TL (  ) 6
+	Trắc nghiệm   
+	50 phút
+	Phần I: 24 MCQ
+
+
+Phần II: 4 câu Đúng/Sai (Không có Trả lời ngắn) 10
+	Phần I: 6,0đ
+
+
+Phần II: 4,0đ 10
+	Tin học
+	TNKQ (  ) + TL (  ) 6
+	Trắc nghiệm   
+	50 phút
+	Phần I: 24 MCQ
+
+
+Phần II: 6 câu Đúng/Sai (Chia nhánh CS/ICT) 21
+	Phần I: 6,0đ
+
+
+Phần II: 4,0đ 21
+	Công nghệ
+	TNKQ (  ) + TL (  ) 6
+	Trắc nghiệm   
+	50 phút
+	Phần I: 24 MCQ
+
+
+Phần II: 4 câu Đúng/Sai (Không có Trả lời ngắn) 10
+	Phần I: 6,0đ
+
+
+Phần II: 4,0đ 10
+	________________
+Bảng ma trận kiến thức định kỳ và tốt nghiệp
+Bảng dưới đây thể hiện sự phân bổ tỷ lệ các cấp độ nhận thức của đề thi tốt nghiệp và định kỳ theo Chương trình GDPT 2018:
+
+
+Kỳ thi / Kiểm tra
+	Nhận biết (Biết)
+	Thông hiểu (Hiểu)
+	Vận dụng (Vận dụng)
+	Mô tả định hướng đánh giá năng lực
+	Kiểm tra định kỳ (Theo CV 7991) 8
+	  
+
+	  
+
+	  
+
+	Khai thác sâu sắc năng lực thực hành học tập theo chuẩn quy định đặc tả của Bộ GD&ĐT, loại bỏ hoàn toàn phần vận dụng cao rời rạc.17
+	Tốt nghiệp THPT (Toán) 19
+	  
+
+	  
+
+	  
+
+	Phân hóa sâu sắc nhờ cấu trúc Đúng/Sai hạn chế đoán bừa và Trả lời ngắn triệt tiêu chọn bừa.1
+	Tốt nghiệp THPT (Ngoại ngữ) 25
+	  
+
+	  
+
+	  
+
+	Chuyển dịch toàn bộ trọng tâm sang kỹ năng đọc hiểu văn bản thực tế và sắp xếp mạch lạc văn bản.25
+	Tốt nghiệp THPT (Lí, Hóa, Sinh) 10
+	  
+
+	  
+
+	  
+
+	Tập trung kiểm tra bản chất hiện tượng vật lý, hóa học, sinh học thực nghiệm, từ bỏ tính toán mẹo mực.21
+	Tốt nghiệp THPT (Sử, Địa, GD KT&PL) 10
+	  
+
+	  
+
+	  
+
+	Sử dụng sử liệu gốc đối với Lịch sử; Atlat đối với Địa lí; tình huống pháp lý - kinh tế đa diện đối với GD KT&PL.21
+	Tốt nghiệp THPT (Tin học, Công nghệ) 21
+	  
+
+	  
+
+	  
+
+	Phân nhánh định hướng nghề nghiệp thực tế của học sinh.21
+	________________
+Danh sách chuyên đề trọng tâm của 11 môn học
+Bảng dưới đây liệt kê các chuyên đề trọng tâm cốt lõi thường xuất hiện với tần suất cao nhất trong cấu trúc đề thi và ma trận đánh giá:
+
+
+Môn học
+	Danh sách các chuyên đề trọng tâm hàng đầu
+	Ngữ văn
+	- Đọc hiểu văn bản văn học, nghị luận, văn bản thông tin ngoài sách giáo khoa.11
+
+
+- Viết bài văn nghị luận xã hội về tư tưởng đạo lý/hiện tượng đời sống.18
+
+
+- Viết bài văn nghị luận văn học phân tích, đánh giá tác phẩm ngoài sách giáo khoa.18
+	Toán
+	- Ứng dụng đạo hàm để khảo sát và vẽ đồ thị hàm số (bài toán cực trị, tối ưu hóa).20
+
+
+- Nguyên hàm, tích phân và ứng dụng thực tiễn.20
+
+
+- Hình học tọa độ trong không gian Oxyz.20
+
+
+- Xác suất có điều kiện và công thức Bayes.20
+	Tiếng Anh
+	- Điền khuyết từ loại và trật tự từ trong thông báo/quảng cáo.25
+
+
+- Sắp xếp thứ tự các câu thành đoạn văn/bức thư hoàn chỉnh.25
+
+
+- Đọc hiểu phân tích ý chính, thông tin chi tiết và suy luận sâu.27
+	Vật lí
+	- Vật lí nhiệt (Nhiệt dung riêng, nhiệt nóng chảy riêng, nội năng).21
+
+
+- Khí lí tưởng (Các định luật chất khí, phương trình trạng thái).21
+
+
+- Từ trường và cảm ứng điện từ.21
+
+
+- Vật lí hạt nhân (Phản ứng hạt nhân, độ hụt khối, năng lượng liên kết).21
+	Hóa học
+	- Ester - Lipid (Tính chất, phản ứng xà phòng hóa thực nghiệm).21
+
+
+- Carbohydrate (Cấu tạo, tính chất hóa học đặc trưng).21
+
+
+- Hợp chất chứa nitrogen (Amine, amino acid, protein).21
+
+
+- Phức chất và kim loại chuyển tiếp; Điện hóa học và ăn mòn kim loại.21
+	Sinh học
+	- Cơ chế di truyền phân tử và di truyền tế bào (Quá trình truyền đạt thông tin di truyền).21
+
+
+- Các quy luật di truyền và di truyền quần thể.21
+
+
+- Tiến hóa (Các nhân tố tiến hóa, sự phát sinh sự sống).21
+
+
+- Sinh thái học (Hệ sinh thái, chu trình sinh địa hóa, dòng năng lượng).21
+	Lịch sử
+	- Lịch sử Việt Nam giai đoạn cách mạng giải phóng dân tộc (1930-1945).
+
+
+- Lịch sử Việt Nam thời kỳ hai cuộc kháng chiến chống ngoại xâm (1945-1975).
+
+
+- Việt Nam trong thời kỳ Đổi mới và hội nhập quốc tế (từ 1986 đến nay).
+
+
+- Lịch sử thế giới hiện đại và xu thế toàn cầu hóa sau Chiến tranh lạnh.
+	Địa lí
+	- Địa lí tự nhiên Việt Nam (Đặc điểm chung, thiên tai và biện pháp phòng chống).
+
+
+- Địa lí dân cư Việt Nam và chuyển dịch cơ cấu kinh tế.
+
+
+- Địa lí các ngành kinh tế và vùng kinh tế trọng điểm Việt Nam.
+
+
+- Kỹ năng thực hành Atlat Địa lí Việt Nam và xử lý số liệu.21
+	GD KT&PL
+	- Ý tưởng, cơ hội kinh doanh và năng lực kinh doanh; Lạm phát và thất nghiệp.
+
+
+- Tăng trưởng và phát triển kinh tế; Hội nhập kinh tế quốc tế.31
+
+
+- Quyền và nghĩa vụ cơ bản của công dân trong các lĩnh vực đời sống.33
+	Tin học
+	- Hệ quản trị cơ sở dữ liệu trực tuyến; Lập trình mạng máy tính.21
+
+
+- Định hướng CS: Lập trình thuật toán Python/C++ (sắp xếp, tìm kiếm, đệ quy).21
+
+
+- Định hướng ICT: Thiết kế cơ sở dữ liệu và truy vấn ngôn ngữ SQL.21
+	Công nghệ
+	- Công nghệ Nông nghiệp: Thủy sản tuần hoàn RAS; Trồng trọt canh tác nhà kính công nghệ cao; Lâm nghiệp bền vững; Phòng ngừa bệnh sinh học vật nuôi.34
+
+
+- Công nghệ Công nghiệp: Bản vẽ kỹ thuật cơ khí; Mạch điện tử điều khiển và tự động hóa.
+	________________
+Dự đoán xu hướng đề thi tương lai giai đoạn 2026-2030
+Đề thi tốt nghiệp THPT và hệ thống đánh giá định kỳ trong giai đoạn từ năm 2026 đến năm 2030 sẽ chứng kiến những cải tiến sâu sắc về kỹ thuật khảo thí để phản ánh chính xác năng lực thực tế của người học 1:
+
+
+Lĩnh vực thay đổi
+	Dự đoán xu hướng chi tiết giai đoạn 2026–2030
+	Hình thức và Phương thức thi
+	Kỳ thi tốt nghiệp THPT sẽ tiếp tục giữ ổn định phương thức thi trên giấy nhằm bảo đảm tính đồng bộ và công bằng xã hội trên cả nước.2
+	
+
+	
+
+	Mức độ bám sát thực tiễn
+	Đề thi sẽ tăng mạnh các câu hỏi tích hợp liên môn và bài toán thực tế đời sống.3 Các bài toán tối ưu hóa chi phí sản xuất, tính toán hiệu suất động cơ nhiệt, phân tích dữ liệu kinh tế vĩ mô sẽ trở thành trục xương sống của các môn Khoa học tự nhiên và Toán học.20
+	Kỹ thuật xây dựng câu hỏi
+	Hoàn thiện kỹ thuật xây dựng câu hỏi trắc nghiệm Đúng/Sai và Trả lời ngắn.1 Các ý hỏi trong câu Đúng/Sai được thiết kế liên kết chặt chẽ về mặt logic lập luận để triệt tiêu hoàn toàn khả năng chọn bừa.23
+	Bản sắc hóa đề thi
+	Môn Ngữ văn, Lịch sử và Địa lí sẽ đưa vào các ngữ liệu mang tính thời đại và chủ quyền quốc gia sâu sắc (như bảo vệ chủ quyền biển đảo, phát triển kinh tế tuần hoàn, chuyển đổi xanh) giúp định hình phẩm chất công dân thế hệ mới.
+	________________
+Gợi ý xây dựng ngân hàng đề thi chuẩn MOET
+Để xây dựng ngân hàng câu hỏi đạt chuẩn quy định chuyên môn kỹ thuật của Bộ Giáo dục và Đào tạo, các cơ sở giáo dục và giáo viên cần tuân thủ quy trình nghiêm ngặt sau:
+                                                                                                                     * Xây dựng ma trận đề và bản đặc tả chi tiết: Ma trận đề thi phải xác định rõ ràng tỷ lệ phân bổ các câu hỏi theo 3 nhóm dạng thức trắc nghiệm và phần tự luận đúng quy chuẩn của Công văn 7991/BGDĐT-GDTrH đối với đề kiểm tra định kỳ 6, hoặc bám sát cấu trúc đề minh họa tốt nghiệp THPT đối với học sinh khối 12.10
+                                                                                                                     * Thiết kế câu hỏi Đúng/Sai đạt chuẩn kỹ thuật khảo thí: Một câu hỏi Đúng/Sai chuẩn phải bao gồm một phần ngữ liệu chung (bối cảnh, đồ thị, đoạn trích) và 4 ý mệnh đề độc lập (  ,   ,   ,   ).6 Các ý hỏi phải có sự tăng tiến dần về độ khó để phân loại học sinh khá, giỏi thực chất.23 Tránh việc thiết kế các ý hỏi quá rời rạc hoặc không bám sát vào ngữ liệu chung đã cho.39
+                                                                                                                     * Chuẩn hóa câu hỏi Trả lời ngắn: Kết quả cuối cùng của câu hỏi trả lời ngắn phải là các số nguyên hoặc số thập phân đơn giản, được định nghĩa rõ ràng về quy tắc làm tròn (ví dụ: làm tròn đến hàng phần mười) để học sinh dễ dàng tô vào phiếu trả lời trắc nghiệm, hạn chế tối đa các lỗi sai sót kỹ thuật cơ học ngoài ý muốn.10
+                                                                                                                     * Quy trình kiểm định và thử nghiệm: Mọi câu hỏi trước khi đưa vào ngân hàng đề chính thức phải trải qua khâu phản biện chéo của tổ chuyên môn nhằm kiểm định tính chính xác khoa học của kiến thức, tính thẩm mỹ của ngôn từ và sự phù hợp của độ khó so với thời gian làm bài quy định.11 Giáo viên cần chủ động hướng dẫn học sinh làm quen với các kỹ năng phân tích độc lập từng mệnh đề để đạt điểm tối đa trong kỳ thi.20
+Nguồn trích dẫn
+                                                                                                                        1. Công bố cấu trúc định dạng đề thi tốt nghiệp THPT từ năm 2025 - lsvn.vn, truy cập vào tháng 5 17, 2026, https://lsvn.vn/cong-bo-cau-truc-dinh-dang-de-thi-tot-nghiep-trung-hoc-pho-thong-tu-nam-2025-1703834809-a139348.html
+                                                                                                                        2. PHƯƠNG ÁN THI TỐT NGHIỆP THPT TỪ NĂM 2025 - Xây Dựng Chính Sách, Pháp Luật, truy cập vào tháng 5 17, 2026, https://xaydungchinhsach.chinhphu.vn/cong-bo-phuong-an-thi-tot-nghiep-thpt-tu-nam-2025-119231129112222933.htm
+                                                                                                                        3. Bộ Giáo dục và Đào tạo công bố cấu trúc đề thi tốt nghiệp THPT 2025, truy cập vào tháng 5 17, 2026, https://tapchicongthuong.vn/bo-giao-duc-va-dao-tao-cong-bo-cau-truc-de-thi-tot-nghiep-thpt-2025-133416.htm
+                                                                                                                        4. Thông tư số 22/2021/TT-BGDĐT ngày 20/7/2021 của Bộ Giáo dục và Đào tạo quy định về đánh giá học, truy cập vào tháng 5 17, 2026, https://tulieuvankien.dangcongsan.vn/he-thong-van-ban/van-ban-quy-pham-phap-luat/thong-tu-so-222021tt-bgddt-ngay-2072021-cua-bo-giao-duc-va-dao-tao-quy-dinh-ve-danh-gia-hoc-sinh-trung-hoc-co-so-va-7772
+                                                                                                                        5. Hướng Dẫn Kiểm Tra Theo Thông Tư 22/2021/TT-BGDĐT - Studocu, truy cập vào tháng 5 17, 2026, https://www.studocu.vn/vn/document/hoc-vien-cong-nghe-buu-chinh-vien-thong/information-technology/huong-dan-kiem-tra-theo-thong-tu-22-chinh/43156028
+                                                                                                                        6. Bộ GD-ĐT đổi cấu trúc đề kiểm tra định kỳ của học sinh THPT - Báo Đồng Tháp, truy cập vào tháng 5 17, 2026, https://baodongthap.vn/bo-gd-dt-doi-cau-truc-de-kiem-tra-dinh-ky-cua-hoc-sinh-thpt-a102584.html
+                                                                                                                        7. Công văn số 7991-CV/BGDĐT của Bộ GD &ĐT về cấu trúc đề kiểm tra định kỳ, áp dụng từ HK2 năm học 2024 – 2025, truy cập vào tháng 5 17, 2026, https://c3phandangluu.daklak.edu.vn/van-ban/cong-van-so-7991-cvbgddt-cua-bo-gd-dt-ve-cau-truc-de-kiem-tra-dinh-ky-ap-dung-tu-hk2-nam-hoc-2024-2025
+                                                                                                                        8. Thay đổi cấu trúc đề kiểm tra định kỳ của học sinh trung học phổ thông từ học kỳ 2 năm học 2024-2025 - Công dân và Khuyến học, truy cập vào tháng 5 17, 2026, https://congdankhuyenhoc.vn/thay-doi-cau-truc-de-kiem-tra-dinh-ky-cua-hoc-sinh-trung-hoc-pho-thong-tu-hoc-ky-2-nam-hoc-2024-2025-179241219135831163.htm
+                                                                                                                        9. Bộ GD&ĐT thay đổi cấu trúc đề kiểm tra định kỳ THPT - lsvn.vn, truy cập vào tháng 5 17, 2026, https://lsvn.vn/bo-gd-dt-thay-doi-cau-truc-de-kiem-tra-dinh-ky-thpt-a151617.html
+                                                                                                                        10. Cấu trúc đề thi Tốt nghiệp THPT năm 2025 và cách thức tính điểm - VietJack, truy cập vào tháng 5 17, 2026, https://vietjack.com/thong-tin-tuyen-sinh/cau-truc-de-thi-tot-nghiep-thpt-nam-2025-va-cach-thuc-tinh-ttts.jsp
+                                                                                                                        11. Tổ chức kiểm tra, đánh giá học năm học 2024 -2025 - Trường THPT Nguyễn Công Phương, truy cập vào tháng 5 17, 2026, https://c3nguyencongphuong.quangngai.edu.vn/wp-content/uploads/2024/09/331.-To-chuc-kiem-tra-danh-gia-nam-hoc-2024.2025.pdf
+                                                                                                                        12. Giáo viên nói về thay đổi cấu trúc đề kiểm tra định kì cấp THCS, THPT, truy cập vào tháng 5 17, 2026, https://giaoduc.net.vn/giao-vien-noi-ve-thay-doi-cau-truc-de-kiem-tra-dinh-ki-cap-thcs-thpt-post247983.gd
+                                                                                                                        13. Công Văn 7991 Bgdđt Gdtrh | PDF - Scribd, truy cập vào tháng 5 17, 2026, https://www.scribd.com/document/1031622648/Cong-V%C4%83n-7991-Bgd%C4%91t-Gdtrh
+                                                                                                                        14. Bộ prompt tạo ma trận, đề thi theo CV 7991 - VietJack, truy cập vào tháng 5 17, 2026, https://www.vietjack.com/ai-tri-tue-nhan-tao/bo-prompt-tao-ma-tran-de-thi-theo-cv-7991.jsp
+                                                                                                                        15. Đề kiểm tra môn Ngữ văn THPT có cần làm theo Công văn 7991​? - Giáo dục, truy cập vào tháng 5 17, 2026, https://giaoduc.net.vn/de-kiem-tra-mon-ngu-van-thpt-co-can-lam-theo-cong-van-7991-post248017.gd
+                                                                                                                        16. HƯỚNG DẪN Công tác kiểm tra, đánh giá định kỳ học kỳ II năm học 2024-2025 Thực hiện công văn số - Trường THPT Nguyễn Công Phương, truy cập vào tháng 5 17, 2026, https://c3nguyencongphuong.quangngai.edu.vn/wp-content/uploads/2025/02/SO-39-HDKTDGHK2-24-25.signed.pdf
+                                                                                                                        17. 2. Khung Ma Trận, Đặc Tả Của Bộ Theo CV7991-BGDDT-GDTrH ..., truy cập vào tháng 5 17, 2026, https://www.scribd.com/document/892885563/2-Khung-Ma-Tr%E1%BA%ADn-%C4%90%E1%BA%B7c-T%E1%BA%A3-C%E1%BB%A7a-B%E1%BB%99-Theo-CV7991-BGDDT-GDTrH
+                                                                                                                        18. Cấu trúc ĐỀ THI TỐT NGHIỆP THPT áp dụng từ năm 2025, truy cập vào tháng 5 17, 2026, https://xaydungchinhsach.chinhphu.vn/cau-truc-de-thi-tot-nghiep-thpt-tu-nam-2025-119240308200554932.htm
+                                                                                                                        19. Cấu trúc định dạng đề thi tốt nghiệp THPT từ năm 2025, truy cập vào tháng 5 17, 2026, https://vqa.moet.gov.vn/vi/news/thong-bao/cau-truc-dinh-dang-de-thi-tot-nghiep-thpt-tu-nam-2025-74.html
+                                                                                                                        20. Mẹo làm bài thi trắc nghiệm môn Toán THPT Quốc gia 2025 giật điểm cao, truy cập vào tháng 5 17, 2026, https://caodangyduochcm.vn/ky-thi-thpt-quoc-gia/meo-lam-bai-thi-trac-nghiem-mon-toan-thpt-quoc-gia-2021-giat-diem-cao-c58936.html
+                                                                                                                        21. Thi tốt nghiệp THPT từ 2025: Thay đổi cách chấm điểm bài thi trắc nghiệm, truy cập vào tháng 5 17, 2026, https://tuyensinh.qui.edu.vn/dong-hanh/thi-tot-nghiep-thpt-tu-2025-thay-doi-cach-cham-diem-bai-thi-trac-nghiem-879.html
+                                                                                                                        22. Cách tính điểm trắc nghiệm thi tốt nghiệp THPT 2025 có gì mới? | Báo điện tử Tiền Phong, truy cập vào tháng 5 17, 2026, https://tienphong.vn/cach-tinh-diem-trac-nghiem-thi-tot-nghiep-thpt-2025-co-gi-moi-post1694957.tpo
+                                                                                                                        23. Câu hỏi trắc nghiệm đúng sai trong đề thi tốt nghiệp THPT 2025: Có làm tăng khả năng đoán mò?, truy cập vào tháng 5 17, 2026, https://daibieunhandan.vn/cau-hoi-trac-nghiem-dung-sai-trong-de-thi-tot-nghiep-thpt-2025-co-lam-tang-kha-nang-doan-mo-10352625.html
+                                                                                                                        24. Thi thử tốt nghiệp THPT 2025: thí sinh thận trọng với câu hỏi dạng trắc nghiệm đúng/sai, trả lời ngắn - Mực Tím, truy cập vào tháng 5 17, 2026, https://muctim.tuoitre.vn/thi-thu-tot-nghiep-thpt-2025-thi-sinh-than-trong-voi-cau-hoi-dang-trac-nghiem-dung-sai-tra-loi-ngan-101250527181449854.htm
+                                                                                                                        25. Phân tích Cấu trúc mới đề thi Tiếng Anh THPT Quốc gia 2025 - IZONE, truy cập vào tháng 5 17, 2026, https://www.izone.edu.vn/blog/cau-truc-moi-de-thi-tieng-anh-thpt-quoc-gia-2025/
+                                                                                                                        26. Cập nhật ma trận đề thi tiếng Anh THPT Quốc gia mới nhất, truy cập vào tháng 5 17, 2026, https://prepedu.com/vi/blog/phan-tich-ma-tran-de-thi-tieng-anh-thpt-quoc-gia
+                                                                                                                        27. Cách làm các dạng bài trong đề thi tiếng Anh THPT Quốc gia 2025 - ZIM Academy, truy cập vào tháng 5 17, 2026, https://zim.vn/cac-dang-bai-trong-de-thi-tieng-anh-thpt-quoc-gia
+                                                                                                                        28. PHÂN TÍCH CẤU TRÚC ĐỀ THI TIẾNG ANH THPT QG 2025 - Studocu, truy cập vào tháng 5 17, 2026, https://www.studocu.vn/vn/document/dai-hoc-kinh-te-quoc-dan/lich-su-dang-csvn/phan-tich-de-mh-tn-2025-dsnffn-dff-f-df-d-df-d-d-f/123034382
+                                                                                                                        29. Chiến lược giải đề thi Tiếng Anh tốt nghiệp THPT 2025 hiệu quả - Học Đúng Vui, truy cập vào tháng 5 17, 2026, https://hocdungvui.com/giai-de-thi-tieng-anh-tot-nghiep-thpt/
+                                                                                                                        30. Các môn học thực hiện cấu trúc đề kiểm tra định kỳ mới từ học kỳ 2 năm học 2024-2025, truy cập vào tháng 5 17, 2026, https://luatvietnam.vn/tin-van-ban-moi/cac-mon-hoc-thuc-hien-cau-truc-de-kiem-tra-dinh-ky-moi-theo-cong-van-7991-186-100407-article.html
+                                                                                                                        31. MA TRẬN - ĐỀ MINH HOẠ Môn GDKTPL 2025-Đã Gộp | PDF - Scribd, truy cập vào tháng 5 17, 2026, https://www.scribd.com/document/959215977/MA-TRA-N-%C4%90E-MINH-HOA-Mo-n-GDKTPL-2025-%C4%91a-go-p
+                                                                                                                        32. Đề thi minh họa môn Giáo dục kinh tế và pháp luật tốt nghiệp THPT từ năm 2025, truy cập vào tháng 5 17, 2026, https://tapchicongthuong.vn/de-thi-minh-hoa-mon-giao-duc-kinh-te-va-phap-luat-tot-nghiep-thpt-tu-nam-2025-116136.htm
+                                                                                                                        33. Điểm mới đề tham khảo Giáo dục kinh tế và pháp luật thi tốt nghiệp THPT 2025, truy cập vào tháng 5 17, 2026, https://giaoducthoidai.vn/diem-moi-de-tham-khao-giao-duc-kinh-te-va-phap-luat-thi-tot-nghiep-thpt-2025-post705186.html
+                                                                                                                        34. Đề thi tốt nghiệp THPT môn Công nghệ nông nghiệp 2025 có đáp án - Sở GD&ĐT Thừa Thiên Huế (Đề minh họa số 11) - TaiLieu.VN, truy cập vào tháng 5 17, 2026, https://tailieu.vn/doc/de-thi-tot-nghiep-thpt-mon-cong-nghe-nong-nghiep-co-dap-an-2025-thua-thien-hue-2887163.html
+                                                                                                                        35. Bộ đề thi thử tốt nghiệp THPT 2025 môn Công nghệ nông nghiệp bám sát đề minh họa, truy cập vào tháng 5 17, 2026, https://vndoc.com/bo-de-thi-thu-tot-nghiep-thpt-2025-mon-cong-nghe-nong-nghiep-bam-sat-de-minh-hoa-so-1-co-dap-an-341279
+                                                                                                                        36. Đáp án và đề thi minh họa môn Công nghệ nông nghiệp THPT 2025, truy cập vào tháng 5 17, 2026, https://thi.tuyensinh247.com/dap-an-va-de-thi-minh-hoa-mon-cong-nghe-nong-nghiep-thpt-2025-c31a79267.html
+                                                                                                                        37. Lưu ý ôn tập, làm bài thi tốt nghiệp THPT môn Tin học - Báo Giáo Dục & Thời Đại, truy cập vào tháng 5 17, 2026, https://baomoi.com/luu-y-on-tap-lam-bai-thi-tot-nghiep-thpt-mon-tin-hoc-c51995242.epi
+                                                                                                                        38. Ma trận đề kiểm tra định kì, tổ chuyên môn yêu cầu câu hỏi mức vận dụng cao có phù hợp CV 7991? - Giáo dục, truy cập vào tháng 5 17, 2026, https://giaoduc.net.vn/ma-tran-de-kiem-tra-dinh-ki-to-chuyen-mon-yeu-cau-cau-hoi-muc-van-dung-cao-co-phu-hop-cv-7991-post258814.gd
+                                                                                                                        39. Ra đề kiểm tra môn Ngữ văn xây dựng theo phụ lục Công văn 7991 có phù hợp? - Giáo dục, truy cập vào tháng 5 17, 2026, https://giaoduc.net.vn/ra-de-kiem-tra-mon-ngu-van-xay-dung-theo-phu-luc-cong-van-7991-co-phu-hop-post258398.gd

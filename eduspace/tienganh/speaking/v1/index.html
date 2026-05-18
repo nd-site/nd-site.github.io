@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Speaking Coach - Đa Năng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .wave-active .wave-bar { animation: wave 1s ease-in-out infinite; }
+        @keyframes wave { 0%, 100% { height: 8px; } 50% { height: 32px; } }
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+    <div class="max-w-2xl mx-auto px-4 py-10">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-blue-700 mb-3 tracking-tight">AI Speaking Coach</h1>
+            <p class="text-slate-500 font-medium italic">Trợ lý luyện nói tiếng Anh thông minh cho mọi cấp độ</p>
+        </div>
+
+        <!-- Dynamic Guide Card -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-8">
+            <h3 class="text-blue-600 font-bold mb-3 flex items-center gap-2">
+                <i class="fas fa-star"></i> Hướng dẫn luyện tập:
+            </h3>
+            <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                <p>Bạn có thể nói về bất kỳ chủ đề nào (Gia đình, Môi trường, Sở thích, Học tập...). Đảm bảo bài nói có các phần:</p>
+                <ul class="list-disc ml-5 space-y-1">
+                    <li><strong>Giới thiệu bản thân:</strong> Tên, tuổi, nơi sống, hoạt động lúc rảnh.</li>
+                    <li><strong>Nội dung chính:</strong> Trình bày rõ ràng các ý của chủ đề bạn chọn.</li>
+                    <li><strong>Kết thúc:</strong> Cảm ơn và chào khán giả.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recording Console -->
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-10 text-center relative">
+            <div id="statusLabel" class="text-slate-400 font-semibold mb-8 uppercase tracking-widest text-xs">Sẵn sàng đánh giá</div>
+            
+            <div id="visualizer" class="flex items-center justify-center gap-1.5 h-12 mb-8 hidden wave-active">
+                <div class="wave-bar w-1.5 bg-blue-500 rounded-full"></div>
+                <div class="wave-bar w-1.5 bg-blue-400 rounded-full"></div>
+                <div class="wave-bar w-1.5 bg-blue-600 rounded-full"></div>
+                <div class="wave-bar w-1.5 bg-blue-400 rounded-full"></div>
+                <div class="wave-bar w-1.5 bg-blue-500 rounded-full"></div>
+            </div>
+
+            <button id="mainBtn" class="group relative w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center mx-auto transition-all active:scale-95 hover:bg-blue-700 shadow-blue-200 shadow-2xl">
+                <i id="btnIcon" class="fas fa-microphone text-3xl text-white"></i>
+                <span id="btnRipple" class="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-0"></span>
+            </button>
+
+            <div id="timerDisplay" class="mt-6 text-2xl font-mono text-slate-700 hidden">00:00</div>
+        </div>
+
+        <!-- Results -->
+        <div id="resultBox" class="mt-10 hidden">
+            <div class="bg-white rounded-3xl shadow-xl border-t-4 border-blue-500 p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold flex items-center gap-2">
+                        <i class="fas fa-chart-line text-blue-500"></i> Phân tích chi tiết từ AI
+                    </h2>
+                    <button onclick="location.reload()" class="p-2 hover:bg-slate-100 rounded-full transition-colors" title="Làm mới">
+                        <i class="fas fa-rotate-right text-slate-400"></i>
+                    </button>
+                </div>
+                <div id="feedbackContent" class="space-y-4 text-slate-700 leading-relaxed">
+                    <!-- Phản hồi AI hiển thị ở đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        /**
+         * LẤY API KEY:
+         * 1. Ưu tiên lấy từ biến môi trường của GitHub (nếu dùng Vite/Build tool)
+         * 2. Nếu không thấy, sẽ để trống (Hệ thống Canvas sẽ tự điền tại đây)
+         */
+        const apiKey = import.meta?.env?.VITE_GEMINI_API_KEY || ""; 
+
+        let mediaRecorder;
+        let audioChunks = [];
+        let timer;
+        let seconds = 0;
+
+        const mainBtn = document.getElementById('mainBtn');
+        const btnIcon = document.getElementById('btnIcon');
+        const btnRipple = document.getElementById('btnRipple');
+        const statusLabel = document.getElementById('statusLabel');
+        const visualizer = document.getElementById('visualizer');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const resultBox = document.getElementById('resultBox');
+        const feedbackContent = document.getElementById('feedbackContent');
+
+        mainBtn.addEventListener('click', async () => {
+            if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+                start();
+            } else {
+                stop();
+            }
+        });
+
+        async function start() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = () => analyze(new Blob(audioChunks, { type: 'audio/wav' }));
+
+                mediaRecorder.start();
+                
+                btnIcon.className = 'fas fa-stop text-2xl text-white';
+                btnRipple.classList.replace('opacity-0', 'opacity-20');
+                statusLabel.innerText = "Đang lắng nghe...";
+                visualizer.classList.remove('hidden');
+                timerDisplay.classList.remove('hidden');
+                
+                seconds = 0;
+                timer = setInterval(() => {
+                    seconds++;
+                    const m = Math.floor(seconds/60).toString().padStart(2,'0');
+                    const s = (seconds%60).toString().padStart(2,'0');
+                    timerDisplay.innerText = `${m}:${s}`;
+                }, 1000);
+            } catch (err) {
+                alert("Lỗi: Không thể truy cập microphone.");
+            }
+        }
+
+        function stop() {
+            mediaRecorder.stop();
+            clearInterval(timer);
+            mainBtn.disabled = true;
+            mainBtn.classList.add('opacity-50');
+            statusLabel.innerText = "AI đang xử lý dữ liệu...";
+            btnRipple.classList.add('hidden');
+            visualizer.classList.add('hidden');
+        }
+
+        async function analyze(blob) {
+            const base64 = await new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                reader.readAsDataURL(blob);
+            });
+
+            const systemMsg = `Bạn là một chuyên gia khảo thí tiếng Anh quốc tế (IELTS/TOEFL). 
+            Hãy phân tích đoạn âm thanh người dùng vừa cung cấp với các tiêu chí sau:
+            
+            1. GIỚI THIỆU CÁ NHÂN: Kiểm tra xem người nói có nêu Tên, Tuổi, Nơi ở và Sở thích/Hoạt động thời gian rảnh không? (Đây là yêu cầu bắt buộc).
+            2. NỘI DUNG CHÍNH: Người nói đang nói về chủ đề gì? Các ý triển khai có logic và đủ ý không?
+            3. PHÁT ÂM & CHÍNH TẢ: Chỉ ra các từ phát âm chưa chuẩn hoặc bị nhầm lẫn.
+            4. ĐỘ TRÔI CHẢY: Có bị ngập ngừng, vấp (stuttering) hay lặp từ không?
+            5. NGỮ PHÁP: Các cấu trúc câu sử dụng có chính xác và đa dạng không?
+            6. ĐỘ TỰ NHIÊN: Giọng điệu có tự nhiên như giao tiếp hàng ngày hay đang đọc máy móc?
+
+            HÃY NHẬN XÉT BẰNG TIẾNG VIỆT. 
+            - Nếu bài nói tốt, hãy khen ngợi.
+            - Nếu thiếu phần giới thiệu cá nhân, hãy nhắc nhở cụ thể.
+            - Trình bày dưới dạng các đề mục đẹp mắt với icon emoji.`;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                { text: "Phân tích bài nói của tôi. Đừng quên kiểm tra phần giới thiệu bản thân." },
+                                { inlineData: { mimeType: "audio/wav", data: base64 } }
+                            ]
+                        }],
+                        systemInstruction: { parts: [{ text: systemMsg }] }
+                    })
+                });
+
+                const data = await response.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Không thể kết nối với trí tuệ nhân tạo lúc này.";
+                
+                // Format Markdown to HTML đơn giản
+                feedbackContent.innerHTML = text
+                    .replace(/\n/g, '<br>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-blue-700">$1</strong>')
+                    .replace(/### (.*?)(<br>|$)/g, '<h3 class="text-lg font-bold text-slate-800 mt-4">$1</h3>');
+                
+                resultBox.classList.remove('hidden');
+                resultBox.scrollIntoView({ behavior: 'smooth' });
+                statusLabel.innerText = "Phân tích hoàn tất!";
+            } catch (err) {
+                feedbackContent.innerHTML = `<p class="text-red-500 font-medium">Lỗi kết nối AI: ${err.message}. Vui lòng kiểm tra API Key của bạn trên GitHub Secrets.</p>`;
+                resultBox.classList.remove('hidden');
+                statusLabel.innerText = "Lỗi!";
+            } finally {
+                mainBtn.disabled = false;
+                mainBtn.classList.remove('opacity-50');
+            }
+        }
+    </script>
+</body>
+</html>

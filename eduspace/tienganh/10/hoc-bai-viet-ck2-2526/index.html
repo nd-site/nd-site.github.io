@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học viết: Saola Working Group - EduSpace</title>
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/font/font.js"></script>
+
+    <style>
+        :root {
+            --primary: #0070f3;
+            --primary-gradient: linear-gradient(135deg, #0070f3, #00b4d8);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(at 0% 0%, rgba(0, 112, 243, 0.1) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+                        #f0f7ff;
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        .blob { position: fixed; filter: blur(80px); z-index: -1; opacity: 0.4; border-radius: 50%; animation: float 20s infinite ease-in-out; }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: rgba(0, 112, 243, 0.3); }
+        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: rgba(16, 185, 129, 0.2); }
+        @keyframes float { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 33% { transform: translate(30px, -50px) rotate(10deg); } 66% { transform: translate(-20px, 20px) rotate(-5deg); } }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .draggable-item {
+            cursor: grab;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            user-select: none;
+            border: 1px solid transparent;
+        }
+        .draggable-item:hover { transform: translateY(-2px); border-color: rgba(0, 112, 243, 0.3); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); }
+        .draggable-item.dragging { opacity: 0.4; transform: scale(0.9); }
+
+        .drop-zone {
+            min-width: 140px;
+            min-height: 44px;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            margin: 8px 6px;
+            padding: 4px 16px;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            vertical-align: middle;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9em;
+            text-align: center;
+            line-height: 1.2;
+            position: relative;
+        }
+
+        .drop-zone-wrapper, .input-wrapper {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 8px 4px;
+            animation: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes bounceIn { from { opacity: 0; transform: scale(0.8) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        /* Toolbox for Pro Mode */
+        .pro-toolbox {
+            display: none;
+            background: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 32px;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .pro-active .pro-toolbox { display: flex; }
+
+        .tool-item {
+            cursor: grab;
+            padding: 14px 28px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            font-weight: 800;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        .tool-item:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-3px); box-shadow: 0 10px 15px rgba(0, 112, 243, 0.1); }
+
+        .writing-canvas {
+            min-height: 450px;
+            border: 2px dashed transparent;
+            transition: all 0.3s;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 8px;
+            padding: 32px;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.4);
+        }
+        .pro-active .writing-canvas { border-color: #cbd5e1; background: white; }
+        .pro-active .writing-canvas.drag-over { border-color: var(--primary); background: rgba(0, 112, 243, 0.05); }
+
+        .hint-text { font-size: 10px; font-weight: 700; color: #94a3b8; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .cloze-input {
+            border: none;
+            border-bottom: 2px solid #cbd5e1;
+            outline: none;
+            padding: 4px 12px;
+            background: transparent;
+            transition: all 0.3s;
+            font-weight: 800;
+            color: #1e293b;
+            text-align: center;
+            font-size: 1em;
+            min-width: 120px;
+        }
+        .cloze-input:focus { border-bottom-color: var(--primary); background: rgba(0, 112, 243, 0.03); }
+
+        /* Delete button for slots in Pro mode */
+        .delete-slot-btn {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 20px;
+            height: 20px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 10px;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 2px solid white;
+            transition: all 0.2s;
+        }
+        .pro-active .input-wrapper:hover .delete-slot-btn,
+        .pro-active .drop-zone-wrapper:hover .delete-slot-btn {
+            display: flex;
+        }
+        .delete-slot-btn:hover { transform: scale(1.2); background: #dc2626; }
+
+        /* General UI */
+        .mode-toggle { background: rgba(255, 255, 255, 0.8); border: 1px solid #e2e8f0; border-radius: 99px; padding: 4px; display: flex; gap: 4px; }
+        .mode-btn { padding: 10px 24px; border-radius: 99px; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.3s; color: #64748b; }
+        .mode-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(0, 112, 243, 0.3); }
+
+        .progress-container { width: 100%; height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-bottom: 32px; }
+        #progress-bar { width: 0%; height: 100%; background: var(--primary-gradient); transition: width 0.5s ease; }
+
+        #model-answer-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .model-card { background: white; border-radius: 40px; max-width: 650px; width: 100%; padding: 48px; position: relative; animation: modalScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes modalScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        .btn-premium { transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); }
+        .btn-premium:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-premium:active { transform: translateY(0) scale(0.98); }
+    </style>
+</head>
+
+<body class="pb-20">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div id="nd-navbar-spacer"></div>
+
+    <main class="max-w-7xl mx-auto px-6 mt-12" id="main-app">
+        <div class="mb-12 flex flex-col items-center animate-fade-in">
+            <div class="inline-flex items-center gap-2 px-5 py-2 bg-white/60 backdrop-blur rounded-full border border-white/50 shadow-sm mb-6">
+                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+                <span class="text-xs font-extrabold text-blue-600 uppercase tracking-widest">Tiếng Anh 10 • Unit 8</span>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-8 text-center">Master Writing</h1>
+            <div class="mode-toggle">
+                <div class="mode-btn active" id="mode-guided" onclick="switchMode('guided')">Có gợi ý</div>
+                <div class="mode-btn" id="mode-pro" onclick="switchMode('pro')">Siêu Thử thách</div>
+            </div>
+        </div>
+
+        <div class="space-y-10">
+            <!-- Top Section: Prompt & Data Table -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Prompt Card -->
+                <div class="glass-card rounded-[32px] p-8 border-l-4 border-l-blue-600 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="ph-bold ph-read-cv-logo text-2xl text-blue-600"></i>
+                        <h3 class="text-xl font-extrabold text-slate-800">Đề Bài</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed font-medium flex-1">
+                        Write a paragraph (120-150 words) about Saola Working Group, using the information in the table below.
+                    </p>
+                </div>
+
+                <!-- Data Table Card -->
+                <div class="lg:col-span-2 glass-card rounded-[32px] p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="ph-bold ph-table text-2xl text-emerald-600"></i>
+                        <h3 class="text-xl font-extrabold text-slate-800">Bảng Thông Tin</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4">
+                        <div class="space-y-4 text-xs">
+                            <div class="grid grid-cols-3 gap-2 py-2 border-b border-slate-100">
+                                <span class="font-bold text-slate-400 uppercase">Name</span>
+                                <span class="col-span-2 text-slate-700 font-bold">Saola Working Group (SWG)</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 py-2 border-b border-slate-100">
+                                <span class="font-bold text-slate-400 uppercase">Kind</span>
+                                <span class="col-span-2 text-slate-700 font-bold">Non-profit organisation</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 py-2 border-b border-slate-100">
+                                <span class="font-bold text-slate-400 uppercase">Set up</span>
+                                <span class="col-span-2 text-slate-700 font-bold">2006</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 py-2 border-b border-slate-100">
+                                <span class="font-bold text-slate-400 uppercase">Aims</span>
+                                <span class="col-span-2 text-slate-700 font-bold">Save the saola being disappeared in Laos and Viet Nam</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Focus of work:</span>
+                            <ul class="list-disc list-inside space-y-1.5 text-[11px] text-slate-600 font-medium leading-relaxed">
+                                <li>Raising funds for saola protection projects</li>
+                                <li>Working with local governments so that they have greater political support for saola protection</li>
+                                <li>Educating people around the world about saolas and the threats to their habitat</li>
+                                <li>Developing research and protection centres to raise awareness about rare and endangered animals including the saola</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section: Workspace & Pool -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <!-- Left Column: Data Pool -->
+                <div class="lg:col-span-4 space-y-8">
+                    <div class="glass-card rounded-[32px] p-8">
+                        <div class="flex items-center justify-between mb-8">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                                    <i class="ph-bold ph-stack text-2xl"></i>
+                                </div>
+                                <h2 class="text-2xl font-extrabold text-slate-800">Thẻ Dữ Liệu</h2>
+                            </div>
+                        </div>
+                        
+                        <div id="info-pool" class="grid grid-cols-1 gap-4">
+                            <div class="draggable-item bg-white p-5 rounded-2xl border border-slate-100 shadow-sm" draggable="true" data-id="org-type">non-profit organisation</div>
+                            <div class="draggable-item bg-white p-5 rounded-2xl border border-slate-100 shadow-sm" draggable="true" data-id="year">2006</div>
+                            <div class="draggable-item bg-white p-5 rounded-2xl border border-slate-100 shadow-sm" draggable="true" data-id="aims">save the saola being disappeared in Laos and Viet Nam</div>
+                            <div class="draggable-item bg-white p-5 rounded-2xl border border-slate-100 shadow-sm" draggable="true" data-id="focus-1">raising funds for saola protection projects</div>
+                            <div class="draggable-item bg-white p-5 rounded-2xl border border-slate-100 shadow-sm" draggable="true" data-id="focus-2">working with local governments so that they have greater political support for saola protection</div>
+                            <div class="draggable-item bg-white p-5 rounded-2xl border border-slate-100 shadow-sm" draggable="true" data-id="focus-3">educating people around the world about saolas and the threats to their habitat</div>
+                            <div class="draggable-item bg-white p-5 rounded-2xl border border-slate-100 shadow-sm" draggable="true" data-id="focus-4">developing research and protection centres to raise awareness about rare and endangered animals including the saola</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-[32px] p-8 text-white shadow-xl">
+                        <p id="instruction-text" class="font-bold">Chế độ Guided: Kéo thẻ vào các ô gợi ý.</p>
+                    </div>
+                </div>
+
+                <!-- Right Column: Workspace -->
+                <div class="lg:col-span-8">
+                    <div class="glass-card rounded-[40px] p-10 min-h-[600px] flex flex-col relative overflow-hidden" id="writing-container">
+                        <div class="pro-toolbox" id="toolbox">
+                            <div class="tool-item" draggable="true" data-id="tool-input"><i class="ph-bold ph-text-aa"></i> Ô nhập chữ</div>
+                            <div class="tool-item" draggable="true" data-id="tool-drop"><i class="ph-bold ph-selection-all"></i> Ô kéo thả</div>
+                        </div>
+
+                        <div class="flex justify-between items-center mb-8">
+                            <h2 class="text-2xl font-black text-slate-800">Soạn Thảo</h2>
+                            <div id="score-display" class="hidden"><span id="score-value" class="text-2xl font-black text-blue-600">0%</span></div>
+                        </div>
+                        <div class="progress-container"><div id="progress-bar"></div></div>
+                        <div id="writing-area" class="writing-canvas"></div>
+                        <div class="mt-12 flex gap-4">
+                            <button id="check-btn" class="btn-premium flex-1 bg-blue-600 text-white font-black py-5 rounded-2xl uppercase tracking-widest">Kiểm Tra</button>
+                            <button id="view-model-btn" class="bg-emerald-500 text-white p-5 rounded-2xl"><i class="ph-bold ph-eye text-2xl"></i></button>
+                            <button onclick="location.reload()" class="bg-slate-100 text-slate-500 p-5 rounded-2xl"><i class="ph-bold ph-arrows-counter-clockwise text-2xl"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="model-answer-overlay">
+        <div class="model-card">
+            <button onclick="closeModel()" class="absolute top-6 right-6 text-slate-400"><i class="ph-bold ph-x text-2xl"></i></button>
+            <h3 class="text-3xl font-black mb-8">Bài Viết Mẫu</h3>
+            <div id="model-text-content" class="text-lg leading-loose text-slate-600 italic bg-slate-50 p-8 rounded-3xl"></div>
+        </div>
+    </div>
+
+    <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+    <audio id="sound-fail" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"></audio>
+    <audio id="sound-drop" src="https://assets.mixkit.co/active_storage/sfx/1997/1997-preview.mp3"></audio>
+
+    <script>
+        const STEPS = [
+            { type: 'input', ans: 'Saola Working Group (SWG)', hint: 'TÊN TỔ CHỨC' },
+            { type: 'input', ans: 'is a', hint: 'LÀ MỘT' },
+            { type: 'drop', ans: 'org-type', hint: 'TỔ CHỨC PHI LỢI NHUẬN' },
+            { type: 'input', ans: '.', hint: 'DẤU CHẤM' },
+            { type: 'input', ans: 'It was set up in', hint: 'NÓ ĐƯỢC THÀNH LẬP VÀO' },
+            { type: 'drop', ans: 'year', hint: 'NĂM 2006' },
+            { type: 'input', ans: '.', hint: 'DẤU CHẤM' },
+            { type: 'input', ans: 'It aims to', hint: 'NÓ CÓ MỤC TIÊU LÀ' },
+            { type: 'drop', ans: 'aims', hint: 'BẢO VỆ SAO LA KHỎI BIẾN MẤT...' },
+            { type: 'input', ans: '.', hint: 'DẤU CHẤM' },
+            { type: 'input', ans: 'Much of the work of SWG focuses on', hint: 'PHẦN LỚN CÔNG VIỆC CỦA SWG TẬP TRUNG VÀO' },
+            { type: 'drop', ans: 'focus-1', hint: 'GÂY QUỸ CHO CÁC DỰ ÁN BẢO VỆ SAO LA' },
+            { type: 'input', ans: ',', hint: 'DẤU PHẨY' },
+            { type: 'drop', ans: 'focus-2', hint: 'LÀM VIỆC VỚI CHÍNH PHỦ ĐỊA PHƯƠNG...' },
+            { type: 'input', ans: ',', hint: 'DẤU PHẨY' },
+            { type: 'drop', ans: 'focus-3', hint: 'GIÁO DỤC MỌI NGƯỜI TRÊN THẾ GIỚI...' },
+            { type: 'input', ans: ', and', hint: 'DẤU PHẨY VÀ' },
+            { type: 'drop', ans: 'focus-4', hint: 'PHÁT TRIỂN TRUNG TÂM NGHIÊN CỨU...' }
+        ];
+
+        let mode = 'guided';
+        const area = document.getElementById('writing-area');
+        
+        function switchMode(m) {
+            mode = m;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.id === `mode-${m}`));
+            document.getElementById('writing-container').classList.toggle('pro-active', m === 'pro');
+            document.getElementById('instruction-text').innerHTML = m === 'guided' 
+                ? '<b>Guided:</b> Toàn bộ là dòng trống, hãy dùng gợi ý Tiếng Việt để điền hoặc kéo thẻ vào.'
+                : '<b>Ultra Pro:</b> Vùng soạn thảo trống. Kéo <b>Ô nhập</b> hoặc <b>Ô kéo</b> vào để xây dựng bài.';
+            render();
+        }
+
+        function render() {
+            area.innerHTML = '';
+            if (mode === 'guided') {
+                STEPS.forEach((s, i) => addSlot(s.type, i));
+            }
+        }
+
+        function createSlot(type, index) {
+            const s = STEPS[index];
+            const wrapper = document.createElement('span');
+            wrapper.className = type === 'input' ? 'input-wrapper' : 'drop-zone-wrapper';
+            wrapper.style.position = 'relative';
+            
+            const el = document.createElement(type === 'input' ? 'input' : 'span');
+            el.className = type === 'input' ? 'cloze-input' : 'drop-zone';
+            // We store the expected answer if it exists, otherwise it might be a mismatched slot
+            if (s) el.dataset.ans = s.ans;
+            
+            if (type === 'input') {
+                el.style.width = (s ? s.ans.length * 10 + 30 : 120) + 'px';
+            } else {
+                setupDropZone(el);
+            }
+            
+            wrapper.appendChild(el);
+
+            // Add delete button
+            const delBtn = document.createElement('div');
+            delBtn.className = 'delete-slot-btn';
+            delBtn.innerHTML = '<i class="ph-bold ph-x"></i>';
+            delBtn.onclick = (e) => {
+                e.stopPropagation();
+                wrapper.remove();
+            };
+            wrapper.appendChild(delBtn);
+
+            if (mode === 'guided' && s) {
+                const hint = document.createElement('span');
+                hint.className = 'hint-text';
+                hint.textContent = s.hint;
+                wrapper.appendChild(hint);
+            }
+            return wrapper;
+        }
+
+        function addSlot(type, index) {
+            area.appendChild(createSlot(type, index));
+        }
+
+        function setupDropZone(zone) {
+            zone.ondragover = e => e.preventDefault();
+            zone.ondrop = e => {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent area.ondrop from firing
+                const id = e.dataTransfer.getData('id');
+                if (!id || id.startsWith('tool')) return;
+                const item = document.querySelector(`.draggable-item[data-id="${id}"]`);
+                if (item) {
+                    zone.textContent = item.textContent;
+                    zone.dataset.current = id;
+                    zone.classList.add('filled');
+                    document.getElementById('sound-drop').play();
+                }
+            };
+        }
+
+        // Pro Mode Tool Logic
+        area.ondragover = e => { 
+            e.preventDefault(); 
+            if (mode === 'pro') area.classList.add('drag-over'); 
+        };
+        area.ondragleave = () => area.classList.remove('drag-over');
+        area.ondrop = e => {
+            if (mode !== 'pro') return;
+            area.classList.remove('drag-over');
+            
+            const toolId = e.dataTransfer.getData('id');
+            if (!toolId || !toolId.startsWith('tool')) return;
+
+            const currentIndex = area.querySelectorAll('.cloze-input, .drop-zone').length;
+            if (currentIndex >= STEPS.length) return;
+
+            const type = toolId === 'tool-input' ? 'input' : 'drop';
+            addSlot(type, currentIndex);
+        };
+
+        // Draggables
+        document.querySelectorAll('[draggable]').forEach(d => {
+            d.ondragstart = e => e.dataTransfer.setData('id', d.dataset.id);
+        });
+
+        document.getElementById('check-btn').onclick = () => {
+            let correct = 0;
+            const elements = area.querySelectorAll('.cloze-input, .drop-zone');
+            
+            if (elements.length < STEPS.length) {
+                alert(`Bạn mới chỉ xây dựng được ${elements.length}/${STEPS.length} phần của đoạn văn. Hãy tiếp tục thêm các ô còn thiếu từ hộp công cụ để đạt 100%!`);
+                // Continue to check what's already there
+            }
+
+            elements.forEach((el, i) => {
+                // If user added more elements than STEPS, ignore extra ones for score
+                if (i >= STEPS.length) {
+                    el.classList.add('incorrect');
+                    return;
+                }
+
+                let isCorrect = false;
+                if (el.tagName === 'INPUT') {
+                    isCorrect = el.value.trim().toLowerCase() === STEPS[i].ans.toLowerCase();
+                } else {
+                    isCorrect = el.dataset.current === STEPS[i].ans;
+                }
+                
+                el.classList.remove('correct', 'incorrect');
+                el.classList.add(isCorrect ? 'correct' : 'incorrect');
+                if (isCorrect) correct++;
+            });
+
+            const pct = Math.round((correct / STEPS.length) * 100);
+            document.getElementById('score-value').textContent = pct + '%';
+            document.getElementById('score-display').classList.remove('hidden');
+            
+            if (pct === 100) {
+                confetti();
+                document.getElementById('sound-success').play();
+            } else {
+                document.getElementById('sound-fail').play();
+            }
+        };
+
+        function closeModel() { document.getElementById('model-answer-overlay').style.display = 'none'; }
+        document.getElementById('view-model-btn').onclick = () => {
+            fetch('baimau.txt').then(r => r.text()).then(t => {
+                document.getElementById('model-text-content').textContent = t;
+                document.getElementById('model-answer-overlay').style.display = 'flex';
+            });
+        };
+
+        function confetti() {
+            for (let i = 0; i < 50; i++) {
+                const d = document.createElement('div');
+                d.style.cssText = `position:fixed;width:10px;height:10px;background:hsl(${Math.random()*360},70%,50%);left:${Math.random()*100}vw;top:-10px;z-index:2000;border-radius:50%;`;
+                document.body.appendChild(d);
+                d.animate([{transform:'translateY(0)'},{transform:`translateY(100vh) translateX(${Math.random()*200-100}px)`}], {duration:2000}).onfinish = () => d.remove();
+            }
+        }
+
+        switchMode('guided');
+    </script>
+</body>
+</html>

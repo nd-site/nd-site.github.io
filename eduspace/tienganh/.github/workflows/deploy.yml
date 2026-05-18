@@ -1,0 +1,35 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Inject API Key to all HTML files
+        run: |
+          # Tìm tất cả file .html và thay thế cụm __GEMINI_API_KEY__ bằng giá trị thật
+          # Lệnh 'find' sẽ quét mọi ngóc ngách trong repo của bạn
+          find . -name "*.html" -exec sed -i "s/__GEMINI_API_KEY_PLACEHOLDER__/${{ secrets.GEMINI_API_KEY }}/g" {} +
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' 
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

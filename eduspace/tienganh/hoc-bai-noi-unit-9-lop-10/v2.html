@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Tiếng Anh cùng Đăng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .hidden-word { background-color: #cbd5e1; color: transparent; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
+        .hidden-word:hover { background-color: #94a3b8; }
+        .revealed { background-color: transparent !important; color: inherit !important; }
+        .active-sentence { border-left: 4px solid #3b82f6; background-color: #eff6ff; }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .is-loading .fa-volume-up, .is-loading .fa-play { display: none; }
+        .is-loading .loading-spinner { display: inline-block; }
+
+        .playing-icon {
+            display: none;
+            color: #3b82f6;
+        }
+        .is-playing .fa-volume-up { display: none; }
+        .is-playing .playing-icon { display: inline-block; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">Xin chào, Đăng! 👋</h1>
+            <p class="text-slate-600">Luyện tập bài nói về Ô nhiễm môi trường (Air Pollution)</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-1 space-y-4">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h2 class="font-semibold text-lg mb-4 flex items-center">
+                        <i class="fas fa-cog mr-2 text-blue-500"></i> Công cụ học tập
+                    </h2>
+                    
+                    <button id="btn-read-all" class="w-full mb-3 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition flex items-center justify-center">
+                        <i class="fas fa-play mr-2"></i>
+                        <i class="fas fa-circle-notch loading-spinner mr-2"></i>
+                        <span id="read-all-text">Nghe toàn bài</span>
+                    </button>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-slate-700">Chế độ hiển thị:</label>
+                        <button id="toggle-memorize" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-xl transition flex items-center justify-center">
+                            <i class="fas fa-eye-slash mr-2"></i> Chế độ học thuộc
+                        </button>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-slate-100">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Trạng thái</h3>
+                        <p id="cache-info" class="text-xs text-slate-500 italic">Bấm "Nghe toàn bài" để tự động tải và lưu đệm tất cả các câu.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2">
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 min-h-[500px]">
+                    <div id="script-container" class="space-y-4 text-lg leading-relaxed text-slate-700"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="status-msg" class="fixed bottom-4 right-4 bg-slate-800 text-white px-4 py-2 rounded-lg opacity-0 transition-opacity duration-300 text-sm z-50"></div>
+    </div>
+
+    <script>
+        const apiKey = "__GEMINI_API_KEY__";
+        const audioCache = new Map(); 
+        let isPlayingSequence = false;
+        let currentAudio = null;
+        
+        const scriptData = [
+            "Good morning teacher and everyone.",
+            "My name is Dang, and I'm sixteen years old.",
+            "I live in Bao Lam 2, Lam Dong province.",
+            "In my free time, I often go online to watch TikTok and Facebook.",
+            "Today, I would like to talk about some simple ways to fix air pollution, which is a big problem today.",
+            "Firstly, we should stop burning leaves and trash.",
+            "By doing this, we can reduce smoke and dust, making the air cleaner for everyone.",
+            "Secondly, people should use buses, trains, or electric bikes instead of cars and motorbikes.",
+            "This will help cut down dirty smoke from traffic.",
+            "In addition, we should plant more trees around our houses and schools because trees help to clean the air naturally by taking in carbon dioxide.",
+            "To sum up, protecting the environment is not a big task; it starts with our daily actions.",
+            "I hope we can all work together for a greener and healthier planet.",
+            "Thank you for listening!"
+        ];
+
+        let isMemorizeMode = false;
+        const container = document.getElementById('script-container');
+        const statusMsg = document.getElementById('status-msg');
+
+        function initScript() {
+            container.innerHTML = '';
+            scriptData.forEach((sentence, index) => {
+                const p = document.createElement('div');
+                p.className = 'p-3 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors sentence-item';
+                p.id = `sentence-${index}`;
+                
+                p.innerHTML = `
+                    <div class="flex items-start">
+                        <button id="btn-audio-${index}" onclick="event.stopPropagation(); handleSentenceClick(${index})" 
+                                class="mt-1 mr-3 text-blue-400 hover:text-blue-600 audio-btn flex items-center justify-center w-6 h-6">
+                            <i class="fas fa-volume-up"></i>
+                            <i class="fas fa-circle-notch loading-spinner text-blue-500"></i>
+                            <i class="fas fa-waveform-lines playing-icon"></i>
+                        </button>
+                        <span class="text-content" onclick="handleSentenceClick(${index})">${formatSentence(sentence)}</span>
+                    </div>
+                `;
+                container.appendChild(p);
+            });
+        }
+
+        function formatSentence(text) {
+            if (!isMemorizeMode) return text;
+            return text.split(' ').map((word, i) => {
+                if (i > 0 && Math.random() > 0.6 && word.length > 3) {
+                    return `<span class="hidden-word" onclick="event.stopPropagation(); this.classList.add('revealed')">${word}</span>`;
+                }
+                return word;
+            }).join(' ');
+        }
+
+        // Hàm lấy Audio (từ Cache hoặc API)
+        async function getAudioBlob(index) {
+            const text = scriptData[index];
+            if (audioCache.has(index)) {
+                return audioCache.get(index);
+            }
+
+            const btn = document.getElementById(`btn-audio-${index}`);
+            if (btn) btn.classList.add('is-loading');
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: text }] }],
+                        generationConfig: {
+                            responseModalities: ["AUDIO"],
+                            speechConfig: {
+                                voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } }
+                            }
+                        }
+                    })
+                });
+
+                const result = await response.json();
+                const pcmData = result.candidates[0].content.parts[0].inlineData.data;
+                const audioBlob = createAudioBlob(pcmData);
+                audioCache.set(index, audioBlob);
+                updateCacheStatus();
+                return audioBlob;
+            } catch (error) {
+                console.error(error);
+                showStatus("Lỗi tải câu " + (index + 1));
+                return null;
+            } finally {
+                if (btn) btn.classList.remove('is-loading');
+            }
+        }
+
+        function playAudio(blob, index, onEndCallback = null) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+
+            // UI Feedback
+            document.querySelectorAll('.sentence-item').forEach(el => el.classList.remove('active-sentence', 'is-playing'));
+            const el = document.getElementById(`sentence-${index}`);
+            if (el) el.classList.add('active-sentence', 'is-playing');
+
+            const url = URL.createObjectURL(blob);
+            currentAudio = new Audio(url);
+            currentAudio.onended = () => {
+                URL.revokeObjectURL(url);
+                const el = document.getElementById(`sentence-${index}`);
+                if (el) el.classList.remove('is-playing');
+                if (onEndCallback) onEndCallback();
+            };
+            currentAudio.play();
+        }
+
+        async function handleSentenceClick(index) {
+            isPlayingSequence = false; // Ngắt chế độ đọc cả bài nếu đang chạy
+            const blob = await getAudioBlob(index);
+            if (blob) playAudio(blob, index);
+        }
+
+        async function playFullSequence(startIndex = 0) {
+            isPlayingSequence = true;
+            const btnAll = document.getElementById('btn-read-all');
+            btnAll.classList.add('is-loading');
+            
+            for (let i = startIndex; i < scriptData.length; i++) {
+                if (!isPlayingSequence) break;
+
+                const blob = await getAudioBlob(i);
+                if (blob) {
+                    btnAll.classList.remove('is-loading'); // Bỏ loading ngay khi có câu đầu tiên
+                    
+                    // Đợi câu hiện tại phát xong mới sang câu tiếp theo
+                    await new Promise((resolve) => {
+                        playAudio(blob, i, () => resolve());
+                    });
+                }
+            }
+            
+            isPlayingSequence = false;
+            btnAll.classList.remove('is-loading');
+        }
+
+        function createAudioBlob(base64Data) {
+            const binaryString = atob(base64Data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
+            const wavHeader = createWavHeader(bytes.length, 24000);
+            return new Blob([wavHeader, bytes], { type: 'audio/wav' });
+        }
+
+        function createWavHeader(dataLength, sampleRate) {
+            const header = new ArrayBuffer(44);
+            const view = new DataView(header);
+            view.setUint32(0, 0x52494646, false); 
+            view.setUint32(4, 36 + dataLength, true); 
+            view.setUint32(8, 0x57415645, false); 
+            view.setUint32(12, 0x666d7420, false); 
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true); 
+            view.setUint16(22, 1, true); 
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            view.setUint32(36, 0x64617461, false); 
+            view.setUint32(40, dataLength, true);
+            return header;
+        }
+
+        function updateCacheStatus() {
+            const count = audioCache.size;
+            const info = document.getElementById('cache-info');
+            if (count === scriptData.length) {
+                info.innerText = "✅ Đã tải xong toàn bộ bài. Bạn có thể nghe bất cứ câu nào ngay lập tức!";
+                info.classList.add('text-green-600');
+            } else if (count > 0) {
+                info.innerText = `Đã lưu đệm ${count}/${scriptData.length} câu.`;
+            }
+        }
+
+        function showStatus(msg) {
+            statusMsg.innerText = msg;
+            statusMsg.style.opacity = '1';
+            setTimeout(() => { statusMsg.style.opacity = '0'; }, 2000);
+        }
+
+        document.getElementById('toggle-memorize').addEventListener('click', () => {
+            isMemorizeMode = !isMemorizeMode;
+            document.getElementById('toggle-memorize').innerHTML = isMemorizeMode ? 
+                '<i class="fas fa-eye mr-2"></i> Hiển thị đầy đủ' : 
+                '<i class="fas fa-eye-slash mr-2"></i> Chế độ học thuộc';
+            initScript();
+        });
+
+        document.getElementById('btn-read-all').addEventListener('click', () => {
+            if (isPlayingSequence) {
+                isPlayingSequence = false;
+                if (currentAudio) currentAudio.pause();
+                document.getElementById('btn-read-all').classList.remove('is-loading');
+            } else {
+                playFullSequence();
+            }
+        });
+
+        window.onload = initScript;
+    </script>
+</body>
+</html>

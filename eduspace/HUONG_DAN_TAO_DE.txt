@@ -1,0 +1,130 @@
+HƯỚNG DẪN CHI TIẾT CẤU TRÚC FILE DỮ LIỆU ĐỀ THI (data.js) - EDUSPACE
+================================================================
+
+Tệp 'data.js' là nơi chứa toàn bộ nội dung câu hỏi, đáp án và cấu hình của đề thi. 
+Để đảm bảo hiển thị đúng (Toán học, Hình ảnh, Markdown), vui lòng tuân thủ các quy tắc sau:
+
+1. CẤU TRÚC TỔNG QUÁT
+---------------------
+Toàn bộ dữ liệu phải được bọc trong biến 'window.quizData' như sau:
+
+window.quizData = {
+    title: "Tiêu đề đề thi",
+    config: {
+        testDuration: 5400, // Thời gian làm bài tính bằng GIÂY (5400s = 90 phút)
+        examLayout: { // Ma trận kiểm tra: Định nghĩa cấu trúc điểm và số câu hiển thị
+            multiple: { count: 20, pointsPerQ: 0.25 }, // Dạng 1: Lấy 20 câu trắc nghiệm 4 đáp án, 0.25đ/câu
+            truefalse: { 
+                count: 4, 
+                pointsPerQ: 1.0, // Dạng 2: Đúng/Sai. Điểm tối đa 1.0đ/câu
+                partialScoring: [0.1, 0.25, 0.5, 1.0] // Mức điểm tùy chỉnh: đúng 1 ý được 10% điểm của câu, 2 ý 25%, 3 ý 50%, 4 ý 100%
+            },
+            short: { count: 6, pointsPerQ: 0.5 }, // Dạng 3: Lấy 6 câu trả lời ngắn, 0.5đ/câu
+            essay: { count: 0, pointsPerQ: 0 }    // Dạng 4: Tự luận
+        }
+    },
+    questions: [
+        // Danh sách toàn bộ câu hỏi (ngân hàng câu hỏi). 
+        // Hệ thống sẽ tự động trích xuất đúng số lượng câu (count) từ ngân hàng này theo từng dạng 
+        // như đã định nghĩa ở phần examLayout bên trên. Nếu số lượng câu trong ngân hàng nhiều hơn 
+        // cấu hình, hệ thống sẽ chỉ lấy số câu đúng bằng ma trận (từ trên xuống).
+    ]
+};
+
+2. CÁC LOẠI CÂU HỎI (type)
+--------------------------
+
+A. Trắc nghiệm nhiều lựa chọn (type: "multiple")
+   - question: Nội dung câu hỏi.
+   - options: Mảng các phương án trả lời.
+   - correct: Chỉ số (index) của đáp án đúng (bắt đầu từ 0. 0=A, 1=B, 2=C, 3=D).
+
+   Ví dụ:
+   {
+       type: "multiple",
+       question: "1 + 1 bằng mấy?",
+       options: ["1", "2", "3", "4"],
+       correct: 1, // Chọn "2"
+       explanation: "Giải thích: 1 thêm 1 là 2."
+   }
+
+B. Trắc nghiệm Đúng/Sai (type: "truefalse")
+   - question: Nội dung câu hỏi tổng quát.
+   - options: Mảng các khẳng định cần xét đúng/sai.
+   - correct: Mảng chứa giá trị [true, false, ...] tương ứng với từng khẳng định.
+
+   Ví dụ:
+   {
+       type: "truefalse",
+       question: "Xét hàm số f(x) = x^2:",
+       options: [
+           "Hàm số luôn đồng biến.",
+           "Đồ thị đi qua gốc tọa độ."
+       ],
+       correct: [false, true],
+       explanation: "Giải thích chi tiết cho từng ý..."
+   }
+
+C. Trắc nghiệm trả lời ngắn (type: "short")
+   - correct: Giá trị đáp án đúng (dạng chuỗi hoặc số).
+   * LƯU Ý QUAN TRỌNG: Ở dạng này, học sinh chỉ được nhập TỐI ĐA 4 KÝ TỰ.
+   * Hệ thống chỉ chấp nhận các ký tự: số từ 0-9, dấu phẩy (,), dấu chấm (.) và dấu trừ (-).
+
+   Ví dụ:
+   {
+       type: "short",
+       question: "Nghiệm của phương trình 2x - 4 = 0 là bao nhiêu?",
+       correct: "2",
+       explanation: "2x = 4 => x = 2."
+   }
+
+D. Tự luận (type: "essay")
+   - Tương tự trả lời ngắn nhưng thường dùng để HS viết dài. GV sẽ đối chiếu với phần explanation.
+
+3. QUY TẮC VIẾT NỘI DUNG (Markdown & Math)
+------------------------------------------
+
+A. Định dạng văn bản (Markdown):
+   - In đậm: Bọc trong dấu sao kép: **nội dung in đậm**
+   - In nghiêng: Bọc trong dấu sao đơn: *nội dung in nghiêng*
+   - Danh sách: Dùng dấu gạch ngang ở đầu dòng: - Ý 1
+
+B. Công thức Toán học (LaTeX):
+   - Quy tắc VÀNG: Phải dùng DẤU GẠCH CHÉO KÉP (\\) thay vì một dấu (\) vì đây là file Javascript.
+   - Công thức nội dòng (inline): Bọc trong $ ... $ (Ví dụ: $y = f(x)$)
+   - Công thức khối (display): Bọc trong $$ ... $$
+   - Các ký hiệu phổ biến:
+     + Vô cực: \\\\infty
+     + Phân số: \\\\frac{tử}{mẫu}
+     + Căn thức: \\\\sqrt{x}
+     + Logarit: \\\\log_a b
+     + Vectơ: \\\\vec{n}
+     + Số mũ: x^{2}
+     + Chỉ số dưới: u_{n}
+
+C. Hình ảnh, Âm thanh, Video:
+   - Hình ảnh: Sử dụng cú pháp Markdown: ![Mô tả ảnh](link_ảnh)
+     (Ví dụ: ![Hình 1](https://example.com/anh.png))
+   - Video: [video:link_youtube_hoặc_link_mp4]
+   - Âm thanh: [audio:link_file_mp3]
+
+D. Bảng biểu (Table):
+   Sử dụng cú pháp bảng của Markdown:
+   | Tiêu đề 1 | Tiêu đề 2 |
+   | --------- | --------- |
+   | Nội dung 1| Nội dung 2|
+
+4. PHẦN GIẢI THÍCH (explanation)
+--------------------------------
+- Luôn nên có phần này để hỗ trợ học sinh ở chế độ "Luyện tập".
+- Bạn có thể dùng đầy đủ Markdown, Toán học và Hình ảnh trong phần này.
+
+5. CÁC LỖI THƯỜNG GẶP CẦN TRÁNH
+-------------------------------
+1. Thiếu dấu phẩy (,) giữa các câu hỏi hoặc giữa các thuộc tính.
+2. Quên đóng ngoặc vuông [] của mảng hoặc ngoặc nhọn {} của đối tượng.
+3. Chỉ dùng một dấu gạch chéo (\) cho ký hiệu toán học -> Sẽ bị mất ký hiệu.
+4. Link ảnh bị hỏng hoặc không cho phép nhúng (Hotlink protection). Nên dùng Imgur hoặc các kho ảnh uy tín.
+5. Đáp án 'correct' của loại 'multiple' vượt quá số lượng options (ví dụ có 4 option nhưng để correct là 4 -> Lỗi vì index tối đa là 3).
+
+CHÚC BẠN TẠO ĐƯỢC NHỮNG BỘ ĐỀ CHẤT LƯỢNG!

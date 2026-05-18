@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiểm tra Giữa Học Kì I – Công nghệ 11 (KNTT) – 2025-2026</title>
+    <script src="data.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/assets/images/logo.png" type="image/x-icon">
+    <script src="/font/font.js"></script>
+    <script src="/assets/js/nd-navbar.js" defer></script>
+</head>
+<body class="bg-blue-50">
+    <div id="app-root">
+        <div class="flex justify-center items-center h-screen font-sans text-blue-900">
+            <div class="text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900 mx-auto mb-4"></div>
+                <p class="font-bold">Đang đồng bộ giao diện và dữ liệu...</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function loadViewer() {
+            try {
+                const response = await fetch('/eduspace/template.html');
+                if (!response.ok) throw new Error("Không thể tải template.html");
+                const htmlText = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+                if (typeof quizData !== 'undefined') {
+                    const quizTitle = quizData.title || "EduSpace by ND Labs";
+                    document.title = quizTitle;
+                    const titleDisplay = doc.getElementById('quiz-title-display');
+                    if (titleDisplay) titleDisplay.innerText = quizTitle;
+                    const pageTitle = doc.getElementById('page-title');
+                    if (pageTitle) pageTitle.innerText = quizTitle;
+                }
+                const headElements = doc.querySelectorAll('link[rel="stylesheet"], style');
+                headElements.forEach(el => document.head.appendChild(el.cloneNode(true)));
+                document.body.innerHTML = doc.body.innerHTML;
+                const scripts = doc.querySelectorAll('script');
+                for (const oldScript of scripts) {
+                    const newScript = document.createElement("script");
+                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.text = oldScript.text;
+                    if (newScript.src) {
+                        await new Promise((resolve) => { newScript.onload = resolve; newScript.onerror = resolve; document.body.appendChild(newScript); });
+                    } else { document.body.appendChild(newScript); }
+                }
+                setTimeout(() => {
+                    const finalTitle = document.getElementById('quiz-title-display');
+                    if (finalTitle && quizData.title) finalTitle.innerText = quizData.title;
+                    if (quizData.title) document.title = quizData.title;
+                    if (typeof renderMath === 'function') renderMath();
+                    window.dispatchEvent(new Event('load'));
+                }, 100);
+            } catch (error) {
+                console.error("Lỗi nạp giao diện:", error);
+                document.getElementById('app-root').innerHTML = `<div class="p-8 text-red-600 font-bold text-center">Lỗi: ${error.message}</div>`;
+            }
+        }
+        loadViewer();
+    </script>
+</body>
+</html>

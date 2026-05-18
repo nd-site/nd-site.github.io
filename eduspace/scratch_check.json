@@ -1,0 +1,2182 @@
+[
+  {
+    "path": "\\congnghe\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\10\\on-tap-gk2-2526-cncn-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\10\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\10\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\12\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\congnghe-congnghiep\\10\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\congnghe-congnghiep\\11\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\congnghe-congnghiep\\12\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\congnghe-nongnghiep\\10\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\congnghe-nongnghiep\\11\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\congnghe-nongnghiep\\12\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\congnghe-nongnghiep\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 24,
+    "tf": 4,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 24, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\congnghe-nongnghiep\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 24,
+    "tf": 4,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 24, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\diali\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\10\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\10\\on-tap-hk1-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 2,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\diali\\10\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\diali\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 18,
+    "tf": 4,
+    "short": 6,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 18, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\diali\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 18,
+    "tf": 4,
+    "short": 6,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 18, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\diali\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\gdqp\\10\\on-tap-hk1-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 4,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\hoahoc\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\10\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\hoahoc\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\10\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\10\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\11\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\hoahoc\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\12\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\hoahoc\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 18,
+    "tf": 4,
+    "short": 6,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 18, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\hoahoc\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 18,
+    "tf": 4,
+    "short": 6,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 18, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\hoahoc\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\hoahoc\\lop10\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\ktpl\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\10\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\ktpl\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\10\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\10\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\11\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\ktpl\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\12\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\ktpl\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\ktpl\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 24,
+    "tf": 4,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 24, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\ktpl\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 24,
+    "tf": 4,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 24, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\ktpl\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\10\\bai7-kntt\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 10,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\lichsu\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\10\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\lichsu\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\10\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\10\\on-tap-gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\10\\on-tap-hk1-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 4,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\lichsu\\10\\on-tap-hk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\11\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\lichsu\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\12\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\lichsu\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 24,
+    "tf": 4,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 24, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\lichsu\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 24,
+    "tf": 4,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 24, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\lichsu\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\lichsu\\9\\on-tap-gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\mau\\data.js",
+    "mcq": 3,
+    "tf": 1,
+    "short": 1,
+    "essay": 1,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 4, pointsPerQ: 1.0 }"
+  },
+  {
+    "path": "\\nguvan\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\10\\ck2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 2,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ essay: { count: 2, pointsPerQ: 5.0, pointsList: { \"0\": 4.0, \"1\": 6.0 }"
+  },
+  {
+    "path": "\\nguvan\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\10\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\10\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\10\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\11\\ck2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 2,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ essay: { count: 2, pointsPerQ: 5.0, pointsList: { \"0\": 4.0, \"1\": 6.0 }"
+  },
+  {
+    "path": "\\nguvan\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\12\\ck2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 2,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ essay: { count: 2, pointsPerQ: 5.0, pointsList: { \"0\": 4.0, \"1\": 6.0 }"
+  },
+  {
+    "path": "\\nguvan\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\nguvan\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 2,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ essay: { count: 2, pointsList: { \"0\": 4, \"1\": 6 }"
+  },
+  {
+    "path": "\\nguvan\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 2,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ essay: { count: 2, pointsList: { \"0\": 4, \"1\": 6 }"
+  },
+  {
+    "path": "\\nguvan\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\10\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\sinhhoc\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\10\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\10\\on-tap-hk1-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\sinhhoc\\10\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\11\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\sinhhoc\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\12\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\sinhhoc\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\sinhhoc\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 18,
+    "tf": 4,
+    "short": 6,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 18, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\sinhhoc\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 18,
+    "tf": 4,
+    "short": 6,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 18, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\sinhhoc\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\10\\ck2-2526-v1\\data.js",
+    "mcq": 30,
+    "tf": 0,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 28, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\tienganh\\10\\de-viet-doan-van-hk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 1,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\10\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\10\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\10\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\11\\ck2-2526-v1\\data.js",
+    "mcq": 28,
+    "tf": 0,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 28, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\tienganh\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\12\\ck2-2526-v1\\data.js",
+    "mcq": 28,
+    "tf": 0,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 28, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\tienganh\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tienganh\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 40,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 40, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\tienganh\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 40,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 40, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\tienganh\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\10\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\tinhoc\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\10\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\10\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\10\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\11\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\tinhoc\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\12\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 0,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\tinhoc\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 24,
+    "tf": 4,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 24, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\tinhoc\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 24,
+    "tf": 4,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 24, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\tinhoc\\12\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\tinhoc\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\10\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\toan\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\10\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\10\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\10\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\11\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\toan\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\12\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\toan\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\toan\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 6,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\toan\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 6,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\toan\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\10\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\10\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\vatly\\10\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\10\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\10\\moment-luc\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 5,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\vatly\\10\\on-tap-gk2-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 6,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\vatly\\10\\on-tap-hk1-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\vatly\\10\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\11\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\11\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\vatly\\11\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\11\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\11\\tx1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\11\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\12\\ck1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\12\\ck2-2526-v1\\data.js",
+    "mcq": 12,
+    "tf": 4,
+    "short": 4,
+    "essay": 3,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 12, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\vatly\\12\\gk1-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\12\\gk2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  },
+  {
+    "path": "\\vatly\\12\\thptqg-2026-v1\\data.js",
+    "mcq": 18,
+    "tf": 4,
+    "short": 6,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 18, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\vatly\\12\\thptqg-2026-v2\\data.js",
+    "mcq": 18,
+    "tf": 4,
+    "short": 6,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "{ multiple: { count: 18, pointsPerQ: 0.25 }"
+  },
+  {
+    "path": "\\vatly\\12\\tx2-2526-v1\\data.js",
+    "mcq": 0,
+    "tf": 0,
+    "short": 0,
+    "essay": 0,
+    "fill": 0,
+    "writing": 0,
+    "layout": "N/A"
+  }
+]

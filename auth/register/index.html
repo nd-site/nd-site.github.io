@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/assets/images/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo NDID - ND Labs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+    <link rel="stylesheet" href="/auth/auth.css">
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/font/font.js"></script>
+</head>
+
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="/assets/images/logo.png" alt="ND Labs" class="auth-logo">
+                <h1>Tạo NDID</h1>
+                <p>Định danh ND duy nhất, dùng mãi mãi</p>
+            </div>
+
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="ndid">Chọn NDID</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-identification-card"></i>
+                        <input type="text" id="ndid" placeholder="VD: dang_2026" autocomplete="off" required>
+                    </div>
+                    <span style="font-size: 12px; color: var(--text-soft); padding-left: 4px;">Chỉ dùng chữ thường, số
+                        và dấu gạch dưới. Không thể đổi sau khi tạo.</span>
+                </div>
+                <div class="form-group">
+                    <label for="fullname">Họ và tên</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-user"></i>
+                        <input type="text" id="fullname" placeholder="Tên đầy đủ của bạn" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email khôi phục</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-envelope-simple"></i>
+                        <input type="email" id="email" placeholder="email@gmail.com" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-lock"></i>
+                        <input type="password" id="password" placeholder="Tối thiểu 6 ký tự" required>
+                    </div>
+                </div>
+                <div
+                    style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--text-soft);">
+                    <input type="checkbox" id="policy" required style="margin-top: 2px; accent-color: var(--primary);">
+                    <label for="policy">Tôi đồng ý với <a href="/privacy/"
+                            style="color: var(--primary); font-weight: 700;">Chính sách bảo mật</a> của ND Labs</label>
+                </div>
+                <button type="submit" id="submit-btn" class="btn-primary">
+                    <span>Khởi tạo NDID</span>
+                    <i class="ph-bold ph-sparkle"></i>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Đã có tài khoản? <a href="/auth/login/">Đăng nhập</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="status-msg" class="status-msg"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged }
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc }
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = await window.getFirebaseConfig();
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const form = document.getElementById('register-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const statusEl = document.getElementById('status-msg');
+
+        function showStatus(text, type) {
+            statusEl.textContent = text;
+            statusEl.className = `status-msg show ${type}`;
+            setTimeout(() => statusEl.className = 'status-msg', 4500);
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.displayName) window.location.href = '/';
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const ndid = document.getElementById('ndid').value.trim().toLowerCase();
+            const fullname = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (ndid.length < 3) return showStatus('NDID phải từ 3 ký tự trở lên.', 'error');
+            if (!/^[a-z0-9_]+$/.test(ndid)) return showStatus('NDID chỉ gồm chữ thường, số và dấu gạch dưới (_).', 'error');
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Đang khởi tạo...</span>';
+
+            try {
+                // Kiểm tra NDID đã tồn tại (bỏ qua nếu Firestore chưa sẵn sàng)
+                try {
+                    const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
+                    if (ndidSnap.exists()) {
+                        showStatus('NDID này đã được sử dụng. Hãy chọn tên khác.', 'error');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<span>Khởi tạo NDID</span><i class="ph-bold ph-sparkle"></i>';
+                        return;
+                    }
+                } catch (fsErr) {
+                    console.warn('Firestore chưa sẵn sàng, bỏ qua kiểm tra NDID:', fsErr.message);
+                }
+
+                const internalEmail = `${ndid}@ndlabs.com`;
+                const cred = await createUserWithEmailAndPassword(auth, internalEmail, password);
+                const user = cred.user;
+
+                await updateProfile(user, { displayName: fullname });
+
+                // Lưu vào Firestore (bỏ qua nếu lỗi)
+                try {
+                    await setDoc(doc(db, 'ndids', ndid), { uid: user.uid, recoveryEmail: email });
+                    await setDoc(doc(db, 'users', user.uid), {
+                        ndid, fullname,
+                        emails: [email],
+                        createdAt: new Date().toISOString()
+                    });
+                } catch (fsErr) {
+                    console.warn('Không thể lưu Firestore (sẽ đồng bộ sau):', fsErr.message);
+                }
+
+                localStorage.setItem('nd_user', JSON.stringify({
+                    displayName: fullname, email, photoURL: null, uid: user.uid, ndid
+                }));
+
+                showStatus('🎉 Tạo NDID thành công!', 'success');
+                setTimeout(() => window.location.href = '/', 1200);
+
+            } catch (err) {
+                console.error(err);
+                // Dịch lỗi Firebase sang tiếng Việt
+                const msgs = {
+                    'auth/email-already-in-use': 'NDID này đã tồn tại. Hãy chọn NDID khác hoặc đăng nhập.',
+                    'auth/weak-password': 'Mật khẩu quá yếu. Cần ít nhất 6 ký tự.',
+                    'auth/invalid-email': 'Định dạng NDID không hợp lệ.',
+                    'auth/network-request-failed': 'Mất kết nối mạng. Vui lòng thử lại.',
+                };
+                showStatus(msgs[err.code] || ('Lỗi: ' + err.message), 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Khởi tạo NDID</span><i class="ph-bold ph-sparkle"></i>';
+            }
+        });
+    </script>
+</body>
+
+</html>
