@@ -35,7 +35,7 @@ const eduspaceAI_UI = (function () {
                 justify-content: center;
                 cursor: pointer;
                 box-shadow: 0 10px 25px -5px rgba(0, 112, 243, 0.4);
-                z-index: 200004;
+                z-index: 99000;
                 transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             }
             .edu-ai-toggle:hover { transform: scale(1.1); }
@@ -57,7 +57,7 @@ const eduspaceAI_UI = (function () {
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
                 display: none;
                 flex-direction: column;
-                z-index: 200005;
+                z-index: 99001;
                 overflow: hidden;
                 animation: aiShow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
@@ -168,7 +168,8 @@ const eduspaceAI_UI = (function () {
                     bottom: 80px;
                     right: 16px;
                     max-width: calc(100vw - 32px);
-                    height: calc(100vh - 100px);
+                    top: 90px !important;
+                    height: auto !important;
                 }
             }
         `;
