@@ -195,7 +195,6 @@ const eduspaceAI_UI = (function () {
                     <button onclick="eduspaceAI_UI.toggle()" class="hover:opacity-70 transition-opacity">✕</button>
                 </div>
                 <div id="ai-chat-messages" class="ai-messages">
-                    <div class="msg msg-ai">Xin chào! Tôi là EduAI. Bạn cần tôi hỗ trợ gì không?</div>
                 </div>
                 <div class="ai-input-area">
                     <input type="text" id="ai-input" placeholder="Hỏi EduAI..." onkeypress="if(event.key==='Enter') eduspaceAI_UI.send()">
@@ -219,47 +218,90 @@ const eduspaceAI_UI = (function () {
         }
     }
 
+    // Trạng thái phiên chat
+    let _hasGreeted = false;
+    let _isSending = false;
+
+    // Tách văn bản thành mảng câu ngắn để gửi từng bong bóng
+    function splitIntoSentences(text) {
+        // Tách theo dấu câu kết thúc, giữ nguyên dấu
+        const raw = text
+            .replace(/\n{2,}/g, '\n')           // gộp nhiều dòng trắng
+            .replace(/([.!?])\s+/g, '$1\n')      // tách câu theo dấu câu
+            .split('\n')
+            .map(s => s.trim())
+            .filter(s => s.length > 0);
+        // Nhóm các câu quá ngắn (< 20 ký tự) vào câu trước
+        const merged = [];
+        for (const s of raw) {
+            if (merged.length && s.length < 20)
+                merged[merged.length - 1] += ' ' + s;
+            else
+                merged.push(s);
+        }
+        return merged;
+    }
+
+    // Gửi từng câu dưới dạng bong bóng riêng biệt, có delay giả lập typing
+    async function sendBubbles(sentences, container) {
+        for (let i = 0; i < sentences.length; i++) {
+            const delay = Math.min(300 + sentences[i].length * 18, 1200);
+            await new Promise(r => setTimeout(r, delay));
+            appendMessage(sentences[i], 'ai');
+        }
+    }
+
     async function send() {
+        if (_isSending) return;
         const input = document.getElementById('ai-input');
         const container = document.getElementById('ai-chat-messages');
         const text = input.value.trim();
         if (!text) return;
 
-        // User message
+        _isSending = true;
         appendMessage(text, 'user');
         input.value = '';
+        input.disabled = true;
 
-        // Loading
-        const loadingId = 'ai-load-' + Date.now();
+        // Bubble "đang nhắn..."
         const loadingDiv = document.createElement('div');
-        loadingDiv.id = loadingId;
         loadingDiv.className = 'msg msg-ai';
-        loadingDiv.innerHTML = '<span style="opacity:0.5">⏳ EduAI đang suy nghĩ...</span>';
+        loadingDiv.innerHTML = '<span style="opacity:0.45; font-size:20px; letter-spacing:2px">•••</span>';
         container.appendChild(loadingDiv);
         container.scrollTop = container.scrollHeight;
 
         try {
-            // Get context from page if available
             const context = typeof window.getAIContext === 'function' ? window.getAIContext() : '';
-            
-            // Use eduspaceAI from data_modal.js
+            const greetInstruction = _hasGreeted
+                ? 'Không chào hỏi, không dẫn nhập — trả lời thẳng vào câu hỏi.'
+                : 'Chào người dùng ngắn gọn một câu rồi trả lời ngay.';
+
+            const systemPrompt = `Bạn là EduAI — trợ lý học tập ngắn gọn, súc tích. ${greetInstruction} Trả lời tối đa 3-5 câu, mỗi câu là một ý độc lập. Không dùng gạch đầu dòng dài. Không markdown phức tạp.${context ? ' Ngữ cảnh bài tập: ' + context : ''}`;
+
             const aiResponseRaw = await eduspaceAI.call({
-                contents: [{ 
-                    role: 'user', 
-                    parts: [{ text: `Bạn là trợ lý học tập EduAI. ${context ? 'Dựa trên ngữ cảnh: ' + context + '.' : ''} Hãy trả lời câu hỏi: ${text}. Sử dụng Markdown để định dạng.` }] 
+                contents: [{
+                    role: 'user',
+                    parts: [{ text: systemPrompt + '\n\nCâu hỏi: ' + text }]
                 }]
             });
 
             loadingDiv.remove();
-            appendMessage(aiResponseRaw, 'ai');
+            if (!_hasGreeted) _hasGreeted = true;
+
+            const sentences = splitIntoSentences(aiResponseRaw);
+            await sendBubbles(sentences, container);
+
         } catch (e) {
-            console.error("[EduAI] Error:", e.message);
-            // Hiển thị lỗi thân thiện, không lộ thông tin kỹ thuật ra ngoài
+            console.error('[EduAI] Error:', e.message);
             const isKeyErr = e.message && (e.message.includes('API Key') || e.message.includes('key') || e.message.includes('leaked') || e.message.includes('expired'));
             const userMsg = isKeyErr
-                ? '⚠️ Tính năng AI đang tạm ngưng để bảo trì. Vui lòng quay lại sau!'
+                ? '⚠️ Tính năng AI đang tạm ngưng để bảo trì.'
                 : '❌ Không thể kết nối EduAI. Vui lòng thử lại sau.';
             loadingDiv.innerHTML = `<span style="color:#ef4444; font-size:13px;">${userMsg}</span>`;
+        } finally {
+            _isSending = false;
+            input.disabled = false;
+            input.focus();
         }
     }
 

@@ -264,6 +264,35 @@
         const welcomeView = document.getElementById('welcome-view');
         const userInput = document.getElementById('user-input');
 
+        let _hasGreeted = false;
+        let _isSending = false;
+
+        function splitIntoSentences(text) {
+            const raw = text
+                .replace(/\n{2,}/g, '\n')
+                .replace(/([.!?])\s+/g, '$1\n')
+                .split('\n')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+            
+            const merged = [];
+            for (const s of raw) {
+                if (merged.length && s.length < 20)
+                    merged[merged.length - 1] += ' ' + s;
+                else
+                    merged.push(s);
+            }
+            return merged;
+        }
+
+        async function sendBubbles(sentences) {
+            for (let i = 0; i < sentences.length; i++) {
+                const delay = Math.min(300 + sentences[i].length * 18, 1200);
+                await new Promise(r => setTimeout(r, delay));
+                appendMessage(sentences[i], 'ai');
+            }
+        }
+
         function appendMessage(text, role) {
             if (welcomeView) welcomeView.remove();
             
@@ -297,35 +326,58 @@
         }
 
         async function sendMessage() {
+            if (_isSending) return;
             const text = userInput.value.trim();
             if (!text) return;
 
+            _isSending = true;
             appendMessage(text, 'user');
             userInput.value = '';
+            userInput.disabled = true;
 
             // Loading state
-            const loadingId = 'ai-load-' + Date.now();
             const loadingDiv = document.createElement('div');
-            loadingDiv.id = loadingId;
-            loadingDiv.className = 'msg msg-ai font-bold opacity-50 italic text-sm';
-            loadingDiv.innerHTML = 'EduAI đang suy nghĩ...';
+            loadingDiv.className = 'msg msg-ai opacity-50 italic text-sm';
+            loadingDiv.innerHTML = '<span style="letter-spacing:2px">•••</span>';
             chatContainer.appendChild(loadingDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
+                const greetInstruction = _hasGreeted
+                    ? 'Không chào hỏi, không dẫn nhập — trả lời thẳng vào câu hỏi.'
+                    : 'Chào người dùng ngắn gọn một câu rồi trả lời ngay.';
+
+                const systemPrompt = `Bạn là EduAI — trợ lý học tập ngắn gọn, súc tích. ${greetInstruction} Trả lời tối đa 3-5 câu, mỗi câu là một ý độc lập. Không dùng gạch đầu dòng dài. Không markdown phức tạp.`;
+
                 // Use the core eduspaceAI.call from data_modal.js
                 const response = await eduspaceAI.call({
-                    contents: [{ role: 'user', parts: [{ text: text }] }]
+                    contents: [{
+                        role: 'user',
+                        parts: [{ text: systemPrompt + '\n\nCâu hỏi: ' + text }]
+                    }]
                 });
 
                 loadingDiv.remove();
-                appendMessage(response, 'ai');
+                if (!_hasGreeted) _hasGreeted = true;
+
+                const sentences = splitIntoSentences(response);
+                await sendBubbles(sentences);
             } catch (e) {
-                loadingDiv.innerHTML = `<span class="text-red-500">Lỗi: ${e.message}</span>`;
+                console.error('[EduAI] Error:', e.message);
+                const isKeyErr = e.message && (e.message.includes('API Key') || e.message.includes('key') || e.message.includes('leaked') || e.message.includes('expired'));
+                const userMsg = isKeyErr
+                    ? '⚠️ Tính năng AI đang tạm ngưng để bảo trì.'
+                    : '❌ Không thể kết nối EduAI. Vui lòng thử lại sau.';
+                loadingDiv.innerHTML = `<span class="text-red-500">${userMsg}</span>`;
+            } finally {
+                _isSending = false;
+                userInput.disabled = false;
+                userInput.focus();
             }
         }
 
         function useSuggest(text) {
+            if (_isSending) return;
             userInput.value = text;
             sendMessage();
         }
