@@ -206,7 +206,7 @@
     <div id="status-msg" class="status-msg"></div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import {
             getAuth, onAuthStateChanged, updateProfile, signOut,
             GoogleAuthProvider, linkWithPopup, unlink,
@@ -217,19 +217,24 @@
         import { getStorage, ref, uploadBytes, getDownloadURL }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-        const keys = await window.getEduKeys();
-        const firebaseConfig = {
-            apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
-            authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
-            databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
-            projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
-            storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
-            messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
-            appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
-            measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
-        };
-
-        const app = initializeApp(firebaseConfig);
+        // Tái sử dụng Firebase App đã khởi tạo bởi firebase-init.js (nếu có)
+        let app;
+        if (getApps().length > 0) {
+            app = getApp();
+        } else {
+            const keys = await window.getEduKeys();
+            const firebaseConfig = {
+                apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
+                authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
+                databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
+                projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
+                storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
+                messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
+                appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
+                measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
+            };
+            app = initializeApp(firebaseConfig);
+        }
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
