@@ -324,12 +324,12 @@
                 const userData = userSnap.data();
                 const ndid = userData.ndid || user.email.split('@')[0];
 
-                // Compute hash and check authorization
+                // Compute hash and check authorization (Must have role: 'admin' and NDID hash must match)
                 const ndidHash = await hashSHA256(ndid);
-                const isAuthorized = AUTHORIZED_ADMIN_HASHES.includes(ndidHash);
+                const isAuthorized = AUTHORIZED_ADMIN_HASHES.includes(ndidHash) && userData.role === 'admin';
 
                 if (!isAuthorized) {
-                    showAccessDenied("Từ chối truy cập", "Bạn không có quyền truy cập trang quản trị này.");
+                    showAccessDenied("Từ chối truy cập", "Tài khoản của bạn không được cấp quyền quản trị viên (Admin).");
                     return;
                 }
 

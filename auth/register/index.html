@@ -176,6 +176,7 @@
 
             if (ndid.length < 3) return showStatus('NDID phải từ 3 ký tự trở lên.', 'error');
             if (!/^[a-z0-9_]+$/.test(ndid)) return showStatus('NDID chỉ gồm chữ thường, số và dấu gạch dưới (_).', 'error');
+            if (ndid.includes('admin')) return showStatus('NDID không được phép chứa từ "admin" vì lý do bảo mật.', 'error');
             if (!yob || isNaN(yob) || yob < 1940 || yob > 2026) return showStatus('Năm sinh không hợp lệ.', 'error');
 
             submitBtn.disabled = true;
