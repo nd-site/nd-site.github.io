@@ -230,7 +230,17 @@ function finishGame() {
 // --- FIREBASE REDUX ---
 async function connectFirebase() {
     if (typeof firebase !== 'undefined') {
-        const config = await window.getFirebaseConfig();
+        const keys = await window.getEduKeys();
+        const config = {
+            apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
+            authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
+            databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
+            projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
+            storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
+            messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
+            appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
+            measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
+        };
         firebase.initializeApp(config);
         db = firebase.database();
     }

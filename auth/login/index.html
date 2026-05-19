@@ -60,11 +60,21 @@
     <div id="status-msg" class="status-msg"></div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
-            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-        const firebaseConfig = await window.getFirebaseConfig();
+        const keys = await window.getEduKeys();
+        const firebaseConfig = {
+            apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
+            authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
+            databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
+            projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
+            storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
+            messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
+            appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
+            measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
+        };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);

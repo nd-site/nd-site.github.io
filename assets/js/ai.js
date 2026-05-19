@@ -151,6 +151,26 @@ const eduspaceAI_UI = (function () {
             .markdown-content pre { background: #1e293b; color: white; padding: 10px; border-radius: 8px; font-size: 12px; margin: 8px 0; overflow-x: auto; }
             .markdown-content code { background: #f1f5f9; padding: 2px 4px; border-radius: 4px; font-family: monospace; }
             .markdown-content b, .markdown-content strong { font-weight: 700; color: ${CONFIG.primary}; }
+
+            @media (max-width: 768px) {
+                .edu-ai-toggle {
+                    bottom: 16px;
+                    right: 16px;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 25px;
+                }
+                .edu-ai-toggle svg {
+                    width: 22px;
+                    height: 22px;
+                }
+                #edu-ai-widget {
+                    bottom: 80px;
+                    right: 16px;
+                    max-width: calc(100vw - 32px);
+                    height: calc(100vh - 100px);
+                }
+            }
         `;
         document.head.appendChild(style);
     }

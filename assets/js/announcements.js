@@ -16,7 +16,7 @@
 (function () {
   // DANH SÁCH CÁC THÔNG BÁO CHẠY NGANG (Dễ dàng thêm/sửa/xóa ở đây)
   const ANNOUNCEMENTS = [
-    "Thông báo toàn hệ thống ND Labs! Hiện tại hệ thống tài khoản Auth và hệ thống trí tuệ nhân tạo AI trên nền tảng Web ND Labs đang được bảo trì. Chúng tôi sẽ cố gắng khắc phục sớm nhất có thể! Cảm ơn quý vị đã thông cảm!",
+    "Thông báo toàn hệ thống ND Labs! Hiện tại, hệ thống trí tuệ nhân tạo AI trên nền tảng Web ND Labs đang được bảo trì. Chúng tôi sẽ cố gắng khắc phục sớm nhất có thể! Cảm ơn quý vị đã thông cảm!",
     "EduSpace by ND Labs vừa thêm vào hệ thống các bài thi thử TN THPT QG năm 2026. <a href='/eduspace/thptqg/2026/index.html' class='nd-ticker-link'>Trải nghiệm ngay tại đây!</a>"
   ];
 
@@ -33,13 +33,13 @@
       left: 0 !important;
       right: 0 !important;
       height: ${TICKER_H}px !important;
-      background: linear-gradient(90deg, #dc2626, #b91c1c) !important; /* Đỏ premium */
+      background: linear-gradient(90deg, #ff4b4b, #e11d48) !important; /* Đỏ tươi rực rỡ, cực kỳ sang trọng */
       z-index: 99999 !important;
-      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15) !important;
+      box-shadow: 0 4px 12px rgba(255, 75, 75, 0.2) !important;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
       display: flex !important;
       align-items: center !important;
-      border-bottom: 1px solid #991b1b !important;
+      border-bottom: 1px solid #be123c !important;
       box-sizing: border-box !important;
     }
 
@@ -90,6 +90,29 @@
       will-change: transform !important;
     }
 
+    #nd-ticker-close {
+      display: none !important; /* Mặc định ẩn cho đến khi chạy hết */
+      align-items: center !important;
+      justify-content: center !important;
+      width: 20px !important;
+      height: 20px !important;
+      border-radius: 50% !important;
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: #ffffff !important;
+      font-size: 10px !important;
+      font-weight: 800 !important;
+      cursor: pointer !important;
+      margin-left: 12px !important;
+      flex-shrink: 0 !important;
+      transition: all 0.2s ease !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      line-height: 1 !important;
+    }
+    #nd-ticker-close:hover {
+      background: rgba(255, 255, 255, 0.35) !important;
+      transform: scale(1.1) !important;
+    }
+
     /* Định dạng liên kết tương tác Premium trong dòng chữ chạy */
     .nd-ticker-link {
       color: #fef08a !important; /* Màu vàng sáng sang trọng nổi bật */
@@ -102,6 +125,8 @@
     .nd-ticker-link:hover {
       color: #ffffff !important;
     }
+
+    /* Không cần CSS tĩnh ở đây nữa vì ta sẽ dùng biến CSS (CSS Variables) để quản lý Layout động, tránh lỗi chồng chéo */
   `;
 
   let currentIndex = 0;
@@ -111,13 +136,7 @@
   function injectTicker() {
     // Nếu không có bất kỳ thông báo hợp lệ nào, ẩn/hủy thanh ticker và đặt spacer về 50px chuẩn
     if (validAnnouncements.length === 0) {
-      const existingBar = document.getElementById('nd-ticker-bar');
-      if (existingBar) existingBar.remove();
-
-      const spacer = document.getElementById('nd-navbar-spacer');
-      if (spacer) {
-        spacer.style.setProperty('height', '50px', 'important');
-      }
+      closeTicker();
       return;
     }
 
@@ -132,6 +151,9 @@
     // Tạo thanh thông báo
     const bar = document.createElement('div');
     bar.id = 'nd-ticker-bar';
+
+    // Cập nhật biến môi trường cho Layout toàn hệ thống
+    document.documentElement.style.setProperty('--ticker-height', TICKER_H + 'px');
 
     const inner = document.createElement('div');
     inner.id = 'nd-ticker-inner';
@@ -148,9 +170,17 @@
     const textSpan = document.createElement('div');
     textSpan.id = 'nd-ticker-text';
 
+    // Nút Đóng x
+    const closeBtn = document.createElement('div');
+    closeBtn.id = 'nd-ticker-close';
+    closeBtn.innerHTML = '✕';
+    closeBtn.title = 'Đóng thông báo';
+    closeBtn.onclick = closeTicker;
+
     track.appendChild(textSpan);
     inner.appendChild(label);
     inner.appendChild(track);
+    inner.appendChild(closeBtn);
     bar.appendChild(inner);
 
     // Gắn vào DOM ngay dưới navbar
@@ -171,6 +201,29 @@
     }
 
     startTicker();
+  }
+
+  function closeTicker() {
+    const bar = document.getElementById('nd-ticker-bar');
+    if (bar) bar.remove();
+
+    const cssEl = document.getElementById('nd-ticker-css');
+    if (cssEl) cssEl.remove();
+
+    // Khôi phục Layout: Đặt chiều cao thông báo về 0
+    document.documentElement.style.setProperty('--ticker-height', '0px');
+
+    const spacer = document.getElementById('nd-navbar-spacer');
+    if (spacer) {
+      spacer.style.setProperty('height', '50px', 'important');
+    }
+  }
+
+  function showCloseButton() {
+    const closeBtn = document.getElementById('nd-ticker-close');
+    if (closeBtn) {
+      closeBtn.style.setProperty('display', 'flex', 'important');
+    }
   }
 
   function startTicker() {
@@ -204,6 +257,12 @@
 
   function onTickerComplete() {
     if (validAnnouncements.length === 0) return;
+
+    // Hiển thị nút close x sau khi chạy xong thông báo cuối cùng ở vòng đầu tiên
+    if (currentIndex === validAnnouncements.length - 1) {
+      showCloseButton();
+    }
+
     currentIndex = (currentIndex + 1) % validAnnouncements.length;
     startTicker();
   }

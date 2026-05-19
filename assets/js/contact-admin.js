@@ -174,12 +174,33 @@ const contactAdminUI = (function () {
                 font-weight: 700;
                 white-space: nowrap;
                 opacity: 1;
-                visibility: visible;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
                 border: 1px solid rgba(255, 255, 255, 0.8);
-                pointer-events: auto; /* Allow clicking the text */
                 cursor: pointer;
                 transition: all 0.3s ease;
+            }
+
+            @media (max-width: 768px) {
+                .contact-fab-container {
+                    bottom: 16px;
+                    left: 16px;
+                    gap: 0.5rem;
+                }
+                .contact-main-btn {
+                    height: 2.75rem;
+                    min-width: 2.75rem;
+                    padding: 0 1rem;
+                }
+                .contact-main-btn.expanded {
+                    padding: 0 1rem;
+                }
+                .contact-item {
+                    width: 2.5rem;
+                    height: 2.5rem;
+                }
+                .contact-tooltip {
+                    left: 3rem;
+                }
             }
         `;
         document.head.appendChild(style);
