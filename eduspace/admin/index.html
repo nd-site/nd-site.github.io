@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị EduSpace - ND Labs</title>
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Base Scripts -->
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/assets/js/config.js"></script>
+    <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/font/font.js"></script>
+
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+        }
+
+        .bg-gradient-mesh {
+            background-color: #f8fafc;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(0, 112, 243, 0.04) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 180, 216, 0.04) 0px, transparent 50%);
+        }
+
+        /* custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-mesh min-h-screen text-slate-800">
+
+    <!-- Access Verification Loader Overlay -->
+    <div id="admin-lock-screen" class="fixed inset-0 z-[99999] flex items-center justify-center bg-slate-900 text-white">
+        <div class="text-center max-w-sm p-8 glass-card rounded-3xl text-slate-900 border border-slate-200">
+            <div id="lock-icon-container" class="mx-auto w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm">
+                <i class="ph-bold ph-lock-keyhole animate-pulse"></i>
+            </div>
+            <h3 id="lock-title" class="text-xl font-extrabold mb-2 tracking-tight">Đang xác thực quyền Admin...</h3>
+            <p id="lock-desc" class="text-sm text-slate-500 mb-6">Hệ thống đang kiểm tra danh tính bảo mật của bạn qua hệ thống băm SHA-256...</p>
+            <div id="lock-action-btn" class="hidden">
+                <a href="/" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/10">
+                    <i class="ph-bold ph-house-line"></i> Quay về Trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Admin Dashboard Content (Hidden by default) -->
+    <div id="admin-dashboard" class="hidden max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider mb-1">
+                    <span>✨</span>
+                    <span>EduSpace Central Admin</span>
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-950">Bảng điều khiển quản trị</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-slate-500 font-medium bg-slate-100 border border-slate-200/60 px-3 py-1.5 rounded-full">
+                    Phiên bản an toàn: SHA-256 Protected
+                </span>
+            </div>
+        </header>
+
+        <!-- Stats Section -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="glass-card p-6 rounded-2xl flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tổng người học</span>
+                    <h3 id="stat-total" class="text-3xl font-black text-slate-950 mt-1">0</h3>
+                </div>
+                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                    <i class="ph-bold ph-student"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Giáo viên</span>
+                    <h3 id="stat-teachers" class="text-3xl font-black text-slate-950 mt-1">0</h3>
+                </div>
+                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                    <i class="ph-bold ph-chalkboard-teacher"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Học sinh Lớp 12</span>
+                    <h3 id="stat-g12" class="text-3xl font-black text-slate-950 mt-1">0</h3>
+                </div>
+                <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                    <i class="ph-bold ph-exam"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tỷ lệ điền thông tin</span>
+                    <h3 id="stat-profile-rate" class="text-3xl font-black text-slate-950 mt-1">0%</h3>
+                </div>
+                <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                    <i class="ph-bold ph-chart-pie-slice"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Management Panel -->
+        <main class="glass-card rounded-3xl overflow-hidden border border-slate-200/85">
+            <!-- Table Header controls -->
+            <div class="p-6 border-b border-slate-200/80 bg-white/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="relative flex-1 max-w-md">
+                    <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                    <input type="text" id="user-search" placeholder="Tìm kiếm NDID, Tên hoặc Email..." class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <select id="filter-role" class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:bg-white focus:border-blue-500 transition-all">
+                        <option value="all">Tất cả vai trò</option>
+                        <option value="student">Học sinh (Student)</option>
+                        <option value="teacher">Giáo viên (Teacher)</option>
+                        <option value="admin">Quản trị viên (Admin)</option>
+                        <option value="other">Khác</option>
+                    </select>
+
+                    <select id="filter-grade" class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:bg-white focus:border-blue-500 transition-all">
+                        <option value="all">Tất cả khối lớp</option>
+                        <option value="10">Lớp 10</option>
+                        <option value="11">Lớp 11</option>
+                        <option value="12">Lớp 12</option>
+                        <option value="Đang dạy">Đang dạy (Teacher)</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+
+                    <button id="btn-refresh" class="w-10 h-10 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl flex items-center justify-center text-slate-600 transition-all" title="Làm mới danh sách">
+                        <i class="ph-bold ph-arrows-clockwise text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Users List Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                            <th class="px-6 py-4">NDID</th>
+                            <th class="px-6 py-4">Họ và tên</th>
+                            <th class="px-6 py-4">Email</th>
+                            <th class="px-6 py-4">Vai trò</th>
+                            <th class="px-6 py-4">Năm sinh</th>
+                            <th class="px-6 py-4">Lớp học</th>
+                            <th class="px-6 py-4">Ngày tạo</th>
+                            <th class="px-6 py-4 text-right">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body" class="divide-y divide-slate-100 bg-white/40">
+                        <!-- User rows dynamically injected here -->
+                        <tr>
+                            <td colspan="8" class="text-center py-12 text-slate-400 font-semibold">Đang tải dữ liệu người dùng...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="edit-user-modal" class="fixed inset-0 z-[100000] hidden flex items-center justify-center bg-slate-900/40 backdrop-blur-md">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-100 mx-4">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-extrabold text-slate-950">Chỉnh sửa người dùng</h3>
+                <button onclick="closeEditModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all">✕</button>
+            </div>
+
+            <form id="edit-user-form" class="space-y-5">
+                <input type="hidden" id="edit-uid">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">NDID tài khoản</label>
+                    <input type="text" id="edit-ndid-display" disabled class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-400 outline-none cursor-not-allowed">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Họ và tên</label>
+                    <input type="text" id="edit-fullname" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Vai trò hệ thống</label>
+                    <select id="edit-role" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:bg-white focus:border-blue-500 transition-all">
+                        <option value="student">Học sinh (Student)</option>
+                        <option value="teacher">Giáo viên (Teacher)</option>
+                        <option value="admin">Quản trị viên (Admin)</option>
+                        <option value="other">Khác</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Năm sinh</label>
+                    <input type="number" id="edit-yob" min="1940" max="2026" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Khối lớp / Hoạt động</label>
+                    <select id="edit-grade" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:bg-white focus:border-blue-500 transition-all">
+                        <option value="10">Lớp 10</option>
+                        <option value="11">Lớp 11</option>
+                        <option value="12">Lớp 12</option>
+                        <option value="Đang dạy">Giáo viên - Đang dạy</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4">
+                    <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition-all">Hủy</button>
+                    <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/10">Lưu thay đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Status Alerts -->
+    <div id="status-toast" class="fixed bottom-6 right-6 z-[100001] transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div id="status-toast-inner" class="flex items-center gap-3 px-5 py-3 rounded-xl bg-slate-900 text-white text-sm font-bold shadow-xl border border-slate-800">
+            <i id="status-toast-icon" class="ph-bold"></i>
+            <span id="status-toast-text">Thông báo hệ thống</span>
+        </div>
+    </div>
+
+    <!-- Firebase Integration Logic -->
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        // Initialize Firebase
+        let app;
+        if (getApps().length > 0) {
+            app = getApp();
+        } else {
+            const keys = await window.getEduKeys();
+            const firebaseConfig = {
+                apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
+                authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
+                databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
+                projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
+                storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
+                messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
+                appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
+                measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
+            };
+            app = initializeApp(firebaseConfig);
+        }
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Security settings
+        // SHA-256 băm của NDID được cấp quyền quản trị
+        const AUTHORIZED_ADMIN_HASHES = [
+            "681bb2d3f8a4e4cedbb0cba5d1763427361b99629bda0357c8c1a5b950f722e0" // nhatdang
+        ];
+
+        // Helper to hash SHA-256
+        async function hashSHA256(text) {
+            const msgUint8 = new TextEncoder().encode(text);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
+        // Global UI state
+        let allUsers = [];
+
+        // Verify and authenticate Admin
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                showAccessDenied("Chưa đăng nhập", "Bạn cần đăng nhập bằng tài khoản Admin để tiếp tục.");
+                return;
+            }
+
+            try {
+                // Fetch user data from Firestore
+                const userSnap = await getDoc(doc(db, 'users', user.uid));
+                if (!userSnap.exists()) {
+                    showAccessDenied("Không tìm thấy thông tin", "Tài khoản của bạn chưa có dữ liệu hồ sơ NDID.");
+                    return;
+                }
+
+                const userData = userSnap.data();
+                const ndid = userData.ndid || user.email.split('@')[0];
+
+                // Compute hash and check authorization
+                const ndidHash = await hashSHA256(ndid);
+                const isAuthorized = AUTHORIZED_ADMIN_HASHES.includes(ndidHash);
+
+                if (!isAuthorized) {
+                    showAccessDenied("Từ chối truy cập", "Bạn không có quyền truy cập trang quản trị này.");
+                    return;
+                }
+
+                // Authorized! Remove lock screen and fetch data
+                document.getElementById('admin-lock-screen').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                showToast("Xác thực quản trị viên thành công!", "success");
+                loadUsersList();
+
+            } catch (err) {
+                console.error(err);
+                showAccessDenied("Lỗi xác thực", "Hệ thống gặp sự cố khi xác minh quyền của bạn: " + err.message);
+            }
+        });
+
+        function showAccessDenied(title, desc) {
+            const lockIcon = document.getElementById('lock-icon-container');
+            const lockTitle = document.getElementById('lock-title');
+            const lockDesc = document.getElementById('lock-desc');
+            const lockAction = document.getElementById('lock-action-btn');
+
+            lockIcon.className = "mx-auto w-16 h-16 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm";
+            lockIcon.innerHTML = `<i class="ph-bold ph-lock-simple"></i>`;
+            lockTitle.textContent = title;
+            lockTitle.className = "text-xl font-extrabold mb-2 tracking-tight text-rose-600";
+            lockDesc.textContent = desc;
+            lockAction.classList.remove('hidden');
+        }
+
+        // Fetch user list from Firestore
+        async function loadUsersList() {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center py-12 text-slate-400 font-semibold">
+                        <i class="ph-bold ph-spinner animate-spin text-xl mr-2"></i> Đang tải dữ liệu từ Firestore...
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const usersSnap = await getDocs(collection(db, 'users'));
+                allUsers = [];
+                usersSnap.forEach(u => {
+                    allUsers.push({
+                        uid: u.id,
+                        ...u.data()
+                    });
+                });
+
+                renderUsersTable(allUsers);
+                updateStats(allUsers);
+
+            } catch (err) {
+                console.error(err);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-12 text-rose-500 font-semibold">
+                            <i class="ph-bold ph-warning-octagon text-xl mr-2"></i> Lỗi tải dữ liệu: ${err.message}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Render data to table
+        function renderUsersTable(users) {
+            const tbody = document.getElementById('users-table-body');
+            if (users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-12 text-slate-400 font-semibold">
+                            Không tìm thấy người dùng phù hợp.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition-colors";
+
+                const roleBadges = {
+                    'admin': '<span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-blue-50 text-blue-600 border border-blue-100">Admin</span>',
+                    'teacher': '<span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100">Teacher</span>',
+                    'student': '<span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-purple-50 text-purple-600 border border-purple-100">Student</span>',
+                    'other': '<span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200">Other</span>'
+                };
+
+                const roleBadge = roleBadges[u.role] || roleBadges['student'];
+                const formattedDate = u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : '—';
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-bold text-slate-900">${u.ndid || '—'}</td>
+                    <td class="px-6 py-4 font-semibold text-slate-800">${u.fullname || '—'}</td>
+                    <td class="px-6 py-4 text-slate-500 font-medium text-xs">${u.emails?.[0] || '—'}</td>
+                    <td class="px-6 py-4">${roleBadge}</td>
+                    <td class="px-6 py-4 font-semibold text-slate-700">${u.yob || '—'}</td>
+                    <td class="px-6 py-4 font-bold text-slate-800">${u.grade || '—'}</td>
+                    <td class="px-6 py-4 text-slate-400 font-semibold text-xs">${formattedDate}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="openEditModal('${u.uid}')" class="px-3 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 border border-slate-200 rounded-lg text-xs font-bold transition-all mr-2">Sửa</button>
+                        <button onclick="deleteUser('${u.uid}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-bold transition-all">Xóa</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Calculate and render stats
+        function updateStats(users) {
+            const total = users.length;
+            const teachers = users.filter(u => u.role === 'teacher').length;
+            const g12 = users.filter(u => u.grade === '12' || u.grade === 12).length;
+
+            const profileCompleted = users.filter(u => u.yob && u.role && u.grade && u.grade !== 'Khác').length;
+            const completedPercent = total > 0 ? Math.round((profileCompleted / total) * 100) : 0;
+
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-teachers').textContent = teachers;
+            document.getElementById('stat-g12').textContent = g12;
+            document.getElementById('stat-profile-rate').textContent = completedPercent + "%";
+        }
+
+        // Live filtering and searching
+        const searchInput = document.getElementById('user-search');
+        const roleFilter = document.getElementById('filter-role');
+        const gradeFilter = document.getElementById('filter-grade');
+
+        function applyFilters() {
+            const query = searchInput.value.toLowerCase().trim();
+            const role = roleFilter.value;
+            const grade = gradeFilter.value;
+
+            const filtered = allUsers.filter(u => {
+                const matchesSearch = 
+                    (u.ndid || '').toLowerCase().includes(query) ||
+                    (u.fullname || '').toLowerCase().includes(query) ||
+                    (u.emails?.[0] || '').toLowerCase().includes(query);
+                
+                const matchesRole = role === 'all' || u.role === role;
+                const matchesGrade = grade === 'all' || String(u.grade) === grade;
+
+                return matchesSearch && matchesRole && matchesGrade;
+            });
+
+            renderUsersTable(filtered);
+        }
+
+        searchInput.addEventListener('input', applyFilters);
+        roleFilter.addEventListener('change', applyFilters);
+        gradeFilter.addEventListener('change', applyFilters);
+
+        document.getElementById('btn-refresh').addEventListener('click', loadUsersList);
+
+        // Edit Modal functions
+        window.openEditModal = function(uid) {
+            const user = allUsers.find(u => u.uid === uid);
+            if (!user) return;
+
+            document.getElementById('edit-uid').value = user.uid;
+            document.getElementById('edit-ndid-display').value = user.ndid || '';
+            document.getElementById('edit-fullname').value = user.fullname || '';
+            document.getElementById('edit-role').value = user.role || 'student';
+            document.getElementById('edit-yob').value = user.yob || '';
+            document.getElementById('edit-grade').value = user.grade || 'Khác';
+
+            // Sync role to grade for teachers in editor
+            const editRole = document.getElementById('edit-role');
+            const editGrade = document.getElementById('edit-grade');
+            editRole.onchange = () => {
+                if (editRole.value === 'teacher') editGrade.value = 'Đang dạy';
+                else if (editRole.value === 'student') editGrade.value = '10';
+            };
+
+            document.getElementById('edit-user-modal').classList.remove('hidden');
+        };
+
+        window.closeEditModal = function() {
+            document.getElementById('edit-user-modal').classList.add('hidden');
+        };
+
+        // Form Submit edit
+        document.getElementById('edit-user-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const uid = document.getElementById('edit-uid').value;
+            const fullname = document.getElementById('edit-fullname').value.trim();
+            const role = document.getElementById('edit-role').value;
+            const yob = document.getElementById('edit-yob').value.trim();
+            const grade = document.getElementById('edit-grade').value;
+
+            if (!uid) return;
+
+            try {
+                await updateDoc(doc(db, 'users', uid), {
+                    fullname,
+                    role,
+                    yob: yob ? Number(yob) : null,
+                    grade
+                });
+
+                showToast("Cập nhật thông tin thành công!", "success");
+                closeEditModal();
+                loadUsersList();
+            } catch (err) {
+                console.error(err);
+                showToast("Lỗi cập nhật: " + err.message, "error");
+            }
+        });
+
+        // Delete user
+        window.deleteUser = async function(uid) {
+            const user = allUsers.find(u => u.uid === uid);
+            if (!user) return;
+
+            if (!confirm(`Bạn có chắc chắn muốn xóa hồ sơ của NDID "${user.ndid}" không? Thao tác này sẽ xóa tài liệu trên Firestore.`)) {
+                return;
+            }
+
+            try {
+                await deleteDoc(doc(db, 'users', uid));
+                if (user.ndid) {
+                    try {
+                        await deleteDoc(doc(db, 'ndids', user.ndid));
+                    } catch (_) {}
+                }
+                showToast("Đã xóa hồ sơ người dùng thành công!", "success");
+                loadUsersList();
+            } catch (err) {
+                console.error(err);
+                showToast("Lỗi xóa: " + err.message, "error");
+            }
+        };
+
+        // Toast utility
+        function showToast(message, type = "success") {
+            const toast = document.getElementById('status-toast');
+            const inner = document.getElementById('status-toast-inner');
+            const text = document.getElementById('status-toast-text');
+            const icon = document.getElementById('status-toast-icon');
+
+            text.textContent = message;
+            if (type === "success") {
+                inner.className = "flex items-center gap-3 px-5 py-3 rounded-xl bg-emerald-500 text-white text-sm font-bold shadow-xl border border-emerald-400";
+                icon.className = "ph-bold ph-check-circle text-lg";
+            } else {
+                inner.className = "flex items-center gap-3 px-5 py-3 rounded-xl bg-rose-500 text-white text-sm font-bold shadow-xl border border-rose-400";
+                icon.className = "ph-bold ph-warning-octagon text-lg";
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

@@ -63,6 +63,8 @@
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc }
+            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         // Tái sử dụng Firebase App đã khởi tạo bởi firebase-init.js (nếu có), tránh lỗi "app already exists"
         let app;
@@ -97,19 +99,69 @@
             setTimeout(() => statusEl.className = 'status-msg', 4000);
         }
 
-        // Nếu đã đăng nhập → về trang chủ
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const stored = localStorage.getItem('nd_user');
-                if (!stored) {
-                    localStorage.setItem('nd_user', JSON.stringify({
-                        displayName: user.displayName,
-                        email: user.email,
-                        photoURL: user.photoURL,
-                        uid: user.uid,
-                        ndid: user.email.split('@')[0]
-                    }));
+        const db = getFirestore(app);
+
+        async function saveUserSession(user, customNdid = null) {
+            let role = 'student';
+            let yob = null;
+            let grade = 'Khác';
+            let ndid = customNdid || user.email.split('@')[0];
+            let fullname = user.displayName || 'ND Member';
+
+            try {
+                const snap = await getDoc(doc(db, 'users', user.uid));
+                if (snap.exists()) {
+                    const data = snap.data();
+                    role = data.role || 'student';
+                    yob = data.yob || null;
+                    grade = data.grade || 'Khác';
+                    ndid = data.ndid || ndid;
+                    fullname = data.fullname || fullname;
+                } else {
+                    // Create base Firestore document for Google first-time login
+                    try {
+                        await saveNewUserDoc(db, user, ndid, fullname, role, yob, grade);
+                    } catch (e) {
+                        console.warn("Could not save initial user document:", e);
+                    }
                 }
+            } catch (e) {
+                console.warn("Error fetching user data from Firestore:", e);
+            }
+
+            localStorage.setItem('nd_user', JSON.stringify({
+                displayName: fullname,
+                email: user.email,
+                photoURL: user.photoURL,
+                uid: user.uid,
+                ndid: ndid,
+                role: role,
+                yob: yob,
+                grade: grade
+            }));
+        }
+
+        async function saveNewUserDoc(db, user, ndid, fullname, role, yob, grade) {
+            const { setDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+            await setDoc(doc(db, 'users', user.uid), {
+                ndid,
+                fullname,
+                emails: [user.email],
+                role,
+                yob,
+                grade,
+                createdAt: new Date().toISOString()
+            });
+            await setDoc(doc(db, 'ndids', ndid), {
+                uid: user.uid,
+                recoveryEmail: user.email
+            });
+        }
+
+        // Nếu đã đăng nhập → về trang chủ
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await saveUserSession(user);
                 window.location.href = '/';
             }
         });
@@ -126,13 +178,7 @@
             try {
                 const email = `${ndid}@ndlabs.com`;
                 const cred = await signInWithEmailAndPassword(auth, email, password);
-                localStorage.setItem('nd_user', JSON.stringify({
-                    displayName: cred.user.displayName,
-                    email: cred.user.email,
-                    photoURL: cred.user.photoURL,
-                    uid: cred.user.uid,
-                    ndid: ndid
-                }));
+                await saveUserSession(cred.user, ndid);
                 showStatus('Đăng nhập thành công!', 'success');
                 setTimeout(() => window.location.href = '/', 800);
             } catch (err) {
@@ -146,14 +192,7 @@
             try {
                 const provider = new GoogleAuthProvider();
                 const result = await signInWithPopup(auth, provider);
-                const u = result.user;
-                localStorage.setItem('nd_user', JSON.stringify({
-                    displayName: u.displayName,
-                    email: u.email,
-                    photoURL: u.photoURL,
-                    uid: u.uid,
-                    ndid: u.email.split('@')[0]
-                }));
+                await saveUserSession(result.user);
                 window.location.href = '/';
             } catch (err) {
                 console.error("Google Auth Error:", err);

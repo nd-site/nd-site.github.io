@@ -139,6 +139,37 @@
                         <input type="text" id="edit-name" placeholder="Tên của bạn">
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="edit-role">Vai trò</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-users"></i>
+                        <select id="edit-role" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
+                            <option value="student">Học sinh (Study)</option>
+                            <option value="teacher">Giáo viên (Teacher)</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-yob">Năm sinh</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-calendar"></i>
+                        <input type="number" id="edit-yob" placeholder="Ví dụ: 2008" min="1940" max="2026" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-grade">Lớp học</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-presentation"></i>
+                        <select id="edit-grade" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
+                            <option value="10">Lớp 10</option>
+                            <option value="11">Lớp 11</option>
+                            <option value="12">Lớp 12</option>
+                            <option value="Đang dạy">Giáo viên - Đang dạy</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </div>
+                </div>
                 <button type="submit" class="btn-primary"
                     style="width: fit-content; padding: 11px 28px; margin-top: 4px;">
                     <i class="ph-bold ph-floppy-disk"></i> Lưu thay đổi
@@ -279,6 +310,9 @@
                     document.getElementById('ndid-display').textContent = data.ndid || user.email.split('@')[0];
                     document.getElementById('display-email').textContent = data.emails?.[0] || user.email;
                     document.getElementById('edit-name').value = data.fullname || user.displayName || '';
+                    document.getElementById('edit-role').value = data.role || 'student';
+                    document.getElementById('edit-yob').value = data.yob || '';
+                    document.getElementById('edit-grade').value = data.grade || 'Khác';
                 } else {
                     document.getElementById('ndid-display').textContent = user.email.split('@')[0];
                     document.getElementById('display-email').textContent = user.email;
@@ -292,6 +326,21 @@
             const googleProvider = user.providerData.find(p => p.providerId === 'google.com');
             setGoogleLinked(!!googleProvider, googleProvider?.email);
         });
+
+        // Sync edit role dropdown with edit grade dropdown
+        const editRoleSelect = document.getElementById('edit-role');
+        const editGradeSelect = document.getElementById('edit-grade');
+        if (editRoleSelect && editGradeSelect) {
+            editRoleSelect.addEventListener('change', () => {
+                if (editRoleSelect.value === 'teacher') {
+                    editGradeSelect.value = 'Đang dạy';
+                } else if (editRoleSelect.value === 'student') {
+                    editGradeSelect.value = '10';
+                } else {
+                    editGradeSelect.value = 'Khác';
+                }
+            });
+        }
 
         // Avatar upload
         document.getElementById('avatar-upload').addEventListener('change', async (e) => {
@@ -315,12 +364,31 @@
             e.preventDefault();
             if (!currentUser) return;
             const newName = document.getElementById('edit-name').value.trim();
+            const newRole = document.getElementById('edit-role').value;
+            const newYob = document.getElementById('edit-yob').value.trim();
+            const newGrade = document.getElementById('edit-grade').value;
+
+            if (newYob && (isNaN(newYob) || newYob < 1940 || newYob > 2026)) {
+                return showStatus('Năm sinh không hợp lệ.', 'error');
+            }
+
             try {
                 await updateProfile(currentUser, { displayName: newName });
                 document.getElementById('display-name').textContent = newName;
-                try { await updateDoc(doc(db, 'users', currentUser.uid), { fullname: newName }); } catch (_) { }
+                try {
+                    await updateDoc(doc(db, 'users', currentUser.uid), {
+                        fullname: newName,
+                        role: newRole,
+                        yob: newYob ? Number(newYob) : null,
+                        grade: newGrade
+                    });
+                } catch (_) { }
                 const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
-                s.displayName = newName; localStorage.setItem('nd_user', JSON.stringify(s));
+                s.displayName = newName;
+                s.role = newRole;
+                s.yob = newYob ? Number(newYob) : null;
+                s.grade = newGrade;
+                localStorage.setItem('nd_user', JSON.stringify(s));
                 showStatus('Lưu thành công!', 'success');
             } catch (err) { showStatus('Lỗi: ' + err.message, 'error'); }
         });

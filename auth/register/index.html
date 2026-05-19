@@ -49,6 +49,37 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="role">Vai trò</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-users"></i>
+                        <select id="role" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
+                            <option value="student" selected>Học sinh (Study)</option>
+                            <option value="teacher">Giáo viên (Teacher)</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="yob">Năm sinh</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-calendar"></i>
+                        <input type="number" id="yob" placeholder="Ví dụ: 2008" min="1940" max="2026" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="grade">Lớp học</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-presentation"></i>
+                        <select id="grade" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
+                            <option value="10">Lớp 10</option>
+                            <option value="11">Lớp 11</option>
+                            <option value="12">Lớp 12</option>
+                            <option value="Đang dạy">Giáo viên - Đang dạy</option>
+                            <option value="Khác" selected>Khác</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="password">Mật khẩu</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-lock"></i>
@@ -117,16 +148,35 @@
             if (user && user.displayName) window.location.href = '/';
         });
 
+        // Sync Role dropdown with Grade dropdown
+        const roleSelect = document.getElementById('role');
+        const gradeSelect = document.getElementById('grade');
+        if (roleSelect && gradeSelect) {
+            roleSelect.addEventListener('change', () => {
+                if (roleSelect.value === 'teacher') {
+                    gradeSelect.value = 'Đang dạy';
+                } else if (roleSelect.value === 'student') {
+                    gradeSelect.value = '10';
+                } else {
+                    gradeSelect.value = 'Khác';
+                }
+            });
+        }
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const ndid = document.getElementById('ndid').value.trim().toLowerCase();
             const fullname = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim();
+            const role = document.getElementById('role').value;
+            const yob = document.getElementById('yob').value.trim();
+            const grade = document.getElementById('grade').value;
             const password = document.getElementById('password').value;
 
             if (ndid.length < 3) return showStatus('NDID phải từ 3 ký tự trở lên.', 'error');
             if (!/^[a-z0-9_]+$/.test(ndid)) return showStatus('NDID chỉ gồm chữ thường, số và dấu gạch dưới (_).', 'error');
+            if (!yob || isNaN(yob) || yob < 1940 || yob > 2026) return showStatus('Năm sinh không hợp lệ.', 'error');
 
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>Đang khởi tạo...</span>';
@@ -157,6 +207,9 @@
                     await setDoc(doc(db, 'users', user.uid), {
                         ndid, fullname,
                         emails: [email],
+                        role: role || 'student',
+                        yob: Number(yob) || null,
+                        grade: grade || 'Khác',
                         createdAt: new Date().toISOString()
                     });
                 } catch (fsErr) {
@@ -164,7 +217,14 @@
                 }
 
                 localStorage.setItem('nd_user', JSON.stringify({
-                    displayName: fullname, email, photoURL: null, uid: user.uid, ndid
+                    displayName: fullname,
+                    email,
+                    photoURL: null,
+                    uid: user.uid,
+                    ndid,
+                    role: role || 'student',
+                    yob: Number(yob) || null,
+                    grade: grade || 'Khác'
                 }));
 
                 showStatus('🎉 Tạo NDID thành công!', 'success');
