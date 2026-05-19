@@ -176,8 +176,18 @@
             submitBtn.innerHTML = '<span>Đang xác thực...</span>';
 
             try {
-                const email = `${ndid}@ndlabs.com`;
-                const cred = await signInWithEmailAndPassword(auth, email, password);
+                let email = `${ndid}@ndid.local`;
+                let cred;
+                try {
+                    cred = await signInWithEmailAndPassword(auth, email, password);
+                } catch (err) {
+                    if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+                        email = `${ndid}@ndlabs.com`;
+                        cred = await signInWithEmailAndPassword(auth, email, password);
+                    } else {
+                        throw err;
+                    }
+                }
                 await saveUserSession(cred.user, ndid);
                 showStatus('Đăng nhập thành công!', 'success');
                 setTimeout(() => window.location.href = '/', 800);

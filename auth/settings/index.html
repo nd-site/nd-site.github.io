@@ -126,7 +126,7 @@
                 </div>
                 <div>
                     <h3 id="display-name" style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">ND Member</h3>
-                    <p id="display-email" style="font-size: 13px; color: var(--text-soft);">email@ndlabs.com</p>
+                    <p id="display-email" style="font-size: 13px; color: var(--text-soft); font-weight: 600;">NDID: ...</p>
                 </div>
             </div>
 
@@ -305,21 +305,21 @@
             // Firestore data
             try {
                 const snap = await getDoc(doc(db, 'users', user.uid));
+                const ndid = snap.exists() ? (snap.data().ndid || user.email.split('@')[0]) : user.email.split('@')[0];
+                document.getElementById('ndid-display').textContent = ndid;
+                document.getElementById('display-email').textContent = `NDID: ${ndid}`;
+
                 if (snap.exists()) {
                     const data = snap.data();
-                    document.getElementById('ndid-display').textContent = data.ndid || user.email.split('@')[0];
-                    document.getElementById('display-email').textContent = data.emails?.[0] || user.email;
                     document.getElementById('edit-name').value = data.fullname || user.displayName || '';
                     document.getElementById('edit-role').value = data.role || 'student';
                     document.getElementById('edit-yob').value = data.yob || '';
                     document.getElementById('edit-grade').value = data.grade || 'Khác';
-                } else {
-                    document.getElementById('ndid-display').textContent = user.email.split('@')[0];
-                    document.getElementById('display-email').textContent = user.email;
                 }
             } catch (_) {
-                document.getElementById('ndid-display').textContent = user.email.split('@')[0];
-                document.getElementById('display-email').textContent = user.email;
+                const fallbackNdid = user.email.split('@')[0];
+                document.getElementById('ndid-display').textContent = fallbackNdid;
+                document.getElementById('display-email').textContent = `NDID: ${fallbackNdid}`;
             }
 
             // Google link status
