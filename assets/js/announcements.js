@@ -16,7 +16,7 @@
 (function () {
   // DANH SÁCH CÁC THÔNG BÁO CHẠY NGANG (Dễ dàng thêm/sửa/xóa ở đây)
   const ANNOUNCEMENTS = [
-    "Thông báo toàn hệ thống ND Labs! Hiện tại, hệ thống trí tuệ nhân tạo AI trên nền tảng Web ND Labs đang được bảo trì. Chúng tôi sẽ cố gắng khắc phục sớm nhất có thể! Cảm ơn quý vị đã thông cảm!",
+    "Thông báo toàn hệ thống ND Labs! Hiện tại, tính năng Trí tuệ nhân tạo AI đang tạm ngưng hoạt động để bảo trì khóa bảo mật. Chúng tôi sẽ khôi phục sớm nhất có thể! Cảm ơn quý vị đã thông cảm!",
     "EduSpace by ND Labs vừa thêm vào hệ thống các bài thi thử TN THPT QG năm 2026. <a href='/eduspace/thptqg/2026/index.html' class='nd-ticker-link'>Trải nghiệm ngay tại đây!</a>"
   ];
 

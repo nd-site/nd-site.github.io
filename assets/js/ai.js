@@ -253,7 +253,13 @@ const eduspaceAI_UI = (function () {
             loadingDiv.remove();
             appendMessage(aiResponseRaw, 'ai');
         } catch (e) {
-            loadingDiv.innerHTML = `<span class="text-red-500">Lỗi: ${e.message}</span>`;
+            console.error("[EduAI] Error:", e.message);
+            // Hiển thị lỗi thân thiện, không lộ thông tin kỹ thuật ra ngoài
+            const isKeyErr = e.message && (e.message.includes('API Key') || e.message.includes('key') || e.message.includes('leaked') || e.message.includes('expired'));
+            const userMsg = isKeyErr
+                ? '⚠️ Tính năng AI đang tạm ngưng để bảo trì. Vui lòng quay lại sau!'
+                : '❌ Không thể kết nối EduAI. Vui lòng thử lại sau.';
+            loadingDiv.innerHTML = `<span style="color:#ef4444; font-size:13px;">${userMsg}</span>`;
         }
     }
 
