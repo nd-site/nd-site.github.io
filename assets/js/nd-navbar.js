@@ -228,7 +228,16 @@
   if (storedUser) {
     try {
       const u = JSON.parse(storedUser);
+      let adminLink = '';
+      if (u.role === 'admin') {
+        adminLink = `
+          <a href="/eduspace/admin/" class="nd-nav-link" style="color: #0070f3;" title="Bảng quản trị Admin">
+            <i class="ph-bold ph-shield-checkered"></i><span class="nd-lbl">Admin</span>
+          </a>
+        `;
+      }
       userSection.innerHTML = `
+        ${adminLink}
         <a href="/auth/settings/" class="nd-nav-link" title="Cài đặt tài khoản">
           <img src="${u.photoURL || '/assets/images/logo.png'}" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
           <span class="nd-lbl">${u.ndid || 'ND Member'}</span>
