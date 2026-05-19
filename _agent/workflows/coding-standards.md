@@ -50,5 +50,12 @@ Hệ thống hỗ trợ cấu hình linh hoạt trong `data.js` -> `config.examL
 - Định dạng phiên bản bắt buộc: `ver:<năm (2025=0, 2026=1, 2027=2, ...)>.<tháng>.<ngày>.<giờ><phút>`.
     - Ví dụ: Thời gian hiện tại là 18:30 ngày 19/05/2026 -> Version sẽ là `ver:1.5.19.1830`.
 
+## 9. Quy chuẩn Hệ thống Đăng nhập NDID & Tên miền
+- **TUYỆT ĐỐI KHÔNG** sử dụng bất kỳ tên miền giả lập nào như `@ndid.local`, `@ndid.internal` hoặc tên miền bên ngoài khác.
+- Đuôi email nội bộ phục vụ cho Firebase Auth bắt buộc phải là **`@ndsite.web.app`**.
+- **TUYỆT ĐỐI KHÔNG** hiển thị hậu tố tên miền `@ndsite.web.app` lên giao diện người dùng (ví dụ: trên trang cài đặt, trang quản trị, hoặc thanh điều hướng). Chỉ hiển thị tiền tố NDID thuần túy (ví dụ: `nhatdang`).
+- Hỗ trợ fallback tương thích ngược tự động cho tài khoản cũ (đuôi `@ndlabs.com`) tại màn hình đăng nhập, không yêu cầu người dùng nhập hậu tố email khi đăng nhập bằng NDID.
+
 ---
 // turbo-all
+

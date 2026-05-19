@@ -195,7 +195,7 @@
                     console.warn('Firestore chưa sẵn sàng, bỏ qua kiểm tra NDID:', fsErr.message);
                 }
 
-                const internalEmail = `${ndid}@ndid.local`;
+                const internalEmail = `${ndid}@ndsite.web.app`;
                 const cred = await createUserWithEmailAndPassword(auth, internalEmail, password);
                 const user = cred.user;
 
