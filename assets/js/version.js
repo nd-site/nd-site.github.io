@@ -1,6 +1,6 @@
 /**
  * EduSpace — Global Version Indicator (Bộ Chỉ báo & Kiểm soát Phiên bản Toàn hệ thống)
- * Generated at: 2026-05-19 20:16
+ * Generated at: 2026-05-19 22:35
  * 
  * Tác dụng:
  *   • Khai báo số hiệu phiên bản hiện tại của ứng dụng.
@@ -10,7 +10,7 @@
  * Định dạng: ver:<năm (2025=0, 2026=1)>.<tháng>.<ngày>.<giờ><phút>
  */
 (function () {
-    const VERSION = "ver:1.5.19.2016";
+    const VERSION = "ver:1.5.19.2235";
 
     function injectVersionBadge() {
         if (document.getElementById('nd-version-badge')) return;

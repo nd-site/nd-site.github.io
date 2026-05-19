@@ -1,0 +1,20 @@
+# EduSpace Workspace Rules & Standards
+
+## 1. Version Control (Bắt buộc cập nhật số phiên bản)
+Mỗi khi có tính năng mới, sửa tính năng cũ, thay đổi giao diện, hoặc thay đổi bất kỳ dòng code nào trên hệ thống, bạn **BẮT BUỘC** phải cập nhật số phiên bản trong file [version.js](file:///d:/WebSite/EduSpace%20-%20%C4%90%E1%BB%95i%20giao%20di%E1%BB%87n%20150526/assets/js/version.js).
+
+- **Định dạng số phiên bản:** `ver:<năm (2025=0, 2026=1, 2027=2, ...)>.<tháng>.<ngày>.<giờ><phút>`
+- **Ví dụ:** Thời gian hiện tại là 22:35 ngày 19/05/2026 -> Version sẽ là `"ver:1.5.19.2235"`.
+- Cập nhật đồng thời phần comment `@Generated at` ở đầu file `version.js` cho trùng khớp với thời gian chỉnh sửa.
+
+## 2. Font System (Hệ thống Font chữ)
+- Hệ thống chỉ sử dụng duy nhất font chữ **Play**.
+- Tất cả các trang HTML phải nạp `/font/font.js`.
+- Bất kỳ thành phần UI mới hoặc CSS mới nào đều không được phép dùng font mặc định hay font hệ thống khác.
+
+## 3. Quy chuẩn đặt tên môn học (Subject Naming)
+- **BẮT BUỘC** viết hoa chữ cái đầu của từng từ trong tên môn học để đảm bảo tính nhất quán (ví dụ: `"Hóa Học"`, `"Vật Lý"`, `"Ngữ Văn"`, `"Địa Lý"`, `"Lịch Sử"`, `"Tin Học"`, `"Công Nghệ"`, `"Tiếng Anh"`, `"Sinh Học"`).
+- **TUYỆT ĐỐI KHÔNG** viết thường chữ cái thứ hai trở đi (ví dụ: tránh viết `"Hóa học"`, `"Vật lý"`, `"Địa lý"`, `"Tin học"`).
+
+## 4. Tài liệu tham khảo
+Đọc kỹ file hướng dẫn chi tiết tại [_agent/workflows/coding-standards.md](file:///d:/WebSite/EduSpace%20-%20%C4%90%E1%BB%95i%20giao%20di%E1%BB%87n%20150526/_agent/workflows/coding-standards.md) trước khi thực hiện bất kỳ chỉnh sửa nào.
