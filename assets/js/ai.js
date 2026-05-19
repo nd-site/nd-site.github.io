@@ -21,7 +21,6 @@ const eduspaceAI_UI = (function () {
         const style = document.createElement('style');
         style.id = 'eduspace-ai-styles';
         style.innerHTML = `
-            @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
             .edu-ai-toggle {
                 position: fixed;
@@ -39,7 +38,7 @@ const eduspaceAI_UI = (function () {
                 box-shadow: 0 10px 25px -5px rgba(0, 112, 243, 0.4);
                 z-index: 99000;
                 transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+                font-family: 'Play', sans-serif !important;
             }
             .edu-ai-toggle:hover { transform: scale(1.1); }
             .edu-ai-toggle svg { width: 28px; height: 28px; }
@@ -63,7 +62,7 @@ const eduspaceAI_UI = (function () {
                 z-index: 99001;
                 overflow: hidden;
                 animation: aiShow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-                font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+                font-family: 'Play', sans-serif !important;
             }
             @keyframes aiShow {
                 from { opacity: 0; transform: translateY(20px) scale(0.95); }
