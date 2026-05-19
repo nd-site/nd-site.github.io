@@ -35,7 +35,7 @@ const eduspaceAI_UI = (function () {
                 justify-content: center;
                 cursor: pointer;
                 box-shadow: 0 10px 25px -5px rgba(0, 112, 243, 0.4);
-                z-index: 1000;
+                z-index: 200004;
                 transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             }
             .edu-ai-toggle:hover { transform: scale(1.1); }
@@ -57,7 +57,7 @@ const eduspaceAI_UI = (function () {
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
                 display: none;
                 flex-direction: column;
-                z-index: 1001;
+                z-index: 200005;
                 overflow: hidden;
                 animation: aiShow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
