@@ -39,6 +39,9 @@
                         <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"
                             required>
                     </div>
+                    <div style="text-align: right; margin-top: 6px;">
+                        <a href="#" id="forgot-password-link" style="font-size: 12px; color: var(--primary); font-weight: 700; text-decoration: none;">Quên mật khẩu?</a>
+                    </div>
                 </div>
                 <button type="submit" id="submit-btn" class="btn-primary">
                     <span>Tiếp tục</span>
@@ -57,11 +60,29 @@
         </div>
     </div>
 
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="modal hidden" style="position: fixed; inset: 0; z-index: 100; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); align-items: center; justify-content: center; display: none;">
+        <div style="background: white; border-radius: 24px; padding: 28px; max-width: 400px; width: 100%; border: 1px solid #e2e8f0; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); margin: 0 16px;">
+            <h3 style="font-weight: 800; font-size: 18px; color: var(--text-main); margin: 0 0 8px 0; font-family: inherit;">Khôi phục mật khẩu</h3>
+            <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 20px; line-height: 1.5; font-family: inherit;">Nhập NDID của bạn để nhận liên kết đặt lại mật khẩu gửi đến email khôi phục đã đăng ký.</p>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <div class="input-container" style="position: relative; display: flex; align-items: center;">
+                    <i class="ph-duotone ph-identification-card" style="position: absolute; left: 16px; color: var(--text-soft); font-size: 18px;"></i>
+                    <input type="text" id="forgot-ndid" placeholder="Nhập NDID của bạn" style="width: 100%; padding: 12px 16px 12px 46px; border: 1.5px solid #e2e8f0; border-radius: 14px; outline: none; font-family: inherit; font-size: 14px;">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button id="cancel-forgot" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer; font-family: inherit;">Hủy</button>
+                <button id="confirm-forgot" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 20px;">Gửi liên kết</button>
+            </div>
+        </div>
+    </div>
+
     <div id="status-msg" class="status-msg"></div>
 
     <script type="module">
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
+        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, sendPasswordResetEmail }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import { getFirestore, doc, getDoc }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -208,6 +229,54 @@
                 console.error("Google Auth Error:", err);
                 const msg = err.code ? `Lỗi đăng nhập với Google (${err.code}).` : 'Lỗi đăng nhập với Google.';
                 showStatus(msg, 'error');
+            }
+        });
+
+        // Forgot password implementation
+        const forgotLink = document.getElementById('forgot-password-link');
+        const forgotModal = document.getElementById('forgot-password-modal');
+        const forgotNdidInput = document.getElementById('forgot-ndid');
+        const confirmForgotBtn = document.getElementById('confirm-forgot');
+
+        forgotLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            forgotNdidInput.value = '';
+            forgotModal.style.display = 'flex';
+        });
+
+        document.getElementById('cancel-forgot').addEventListener('click', () => {
+            forgotModal.style.display = 'none';
+        });
+
+        confirmForgotBtn.addEventListener('click', async () => {
+            const ndid = forgotNdidInput.value.trim().toLowerCase();
+            if (!ndid) {
+                alert('Vui lòng nhập NDID.');
+                return;
+            }
+
+            confirmForgotBtn.disabled = true;
+            confirmForgotBtn.textContent = 'Đang xử lý...';
+
+            try {
+                const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
+                if (!ndidSnap.exists()) {
+                    throw new Error('NDID này không tồn tại trên hệ thống.');
+                }
+                const data = ndidSnap.data();
+                const recoveryEmail = data.recoveryEmail;
+                if (!recoveryEmail) {
+                    throw new Error('Tài khoản này chưa cài đặt email khôi phục.');
+                }
+
+                await sendPasswordResetEmail(auth, recoveryEmail);
+                showStatus(`Liên kết đặt lại mật khẩu đã gửi đến email: ${recoveryEmail.replace(/(.{3})(.*)(@.*)/, "$1***$3")}`, 'success');
+                forgotModal.style.display = 'none';
+            } catch (err) {
+                alert('Lỗi khôi phục mật khẩu: ' + err.message);
+            } finally {
+                confirmForgotBtn.disabled = false;
+                confirmForgotBtn.textContent = 'Gửi liên kết';
             }
         });
     </script>

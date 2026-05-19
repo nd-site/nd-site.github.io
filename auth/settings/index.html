@@ -203,6 +203,16 @@
                 </div>
             </div>
 
+            <div class="divider" style="margin: 36px 0;"><span>Bảo mật & Mật khẩu</span></div>
+
+            <div id="password-management-section" style="padding: 20px; border-radius: 16px; border: 1.5px solid #e2e8f0; background: #fff; display: flex; flex-direction: column; gap: 8px;">
+                <h4 id="pass-sec-title" style="font-weight: 800; font-size: 15px; color: var(--text-main); display: flex; align-items: center; gap: 6px; margin: 0;"><i class="ph-bold ph-key"></i> Đang tải thông tin...</h4>
+                <p id="pass-sec-desc" style="font-size: 13px; color: var(--text-soft); line-height: 1.5; margin: 0;">Đang kiểm tra cơ chế bảo mật tài khoản...</p>
+                <button id="pass-sec-btn" class="btn-primary" style="width: fit-content; margin-top: 8px; padding: 8px 20px; font-size: 13px;">
+                    Thiết lập
+                </button>
+            </div>
+
             <!-- Dangerous options -->
             <div class="divider" style="margin: 36px 0;"><span>Quản lý nâng cao</span></div>
 
@@ -353,6 +363,48 @@
         </div>
     </div>
 
+    <!-- Password Management Modal -->
+    <div id="password-modal" class="modal hidden">
+        <div class="modal-content" style="max-width: 450px; width: 100%; padding: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 id="password-modal-title" style="font-weight: 800; font-size: 18px; color: var(--text-main); margin: 0; font-family: inherit;">Đổi mật khẩu</h3>
+                <button id="close-password-modal" style="border: none; background: none; font-size: 18px; cursor: pointer; color: var(--text-soft); font-weight: 700;">✕</button>
+            </div>
+
+            <form id="password-modal-form" class="space-y-4">
+                <!-- Current Password Field -->
+                <div id="pwd-field-current" class="form-group" style="margin-bottom: 16px;">
+                    <label>Mật khẩu hiện tại</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-lock"></i>
+                        <input type="password" id="pwd-current" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label>Mật khẩu mới</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-key"></i>
+                        <input type="password" id="pwd-new" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label>Xác nhận mật khẩu mới</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-key"></i>
+                        <input type="password" id="pwd-confirm" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+                    <button type="button" id="cancel-password-modal" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer; font-family: inherit;">Hủy</button>
+                    <button type="submit" id="btn-save-password" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 20px;">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="status-msg" class="status-msg"></div>
 
     <script type="module">
@@ -360,7 +412,8 @@
         import {
             getAuth, onAuthStateChanged, updateProfile, signOut,
             GoogleAuthProvider, linkWithPopup, unlink,
-            reauthenticateWithCredential, EmailAuthProvider, deleteUser, signInWithEmailAndPassword
+            reauthenticateWithCredential, EmailAuthProvider, deleteUser, signInWithEmailAndPassword,
+            updatePassword, linkWithCredential
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc, arrayUnion, deleteDoc, setDoc }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -444,6 +497,22 @@
             // Google link status
             const googleProvider = user.providerData.find(p => p.providerId === 'google.com');
             setGoogleLinked(!!googleProvider, googleProvider?.email);
+
+            // Password status check
+            const hasPassword = user.providerData.some(p => p.providerId === 'password');
+            const passTitle = document.getElementById('pass-sec-title');
+            const passDesc = document.getElementById('pass-sec-desc');
+            const passBtn = document.getElementById('pass-sec-btn');
+
+            if (hasPassword) {
+                passTitle.innerHTML = `<i class="ph-bold ph-key"></i> Đổi mật khẩu`;
+                passDesc.textContent = "Bạn đã thiết lập mật khẩu cho NDID. Nên thay đổi mật khẩu định kỳ để nâng cao bảo mật.";
+                passBtn.textContent = "Đổi mật khẩu";
+            } else {
+                passTitle.innerHTML = `<i class="ph-bold ph-key-return"></i> Thêm mật khẩu cho NDID`;
+                passDesc.textContent = "Tài khoản của bạn chỉ đang đăng nhập bằng Google. Hãy thêm mật khẩu ngay để có thể đăng nhập độc lập bằng NDID.";
+                passBtn.textContent = "Thêm mật khẩu";
+            }
         });
 
         // Sync edit role dropdown with edit grade dropdown
@@ -899,6 +968,97 @@
                 btn.disabled = false;
                 btn.textContent = 'Hoàn tất Sáp nhập';
             }
+        });
+
+        // ==========================================
+        // ADVANCED: PASSWORD MANAGEMENT LOGIC (CHANGE / ADD)
+        // ==========================================
+        let isChangeMode = true;
+        const passwordModal = document.getElementById('password-modal');
+        const pwdForm = document.getElementById('password-modal-form');
+        const pwdTitle = document.getElementById('password-modal-title');
+        const pwdFieldCurrent = document.getElementById('pwd-field-current');
+        const pwdCurrentInput = document.getElementById('pwd-current');
+        const pwdNewInput = document.getElementById('pwd-new');
+        const pwdConfirmInput = document.getElementById('pwd-confirm');
+        const btnSavePassword = document.getElementById('btn-save-password');
+
+        function openPasswordModal(isChange) {
+            isChangeMode = isChange;
+            pwdCurrentInput.value = '';
+            pwdNewInput.value = '';
+            pwdConfirmInput.value = '';
+
+            if (isChange) {
+                pwdTitle.textContent = 'Đổi mật khẩu';
+                pwdFieldCurrent.style.display = 'block';
+                pwdCurrentInput.required = true;
+            } else {
+                pwdTitle.textContent = 'Thêm mật khẩu cho NDID';
+                pwdFieldCurrent.style.display = 'none';
+                pwdCurrentInput.required = false;
+            }
+
+            passwordModal.classList.remove('hidden');
+        }
+
+        // Bind pass-sec-btn
+        document.getElementById('pass-sec-btn').addEventListener('click', () => {
+            if (!currentUser) return;
+            const hasPassword = currentUser.providerData.some(p => p.providerId === 'password');
+            openPasswordModal(hasPassword);
+        });
+
+        const closePasswordModal = () => passwordModal.classList.add('hidden');
+        document.getElementById('close-password-modal').addEventListener('click', closePasswordModal);
+        document.getElementById('cancel-password-modal').addEventListener('click', closePasswordModal);
+
+        pwdForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const valNew = pwdNewInput.value;
+            const valConfirm = pwdConfirmInput.value;
+
+            if (valNew !== valConfirm) {
+                alert('Mật khẩu mới và xác nhận mật khẩu không khớp.');
+                return;
+            }
+
+            if (valNew.length < 6) {
+                alert('Mật khẩu phải dài ít nhất 6 ký tự.');
+                return;
+            }
+
+            btnSavePassword.disabled = true;
+            btnSavePassword.textContent = 'Đang lưu...';
+
+            try {
+                if (isChangeMode) {
+                    // Step 1: Reauthenticate
+                    const valCurrent = pwdCurrentInput.value;
+                    const credential = EmailAuthProvider.credential(currentUser.email, valCurrent);
+                    await reauthenticateWithCredential(currentUser, credential);
+
+                    // Step 2: Update Password
+                    await updatePassword(currentUser, valNew);
+                    showStatus('🎉 Đổi mật khẩu thành công!', 'success');
+                } else {
+                    // Link with password credential
+                    const credential = EmailAuthProvider.credential(currentUser.email, valNew);
+                    await linkWithCredential(currentUser, credential);
+                    showStatus('🎉 Đã thêm mật khẩu thành công!', 'success');
+                }
+
+                closePasswordModal();
+                setTimeout(() => window.location.reload(), 1500);
+            } catch (err) {
+                alert('Thao tác mật khẩu thất bại: ' + err.message);
+            } finally {
+                btnSavePassword.disabled = false;
+                btnSavePassword.textContent = 'Xác nhận';
+            }
+        });
         });
     </script>
 </body>
