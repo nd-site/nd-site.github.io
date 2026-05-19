@@ -196,6 +196,15 @@ const eduspaceAI_UI = (function () {
                     <button onclick="eduspaceAI_UI.toggle()" class="hover:opacity-70 transition-opacity">✕</button>
                 </div>
                 <div id="ai-chat-messages" class="ai-messages">
+                    <div id="ai-welcome-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 32px 20px; height: 100%; color: #64748b; font-family: sans-serif; box-sizing: border-box;">
+                        <div style="font-size: 32px; margin-bottom: 12px; background: linear-gradient(135deg, ${CONFIG.primary} 0%, #3291ff 100%); width: 56px; height: 56px; border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 10px 20px rgba(0,112,243,0.15);">✨</div>
+                        <h3 style="font-size: 15px; font-weight: 800; color: #1e293b; margin: 8px 0 4px;">Chào mừng bạn đến với EduAI!</h3>
+                        <p style="font-size: 12px; font-weight: 500; line-height: 1.5; margin-bottom: 20px; max-width: 220px; color: #64748b;">Hãy hỏi tôi bất kỳ câu hỏi hoặc bài tập nào để được giải đáp tức thì.</p>
+                        <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 260px;">
+                            <div onclick="eduspaceAI_UI.useSuggestion('Giải thích ý nghĩa số Pi')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='${CONFIG.primary}'; this.style.color='${CONFIG.primary}'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">💡 Giải thích ý nghĩa số Pi</div>
+                            <div onclick="eduspaceAI_UI.useSuggestion('Cách cân bằng phản ứng hóa học?')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='${CONFIG.primary}'; this.style.color='${CONFIG.primary}'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">🧪 Cân bằng phản ứng hóa học</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="ai-input-area">
                     <input type="text" id="ai-input" placeholder="Hỏi EduAI..." onkeypress="if(event.key==='Enter') eduspaceAI_UI.send()">
@@ -307,6 +316,9 @@ const eduspaceAI_UI = (function () {
     }
 
     function appendMessage(content, role) {
+        const welcomeCard = document.getElementById('ai-welcome-card');
+        if (welcomeCard) welcomeCard.remove();
+
         const container = document.getElementById('ai-messages') || document.getElementById('ai-chat-messages');
         const div = document.createElement('div');
         div.className = `msg msg-${role} ${role === 'ai' ? 'markdown-content' : ''}`;
@@ -359,6 +371,15 @@ const eduspaceAI_UI = (function () {
         toggleBtn.style.display = 'flex';
     }
 
+    function useSuggestion(text) {
+        if (_isSending) return;
+        const input = document.getElementById('ai-input');
+        if (input) {
+            input.value = text;
+            send();
+        }
+    }
+
     // Auto-init on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
@@ -370,6 +391,7 @@ const eduspaceAI_UI = (function () {
         init: init,
         toggle: toggle,
         send: send,
+        useSuggestion: useSuggestion,
         updateVisibility: updateVisibility,
         appendMessage: appendMessage
     };
