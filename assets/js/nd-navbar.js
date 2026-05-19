@@ -21,7 +21,14 @@
     window.location.replace(target);
     return; // Dừng mọi xử lý phía dưới — trang sẽ redirect ngay lập tức
   }
+  /* ─── Tự động nạp font.js cho toàn bộ hệ thống ─────────────────────── */
+  if (!document.querySelector('script[src*="font.js"]')) {
+    const fontScript = document.createElement('script');
+    fontScript.src = '/font/font.js';
+    document.head.appendChild(fontScript);
+  }
   /* ────────────────────────────────────────────────────────────────────── */
+
 
   const NAV_H = 50; // navbar height in px — single source of truth
 

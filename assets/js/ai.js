@@ -180,6 +180,13 @@ const eduspaceAI_UI = (function () {
     }
 
     function init() {
+        // Tự động nạp font.js nếu trang chưa nạp
+        if (!document.querySelector('script[src*="font.js"]')) {
+            const fontScript = document.createElement('script');
+            fontScript.src = '/font/font.js';
+            document.head.appendChild(fontScript);
+        }
+
         injectStyles();
         if (document.getElementById('edu-ai-widget')) return;
 
