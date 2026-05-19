@@ -68,8 +68,6 @@ const eduspaceAI_UI = (function () {
             @keyframes aiShow {
                 from { opacity: 0; transform: translateY(20px) scale(0.95); }
                 to { opacity: 1; transform: translateY(0) scale(1); }
-            }opacity: 0; transform: translateY(20px) scale(0.95); }
-                to { opacity: 1; transform: translateY(0) scale(1); }
             }
 
             .ai-header {
