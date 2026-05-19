@@ -203,6 +203,29 @@
                 </div>
             </div>
 
+            <!-- Dangerous options -->
+            <div class="divider" style="margin: 36px 0;"><span>Quản lý nâng cao</span></div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Merge Accounts Row -->
+                <div style="padding: 20px; border-radius: 16px; border: 1.5px dashed #cbd5e1; background: #f8fafc; display: flex; flex-direction: column; gap: 8px;">
+                    <h4 style="font-weight: 800; font-size: 15px; color: var(--text-main); display: flex; align-items: center; gap: 6px; margin: 0;"><i class="ph-bold ph-git-merge" style="color: var(--primary);"></i> Sáp nhập tài khoản</h4>
+                    <p style="font-size: 13px; color: var(--text-soft); line-height: 1.5; margin: 0;">Sáp nhập dữ liệu từ một tài khoản NDID khác vào tài khoản này. Bạn cần cung cấp mật khẩu của cả hai tài khoản.</p>
+                    <button id="start-merge-btn" class="btn-link-small" style="width: fit-content; margin-top: 8px;">
+                        Bắt đầu sáp nhập
+                    </button>
+                </div>
+
+                <!-- Delete Account Row -->
+                <div style="padding: 20px; border-radius: 16px; border: 1.5px solid #fecaca; background: #fff5f5; display: flex; flex-direction: column; gap: 8px;">
+                    <h4 style="font-weight: 800; font-size: 15px; color: #dc2626; display: flex; align-items: center; gap: 6px; margin: 0;"><i class="ph-bold ph-trash"></i> Xóa tài khoản</h4>
+                    <p style="font-size: 13px; color: #991b1b; line-height: 1.5; margin: 0;">Hành động này không thể hoàn tác. Mọi dữ liệu học tập của bạn trên EduSpace sẽ bị xóa vĩnh viễn.</p>
+                    <button id="delete-acc-btn" class="btn-unlink" style="width: fit-content; margin-top: 8px; border: 1.5px solid #fecaca; background: #fee2e2;">
+                        Xóa tài khoản vĩnh viễn
+                    </button>
+                </div>
+            </div>
+
             <!-- Logout -->
             <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #fecaca;">
                 <button id="logout-btn"
@@ -234,6 +257,102 @@
         </div>
     </div>
 
+    <!-- Merge Account Modal -->
+    <div id="merge-modal" class="modal hidden" style="overflow-y: auto;">
+        <div class="modal-content" style="max-width: 600px; width: 100%; margin: 40px auto; padding: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="font-weight: 800; font-size: 20px; color: var(--text-main); margin: 0; display: flex; align-items: center; gap: 8px;"><i class="ph-bold ph-git-merge"></i> Sáp nhập tài khoản</h3>
+                <button id="close-merge" style="border: none; background: none; font-size: 18px; cursor: pointer; color: var(--text-soft); font-weight: 700;">✕</button>
+            </div>
+
+            <!-- Step 1: Login Account 2 -->
+            <div id="merge-step-1" class="merge-step">
+                <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 16px; line-height: 1.5;">Vui lòng nhập NDID và mật khẩu của <strong>tài khoản phụ (Account 2)</strong> cần sáp nhập.</p>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label>NDID Tài khoản 2</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-identification-card"></i>
+                        <input type="text" id="merge-ndid2" placeholder="Nhập NDID của tài khoản 2">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label>Mật khẩu Tài khoản 2</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-lock"></i>
+                        <input type="password" id="merge-password2" placeholder="••••••••">
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button id="cancel-merge-s1" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer;">Hủy</button>
+                    <button id="btn-merge-to-step2" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 24px;">Tiếp tục</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Confirm Account 1 Password -->
+            <div id="merge-step-2" class="merge-step hidden">
+                <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 16px; line-height: 1.5;">Xác thực tài khoản hiện tại: Vui lòng nhập mật khẩu của <strong>tài khoản hiện tại (Account 1 - <span id="merge-ndid1-display" style="color: var(--primary);">...</span>)</strong>.</p>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label>Mật khẩu của bạn</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-lock"></i>
+                        <input type="password" id="merge-password1" placeholder="••••••••">
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button id="btn-merge-back-step1" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer;">Quay lại</button>
+                    <button id="btn-merge-to-step3" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 24px;">Tiếp tục</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Choose Data Fields -->
+            <div id="merge-step-3" class="merge-step hidden">
+                <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 16px; line-height: 1.5;">Chọn thông tin bạn muốn giữ lại cho tài khoản sau khi sáp nhập:</p>
+                
+                <div style="border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; margin-bottom: 20px; font-size: 13px;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-weight: 800;">
+                                <th style="padding: 10px 12px; color: var(--text-soft);">Trường thông tin</th>
+                                <th style="padding: 10px 12px;">Acc 1 (Hiện tại)</th>
+                                <th style="padding: 10px 12px;">Acc 2 (Phụ)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="merge-options-body">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <p style="font-size: 12px; color: #b45309; background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 10px; margin-bottom: 20px; line-height: 1.5;">
+                    ⚠️ <strong>Lưu ý:</strong> Sau khi hoàn tất, Tài khoản 2 sẽ bị xóa vĩnh viễn khỏi hệ thống. Tài khoản Google không được chọn giữ lại cũng sẽ bị hủy liên kết và xóa khỏi cơ sở dữ liệu.
+                </p>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button id="btn-merge-back-step2" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer;">Quay lại</button>
+                    <button id="btn-execute-merge" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 24px; background: #059669; border-color: #059669;">Hoàn tất Sáp nhập</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div id="delete-modal" class="modal hidden">
+        <div class="modal-content" style="max-width: 450px; width: 100%; padding: 24px;">
+            <h3 style="font-weight: 800; font-size: 18px; color: #dc2626; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; margin: 0 0 8px 0;"><i class="ph-bold ph-warning"></i> Xác nhận xóa tài khoản</h3>
+            <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 20px; line-height: 1.5;">Vui lòng nhập mật khẩu của bạn để xác nhận xóa vĩnh viễn tài khoản này.</p>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <div class="input-container">
+                    <i class="ph-duotone ph-lock"></i>
+                    <input type="password" id="delete-password" placeholder="Mật khẩu của bạn">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button id="cancel-delete" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer;">Hủy</button>
+                <button id="confirm-delete" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 20px; background: #dc2626; border-color: #dc2626;">Xóa vĩnh viễn</button>
+            </div>
+        </div>
+    </div>
+
     <div id="status-msg" class="status-msg"></div>
 
     <script type="module">
@@ -241,9 +360,9 @@
         import {
             getAuth, onAuthStateChanged, updateProfile, signOut,
             GoogleAuthProvider, linkWithPopup, unlink,
-            reauthenticateWithCredential, EmailAuthProvider
+            reauthenticateWithCredential, EmailAuthProvider, deleteUser, signInWithEmailAndPassword
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, arrayUnion }
+        import { getFirestore, doc, getDoc, updateDoc, arrayUnion, deleteDoc, setDoc }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
@@ -443,6 +562,343 @@
             await signOut(auth);
             localStorage.removeItem('nd_user');
             window.location.href = '/';
+        });
+
+        // ==========================================
+        // ADVANCED: DELETE ACCOUNT LOGIC
+        // ==========================================
+        const deleteModal = document.getElementById('delete-modal');
+        const deletePasswordInput = document.getElementById('delete-password');
+
+        document.getElementById('delete-acc-btn').addEventListener('click', () => {
+            deletePasswordInput.value = '';
+            deleteModal.classList.remove('hidden');
+        });
+
+        document.getElementById('cancel-delete').addEventListener('click', () => {
+            deleteModal.classList.add('hidden');
+        });
+
+        document.getElementById('confirm-delete').addEventListener('click', async () => {
+            const password = deletePasswordInput.value;
+            if (!password || !currentUser) return;
+
+            try {
+                // Step 1: Reauthenticate currentUser
+                const credential = EmailAuthProvider.credential(currentUser.email, password);
+                await reauthenticateWithCredential(currentUser, credential);
+
+                // Step 2: Fetch user profile to get NDID
+                const snap = await getDoc(doc(db, 'users', currentUser.uid));
+                let ndid = null;
+                if (snap.exists()) {
+                    ndid = snap.data().ndid;
+                }
+
+                // Step 3: Delete Firestore data
+                await deleteDoc(doc(db, 'users', currentUser.uid));
+                if (ndid) {
+                    await deleteDoc(doc(db, 'ndids', ndid));
+                }
+
+                // Step 4: Delete Auth account
+                await deleteUser(currentUser);
+
+                // Step 5: Clean local storage and redirect
+                localStorage.removeItem('nd_user');
+                alert('Tài khoản của bạn đã được xóa vĩnh viễn khỏi EduSpace.');
+                window.location.href = '/';
+            } catch (err) {
+                alert('Lỗi xác thực hoặc không thể xóa tài khoản: ' + err.message);
+            }
+        });
+
+        // ==========================================
+        // ADVANCED: MERGE ACCOUNTS LOGIC
+        // ==========================================
+        let secondaryApp = null;
+        let secondaryAuth = null;
+        let data1 = {};
+        let data2 = {};
+        let user2 = null;
+
+        async function getSecondaryAuth() {
+            if (secondaryAuth) return secondaryAuth;
+            const keys = await window.getEduKeys();
+            const firebaseConfig = {
+                apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
+                authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
+                databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
+                projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
+                storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
+                messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
+                appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
+                measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
+            };
+            secondaryApp = initializeApp(firebaseConfig, "SecondaryApp");
+            secondaryAuth = getAuth(secondaryApp);
+            return secondaryAuth;
+        }
+
+        const mergeModal = document.getElementById('merge-modal');
+        const mergeStep1 = document.getElementById('merge-step-1');
+        const mergeStep2 = document.getElementById('merge-step-2');
+        const mergeStep3 = document.getElementById('merge-step-3');
+
+        function switchMergeStep(step) {
+            mergeStep1.classList.add('hidden');
+            mergeStep2.classList.add('hidden');
+            mergeStep3.classList.add('hidden');
+            document.getElementById(`merge-step-${step}`).classList.remove('hidden');
+        }
+
+        document.getElementById('start-merge-btn').addEventListener('click', () => {
+            document.getElementById('merge-ndid2').value = '';
+            document.getElementById('merge-password2').value = '';
+            document.getElementById('merge-password1').value = '';
+            switchMergeStep(1);
+            mergeModal.classList.remove('hidden');
+        });
+
+        const closeMerge = () => mergeModal.classList.add('hidden');
+        document.getElementById('close-merge').addEventListener('click', closeMerge);
+        document.getElementById('cancel-merge-s1').addEventListener('click', closeMerge);
+
+        // Step 1 -> Step 2
+        document.getElementById('btn-merge-to-step2').addEventListener('click', async () => {
+            const ndid2 = document.getElementById('merge-ndid2').value.trim().toLowerCase();
+            const password2 = document.getElementById('merge-password2').value;
+            if (!ndid2 || !password2) {
+                alert('Vui lòng điền đầy đủ NDID và mật khẩu tài khoản 2.');
+                return;
+            }
+
+            const btn = document.getElementById('btn-merge-to-step2');
+            btn.disabled = true;
+            btn.textContent = 'Đang xác thực...';
+
+            try {
+                const sAuth = await getSecondaryAuth();
+                let email2 = `${ndid2}@ndsite.web.app`;
+                let cred2;
+
+                try {
+                    cred2 = await signInWithEmailAndPassword(sAuth, email2, password2);
+                } catch (err) {
+                    if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+                        email2 = `${ndid2}@ndlabs.com`;
+                        cred2 = await signInWithEmailAndPassword(sAuth, email2, password2);
+                    } else {
+                        throw err;
+                    }
+                }
+
+                user2 = cred2.user;
+
+                // Load profiles
+                const snap1 = await getDoc(doc(db, 'users', currentUser.uid));
+                const snap2 = await getDoc(doc(db, 'users', user2.uid));
+
+                if (!snap1.exists()) {
+                    throw new Error('Không tìm thấy tài khoản 1 trong Firestore.');
+                }
+                if (!snap2.exists()) {
+                    throw new Error('Tài khoản 2 đã xác thực thành công nhưng chưa khởi tạo hồ sơ Firestore.');
+                }
+
+                const ndidMap1Snap = await getDoc(doc(db, 'ndids', snap1.data().ndid));
+                const ndidMap2Snap = await getDoc(doc(db, 'ndids', snap2.data().ndid));
+
+                data1 = {
+                    ...snap1.data(),
+                    recoveryEmail: ndidMap1Snap.exists() ? ndidMap1Snap.data().recoveryEmail : '',
+                    googleEmail: currentUser.providerData.find(p => p.providerId === 'google.com')?.email || null
+                };
+
+                data2 = {
+                    ...snap2.data(),
+                    recoveryEmail: ndidMap2Snap.exists() ? ndidMap2Snap.data().recoveryEmail : '',
+                    googleEmail: user2.providerData.find(p => p.providerId === 'google.com')?.email || null
+                };
+
+                document.getElementById('merge-ndid1-display').textContent = data1.ndid;
+                switchMergeStep(2);
+            } catch (err) {
+                alert('Không thể xác thực tài khoản 2: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Tiếp tục';
+            }
+        });
+
+        document.getElementById('btn-merge-back-step1').addEventListener('click', () => switchMergeStep(1));
+
+        // Step 2 -> Step 3
+        document.getElementById('btn-merge-to-step3').addEventListener('click', async () => {
+            const password1 = document.getElementById('merge-password1').value;
+            if (!password1) {
+                alert('Vui lòng nhập mật khẩu tài khoản hiện tại.');
+                return;
+            }
+
+            const btn = document.getElementById('btn-merge-to-step3');
+            btn.disabled = true;
+            btn.textContent = 'Xác minh...';
+
+            try {
+                const credential1 = EmailAuthProvider.credential(currentUser.email, password1);
+                await reauthenticateWithCredential(currentUser, credential1);
+
+                populateMergeTable();
+                switchMergeStep(3);
+            } catch (err) {
+                alert('Mật khẩu tài khoản hiện tại không đúng: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Tiếp tục';
+            }
+        });
+
+        document.getElementById('btn-merge-back-step2').addEventListener('click', () => switchMergeStep(2));
+
+        function populateMergeTable() {
+            const fields = [
+                { key: 'fullname', label: 'Họ và tên' },
+                { key: 'ndid', label: 'NDID' },
+                { key: 'role', label: 'Vai trò' },
+                { key: 'yob', label: 'Năm sinh' },
+                { key: 'grade', label: 'Lớp học' },
+                { key: 'recoveryEmail', label: 'Email khôi phục' }
+            ];
+
+            let html = '';
+            fields.forEach(f => {
+                const val1 = data1[f.key] || '—';
+                const val2 = data2[f.key] || '—';
+                html += `
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 10px 12px; font-weight: 700; color: var(--text-soft);">${f.label}</td>
+                        <td style="padding: 10px 12px;">
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="radio" name="merge_${f.key}" value="1" checked style="accent-color: var(--primary);">
+                                <span>${val1}</span>
+                            </label>
+                        </td>
+                        <td style="padding: 10px 12px;">
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="radio" name="merge_${f.key}" value="2" style="accent-color: var(--primary);">
+                                <span>${val2}</span>
+                            </label>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // Handle Google accounts if at least one is linked
+            if (data1.googleEmail || data2.googleEmail) {
+                html += `
+                    <tr style="border-bottom: 1px solid #e2e8f0; background: #fffbeb;">
+                        <td style="padding: 10px 12px; font-weight: 700; color: #b45309;">Giữ liên kết Google</td>
+                        <td style="padding: 10px 12px;">
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="radio" name="merge_google" value="1" ${data1.googleEmail ? 'checked' : 'disabled'} style="accent-color: #b45309;">
+                                <span>${data1.googleEmail || 'Không có liên kết'}</span>
+                            </label>
+                        </td>
+                        <td style="padding: 10px 12px;">
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="radio" name="merge_google" value="2" ${data2.googleEmail ? 'checked' : 'disabled'} style="accent-color: #b45309;">
+                                <span>${data2.googleEmail || 'Không có liên kết'}</span>
+                            </label>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            document.getElementById('merge-options-body').innerHTML = html;
+        }
+
+        // Execute Merge
+        document.getElementById('btn-execute-merge').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-execute-merge');
+            btn.disabled = true;
+            btn.textContent = 'Đang sáp nhập...';
+
+            try {
+                const getSelectedValue = (fieldName) => {
+                    const radios = document.getElementsByName(`merge_${fieldName}`);
+                    for (let r of radios) {
+                        if (r.checked) return r.value;
+                    }
+                    return "1";
+                };
+
+                const finalFullname = getSelectedValue('fullname') === "1" ? data1.fullname : data2.fullname;
+                const finalNdid = getSelectedValue('ndid') === "1" ? data1.ndid : data2.ndid;
+                const finalRole = getSelectedValue('role') === "1" ? data1.role : data2.role;
+                const finalYob = getSelectedValue('yob') === "1" ? data1.yob : data2.yob;
+                const finalGrade = getSelectedValue('grade') === "1" ? data1.grade : data2.grade;
+                const finalRecoveryEmail = getSelectedValue('recoveryEmail') === "1" ? data1.recoveryEmail : data2.recoveryEmail;
+
+                // Handle google selection
+                const keepGoogle2 = (data1.googleEmail || data2.googleEmail) && getSelectedValue('google') === "2";
+
+                // Step 1: Google processing
+                if (data2.googleEmail) {
+                    try {
+                        await unlink(user2, 'google.com');
+                    } catch (_) {}
+                }
+
+                // If Google 2 was chosen to keep, add it to current user email list.
+                const emailsList = [currentUser.email];
+                if (finalRecoveryEmail) emailsList.push(finalRecoveryEmail);
+                if (keepGoogle2 && data2.googleEmail) emailsList.push(data2.googleEmail);
+
+                // Step 2: Update Account 1 Firestore
+                await updateDoc(doc(db, 'users', currentUser.uid), {
+                    fullname: finalFullname || '',
+                    ndid: finalNdid,
+                    role: finalRole || 'student',
+                    yob: finalYob ? Number(finalYob) : null,
+                    grade: finalGrade || 'Khác',
+                    emails: emailsList
+                });
+
+                // Update Account 1 NDID map
+                await setDoc(doc(db, 'ndids', finalNdid), {
+                    uid: currentUser.uid,
+                    recoveryEmail: finalRecoveryEmail || ''
+                });
+
+                // If final NDID is different from data1.ndid, delete old NDID map
+                if (finalNdid !== data1.ndid) {
+                    await deleteDoc(doc(db, 'ndids', data1.ndid));
+                }
+
+                // Step 3: Delete Account 2 Firestore
+                await deleteDoc(doc(db, 'users', user2.uid));
+                await deleteDoc(doc(db, 'ndids', data2.ndid));
+
+                // Step 4: Delete Account 2 Auth
+                await deleteUser(user2);
+
+                // Update UI state & LocalStorage
+                localStorage.setItem('nd_user', JSON.stringify({
+                    displayName: finalFullname,
+                    ndid: finalNdid,
+                    role: finalRole,
+                    yob: finalYob,
+                    grade: finalGrade
+                }));
+
+                alert('🎉 Sáp nhập tài khoản thành công! Trang sẽ được tải lại.');
+                window.location.reload();
+            } catch (err) {
+                alert('Lỗi sáp nhập dữ liệu: ' + err.message);
+                btn.disabled = false;
+                btn.textContent = 'Hoàn tất Sáp nhập';
+            }
         });
     </script>
 </body>
