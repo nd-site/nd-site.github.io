@@ -276,7 +276,7 @@ const eduspaceAI_UI = (function () {
                 ? 'Không chào hỏi, không dẫn nhập — trả lời thẳng vào câu hỏi.'
                 : 'Chào người dùng ngắn gọn một câu rồi trả lời ngay.';
 
-            const systemPrompt = `Bạn là EduAI — trợ lý học tập ngắn gọn, súc tích. ${greetInstruction} Trả lời tối đa 3-5 câu, mỗi câu là một ý độc lập. Không dùng gạch đầu dòng dài. Không markdown phức tạp.${context ? ' Ngữ cảnh bài tập: ' + context : ''}`;
+            const systemPrompt = `Bạn là EduAI — trợ lý học tập ngắn gọn, súc tích. ${greetInstruction} Trả lời tối đa 3-5 câu, mỗi câu là một ý độc lập. Hãy sử dụng định dạng Markdown (in đậm, in nghiêng) và công thức Toán/Lý/Hóa bằng LaTeX (sử dụng dấu đô-la: $...$ cho công thức nội dòng và $$...$$ cho công thức dạng khối).${context ? ' Ngữ cảnh bài tập: ' + context : ''}`;
 
             const aiResponseRaw = await eduspaceAI.call({
                 contents: [{
