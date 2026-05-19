@@ -131,47 +131,81 @@
             </div>
 
             <!-- Edit profile -->
-            <form id="profile-form" class="auth-form">
-                <div class="form-group">
-                    <label>Họ và tên</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-user"></i>
-                        <input type="text" id="edit-name" placeholder="Tên của bạn">
+            <form id="profile-form" class="auth-form" style="display: flex; flex-direction: column; gap: 24px;">
+                <!-- Section 1: Thông tin tài khoản NDID -->
+                <div style="padding: 24px; border-radius: 20px; border: 1.5px solid #e2e8f0; background: #fff; display: flex; flex-direction: column; gap: 16px;">
+                    <h3 style="font-weight: 800; font-size: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; margin: 0; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
+                        <i class="ph-bold ph-identification-card" style="color: var(--primary);"></i> Thông tin tài khoản NDID
+                    </h3>
+                    
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>NDID (Tên định danh)</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-fingerprint"></i>
+                            <input type="text" id="edit-ndid" placeholder="Nhập NDID" required>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-soft); margin-top: 4px; line-height: 1.4; font-family: inherit;">Chỉ chứa chữ (hoa/thường), số, và ký tự <code>.</code> <code>_</code> <code>-</code>. Không được chứa từ "admin".</p>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Họ và tên</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-user"></i>
+                            <input type="text" id="edit-name" placeholder="Tên của bạn" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Email khôi phục</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-envelope-simple"></i>
+                            <input type="email" id="edit-recovery-email" placeholder="email@example.com">
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="edit-role">Vai trò</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-users"></i>
-                        <select id="edit-role" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
-                            <option value="student">Học sinh (Study)</option>
-                            <option value="teacher">Giáo viên (Teacher)</option>
-                            <option value="other">Khác</option>
-                        </select>
+
+                <!-- Section 2: Thông tin trong EduSpace -->
+                <div style="padding: 24px; border-radius: 20px; border: 1.5px solid #e2e8f0; background: #fff; display: flex; flex-direction: column; gap: 16px;">
+                    <h3 style="font-weight: 800; font-size: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; margin: 0; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
+                        <i class="ph-bold ph-graduation-cap" style="color: var(--primary);"></i> Thông tin học tập EduSpace
+                    </h3>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="edit-role">Vai trò</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-users"></i>
+                            <select id="edit-role" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
+                                <option value="student">Học sinh (Study)</option>
+                                <option value="teacher">Giáo viên (Teacher)</option>
+                                <option value="other">Khác</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="edit-yob">Năm sinh</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-calendar"></i>
+                            <input type="number" id="edit-yob" placeholder="Ví dụ: 2008" min="1940" max="2026" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="edit-grade">Lớp học</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-presentation"></i>
+                            <select id="edit-grade" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
+                                <option value="10">Lớp 10</option>
+                                <option value="11">Lớp 11</option>
+                                <option value="12">Lớp 12</option>
+                                <option value="Đang dạy">Giáo viên - Đang dạy</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="edit-yob">Năm sinh</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-calendar"></i>
-                        <input type="number" id="edit-yob" placeholder="Ví dụ: 2008" min="1940" max="2026" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="edit-grade">Lớp học</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-presentation"></i>
-                        <select id="edit-grade" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
-                            <option value="10">Lớp 10</option>
-                            <option value="11">Lớp 11</option>
-                            <option value="12">Lớp 12</option>
-                            <option value="Đang dạy">Giáo viên - Đang dạy</option>
-                            <option value="Khác">Khác</option>
-                        </select>
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary"
-                    style="width: fit-content; padding: 11px 28px; margin-top: 4px;">
+
+                <button type="submit" class="btn-primary" style="width: fit-content; padding: 11px 28px; margin-top: 4px;">
                     <i class="ph-bold ph-floppy-disk"></i> Lưu thay đổi
                 </button>
             </form>
@@ -480,6 +514,16 @@
                 const ndid = snap.exists() ? (snap.data().ndid || user.email.split('@')[0]) : user.email.split('@')[0];
                 document.getElementById('ndid-display').textContent = ndid;
                 document.getElementById('display-email').textContent = `NDID: ${ndid}`;
+                document.getElementById('edit-ndid').value = ndid;
+
+                let recoveryEmail = '';
+                try {
+                    const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
+                    if (ndidSnap.exists()) {
+                        recoveryEmail = ndidSnap.data().recoveryEmail || '';
+                    }
+                } catch (_) {}
+                document.getElementById('edit-recovery-email').value = recoveryEmail;
 
                 if (snap.exists()) {
                     const data = snap.data();
@@ -492,6 +536,7 @@
                 const fallbackNdid = user.email.split('@')[0];
                 document.getElementById('ndid-display').textContent = fallbackNdid;
                 document.getElementById('display-email').textContent = `NDID: ${fallbackNdid}`;
+                document.getElementById('edit-ndid').value = fallbackNdid;
             }
 
             // Google link status
@@ -551,34 +596,82 @@
         document.getElementById('profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!currentUser) return;
+            
+            const newNdid = document.getElementById('edit-ndid').value.trim();
             const newName = document.getElementById('edit-name').value.trim();
+            const newRecoveryEmail = document.getElementById('edit-recovery-email').value.trim();
             const newRole = document.getElementById('edit-role').value;
             const newYob = document.getElementById('edit-yob').value.trim();
             const newGrade = document.getElementById('edit-grade').value;
+
+            if (newNdid.length < 3) {
+                return showStatus('NDID phải từ 3 ký tự trở lên.', 'error');
+            }
+            if (!/^[a-zA-Z0-9._-]+$/.test(newNdid)) {
+                return showStatus('NDID chỉ chứa chữ cái, số và các ký tự đặc biệt . _ -', 'error');
+            }
+            if (newNdid.toLowerCase().includes('admin')) {
+                return showStatus('NDID của bạn không được phép chứa cụm từ "admin" vì lý do bảo mật.', 'error');
+            }
 
             if (newYob && (isNaN(newYob) || newYob < 1940 || newYob > 2026)) {
                 return showStatus('Năm sinh không hợp lệ.', 'error');
             }
 
+            // Find current NDID
+            const currentNdid = document.getElementById('ndid-display').textContent.trim();
+
             try {
+                // If NDID changes, check if new one is already occupied
+                if (newNdid !== currentNdid) {
+                    const ndidSnap = await getDoc(doc(db, 'ndids', newNdid));
+                    if (ndidSnap.exists() && ndidSnap.data().uid !== currentUser.uid) {
+                        return showStatus('NDID này đã được sử dụng bởi người khác.', 'error');
+                    }
+                }
+
+                // Handle email list
+                const emailsList = [currentUser.email];
+                if (newRecoveryEmail) emailsList.push(newRecoveryEmail);
+
+                // Update users document
+                await updateDoc(doc(db, 'users', currentUser.uid), {
+                    ndid: newNdid,
+                    fullname: newName,
+                    role: newRole,
+                    yob: newYob ? Number(newYob) : null,
+                    grade: newGrade,
+                    emails: emailsList
+                });
+
+                // Update ndid maps
+                await setDoc(doc(db, 'ndids', newNdid), {
+                    uid: currentUser.uid,
+                    recoveryEmail: newRecoveryEmail
+                });
+
+                if (newNdid !== currentNdid) {
+                    await deleteDoc(doc(db, 'ndids', currentNdid));
+                }
+
                 await updateProfile(currentUser, { displayName: newName });
                 document.getElementById('display-name').textContent = newName;
-                try {
-                    await updateDoc(doc(db, 'users', currentUser.uid), {
-                        fullname: newName,
-                        role: newRole,
-                        yob: newYob ? Number(newYob) : null,
-                        grade: newGrade
-                    });
-                } catch (_) { }
+                document.getElementById('ndid-display').textContent = newNdid;
+                document.getElementById('display-email').textContent = `NDID: ${newNdid}`;
+
                 const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
                 s.displayName = newName;
+                s.ndid = newNdid;
                 s.role = newRole;
                 s.yob = newYob ? Number(newYob) : null;
                 s.grade = newGrade;
                 localStorage.setItem('nd_user', JSON.stringify(s));
-                showStatus('Lưu thành công!', 'success');
-            } catch (err) { showStatus('Lỗi: ' + err.message, 'error'); }
+
+                showStatus('Cập nhật thông tin thành công!', 'success');
+                setTimeout(() => window.location.reload(), 1000);
+            } catch (err) {
+                showStatus('Lỗi cập nhật: ' + err.message, 'error');
+            }
         });
 
         // Link Google → show reauth modal

@@ -207,42 +207,49 @@
                 <button onclick="closeEditModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all">✕</button>
             </div>
 
-            <form id="edit-user-form" class="space-y-5">
+            <form id="edit-user-form" class="space-y-6">
                 <input type="hidden" id="edit-uid">
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">NDID tài khoản</label>
-                    <input type="text" id="edit-ndid-display" disabled class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-400 outline-none cursor-not-allowed">
+                
+                <!-- Section 1: Tài khoản NDID -->
+                <div class="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 space-y-4">
+                    <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1.5"><i class="ph-bold ph-identification-card"></i> Tài khoản NDID</h4>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">NDID (Tên định danh)</label>
+                        <input type="text" id="edit-ndid" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                        <p class="text-[10px] text-slate-400 mt-1">Admin có thể sửa tùy ý, không giới hạn ký tự hay cụm từ cấm.</p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Họ và tên</label>
+                        <input type="text" id="edit-fullname" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Họ và tên</label>
-                    <input type="text" id="edit-fullname" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 transition-all">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Vai trò hệ thống</label>
-                    <select id="edit-role" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:bg-white focus:border-blue-500 transition-all">
-                        <option value="student">Học sinh (Student)</option>
-                        <option value="teacher">Giáo viên (Teacher)</option>
-                        <option value="admin">Quản trị viên (Admin)</option>
-                        <option value="other">Khác</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Năm sinh</label>
-                    <input type="number" id="edit-yob" min="1940" max="2026" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 transition-all">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Khối lớp / Hoạt động</label>
-                    <select id="edit-grade" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:bg-white focus:border-blue-500 transition-all">
-                        <option value="10">Lớp 10</option>
-                        <option value="11">Lớp 11</option>
-                        <option value="12">Lớp 12</option>
-                        <option value="Đang dạy">Giáo viên - Đang dạy</option>
-                        <option value="Khác">Khác</option>
-                    </select>
+                <!-- Section 2: Thông tin học tập/giáo dục EduSpace -->
+                <div class="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 space-y-4">
+                    <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1.5"><i class="ph-bold ph-graduation-cap"></i> Thông tin học tập EduSpace</h4>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Vai trò hệ thống</label>
+                        <select id="edit-role" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-blue-500 transition-all">
+                            <option value="student">Học sinh (Student)</option>
+                            <option value="teacher">Giáo viên (Teacher)</option>
+                            <option value="admin">Quản trị viên (Admin)</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Năm sinh</label>
+                        <input type="number" id="edit-yob" min="1940" max="2026" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Khối lớp / Hoạt động</label>
+                        <select id="edit-grade" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-blue-500 transition-all">
+                            <option value="10">Lớp 10</option>
+                            <option value="11">Lớp 11</option>
+                            <option value="12">Lớp 12</option>
+                            <option value="Đang dạy">Giáo viên - Đang dạy</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="flex items-center justify-end gap-3 pt-4">
@@ -265,7 +272,7 @@
     <script type="module">
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         // Initialize Firebase
         let app;
@@ -493,7 +500,7 @@
             if (!user) return;
 
             document.getElementById('edit-uid').value = user.uid;
-            document.getElementById('edit-ndid-display').value = user.ndid || '';
+            document.getElementById('edit-ndid').value = user.ndid || '';
             document.getElementById('edit-fullname').value = user.fullname || '';
             document.getElementById('edit-role').value = user.role || 'student';
             document.getElementById('edit-yob').value = user.yob || '';
@@ -518,6 +525,7 @@
         document.getElementById('edit-user-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const uid = document.getElementById('edit-uid').value;
+            const newNdid = document.getElementById('edit-ndid').value.trim();
             const fullname = document.getElementById('edit-fullname').value.trim();
             const role = document.getElementById('edit-role').value;
             const yob = document.getElementById('edit-yob').value.trim();
@@ -525,13 +533,41 @@
 
             if (!uid) return;
 
+            const user = allUsers.find(u => u.uid === uid);
+            const oldNdid = user ? user.ndid : '';
+
             try {
+                // If NDID changes, check map conflicts
+                if (newNdid !== oldNdid) {
+                    if (newNdid) {
+                        const ndidSnap = await getDoc(doc(db, 'ndids', newNdid));
+                        if (ndidSnap.exists() && ndidSnap.data().uid !== uid) {
+                            showToast("NDID này đã được sử dụng bởi người dùng khác!", "error");
+                            return;
+                        }
+                    }
+                }
+
+                // Update users document
                 await updateDoc(doc(db, 'users', uid), {
+                    ndid: newNdid,
                     fullname,
                     role,
                     yob: yob ? Number(yob) : null,
                     grade
                 });
+
+                // Update map ndids
+                if (newNdid) {
+                    await setDoc(doc(db, 'ndids', newNdid), {
+                        uid: uid,
+                        recoveryEmail: user?.emails?.[1] || ''
+                    });
+                }
+
+                if (oldNdid && newNdid !== oldNdid) {
+                    await deleteDoc(doc(db, 'ndids', oldNdid));
+                }
 
                 showToast("Cập nhật thông tin thành công!", "success");
                 closeEditModal();
@@ -547,7 +583,7 @@
             const user = allUsers.find(u => u.uid === uid);
             if (!user) return;
 
-            if (!confirm(`Bạn có chắc chắn muốn xóa hồ sơ của NDID "${user.ndid}" không? Thao tác này sẽ xóa tài liệu trên Firestore.`)) {
+            if (!confirm(`Bạn có chắc chắn muốn xóa tài khoản của NDID "${user.ndid || 'chưa rõ'}"?\n\nHành động này sẽ:\n1. Xóa thông tin cá nhân và học tập trên Firestore.\n2. Thu hồi bản đồ định danh NDID để người khác có thể sử dụng lại.\n3. Vô hiệu hóa quyền truy cập hệ thống của tài khoản này.`)) {
                 return;
             }
 
