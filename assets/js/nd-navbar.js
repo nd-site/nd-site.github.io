@@ -10,6 +10,19 @@
  *   • Tự động nạp bộ chỉ báo phiên bản (version.js) và bộ thông báo chạy chữ (announcements.js).
  */
 (function () {
+  /* ─── Chuyển hướng tự động: GitHub Pages → Firebase Hosting ────────── */
+  // Mọi lượt truy cập vào nd-site.github.io đều được chuyển sang ndsite.web.app
+  // để đảm bảo người dùng luôn dùng phiên bản chính thức duy nhất của hệ thống.
+  if (window.location.hostname === 'nd-site.github.io') {
+    const target = 'https://ndsite.web.app'
+      + window.location.pathname
+      + window.location.search
+      + window.location.hash;
+    window.location.replace(target);
+    return; // Dừng mọi xử lý phía dưới — trang sẽ redirect ngay lập tức
+  }
+  /* ────────────────────────────────────────────────────────────────────── */
+
   const NAV_H = 50; // navbar height in px — single source of truth
 
   const NAV_LINKS = [
