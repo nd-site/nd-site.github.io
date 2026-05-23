@@ -3,6 +3,17 @@
 
 window.quizData = {
     title: "Kiểm tra 1 tiết: Moment lực và Cân bằng vật rắn (50 Câu)",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: {
         testDuration: 2700,
         examLayout: {

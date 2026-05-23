@@ -3,6 +3,17 @@
 
 window.quizData = {
     title: "Kiểm tra Cuối Học Kì II – Công nghệ 10 (Thiết kế và Công nghệ) 2025-2026",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: {
         testDuration: 2700,
         examLayout: {

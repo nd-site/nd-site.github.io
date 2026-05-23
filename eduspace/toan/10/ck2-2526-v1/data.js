@@ -3,6 +3,17 @@
 
 window.quizData = {
     title: "Kiểm tra Cuối Học Kì II – Toán 10 (Kết nối tri thức) 2025-2026",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: {
         testDuration: 5400,
         examLayout: {

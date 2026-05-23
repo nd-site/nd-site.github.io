@@ -3,6 +3,17 @@
 
 window.quizData = {
     title: "Kiểm tra Cuối Học Kì II – Vật Lý 11 (Kết nối tri thức) 2025-2026",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: {
         testDuration: 3000,
         examLayout: {

@@ -1,5 +1,16 @@
 window.quizData = {
     title: "Đề thi thử tốt nghiệp THPT 2026 - Môn Tiếng Anh (Bản 1)",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: {
         testDuration: 3000, // 50 minutes
         examLayout: {

@@ -658,18 +658,22 @@
         window.addEventListener('load', async () => {
             try {
                 if (typeof quizData !== 'undefined') {
-                    document.getElementById('quiz-title-display').innerText = quizData.title || "EduSpace by ND Labs";
-                    document.getElementById('page-title').innerText = quizData.title || "EduSpace by ND Labs";
+                    const qTitleDisplay = document.getElementById('quiz-title-display');
+                    if (qTitleDisplay) qTitleDisplay.innerText = quizData.title || "EduSpace by ND Labs";
+                    const pTitle = document.getElementById('page-title');
+                    if (pTitle) pTitle.innerText = quizData.pageTitle || quizData.title || "EduSpace by ND Labs";
                     
                     quizData.activeQuestions = [...(quizData.questions || [])];
                     
-                    document.getElementById('total-questions-stat').innerText = quizData.activeQuestions.length;
+                    const totalQStat = document.getElementById('total-questions-stat');
+                    if (totalQStat) totalQStat.innerText = quizData.activeQuestions.length;
                     
                     let duration = 0;
                     if (quizData.config && quizData.config.testDuration) {
                         duration = quizData.config.testDuration;
                     }
-                    document.getElementById('total-time-stat').innerText = Math.floor(duration / 60);
+                    const totalTimeStat = document.getElementById('total-time-stat');
+                    if (totalTimeStat) totalTimeStat.innerText = Math.floor(duration / 60);
                 }
                 if (window.getGeminiApiKey) {
                     apiKey = await window.getGeminiApiKey();

@@ -1,0 +1,359 @@
+SỞ GD&ĐT NINH BÌNH
+CỤM 05 TRƯỜNG THPT
+ĐỀ THI CHÍNH THỨC
+(Đề thi có 07 trang)
+ĐỀ THI THỬ TỐT NGHIỆP THPT NĂM 2026
+(Đợt 1)
+Môn thi: TIN HỌC
+Thời gian làm bài: 50 phút
+Họ và tên thí sinh: ...............................................
+Số báo danh: ........................................................ Mã đề 0501
+PHẦN I: Câu hỏi trắc nghiệm nhiều phương án lựa chọn
+Thi sinh làm từ câu 1 đến câu 24. Mỗi câu hỏi thí sinh chỉ chọn một phương án.
+Câu 1 [NEO]: Bạn Q tham gia trong một cuộc thảo luận trực tuyến, khi trao đổi có một thành viên dùng lời lẽ cáu gắt và
+thiếu lịch sự. Cách ứng xử nào của bạn Q thể hiện tính nhân văn?
+A Lặng lẽ rời khỏi diễn đàn và không bao giờ quay lại tham gia thảo luận.
+B Phản bác lại ngay lập tức bằng những lời lẽ gay gắt để thể hiện quan điểm của minh.
+C Phớt lờ, xem như không thấy, không biết.
+D Đáp lại một cách lịch sự và tập trung vào nội dung của vấn đề đang thảo luận.
+Câu 2 [NEO]: Hành động nào thể hiện sự nhân văn và tôn trọng khi tham gia trực tuyến ?
+A Phản bác một cách xây dựng và tôn trọng quan điểm của người khác, dù không đồng ý.
+B Sử dụng các biểu tượng cảm xúc để thể hiện cảm xúc cá nhân mà không cần chú ý đến ngữ cảnh.
+C Luôn đồng tình với tất cả các ý kiến của mọi người trong lúc thảo luận.
+D Chia sẻ thường xuyên các tin nóng theo số đông để tạo hiệu ứng và thu hút sự chú ý.
+Câu 3 [NEO]: Đặc trưng nào sau đây không phải là một trong những đặc trưng cơ bản của AI?
+A Khả năng học. B Khả năng suy luận.
+C Khả năng vận động. D Khả năng nhận thức.
+Câu 4 [NEO]: Bảng điểm có các trường MOT_TIET; HỌC_KI. Để tìm những học sinh có điểm một tiết lớn hơn 3 và
+điểm thi học kì lớn hơn 5, biểu thức điều kiện nào sau đây là đúng?
+A MOT_TIET >= 3 AND HOC_KI > 5 B [MOT_TIET] > "3" AND [HOC_KI] > "5"
+C [MOT_TIET] >= 3 OR [HOC_KI] > 5 D [MOT_TIET] > 3 AND [HOC_KI] > 5
+Câu 5 [NEO]: Bạn A đọc một bài viết trên mạng xã hội (từ một tài khoản cho phép chia sẻ nội dung và nhận tin nhắn từ
+người lạ) nói về hoàn cảnh của bạn B trong lớp bị sai sự thật. Hành động nào của A thể hiện sự nhân văn khi giao tiếp trên
+không gian mạng?
+A Phản ứng mạnh mẽ và kêu gọi người khác lên án, phản bác tác giả đăng bài.
+B Chia sẻ bài viết đó lên trang cá nhân để bạn B có thể đọc được.
+C Bỏ qua nội dung bài viết vì không liên quan đến mình để tránh gặp rắc rối.
+D Gửi tin nhắn riêng giải thích và đề nghị tác giả đính chính nội dung hoặc gỡ bài.
+Câu 6 [NEO]: Để áp dụng cùng một kiểu chữ cho cả <h1> và các phần tử có class là title, cách viết CSS nào là đúng?
+A h1, .title {font-family: Arial;} B h1.title {font-family: Arial;}
+C h1.title {font-family: Arial;} D .h1, title {font-family: Arial;}
+` NEO - Cùng nhau Thủ Khoa Tin Học THPT Trang 1
+
+-- 1 of 7 --
+
+Câu 7 [NEO]: Chọn một trong hai ngôn ngữ Python hoặc C++ để xem xét đoạn chương trình sau:
+Python C++
+s = ""
+n = 12345
+while n > 0:
+s += str(n % 10)
+n //= 10
+print(s)
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+string s = "";
+int n = 12345;
+while (n > 0) {
+s += to_string(n % 10);
+n /= 10;
+}
+cout << s << endl;
+}
+Phương án nào dưới đây nêu đúng giá trị của s sau khi thực hiện chương trình trên?
+A 1 B 5 C 54321 D 12345
+Câu 8 [NEO]: Công việc nào trong lĩnh vực CNTT liên quan đến việc duy trì phần cứng máy tính hoạt động ổn định?
+A Quản trị mạng. B Phát triển web.
+C Sửa chữa và bảo trì. D Chuyên viên bảo mật.
+Câu 9 [NEO]: Hoa muốn chèn liên kết trên trang web cá nhân sao cho khi nhấp vào, liên kết mở trong tab mới. Mã HTML
+nào sau đây là đúng?
+A <a href="https://info.com"target="_self">Trang của tôi</a>
+B <a href="https://info.com">Trang của tôi</a>
+C <a src="https://info.com"target="_blank">Trang của tôi</a>
+D <a href="https://info.com"target="_blank">Trang của tôi</a>
+Câu 10 [NEO]: Thành tựu nào của Al đã đóng góp cho lĩnh vực tài chính?
+A Phân tích và dự đoán xu hướng thị trường tài chính.
+B Tạo ra các loại tiền mã hóa mới để thay đổi cách thanh toán truyền thống.
+C Nhận dạng khuôn mặt khi giao dịch.
+D Thiết kế và triển khai các hệ thống mạng lưới thanh toán trực tuyến.
+Câu 11 [NEO]: Độ dài của địa chỉ MAC là bao nhiêu?
+A 48 bit. B 8 bit. C 24 bit. D 32 bit.
+Câu 12 [NEO]: Phần tử nào sau đây khai báo thuộc tính border để tạo đường viền bao quanh các ô của bảng?
+A table B td C tr D caption
+A VÀ B ĐỀU ĐÚNG
+Câu 13 [NEO]: Học sinh lớp 12 của trường THPT A đang tham gia buổi hội thảo hướng nghiệp để chuẩn bị định hướng
+chọn nghề ngành Công nghệ Thông tin (CNTT) trong tương lai. Mục tiêu nào cần được chú trọng hàng đầu trong buổi hội
+thảo hướng nghiệp này?
+A Tham gia các buổi trò chuyện giải trí và giao lưu với sinh viên ngành CNTT.
+B Tạo mối quan hệ với các nhà tuyển dụng và nộp hồ sơ xin việc ngay tại hội thảo.
+C Tìm hiểu các kĩ năng cần thiết để tiếp cận và thành công trong ngành CNTT.
+D Thu thập các tài liệu quảng cáo từ các công ty CNTT tham gia hướng nghiệp.
+Câu 14 [NEO]: Một cửa hàng thời trang trên đường Trần Phú lắp camera tích hợp AI để theo dõi khách hàng. Chủ cửa
+hàng muốn biết ứng dụng nào sau đây không phải là ví dụ của nhận dạng khuôn mặt bằng AI?
+A Dự đoán xu hướng thời trang. B Xác định nhân vật trong video.
+C Mở khóa điện thoại. D Kiểm tra An ninh.
+` NEO - Cùng nhau Thủ Khoa Tin Học THPT Trang 2
+
+-- 2 of 7 --
+
+Câu 15 [NEO]: Phòng thư viện của Trường B có một modem tích hợp router kết nối Internet và một switch đơn chức
+năng có 12 cổng LAN. Trong đó, một cổng LAN của switch được dùng để nổi với modem/router. Vậy số lượng máy tính
+có thể kết nối Internet cùng lúc là bao nhiêu?
+A 11 B 12 C 2 D 1
+Câu 16 [NEO]: Cách nào để đặt kiểu chữ vừa in đậm vừa in nghiêng sau đây?
+A <bold><i>
+B <strong><italic>
+C style="font-weight:bold; font-style: italic;"
+D <bold><italic>
+Câu 17 [NEO]: Trong quá trình nhận dạng chữ viết tay năng lực trí tuệ nào sau đây được thể hiện rõ nhất?
+A Chuyển đổi hình ảnh chữ viết tay thành dữ liệu văn bản.
+B Có thể suy luận và hiểu ý nghĩa sâu xa của các từ hoặc câu viết tay.
+C Có khả năng vận động để mô phỏng chữ viết tay của con người.
+D Có khả năng nhận thức để phân biệt và hiểu các kí tự viết tay, bất kể phong cách viêt.
+Câu 18 [NEO]: Chức năng nào sau đây là một trong những chức năng của Access Point?
+A Kết nối các mạng LAN với nhau.
+B Thiết lập mạng WAN.
+C Cung cấp điểm truy cập không dây cho các thiết bị đầu cuối của người dùng.
+D Thiết lập mạng LAN.
+Câu 19 [NEO]: Thuật ngữ Al được chính thức đề cập một cách khoa học vào năm nào?
+A 1950. B 1956. C 1970. D 1957.
+Câu 20 [NEO]: Thiết bị mạng được cung cấp bởi ISP để kết nối với Internet là gì?
+A Access Point. B Router. C Switch. D Modem.
+Câu 21 [NEO]: Phương án nào sau đây phản ánh đúng vai trò trọng tâm của chuyền viên CNTT trong lĩnh vực Giáo dục
+hiện nay?
+A Thiết kế chương trình giảng dạy trực tuyến cho học sinh.
+B Phát triển và quản lí hệ thống quản lí học trực tuyến.
+C Quản lí các cuộc họp và hội thảo trực tuyến cho giáo viên.
+D Cài đặt và bảo trì hệ thống phần cứng cho các lớp học.
+Câu 22 [NEO]: Cho khai báo thuộc tính CSS như sau:
+<style>
+.highlight { color: blue;}
+.notice { color: red;}
+p { color: green;}
+</style>
+Với đoạn HTML:
+<p class="highlight notice">Chúc bạn thi tốt!</p>
+Khi hiển thị, màu chữ của đoạn văn bản sẽ là gì?
+A Trình duyệt báo lỗi vì phần tử có nhiều class
+B Xanh dương (blue)
+C Đỏ (red)
+D Xanh lá (green)
+` NEO - Cùng nhau Thủ Khoa Tin Học THPT Trang 3
+
+-- 3 of 7 --
+
+Câu 23 [NEO]: Cho đoạn mã sau:
+<ul>
+<li> Thiết kế trang web
+<ol>
+<li> Tài liệu HTML </li>
+<li> Tài liệu CSS </li>
+</ol>
+</li>
+<li> Tài liệu văn phòng
+<ol>
+<li> Tài liệu Word </li>
+<li> Tài liệu Excel </li>
+</ol>
+</li>
+</ul>
+Trên trình duyệt sẽ hiển thị kết quả nào dưới đây nếu thay cặp thẻ <ul></ul> thành cặp <ol></ol> và ngược lại?
+A 1. Thiết kế trang Web
+◦ Tài liệu HTML
+◦ Tài liệu CSS
+2. Tài liệu văn phòng
+◦ Tài liệu Word
+◦ Tài liệu Excel
+B 1. Thiết kế trang Web
+1. Tài liệu HTML
+2. Tài liệu CSS
+2. Tài liệu văn phòng
+1. Tài liệu Word
+2. Tài liệu Excel
+C • Thiết kế trang Web
+◦ Tài liệu HTML
+◦ Tài liệu CSS
+• Tài liệu văn phòng
+◦ Tài liệu Word
+◦ Tài liệu Excel
+D • Thiết kế trang Web
+1. Tài liệu HTML
+2. Tài liệu CSS
+• Tài liệu văn phòng
+1. Tài liệu Word
+2. Tài liệu Excel
+Phần II. Câu hỏi trắc nghiệm đúng sai.
+Thí sinh trả lời 4 câu hỏi. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.
+A. Phần chung cho tất cả các thí sinh
+Câu 1 [NEO]: Để truy cập vào các chức năng của trang web giáo dục trực tuyến, người dùng cần đăng ký tài khoản. Nhân
+viên phát triển web đã viết đoạn mã HTML sau để tạo biểu mẫu đăng ký:
+<form>
+<label for="username">Tài Khoản </label>
+<input type="text"id="username"name="username"> <br>
+<label for="email">Email</label>
+<input type="email"id="email"name="email"> <br>
+<label for="password">Mật khẩu</label>
+<input type="password"id="password"name="password"> <br>
+<input type="submit"value="Đăng ký">
+</form>
+Sau đây là một số nhận định về đoạn mã trên:
+a) Kiểu dữ liệu cho tài khoản là text. [ĐÚNG]
+b) Khi nhập dữ liệu vào ô mật khẩu, dữ liệu sẽ được hiển thị rõ ràng. [SAI]
+c) Phương thức gửi dữ liệu mặc định là phương thức POST. [SAI]
+d) Thẻ <input> của ô email yêu cầu người dùng nhập chính xác định dạng thư điện tử nhưng không kiểm tra liệu địa
+chỉ đó có tổn tại hay không. [ĐÚNG]
+` NEO - Cùng nhau Thủ Khoa Tin Học THPT Trang 4
+
+-- 4 of 7 --
+
+Câu 2 [NEO]: Cho một CSDL quản lí các thuê bao điện thoại của một công ty viễn thông gồm 3 bảng:
+LOAI_THUE_BAO (Loai_TB: Loại thuê bao có mã khác nhau; Gia_Cuoc: giá cước);
+THUE_BAO (Sdt: số điện thoại là duy nhất Ho_ten: Họ tên);
+CUOC_GOI (Ma_CG: Mã cước gọi, Ngay_goi: Ngày gọi, Thoi_gian: Thời gian).
+Hãy đưa ra thông tin các cuộc gọi được thực hiện trong ngày 18/7/2025. Kết quả bao gồm: Mã cước gọi: số điện thoại; họ
+và tên; thời gian gọi và được sắp xếp theo thứ tự giảm dần. Sau đây là ý kiến của học sinh về câu hỏi trên. Em hãy xác
+định câu đúng sai.
+Bảng: LOAI_THUE_BAO
+Loai_TB Gia_Cuoc
+TT 50
+TS 35
+Bảng: THUE_BAO
+Sdt Ho_ten Loai_TB
+0912785326 Phạm Thị Minh TT
+0382080006 Hà Minh Đức TS
+0399218456 Nguyễn Thị Lan TT
+Bảng: CUOC_GOI
+Ma_CG Sdt Ngay_goi Thoi_gian
+1000 0912785326 13/7/2025 15
+1001 0382080006 15/7/2025 27
+1002 0399218456 18/7/2025 33
+1003 0912785326 18/7/2025 40
+1004 0382080006 1/8/2025 10
+1005 0399218456 8/8/2025 28
+1006 0912785326 15/8/2025 12
+.... .... .... ....
+a) Các trường thông tin cần đưa ra trong truy vấn có trong hai bảng LOAI_THUE_BAO; CUOC_GOI nên cả hai bảng này
+có trong truy vấn. [SAI]
+b) Hai bảng LOAI_THUE_BAO; CUOC_GOI dược liên kết bằng hai khóa LOAI_THUE_BAO.Sdt = CUOC_GOI.Sdt.
+[SAI]
+c) Thiết lập điều kiện lọc cho truy vấn bằng biểu thức: CUOC_GOI.Ngay_goi = "18/7/2025". [ĐÚNG]
+d) Thiết lập thử tự kết quả theo giá trị cột Thoi_gian bằng từ khóa DESC. [ĐÚNG]
+B. Phần riêng
+Thí sinh chỉ chọn một trong hai phần sau: Thí sinh theo định hướng Khoa học máy tỉnh làm câu 3 và 4; Thí sinh theo định
+hướng Tin học ứng dụng làm câu 5 và 6.
+Định hướng Khoa học máy tính
+Câu 3 [NEO]: Một ứng dụng học máy dự đoán giá nhà trung cư của một thành phố X được huấn luyện trên một bảng dữ
+liệu của 1000 căn nhà đã mua bán trong thời gian gần đây. Mỗi dòng của bảng ứng với một căn nhà và gồm các đặc trưng
+của căn nhà đó, ví dụ như: địa chỉ, diện tích, khoảng cách đến trung tâm, giá giao dịch. Một số người đưa ra các kiến sau
+đâu là ý kiến đúng, đâu là ý kiến sai?
+a) Nhãn của dữ liệu là địa chỉ căn nhà. [SAI]
+b) Phương pháp học máy là học có giám sát. [ĐÚNG]
+c) Nên ứng dụng dữ liệu của 1000 căn nhà trên vừa để huấn luyện và vừa để kiểm thử ứng dụng dự đoán giá nhà. [SAI]
+d) Ứng dụng học máy trên có thể áp dụng dự đoán giá nhà ở thành phố lớn khác mà không cần thay đổi bất cứ dòng lệnh
+nào, chỉ cần thay đổi bảng dữ liệu huấn luyện và dữ liệu kiểm thử. [ĐÚNG]
+` NEO - Cùng nhau Thủ Khoa Tin Học THPT Trang 5
+
+-- 5 of 7 --
+
+Câu 4 [NEO]: Cho hàm được viết bằng ngôn ngữ Python và C++ để tìm hiểu hàm Tìm kiếm nhị phân sau:
+Python C++
+def binary_search(arr, n, target):
+left, right = 0, n-1
+while left <= right:
+mid = left + (right - left) // 2
+if arr[mid] == target:
+return mid
+elif arr[mid] < target:
+left = mid + 1
+else:
+right = mid - 1
+return -1
+int binarySearch(int arr[], int n, int
+target) {
+int left = 0, right = n-1;
+while (left <= right) {
+int mid = left + (right - left) /
+2;
+if (arr[mid] == target) {
+return mid;
+}
+else if (arr[mid] < target) {
+left = mid + 1;
+} else {
+right = mid - 1;
+}
+}
+return -1;
+}
+Một số bạn có nhận xét về hàm trên, theo em nhận xét nào sau đây là đúng, là sai?
+a) Thuật toán luôn hoạt động chính xác nếu màng arr được sắp xếp theo thứ tự tăng dần. [ĐÚNG]
+b) Độ phức tạp thời gian của thuật toán là O(n) trong trường hợp xấu nhất. [SAI]
+c) Nếu mảng arr có kích thước lẻ, thuật toán sẽ luôn kiểm tra phần tử ở vị trí giữa đầu tiên. [ĐÚNG]
+d) Với n = 5, arr = [2, 5, 7, 8, 12], target = 8 Kết quả hiển thị là 3. [ĐÚNG]
+Định hướng Tin học ứng dụng
+Câu 5 [NEO]: Bạn H muốn tạo một biểu mẫu đăng ký trên trang web chia sẻ tài liệu của mình. Bạn đã khai báo CSS và
+code HTML như sau:
+Khai báo CSS Code HTML
+form {
+width: 300px;
+margin: 0 auto;
+}
+input[type="submit"] {
+background-color: green;
+color:white;
+}
+:focus {
+background-color:yellow;
+}
+input[type="submit"]:hover {
+background-color: red;
+}
+<form action="">
+<label for= "fname"> Họ:
+</label><br>
+<input type = "text"id =
+"fname"name="fname"><br>
+<label for="name"> Tên: </label><br>
+<input type = "text"id =
+"name"name="name"><br>
+<label for="class"> Lớp:
+</label><br>
+<select id = "class"name= "class">
+<option value= "class">12A
+</option>
+<option value="class">12B
+</option>
+<option value="class">12C
+</option>
+</select><br>
+<input type="submit"value= "Đăng
+kí">
+</form>
+Bạn H đã đưa ra một số nhận định sau về cách trình duyệt web sẽ hiển thị đoạn code HTML trên. Nhận định nào là
+đúng, nhận định nào sai?
+a) Biểu mẫu có chiều rộng tổng cộng 300px và được đặt chính giữa trang web theo chiều ngang. [ĐÚNG]
+` NEO - Cùng nhau Thủ Khoa Tin Học THPT Trang 6
+
+-- 6 of 7 --
+
+b) Nút Đăng kí được tô màu xanh, khi nháy chọn để gửi nội dung thì màu nền của nút Đăng kí sẽ chuyển sang màu đỏ.
+[SAI]
+c) Khi nháy chọn vào các ô nhập dữ liệu, màu nền của ô vẫn được giữ như cũ. [SAI]
+d) Biểu mẫu của bạn H cho phép chọn nhiều lớp khác nhau trong một lần đăng kí. [SAI]
+Câu 6 [NEO]: Một học sinh viết câu lệnh SELECT để truy cập bảng HOCSINH (Ma_so, Ho_ten, Tuoi,
+Gioi_tinh) như sau:
+SELECT *
+FROM HOCSINH
+WHERE (Tuoi>=15 AND Tuoi <18) OR Gioi_tinh = "Nữ"
+ORDER BY Tuoi DESC
+Sau đó, một số bạn đưa ra các phát biểu dưới đây về kết quả của câu lệnh này.
+a) Chọn tất cả các trường (cột) của bảng HOCSINH. [ĐÚNG]
+b) Chọn các bản ghi (hàng) có tuổi từ 15 đến 18. [SAI]
+c) Các bản ghi trong kết quả có thứ tự giảm dần theo tuổi. [ĐÚNG]
+d) Tất cả các nữ sinh đều có trong kết quả. [ĐÚNG]
+–HẾT–
+` NEO - Cùng nhau Thủ Khoa Tin Học THPT Trang 7
+
+-- 7 of 7 --
+

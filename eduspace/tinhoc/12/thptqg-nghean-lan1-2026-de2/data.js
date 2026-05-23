@@ -1,5 +1,16 @@
 window.quizData = {
     title: "Đề thi thử tốt nghiệp THPT 2026 - Sở GD&ĐT Nghệ An (Lần 1 - Đề 2)",
+    pageTitle: "",
+    examInfo: {
+        department: "Sở GD&ĐT Nghệ An",
+        school: "",
+        province: "Nghệ An",
+        examName: "Thi thử tốt nghiệp THPT",
+        attempt: "Lần 1 - Đề 2",
+        date: "2026",
+        subject: "Tin học",
+        grade: "Lớp 12"
+    },
     config: {
         testDuration: 3000,
         examLayout: {

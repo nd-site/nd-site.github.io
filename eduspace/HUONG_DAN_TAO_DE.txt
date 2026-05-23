@@ -10,6 +10,17 @@ Toàn bộ dữ liệu phải được bọc trong biến 'window.quizData' như
 
 window.quizData = {
     title: "Tiêu đề đề thi",
+    pageTitle: "Tên trang (hiển thị trên tab trình duyệt)", // Tùy chọn
+    examInfo: { // Thông tin bổ sung đầy đủ về đề thi
+        department: "Tên Sở GD&ĐT (VD: Sở GD&ĐT Hà Nội)",
+        school: "Tên Trường (VD: THPT Chu Văn An)",
+        province: "Tỉnh/Thành phố",
+        examName: "Tên kì thi (VD: Kiểm tra cuối kì 2, Thi thử THPT QG...)",
+        attempt: "Lần thi (VD: Lần 1, Lần 2...)",
+        date: "Ngày tháng năm thi (VD: 15/05/2026)",
+        subject: "Môn thi (VD: Toán học)",
+        grade: "Khối lớp (VD: Lớp 12)"
+    },
     config: {
         testDuration: 5400, // Thời gian làm bài tính bằng GIÂY (5400s = 90 phút)
         examLayout: { // Ma trận kiểm tra: Định nghĩa cấu trúc điểm và số câu hiển thị

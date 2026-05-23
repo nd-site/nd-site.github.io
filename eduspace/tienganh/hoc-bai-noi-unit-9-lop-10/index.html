@@ -6,6 +6,7 @@
     <title>Học Tiếng Anh cùng Đăng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="/assets/js/config.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
@@ -97,9 +98,7 @@
     </div>
 
     <script>
-        // Placeholder cho GitHub Actions. Nếu chạy ở môi trường preview, gán bằng chuỗi rỗng để sử dụng key nội bộ của hệ thống.
-        const rawKey = "__GEMINI_API_KEY_PLACEHOLDER__";
-        const apiKey = rawKey.includes("PLACEHOLDER") ? "" : rawKey;
+        let apiKey = "";
 
         const audioCache = new Map(); 
         const loadingStates = new Set();
@@ -215,6 +214,14 @@
             if (index >= scriptData.length) return null;
             if (audioCache.has(index)) return audioCache.get(index);
             if (loadingStates.has(index)) return null;
+
+            if (!apiKey && window.getGeminiApiKey) {
+                apiKey = await window.getGeminiApiKey();
+            }
+            if (!apiKey) {
+                console.error("Lỗi: Không tìm thấy API Key!");
+                return null;
+            }
 
             loadingStates.add(index);
             const btn = document.getElementById(`btn-audio-${index}`);

@@ -3,6 +3,17 @@
 
 window.quizData = {
     title: "Ôn tập đầy đủ - Kiểm tra cuối Học kì I Địa lý 10 (2025-2026)",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: {
         testDuration: 3600,
         examLayout: {

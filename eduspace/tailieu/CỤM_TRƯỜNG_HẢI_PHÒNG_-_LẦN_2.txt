@@ -1,0 +1,140 @@
+CỤM 7 TRƯỜNG PHÍA ĐÔNG HẢI PHÒNG
+
+ĐỀ THI CHÍNH THỨC
+
+(Đề có 05 trang)
+
+KỲ THI TỐT THỬ NGHIỆP THPT NĂM 2026
+
+(Đợt 2)
+
+MÔN: TIN HỌC
+
+Thời gian làm bài: 50 phút, không kể thời gian phát đề
+
+
+
+Mã đề thi: 
+
+Họ và tên thí sinh:.........................................................
+
+SBD:.........................................................
+
+PHẦN I. Thí sinh trả lời từ câu 1 đến câu 24. Mỗi câu hỏi thí sinh chỉ chọn một phương án.
+
+Câu 1. Trí tuệ nhân tạo (AI) làA. khả năng của máy tính thực hiện các công việc cơ học.B. khả năng của máy tính thực hiện các công việc trí tuệ của con người.C. khả năng của máy tính chơi trò chơi.D. khả năng của máy tính xử lý dữ liệu nhanh hơn.
+
+Câu 2. AI được sử dụng trong tài chính ngân hàng để làm gì?A. Thiết kế logo.B. Phát hiện các giao dịch đáng ngờ và gian lận.C. Quản lý kho hàng.D. Tối ưu hóa quảng cáo.
+
+Câu 3. Nhận định nào sau đây là SAI khi nói về sự ảnh hưởng của AI trong tương lai?A. AI tăng cường sự tự động hóa trong các công việc.B. AI có thể thay thế con người trong một số lĩnh vực.C. AI tạo ra nguy cơ về an ninh mạng và quyền riêng tư.D. AI luôn an toàn và có lợi cho con người.
+
+Câu 4. Lĩnh vực nào liên quan đến việc thu nhận và phân tích nhận dạng hình ảnh?
+
+A. Học máy.B. Xử lý ngôn ngữ tự nhiên.C. Thị giác máy tính.D. AI tạo sinh.
+
+Câu 5. Thiết bị nào sau đây được coi là thiết bị đầu cuối?
+
+A. Switch.B. Router.C. Máy tính cá nhân.D. Modem.
+
+Câu 6. Thiết bị nào trong mạng LAN có nhiệm vụ chuyển tiếp dữ liệu giữa các thiết bị?
+
+A. Router.B. Modem.C. Switch.D. Access Point.
+
+
+
+Câu 7. Chức năng nào sau đây của hệ điều hành hỗ trợ người dùng trao đổi dữ liệu?A. Kiểm soát các hoạt động thực thi ứng dụng.B. Quản lý bộ nhớ.C. Kiểm soát hiệu suất hệ thống.D. Chức năng mạng.
+
+Câu 8. Cách làm nào sau đây là đúng khi muốn chia sẻ ổ đĩa cho người dùng khác trong cùng một mạng để đọc, xem dữ liệu?A. Nháy phải chuột vào ổ đĩa cần chia sẻ/Properties/Advanced Sharing, chọn nhóm hoặc tên người dùng cần chia sẻ, chọn mức phân quyền Full Control.B. Nháy phải chuột vào ổ đĩa cần chia sẻ/Properties/Advanced Sharing, chọn nhóm hoặc tên người dùng cần chia sẻ, chọn mức phân quyền Change.C. Nháy phải chuột vào ổ đĩa cần chia sẻ/Properties/Advanced Sharing, chọn nhóm hoặc tên người dùng cần chia sẻ, chọn mức phân quyền Read.D. Nháy phải chuột vào ổ đĩa cần chia sẻ/Properties/Advanced Sharing, chọn nhóm hoặc tên người dùng cần chia sẻ, chọn cả 3 mức phân quyền (Full Control, Change, Read).
+
+Câu 9. Phần tử nào được sử dụng để xác định phần đầu của một tài liệu HTML?A. <body>		B. <footer>		C. <head>		D. <header>
+
+Câu 10. Phương án nào sau đây mô tả đúng về HTML?A. Ngôn ngữ lập trình.B. Ngôn ngữ soạn thảo văn bản.C. Là bộ quy tắc dùng để trình bày cấu trúc, nội dung và hình thức trang Web.D. Ngôn ngữ liên kết dữ liệu.
+
+Câu 11. Thuộc tính của phần tử HTML KHÔNG có đặc điểm nào sau đây?A. Nằm trong thẻ mở.B. Mỗi phần tử bắt buộc phải có một thuộc tính.C. Mỗi phần tử có thể có một hoặc nhiều thuộc tính.D. Có phần tử không có thuộc tính nào.
+
+Câu 12. Trong các khai báo Cascading Style Sheets (CSS), khai báo nào là đúng cú pháp?
+
+A. h1 {color: Blue;}B. h1 color: Blue;C. h1= {color: Blue}D. h1(color: Blue;)
+
+Câu 13. Nếu muốn đoạn văn bản có nội dung “Thông tin liên hệ” chữ màu xanh dương thì đoạn mã HTML nào sau đây là đúng?A. <p style="color: blue;">Thông tin liên hệ</p>B. <p style color="blue">Thông tin liên hệ </p>C. <p style=color: "blue";>Thông tin liên hệ </p>D. <p style="color: "blue";">Thông tin liên hệ </p>
+
+Câu 14. Trong phần thông tin đăng nhập trên trang web được viết bằng HTML, nơi nhập mật khẩu của người dùng chỉ cho phép hiển thị dấu chấm tròn thì thuộc tính type của phần tử input ta cần gán giá trị nào sau đây?
+
+A. "password".B. "radio".C. "button".D. "text".
+
+Câu 15. Nội dung phần body trong tệp home.html có đoạn HTML như sau:	<h2 id="dautrang"> Đầu trang </h2>Phương án nào dưới đây là đúng khi khai báo siêu liên kết đến phần tử h2 thông qua định danh "dautrang" trong cùng một trang web?A. <a href="dautrang"> Về đầu trang </a>B. <a href="#dautrang"> Về đầu trang </a>C. <a href="dautrang.html"> Về đầu trang </a>D. <a href="https://www. dautrang.vn"> Về đầu trang </a>
+
+Câu 16. Để hiển thị nội dung của trang Thongtin.html trong trang web Index.html, thì trong trang Index.html ta sẽ sử dụng câu lệnh nào trong các câu lệnh sau đây?A. <a href="Thongtin.html" target="_blank"> Thông tin </a>B. <a href="Thongtin.html" target="_self"> Thông tin </a>C. <link rel="stylesheet" type="text/css" href="Thongtin.html">D. <iframe src="Thongtin.html" width="300" height="300"></iframe>
+
+Câu 17. Muốn định dạng phần văn bản “Nội dung” của danh sách có thứ tự bắt đầu bằng kí tự “C” ta sử dụng câu lệnh nào trong các câu lệnh sau đây là đúng?A. <ol type="A" start="3"><li>Nội dung</li></ol>B. <ol type="A" start="C"><li>Nội dung</li></ol>C. <ol type="C"><li>Nội dung</li></ol>D. <ul type="A" start="C"><li>Nội dung</li></ul>
+
+Câu 18. Sau khi thực hiện đoạn chương trình sau:
+
+S=10
+
+for i in range (1, 5) :
+
+    S=S+i
+
+print (S)
+
+Giá trị của biến S bằng bao nhiêu?A. 20			B. 14			C. 10			D. 0
+
+Câu 19. Ứng xử nhân văn trên không gian mạng có thể góp phần tạo ra điều gì?A. Một môi trường mạng tiêu cực.B. Sự gia tăng của hành vi bắt nạt trực tuyến.C. Một xã hội mạng tích cực.D. Tăng nguy cơ lừa đảo trực tuyến.
+
+Câu 20. Em dùng mạng xã hội trên máy tính công cộng nhưng quên không thoát đăng nhập ra, bản thân của em thấy thế không bảo em mà dùng tài khoản của em nhắn tin cho bạn bè của em với lời lẽ không hay. Em sẽ làm gì?A. Đăng lên mạng xã hội để chửi mắng người bạn này.B. Nhắn tin lên án, phê bình gay gắt bạn.C. Gặp trực tiếp hoặc nhắn tin về bạn B trong lớp. Bạn A rất thích thú với nội dung này. Bạn A đã kiểm tra tính chính xác của thông tin, đảm bảo thông tin không bị cấm. Sau đó bạn A chia sẻ bài viết đó với mọi người để giúp bạn B được nhiều người biết tới.D. Bình luận vào bài của mình để chỉ trích bạn đó.
+
+Câu 21. Bạn A đọc được một bài viết về bạn B trong lớp. Bạn A rất thích thú với nội dung này. Bạn A đã kiểm tra tính chính xác của thông tin, đảm bảo thông tin không bị cấm. Sau đó bạn A chia sẻ bài viết đó với mọi người để giúp bạn B được nhiều người biết tới. Trong tình huống trên, tính nhân văn thể hiện ở biểu hiện nào dưới đây?A. Bạn A đã chia sẻ cảm xúc tích cực của bản thân.B. Bạn A đã kiểm chứng đảm bảo thông tin đúng sự thật trước khi đăng tải.C. Bạn A đã chia sẻ bài viết giúp bạn B được nhiều người biết đến hơn, không cần bạn B đồng ý.D. Bạn A đã kiểm chứng đảm bảo các thông tin đúng sự thật và không bị cấm trước khi đăng tải.
+
+Câu 22. Kĩ thuật viên công nghệ thông tin không thực hiện công việc nào sau đây?A. Lắp đặt thiết bị phần cứng và thiết lập kết nối mạng.B. Quản lí thiết bị mạng và điều chỉnh hiệu năng mạng.C. Khắc phục lỗi máy tính cho khách hàng.D. Cài đặt và nâng cấp phần mềm trên máy tính của nhân viên.
+
+Câu 23. Để trở thành một kĩ sư quản trị mạng, cần có kiến thức về:A. Tài chính và kế toán.B. Phần cứng máy tính, hệ thống mạng và an toàn thông tin.C. Thiết kế đồ họa.D. Lập trình di động.
+
+Câu 24. Em thích công việc thiết kế, xử lí và biên tập âm thanh, hình ảnh cho những sản phẩm số nhưng không đam mê lập trình thì nên chọn nghề nào?
+
+
+
+A. Thiết kế truyền thông đa phương tiện.B. Thiết kế đồ họa.C. Thiết kế web.D. Thiết kế giao diện người dùng.
+
+
+
+PHẦN II. Thí sinh trả lời 2 câu hỏi. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.
+
+A. Phần chung cho các thí sinh
+
+Câu 1. Mạng không dây là loại mạng máy tính sử dụng sóng điện từ để truyền dữ liệu giữa các thiết bị mà không cần sử dụng cáp mạng. Trong mạng cục bộ không dây (Wi-Fi), thiết bị Access Point (AP) có nhiệm vụ cung cấp kết nối không dây cho các thiết bị trong phạm vi phủ sóng của nó. Các thiết bị có thể kết nối với Access Point để trao đổi dữ liệu trong mạng cục bộ hoặc truy cập Internet. Sau khi tìm hiểu về mạng Wi-Fi, một số học sinh đưa ra các nhận định sau:a) Wi-Fi là công nghệ được sử dụng xây dựng mạng cục bộ không dây (WLAN).b) Trong mạng Wi-Fi, dữ liệu giữa các thiết bị được truyền thông qua sóng điện tử.c) Trong phòng thực hành của trường, nếu hệ thống mạng chỉ có các máy tính để bàn kết nối với Switch bằng cáp mạng thì các thiết bị như điện thoại thông minh hoặc máy tính tay vẫn có thể kết nối nối Wi-Fi vào mạng đó mà không cần thêm thiết bị mạng nào khác.d) Một học sinh mang máy tính xách tay đến trường và thiết bị nhận được tín hiệu Wi-Fi của trường. Khi đó học sinh chắc chắn có thể truy cập Internet thông qua mạng Wi-Fi này.
+
+Câu 2. Trí tuệ nhân tạo đang thực hiện việc cách mạng hóa quá trình học tập cho các cá nhân ở mọi lứa tuổi bằng cách tận dụng sức mạnh của học máy, xử lí ngôn ngữ tự nhiên và nhận dạng hình ảnh. Sau đây là các nhận định về việc ứng dụng trí tuệ nhân tạo trong giáo dục.a) Trí tuệ nhân tạo có thể phân tích dữ liệu học tập của học sinh để đề xuất nội dung và lộ trình học tập phù hợp với từng cá nhân.b) Để triển khai các hệ thống ứng dụng trí tuệ nhân tạo trong giáo dục, nhà trường nhất thiết phải xây dựng và vận hành hệ thống máy chủ riêng tại trường.c) Thông qua hệ thống LAN, từ máy tính đặt tại phòng thực hành, học sinh có thể truy cập vào kho dữ liệu đám mây của nhà trường để tải về các chương trình học được xây dựng riêng cho mình.d) Các nhà sư phạm hoàn toàn có thể tin tưởng vào khả năng xây dựng chương trình học tập thông minh của trí tuệ nhân tạo, tự động hóa và cá nhân hóa quá trình học tập của học sinh.
+
+B. Phần riêngThí sinh chỉ chọn một trong hai phần sau: Thí sinh theo định hướng Khoa học máy tính làm Câu 3 và 4; Thí sinh theo định hướng tin học ứng dụng làm Câu 5 và 6.
+
+B1. Định hướng Khoa học máy tính
+
+Câu 3. Học máy đóng vai trò quan trọng trong việc phân tích thị trường (dự báo thị trường, phân tích dữ liệu lớn, đánh giá rủi ro...). Sau đây là những phát biểu về vai trò của học máy trong việc phân tích thị trường.a) Học máy có khả năng dự đoán xu hướng và hành vi của người tiêu dùng, cũng như phản ứng của thị trường đối với việc điều chỉnh giá sản phẩm.b) Học máy chủ yếu áp dụng trong phòng thí nghiệm hoặc các mô hình ảo, chưa ứng dụng trong thực tế.c) Học máy có vai trò quan trọng trong phân tích thị trường, giúp các tổ chức hiểu rõ hơn về thị trường để có thể đưa ra quyết định hợp lí.d) Một doanh nghiệp thu thập dữ liệu về lịch sử mua hàng của khách hàng và sử dụng mô hình học máy để phân nhóm khách hàng theo hành vi tiêu dùng, từ đó xây dựng các chương trình khuyến mại phù hợp cho từng nhóm.
+
+Câu 4. Trong giờ thực hành Tin học, học sinh Lâm viết hàm như bên dưới để tìm kiếm 
+
+
+
+Lâm nhờ bạn của mình kiểm tra chương trình. Qua phân tích, bạn của Lâm đã đưa ra một số nhận xét như sau:a) Khi nhập vào số 7 thì biến i có giá trị 3.b) Khi nhập vào số 6 thì biến i có giá trị là 7.c) Khi nhập vào số 2 thì biến i có giá trị là 2.d) Khi nhập vào số 9 thì biến i có giá trị -2.
+
+B2. Định hướng Tin học ứng dụng
+
+Câu 5. Một bạn học sinh muốn xây dựng một trang Web đơn giản để chia sẻ thông tin về sở thích, thành tích của bạn đó trong các hoạt động khóa và dự án cá nhân. Tuy nhiên bạn chưa thành thạo các ngôn ngữ lập trình để tạo trang Web. Một số bạn khác đã cho bạn học sinh đó những lời khuyên như sau:a) Bạn có thể sử dụng phần mềm trực tuyến như Google Sites, Wix để tạo trang Web mà không cần thành thạo ngôn ngữ lập trình web.
+
+b) Bạn chỉ cần tạo một trang web chứa tất cả các thông tin, trong đó phần đầu trang là thông tin về sở thích, phần thân trang là thành tích và phần chân trang chứa thông tin về các hoạt động ngoại khóa.c) Sau khi tạo các trang web, bạn chỉ có thể chia sẻ với người khác bằng cách gửi các tệp HTML của trang web qua thẻ nhớ USB hoặc email cho họ.d) Các phần mềm tạo trang web có thể hỗ trợ tạo trang web sinh động, hấp dẫn với nhiều mẫu (theme) có sẵn.
+
+Câu 6. Để xây dựng phần mềm quản lí thông tin trường học, lập trình viên đã khởi tạo CSDL bao gồm các bảng sau đây:
+
+GIAOVIEN(MaGV, HoTenGV) Khóa chính: MaGV
+
+LOP(MaLop, TenLop, MaGVChuNhiem) Khóa chính: MaLop; Khóa ngoại: MaGVChuNhiem
+
+HOCSINH(MaSo, HoTen, MaLop) Khóa chính: MaSo; Khóa ngoại: MaLop
+
+Xét các nhận định sau về những thao tác có thể thực hiện cơ sở dữ liệu trên:a) Để biết họ tên giáo viên chủ nhiệm của lớp có mã lớp “12A1”, cần sử dụng các bảng LOP và GIAOVIEN.b) Để biết tên lớp của học sinh có mã số 12, cần sử dụng các bảng HOCSINH và LOP.c) Để in danh sách học sinh gồm các cột MaSo, HoTen, TenLop, HoTenGV, cần sử dụng các bảng HOCSINH, LOP và GIAOVIEN.d) Để in danh sách học sinh gồm các cột MaSo, HoTen, HoTenGV, chỉ cần sử dụng các bảng HOCSINH và GIAOVIEN.
+
+
+
+--HẾT--
+

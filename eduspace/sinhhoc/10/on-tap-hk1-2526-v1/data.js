@@ -3,6 +3,17 @@
 
 window.quizData = {
     title: "ĐỀ CƯƠNG ÔN TẬP SINH HỌC 10 - CUỐI HỌC KÌ I TRƯỜNG THPT LỘC AN",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: {
         testDuration: 3600,
         examLayout: {

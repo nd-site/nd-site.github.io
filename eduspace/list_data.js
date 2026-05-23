@@ -346,6 +346,76 @@ const quizList = [
         "isHot": true
     },
     {
+        "title": "Thi thử tốt nghiệp THPT Sở GD&ĐT Nghệ An (Lần 2 - Đợt 2)",
+        "url": "/eduspace/tinhoc/12/nghean-lan2-2026/",
+        "description": "Kỳ khảo sát chất lượng kết hợp thi thử lớp 12 năm học 2025-2026 của Sở GD&ĐT Nghệ An - Đợt 2 (Mã đề 0924). Cấu trúc 24 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II.",
+        "tag": "Nghệ An",
+        "type": "quiz",
+        "class": "12",
+        "subject": "Tin Học",
+        "isHot": true
+    },
+    {
+        "title": "Thi thử tốt nghiệp THPT Sở GD&ĐT Đồng Nai (Lần 1)",
+        "url": "/eduspace/tinhoc/12/dongnai-lan1-2026/",
+        "description": "Kỳ thi khảo sát chất lượng các môn thi tốt nghiệp THPT năm 2026 của Sở GD&ĐT Đồng Nai - Lần 1 (Mã đề 0501). Cấu trúc 24 câu Phần I + 6 câu Đúng/Sai Phần II.",
+        "tag": "Đồng Nai",
+        "type": "quiz",
+        "class": "12",
+        "subject": "Tin Học",
+        "isHot": true
+    },
+    {
+        "title": "Thi thử TN THPT 2026 – Cụm 7 trường phía Đông Hải Phòng (Đợt 2)",
+        "url": "/eduspace/tinhoc/12/haiphong-cum7-lan2-2026/",
+        "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Cụm 7 trường THPT phía Đông Hải Phòng, đợt 2. Cấu trúc 24 câu Phần I + 4 câu Đúng/Sai Phần II.",
+        "tag": "Hải Phòng",
+        "type": "quiz",
+        "class": "12",
+        "subject": "Tin Học",
+        "isHot": true
+    },
+    {
+        "title": "Thi thử tốt nghiệp THPT 2026 – Cụm 5 trường THPT Ninh Bình (Đợt 1)",
+        "url": "/eduspace/tinhoc/12/ninhbinh-cum5-lan1-2026/",
+        "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Cụm 5 trường THPT Ninh Bình, đợt 1. Cấu trúc 23 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II.",
+        "tag": "Ninh Bình",
+        "type": "quiz",
+        "class": "12",
+        "subject": "Tin Học",
+        "isHot": true
+    },
+    {
+        "title": "Thi thử tốt nghiệp THPT 2026 – Cụm chuyên môn số 8 Đắk Lắk",
+        "url": "/eduspace/tinhoc/12/daklak-cum8-2026/",
+        "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Cụm chuyên môn số 8 Sở GD&ĐT Đắk Lắk. Cấu trúc 24 câu Phần I + 6 câu Đúng/Sai Phần II.",
+        "tag": "Đắk Lắk",
+        "type": "quiz",
+        "class": "12",
+        "subject": "Tin Học",
+        "isHot": true
+    },
+    {
+        "title": "Thi thử tốt nghiệp THPT 2026 – Sở GD&ĐT Đà Nẵng (Đề 04)",
+        "url": "/eduspace/tinhoc/12/danang-cum-2026/",
+        "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Sở GD&ĐT Đà Nẵng (Đề 04). Cấu trúc 24 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II (KHMT & THƯD).",
+        "tag": "Đà Nẵng",
+        "type": "quiz",
+        "class": "12",
+        "subject": "Tin Học",
+        "isHot": true
+    },
+    {
+        "title": "Thi thử TN THPT 2026 – Sở GD&ĐT Tuyên Quang (Lần 2 – Đề gốc 2)",
+        "url": "/eduspace/tinhoc/12/tuyenquang-lan2-2026/",
+        "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Sở GD&ĐT Tỉnh Tuyên Quang – Lần 2, Đề gốc số 2. Cấu trúc 24 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II.",
+        "tag": "Tuyên Quang",
+        "type": "quiz",
+        "class": "12",
+        "subject": "Tin Học",
+        "isHot": true
+    },
+    {
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Công nghệ (Bản 1)",
         "url": "/eduspace/congnghe-nongnghiep/12/thptqg-2026-v1/",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Công nghệ Nông nghiệp (Bản 1) - Canh tác công nghệ cao và an toàn sinh học.",

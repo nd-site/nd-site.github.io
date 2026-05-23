@@ -76,7 +76,7 @@ async function getBestModel(apiKey) {
 }
 
 async function callGeminiAPI(payload, hasImages = false) {
-    const apiKey = window.getGeminiApiKey();
+    const apiKey = await window.getGeminiApiKey();
     if (!apiKey) throw new Error('Thiếu API Key!');
 
     if (sessionModel.model && sessionModel.version) {

@@ -3,6 +3,17 @@
 
 window.quizData = {
     title: "ĐỀ CƯƠNG ÔN TẬP KIỂM TRA CUỐI HỌC KÌ I - MÔN: LỊCH SỬ 10 - NĂM HỌC 2025-2026",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: {
         testDuration: 7200,
         examLayout: {

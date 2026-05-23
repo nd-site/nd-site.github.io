@@ -1,5 +1,16 @@
 window.quizData = {
     title: "Đề thi thử tốt nghiệp THPT 2026 - Môn Tin Học (Bản 1)",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: {
         testDuration: 3000,
         examLayout: {

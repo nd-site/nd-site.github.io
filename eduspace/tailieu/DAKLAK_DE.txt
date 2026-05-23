@@ -1,0 +1,231 @@
+Mã đề 0501
+SỞ GIÁO DỤC VÀ ĐÀO TẠO ĐẮK LẮK
+CỤM CHUYÊN MÔN SỐ 8________________
+(Đề thi có 04 trang)
+KỲ THI THỬ TỐT NGHIỆP THPT NĂM 2026
+Môn thi: TIN HỌC
+Thời gian làm bài 50. phút, không kể thời gian phát đề_____________________________
+Họ, tên thí sinh...................................................
+Số báo danh: ......................................................
+PHẦN I. Thí sinh trả lời từ Câu 1 đến Câu 24. Mỗi câu hỏi thí sinh chọn 1 phương án.
+Câu 1. Cho đoạn mã lệnh:
+Python C++
+a = 10
+b = 20
+a = a + b
+b = a – b
+a = a – b
+print(a, b)
+int a = 10, b = 20;
+a = a + b;
+b = a – b;
+a = a – b;
+cout << a << “ ” << b;
+Kết quả in ra màn hình của đoạn mã trên là:
+A. 10 20 B. 20 10 C. 20 30 D. 30 10
+Câu 2. Khai báo nào sau đây là đúng để liên kết với một tệp CSS bên ngoài?
+A. <script src = “fit.css” value = “stylesheet”>
+B. <source href = “fit.css” style = “stylesheet”>
+C. <a href = “fit.css” style = “stylesheet”>
+D. <link href = “fit.css” rel = “stylesheet”>
+Câu 3. Phát biểu nào sau đây KHÔNG phải là ưu điểm của giao tiếp trong thế giới ảo?
+A. Giao tiếp trong thế giới ảo giúp thuận tiện trong việc truyền tải cảm xúc.
+B. Giao tiếp trong thế giới ảo có thể diễn ra mọi lúc, mọi nơi.
+C. Giao tiếp trong thế giới ảo giúp tạo điều kiện thuận lợi cho việc lưu trữ thông tin.
+D. Giao tiếp trong thế giới ảo cung cấp nhiều công cụ giao tiếp đa dạng.
+Câu 4. Khi tham gia mua sắm trực tuyến, phương án nào sau đây có thể là nhược điểm của hình thức này?
+A. Không có dịch vụ chăm sóc khách hàng khi mua sắm trực tuyến.
+B. Không được kiểm tra và đánh giá sản phẩm khi nhận hàng.
+C. Nguy cơ bị lừa đảo hoặc mất thông tin cá nhân khi thực hiện thanh toán trực tuyến.
+D. Sự khó khăn trong việc tìm kiếm sản phẩm và so sánh giá cả.
+Câu 5. Cho đoạn mã lệnh:
+Python C++
+C = 0
+for k in range (1, 10):
+if k % 3 = = 0:
+C = C + k
+print(C)
+int C = 0;
+for (int k =1; k < 10; k++) {
+if (k % 3 = = 0) {
+C = C + k;
+}
+}
+cout << C;
+Phương án nào sau đây nêu đúng giá trị của C sau khi thực hiện đoạn chương trình trên?
+A. 55 B. 3 C. 45 D. 18
+Câu 6. Cú pháp HTML nào sau đây là đúng để tạo ra một bảng có 2 dòng, mỗi dòng 1 ô?
+A. <tbl><tr><th></th></tr><tr><td></td></tr></tbl>
+B. <tbl><tr><td></td><td></td></tr></tbl>
+C. <table><tr><th></th></tr><tr><td></td></tr></table>
+D. <table><tr><td></td><td></td></tr></table>
+Câu 7. Thẻ nào sau đây có thể xuất hiện nhiều hơn một lần trong một trang web?
+Mã đề: 0501
+
+-- 1 of 4 --
+
+Mã đề 0501
+A. <body> B. <html> C. <head> D. <p>
+Câu 8. Ứng dụng nào sau đây KHÔNG là ví dụ của AI hẹp?
+A. Máy chấm công bằng nhận diện khuôn mặt
+B. Hệ chuyên gia MYCIN tư vấn trong lĩnh vực y tế
+C. Chương trình chơi cờ AlphaGo
+D. Quản lí điểm của học sinh bằng sổ điểm điện tử
+Câu 9. Thẻ HTML nào sau đây cho phép xác định nơi viết các lênh CSS trong nội bộ một trang web?
+A. <stylesheet> B. <style> C. <link> D. <script>
+Câu 10. Cú pháp CSS nào sau đây là đúng để tất cả các màu nền của thẻ tiêu đề đều có màu xanh?
+A. h1 {background-color: “blue”;} B. h1. * {background-color: blue; }
+C. all.h1 {background-color: blue; } D. h1 {background-color: blue; }
+Câu 11. Lĩnh vực nào sau đây KHÔNG được phát triển mạnh nhờ ứng dụng của Trí tuệ nhân tạo (AI)?
+A. Sản xuất thiết bị tiện ích thông minh
+B. Điều khiển tự động
+C. Xây dựng nhà, đường, cầu
+D. Tài chính ngân hàng
+Câu 12. Thành phần nào của biểu mẫu cho phép chọn được nhiều giá trị trong số nhiều lựa chọn?
+A. radio B. select C. textbox D. checkbox
+Câu 13. Thẻ HTML nào sau đây được sử dụng để liệt kê các danh mục trong một danh sách?
+A. <li> B. <item> C. <ol> D. <ul>
+Câu 14. Phương án nào sau đây là kĩ năng KHÔNG cần thiết đối với nhân lực trong nghề bảo mật hệ
+thống thông tin?
+A. Kĩ năng phát hiện và phòng ngừa các cuộc tấn công mạng.
+B. Kĩ năng phân tích và đánh giá các rủi ro bảo bật.
+C. Kĩ năng phân tích dữ liệu và phát hiện lỗ hổng bảo mật.
+D. Kĩ năng phân tích và quản trị CSDL.
+Câu 15. Phát biểu nào sau đây là đúng về giao thức FTP?
+A. Là giao thức để duyệt web
+B. Là giao thức để gửi email
+C. Là giao thức để truyền tải tập tin giữa máy tính và máy chủ
+D. Là giao thức để chia sẻ dữ liệu giữa các máy tính trong cùng mạng LAN
+Câu 16. Mệnh đề nào sau đây là SAI khi nói về việc kết nối máy tính và Access Point?
+A. Tất cả Access Point khi truy cập đều cần mật khẩu.
+B. Access Point có thể cung cấp kết nối Internet cho nhiều máy tính cùng lúc.
+C. Máy tính có thể kết nối với Access Point bằng cáp Ethernet hoặc Wi-fi.
+D. Access Point cần được kết nối với Router hoặc Modem để cung cấp truy cập Internet.
+Câu 17. Thuộc tính nào sau đây được sử dụng để hiện thị các nút điều khiển start, stop và tăng giảm âm
+lượng cho một video?
+A. start, stop và control B. controls
+C. start và volume D. start, stop và volume
+Câu 18. Thiết bị nào sau đây có chức năng cung cấp kết nối không dây cho các thành phần trong một mạng?
+A. Hub B. Switch C. Access Point D. Router
+Câu 19. Đối với nhóm nghề Sửa chữa và bảo trì máy tính, yêu cầu cần có kiến thức và kĩ năng gì?
+A. Hiểu biết về lập trình máy tính và thành thạo một ngôn ngưc lập trình.
+B. Nắm vững về quản lí dự án công nghệ thông tin.
+C. Kĩ năng sửa chữa và thay thế linh kiện phần cứng máy tính.
+D. Kiến thức về phân tích dữ liệu.
+Câu 20. Trong một cuộc họp trực tuyến, bạn Sơn nhận ra rằng một số người tham gia đang bị gián đoạn
+bởi tiếng ồn từ môi trường xung quanh. Phương án nào sau đây là hành động phù hợp để gìn giữ tính
+nhân văn và tôn trọng người khác?
+A. Gửi một email sau cuộc họp nhắc nhở về vấn đề này.
+B. Phản ứng bằng cách nâng giọng lên để yêu cầu mọi người lắng nghe.
+
+-- 2 of 4 --
+
+Mã đề 0501
+C. Gửi tin nhắn riêng đề nghị họ tắt mic trong lúc không phát biểu.
+D. Gửi tin nhắn công khai nhắc nhở tất cả mọi người về vấn đề này.
+Câu 21. Nhiệm vụ nào sau đây là công việc chính của một kĩ sư quản trị mạng?
+A. Xây dựng các hệ thống quản lí CSDL trên mạng để lưu trữ thông tin quan trọng của doanh nghiệp.
+B. Cài đặt phần cứng và phần mềm cho hệ thống mạng.
+C. Phát triển và triển khai các biện pháp bảo mật mạng để ngăn chặn các cuộc tấn công từ hacker.
+D. Phân tích và xác định nhu cầu về hệ thống thông tin của tổ chức.
+Câu 22. Cổng nào trên một thiết bị máy tính được dùng để cắm trực tiếp dây cáp mạng có đầu RJ45?
+A. Cổng USB B. Cổng Ethernet C. Cổng HDMI D. Cổng nguồn
+Câu 23. Có một tệp ảnh kích thước 600x800. Đoạn lệnh sau đây sẽ hiển thị ảnh có kích thước là bao
+nhiêu trên trình duyệt?
+<image src = “hnue.jpeg” alt “hnue” width = “300”/>
+A. 400x300 B. 300x400 C. 300x600 D. 600x800
+Câu 24. Phương án nào sau đây không là ứng dụng của AI?
+A. Onedrive của Microsoft B. Siri của Apple
+C. ChatGPT. D. Google Assistant của Google
+PHẦN II. Thí sinh trả lời 4 câu hỏi. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.
+A. Phần chung dành cho tất cả thí sinh
+Câu 1. Gia đình bạn Kiên cần lắp đặt hệ thống mạng Internet để các thành viên trong nhà (diện tích 70
+m2) có nhu cầu sử dụng bao gồm 03 máy tính để bàn và một số điện thoại thông minh. Ngoài ra, 03 máy
+tính này cần được kết nối với nhau để có thể truyền dữ liệu ngay cả khi không có Internet.
+Sau đây là một số nhận xét của bạn Kiên sau khi hệ thống đã được lắp đặt.
+a) Có thể sử dụng cáp xoắn đôi để kết nối các máy tính thành một mạng LAN.
+b) Có thể sử dụng một Access Point để cho phép truy cập Internet không dây.
+c) Sử dụng mạng không dây sẽ có tốc độ nhanh hơn sử dụng cáp xoắn đôi khi thực hiện chia sẻ các
+tệp trong trường hợp không có Internet.
+d) Có thể sử dụng một Switch để kết nối giữa các máy tính với nhau và giữa các máy tính với Internet.
+Câu 2. Một nhóm học sinh sử dụng phần mềm hệ quản trị CSDL để tạo lập một CSDL bán hàng bao gồm
+bàng CHI_TIẾT_HÓA_ĐƠN lưu thông tin chi tiết về các mặt hàng và số lượng được mua trong các đơn
+hàng. Trong đó, trường Ma_hoa_don là khóa chính của bảng HÓA_ĐƠN (lưu thông tin chung của hóa
+đơn). Trường Ma_mat_hang là khóa chính của bảng MẶT_HÀNG (lưu thông tin về các mặt hàng).
+Trong một hóa đơn có thể có nhiều mặt hàng được mua, một mặt hàng có thể được mua trong nhiều đơn hàng.
+a) Định nghĩa trường Ma_hoa_don và trường Ma_mat_hang với tên là ma_hoa_don, Ma_mat_hang
+và kiểu dữ liệu là chuỗi kí tự.
+b) Do hai trường Ma_hoa_don và Ma_mat_hang là khóa chính của các bảng khác nên chọn hai
+trường này và thiết đặt làm khóa chính cho bảng.
+c) Bảng này lưu trữ thông tin về đơn hàng nên chọn trường Ma_hoa_don và thiết đặt làm khóa chính
+cho bảng.
+d) Chọn hai trường Ma_hoa_don, Ma_mat_hang và thiết đặt chúng thành khóa của bảng.
+B. Phần riêng. Thí sinh được phép chọn một trong hai phần: Khoa học máy tính (Câu 3, Câu 4) hoặc Tin
+học ứng dụng (Câu 5, Câu 6). Thí sinh không được tính điểm nếu làm cả hai phần.
+B1. Khoa học máy tính
+Câu 3. Cho hàm tìm giá trị lớn nhất trong mảng A gồm n phần tử bằng Python và C++:
+Python C++
+def FindMax(A, n):
+max_val = A[0]
+for i in range(1, n):
+if A[i] > max_val:
+int FindMax (int A[], int n) {
+int max_val = A[0];
+for (int i = 1; i < n; i ++) {
+if (A[i] > max_val) {
+
+-- 3 of 4 --
+
+Mã đề 0501
+max_val = A[i]
+return max_val
+max_val = A[i];
+}
+}
+return max_val;
+}
+a) Thuật toán này có độ phực tạp thời gian phụ thuộc vào số lượng phần tử n trong mảng.
+b) Vòng lặp for thực hiện việc duyệt qua từng phần tử của mảng từ chỉ số 1 đến n-1.
+c) Nếu dữ liệu đầu vào là A = (3, 8, 2, 9, 5), biến max_val sẽ cập nhật giá trị mới 3 lần trong suốt quá
+trình chạy.
+d) Đoạn mã trên thực hiện thuật toán sắp xếp mảng theo thứ tự tăng dần.
+Câu 4. Một nhóm học sinh được giáo viên yêu cầu tìm hiểu và thảo luận về nhận dạng chữ viết tay trong
+học máy. Sau đây là một số ý kiến của nhóm học sinh về nhận dạng chữ viết tay.
+a) Việc thu thập dữ liệu chữ viết tay có thể thực hiện thông qua việc quét các tài liệu giấy và chuyển
+chúng thành dữ liệu số để xử lí.
+b) Việc trích xuất ra các đặc trưng là bước không cần thiết trong quá trình nhận dạng chữ viết tay vì
+máy tính có thể nhận dạng trực tiếp từ hình ảnh.
+c) Các thuật toán nhận dạng chữ viết tay không cần phải được huấn luyện trên một lượng lớn dữ liệu
+vì chúng đã được thiết kế để nhận dạng mọi loại chữ viết.
+d) Một số thuật toán được sử dụng trong nhận dạng chữ viết tay là HOG (Histogram of Oriented
+Gradient, SVM (Support Vector Machine).
+B2. Tin học ứng dụng
+Câu 5. Một nhóm học sinh sử dụng phần mềm hệ quản trị CSDL để tạo lập một CSDL quản lí nhân viên
+trong một công ty bao gồm bảng NHAN_VIEN lưu thông tin về các nhân viên.. Trong đó, mỗi nhân
+viên có một mã nhân viên khác nhau theo quy định riêng của công ty. Mỗi nhân viên có một số thẻ
+căn cước công dân duy nhất.
+a) Mỗi nhân viên có một mã nhân viên duy nhất và có số căn cước công dân riêng nên hai trường
+Ma_nhan_vien và Can_cuoc_cong_dan phải là khóa chính của bảng NHAN_VIEN.
+b) Trường Can_cuoc_cong_dan có thể chọn làm khóa chính của bảng NHAN_VIEN vì mỗi nhân
+viên có số thẻ căn cước công dân khác nhau.
+c) Định nghĩa trường Can_cuoc_cong_dan và So_dien_thoai với tên là Can_cuoc_cong_dan,
+So_dien_thoai và kiểu dữ liệu là số nguyên.
+d) Định nghĩa trường Ma_nhan_vien với tên Ma_nhan_vien, có kiểu dữ liệu là kiểu kí tự có độ dài
+cố định và thiết đặt làm khóa chính cho bảng.
+Câu 6. Lớp em có dự án bán hàng trực tuyến một số sản phẩm thủ công để có kinh phí giúp trẻ em ở một
+huyện vùng cao có bữa ăn đủ dinh dưỡng. Nhóm phụ trách xây dựng website đã thực hiện tham khảo
+từ Internet và đưa ra một số báo cáo trong buổi họp nhóm như sau:
+a) Các phần mềm tạo website miễn phí không cho phép tạo website để bán hàng trực tuyến.
+b) Tại đầu trang của trang chủ bắt buộc phải có logo, tên của website và kèm theo khẩu hiệu của
+dự án.
+c) Tại trang chủ, nhóm xây dựng website muốn hiển thị nhiều hình ảnh minh họa và kèm chú thích
+tình hình bữa ăn không đảm bảo dinh dưỡng của các em. Có từ 7 đến 10 hình ảnh tự động luân
+phiên thanh đổi sau mỗi khoảng 3 giây. Nhóm xây dựng website có thể sử dụng đối tượng thanh
+trượt hình ảnh trong phần mềm tạo website để thực hiện yêu cầu này.
+d) Tại trang nhận đơn hàng, sử dụng biểu mẫu để khách điền thông tin họ tên, địa chỉ nhận hàng, số
+điện thoại liên hệ, các sản phẩm cần mua và số lượng. Sử dụng đối tượng ô đánh dấu để cho khách
+hàng lựa chọn “Không cần gọi điền xác nhận đơn hàng”.
+------ HẾT ------
+
+-- 4 of 4 --
+

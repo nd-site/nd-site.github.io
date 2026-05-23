@@ -1,5 +1,16 @@
 window.quizData = {
     title: "Đề thi thử tốt nghiệp THPT 2026 - Môn Vật Lý (Bản 2)",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: { testDuration: 3000, examLayout: { multiple: { count: 18, pointsPerQ: 0.25 }, truefalse: { count: 4, pointsPerQ: 1.0 }, short: { count: 6, pointsPerQ: 0.25 } } },
     questions: [
         { type: "multiple", question: "Nhiệt lượng cần cung cấp để đun nóng 2 kg nước từ 20°C lên 100°C là bao nhiêu? (c = 4200 J/kg.K)", options: ["336 000 J", "672 000 J", "168 000 J", "840 000 J"], correct: 1, explanation: "Q = mcΔT = 2×4200×80 = 672 000 J." },

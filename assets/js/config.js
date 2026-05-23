@@ -14,14 +14,14 @@ if (window.location.hostname === '127.0.0.1') {
 const EDU_CONFIG = {
     // These placeholders are replaced by GitHub Actions during deployment for each repo
     geminiApiKey: "__GEMINI_API_KEY_PLACEHOLDER__",
-    firebaseApiKey: "AIzaSyC6h0Uqg34PiT0p9l_cQOT7p7pt6kVHCHk",
-    firebaseAuthDomain: "ndlabs-0.firebaseapp.com",
-    firebaseDatabaseURL: "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app",
-    firebaseProjectId: "ndlabs-0",
-    firebaseStorageBucket: "ndlabs-0.firebasestorage.app",
-    firebaseMessagingSenderId: "600040258053",
-    firebaseAppId: "1:600040258053:web:617a19f62aafeb35d13a6c",
-    firebaseMeasurementId: "G-20W5SZ0BKB",
+    firebaseApiKey: "__FIREBASE_API_KEY_PLACEHOLDER__",
+    firebaseAuthDomain: "__FIREBASE_AUTH_DOMAIN_PLACEHOLDER__",
+    firebaseDatabaseURL: "__FIREBASE_DATABASE_URL_PLACEHOLDER__",
+    firebaseProjectId: "__FIREBASE_PROJECT_ID_PLACEHOLDER__",
+    firebaseStorageBucket: "__FIREBASE_STORAGE_BUCKET_PLACEHOLDER__",
+    firebaseMessagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID_PLACEHOLDER__",
+    firebaseAppId: "__FIREBASE_APP_ID_PLACEHOLDER__",
+    firebaseMeasurementId: "__FIREBASE_MEASUREMENT_ID_PLACEHOLDER__",
     // URL của Firebase Cloud Function geminiProxy (inject bởi GitHub Actions)
     geminiFunctionUrl: "__GEMINI_FUNCTION_URL_PLACEHOLDER__",
 
@@ -68,35 +68,55 @@ async function getEduKeys() {
     // 2. If not in GitHub Environment, fallback to local .env (For development)
     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     if (isLocalhost) {
-        const paths = ['/.env', './.env', '../.env', '../../.env', '/eduspace/.env'];
-        for (const path of paths) {
-            try {
-                const res = await fetch(path, { cache: 'no-store' });
-                if (res.ok) {
-                    const text = await res.text();
-                    let foundMatch = false;
-                    for (const line of text.split('\n')) {
-                        const trimmed = line.trim();
-                        if (!trimmed || trimmed.startsWith('#')) continue;
-                        const [key, ...valParts] = trimmed.split('=');
-                        if (!key || valParts.length === 0) continue;
-                        const value = valParts.join('=').trim().replace(/['"]/g, '');
+        // Try to fetch env.json first (works on servers that block dotfiles like Live Server)
+        try {
+            const res = await fetch('/env.json', { cache: 'no-store' });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.GEMINI_API_KEY) _cachedKeys.gemini = data.GEMINI_API_KEY;
+                if (data.FIREBASE_API_KEY) _cachedKeys.firebase = data.FIREBASE_API_KEY;
+                if (data.FIREBASE_AUTH_DOMAIN) _cachedKeys.fbAuthDomain = data.FIREBASE_AUTH_DOMAIN;
+                if (data.FIREBASE_DATABASE_URL) _cachedKeys.fbDatabaseURL = data.FIREBASE_DATABASE_URL;
+                if (data.FIREBASE_PROJECT_ID) _cachedKeys.fbProjectId = data.FIREBASE_PROJECT_ID;
+                if (data.FIREBASE_STORAGE_BUCKET) _cachedKeys.fbStorageBucket = data.FIREBASE_STORAGE_BUCKET;
+                if (data.FIREBASE_MESSAGING_SENDER_ID) _cachedKeys.fbMessagingSenderId = data.FIREBASE_MESSAGING_SENDER_ID;
+                if (data.FIREBASE_APP_ID) _cachedKeys.fbAppId = data.FIREBASE_APP_ID;
+                if (data.FIREBASE_MEASUREMENT_ID) _cachedKeys.fbMeasurementId = data.FIREBASE_MEASUREMENT_ID;
+            }
+        } catch (e) {}
 
-                        switch(key) {
-                            case 'GEMINI_API_KEY': if (!_cachedKeys.gemini) _cachedKeys.gemini = value; foundMatch = true; break;
-                            case 'FIREBASE_API_KEY': if (!_cachedKeys.firebase) _cachedKeys.firebase = value; foundMatch = true; break;
-                            case 'FIREBASE_AUTH_DOMAIN': if (!_cachedKeys.fbAuthDomain) _cachedKeys.fbAuthDomain = value; foundMatch = true; break;
-                            case 'FIREBASE_DATABASE_URL': if (!_cachedKeys.fbDatabaseURL) _cachedKeys.fbDatabaseURL = value; foundMatch = true; break;
-                            case 'FIREBASE_PROJECT_ID': if (!_cachedKeys.fbProjectId) _cachedKeys.fbProjectId = value; foundMatch = true; break;
-                            case 'FIREBASE_STORAGE_BUCKET': if (!_cachedKeys.fbStorageBucket) _cachedKeys.fbStorageBucket = value; foundMatch = true; break;
-                            case 'FIREBASE_MESSAGING_SENDER_ID': if (!_cachedKeys.fbMessagingSenderId) _cachedKeys.fbMessagingSenderId = value; foundMatch = true; break;
-                            case 'FIREBASE_APP_ID': if (!_cachedKeys.fbAppId) _cachedKeys.fbAppId = value; foundMatch = true; break;
-                            case 'FIREBASE_MEASUREMENT_ID': if (!_cachedKeys.fbMeasurementId) _cachedKeys.fbMeasurementId = value; foundMatch = true; break;
+        // Fallback to .env parser if env.json was not loaded
+        if (!_cachedKeys.gemini || !_cachedKeys.fbAppId) {
+            const paths = ['/.env', '/eduspace/.env'];
+            for (const path of paths) {
+                try {
+                    const res = await fetch(path, { cache: 'no-store' });
+                    if (res.ok) {
+                        const text = await res.text();
+                        let foundMatch = false;
+                        for (const line of text.split('\n')) {
+                            const trimmed = line.trim();
+                            if (!trimmed || trimmed.startsWith('#')) continue;
+                            const [key, ...valParts] = trimmed.split('=');
+                            if (!key || valParts.length === 0) continue;
+                            const value = valParts.join('=').trim().replace(/['"]/g, '');
+
+                            switch(key) {
+                                case 'GEMINI_API_KEY': if (!_cachedKeys.gemini) _cachedKeys.gemini = value; foundMatch = true; break;
+                                case 'FIREBASE_API_KEY': if (!_cachedKeys.firebase) _cachedKeys.firebase = value; foundMatch = true; break;
+                                case 'FIREBASE_AUTH_DOMAIN': if (!_cachedKeys.fbAuthDomain) _cachedKeys.fbAuthDomain = value; foundMatch = true; break;
+                                case 'FIREBASE_DATABASE_URL': if (!_cachedKeys.fbDatabaseURL) _cachedKeys.fbDatabaseURL = value; foundMatch = true; break;
+                                case 'FIREBASE_PROJECT_ID': if (!_cachedKeys.fbProjectId) _cachedKeys.fbProjectId = value; foundMatch = true; break;
+                                case 'FIREBASE_STORAGE_BUCKET': if (!_cachedKeys.fbStorageBucket) _cachedKeys.fbStorageBucket = value; foundMatch = true; break;
+                                case 'FIREBASE_MESSAGING_SENDER_ID': if (!_cachedKeys.fbMessagingSenderId) _cachedKeys.fbMessagingSenderId = value; foundMatch = true; break;
+                                case 'FIREBASE_APP_ID': if (!_cachedKeys.fbAppId) _cachedKeys.fbAppId = value; foundMatch = true; break;
+                                case 'FIREBASE_MEASUREMENT_ID': if (!_cachedKeys.fbMeasurementId) _cachedKeys.fbMeasurementId = value; foundMatch = true; break;
+                            }
                         }
+                        if (foundMatch) break;
                     }
-                    if (foundMatch) break;
-                }
-            } catch (e) {}
+                } catch (e) {}
+            }
         }
     }
 

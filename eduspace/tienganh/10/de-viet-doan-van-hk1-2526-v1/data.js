@@ -1,6 +1,17 @@
 // data.js - File dữ liệu mẫu cho EduSpace Quiz
 window.quizData = {
     title: "Đề kiểm tra viết Tiếng Anh 10 HKI 25-26 - EduSpace by ND Labs",
+    pageTitle: "",
+    examInfo: {
+        department: "",
+        school: "",
+        province: "",
+        examName: "",
+        attempt: "",
+        date: "",
+        subject: "",
+        grade: ""
+    },
     config: {
         testDuration: 300  // 5 phút cho chế độ kiểm tra
     },
