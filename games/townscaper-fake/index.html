@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phố Biển Yên Bình - Townscaper Sandbox</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Tone.js for Sound Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+        /* Custom scrollbar for color palette */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-sky-100 text-slate-800">
+
+    <!-- Main Game UI Overlay -->
+    <div class="absolute inset-0 pointer-events-none z-10 flex flex-col justify-between p-4 md:p-6">
+        
+        <!-- Header Panel -->
+        <header class="flex justify-between items-start w-full">
+            <div class="bg-white/80 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-white/20 pointer-events-auto max-w-xs md:max-w-sm transition-all hover:bg-white/95">
+                <h1 class="text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-hotel text-teal-600 animate-pulse"></i> Phố Biển Yên Bình
+                </h1>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                    Xây dựng phố đảo thơ mộng. Hãy tạo những **Đường đi** để triệu hồi các cư dân tí hon đi bộ dạo mát quanh thị trấn!
+                </p>
+            </div>
+
+            <!-- Top Right Controls (Time of day & Settings) -->
+            <div class="flex flex-col gap-2 items-end pointer-events-auto">
+                <div class="bg-white/80 backdrop-blur-md rounded-2xl p-3 shadow-lg border border-white/20 flex gap-2">
+                    <button onclick="setTimeOfDay('morning')" id="btn-morning" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:bg-amber-100 text-amber-600 hover:scale-105" title="Bình minh">
+                        <i class="fa-solid fa-cloud-sun text-lg"></i>
+                    </button>
+                    <button onclick="setTimeOfDay('noon')" id="btn-noon" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all bg-sky-100 text-sky-600 font-bold scale-105" title="Trưa rực nắng">
+                        <i class="fa-solid fa-sun text-lg"></i>
+                    </button>
+                    <button onclick="setTimeOfDay('sunset')" id="btn-sunset" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:bg-orange-100 text-orange-600 hover:scale-105" title="Hoàng hôn">
+                        <i class="fa-solid fa-mountain-sun text-lg"></i>
+                    </button>
+                    <button onclick="setTimeOfDay('night')" id="btn-night" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:bg-indigo-100 text-indigo-900 hover:scale-105" title="Đêm trăng">
+                        <i class="fa-solid fa-moon text-lg"></i>
+                    </button>
+                </div>
+                
+                <div class="bg-white/80 backdrop-blur-md rounded-2xl p-2 shadow-lg border border-white/20 flex gap-1">
+                    <button id="btn-mute" onclick="toggleMute()" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:bg-slate-100 text-slate-600" title="Bật/Tắt âm thanh">
+                        <i id="mute-icon" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <button onclick="openResetModal()" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:bg-red-50 text-red-500" title="Xóa hết xây lại">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                    <button onclick="saveTown()" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:bg-emerald-50 text-emerald-600" title="Lưu thủ công">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Central Instruction Toast -->
+        <div id="instruction-toast" class="self-center bg-slate-900/90 text-white text-xs md:text-sm px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 pointer-events-auto animate-bounce transition-all duration-500">
+            <span>🖱️ <b>Click</b> để Xây • <b>Shift+Click</b> để Xóa • <b>Click phải + Kéo</b> để quay camera</span>
+            <button onclick="this.parentElement.remove()" class="hover:text-amber-400 font-bold ml-2">✕</button>
+        </div>
+
+        <!-- Bottom Controls & Color Palette -->
+        <footer class="flex flex-col gap-4 items-center w-full">
+            
+            <!-- Tool Switcher (House / Street / Erase) -->
+            <div class="bg-white/80 backdrop-blur-md rounded-full p-1.5 shadow-xl border border-white/20 flex gap-1 pointer-events-auto">
+                <button id="tool-house" onclick="setTool('house')" class="px-5 py-2.5 rounded-full flex items-center gap-2 font-medium text-sm transition-all bg-teal-600 text-white shadow-md">
+                    <i class="fa-solid fa-hotel"></i> Xây nhà
+                </button>
+                <button id="tool-street" onclick="setTool('street')" class="px-5 py-2.5 rounded-full flex items-center gap-2 font-medium text-sm transition-all text-slate-600 hover:bg-slate-100/80">
+                    <i class="fa-solid fa-road"></i> Lát đường
+                </button>
+                <button id="tool-erase" onclick="setTool('erase')" class="px-5 py-2.5 rounded-full flex items-center gap-2 font-medium text-sm transition-all text-slate-600 hover:bg-slate-100/80">
+                    <i class="fa-solid fa-eraser"></i> Xóa bỏ
+                </button>
+            </div>
+
+            <!-- Color Palette Bar -->
+            <div class="w-full max-w-xl bg-white/80 backdrop-blur-md rounded-2xl p-3 shadow-xl border border-white/20 pointer-events-auto flex flex-col gap-2">
+                <div class="text-xs font-semibold text-slate-500 px-1 text-center md:text-left">Chọn tông màu công trình & đường đi:</div>
+                <div id="palette-container" class="flex gap-2.5 overflow-x-auto py-1 px-1 justify-start md:justify-center no-scrollbar">
+                    <!-- Dynamically generated colors -->
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Smooth Clean Reset Confirmation Modal -->
+    <div id="reset-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full mx-4 shadow-2xl border border-slate-100 text-center transform scale-90 transition-all duration-300" id="reset-modal-card">
+            <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 animate-bounce">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">Xóa toàn bộ đảo?</h3>
+            <p class="text-sm text-slate-500 mb-6">Hành động này sẽ dọn sạch toàn bộ công trình hiện tại và không thể khôi phục lại.</p>
+            <div class="flex gap-3 justify-center">
+                <button onclick="closeResetModal()" class="flex-1 py-2.5 rounded-xl text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all pointer-events-auto">Hủy bỏ</button>
+                <button onclick="confirmResetTown()" class="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white bg-red-500 hover:bg-red-600 shadow-md shadow-red-200 transition-all pointer-events-auto">Xóa sạch</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="absolute top-20 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white px-4 py-2 rounded-xl shadow-lg opacity-0 pointer-events-none transition-all duration-300 z-20 text-sm flex items-center gap-2">
+        <i class="fa-solid fa-circle-check"></i> <span id="toast-message">Đã lưu tự động!</span>
+    </div>
+
+    <!-- Three.js Canvas Container -->
+    <div id="canvas-container" class="w-full h-full"></div>
+
+    <script>
+        // Sound state and setup
+        let isMuted = false;
+        let isInitialLoading = true;
+        let lastPlayTime = 0;
+        let synth, noise, noiseFilter, droneOsc;
+
+        // Initialize Audio context on first click
+        function initAudio() {
+            if (synth) return; 
+
+            Tone.start();
+
+            // Create plop sound synth for building
+            synth = new Tone.MonoSynth({
+                oscillator: { type: "sine" },
+                filter: { Q: 2, type: "lowpass", frequency: 400 },
+                envelope: { attack: 0.005, decay: 0.15, sustain: 0, release: 0.1 },
+                filterEnvelope: { attack: 0.001, decay: 0.1, sustain: 0, release: 0.1, baseFrequency: 200, octaves: 2.5 }
+            }).toDestination();
+            synth.volume.value = -3;
+
+            // Create soft ambient ocean/wind sound
+            noise = new Tone.Noise("pink").start();
+            noiseFilter = new Tone.Filter({
+                type: "lowpass",
+                frequency: 180,
+                Q: 1
+            }).toDestination();
+            noise.connect(noiseFilter);
+            noise.volume.value = -32; 
+
+            // Soft relaxing synth drone
+            droneOsc = new Tone.Oscillator(72.5, "sine").start();
+            const droneFilter = new Tone.Filter(150, "lowpass").toDestination();
+            droneOsc.connect(droneFilter);
+            droneOsc.volume.value = -36; 
+        }
+
+        function playPlopSound(height, isErase = false) {
+            if (isMuted || isInitialLoading) return;
+            initAudio();
+
+            const baseNote = isErase ? 120 : 150;
+            const pitchFactor = height * 25;
+            const freq = baseNote + pitchFactor;
+
+            const now = Tone.now();
+            if (now < lastPlayTime + 0.05) {
+                return; 
+            }
+            lastPlayTime = now;
+
+            if (synth) {
+                if (isErase) {
+                    synth.triggerAttackRelease(freq * 0.8, "16n", now);
+                } else {
+                    synth.triggerAttackRelease(freq, "12n", now);
+                }
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const icon = document.getElementById('mute-icon');
+            if (isMuted) {
+                icon.className = 'fa-solid fa-volume-xmark text-red-500';
+                if (noise) noise.volume.value = -Infinity;
+                if (droneOsc) droneOsc.volume.value = -Infinity;
+            } else {
+                icon.className = 'fa-solid fa-volume-high';
+                if (noise) noise.volume.value = -32;
+                if (droneOsc) droneOsc.volume.value = -36;
+                initAudio();
+            }
+        }
+    </script>
+
+    <script>
+        const COLOR_PALETTE = [
+            { hex: "#e76f51", name: "Đất nung" },
+            { hex: "#f4a261", name: "Cam san hô" },
+            { hex: "#e9c46a", name: "Vàng mù tạt" },
+            { hex: "#2a9d8f", name: "Xanh ngọc biển" },
+            { hex: "#264653", name: "Lam sẫm" },
+            { hex: "#457b9d", name: "Xanh thủy tinh" },
+            { hex: "#a8dadc", name: "Xanh mây nhạt" },
+            { hex: "#f1faee", name: "Trắng vỏ sò" },
+            { hex: "#e5989b", name: "Hồng phấn" },
+            { hex: "#b58db6", name: "Tím oải hương" },
+            { hex: "#8ab17d", name: "Xanh rêu lục" },
+            { hex: "#b7b7a4", name: "Xám đá cuội" }
+        ];
+
+        let selectedColor = COLOR_PALETTE[0].hex;
+        let activeTool = 'house'; // 'house', 'street', or 'erase'
+
+        // Render Color Palette UI
+        const paletteContainer = document.getElementById('palette-container');
+        COLOR_PALETTE.forEach((color, index) => {
+            const btn = document.createElement('button');
+            btn.className = `w-12 h-12 rounded-full border-4 transition-all duration-200 transform hover:scale-110 flex-shrink-0 relative ${index === 0 ? 'border-white scale-110 shadow-md ring-2 ring-teal-500' : 'border-transparent hover:border-white/50'}`;
+            btn.style.backgroundColor = color.hex;
+            btn.title = color.name;
+            btn.dataset.color = color.hex;
+            
+            btn.onclick = () => {
+                Array.from(paletteContainer.children).forEach(c => {
+                    c.classList.remove('border-white', 'scale-110', 'shadow-md', 'ring-2', 'ring-teal-500');
+                    c.classList.add('border-transparent');
+                });
+                btn.classList.remove('border-transparent');
+                btn.classList.add('border-white', 'scale-110', 'shadow-md', 'ring-2', 'ring-teal-500');
+                selectedColor = color.hex;
+                
+                if (previewMesh) {
+                    if (activeTool === 'street') {
+                        previewMesh.material.color.set(new THREE.Color(selectedColor).lerp(new THREE.Color('#94a3b8'), 0.4));
+                    } else {
+                        previewMesh.material.color.set(selectedColor);
+                    }
+                }
+            };
+            paletteContainer.appendChild(btn);
+        });
+
+        function setTool(tool) {
+            activeTool = tool;
+            const btnHouse = document.getElementById('tool-house');
+            const btnStreet = document.getElementById('tool-street');
+            const btnErase = document.getElementById('tool-erase');
+
+            // Reset classes
+            btnHouse.className = "px-5 py-2.5 rounded-full flex items-center gap-2 font-medium text-sm transition-all text-slate-600 hover:bg-slate-100/80";
+            btnStreet.className = "px-5 py-2.5 rounded-full flex items-center gap-2 font-medium text-sm transition-all text-slate-600 hover:bg-slate-100/80";
+            btnErase.className = "px-5 py-2.5 rounded-full flex items-center gap-2 font-medium text-sm transition-all text-slate-600 hover:bg-slate-100/80";
+
+            if (tool === 'house') {
+                btnHouse.className = "px-5 py-2.5 rounded-full flex items-center gap-2 font-medium text-sm transition-all bg-teal-600 text-white shadow-md";
+            } else if (tool === 'street') {
+                btnStreet.className = "px-5 py-2.5 rounded-full flex items-center gap-2 font-medium text-sm transition-all bg-amber-500 text-white shadow-md";
+            } else if (tool === 'erase') {
+                btnErase.className = "px-5 py-2.5 rounded-full flex items-center gap-2 font-medium text-sm transition-all bg-red-500 text-white shadow-md";
+            }
+
+            // Adjust interactive preview helper box geometry based on selected tool
+            if (previewMesh) {
+                scene.remove(previewMesh);
+                let geo;
+                let matColor = selectedColor;
+
+                if (tool === 'street') {
+                    geo = new THREE.BoxGeometry(0.98, 0.2, 0.98);
+                    matColor = new THREE.Color(selectedColor).lerp(new THREE.Color('#94a3b8'), 0.4);
+                } else {
+                    geo = new THREE.BoxGeometry(0.98, 0.98, 0.98);
+                }
+
+                const previewMat = new THREE.MeshBasicMaterial({
+                    color: matColor,
+                    transparent: true,
+                    opacity: 0.5,
+                });
+                previewMesh = new THREE.Mesh(geo, previewMat);
+                scene.add(previewMesh);
+                previewMesh.visible = (tool !== 'erase');
+            }
+        }
+
+        // Helper Modal Popups without using native confirm()
+        function openResetModal() {
+            const modal = document.getElementById('reset-modal');
+            const card = document.getElementById('reset-modal-card');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-90');
+            card.classList.add('scale-100');
+        }
+
+        function closeResetModal() {
+            const modal = document.getElementById('reset-modal');
+            const card = document.getElementById('reset-modal-card');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-90');
+        }
+
+        function confirmResetTown() {
+            closeResetModal();
+            resetTown(true);
+            saveTown(true);
+            showToast("Đã dọn dẹp sạch sẽ hòn đảo quốc!");
+        }
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const msgSpan = document.getElementById('toast-message');
+            msgSpan.innerText = message;
+            toast.className = `absolute top-20 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-xl shadow-lg transition-all duration-300 z-20 text-sm flex items-center gap-2 ${isError ? 'bg-red-600 text-white' : 'bg-emerald-600 text-white'}`;
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2500);
+        }
+    </script>
+
+    <script>
+        let scene, camera, renderer, controls;
+        let gridPlane; 
+        const BLOCK_SIZE = 1;
+        
+        // Grid storage: key "x,y,z" -> { color: hex, type: 'house'|'street', meshGroup: THREE.Group }
+        let worldGrid = {};
+
+        let previewMesh;
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        
+        const LIGHT_PRESETS = {
+            morning: {
+                skyColor: '#fbcfe8',
+                groundColor: '#7c2d12',
+                fogColor: '#fdf2f8',
+                sunColor: '#fdba74',
+                sunIntensity: 1.1,
+                sunPos: [15, 8, 10],
+                ambientColor: '#fce7f3',
+                ambientIntensity: 0.5
+            },
+            noon: {
+                skyColor: '#93c5fd',
+                groundColor: '#1e3a8a',
+                fogColor: '#e0f2fe',
+                sunColor: '#ffffff',
+                sunIntensity: 1.3,
+                sunPos: [5, 20, 5],
+                ambientColor: '#eff6ff',
+                ambientIntensity: 0.7
+            },
+            sunset: {
+                skyColor: '#ffedd5',
+                groundColor: '#431407',
+                fogColor: '#fef3c7',
+                sunColor: '#f97316',
+                sunIntensity: 1.2,
+                sunPos: [-15, 6, -8],
+                ambientColor: '#ffedd5',
+                ambientIntensity: 0.4
+            },
+            night: {
+                skyColor: '#1e1b4b',
+                groundColor: '#030712',
+                fogColor: '#090514',
+                sunColor: '#93c5fd',
+                sunIntensity: 0.4,
+                sunPos: [-10, 15, -10],
+                ambientColor: '#172554',
+                ambientIntensity: 0.3
+            }
+        };
+
+        let currentPreset = 'noon';
+        let dirLight, ambientLight, hemiLight;
+
+        function init3D() {
+            const container = document.getElementById('canvas-container');
+
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2('#e0f2fe', 0.015);
+
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(12, 12, 12);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, preserveDrawingBuffer: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            container.appendChild(renderer.domElement);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxPolarAngle = Math.PI / 2 - 0.01; 
+            controls.minDistance = 3;
+            controls.maxDistance = 45;
+            controls.target.set(0, 0, 0);
+
+            ambientLight = new THREE.AmbientLight('#ffffff', 0.7);
+            scene.add(ambientLight);
+
+            hemiLight = new THREE.HemisphereLight('#ffffff', '#ffffff', 0.3);
+            scene.add(hemiLight);
+
+            dirLight = new THREE.DirectionalLight('#ffffff', 1.3);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 2048;
+            dirLight.shadow.mapSize.height = 2048;
+            dirLight.shadow.camera.near = 0.5;
+            dirLight.shadow.camera.far = 100;
+            const d = 20;
+            dirLight.shadow.camera.left = -d;
+            dirLight.shadow.camera.right = d;
+            dirLight.shadow.camera.top = d;
+            dirLight.shadow.camera.bottom = -d;
+            dirLight.shadow.bias = -0.0005;
+            scene.add(dirLight);
+
+            setTimeOfDay('noon');
+
+            createWater();
+
+            const planeGeo = new THREE.PlaneGeometry(100, 100);
+            planeGeo.rotateX(-Math.PI / 2);
+            gridPlane = new THREE.Mesh(planeGeo, new THREE.MeshBasicMaterial({ visible: false }));
+            gridPlane.position.y = -0.5; 
+            scene.add(gridPlane);
+
+            // Setup preview mesh geometry according to initial state
+            const previewGeo = new THREE.BoxGeometry(0.98, 0.98, 0.98);
+            const previewMat = new THREE.MeshBasicMaterial({
+                color: selectedColor,
+                transparent: true,
+                opacity: 0.4
+            });
+            previewMesh = new THREE.Mesh(previewGeo, previewMat);
+            previewMesh.visible = false;
+            scene.add(previewMesh);
+
+            createBirds();
+            loadTown();
+
+            isInitialLoading = false;
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function setTimeOfDay(presetName) {
+            currentPreset = presetName;
+            const preset = LIGHT_PRESETS[presetName];
+
+            ['morning', 'noon', 'sunset', 'night'].forEach(p => {
+                const btn = document.getElementById(`btn-${p}`);
+                if (p === presetName) {
+                    btn.className = `w-10 h-10 rounded-xl flex items-center justify-center transition-all bg-sky-100 text-sky-600 font-bold scale-105 shadow-md`;
+                } else {
+                    btn.className = `w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:bg-slate-100 text-slate-500 hover:scale-105`;
+                }
+            });
+
+            renderer.setClearColor(preset.skyColor);
+            scene.fog.color.set(preset.fogColor);
+
+            ambientLight.color.set(preset.ambientColor);
+            ambientLight.intensity = preset.ambientIntensity;
+
+            hemiLight.color.set(preset.skyColor);
+            hemiLight.groundColor.set(preset.groundColor);
+            hemiLight.intensity = preset.ambientIntensity * 0.5;
+
+            dirLight.color.set(preset.sunColor);
+            dirLight.intensity = preset.sunIntensity;
+            dirLight.position.set(...preset.sunPos);
+
+            if (waterMesh) {
+                if (presetName === 'night') {
+                    waterMesh.material.color.set('#0b1d3a');
+                    waterMesh.material.emissive.set('#020617');
+                } else if (presetName === 'sunset') {
+                    waterMesh.material.color.set('#1e3a5f');
+                    waterMesh.material.emissive.set('#1c0a00');
+                } else if (presetName === 'morning') {
+                    waterMesh.material.color.set('#3a86c8');
+                    waterMesh.material.emissive.set('#120310');
+                } else {
+                    waterMesh.material.color.set('#22577a');
+                    waterMesh.material.emissive.set('#000000');
+                }
+            }
+
+            // Update glowing windows and streetlights
+            scene.traverse(child => {
+                if (child.name === 'window') {
+                    if (presetName === 'night' || presetName === 'sunset') {
+                        child.material.emissive.set('#ffc300'); 
+                        child.material.emissiveIntensity = 2.0;
+                    } else {
+                        child.material.emissive.set('#000000'); 
+                        child.material.emissiveIntensity = 0;
+                    }
+                }
+            });
+        }
+
+        let waterMesh, waterGeometry;
+        function createWater() {
+            waterGeometry = new THREE.PlaneGeometry(120, 120, 64, 64);
+            waterGeometry.rotateX(-Math.PI / 2);
+
+            const waterMaterial = new THREE.MeshStandardMaterial({
+                color: '#22577a',
+                roughness: 0.15,
+                metalness: 0.1,
+                flatShading: true,
+                transparent: true,
+                opacity: 0.92
+            });
+
+            waterMesh = new THREE.Mesh(waterGeometry, waterMaterial);
+            waterMesh.position.y = -0.5;
+            waterMesh.receiveShadow = true;
+            scene.add(waterMesh);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+    </script>
+
+    <script>
+        let birds = [];
+
+        function createBirds() {
+            const birdCount = 12;
+            const birdGeo = new THREE.BufferGeometry();
+            
+            const vertices = new Float32Array([
+                0, 0, 0,      
+                -0.15, 0.05, 0.1, 
+                0, 0, 0.2,    
+                
+                0, 0, 0,      
+                0, 0, 0.2,    
+                0.15, 0.05, 0.1  
+            ]);
+
+            birdGeo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+            birdGeo.computeVertexNormals();
+
+            const birdMat = new THREE.MeshBasicMaterial({ color: '#f8fafc', side: THREE.DoubleSide });
+
+            for (let i = 0; i < birdCount; i++) {
+                const birdMesh = new THREE.Mesh(birdGeo.clone(), birdMat);
+                
+                birdMesh.position.set(
+                    (Math.random() - 0.5) * 30,
+                    5 + Math.random() * 8,
+                    (Math.random() - 0.5) * 30
+                );
+                
+                birdMesh.userData = {
+                    speed: 0.02 + Math.random() * 0.02,
+                    angle: Math.random() * Math.PI * 2,
+                    rotSpeed: (Math.random() - 0.5) * 0.01,
+                    wingSpeed: 10 + Math.random() * 5,
+                    wingOffset: Math.random() * Math.PI
+                };
+
+                scene.add(birdMesh);
+                birds.push(birdMesh);
+            }
+        }
+
+        function updateBirds(time) {
+            birds.forEach(bird => {
+                const data = bird.userData;
+
+                data.angle += data.rotSpeed;
+                bird.position.x += Math.cos(data.angle) * data.speed;
+                bird.position.z += Math.sin(data.angle) * data.speed;
+
+                bird.position.y += Math.sin(time * 2 + data.wingOffset) * 0.005;
+
+                const limit = 25;
+                if (Math.abs(bird.position.x) > limit || Math.abs(bird.position.z) > limit) {
+                    data.angle += Math.PI; 
+                }
+
+                bird.rotation.y = -data.angle + Math.PI/2;
+
+                const positions = bird.geometry.attributes.position.array;
+                const flap = Math.sin(time * data.wingSpeed) * 0.06;
+                positions[4] = 0.05 + flap;  
+                positions[16] = 0.05 + flap; 
+                bird.geometry.attributes.position.needsUpdate = true;
+            });
+        }
+    </script>
+
+    <script>
+        function getBuildCoordinates(bx, by, bz, normal) {
+            let nx = bx;
+            let ny = by;
+            let nz = bz;
+
+            const absX = Math.abs(normal.x);
+            const absY = Math.abs(normal.y);
+            const absZ = Math.abs(normal.z);
+
+            if (absX > absY && absX > absZ) {
+                nx += Math.sign(normal.x);
+            } else if (absY > absX && absY > absZ) {
+                ny += Math.sign(normal.y);
+            } else {
+                nz += Math.sign(normal.z);
+            }
+
+            return { nx, ny, nz };
+        }
+
+        function getGridKey(x, y, z) {
+            return `${x},${y},${z}`;
+        }
+
+        function hasBlock(x, y, z) {
+            return worldGrid[getGridKey(x, y, z)] !== undefined;
+        }
+
+        function getBlock(x, y, z) {
+            return worldGrid[getGridKey(x, y, z)];
+        }
+
+        // Add or stack block at coordinate (now supports custom types)
+        function addBlock(x, y, z, color, type = 'house') {
+            if (y < 0) return; 
+            const key = getGridKey(x, y, z);
+            
+            if (hasBlock(x, y, z)) return;
+
+            worldGrid[key] = {
+                color: color,
+                type: type,
+                meshGroup: null 
+            };
+
+            playPlopSound(y, false);
+            updateBlockAndNeighbors(x, y, z);
+
+            if (y === 0) {
+                createSplashRing(x, z);
+            }
+
+            autoSave();
+        }
+
+        function removeBlock(x, y, z) {
+            const key = getGridKey(x, y, z);
+            if (!hasBlock(x, y, z)) return;
+
+            const block = worldGrid[key];
+            if (block.meshGroup) {
+                scene.remove(block.meshGroup);
+                block.meshGroup.traverse(child => {
+                    if (child.isMesh) {
+                        child.geometry.dispose();
+                        if (Array.isArray(child.material)) {
+                            child.material.forEach(m => m.dispose());
+                        } else {
+                            child.material.dispose();
+                        }
+                    }
+                });
+            }
+
+            delete worldGrid[key];
+            playPlopSound(y, true);
+
+            if (y === 0) {
+                createSplashRing(x, z);
+            }
+
+            updateBlockAndNeighbors(x, y, z);
+            autoSave();
+        }
+
+        function updateBlock(x, y, z) {
+            const key = getGridKey(x, y, z);
+            
+            if (worldGrid[key] && worldGrid[key].meshGroup) {
+                scene.remove(worldGrid[key].meshGroup);
+                worldGrid[key].meshGroup.traverse(child => {
+                    if (child.isMesh) {
+                        child.geometry.dispose();
+                        if (Array.isArray(child.material)) {
+                            child.material.forEach(m => m.dispose());
+                        } else {
+                            child.material.dispose();
+                        }
+                    }
+                });
+                worldGrid[key].meshGroup = null;
+            }
+
+            if (hasBlock(x, y, z)) {
+                const b = worldGrid[key];
+                if (b.type === 'street') {
+                    worldGrid[key].meshGroup = generateProceduralStreetMesh(x, y, z, b.color);
+                } else {
+                    worldGrid[key].meshGroup = generateProceduralBlockMesh(x, y, z, b.color);
+                }
+                scene.add(worldGrid[key].meshGroup);
+            }
+        }
+
+        function updateBlockAndNeighbors(x, y, z) {
+            const offsets = [
+                [0,0,0],
+                [1,0,0], [-1,0,0],
+                [0,1,0], [0,-1,0],
+                [0,0,1], [0,0,-1]
+            ];
+            offsets.forEach(([dx, dy, dz]) => {
+                updateBlock(x + dx, y + dy, z + dz);
+            });
+        }
+
+        function createSplashRing(x, z) {
+            const splashGeo = new THREE.RingGeometry(0.1, 0.4, 32);
+            splashGeo.rotateX(-Math.PI / 2);
+            const splashMat = new THREE.MeshBasicMaterial({
+                color: '#ffffff',
+                transparent: true,
+                opacity: 0.8,
+                side: THREE.DoubleSide
+            });
+            const splash = new THREE.Mesh(splashGeo, splashMat);
+            splash.position.set(x, -0.48, z); 
+            scene.add(splash);
+
+            const startTime = clock.getElapsedTime();
+            const animateSplash = () => {
+                const elapsed = clock.getElapsedTime() - startTime;
+                const duration = 0.5; 
+                const progress = elapsed / duration;
+
+                if (progress < 1) {
+                    splash.scale.set(1 + progress * 3, 1 + progress * 3, 1);
+                    splash.material.opacity = 0.8 * (1 - progress);
+                    requestAnimationFrame(animateSplash);
+                } else {
+                    scene.remove(splash);
+                    splashGeo.dispose();
+                    splashMat.dispose();
+                }
+            };
+            animateSplash();
+        }
+
+        // Seeds based helper to maintain persistent decorations on street blocks
+        function getDeterministicRandom(x, y, z) {
+            const seed = Math.sin(x * 12.9898 + y * 78.233 + z * 437.287) * 43758.5453123;
+            return seed - Math.floor(seed);
+        }
+    </script>
+
+    <script>
+        function generateProceduralBlockMesh(x, y, z, colorHex) {
+            const group = new THREE.Group();
+            group.position.set(x, y, z);
+
+            const hasTop = hasBlock(x, y + 1, z);
+            const hasBottom = hasBlock(x, y - 1, z);
+            const hasLeft = hasBlock(x - 1, y, z);
+            const hasRight = hasBlock(x + 1, y, z);
+            const hasFront = hasBlock(x, y, z + 1);
+            const hasBack = hasBlock(x, y, z - 1);
+
+            const wallMaterial = new THREE.MeshStandardMaterial({
+                color: colorHex,
+                roughness: 0.5,
+                metalness: 0.1,
+                flatShading: true
+            });
+
+            // 1. Core House Body
+            const bodyGeo = new THREE.BoxGeometry(0.96, 0.98, 0.96);
+            const bodyMesh = new THREE.Mesh(bodyGeo, wallMaterial);
+            bodyMesh.castShadow = true;
+            bodyMesh.receiveShadow = true;
+            group.add(bodyMesh);
+
+            // 2. Foundation Stone (If block rests at water level y=0)
+            if (y === 0) {
+                const foundationGeo = new THREE.BoxGeometry(1.02, 0.25, 1.02);
+                const foundationMat = new THREE.MeshStandardMaterial({
+                    color: '#475569', 
+                    roughness: 0.8,
+                    metalness: 0.2,
+                    flatShading: true
+                });
+                const foundation = new THREE.Mesh(foundationGeo, foundationMat);
+                foundation.position.y = -0.5 + 0.125; 
+                foundation.castShadow = true;
+                foundation.receiveShadow = true;
+                group.add(foundation);
+            }
+
+            // 3. Bottom Columns/Stilts (If building is hovering, y > 0 and no bottom neighbor)
+            if (y > 0 && !hasBottom) {
+                const colGeo = new THREE.CylinderGeometry(0.08, 0.08, 1.2, 8);
+                const colMat = new THREE.MeshStandardMaterial({
+                    color: '#334155', 
+                    roughness: 0.6
+                });
+
+                const positions = [
+                    [-0.38, -0.38],
+                    [0.38, -0.38],
+                    [-0.38, 0.38],
+                    [0.38, 0.38]
+                ];
+
+                positions.forEach(([cx, cz]) => {
+                    const col = new THREE.Mesh(colGeo, colMat);
+                    col.position.set(cx, -0.6, cz);
+                    col.castShadow = true;
+                    col.receiveShadow = true;
+                    group.add(col);
+                });
+            }
+
+            // 4. Roof Style Structure (If nothing is directly on top of this block)
+            if (!hasTop) {
+                const roofGeo = new THREE.ConeGeometry(0.72, 0.65, 4); 
+                roofGeo.rotateY(Math.PI / 4); 
+
+                const rColor = new THREE.Color(colorHex).multiplyScalar(0.7); 
+                const roofMat = new THREE.MeshStandardMaterial({
+                    color: rColor,
+                    roughness: 0.45,
+                    metalness: 0.15,
+                    flatShading: true
+                });
+
+                const roof = new THREE.Mesh(roofGeo, roofMat);
+                roof.position.y = 0.5 + 0.325; 
+                roof.castShadow = true;
+                group.add(roof);
+
+                if (Math.random() > 0.5) {
+                    const chimneyGeo = new THREE.BoxGeometry(0.12, 0.35, 0.12);
+                    const chimneyMat = new THREE.MeshStandardMaterial({ color: '#52525b', roughness: 0.8 });
+                    const chimney = new THREE.Mesh(chimneyGeo, chimneyMat);
+                    chimney.position.set(0.25, 0.6, 0.25);
+                    chimney.castShadow = true;
+                    group.add(chimney);
+                }
+            }
+
+            // 5. Windows and Doors
+            const sides = [
+                { hasNeighbor: hasLeft, dir: [-0.49, 0, 0], rot: [0, Math.PI / 2, 0] },
+                { hasNeighbor: hasRight, dir: [0.49, 0, 0], rot: [0, -Math.PI / 2, 0] },
+                { hasNeighbor: hasFront, dir: [0, 0, 0.49], rot: [0, 0, 0] },
+                { hasNeighbor: hasBack, dir: [0, 0, -0.49], rot: [0, Math.PI, 0] }
+            ];
+
+            const isNight = currentPreset === 'night' || currentPreset === 'sunset';
+            const windowFrameGeo = new THREE.BoxGeometry(0.24, 0.35, 0.04);
+            const windowGlassGeo = new THREE.PlaneGeometry(0.18, 0.28);
+
+            sides.forEach(side => {
+                if (!side.hasNeighbor) {
+                    if (y === 0 && Math.random() > 0.6) {
+                        const doorFrameGeo = new THREE.BoxGeometry(0.32, 0.55, 0.05);
+                        const doorMat = new THREE.MeshStandardMaterial({
+                            color: '#7c2d12', 
+                            roughness: 0.8
+                        });
+                        const door = new THREE.Mesh(doorFrameGeo, doorMat);
+                        door.position.set(side.dir[0], -0.2, side.dir[2]);
+                        door.rotation.set(...side.rot);
+                        door.castShadow = true;
+                        group.add(door);
+                    } else {
+                        const wGroup = new THREE.Group();
+                        wGroup.position.set(side.dir[0], 0.1, side.dir[2]);
+                        wGroup.rotation.set(...side.rot);
+
+                        const frameMat = new THREE.MeshStandardMaterial({ color: '#1e293b', roughness: 0.7 });
+                        const frame = new THREE.Mesh(windowFrameGeo, frameMat);
+                        frame.castShadow = true;
+                        wGroup.add(frame);
+
+                        const glassMat = new THREE.MeshStandardMaterial({
+                            color: '#ffffff',
+                            emissive: isNight ? '#ffc300' : '#000000',
+                            emissiveIntensity: isNight ? 1.8 : 0,
+                            roughness: 0.1,
+                            metalness: 0.9
+                        });
+                        const glass = new THREE.Mesh(windowGlassGeo, glassMat);
+                        glass.name = 'window'; 
+                        glass.position.z = 0.022; 
+                        wGroup.add(glass);
+
+                        group.add(wGroup);
+                    }
+                }
+            });
+
+            group.name = `block:${x}:${y}:${z}`;
+            return group;
+        }
+    </script>
+
+    <script>
+        function generateProceduralStreetMesh(x, y, z, colorHex) {
+            const group = new THREE.Group();
+            group.position.set(x, y, z);
+
+            const rand = getDeterministicRandom(x, y, z);
+
+            // Analyze surrounding neighbors at the same level
+            const hasLeft = hasBlock(x - 1, y, z);
+            const hasRight = hasBlock(x + 1, y, z);
+            const hasFront = hasBlock(x, y, z + 1);
+            const hasBack = hasBlock(x, y, z - 1);
+            const hasBottom = hasBlock(x, y - 1, z);
+
+            // 1. Street Walkway Slab
+            const slabGeo = new THREE.BoxGeometry(0.98, 0.2, 0.98);
+            const slabColor = new THREE.Color(colorHex).lerp(new THREE.Color('#cbd5e1'), 0.5); 
+            const slabMat = new THREE.MeshStandardMaterial({
+                color: slabColor,
+                roughness: 0.8,
+                flatShading: true
+            });
+            const slabMesh = new THREE.Mesh(slabGeo, slabMat);
+            slabMesh.position.y = -0.4; // Positioned flat at the bottom of the grid unit
+            slabMesh.castShadow = true;
+            slabMesh.receiveShadow = true;
+            group.add(slabMesh);
+
+            // 2. Heavy Stone Foundation (If on sea level)
+            if (y === 0) {
+                const foundGeo = new THREE.BoxGeometry(1.02, 0.4, 1.02);
+                const foundMat = new THREE.MeshStandardMaterial({
+                    color: '#334155',
+                    roughness: 0.9,
+                    flatShading: true
+                });
+                const foundation = new THREE.Mesh(foundGeo, foundMat);
+                foundation.position.y = -0.7; 
+                foundation.castShadow = true;
+                foundation.receiveShadow = true;
+                group.add(foundation);
+            }
+
+            // 3. Wooden Support stilts (If elevated on air)
+            if (y > 0 && !hasBottom) {
+                const colGeo = new THREE.CylinderGeometry(0.06, 0.06, 1.0, 8);
+                const colMat = new THREE.MeshStandardMaterial({ color: '#334155', roughness: 0.7 });
+                const stiltPositions = [
+                    [-0.38, -0.38],
+                    [0.38, -0.38],
+                    [-0.38, 0.38],
+                    [0.38, 0.38]
+                ];
+                stiltPositions.forEach(([cx, cz]) => {
+                    const col = new THREE.Mesh(colGeo, colMat);
+                    col.position.set(cx, -1.0, cz);
+                    col.castShadow = true;
+                    group.add(col);
+                });
+            }
+
+            // 4. Smart Fences / Railings on Exposed street borders
+            const railingColor = '#7c2d12'; 
+            const railingMat = new THREE.MeshStandardMaterial({ color: railingColor, roughness: 0.8 });
+            
+            const buildRailing = (rotY, offsetZ) => {
+                const rGroup = new THREE.Group();
+                rGroup.rotation.y = rotY;
+                rGroup.position.z = offsetZ;
+                rGroup.position.y = -0.3; // Sits nicely above slab
+
+                // Vertical posts
+                const postGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.25, 8);
+                const post1 = new THREE.Mesh(postGeo, railingMat);
+                post1.position.x = -0.42;
+                post1.castShadow = true;
+                const post2 = new THREE.Mesh(postGeo, railingMat);
+                post2.position.x = 0.42;
+                post2.castShadow = true;
+                rGroup.add(post1, post2);
+
+                // Horizontal bars
+                const barGeo = new THREE.BoxGeometry(0.84, 0.02, 0.02);
+                const bar1 = new THREE.Mesh(barGeo, railingMat);
+                bar1.position.y = 0.1;
+                bar1.castShadow = true;
+                const bar2 = new THREE.Mesh(barGeo, railingMat);
+                bar2.position.y = 0.0;
+                bar2.castShadow = true;
+                rGroup.add(bar1, bar2);
+
+                group.add(rGroup);
+            };
+
+            if (!hasLeft) buildRailing(Math.PI / 2, 0);
+            if (!hasRight) buildRailing(-Math.PI / 2, 0);
+            if (!hasFront) buildRailing(0, 0.49);
+            if (!hasBack) buildRailing(Math.PI, -0.49);
+
+            // 5. Procedural Decorative Streetlights, benches, or plants
+            if (rand < 0.22) {
+                // Classic glowing lantern post
+                const lightGroup = new THREE.Group();
+                lightGroup.position.set(0.32, -0.3, 0.32);
+
+                const postGeo = new THREE.CylinderGeometry(0.015, 0.015, 0.52, 8);
+                const postMat = new THREE.MeshStandardMaterial({ color: '#1e293b', roughness: 0.5 });
+                const post = new THREE.Mesh(postGeo, postMat);
+                post.position.y = 0.26;
+                post.castShadow = true;
+                lightGroup.add(post);
+
+                // Bulb that turns on/glows at sunset/night
+                const isNight = currentPreset === 'night' || currentPreset === 'sunset';
+                const bulbGeo = new THREE.SphereGeometry(0.045, 8, 8);
+                const bulbMat = new THREE.MeshStandardMaterial({
+                    color: '#ffffff',
+                    emissive: isNight ? '#ffb703' : '#000000',
+                    emissiveIntensity: isNight ? 2.5 : 0,
+                    roughness: 0.1
+                });
+                const bulb = new THREE.Mesh(bulbGeo, bulbMat);
+                bulb.name = 'window'; // Hook directly to global day/night update function
+                bulb.position.y = 0.54;
+                lightGroup.add(bulb);
+
+                group.add(lightGroup);
+            } else if (rand >= 0.22 && rand < 0.36) {
+                // Cozy Wood Bench for citizens
+                const benchGroup = new THREE.Group();
+                benchGroup.position.set(0, -0.3, 0);
+                benchGroup.rotation.y = rand * Math.PI * 2; // Random natural rotation
+
+                const woodMat = new THREE.MeshStandardMaterial({ color: '#854d0e', roughness: 0.9 });
+                const seatGeo = new THREE.BoxGeometry(0.42, 0.02, 0.16);
+                const seat = new THREE.Mesh(seatGeo, woodMat);
+                seat.position.y = 0.08;
+                seat.castShadow = true;
+                benchGroup.add(seat);
+
+                const legGeo = new THREE.BoxGeometry(0.02, 0.08, 0.16);
+                const leg1 = new THREE.Mesh(legGeo, woodMat);
+                leg1.position.set(-0.19, 0.04, 0);
+                leg1.castShadow = true;
+                const leg2 = new THREE.Mesh(legGeo, woodMat);
+                leg2.position.set(0.19, 0.04, 0);
+                leg2.castShadow = true;
+                benchGroup.add(leg1, leg2);
+
+                group.add(benchGroup);
+            } else if (rand >= 0.36 && rand < 0.5) {
+                // Cute round potted plants
+                const potGroup = new THREE.Group();
+                potGroup.position.set(-0.3, -0.3, -0.3);
+
+                const potGeo = new THREE.CylinderGeometry(0.05, 0.035, 0.09, 8);
+                const potMat = new THREE.MeshStandardMaterial({ color: '#ca8a04', roughness: 0.8 });
+                const pot = new THREE.Mesh(potGeo, potMat);
+                pot.position.y = 0.045;
+                pot.castShadow = true;
+                potGroup.add(pot);
+
+                const plantGeo = new THREE.SphereGeometry(0.075, 8, 8);
+                const plantMat = new THREE.MeshStandardMaterial({ color: '#15803d', roughness: 0.9 });
+                const plant = new THREE.Mesh(plantGeo, plantMat);
+                plant.position.y = 0.12;
+                plant.castShadow = true;
+                potGroup.add(plant);
+
+                group.add(potGroup);
+            }
+
+            group.name = `block:${x}:${y}:${z}`;
+            return group;
+        }
+    </script>
+
+    <script>
+        let citizens = [];
+
+        class Citizen {
+            constructor(x, y, z) {
+                this.x = x; this.y = y; this.z = z;
+                this.tx = x; this.ty = y; this.tz = z; // Target position
+                this.progress = 1.0;
+                this.speed = 0.7 + Math.random() * 0.6;
+                this.color = COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)].hex;
+                this.createMesh();
+            }
+
+            createMesh() {
+                this.mesh = new THREE.Group();
+
+                // Cute capsule-like low poly body
+                const bodyGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.18, 8);
+                const bodyMat = new THREE.MeshStandardMaterial({ color: this.color, roughness: 0.6 });
+                const body = new THREE.Mesh(bodyGeo, bodyMat);
+                body.position.y = 0.09;
+                body.castShadow = true;
+                this.mesh.add(body);
+
+                // Small round head
+                const headGeo = new THREE.SphereGeometry(0.05, 8, 8);
+                const headMat = new THREE.MeshStandardMaterial({ color: '#ffdbac', roughness: 0.8 }); 
+                const head = new THREE.Mesh(headGeo, headMat);
+                head.position.y = 0.21;
+                head.castShadow = true;
+                this.mesh.add(head);
+
+                // Tiny conical hat accessory
+                if (Math.random() > 0.4) {
+                    const hatGeo = new THREE.ConeGeometry(0.055, 0.06, 8);
+                    const hatMat = new THREE.MeshStandardMaterial({ color: '#334155' });
+                    const hat = new THREE.Mesh(hatGeo, hatMat);
+                    hat.position.y = 0.26;
+                    this.mesh.add(hat);
+                }
+
+                this.mesh.position.set(this.x, this.y - 0.4, this.z); 
+                scene.add(this.mesh);
+            }
+
+            update(deltaTime) {
+                if (this.progress >= 1.0) {
+                    // Arrived at current target, assign new destination
+                    this.x = this.tx; this.y = this.ty; this.z = this.tz;
+                    
+                    const neighbors = [];
+                    const dirs = [[1,0,0], [-1,0,0], [0,0,1], [0,0,-1]];
+                    
+                    // Search for connected street tiles to walk along
+                    dirs.forEach(([dx, dy, dz]) => {
+                        const nx = this.x + dx;
+                        const ny = this.y;
+                        const nz = this.z + dz;
+                        const block = getBlock(nx, ny, nz);
+                        if (block && block.type === 'street') {
+                            neighbors.push({x: nx, y: ny, z: nz});
+                        }
+                    });
+
+                    if (neighbors.length > 0 && Math.random() > 0.15) {
+                        const next = neighbors[Math.floor(Math.random() * neighbors.length)];
+                        this.tx = next.x; this.ty = next.y; this.tz = next.z;
+                        this.progress = 0.0;
+                    } else {
+                        // Keep idling and look around
+                        this.progress = 1.0;
+                        this.mesh.rotation.y += (Math.random() - 0.5) * 0.4;
+                    }
+                }
+
+                if (this.progress < 1.0) {
+                    this.progress += deltaTime * this.speed;
+                    if (this.progress > 1.0) this.progress = 1.0;
+
+                    // Interpolate smoothly between path tiles
+                    const px = THREE.MathUtils.lerp(this.x, this.tx, this.progress);
+                    const py = THREE.MathUtils.lerp(this.y, this.ty, this.progress);
+                    const pz = THREE.MathUtils.lerp(this.z, this.tz, this.progress);
+
+                    // Adorable hopping cartoon movement style
+                    const hopHeight = Math.abs(Math.sin(this.progress * Math.PI)) * 0.06;
+                    this.mesh.position.set(px, py - 0.4 + hopHeight, pz);
+
+                    // Dynamic rotation towards destination
+                    const dx = this.tx - this.x;
+                    const dz = this.tz - this.z;
+                    if (Math.abs(dx) > 0.01 || Math.abs(dz) > 0.01) {
+                        const targetAngle = Math.atan2(dx, dz);
+                        this.mesh.rotation.y = targetAngle;
+                    }
+                } else {
+                    this.mesh.position.set(this.x, this.y - 0.4, this.z);
+                }
+            }
+
+            destroy() {
+                scene.remove(this.mesh);
+                this.mesh.traverse(child => {
+                    if (child.isMesh) {
+                        child.geometry.dispose();
+                        child.material.dispose();
+                    }
+                });
+            }
+        }
+
+        // Handles active population based on current built streets count
+        function updateCitizens(deltaTime) {
+            const streetTiles = [];
+            Object.keys(worldGrid).forEach(key => {
+                const block = worldGrid[key];
+                if (block.type === 'street') {
+                    const parts = key.split(',');
+                    streetTiles.push({
+                        x: parseInt(parts[0]),
+                        y: parseInt(parts[1]),
+                        z: parseInt(parts[2])
+                    });
+                }
+            });
+
+            // Target population limit
+            const targetCount = Math.min(12, Math.floor(streetTiles.length / 2) + 1);
+
+            // Spawn citizens if town has grown
+            if (citizens.length < targetCount && streetTiles.length > 0) {
+                const spawnTile = streetTiles[Math.floor(Math.random() * streetTiles.length)];
+                citizens.push(new Citizen(spawnTile.x, spawnTile.y, spawnTile.z));
+            }
+
+            // Trim citizens if streets were demolished
+            while (citizens.length > targetCount) {
+                const removed = citizens.pop();
+                removed.destroy();
+            }
+
+            // Update citizens movement
+            citizens.forEach(c => c.update(deltaTime));
+        }
+
+        function clearAllCitizens() {
+            citizens.forEach(c => c.destroy());
+            citizens = [];
+        }
+    </script>
+
+    <script>
+        let pointerDownPos = { x: 0, y: 0 };
+        let isPointerDown = false;
+
+        window.addEventListener('pointerdown', (e) => {
+            if (e.target.tagName !== 'CANVAS') return;
+            isPointerDown = true;
+            pointerDownPos = { x: e.clientX, y: e.clientY };
+            updateMouseCoords(e);
+        });
+
+        window.addEventListener('pointerup', (e) => {
+            if (!isPointerDown) return;
+            isPointerDown = false;
+
+            const moveDist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+            
+            // Distinguish dragging the camera from quick placing
+            if (moveDist < 6) {
+                updateMouseCoords(e);
+                handleUserClick(e);
+            }
+        });
+
+        window.addEventListener('pointermove', (e) => {
+            updateMouseCoords(e);
+            updateRaycastPreview();
+        });
+
+        function updateMouseCoords(e) {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        function handleUserClick(e) {
+            raycaster.setFromCamera(mouse, camera);
+            
+            const targets = [];
+            scene.traverse(child => {
+                if (child.name && child.name.startsWith('block:')) {
+                    child.traverse(inner => {
+                        if (inner.isMesh) targets.push(inner);
+                    });
+                }
+            });
+            targets.push(gridPlane);
+
+            const intersects = raycaster.intersectObjects(targets);
+            if (intersects.length === 0) return;
+
+            const hit = intersects[0];
+            const hitObject = hit.object;
+
+            // 1. ERASE MODE (Or Build mode with SHIFT held)
+            if (activeTool === 'erase' || e.shiftKey) {
+                if (hitObject === gridPlane) return; 
+
+                let current = hitObject;
+                while (current && current.parent) {
+                    if (current.name && current.name.startsWith('block:')) {
+                        const parts = current.name.split(':');
+                        const bx = parseInt(parts[1]);
+                        const by = parseInt(parts[2]);
+                        const bz = parseInt(parts[3]);
+                        removeBlock(bx, by, bz);
+                        break;
+                    }
+                    current = current.parent;
+                }
+                return;
+            }
+
+            // 2. BUILD MODE (House or Street)
+            if (hitObject === gridPlane) {
+                const px = Math.round(hit.point.x);
+                const pz = Math.round(hit.point.z);
+                addBlock(px, 0, pz, selectedColor, activeTool);
+            } else {
+                let current = hitObject;
+                while (current && current.parent) {
+                    if (current.name && current.name.startsWith('block:')) {
+                        const parts = current.name.split(':');
+                        const bx = parseInt(parts[1]);
+                        const by = parseInt(parts[2]);
+                        const bz = parseInt(parts[3]);
+
+                        const normal = hit.face.normal.clone();
+                        normal.transformDirection(hitObject.matrixWorld);
+
+                        const { nx, ny, nz } = getBuildCoordinates(bx, by, bz, normal);
+
+                        if (ny < 12 && Math.abs(nx) < 15 && Math.abs(nz) < 15) {
+                            addBlock(nx, ny, nz, selectedColor, activeTool);
+                        }
+                        break;
+                    }
+                    current = current.parent;
+                }
+            }
+        }
+
+        function updateRaycastPreview() {
+            if (activeTool === 'erase') {
+                previewMesh.visible = false;
+                return;
+            }
+
+            raycaster.setFromCamera(mouse, camera);
+            const targets = [];
+            scene.traverse(child => {
+                if (child.name && child.name.startsWith('block:')) {
+                    child.traverse(inner => {
+                        if (inner.isMesh) targets.push(inner);
+                    });
+                }
+            });
+            targets.push(gridPlane);
+
+            const intersects = raycaster.intersectObjects(targets);
+            if (intersects.length > 0) {
+                const hit = intersects[0];
+                const hitObject = hit.object;
+
+                previewMesh.visible = true;
+
+                if (hitObject === gridPlane) {
+                    const px = Math.round(hit.point.x);
+                    const pz = Math.round(hit.point.z);
+                    previewMesh.position.set(px, activeTool === 'street' ? 0 : 0, pz);
+                } else {
+                    let current = hitObject;
+                    while (current && current.parent) {
+                        if (current.name && current.name.startsWith('block:')) {
+                            const parts = current.name.split(':');
+                            const bx = parseInt(parts[1]);
+                            const by = parseInt(parts[2]);
+                            const bz = parseInt(parts[3]);
+
+                            const normal = hit.face.normal.clone();
+                            normal.transformDirection(hitObject.matrixWorld);
+
+                            const { nx, ny, nz } = getBuildCoordinates(bx, by, bz, normal);
+
+                            previewMesh.position.set(nx, ny, nz);
+                            break;
+                        }
+                        current = current.parent;
+                    }
+                }
+            } else {
+                previewMesh.visible = false;
+            }
+        }
+    </script>
+
+    <script>
+        const STORAGE_KEY = 'townscaper_sandbox_save_v2';
+        let autoSaveTimeout;
+
+        function saveTown(isSilent = false) {
+            const dataToSave = [];
+            Object.keys(worldGrid).forEach(key => {
+                const block = worldGrid[key];
+                const parts = key.split(',');
+                dataToSave.push({
+                    x: parseInt(parts[0]),
+                    y: parseInt(parts[1]),
+                    z: parseInt(parts[2]),
+                    color: block.color,
+                    type: block.type || 'house' // Preserve block category
+                });
+            });
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+            if (!isSilent) {
+                showToast("Thành phố đã được lưu trữ thành công!");
+            }
+        }
+
+        function loadTown() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (!savedData) {
+                createStartingIsland();
+                return;
+            }
+
+            try {
+                const blocks = JSON.parse(savedData);
+                if (blocks.length === 0) {
+                    createStartingIsland();
+                    return;
+                }
+
+                resetTown(true);
+
+                blocks.forEach(b => {
+                    worldGrid[getGridKey(b.x, b.y, b.z)] = {
+                        color: b.color,
+                        type: b.type || 'house',
+                        meshGroup: null
+                    };
+                });
+
+                Object.keys(worldGrid).forEach(key => {
+                    const parts = key.split(',');
+                    const x = parseInt(parts[0]);
+                    const y = parseInt(parts[1]);
+                    const z = parseInt(parts[2]);
+                    updateBlock(x, y, z);
+                });
+
+                showToast("Đã khôi phục lại hòn đảo cũ!");
+            } catch (err) {
+                console.error("Lỗi khi tải dữ liệu lưu trữ:", err);
+                createStartingIsland();
+            }
+        }
+
+        function autoSave() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                saveTown(true);
+            }, 1000); 
+        }
+
+        function resetTown(isSilent = false) {
+            Object.keys(worldGrid).forEach(key => {
+                const block = worldGrid[key];
+                if (block.meshGroup) {
+                    scene.remove(block.meshGroup);
+                }
+            });
+            worldGrid = {};
+            clearAllCitizens();
+            
+            if (!isSilent) {
+                saveTown(true);
+                showToast("Đã xóa sạch thành phố!");
+            }
+        }
+
+        // Spawn beautiful default scenic starting town with connected streets
+        function createStartingIsland() {
+            const startColor = COLOR_PALETTE[3].hex; // Teal
+            const altColor = COLOR_PALETTE[0].hex;  // Terracotta
+            const sandColor = COLOR_PALETTE[2].hex; // Yellow Mustard
+
+            // Core town houses
+            addBlock(0, 0, 0, startColor, 'house');
+            addBlock(0, 1, 0, startColor, 'house');
+            addBlock(1, 0, 0, altColor, 'house');
+            
+            // Connected winding street path around houses
+            addBlock(0, 0, 1, sandColor, 'street');
+            addBlock(1, 0, 1, startColor, 'street');
+            addBlock(-1, 0, 1, sandColor, 'street');
+            addBlock(-1, 0, 0, altColor, 'street');
+            addBlock(-1, 0, -1, startColor, 'street');
+            addBlock(0, 0, -1, sandColor, 'street');
+            
+            addBlock(1, 1, 0, altColor, 'house'); 
+        }
+    </script>
+
+    <script>
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Calculate precise delta time to support steady frame rate calculations
+            const deltaTime = clock.getDelta();
+            const time = clock.getElapsedTime();
+
+            if (controls) controls.update();
+
+            // Gentle ocean wave animation (vertex displacement on water plane)
+            if (waterGeometry) {
+                const position = waterGeometry.attributes.position;
+                for (let i = 0; i < position.count; i++) {
+                    const u = position.getX(i);
+                    const v = position.getZ(i);
+                    const z = Math.sin(u * 0.15 + time * 1.0) * 0.08 + 
+                              Math.cos(v * 0.12 + time * 0.8) * 0.08 +
+                              Math.sin((u + v) * 0.05 + time * 0.4) * 0.12;
+                    position.setY(i, z);
+                }
+                waterGeometry.computeVertexNormals();
+                position.needsUpdate = true;
+            }
+
+            updateBirds(time);
+            updateCitizens(deltaTime);
+
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+            }
+        }
+
+        window.onload = function() {
+            init3D();
+            animate();
+            
+            setTimeout(() => {
+                const toast = document.getElementById('instruction-toast');
+                if (toast) toast.remove();
+            }, 8000);
+        };
+    </script>
+</body>
+</html>

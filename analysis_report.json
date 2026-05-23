@@ -1,0 +1,1010 @@
+{
+  "totalItems": 256,
+  "missingPaths": [
+    {
+      "title": "Lịch sử bài 8 - Kết Nối Tri Thức",
+      "url": "/eduspace/lichsu/10/bai8-kntt",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\10\\bai8-kntt"
+    },
+    {
+      "title": "Học các nguyên tố hóa học phổ biến",
+      "url": "/eduspace/BTH/phobien",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\BTH\\phobien"
+    },
+    {
+      "title": "Đề cương Hóa Học 10 - Tính lượng ion dư (Bài 1)",
+      "url": "/eduspace/hoahoc/10/tinh-luong-ion-du-1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\10\\tinh-luong-ion-du-1"
+    },
+    {
+      "title": "Đề cương Hóa Học 10 - Tính lượng ion dư (Bài 2)",
+      "url": "/eduspace/hoahoc/10/tinh-luong-ion-du-2",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\10\\tinh-luong-ion-du-2"
+    },
+    {
+      "title": "Đề cương Hóa Học 10 - Tính lượng ion dư (Bài 3)",
+      "url": "/eduspace/hoahoc/10/tinh-luong-ion-du-3",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\10\\tinh-luong-ion-du-3"
+    },
+    {
+      "title": "Đề cương Hóa Học 10 - Tính lượng ion dư (Bài 4)",
+      "url": "/eduspace/hoahoc/10/tinh-luong-ion-du-4",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\10\\tinh-luong-ion-du-4"
+    },
+    {
+      "title": "Ôn tập Giữa học kỳ II - Môn: Vật Lý 10 2025-2026",
+      "url": "/eduspace/vatly/10/on-tap-gk2-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\vatly\\10\\on-tap-gk2-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Vật Lý 10 2025-2026",
+      "url": "/eduspace/vatly/10/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\vatly\\10\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Vật Lý 11 2025-2026",
+      "url": "/eduspace/vatly/11/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\vatly\\11\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Vật Lý 12 2025-2026",
+      "url": "/eduspace/vatly/12/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\vatly\\12\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Hóa Học 10 2025-2026",
+      "url": "/eduspace/hoahoc/10/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\10\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Hóa Học 11 2025-2026",
+      "url": "/eduspace/hoahoc/11/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\11\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Hóa Học 12 2025-2026",
+      "url": "/eduspace/hoahoc/12/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\12\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Toán 10 2025-2026",
+      "url": "/eduspace/toan/10/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\toan\\10\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Toán 11 2025-2026",
+      "url": "/eduspace/toan/11/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\toan\\11\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Toán 12 2025-2026",
+      "url": "/eduspace/toan/12/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\toan\\12\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Tin Học 10 2025-2026",
+      "url": "/eduspace/tinhoc/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Tin Học 11 2025-2026",
+      "url": "/eduspace/tinhoc/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Tin Học 12 2025-2026",
+      "url": "/eduspace/tinhoc/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\12\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Địa Lí 10 2025-2026",
+      "url": "/eduspace/diali/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Địa Lí 11 2025-2026",
+      "url": "/eduspace/diali/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Địa Lí 12 2025-2026",
+      "url": "/eduspace/diali/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\12\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 10 2025-2026",
+      "url": "/eduspace/lichsu/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 11 2025-2026",
+      "url": "/eduspace/lichsu/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 12 2025-2026",
+      "url": "/eduspace/lichsu/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\12\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 10 2025-2026",
+      "url": "/eduspace/ktpl/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 11 2025-2026",
+      "url": "/eduspace/ktpl/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 12 2025-2026",
+      "url": "/eduspace/ktpl/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\12\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 10 Nông nghiệp 2025-2026",
+      "url": "/eduspace/congnghe-nongnghiep/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-nongnghiep\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 11 Chăn nuôi 2025-2026",
+      "url": "/eduspace/congnghe-nongnghiep/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-nongnghiep\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 12 Lâm nghiệp - Thủy sản 2025-2026",
+      "url": "/eduspace/congnghe-nongnghiep/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-nongnghiep\\12\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 10 (Thiết kế và Công nghệ) 2025-2026",
+      "url": "/eduspace/congnghe-congnghiep/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-congnghiep\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 11 Cơ khí động lực 2025-2026",
+      "url": "/eduspace/congnghe-congnghiep/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-congnghiep\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Hóa Học 12 2025-2026",
+      "url": "/eduspace/hoahoc/12/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\12\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Toán 10 2025-2026",
+      "url": "/eduspace/toan/10/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\toan\\10\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Toán 11 2025-2026",
+      "url": "/eduspace/toan/11/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\toan\\11\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Toán 12 2025-2026",
+      "url": "/eduspace/toan/12/ck2-2526-kntt-v1/",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\toan\\12\\ck2-2526-kntt-v1\\"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Tin Học 10 2025-2026",
+      "url": "/eduspace/tinhoc/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Tin Học 11 2025-2026",
+      "url": "/eduspace/tinhoc/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Tin Học 12 2025-2026",
+      "url": "/eduspace/tinhoc/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\12\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Địa Lí 10 2025-2026",
+      "url": "/eduspace/diali/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Địa Lí 11 2025-2026",
+      "url": "/eduspace/diali/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Địa Lí 12 2025-2026",
+      "url": "/eduspace/diali/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\12\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 10 2025-2026",
+      "url": "/eduspace/lichsu/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 11 2025-2026",
+      "url": "/eduspace/lichsu/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 12 2025-2026",
+      "url": "/eduspace/lichsu/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\12\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 10 2025-2026",
+      "url": "/eduspace/ktpl/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 11 2025-2026",
+      "url": "/eduspace/ktpl/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 12 2025-2026",
+      "url": "/eduspace/ktpl/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\12\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 10 Nông nghiệp 2025-2026",
+      "url": "/eduspace/congnghe-nongnghiep/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-nongnghiep\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 11 Chăn nuôi 2025-2026",
+      "url": "/eduspace/congnghe-nongnghiep/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-nongnghiep\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 12 Lâm nghiệp - Thủy sản 2025-2026",
+      "url": "/eduspace/congnghe-nongnghiep/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-nongnghiep\\12\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 10 (Thiết kế và Công nghệ) 2025-2026",
+      "url": "/eduspace/congnghe-congnghiep/10/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-congnghiep\\10\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 11 Cơ khí động lực 2025-2026",
+      "url": "/eduspace/congnghe-congnghiep/11/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-congnghiep\\11\\ck2-2526-kntt-v1"
+    },
+    {
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 12 Điện - Điện tử 2025-2026",
+      "url": "/eduspace/congnghe-congnghiep/12/ck2-2526-kntt-v1",
+      "localPath": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe-congnghiep\\12\\ck2-2526-kntt-v1"
+    }
+  ],
+  "duplicateUrls": [
+    {
+      "url": "/eduspace/lichsu/10/bai7-kntt",
+      "indices": [
+        41,
+        42
+      ],
+      "title": "Kiểm tra Lịch Sử 10 bài 7 - Kết nối tri thức"
+    },
+    {
+      "url": "/eduspace/hoahoc/12/ck2-2526-kntt-v1/",
+      "indices": [
+        70,
+        91
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Hóa Học 12 2025-2026"
+    },
+    {
+      "url": "/eduspace/toan/10/ck2-2526-kntt-v1/",
+      "indices": [
+        71,
+        92
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Toán 10 2025-2026"
+    },
+    {
+      "url": "/eduspace/toan/11/ck2-2526-kntt-v1/",
+      "indices": [
+        72,
+        93
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Toán 11 2025-2026"
+    },
+    {
+      "url": "/eduspace/toan/12/ck2-2526-kntt-v1/",
+      "indices": [
+        73,
+        94
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Toán 12 2025-2026"
+    },
+    {
+      "url": "/eduspace/tinhoc/10/ck2-2526-kntt-v1",
+      "indices": [
+        74,
+        95
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Tin Học 10 2025-2026"
+    },
+    {
+      "url": "/eduspace/tinhoc/11/ck2-2526-kntt-v1",
+      "indices": [
+        75,
+        96
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Tin Học 11 2025-2026"
+    },
+    {
+      "url": "/eduspace/tinhoc/12/ck2-2526-kntt-v1",
+      "indices": [
+        76,
+        97
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Tin Học 12 2025-2026"
+    },
+    {
+      "url": "/eduspace/diali/10/ck2-2526-kntt-v1",
+      "indices": [
+        77,
+        98
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Địa Lí 10 2025-2026"
+    },
+    {
+      "url": "/eduspace/diali/11/ck2-2526-kntt-v1",
+      "indices": [
+        78,
+        99
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Địa Lí 11 2025-2026"
+    },
+    {
+      "url": "/eduspace/diali/12/ck2-2526-kntt-v1",
+      "indices": [
+        79,
+        100
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Địa Lí 12 2025-2026"
+    },
+    {
+      "url": "/eduspace/lichsu/10/ck2-2526-kntt-v1",
+      "indices": [
+        80,
+        101
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 10 2025-2026"
+    },
+    {
+      "url": "/eduspace/lichsu/11/ck2-2526-kntt-v1",
+      "indices": [
+        81,
+        102
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 11 2025-2026"
+    },
+    {
+      "url": "/eduspace/lichsu/12/ck2-2526-kntt-v1",
+      "indices": [
+        82,
+        103
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 12 2025-2026"
+    },
+    {
+      "url": "/eduspace/ktpl/10/ck2-2526-kntt-v1",
+      "indices": [
+        83,
+        104
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 10 2025-2026"
+    },
+    {
+      "url": "/eduspace/ktpl/11/ck2-2526-kntt-v1",
+      "indices": [
+        84,
+        105
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 11 2025-2026"
+    },
+    {
+      "url": "/eduspace/ktpl/12/ck2-2526-kntt-v1",
+      "indices": [
+        85,
+        106
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 12 2025-2026"
+    },
+    {
+      "url": "/eduspace/congnghe-nongnghiep/10/ck2-2526-kntt-v1",
+      "indices": [
+        86,
+        107
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 10 Nông nghiệp 2025-2026"
+    },
+    {
+      "url": "/eduspace/congnghe-nongnghiep/11/ck2-2526-kntt-v1",
+      "indices": [
+        87,
+        108
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 11 Chăn nuôi 2025-2026"
+    },
+    {
+      "url": "/eduspace/congnghe-nongnghiep/12/ck2-2526-kntt-v1",
+      "indices": [
+        88,
+        109
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 12 Lâm nghiệp - Thủy sản 2025-2026"
+    },
+    {
+      "url": "/eduspace/congnghe-congnghiep/10/ck2-2526-kntt-v1",
+      "indices": [
+        89,
+        110
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 10 (Thiết kế và Công nghệ) 2025-2026"
+    },
+    {
+      "url": "/eduspace/congnghe-congnghiep/11/ck2-2526-kntt-v1",
+      "indices": [
+        90,
+        111
+      ],
+      "title": "Kiểm tra Cuối Học Kì II – Công nghệ 11 Cơ khí động lực 2025-2026"
+    },
+    {
+      "url": "/eduspace/nguvan/11/ck1-2526-v1",
+      "indices": [
+        114,
+        181
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/nguvan/12/ck1-2526-v1",
+      "indices": [
+        115,
+        182
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 12 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/toan/11/ck1-2526-v1",
+      "indices": [
+        117,
+        183
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Toán 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/toan/12/ck1-2526-v1",
+      "indices": [
+        118,
+        184
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Toán 12 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/tienganh/11/ck1-2526-v1",
+      "indices": [
+        120,
+        185
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Tiếng Anh 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/tienganh/12/ck1-2526-v1",
+      "indices": [
+        121,
+        186
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Tiếng Anh 12 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/lichsu/10/ck1-2526-v1",
+      "indices": [
+        131,
+        187
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Lịch sử 10 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/lichsu/11/ck1-2526-v1",
+      "indices": [
+        132,
+        188
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Lịch sử 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/lichsu/12/ck1-2526-v1",
+      "indices": [
+        133,
+        189
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Lịch sử 12 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/diali/10/ck1-2526-v1",
+      "indices": [
+        134,
+        190
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Địa lí 10 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/diali/11/ck1-2526-v1",
+      "indices": [
+        135,
+        191
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Địa lí 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/diali/12/ck1-2526-v1",
+      "indices": [
+        136,
+        192
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Địa lí 12 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/ktpl/10/ck1-2526-v1",
+      "indices": [
+        137,
+        193
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 10 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/ktpl/11/ck1-2526-v1",
+      "indices": [
+        138,
+        194
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/ktpl/12/ck1-2526-v1",
+      "indices": [
+        139,
+        195
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 12 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/vatly/10/ck1-2526-v1",
+      "indices": [
+        122,
+        196
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Vật lí 10 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/vatly/11/ck1-2526-v1",
+      "indices": [
+        123,
+        197
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Vật lí 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/vatly/12/ck1-2526-v1",
+      "indices": [
+        124,
+        198
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Vật lí 12 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/hoahoc/10/ck1-2526-v1",
+      "indices": [
+        125,
+        199
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Hóa học 10 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/hoahoc/11/ck1-2526-v1",
+      "indices": [
+        126,
+        200
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Hóa học 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/hoahoc/12/ck1-2526-v1",
+      "indices": [
+        127,
+        201
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Hóa học 12 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/sinhhoc/10/ck1-2526-v1",
+      "indices": [
+        128,
+        202
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Sinh học 10 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/sinhhoc/11/ck1-2526-v1",
+      "indices": [
+        129,
+        203
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Sinh học 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/sinhhoc/12/ck1-2526-v1",
+      "indices": [
+        130,
+        204
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Sinh học 12 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/congnghe/10/ck1-2526-v1",
+      "indices": [
+        140,
+        205
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Công nghệ 10 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/congnghe/11/ck1-2526-v1",
+      "indices": [
+        141,
+        206
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Công nghệ 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/congnghe/12/ck1-2526-v1",
+      "indices": [
+        142,
+        207
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Công nghệ 12 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/tinhoc/10/ck1-2526-v1",
+      "indices": [
+        143,
+        208
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Tin học 10 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/tinhoc/11/ck1-2526-v1",
+      "indices": [
+        144,
+        209
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Tin học 11 (KNTT) – 2025-2026"
+    },
+    {
+      "url": "/eduspace/tinhoc/12/ck1-2526-v1",
+      "indices": [
+        145,
+        210
+      ],
+      "title": "Kiểm tra Cuối Học Kì I – Tin học 12 (KNTT) – 2025-2026"
+    }
+  ],
+  "contentDuplicates": [
+    [
+      {
+        "title": "Học Lịch Sử 10 bài 7 - Kết nối tri thức",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\10\\bai7-kntt\\data.js"
+      },
+      {
+        "title": "Kiểm tra Lịch Sử 10 bài 7 - Kết nối tri thức",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\10\\bai7-kntt\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\nguvan\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\nguvan\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\nguvan\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\nguvan\\12\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Toán 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\toan\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Toán 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\toan\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Toán 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\toan\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Toán 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\toan\\12\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Tiếng Anh 11 (Global Success) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tienganh\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Tiếng Anh 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tienganh\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Tiếng Anh 12 (Global Success) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tienganh\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Tiếng Anh 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tienganh\\12\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Vật lí 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\vatly\\10\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Vật lí 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\vatly\\10\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Vật lí 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\vatly\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Vật lí 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\vatly\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Vật lí 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\vatly\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Vật lí 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\vatly\\12\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Hóa học 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\10\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Hóa học 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\10\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Hóa học 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Hóa học 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Hóa học 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Hóa học 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\hoahoc\\12\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Sinh học 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\sinhhoc\\10\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Sinh học 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\sinhhoc\\10\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Sinh học 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\sinhhoc\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Sinh học 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\sinhhoc\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Sinh học 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\sinhhoc\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Sinh học 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\sinhhoc\\12\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Lịch sử 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\10\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Lịch sử 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\10\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Lịch sử 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Lịch sử 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Lịch sử 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Lịch sử 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\lichsu\\12\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Địa lí 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\10\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Địa lí 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\10\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Địa lí 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Địa lí 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Địa lí 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Địa lí 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\diali\\12\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\10\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\10\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\ktpl\\12\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Công nghệ 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe\\10\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Công nghệ 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe\\10\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Công nghệ 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Công nghệ 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Công nghệ 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Công nghệ 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\congnghe\\12\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Tin học 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\10\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Tin học 10 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\10\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Tin học 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\11\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Tin học 11 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\11\\ck1-2526-v1\\data.js"
+      }
+    ],
+    [
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Tin học 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\12\\ck1-2526-v1\\data.js"
+      },
+      {
+        "title": "Kiểm tra Cuối Học Kì I – Tin học 12 (KNTT) – 2025-2026",
+        "file": "d:\\WebSite\\EduSpace - Đổi giao diện 150526\\eduspace\\tinhoc\\12\\ck1-2526-v1\\data.js"
+      }
+    ]
+  ]
+}

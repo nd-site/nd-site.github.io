@@ -298,7 +298,8 @@
         // Security settings
         // SHA-256 băm của NDID được cấp quyền quản trị
         const AUTHORIZED_ADMIN_HASHES = [
-            "681bb2d3f8a4e4cedbb0cba5d1763427361b99629bda0357c8c1a5b950f722e0" // nhatdang
+            "681bb2d3f8a4e4cedbb0cba5d1763427361b99629bda0357c8c1a5b950f722e0", // nhatdang
+            "30fe8a3f9ebe1ce7556a7364c9fabb0edab5d6524deb608c40e76c6cfbeeb74b"  // @nhatdang
         ];
 
         // Helper to hash SHA-256
@@ -329,7 +330,7 @@
                 }
 
                 const userData = userSnap.data();
-                const ndid = userData.ndid || user.email.split('@')[0];
+                const ndid = userData.ndid || (user.email || '').split('@')[0] || user.uid;
 
                 // Compute hash and check authorization (Must have role: 'admin' and NDID hash must match)
                 const ndidHash = await hashSHA256(ndid);

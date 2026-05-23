@@ -4,6 +4,7 @@
     "public": ".",
     "cleanUrls": true,
     "trailingSlash": true,
+    "retainedBackups": 5,
     "ignore": [
       "firebase.json",
       "**/.*",

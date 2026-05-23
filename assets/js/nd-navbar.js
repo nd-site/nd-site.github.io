@@ -163,11 +163,28 @@
     }
     .nd-nav-link.nd-active:hover { color: #fff; }
 
+    /* ── Role badge in navbar ── */
+    .nd-role-badge {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      line-height: 1.6;
+      flex-shrink: 0;
+    }
+    .nd-role-badge.role-admin   { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+    .nd-role-badge.role-teacher { background: #f3e8ff; color: #7c3aed; border: 1px solid #e9d5ff; }
+    .nd-role-badge.role-student { background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
+    .nd-role-badge.role-other   { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+
     /* ── Responsive: hide label text on very small screens ── */
     @media (max-width: 500px) {
       .nd-lbl { display: none; }
       .nd-nav-link { padding: 6px 8px; }
       #nd-brand-name { display: none; }
+      .nd-role-badge { display: none; }
     }
   `;
 
@@ -228,8 +245,25 @@
   if (storedUser) {
     try {
       const u = JSON.parse(storedUser);
+      const role = u.role || 'other';
+      const subrole = u.subrole || '';
+
+      // Role badge config
+      const roleCfg = {
+        admin:   { cls: 'role-admin',   label: 'Admin' },
+        teacher: { cls: 'role-teacher', label: 'GV' },
+        student: { cls: 'role-student', label: 'HS' },
+      };
+      const rc = roleCfg[role] || { cls: 'role-other', label: 'TV' };
+      let roleBadgeHtml = `<span class="nd-role-badge ${rc.cls}">${rc.label}</span>`;
+      // Admin: show second badge for subrole if exists
+      if (role === 'admin' && subrole && roleCfg[subrole]) {
+        const sr = roleCfg[subrole];
+        roleBadgeHtml += `<span class="nd-role-badge ${sr.cls}">${sr.label}</span>`;
+      }
+
       let adminLink = '';
-      if (u.role === 'admin') {
+      if (role === 'admin') {
         adminLink = `
           <a href="/eduspace/admin/" class="nd-nav-link" style="color: #0070f3;" title="Bảng quản trị Admin">
             <i class="ph-bold ph-shield-checkered"></i><span class="nd-lbl">Admin</span>
@@ -238,9 +272,12 @@
       }
       userSection.innerHTML = `
         ${adminLink}
-        <a href="/auth/settings/" class="nd-nav-link" title="Cài đặt tài khoản">
-          <img src="${u.photoURL || '/assets/images/logo.png'}" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
-          <span class="nd-lbl">${u.ndid || 'ND Member'}</span>
+        <a href="/auth/settings/" class="nd-nav-link" title="Cài đặt tài khoản" style="gap: 6px;">
+          <img src="${u.photoURL || '/assets/images/logo.png'}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+          <span class="nd-lbl" style="display:flex; align-items:center; gap:4px;">
+            ${u.ndid || 'ND Member'}
+            ${roleBadgeHtml}
+          </span>
         </a>
       `;
     } catch (e) { storageClear(); }

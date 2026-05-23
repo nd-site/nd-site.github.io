@@ -10,6 +10,15 @@
 
 const announcements = [
     {
+        title: "Tạo Đề Nâng Cao – Công cụ bóc tách & tạo đề bằng AI",
+        description: "Hệ thống đang được nâng cấp. Vui lòng chờ đón những tính năng đột phá sắp ra mắt!",
+        link: "#",
+        buttonText: "Sắp có",
+        tag: "Sắp ra mắt",
+        platform: "EduSpace",
+        gradient: "from-emerald-600 via-teal-600 to-green-600"
+    },
+    {
         title: "Scan2Word – Chuyển ảnh & tài liệu thành văn bản cực nhanh ✨",
         description: "Khám phá ngay công cụ hỗ trợ học tập mới nhất trong hệ sinh thái EduSpace.",
         link: "https://web.facebook.com/share/p/1GvdRNu49r/",

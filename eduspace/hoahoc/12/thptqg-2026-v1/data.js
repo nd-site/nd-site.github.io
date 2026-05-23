@@ -152,7 +152,7 @@ window.quizData = {
         },
         {
             type: "truefalse",
-            question: "Cho sơ đồ chuyển hóa: Glucozơ $\xrightarrow{+H_2/Ni, t^\circ}$ X $\xrightarrow{+CH_3COOH/H_2SO_4}$ Y. Biết X, Y là các hợp chất hữu cơ.",
+            question: "Cho sơ đồ chuyển hóa: Glucozơ $\\xrightarrow{+H_2/Ni, t^\\circ}$ X $\\xrightarrow{+CH_3COOH/H_2SO_4}$ Y. Biết X, Y là các hợp chất hữu cơ.",
             options: [
                 "Chất X là sobitol.",
                 "Phản ứng tạo ra X chứng tỏ glucozơ có tính oxi hóa.",

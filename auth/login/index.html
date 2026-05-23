@@ -125,8 +125,10 @@
         async function saveUserSession(user, customNdid = null) {
             let role = 'student';
             let yob = null;
-            let grade = 'Khác';
-            let ndid = customNdid || user.email.split('@')[0];
+            let grade = 'Khách';
+            const email = user.email || '';
+            const emailPrefix = email.split('@')[0] || '';
+            let ndid = customNdid || emailPrefix || user.uid;
             let fullname = user.displayName || 'ND Member';
 
             try {
@@ -152,8 +154,8 @@
 
             localStorage.setItem('nd_user', JSON.stringify({
                 displayName: fullname,
-                email: user.email,
-                photoURL: user.photoURL,
+                email: user.email || '',
+                photoURL: user.photoURL || '/assets/images/logo.png',
                 uid: user.uid,
                 ndid: ndid,
                 role: role,
@@ -164,19 +166,22 @@
 
         async function saveNewUserDoc(db, user, ndid, fullname, role, yob, grade) {
             const { setDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+            const emailsList = user.email ? [user.email] : [];
             await setDoc(doc(db, 'users', user.uid), {
                 ndid,
                 fullname,
-                emails: [user.email],
+                emails: emailsList,
                 role,
                 yob,
                 grade,
                 createdAt: new Date().toISOString()
             });
-            await setDoc(doc(db, 'ndids', ndid), {
-                uid: user.uid,
-                recoveryEmail: user.email
-            });
+            if (ndid) {
+                await setDoc(doc(db, 'ndids', ndid), {
+                    uid: user.uid,
+                    recoveryEmail: user.email || ''
+                });
+            }
         }
 
         // Nếu đã đăng nhập → về trang chủ

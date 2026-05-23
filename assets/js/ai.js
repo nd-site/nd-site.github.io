@@ -390,6 +390,113 @@ const eduspaceAI_UI = (function () {
         }
     }
 
+    function eduAI_ask(text) {
+        const widget = document.getElementById('edu-ai-widget');
+        if (widget && widget.style.display !== 'flex') {
+            widget.style.display = 'flex';
+        }
+        const input = document.getElementById('ai-input');
+        if (input) {
+            input.value = text;
+            send();
+        }
+    }
+    window.eduAI_ask = eduAI_ask;
+
+    window.getAIContext = function() {
+        if (typeof quizData === 'undefined' || !quizData.activeQuestions || quizData.activeQuestions.length === 0) {
+            return "";
+        }
+        try {
+            const q = quizData.activeQuestions[currentIndex];
+            if (!q) return "";
+
+            let context = `Thông tin câu hỏi hiện tại trên màn hình:\n`;
+            context += `- Loại câu hỏi: ${q.type}\n`;
+            context += `- Đề bài: ${q.question || ''}\n`;
+            
+            if (q.type === 'multiple' && q.options) {
+                context += `- Các phương án lựa chọn:\n`;
+                q.options.forEach((opt, idx) => {
+                    context += `  + ${String.fromCharCode(65 + idx)}. ${opt}\n`;
+                });
+                
+                const isChecked = typeof questionChecked !== 'undefined' && questionChecked[currentIndex];
+                const hasAnswered = typeof userAnswers !== 'undefined' && userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== undefined;
+                
+                if (isChecked) {
+                    context += `- Đáp án đúng theo đề bài: ${String.fromCharCode(65 + q.correct)}\n`;
+                    if (hasAnswered) {
+                        context += `- Học sinh đã chọn phương án: ${String.fromCharCode(65 + userAnswers[currentIndex])}\n`;
+                    }
+                    if (q.explanation) {
+                        context += `- Giải thích chi tiết sẵn có: ${q.explanation}\n`;
+                    }
+                } else {
+                    if (hasAnswered) {
+                        context += `- Học sinh đang chọn phương án: ${String.fromCharCode(65 + userAnswers[currentIndex])} (chưa nhấn kiểm tra)\n`;
+                    }
+                }
+            } else if (q.type === 'truefalse' && q.options) {
+                context += `- Các phát biểu Đúng/Sai:\n`;
+                q.options.forEach((opt, idx) => {
+                    context += `  + ${String.fromCharCode(65 + idx)}. ${opt}\n`;
+                });
+                
+                const isChecked = typeof questionChecked !== 'undefined' && questionChecked[currentIndex];
+                const hasAnswered = typeof userAnswers !== 'undefined' && userAnswers[currentIndex];
+                
+                if (isChecked) {
+                    const correctArr = q.correctAnswers || q.correct || [];
+                    context += `- Đáp án đúng cho từng phát biểu:\n`;
+                    q.options.forEach((opt, idx) => {
+                        context += `  + ${String.fromCharCode(65 + idx)}: ${correctArr[idx] ? 'Đúng' : 'Sai'}\n`;
+                    });
+                    if (hasAnswered) {
+                        context += `- Lựa chọn của học sinh:\n`;
+                        q.options.forEach((opt, idx) => {
+                            const choice = hasAnswered[idx] === true ? 'Đúng' : (hasAnswered[idx] === false ? 'Sai' : 'Chưa chọn');
+                            context += `  + ${String.fromCharCode(65 + idx)}: ${choice}\n`;
+                        });
+                    }
+                    if (q.explanation) {
+                        context += `- Giải thích chi tiết sẵn có: ${q.explanation}\n`;
+                    }
+                } else {
+                    if (hasAnswered) {
+                        context += `- Lựa chọn hiện tại của học sinh (chưa nhấn kiểm tra):\n`;
+                        q.options.forEach((opt, idx) => {
+                            const choice = hasAnswered[idx] === true ? 'Đúng' : (hasAnswered[idx] === false ? 'Sai' : 'Chưa chọn');
+                            context += `  + ${String.fromCharCode(65 + idx)}: ${choice}\n`;
+                        });
+                    }
+                }
+            } else if (q.type === 'short' || q.type === 'essay') {
+                const isChecked = typeof questionChecked !== 'undefined' && questionChecked[currentIndex];
+                const hasAnswered = typeof userAnswers !== 'undefined' && userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== undefined;
+                
+                if (isChecked) {
+                    context += `- Đáp án chính xác/gợi ý: ${q.correct || q.suggested || ''}\n`;
+                    if (hasAnswered) {
+                        context += `- Học sinh đã nhập: ${userAnswers[currentIndex]}\n`;
+                    }
+                    if (q.explanation) {
+                        context += `- Giải thích chi tiết sẵn có: ${q.explanation}\n`;
+                    }
+                } else {
+                    if (hasAnswered) {
+                        context += `- Học sinh đang nhập: ${userAnswers[currentIndex]} (chưa nhấn kiểm tra)\n`;
+                    }
+                }
+            }
+            
+            return context;
+        } catch (err) {
+            console.error("Lỗi lấy ngữ cảnh câu hỏi:", err);
+            return "";
+        }
+    };
+
     // Auto-init on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);

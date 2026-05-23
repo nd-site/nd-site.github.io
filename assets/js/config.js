@@ -1,3 +1,7 @@
+if (window.location.hostname === '127.0.0.1') {
+    window.location.hostname = 'localhost';
+}
+
 /**
  * EduSpace — Configuration & Keys Management (Quản lý Cấu hình & Khóa bảo mật)
  * 
