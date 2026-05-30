@@ -5,13 +5,21 @@ window.quizData = {
         "notice": "Bản ôn tập này chưa có đầy đủ câu hỏi so với đề cương thực tế (đang cập nhật).",
         "noticeDuration": 5,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0 },
-            "essay": { "count": 4, "totalPoints": 3.0 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1
+            },
+            "essay": {
+                "count": 4,
+                "totalPoints": 3
+            }
         }
     },
     "questions": [
-        /* BÀI 13: BIỂU DIỄN QUY ƯỚC REN */
         {
             "type": "multiple",
             "question": "Ren dùng để làm gì?",
@@ -27,7 +35,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Có mấy loại ren?",
-            "options": ["A. 1.", "B. 2.", "C. 3.", "D. 4."],
+            "options": [
+                "A. 1.",
+                "B. 2.",
+                "C. 3.",
+                "D. 4."
+            ],
             "correct": 1,
             "explanation": "Ren được phân thành hai loại chính dựa trên vị trí tạo ren là ren trong và ren ngoài."
         },
@@ -70,28 +83,48 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Kí hiệu của đường kính đỉnh ren ngoài là:",
-            "options": ["A. d.", "B. d1.", "C. D.", "D. D1."],
+            "options": [
+                "A. d.",
+                "B. d1.",
+                "C. D.",
+                "D. D1."
+            ],
             "correct": 0,
             "explanation": "Chữ 'd' (thường) là ký hiệu quy ước cho đường kính lớn nhất (đỉnh) của ren trục."
         },
         {
             "type": "multiple",
             "question": "Kí hiệu của đường kính chân ren ngoài là:",
-            "options": ["A. d.", "B. d1.", "C. D.", "D. D1."],
+            "options": [
+                "A. d.",
+                "B. d1.",
+                "C. D.",
+                "D. D1."
+            ],
             "correct": 1,
             "explanation": "d1 là ký hiệu tiêu chuẩn để chỉ đường kính tại đáy (chân) của ren ngoài."
         },
         {
             "type": "multiple",
             "question": "Kí hiệu của đường kính đỉnh ren trong là:",
-            "options": ["A. d.", "B. d1.", "C. D.", "D. D1."],
+            "options": [
+                "A. d.",
+                "B. d1.",
+                "C. D.",
+                "D. D1."
+            ],
             "correct": 3,
             "explanation": "Đối với lỗ, đường kính đỉnh (phần nhô ra phía trong) được ký hiệu bằng D1."
         },
         {
             "type": "multiple",
             "question": "Kí hiệu của đường kính chân ren trong là:",
-            "options": ["A. d.", "B. d1.", "C. D.", "D. D1."],
+            "options": [
+                "A. d.",
+                "B. d1.",
+                "C. D.",
+                "D. D1."
+            ],
             "correct": 2,
             "explanation": "Chữ 'D' (in hoa) được dùng để ký hiệu đường kính tại đáy (chân) của ren lỗ."
         },
@@ -146,7 +179,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Cho các hình vẽ vòng chân ren và vòng đỉnh ren. Hình nào vẽ đúng theo quy ước?",
-            "options": ["A. Hình 1.", "B. Hình 2.", "C. Hình 3.", "D. Hình 4."],
+            "options": [
+                "A. Hình 1.",
+                "B. Hình 2.",
+                "C. Hình 3.",
+                "D. Hình 4."
+            ],
             "correct": 3,
             "explanation": "Hình 4 thể hiện đúng vòng đỉnh là nét liền đậm đóng kín và vòng chân là nét liền mảnh hở 3/4."
         },
@@ -186,12 +224,15 @@ window.quizData = {
             "correct": 2,
             "explanation": "'Tr' là kí hiệu ren thang, xoắn phải."
         },
-
-        /* BÀI 14: BẢN VẼ CƠ KHÍ */
         {
             "type": "multiple",
             "question": "Bản vẽ lắp thể hiện mấy nội dung chính?",
-            "options": ["A. 1.", "B. 2.", "C. 3.", "D. 4."],
+            "options": [
+                "A. 1.",
+                "B. 2.",
+                "C. 3.",
+                "D. 4."
+            ],
             "correct": 3,
             "explanation": "Bản vẽ lắp bao gồm: hình biểu diễn, kích thước, bảng kê và khung tên."
         },
@@ -210,7 +251,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Lập bản vẽ chi tiết gồm mấy bước?",
-            "options": ["A. 1.", "B. 2.", "C. 3.", "D. 4."],
+            "options": [
+                "A. 1.",
+                "B. 2.",
+                "C. 3.",
+                "D. 4."
+            ],
             "correct": 3,
             "explanation": "Quy trình gồm 4 bước: tìm hiểu chi tiết, chọn phương án biểu diễn, vẽ các hình biểu diễn và hoàn thiện bản vẽ."
         },
@@ -322,8 +368,6 @@ window.quizData = {
             "correct": 1,
             "explanation": "Bản hướng dẫn Lego chỉ dẫn cách lắp ghép các khối chi tiết lại thành một mô hình hoàn chỉnh."
         },
-
-        /* BÀI 15: BẢN VẼ XÂY DỰNG */
         {
             "type": "multiple",
             "question": "Bản vẽ nào sau đây không phải là bản vẽ xây dựng?",
@@ -339,7 +383,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Trong hồ sơ của bản vẽ nhà thường có mấy loại bản vẽ/hình biểu diễn chính?",
-            "options": ["A. 1.", "B. 2.", "C. 3.", "D. 4."],
+            "options": [
+                "A. 1.",
+                "B. 2.",
+                "C. 3.",
+                "D. 4."
+            ],
             "correct": 2,
             "explanation": "Bao gồm 3 loại hình biểu diễn cơ bản: mặt bằng, mặt đứng và mặt cắt."
         },
@@ -454,37 +503,60 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Quan sát mặt bằng ngôi nhà (Trang 6), có bao nhiêu phòng ngủ?",
-            "options": ["A. 3 phòng.", "B. 2 phòng.", "C. 4 phòng.", "D. 1 phòng."],
+            "options": [
+                "A. 3 phòng.",
+                "B. 2 phòng.",
+                "C. 4 phòng.",
+                "D. 1 phòng."
+            ],
             "correct": 2,
             "explanation": "Có 4 phòng được ký hiệu số 1, 2, 4, 9 trên bản vẽ."
         },
         {
             "type": "multiple",
             "question": "Trên mặt bằng ngôi nhà, ký hiệu số 8 thường dùng cho khu vực nào?",
-            "options": ["A. Phòng khách.", "B. Phòng bếp.", "C. Nhà vệ sinh.", "D. Sân sau."],
+            "options": [
+                "A. Phòng khách.",
+                "B. Phòng bếp.",
+                "C. Nhà vệ sinh.",
+                "D. Sân sau."
+            ],
             "correct": 0,
             "explanation": "Khu vực số 8 là không gian sinh hoạt chung/phòng khách lớn nhất."
         },
         {
             "type": "multiple",
             "question": "Trên mặt bằng, lối vào chính (cửa chính) của ngôi nhà thường ký hiệu số mấy?",
-            "options": ["A. 8.", "B. 7.", "C. 6.", "D. 10."],
+            "options": [
+                "A. 8.",
+                "B. 7.",
+                "C. 6.",
+                "D. 10."
+            ],
             "correct": 3,
             "explanation": "Vị trí số 10 là lối vào dẫn từ ngoài vào phòng khách."
         },
-
-        /* BÀI 16: VẼ KĨ THUẬT VỚI CAD */
         {
             "type": "multiple",
             "question": "Lập bản vẽ bằng máy tính (CAD) có mấy nhóm ưu điểm chính?",
-            "options": ["A. 1.", "B. 2.", "C. 3.", "D. 4."],
+            "options": [
+                "A. 1.",
+                "B. 2.",
+                "C. 3.",
+                "D. 4."
+            ],
             "correct": 1,
             "explanation": "Ưu điểm về năng suất/độ chính xác và khả năng lưu trữ/chỉnh sửa."
         },
         {
             "type": "multiple",
             "question": "Giao diện của phần mềm AutoCAD bao gồm mấy phần chính?",
-            "options": ["A. 2.", "B. 3.", "C. 4.", "D. 5."],
+            "options": [
+                "A. 2.",
+                "B. 3.",
+                "C. 4.",
+                "D. 5."
+            ],
             "correct": 2,
             "explanation": "Gồm: Thực đơn, thanh công cụ, vùng đồ họa và dòng lệnh."
         },
@@ -512,8 +584,6 @@ window.quizData = {
             "correct": 2,
             "explanation": "Đây là nơi hiển thị và thực hiện nội dung bản vẽ."
         },
-
-        /* PHẦN ĐÚNG - SAI */
         {
             "type": "truefalse",
             "question": "Về lý thuyết bản vẽ xây dựng và hình biểu diễn ngôi nhà:",
@@ -523,8 +593,25 @@ window.quizData = {
                 "Mặt bằng là hình cắt bằng của các tầng cách sàn khoảng 1,5m.",
                 "Mặt bằng của ngôi nhà cấp 4 có thể có 3 phòng ngủ tùy thiết kế."
             ],
-            "correctAnswers": [true, false, true, false],
-            "explanation": "Cửa thông thường là cửa xoay. Trong hình vẽ cụ thể, nhà cấp 4 có 2 phòng ngủ."
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "explanation": "Cửa thông thường là cửa xoay. Trong hình vẽ cụ thể, nhà cấp 4 có 2 phòng ngủ.",
+            "options": [
+                "Bản vẽ xây dựng là bản vẽ mô tả các công trình xây dựng.",
+                "Cửa thông với các phòng thường là cửa lùa một cánh.",
+                "Mặt bằng là hình cắt bằng của các tầng cách sàn khoảng 1,5m.",
+                "Mặt bằng của ngôi nhà cấp 4 có thể có 3 phòng ngủ tùy thiết kế."
+            ],
+            "correct": [
+                true,
+                false,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -535,8 +622,25 @@ window.quizData = {
                 "Cửa chính của một ngôi nhà có thể là cửa đi đơn 4 cánh.",
                 "Kích thước phòng vệ sinh có thể là 1500mm tùy bản vẽ."
             ],
-            "correctAnswers": [false, false, true, true],
-            "explanation": "Mặt bằng là hình cắt ngang. Mặt đứng mới thể hiện kiến trúc ngoại thất."
+            "correctAnswers": [
+                false,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Mặt bằng là hình cắt ngang. Mặt đứng mới thể hiện kiến trúc ngoại thất.",
+            "options": [
+                "Mặt bằng là hình chiếu vuông góc lên mặt phẳng thẳng đứng.",
+                "Mặt bằng thể hiện hình dáng, kiến trúc ngoại thất ngôi nhà.",
+                "Cửa chính của một ngôi nhà có thể là cửa đi đơn 4 cánh.",
+                "Kích thước phòng vệ sinh có thể là 1500mm tùy bản vẽ."
+            ],
+            "correct": [
+                false,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -547,8 +651,25 @@ window.quizData = {
                 "Thực đơn (Menu) là hàng chữ nằm trên cùng giao diện AutoCAD.",
                 "Lệnh Line trong AutoCAD có chức năng dùng để vẽ đường thẳng."
             ],
-            "correctAnswers": [true, false, true, true],
-            "explanation": "Bước 1 là khởi động phần mềm. Lệnh Line dùng để vẽ đoạn thẳng."
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Bước 1 là khởi động phần mềm. Lệnh Line dùng để vẽ đoạn thẳng.",
+            "options": [
+                "CAD thực chất là sử dụng phần mềm để lập các bản vẽ kĩ thuật.",
+                "Bước 1 khi lập bản vẽ bằng máy tính là tạo bản vẽ mới.",
+                "Thực đơn (Menu) là hàng chữ nằm trên cùng giao diện AutoCAD.",
+                "Lệnh Line trong AutoCAD có chức năng dùng để vẽ đường thẳng."
+            ],
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -559,11 +680,26 @@ window.quizData = {
                 "Vùng đồ họa là vùng không gian nhỏ nhất ở trung tâm màn hình.",
                 "Lệnh Circle trong AutoCAD dùng để vẽ các hình tròn."
             ],
-            "correctAnswers": [true, false, false, true],
-            "explanation": "Thiết lập là bước 2. Vùng đồ họa phải là vùng LỚN nhất."
+            "correctAnswers": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "explanation": "Thiết lập là bước 2. Vùng đồ họa phải là vùng LỚN nhất.",
+            "options": [
+                "CAD giúp tạo ra các bản vẽ có độ chính xác và tốc độ nhanh hơn vẽ tay.",
+                "Bước 3 khi lập bản vẽ bằng máy tính là thiết lập các thông số ban đầu.",
+                "Vùng đồ họa là vùng không gian nhỏ nhất ở trung tâm màn hình.",
+                "Lệnh Circle trong AutoCAD dùng để vẽ các hình tròn."
+            ],
+            "correct": [
+                true,
+                false,
+                false,
+                true
+            ]
         },
-
-        /* PHẦN TỰ LUẬN */
         {
             "type": "essay",
             "question": "Hãy nêu một số chi tiết có ren trong gia đình, xác định loại ren và công dụng của chúng.",
@@ -588,5 +724,12 @@ window.quizData = {
             "suggested": "- Độ nhám: Trị số nhấp nhô bề mặt.\n- Dung sai: Hiệu kích thước giới hạn lớn nhất và nhỏ nhất.\n- Ý nghĩa: Xác định phạm vi sai số cho phép khi chế tạo.",
             "explanation": "Định nghĩa chính xác cả hai thuật ngữ và nêu được mục đích của dung sai."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Công nghệ",
+        "grade": "Lớp 10",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Giữa Học Kì II",
+        "attempt": "Bản 1"
+    }
 };

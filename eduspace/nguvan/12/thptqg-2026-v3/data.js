@@ -1,15 +1,15 @@
 window.quizData = {
     title: "Đề thi thử tốt nghiệp THPT 2026 - Môn Ngữ Văn (Bản 3)",
-    pageTitle: "",
+    pageTitle: "Ngữ văn 12 - Thi thử tốt nghiệp THPT 2026 (Bản 3)",
     examInfo: {
         department: "",
         school: "",
         province: "",
-        examName: "",
-        attempt: "",
-        date: "",
-        subject: "",
-        grade: ""
+        examName: "Thi thử tốt nghiệp THPT",
+        attempt: "Bản 3",
+        date: "2026",
+        subject: "Ngữ văn",
+        grade: "Lớp 12"
     },
     config: {
         testDuration: 7200, // 120 minutes

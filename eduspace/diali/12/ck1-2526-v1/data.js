@@ -3,24 +3,48 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Điểm cực Bắc trên đất liền của nước ta nằm ở vĩ độ nào?",
-            "options": ["23°23'B", "23°23'N", "8°34'B", "102°09'Đ"],
+            "options": [
+                "23°23'B",
+                "23°23'N",
+                "8°34'B",
+                "102°09'Đ"
+            ],
             "correct": 0,
             "explanation": "Điểm cực Bắc tại xã Lũng Cú, huyện Đồng Văn, tỉnh Hà Giang có vĩ độ 23°23'B."
         },
         {
             "type": "multiple",
             "question": "Việt Nam nằm hoàn toàn trong vùng khí hậu nào?",
-            "options": ["Ôn đới.", "Hàn đới.", "Nhiệt đới bán cầu Bắc.", "Xích đạo bán cầu Nam."],
+            "options": [
+                "Ôn đới.",
+                "Hàn đới.",
+                "Nhiệt đới bán cầu Bắc.",
+                "Xích đạo bán cầu Nam."
+            ],
             "correct": 2,
             "explanation": "Nước ta nằm trong vùng nội chí tuyến bán cầu Bắc, mang tính chất nhiệt đới ẩm gió mùa."
         },
@@ -51,14 +75,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Gió mùa Đông Bắc thổi vào nước ta theo từng đợt vào thời gian nào?",
-            "options": ["Từ tháng 5 đến tháng 10.", "Từ tháng 11 đến tháng 4 năm sau.", "Quanh năm.", "Chỉ vào mùa hè."],
+            "options": [
+                "Từ tháng 5 đến tháng 10.",
+                "Từ tháng 11 đến tháng 4 năm sau.",
+                "Quanh năm.",
+                "Chỉ vào mùa hè."
+            ],
             "correct": 1,
             "explanation": "Gió mùa Đông Bắc gây ra mùa đông lạnh ở miền Bắc nước ta."
         },
         {
             "type": "multiple",
             "question": "Hệ sinh thái đặc trưng của vùng ven biển nước ta là:",
-            "options": ["Rừng kín nhiệt đới ẩm.", "Rừng ngập mặn.", "Rừng thưa rụng lá.", "Xa van cây bụi."],
+            "options": [
+                "Rừng kín nhiệt đới ẩm.",
+                "Rừng ngập mặn.",
+                "Rừng thưa rụng lá.",
+                "Xa van cây bụi."
+            ],
             "correct": 1,
             "explanation": "Việt Nam có diện tích rừng ngập mặn lớn thứ hai thế giới (sau rừng A-ma-zôn)."
         },
@@ -89,7 +123,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Loại đất chiếm diện tích lớn nhất ở vùng đồi núi nước ta là:",
-            "options": ["Đất phù sa.", "Đất feralit.", "Đất xám bạc màu.", "Đất mùn núi cao."],
+            "options": [
+                "Đất phù sa.",
+                "Đất feralit.",
+                "Đất xám bạc màu.",
+                "Đất mùn núi cao."
+            ],
             "correct": 1,
             "explanation": "Đất feralit hình thành trên đá mẹ phong hóa mạnh trong điều kiện nhiệt ẩm cao."
         },
@@ -129,8 +168,6 @@ window.quizData = {
             "correct": 1,
             "explanation": "Chế độ nước sông ngòi nước ta phân hóa theo mùa (mùa lũ và mùa cạn)."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về tự nhiên Việt Nam:",
@@ -140,8 +177,19 @@ window.quizData = {
                 "Đai nhiệt đới gió mùa chân núi ở miền Bắc có độ cao thấp hơn so với miền Nam.",
                 "Biển Đông có vai trò quan trọng trong việc điều hòa khí hậu và cung cấp nguồn tài nguyên lớn cho nước ta."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Trường Sơn Bắc có hướng Tây Bắc - Đông Nam. Độ cao chân đai nhiệt đới miền Bắc thấp hơn do có mùa đông lạnh."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Trường Sơn Bắc có hướng Tây Bắc - Đông Nam. Độ cao chân đai nhiệt đới miền Bắc thấp hơn do có mùa đông lạnh.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -152,8 +200,19 @@ window.quizData = {
                 "Chất lượng nguồn lao động nước ta đang ngày càng được nâng cao.",
                 "Tình trạng thiếu việc làm diễn ra gay gắt nhất ở khu vực nông thôn."
             ],
-            "correct": [false, true, true, false],
-            "explanation": "Nước ta đang ở giai đoạn 'dân số vàng' và bắt đầu già hóa. Thiếu việc làm gay gắt ở THÀNH THỊ, nông thôn chủ yếu là thiếu thời gian làm việc."
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Nước ta đang ở giai đoạn 'dân số vàng' và bắt đầu già hóa. Thiếu việc làm gay gắt ở THÀNH THỊ, nông thôn chủ yếu là thiếu thời gian làm việc.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -164,8 +223,19 @@ window.quizData = {
                 "Nước ta không chịu ảnh hưởng của các hiện tượng cực đoan như El Nino hay La Nina.",
                 "Khí hậu miền Nam có hai mùa rõ rệt: mùa mưa và mùa khô."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Việt Nam chịu ảnh hưởng rất mạnh từ El Nino và La Nina gây ra hạn hán và bão lũ phức tạp."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Việt Nam chịu ảnh hưởng rất mạnh từ El Nino và La Nina gây ra hạn hán và bão lũ phức tạp.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -176,11 +246,20 @@ window.quizData = {
                 "Diện tích rừng của nước ta đang có xu hướng tăng trở lại nhờ các chính sách trồng rừng.",
                 "Tính đa dạng sinh học của nước ta đang bị suy giảm do các hoạt động khai thác quá mức của con người."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Đất phù sa mới thích hợp nhất cho lúa nước. Đất feralit thích hợp trồng cây công nghiệp lâu năm."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Đất phù sa mới thích hợp nhất cho lúa nước. Đất feralit thích hợp trồng cây công nghiệp lâu năm.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tính mật độ dân số (người/km2) của nước ta năm 2023 nếu dân số là 100,3 triệu người và diện tích là 331.212 km2. (Làm tròn đến số nguyên)",
@@ -217,5 +296,12 @@ window.quizData = {
             "correct": "Cao",
             "explanation": "Năm 2022, Việt Nam gia nhập nhóm các nước có chỉ số phát triển con người ở mức Cao."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Địa lí",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

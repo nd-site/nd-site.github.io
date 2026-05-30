@@ -376,6 +376,16 @@ const quizList = [
         "isHot": true
     },
     {
+        "title": "Thi thử tốt nghiệp THPT 2026 – Sở GD&ĐT Hải Phòng (Lần 2)",
+        "url": "/eduspace/tinhoc/12/haiphong-lan2-2026/",
+        "description": "Đề khảo sát kỳ thi tốt nghiệp THPT năm học 2025-2026 môn Tin học của Sở GD&ĐT Hải Phòng - Lần 2 (Mã đề 0502). Cấu trúc chuẩn 24 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II.",
+        "tag": "Hải Phòng",
+        "type": "quiz",
+        "class": "12",
+        "subject": "Tin Học",
+        "isHot": true
+    },
+    {
         "title": "Thi thử tốt nghiệp THPT 2026 – Cụm 5 trường THPT Ninh Bình (Đợt 1)",
         "url": "/eduspace/tinhoc/12/ninhbinh-cum5-lan1-2026/",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Cụm 5 trường THPT Ninh Bình, đợt 1. Cấu trúc 23 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II.",

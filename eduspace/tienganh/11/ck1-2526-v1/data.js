@@ -3,99 +3,171 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Choose the word whose underlined part is pronounced differently from that of the others:",
-            "options": ["h**ea**lthy", "br**ea**k", "br**ea**th", "h**ea**vy"],
+            "options": [
+                "h**ea**lthy",
+                "br**ea**k",
+                "br**ea**th",
+                "h**ea**vy"
+            ],
             "correct": 1,
             "explanation": "'Break' is pronounced /breɪk/ (diphthong), while the others have the short /e/ sound."
         },
         {
             "type": "multiple",
             "question": "Regular exercise and a balanced diet are essential for a long and ______ life.",
-            "options": ["health", "healthy", "healthily", "healthiness"],
+            "options": [
+                "health",
+                "healthy",
+                "healthily",
+                "healthiness"
+            ],
             "correct": 1,
             "explanation": "Adjective 'healthy' modifies the noun 'life'."
         },
         {
             "type": "multiple",
             "question": "The ______ gap often leads to misunderstandings between parents and children.",
-            "options": ["generation", "bridge", "space", "distance"],
+            "options": [
+                "generation",
+                "bridge",
+                "space",
+                "distance"
+            ],
             "correct": 0,
             "explanation": "Generation gap: khoảng cách thế hệ."
         },
         {
             "type": "multiple",
             "question": "In the future, many people will live in ______ cities with smart technology.",
-            "options": ["sustainable", "noisy", "crowded", "polluted"],
+            "options": [
+                "sustainable",
+                "noisy",
+                "crowded",
+                "polluted"
+            ],
             "correct": 0,
             "explanation": "Sustainable cities: các thành phố bền vững."
         },
         {
             "type": "multiple",
             "question": "Viet Nam has been an active ______ of ASEAN since 1995.",
-            "options": ["member", "partner", "leader", "friend"],
+            "options": [
+                "member",
+                "partner",
+                "leader",
+                "friend"
+            ],
             "correct": 0,
             "explanation": "Member of ASEAN: thành viên của ASEAN."
         },
         {
             "type": "multiple",
             "question": "Global ______ is caused by the increase of greenhouse gases in the atmosphere.",
-            "options": ["warming", "cooling", "change", "storm"],
+            "options": [
+                "warming",
+                "cooling",
+                "change",
+                "storm"
+            ],
             "correct": 0,
             "explanation": "Global warming: sự nóng lên toàn cầu."
         },
         {
             "type": "multiple",
             "question": "Parents should listen to their children's opinions to ______ the generation gap.",
-            "options": ["widen", "bridge", "make", "create"],
+            "options": [
+                "widen",
+                "bridge",
+                "make",
+                "create"
+            ],
             "correct": 1,
             "explanation": "Bridge the gap: rút ngắn/lấp đầy khoảng cách."
         },
         {
             "type": "multiple",
             "question": "If we continue to burn fossil fuels, the Earth's temperature ______ rise.",
-            "options": ["will", "would", "shall", "may"],
+            "options": [
+                "will",
+                "would",
+                "shall",
+                "may"
+            ],
             "correct": 0,
             "explanation": "First conditional for real possibilities in the future."
         },
         {
             "type": "multiple",
             "question": "Smart cities use modern technology to improve the ______ of life of their citizens.",
-            "options": ["quantity", "quality", "amount", "number"],
+            "options": [
+                "quantity",
+                "quality",
+                "amount",
+                "number"
+            ],
             "correct": 1,
             "explanation": "Quality of life: chất lượng cuộc sống."
         },
         {
             "type": "multiple",
             "question": "The main ______ of ASEAN is to promote regional peace and stability.",
-            "options": ["problem", "goal", "difficulty", "conflict"],
+            "options": [
+                "problem",
+                "goal",
+                "difficulty",
+                "conflict"
+            ],
             "correct": 1,
             "explanation": "Goal: mục tiêu."
         },
         {
             "type": "multiple",
             "question": "I have been interested in ______ about environmental issues since I was at school.",
-            "options": ["learning", "to learn", "learn", "learned"],
+            "options": [
+                "learning",
+                "to learn",
+                "learn",
+                "learned"
+            ],
             "correct": 0,
             "explanation": "Interested in + V-ing."
         },
         {
             "type": "multiple",
             "question": "The increase in carbon dioxide emissions has ______ to global warming.",
-            "options": ["led", "caused", "resulted", "made"],
+            "options": [
+                "led",
+                "caused",
+                "resulted",
+                "made"
+            ],
             "correct": 0,
             "explanation": "Lead to something: dẫn đến điều gì."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Read the text about Cities of the Future and decide whether the statements are True or False:",
@@ -105,8 +177,19 @@ window.quizData = {
                 "Green spaces like parks and gardens will be removed to build more houses.",
                 "Sustainable cities aim to reduce the impact on the environment."
             ],
-            "correct": [false, true, false, true],
-            "explanation": "Future cities focus on renewable energy and green spaces."
+            "correct": [
+                false,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Future cities focus on renewable energy and green spaces.",
+            "correctAnswers": [
+                false,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -117,8 +200,19 @@ window.quizData = {
                 "Open communication can help resolve conflicts between family members.",
                 "Younger people always have the same values as their grandparents."
             ],
-            "correct": [false, true, true, false],
-            "explanation": "The gap is a global issue. Generations often have different values."
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "explanation": "The gap is a global issue. Generations often have different values.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -129,8 +223,19 @@ window.quizData = {
                 "There are 12 official member states of ASEAN.",
                 "Viet Nam joined ASEAN before 1990."
             ],
-            "correct": [true, true, false, false],
-            "explanation": "There are 10 (or 11 if including Timor-Leste officially) members. VN joined in 1995."
+            "correct": [
+                true,
+                true,
+                false,
+                false
+            ],
+            "explanation": "There are 10 (or 11 if including Timor-Leste officially) members. VN joined in 1995.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -141,11 +246,20 @@ window.quizData = {
                 "Smoking is one of the leading causes of lung cancer.",
                 "Stress has no effect on physical health."
             ],
-            "correct": [false, true, true, false],
-            "explanation": "Fast food is unhealthy. Stress affects both mental and physical health."
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Fast food is unhealthy. Stress affects both mental and physical health.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Fill in the blank with the correct form of the word in brackets: 'The city is becoming more and more (SUSTAIN) ______.'",
@@ -182,5 +296,12 @@ window.quizData = {
             "correct": "to",
             "explanation": "Contribution to something: sự đóng góp vào cái gì."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Tiếng Anh",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

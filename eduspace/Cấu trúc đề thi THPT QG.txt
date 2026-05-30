@@ -1,0 +1,46 @@
+Cấu trúc đề thi tốt nghiệp THPT Quốc gia (áp dụng theo chương trình mới) có sự thay đổi lớn về dạng bài để giảm yếu tố may rủi của việc khoanh bừa.
+
+Dưới đây là chi tiết về loại câu hỏi và số lượng câu cho từng môn:
+
+## 1. Các môn Trắc nghiệm tự nhiên & Xã hội
+
+*(Toán, Vật lí, Hóa học, Sinh học, Lịch sử, Địa lí, GDCD)*
+
+Đề thi các môn này không còn thuần một loại trắc nghiệm 4 lựa chọn nữa, mà chia làm **3 phần rõ rệt**:
+
+* **Phần I: Trắc nghiệm nhiều lựa chọn** (Dạng truyền thống). Chọn 1 đáp án đúng trong 4 đáp án (A, B, C, D). Mỗi câu đúng được 0,25 điểm.
+* **Phần II: Trắc nghiệm Đúng/Sai**. Mỗi câu hỏi có 4 ý (a, b, c, d). Bạn phải chọn từng ý là Đúng hoặc Sai.
+* *Cách tính điểm đặc biệt:* Đúng 1 ý = 0,1 điểm; đúng 2 ý = 0,25 điểm; đúng 3 ý = 0,5 điểm; đúng cả 4 ý = 1,0 điểm.
+
+
+* **Phần III: Trắc nghiệm trả lời ngắn** (Dạng toán tự luận điền số). Bạn phải tự giải và điền đáp án số vào phiếu (tương tự dạng tự luận nhưng chấm bằng máy). Mỗi câu đúng được 0,25 hoặc 0,5 điểm tùy môn.
+
+### Bảng phân phối số câu chi tiết:
+
+| Môn học | Tổng số câu | Thời gian | Phần I (4 lựa chọn) | Phần II (Đúng/Sai) | Phần III (Trả lời ngắn) |
+| --- | --- | --- | --- | --- | --- |
+| **Toán** | **34 câu** (60 lệnh hỏi) | 90 phút | 12 câu | 4 câu (16 ý) | 6 câu |
+| **Vật lí** | **40 câu** (40 lệnh hỏi) | 50 phút | 18 câu | 4 câu (16 ý) | 6 câu |
+| **Hóa học** | **40 câu** (40 lệnh hỏi) | 50 phút | 18 câu | 4 câu (16 ý) | 6 câu |
+| **Sinh học** | **40 câu** (40 lệnh hỏi) | 50 phút | 18 câu | 4 câu (16 ý) | 6 câu |
+| **Lịch sử** | **40 câu** (40 lệnh hỏi) | 50 phút | 24 câu | 4 câu (16 ý) | 0 câu |
+| **Địa lí** | **40 câu** (40 lệnh hỏi) | 50 phút | 24 câu | 4 câu (16 ý) | 0 câu |
+| **GDCD / KTPL** | **40 câu** (40 lệnh hỏi) | 50 phút | 24 câu | 4 câu (16 ý) | 0 câu |
+
+---
+
+## 2. Môn Ngoại ngữ (Tiếng Anh,...)
+
+* **Số lượng:** 40 câu.
+* **Thời gian:** 50 phút.
+* **Loại câu hỏi:** 100% trắc nghiệm nhiều lựa chọn (chọn 1 trong 4 đáp án A, B, C, D). Mỗi câu đúng được 0,25 điểm.
+
+---
+
+## 3. Môn Ngữ văn
+
+* **Thời gian:** 120 phút.
+* **Loại câu hỏi:** 100% Tự luận.
+* **Cấu trúc:**
+* **Phần I: Đọc hiểu (4,0 điểm):** Cho một văn bản nằm ngoài sách giáo khoa kèm 4 câu hỏi tự luận ngắn kiểm tra khả năng nhận biết, thông hiểu, vận dụng.
+* **Phần II: Viết (6,0 điểm):** Gồm 1 câu nghị luận xã hội (khoảng 200 chữ) và 1 câu nghị luận văn học (phân tích, đánh giá một tác phẩm/đoạn trích nằm ngoài sách giáo khoa).

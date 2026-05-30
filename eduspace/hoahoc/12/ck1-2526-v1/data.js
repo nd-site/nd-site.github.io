@@ -3,38 +3,72 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Ester có mùi thơm của dứa là:",
-            "options": ["Isoamyl acetate.", "Ethyl butyrate.", "Benzyl acetate.", "Methyl salicylate."],
+            "options": [
+                "Isoamyl acetate.",
+                "Ethyl butyrate.",
+                "Benzyl acetate.",
+                "Methyl salicylate."
+            ],
             "correct": 1,
             "explanation": "Ethyl butyrate và ethyl propionate có mùi dứa đặc trưng."
         },
         {
             "type": "multiple",
             "question": "Chất béo là triester của acid béo với:",
-            "options": ["Methanol.", "Ethylene glycol.", "Glycerol.", "Sorbitol."],
+            "options": [
+                "Methanol.",
+                "Ethylene glycol.",
+                "Glycerol.",
+                "Sorbitol."
+            ],
             "correct": 2,
             "explanation": "Chất béo (triglyceride) là sản phẩm của phản ứng ester hóa giữa glycerol và các acid béo."
         },
         {
             "type": "multiple",
             "question": "Trong công nghiệp, glucose được điều chế bằng cách thủy phân chất nào sau đây?",
-            "options": ["Methanol.", "Tinh bột.", "Ancol ethyl.", "Acid acetic."],
+            "options": [
+                "Methanol.",
+                "Tinh bột.",
+                "Ancol ethyl.",
+                "Acid acetic."
+            ],
             "correct": 1,
             "explanation": "Thủy phân tinh bột hoặc cellulose bằng acid hoặc enzyme thu được glucose."
         },
         {
             "type": "multiple",
             "question": "Saccharide nào sau đây không có tính khử (không tham gia phản ứng tráng bạc)?",
-            "options": ["Glucose.", "Fructose.", "Saccharose.", "Maltose."],
+            "options": [
+                "Glucose.",
+                "Fructose.",
+                "Saccharose.",
+                "Maltose."
+            ],
             "correct": 2,
             "explanation": "Saccharose không còn nhóm -OH hemiacetal tự do nên không có tính khử."
         },
@@ -65,14 +99,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Sản phẩm cuối cùng của quá trình thủy phân hoàn toàn protein là:",
-            "options": ["Peptide.", "Amine.", "Amino acid.", "Ammonia."],
+            "options": [
+                "Peptide.",
+                "Amine.",
+                "Amino acid.",
+                "Ammonia."
+            ],
             "correct": 2,
             "explanation": "Protein là các polypeptide cao phân tử, được cấu tạo từ các gốc $\\\\alpha$-amino acid."
         },
         {
             "type": "multiple",
             "question": "Tơ nilon-6,6 thuộc loại tơ nào sau đây?",
-            "options": ["Tơ thiên nhiên.", "Tơ nhân tạo (bán tổng hợp).", "Tơ tổng hợp.", "Tơ khoáng vật."],
+            "options": [
+                "Tơ thiên nhiên.",
+                "Tơ nhân tạo (bán tổng hợp).",
+                "Tơ tổng hợp.",
+                "Tơ khoáng vật."
+            ],
             "correct": 2,
             "explanation": "Tơ nilon-6,6 được điều chế bằng phản ứng trùng ngưng giữa hexamethylenediamine và acid adipic."
         },
@@ -115,12 +159,15 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Peptide có phản ứng màu biuret là những peptide có từ bao nhiêu liên kết peptide trở lên?",
-            "options": ["1", "2", "3", "4"],
+            "options": [
+                "1",
+                "2",
+                "3",
+                "4"
+            ],
             "correct": 1,
             "explanation": "Tripeptide trở lên (có ít nhất 2 liên kết peptide) mới có phản ứng màu biuret với $Cu(OH)_2$ tạo phức màu tím."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về Ester và Lipit:",
@@ -130,8 +177,19 @@ window.quizData = {
                 "Phản ứng thủy phân ester trong môi trường acid là phản ứng một chiều.",
                 "Mỡ động vật chứa nhiều gốc acid béo no, thường ở trạng thái rắn ở nhiệt độ thường."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Thủy phân ester trong môi trường acid là phản ứng THUẬN NGHỊCH."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Thủy phân ester trong môi trường acid là phản ứng THUẬN NGHỊCH.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -142,8 +200,19 @@ window.quizData = {
                 "Tinh bột và Cellulose đều có công thức chung là $(C_6H_{10}O_5)_n$ và là đồng phân của nhau.",
                 "Cellulose là thành phần chính cấu tạo nên màng tế bào thực vật."
             ],
-            "correct": [true, false, false, true],
-            "explanation": "Saccharose thủy phân ra glucose và fructose. Tinh bột và cellulose có n khác nhau nên không phải đồng phân."
+            "correct": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "explanation": "Saccharose thủy phân ra glucose và fructose. Tinh bột và cellulose có n khác nhau nên không phải đồng phân.",
+            "correctAnswers": [
+                true,
+                false,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -154,8 +223,19 @@ window.quizData = {
                 "Protein bị đông tụ khi đun nóng hoặc gặp acid, kiềm.",
                 "Tất cả các peptide đều có phản ứng màu biuret."
             ],
-            "correct": [false, true, true, false],
-            "explanation": "Aniline rất ít tan trong nước và không làm xanh quỳ tím. Dipeptide không có phản ứng màu biuret."
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Aniline rất ít tan trong nước và không làm xanh quỳ tím. Dipeptide không có phản ứng màu biuret.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -166,11 +246,20 @@ window.quizData = {
                 "Tơ visco và tơ acetate thuộc loại tơ bán tổng hợp.",
                 "Phản ứng trùng hợp là quá trình kết hợp nhiều phân tử nhỏ giống nhau hoặc tương tự nhau thành phân tử rất lớn."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Polymer không có nhiệt độ nóng chảy xác định (nóng chảy trong một khoảng nhiệt độ)."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Polymer không có nhiệt độ nóng chảy xác định (nóng chảy trong một khoảng nhiệt độ).",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tính phân tử khối ($g/mol$) của Ethyl acetate ($CH_3COOC_2H_5$).",
@@ -207,5 +296,12 @@ window.quizData = {
             "correct": "Nitron",
             "explanation": "Hoặc tơ olon."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Hóa học",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

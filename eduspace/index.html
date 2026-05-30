@@ -603,38 +603,35 @@
             const soonItems = quizList.filter(item => item.isComingSoon);
             const toolItems = quizList.filter(item => item.tag === 'Công Cụ');
 
-            if (hotItems.length > 0) {
-                const section = document.getElementById('hotSection');
-                section.classList.remove('hidden');
-                const content1 = document.getElementById('hotContent1');
-                const content2 = document.getElementById('hotContent2');
-                const cards = hotItems.map((item, idx) => createCard(item, idx, true)).join('');
-                content1.innerHTML = cards;
-                content2.innerHTML = cards;
-                setupInfiniteScroll('hotMarquee');
+            function setupSection(items, sectionId, containerId, content1Id, content2Id, direction) {
+                if (items.length > 0) {
+                    const section = document.getElementById(sectionId);
+                    const container = document.getElementById(containerId);
+                    section.classList.remove('hidden');
+                    const content1 = document.getElementById(content1Id);
+                    const content2 = document.getElementById(content2Id);
+                    
+                    const cards = items.map((item, idx) => createCard(item, idx, true)).join('');
+                    content1.innerHTML = cards;
+                    content2.innerHTML = '';
+                    
+                    // Kiểm tra xem nội dung có tràn khung không
+                    if (content1.scrollWidth > container.clientWidth) {
+                        content2.innerHTML = cards;
+                        container.style.maskImage = '';
+                        setupInfiniteScroll(containerId, direction);
+                    } else {
+                        container.style.maskImage = 'none';
+                        // Hủy bỏ scroll loop nếu có (trong trường hợp setupInfiniteScroll chạy nhiều lần)
+                        // Tuy nhiên vì hàm setup chỉ được gọi khi overflow, nếu không overflow ta không gọi setup.
+                    }
+                }
             }
 
-            if (soonItems.length > 0) {
-                const section = document.getElementById('upcomingSection');
-                section.classList.remove('hidden');
-                const content1 = document.getElementById('upcomingContent1');
-                const content2 = document.getElementById('upcomingContent2');
-                const cards = soonItems.map((item, idx) => createCard(item, idx, true)).join('');
-                content1.innerHTML = cards;
-                content2.innerHTML = cards;
-                setupInfiniteScroll('upcomingMarquee', -1);
-            }
+            setupSection(hotItems, 'hotSection', 'hotMarquee', 'hotContent1', 'hotContent2', 1);
+            setupSection(soonItems, 'upcomingSection', 'upcomingMarquee', 'upcomingContent1', 'upcomingContent2', -1);
+            setupSection(toolItems, 'toolSection', 'toolMarquee', 'toolContent1', 'toolContent2', 1);
 
-            if (toolItems.length > 0) {
-                const section = document.getElementById('toolSection');
-                section.classList.remove('hidden');
-                const content1 = document.getElementById('toolContent1');
-                const content2 = document.getElementById('toolContent2');
-                const cards = toolItems.map((item, idx) => createCard(item, idx, true)).join('');
-                content1.innerHTML = cards;
-                content2.innerHTML = cards;
-                setupInfiniteScroll('toolMarquee', 1);
-            }
             lucide.createIcons();
         }
 

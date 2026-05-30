@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Cuộc Cách mạng tư sản Anh (thế kỷ XVII) diễn ra dưới hình thức nào?",
@@ -61,7 +75,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Liên bang Cộng hòa xã hội chủ nghĩa Xô viết (Liên Xô) được thành lập vào năm nào?",
-            "options": ["1917", "1918", "1922", "1924"],
+            "options": [
+                "1917",
+                "1918",
+                "1922",
+                "1924"
+            ],
             "correct": 2,
             "explanation": "Năm 1922, Đại hội lần thứ nhất các Xô viết toàn Nga đã thông qua bản Tuyên bố và Hiệp ước thành lập Liên Xô."
         },
@@ -104,14 +123,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Quốc gia duy nhất ở Đông Nam Á không trở thành thuộc địa của các nước phương Tây là:",
-            "options": ["Việt Nam.", "Thái Lan (Xiêm).", "In-đô-nê-xi-a.", "Phi-líp-pin."],
+            "options": [
+                "Việt Nam.",
+                "Thái Lan (Xiêm).",
+                "In-đô-nê-xi-a.",
+                "Phi-líp-pin."
+            ],
             "correct": 1,
             "explanation": "Thái Lan đã thực hiện chính sách ngoại giao khôn khéo và cải cách đất nước để giữ vững độc lập."
         },
         {
             "type": "multiple",
             "question": "Lãnh đạo cuộc đấu tranh chống thực dân Tây Ban Nha và Mỹ ở Phi-líp-pin vào cuối thế kỷ XIX là:",
-            "options": ["Phan Bội Châu.", "Hô-xê Ri-dan.", "Xu-các-nô.", "Thun Ki-ô."],
+            "options": [
+                "Phan Bội Châu.",
+                "Hô-xê Ri-dan.",
+                "Xu-các-nô.",
+                "Thun Ki-ô."
+            ],
             "correct": 1,
             "explanation": "Hô-xê Ri-dan là nhà yêu nước và trí thức lỗi lạc của Phi-líp-pin."
         },
@@ -139,8 +168,6 @@ window.quizData = {
             "correct": 1,
             "explanation": "Sự tập trung sản xuất và tư bản dẫn đến việc hình thành các tổ chức độc quyền (Cartel, Trust, Syndicate...)."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về các cuộc cách mạng tư sản:",
@@ -150,8 +177,19 @@ window.quizData = {
                 "Lãnh đạo của cuộc cách mạng tư sản Anh là liên minh giữa tư sản và quý tộc mới.",
                 "Cách mạng tư sản mở đường cho chủ nghĩa tư bản phát triển."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Nhiều cuộc cách mạng vẫn giữ lại chế độ Quân chủ lập hiến (như Anh), chưa xóa sạch tàn dư phong kiến."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Nhiều cuộc cách mạng vẫn giữ lại chế độ Quân chủ lập hiến (như Anh), chưa xóa sạch tàn dư phong kiến.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -162,8 +200,19 @@ window.quizData = {
                 "Trung Quốc thực hiện cải cách mở cửa nhằm quay lại phát triển chủ nghĩa tư bản hoàn toàn.",
                 "CNXH hiện nay tập trung vào phát triển kinh tế thị trường định hướng XHCN và hội nhập quốc tế."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Cải cách ở Trung Quốc và Việt Nam là để hoàn thiện và phát triển CNXH phù hợp với thực tiễn, không phải bỏ CNXH."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Cải cách ở Trung Quốc và Việt Nam là để hoàn thiện và phát triển CNXH phù hợp với thực tiễn, không phải bỏ CNXH.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -174,8 +223,19 @@ window.quizData = {
                 "Cuộc khởi nghĩa của Ong Kẹo và Com-ma-đam diễn ra ở In-đô-nê-xi-a.",
                 "Phong trào đấu tranh theo xu hướng vô sản đóng vai trò quan trọng trong việc giành độc lập ở nhiều nước."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Khởi nghĩa Ong Kẹo và Com-ma-đam là của nhân dân Lào."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Khởi nghĩa Ong Kẹo và Com-ma-đam là của nhân dân Lào.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -186,11 +246,20 @@ window.quizData = {
                 "CNTB hiện đại đã xóa bỏ được hiện tượng khủng hoảng kinh tế chu kì.",
                 "Các tập đoàn tư bản xuyên quốc gia có ảnh hưởng lớn đến kinh tế và chính trị thế giới."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Khủng hoảng kinh tế vẫn là một căn bệnh thâm căn cố đế của CNTB (ví dụ khủng hoảng 2008)."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Khủng hoảng kinh tế vẫn là một căn bệnh thâm căn cố đế của CNTB (ví dụ khủng hoảng 2008).",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tên nhà tư tưởng lãnh đạo cuộc Cách mạng tháng Mười Nga năm 1917 là ai?",
@@ -227,5 +296,12 @@ window.quizData = {
             "correct": "ASEAN",
             "explanation": "Association of Southeast Asian Nations."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Lịch sử",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

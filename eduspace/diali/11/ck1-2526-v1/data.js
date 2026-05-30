@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Nhóm nước phát triển thường có đặc điểm nào sau đây?",
@@ -37,7 +51,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Khu vực Mỹ La-tinh nằm giữa hai đại dương lớn nào?",
-            "options": ["Ấn Độ Dương và Đại Tây Dương.", "Thái Bình Dương và Ấn Độ Dương.", "Thái Bình Dương và Đại Tây Dương.", "Bắc Băng Dương và Đại Tây Dương."],
+            "options": [
+                "Ấn Độ Dương và Đại Tây Dương.",
+                "Thái Bình Dương và Ấn Độ Dương.",
+                "Thái Bình Dương và Đại Tây Dương.",
+                "Bắc Băng Dương và Đại Tây Dương."
+            ],
             "correct": 2,
             "explanation": "Mỹ La-tinh có vị trí chiến lược tiếp giáp Thái Bình Dương ở phía Tây và Đại Tây Dương ở phía Đông."
         },
@@ -68,35 +87,60 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Tổ chức kinh tế nào sau đây có Việt Nam là thành viên?",
-            "options": ["EU (Liên minh châu Âu).", "ASEAN (Hiệp hội các quốc gia Đông Nam Á).", "NAFTA (Hiệp định Thương mại Tự do Bắc Mỹ).", "MERCOSUR (Thị trường chung Nam Mỹ)."],
+            "options": [
+                "EU (Liên minh châu Âu).",
+                "ASEAN (Hiệp hội các quốc gia Đông Nam Á).",
+                "NAFTA (Hiệp định Thương mại Tự do Bắc Mỹ).",
+                "MERCOSUR (Thị trường chung Nam Mỹ)."
+            ],
             "correct": 1,
             "explanation": "Việt Nam gia nhập ASEAN vào năm 1995."
         },
         {
             "type": "multiple",
             "question": "Tình trạng biến đổi khí hậu toàn cầu chủ yếu do sự gia tăng của khí nào trong khí quyển?",
-            "options": ["Oxy (O2).", "Nitơ (N2).", "Cacbon đioxit (CO2).", "Hêli (He)."],
+            "options": [
+                "Oxy (O2).",
+                "Nitơ (N2).",
+                "Cacbon đioxit (CO2).",
+                "Hêli (He)."
+            ],
             "correct": 2,
             "explanation": "Khí thải từ hoạt động công nghiệp và giao thông gây hiệu ứng nhà kính làm Trái Đất nóng lên."
         },
         {
             "type": "multiple",
             "question": "Mỹ La-tinh có thế mạnh nổi bật về sản xuất các loại nông sản nào?",
-            "options": ["Cây lương thực ôn đới.", "Cây công nghiệp nhiệt đới và chăn nuôi đại gia súc.", "Chăn nuôi cừu lấy lông.", "Trồng cây lúa mì trên diện tích lớn."],
+            "options": [
+                "Cây lương thực ôn đới.",
+                "Cây công nghiệp nhiệt đới và chăn nuôi đại gia súc.",
+                "Chăn nuôi cừu lấy lông.",
+                "Trồng cây lúa mì trên diện tích lớn."
+            ],
             "correct": 1,
             "explanation": "Khí hậu nhiệt đới và diện tích đồng cỏ rộng lớn thuận lợi cho cà phê, mía, bò thịt..."
         },
         {
             "type": "multiple",
             "question": "Khu vực Đông Nam Á bao gồm bao nhiêu quốc gia?",
-            "options": ["9", "10", "11", "12"],
+            "options": [
+                "9",
+                "10",
+                "11",
+                "12"
+            ],
             "correct": 2,
             "explanation": "Đông Nam Á gồm 11 quốc gia: Việt Nam, Lào, Campuchia, Thái Lan, Myanmar, Malaysia, Singapore, Indonesia, Philippines, Brunei và Timor-Leste."
         },
         {
             "type": "multiple",
             "question": "Đồng tiền chung của Liên minh châu Âu (EU) có tên là:",
-            "options": ["Đô la.", "Bảng.", "Ơ-rô (Euro).", "Yên."],
+            "options": [
+                "Đô la.",
+                "Bảng.",
+                "Ơ-rô (Euro).",
+                "Yên."
+            ],
             "correct": 2,
             "explanation": "Đồng Euro là biểu tượng mạnh mẽ cho sự liên kết kinh tế của EU."
         },
@@ -124,8 +168,6 @@ window.quizData = {
             "correct": 1,
             "explanation": "Cách mạng 4.0 làm thay đổi căn bản phương thức sản xuất dựa trên dữ liệu và AI."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về các vấn đề thế giới:",
@@ -135,8 +177,19 @@ window.quizData = {
                 "Các vấn đề an ninh phi truyền thống như dịch bệnh, khủng bố có phạm vi ảnh hưởng toàn cầu.",
                 "Kinh tế tri thức đóng vai trò chủ đạo trong nền kinh tế thế giới hiện đại."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Khoảng cách giàu nghèo vẫn còn rất lớn và có xu hướng gia tăng ở một số khu vực."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Khoảng cách giàu nghèo vẫn còn rất lớn và có xu hướng gia tăng ở một số khu vực.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -147,8 +200,19 @@ window.quizData = {
                 "EU thực hiện quyền tự do lưu thông về hàng hóa, dịch vụ, con người và vốn giữa các nước thành viên.",
                 "Anh (United Kingdom) đã chính thức rời khỏi EU (Brexit)."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Nhiều nước châu Âu như Thụy Sĩ, Na Uy, Nga... không phải là thành viên EU."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Nhiều nước châu Âu như Thụy Sĩ, Na Uy, Nga... không phải là thành viên EU.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -159,8 +223,19 @@ window.quizData = {
                 "Sự chênh lệch giàu nghèo trong nội bộ dân cư Mỹ La-tinh là rất lớn.",
                 "Cải cách kinh tế ở Mỹ La-tinh đang hướng tới việc giảm sự phụ thuộc vào vốn nước ngoài."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Đa số các nước Mỹ La-tinh đều đối mặt với tình trạng nợ nước ngoài cao."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Đa số các nước Mỹ La-tinh đều đối mặt với tình trạng nợ nước ngoài cao.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -171,11 +246,20 @@ window.quizData = {
                 "Lào là quốc gia duy nhất trong khu vực không có đường biên giới với biển.",
                 "Đông Nam Á là khu vực có nền văn hóa đa dạng, nhiều tôn giáo lớn cùng tồn tại."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Lào không giáp biển. Các nước còn lại đều có biển."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Lào không giáp biển. Các nước còn lại đều có biển.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tổ chức thương mại lớn nhất hành tinh có tên viết tắt là gì?",
@@ -212,5 +296,12 @@ window.quizData = {
             "correct": "HDI",
             "explanation": "Human Development Index."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Địa lí",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

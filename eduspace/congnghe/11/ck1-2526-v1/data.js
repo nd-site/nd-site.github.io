@@ -3,38 +3,72 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Vật liệu cơ khí nào sau đây thuộc nhóm kim loại đen?",
-            "options": ["Đồng.", "Nhôm.", "Thép.", "Vàng."],
+            "options": [
+                "Đồng.",
+                "Nhôm.",
+                "Thép.",
+                "Vàng."
+            ],
             "correct": 2,
             "explanation": "Kim loại đen chủ yếu bao gồm sắt và carbon (thép, gang)."
         },
         {
             "type": "multiple",
             "question": "Tính chất nào đặc trưng cho khả năng của vật liệu chống lại biến dạng dẻo hoặc phá hủy khi có ngoại lực tác dụng?",
-            "options": ["Tính cứng.", "Tính dẻo.", "Tính bền.", "Tính dẫn điện."],
+            "options": [
+                "Tính cứng.",
+                "Tính dẻo.",
+                "Tính bền.",
+                "Tính dẫn điện."
+            ],
             "correct": 2,
             "explanation": "Độ bền là khả năng chịu tải trọng mà không bị gãy vỡ hoặc biến dạng quá mức."
         },
         {
             "type": "multiple",
             "question": "Vật liệu phi kim loại nào thường được dùng để chế tạo lốp xe, ống dẫn?",
-            "options": ["Chất dẻo.", "Cao su.", "Gốm.", "Thủy tinh."],
+            "options": [
+                "Chất dẻo.",
+                "Cao su.",
+                "Gốm.",
+                "Thủy tinh."
+            ],
             "correct": 1,
             "explanation": "Cao su có tính đàn hồi cao, khả năng giảm chấn và chống thấm tốt."
         },
         {
             "type": "multiple",
             "question": "Phương pháp gia công nào sau đây là phương pháp gia công không cắt gọt?",
-            "options": ["Tiện.", "Phay.", "Đúc.", "Khoan."],
+            "options": [
+                "Tiện.",
+                "Phay.",
+                "Đúc.",
+                "Khoan."
+            ],
             "correct": 2,
             "explanation": "Đúc là phương pháp rót kim loại lỏng vào khuôn, không tạo ra phôi vụn như các phương pháp cắt gọt."
         },
@@ -89,14 +123,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Quy trình chế tạo chi tiết máy bằng phương pháp đúc bao gồm bước nào đầu tiên?",
-            "options": ["Rót kim loại lỏng.", "Làm khuôn.", "Chuẩn bị mẫu.", "Lấy vật đúc ra khỏi khuôn."],
+            "options": [
+                "Rót kim loại lỏng.",
+                "Làm khuôn.",
+                "Chuẩn bị mẫu.",
+                "Lấy vật đúc ra khỏi khuôn."
+            ],
             "correct": 2,
             "explanation": "Cần có mẫu (bằng gỗ, nhôm...) trước khi tạo lòng khuôn."
         },
         {
             "type": "multiple",
             "question": "Phương pháp gia công bằng áp lực (như rèn, dập) dựa trên tính chất nào của vật liệu?",
-            "options": ["Tính giòn.", "Tính dẻo.", "Tính dẫn điện.", "Tính nhiễm từ."],
+            "options": [
+                "Tính giòn.",
+                "Tính dẻo.",
+                "Tính dẫn điện.",
+                "Tính nhiễm từ."
+            ],
             "correct": 1,
             "explanation": "Tính dẻo cho phép vật liệu biến dạng vĩnh viễn dưới tác dụng của ngoại lực mà không bị phá hủy."
         },
@@ -124,8 +168,6 @@ window.quizData = {
             "correct": 1,
             "explanation": "Đây là phương pháp gia công lạnh, không làm thay đổi tính chất nhiệt của vật liệu."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về vật liệu cơ khí:",
@@ -135,8 +177,19 @@ window.quizData = {
                 "Sắt nguyên chất được dùng phổ biến để chế tạo các chi tiết máy chịu lực lớn.",
                 "Nhựa nhiệt dẻo có thể nóng chảy và tái chế nhiều lần."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Sắt nguyên chất quá mềm, thực tế thường dùng hợp kim của sắt (thép, gang)."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Sắt nguyên chất quá mềm, thực tế thường dùng hợp kim của sắt (thép, gang).",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -147,8 +200,19 @@ window.quizData = {
                 "Khoan chỉ dùng để tạo ra các lỗ có đường kính rất lớn.",
                 "Mài là phương pháp gia công tinh để đạt được độ bóng bề mặt cao."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Khoan có thể tạo lỗ với nhiều kích cỡ khác nhau, từ rất nhỏ đến trung bình."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Khoan có thể tạo lỗ với nhiều kích cỡ khác nhau, từ rất nhỏ đến trung bình.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -159,8 +223,19 @@ window.quizData = {
                 "Tự động hóa giúp giảm sai sót do yếu tố chủ quan của con người.",
                 "Dây chuyền sản xuất linh hoạt (FMS) có khả năng thích ứng nhanh với việc thay đổi sản phẩm."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Máy CNC cần chương trình điều khiển được lập trình trên máy tính (G-code)."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Máy CNC cần chương trình điều khiển được lập trình trên máy tính (G-code).",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -171,11 +246,20 @@ window.quizData = {
                 "Quy trình sản xuất cơ khí hiện đại hướng tới việc giảm thiểu rác thải và bảo vệ môi trường.",
                 "Sử dụng dao cắt đã bị mòn giúp tiết kiệm chi phí sản xuất mà vẫn đảm bảo độ chính xác."
             ],
-            "correct": [true, false, true, false],
-            "explanation": "Bảo hộ lao động là bắt buộc. Dao mòn làm giảm độ chính xác và gây hại cho máy."
+            "correct": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "explanation": "Bảo hộ lao động là bắt buộc. Dao mòn làm giảm độ chính xác và gây hại cho máy.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                false
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Hàm lượng Carbon (%) tối thiểu để gọi là Gang là bao nhiêu? (Nhập số thập phân)",
@@ -212,5 +296,12 @@ window.quizData = {
             "correct": "Nhựa nhiệt rắn",
             "explanation": "Ví dụ: Epoxy, Phenol..."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Công nghệ",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

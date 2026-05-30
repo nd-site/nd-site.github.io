@@ -241,6 +241,12 @@ async function connectFirebase() {
             appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
             measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
         };
+        const effectiveApiKey = keys.firebase || EDU_CONFIG.firebaseApiKey;
+        const effectiveAppId = keys.fbAppId || EDU_CONFIG.firebaseAppId;
+        if (!isSet(effectiveApiKey) || !isSet(effectiveAppId)) {
+            console.warn('Firebase credentials missing — online game features disabled.');
+            return;
+        }
         firebase.initializeApp(config);
         db = firebase.database();
     }

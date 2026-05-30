@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Cạnh tranh kinh tế là sự ganh đua giữa các chủ thể kinh tế nhằm:",
@@ -25,7 +39,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Khi cung lớn hơn cầu trên thị trường, giá cả hàng hóa thường có xu hướng:",
-            "options": ["Tăng mạnh.", "Giảm xuống.", "Giữ nguyên.", "Biến động không ngừng."],
+            "options": [
+                "Tăng mạnh.",
+                "Giảm xuống.",
+                "Giữ nguyên.",
+                "Biến động không ngừng."
+            ],
             "correct": 1,
             "explanation": "Dư thừa hàng hóa buộc người bán phải giảm giá để kích cầu."
         },
@@ -44,7 +63,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Tình trạng người lao động mong muốn có việc làm nhưng chưa tìm được việc làm được gọi là:",
-            "options": ["Lao động tự do.", "Thất nghiệp.", "Nghỉ hưu sớm.", "Thiếu lao động."],
+            "options": [
+                "Lao động tự do.",
+                "Thất nghiệp.",
+                "Nghỉ hưu sớm.",
+                "Thiếu lao động."
+            ],
             "correct": 1,
             "explanation": "Thất nghiệp gây ra nhiều hệ lụy cho cá nhân và nền kinh tế."
         },
@@ -99,14 +123,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Khi lạm phát xảy ra, người có thu nhập cố định (như lương hưu) sẽ:",
-            "options": ["Được hưởng lợi lớn.", "Không bị ảnh hưởng gì.", "Bị thiệt hại vì giá trị thực của thu nhập giảm.", "Được Nhà nước tăng lương ngay lập tức."],
+            "options": [
+                "Được hưởng lợi lớn.",
+                "Không bị ảnh hưởng gì.",
+                "Bị thiệt hại vì giá trị thực của thu nhập giảm.",
+                "Được Nhà nước tăng lương ngay lập tức."
+            ],
             "correct": 2,
             "explanation": "Lạm phát làm giảm thu nhập thực tế của những người không thể điều chỉnh thu nhập theo giá cả."
         },
         {
             "type": "multiple",
             "question": "Tổ chức nào đóng vai trò kết nối giữa người lao động và người sử dụng lao động trên thị trường lao động?",
-            "options": ["Ngân hàng thương mại.", "Các trung tâm dịch vụ việc làm.", "Các siêu thị lớn.", "Các câu lạc bộ giải trí."],
+            "options": [
+                "Ngân hàng thương mại.",
+                "Các trung tâm dịch vụ việc làm.",
+                "Các siêu thị lớn.",
+                "Các câu lạc bộ giải trí."
+            ],
             "correct": 1,
             "explanation": "Trung tâm dịch vụ việc làm giúp giảm tình trạng thất nghiệp do thiếu thông tin."
         },
@@ -125,12 +159,15 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Hành vi 'đẩy giá hàng hóa lên cao khi có thiên tai' là vi phạm khía cạnh nào sau đây?",
-            "options": ["Kỹ thuật kinh doanh.", "Đạo đức kinh doanh.", "Năng lực sản xuất.", "Văn hóa tiêu dùng."],
+            "options": [
+                "Kỹ thuật kinh doanh.",
+                "Đạo đức kinh doanh.",
+                "Năng lực sản xuất.",
+                "Văn hóa tiêu dùng."
+            ],
             "correct": 1,
             "explanation": "Đây là hành vi trục lợi trên khó khăn của người khác, vi phạm đạo đức kinh doanh."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về cạnh tranh và cung cầu:",
@@ -140,8 +177,19 @@ window.quizData = {
                 "Nhà nước không nên can thiệp vào quan hệ cung - cầu vì đây là quy luật tự nhiên.",
                 "Người sản xuất sẽ mở rộng sản xuất khi giá cả hàng hóa trên thị trường tăng cao."
             ],
-            "correct": [false, true, false, true],
-            "explanation": "Cạnh tranh có thể dẫn đến độc quyền hoặc gian lận. Nhà nước cần điều tiết để ổn định thị trường."
+            "correct": [
+                false,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Cạnh tranh có thể dẫn đến độc quyền hoặc gian lận. Nhà nước cần điều tiết để ổn định thị trường.",
+            "correctAnswers": [
+                false,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -152,8 +200,19 @@ window.quizData = {
                 "Chính sách an sinh xã hội góp phần hỗ trợ người lao động bị thất nghiệp.",
                 "Để kiềm chế lạm phát, Nhà nước có thể sử dụng chính sách thắt chặt tiền tệ."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Thất nghiệp gây mất ổn định an ninh trật tự và lãng phí nguồn lực xã hội."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Thất nghiệp gây mất ổn định an ninh trật tự và lãng phí nguồn lực xã hội.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -164,8 +223,19 @@ window.quizData = {
                 "Lợi nhuận là mục tiêu duy nhất và quan trọng hơn tất cả trong kinh doanh.",
                 "Tuân thủ pháp luật là mức độ thấp nhất của đạo đức kinh doanh."
             ],
-            "correct": [false, true, false, true],
-            "explanation": "Ý tưởng chỉ là điều kiện cần. Doanh nghiệp cần hài hòa lợi nhuận với lợi ích xã hội."
+            "correct": [
+                false,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Ý tưởng chỉ là điều kiện cần. Doanh nghiệp cần hài hòa lợi nhuận với lợi ích xã hội.",
+            "correctAnswers": [
+                false,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -176,11 +246,20 @@ window.quizData = {
                 "Quảng cáo có thể ảnh hưởng đến thói quen và văn hóa tiêu dùng của xã hội.",
                 "Tiêu dùng xanh giúp bảo vệ môi trường và sức khỏe cộng đồng."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Người tiêu dùng thông thái biết chọn sản phẩm phù hợp về chất lượng, giá cả và trách nhiệm xã hội."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Người tiêu dùng thông thái biết chọn sản phẩm phù hợp về chất lượng, giá cả và trách nhiệm xã hội.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Điền từ còn thiếu: 'Cung là lượng hàng hóa, dịch vụ mà ...... sẵn sàng bán trên thị trường tại các mức giá khác nhau.'",
@@ -217,5 +296,12 @@ window.quizData = {
             "correct": "Cung lao động",
             "explanation": "Đối lập với cầu lao động từ phía doanh nghiệp."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Giáo dục Kinh tế và Pháp luật",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

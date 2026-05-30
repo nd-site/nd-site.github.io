@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Đối tượng nghiên cứu của Sử học là gì?",
@@ -37,42 +51,72 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Nền văn minh Ai Cập cổ đại được hình thành trên lưu vực con sông nào?",
-            "options": ["Sông Ấn.", "Sông Hằng.", "Sông Nin (Nile).", "Sông Hoàng Hà."],
+            "options": [
+                "Sông Ấn.",
+                "Sông Hằng.",
+                "Sông Nin (Nile).",
+                "Sông Hoàng Hà."
+            ],
             "correct": 2,
             "explanation": "Sông Nin mang lại nguồn nước và phù sa màu mỡ cho sự hình thành văn minh Ai Cập."
         },
         {
             "type": "multiple",
             "question": "Kim tự tháp là công trình kiến trúc tiêu biểu của nền văn minh nào?",
-            "options": ["Ấn Độ.", "Trung Hoa.", "Ai Cập.", "Lưỡng Hà."],
+            "options": [
+                "Ấn Độ.",
+                "Trung Hoa.",
+                "Ai Cập.",
+                "Lưỡng Hà."
+            ],
             "correct": 2,
             "explanation": "Đây là kỳ quan vĩ đại của người Ai Cập cổ đại, dùng làm lăng mộ cho các Pha-ra-ông."
         },
         {
             "type": "multiple",
             "question": "Hệ chữ số La Mã ($I, II, III, V, X...$) là thành tựu của cư dân vùng nào?",
-            "options": ["Ấn Độ.", "Hy Lạp.", "La Mã.", "Trung Hoa."],
+            "options": [
+                "Ấn Độ.",
+                "Hy Lạp.",
+                "La Mã.",
+                "Trung Hoa."
+            ],
             "correct": 2,
             "explanation": "Hệ chữ số này do người La Mã cổ đại sáng tạo và vẫn được sử dụng đến ngày nay."
         },
         {
             "type": "multiple",
             "question": "Nền văn minh nào đã sáng tạo ra hệ chữ số 0 đầu tiên trên thế giới?",
-            "options": ["Ai Cập.", "Ấn Độ.", "Lưỡng Hà.", "La Mã."],
+            "options": [
+                "Ai Cập.",
+                "Ấn Độ.",
+                "Lưỡng Hà.",
+                "La Mã."
+            ],
             "correct": 1,
             "explanation": "Người Ấn Độ cổ đại đã đóng góp to lớn cho toán học thế giới bằng việc sáng tạo ra chữ số 0."
         },
         {
             "type": "multiple",
             "question": "Tôn giáo nào sau đây có nguồn gốc từ Ấn Độ?",
-            "options": ["Thiên Chúa giáo.", "Hồi giáo.", "Phật giáo.", "Do Thái giáo."],
+            "options": [
+                "Thiên Chúa giáo.",
+                "Hồi giáo.",
+                "Phật giáo.",
+                "Do Thái giáo."
+            ],
             "correct": 2,
             "explanation": "Phật giáo do Tất-đạt-đa Cồ-đàm sáng lập tại Ấn Độ vào khoảng thế kỷ VI TCN."
         },
         {
             "type": "multiple",
             "question": "Phát minh nào sau đây của người Trung Hoa thời cổ - trung đại đã làm thay đổi kỹ thuật quân sự thế giới?",
-            "options": ["Kỹ thuật làm giấy.", "Kỹ thuật in.", "Thuốc súng.", "La bàn."],
+            "options": [
+                "Kỹ thuật làm giấy.",
+                "Kỹ thuật in.",
+                "Thuốc súng.",
+                "La bàn."
+            ],
             "correct": 2,
             "explanation": "Thuốc súng là một trong bốn phát minh lớn của Trung Quốc có ảnh hưởng sâu rộng."
         },
@@ -103,7 +147,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Nguồn năng lượng chính của cuộc Cách mạng công nghiệp lần thứ hai là:",
-            "options": ["Than đá.", "Sức nước.", "Điện năng và dầu mỏ.", "Năng lượng nguyên tử."],
+            "options": [
+                "Than đá.",
+                "Sức nước.",
+                "Điện năng và dầu mỏ.",
+                "Năng lượng nguyên tử."
+            ],
             "correct": 2,
             "explanation": "Điện năng và động cơ đốt trong là đặc trưng của cách mạng công nghiệp lần hai."
         },
@@ -119,8 +168,6 @@ window.quizData = {
             "correct": 2,
             "explanation": "Cách mạng 4.0 dựa trên nền tảng của trí tuệ nhân tạo (AI), Internet vạn vật (IoT) và dữ liệu lớn (Big Data)."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về Sử học và Di sản văn hóa:",
@@ -130,8 +177,19 @@ window.quizData = {
                 "Việc bảo tồn các di tích lịch sử góp phần phát triển du lịch bền vững.",
                 "Kết quả nghiên cứu của Sử học luôn tuyệt đối chính xác, không bao giờ thay đổi."
             ],
-            "correct": [true, false, true, false],
-            "explanation": "Sử học có mối quan hệ liên ngành mật thiết. Nhận thức lịch sử có thể thay đổi khi có nguồn tư liệu mới."
+            "correct": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "explanation": "Sử học có mối quan hệ liên ngành mật thiết. Nhận thức lịch sử có thể thay đổi khi có nguồn tư liệu mới.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -142,8 +200,19 @@ window.quizData = {
                 "Nho giáo là hệ tư tưởng quan trọng duy nhất tại Ấn Độ cổ đại.",
                 "Vạn Lí Trường Thành là công trình phòng thủ vĩ đại của người Trung Hoa."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Nho giáo có nguồn gốc từ Trung Hoa, không phải Ấn Độ (Ấn Độ chủ yếu có Hindu giáo và Phật giáo)."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Nho giáo có nguồn gốc từ Trung Hoa, không phải Ấn Độ (Ấn Độ chủ yếu có Hindu giáo và Phật giáo).",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -154,8 +223,19 @@ window.quizData = {
                 "Cư dân Hy Lạp cổ đại không có thành tựu nào về khoa học tự nhiên.",
                 "Thế vận hội Olympic có nguồn gốc từ thời Hy Lạp cổ đại."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Hy Lạp có rất nhiều nhà khoa học vĩ đại như Pi-ta-go, Ta-lét, Ơ-clit..."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Hy Lạp có rất nhiều nhà khoa học vĩ đại như Pi-ta-go, Ta-lét, Ơ-clit...",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -166,11 +246,20 @@ window.quizData = {
                 "Các cuộc cách mạng công nghiệp không gây ra bất kỳ tác động tiêu cực nào cho môi trường.",
                 "Internet là một trong những thành tựu vĩ đại của cách mạng công nghiệp lần thứ ba."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Cách mạng công nghiệp gây ra ô nhiễm môi trường, biến đổi khí hậu và sự phân hóa giàu nghèo."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Cách mạng công nghiệp gây ra ô nhiễm môi trường, biến đổi khí hậu và sự phân hóa giàu nghèo.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "James Watt là người hoàn thiện thiết bị nào vào năm 1784?",
@@ -207,5 +296,12 @@ window.quizData = {
             "correct": "AI",
             "explanation": "AI (Artificial Intelligence)."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Lịch sử",
+        "grade": "Lớp 10",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

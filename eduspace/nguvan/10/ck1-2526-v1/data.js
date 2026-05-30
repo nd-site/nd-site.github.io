@@ -1,22 +1,32 @@
 window.quizData = {
     "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 10 (KNTT) – 2025-2026",
     "config": {
-        "testDuration": 5400, // 90 phút
+        "testDuration": 5400,
         "examLayout": {
-            "multiple": { "count": 8, "pointsPerQ": 0.25 }, // 2 điểm trắc nghiệm
-            "essay": { 
-                "count": 3, 
-                "pointsList": { "0": 1.0, "1": 1.0, "2": 6.0 } // 2 câu đọc hiểu (1đ/câu) + 1 bài nghị luận (6đ)
+            "multiple": {
+                "count": 8,
+                "pointsPerQ": 0.25
+            },
+            "essay": {
+                "count": 3,
+                "pointsList": {
+                    "0": 1,
+                    "1": 1,
+                    "2": 6
+                }
             }
         }
     },
     "questions": [
-        // --- PHẦN I: ĐỌC HIỂU ---
-        // Văn bản: Đoạn trích Sử thi "Héc-to từ biệt Ăng-đrô-mác" (Trích I-li-át - Hô-me-rơ)
         {
             "type": "multiple",
             "question": "Sử thi 'I-li-át' thuộc nền văn học nào?",
-            "options": ["Văn học La Mã cổ đại.", "Văn học Hy Lạp cổ đại.", "Văn học Ấn Độ cổ đại.", "Văn học Ai Cập cổ đại."],
+            "options": [
+                "Văn học La Mã cổ đại.",
+                "Văn học Hy Lạp cổ đại.",
+                "Văn học Ấn Độ cổ đại.",
+                "Văn học Ai Cập cổ đại."
+            ],
             "correct": 1,
             "explanation": "Đây là kiệt tác sử thi của Hô-me-rơ, đặt nền móng cho văn học Hy Lạp và phương Tây."
         },
@@ -104,8 +114,6 @@ window.quizData = {
             "correct": 2,
             "explanation": "Sử thi tôn vinh sự hy sinh cá nhân cho cộng đồng và lòng dũng cảm của người anh hùng."
         },
-
-        // Câu hỏi essay đọc hiểu
         {
             "type": "essay",
             "question": "Phân tích tâm trạng của nhân vật Ăng-đrô-mác trong cuộc đối thoại với chồng. Theo em, vì sao nàng lại được coi là hình tượng phụ nữ tiêu biểu của văn học Hy Lạp cổ đại?",
@@ -118,13 +126,18 @@ window.quizData = {
             "suggested": "Bối cảnh chia tay bên cổng Xki-ê giúp làm nổi bật chiều sâu nội tâm của anh hùng. Ở đây, Héc-to không chỉ là dũng sĩ mà còn là người chồng, người cha. Việc ông quyết định rời bỏ bến đỗ bình yên để ra đi chiến đấu càng khẳng định lòng quả cảm và tinh thần trách nhiệm lớn lao của ông.",
             "points": 10
         },
-
-        // --- PHẦN II: VIẾT (NGHỊ LUẬN XÃ HỘI/VĂN HỌC) ---
         {
             "type": "essay",
             "question": "Viết bài văn nghị luận (khoảng 600 chữ) bàn về vấn đề: Trách nhiệm của cá nhân đối với cộng đồng trong bối cảnh xã hội ngày nay (Lấy cảm hứng từ sự lựa chọn của người anh hùng Héc-to).",
             "suggested": "Dàn ý:\n1. Mở bài: Nêu tầm quan trọng của trách nhiệm cộng đồng, dẫn dắt từ hình ảnh Héc-to gác tình riêng để bảo vệ thành Tơ-roa.\n2. Thân bài:\n- Giải thích: Trách nhiệm cá nhân với cộng đồng là ý thức đóng góp công sức, trí tuệ để xây dựng xã hội tốt đẹp hơn.\n- Phân tích: Tại sao cần có trách nhiệm? (Sự gắn kết xã hội, thúc đẩy phát triển bền vững, mang lại ý nghĩa cho sự tồn tại cá nhân).\n- Chứng minh: Các ví dụ trong đại dịch, trong bảo vệ môi trường, hoặc các hoạt động thiện nguyện hiện nay.\n- Phản biện: Trách nhiệm cộng đồng không đồng nghĩa với việc xóa bỏ hoàn toàn quyền lợi cá nhân; cần sự hài hòa.\n3. Kết bài: Khẳng định lại vấn đề và liên hệ bản thân (lời hứa hành động).",
             "points": 60
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Ngữ văn",
+        "grade": "Lớp 10",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

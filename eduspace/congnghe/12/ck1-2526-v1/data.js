@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Hệ thống điện quốc gia bao gồm các thành phần chính nào?",
@@ -25,7 +39,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Lưới điện truyền tải ở Việt Nam hiện nay có cấp điện áp cao nhất là bao nhiêu?",
-            "options": ["110 kV.", "220 kV.", "500 kV.", "800 kV."],
+            "options": [
+                "110 kV.",
+                "220 kV.",
+                "500 kV.",
+                "800 kV."
+            ],
             "correct": 2,
             "explanation": "Đường dây 500 kV Bắc - Nam là trục xương sống của hệ thống điện truyền tải quốc gia."
         },
@@ -44,14 +63,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Linh kiện điện tử nào dùng để hạn chế dòng điện và phân chia điện áp trong mạch?",
-            "options": ["Tụ điện.", "Điện trở.", "Cuộn cảm.", "Diode."],
+            "options": [
+                "Tụ điện.",
+                "Điện trở.",
+                "Cuộn cảm.",
+                "Diode."
+            ],
             "correct": 1,
             "explanation": "Điện trở có đặc tính cản trở dòng điện, tuân theo định luật Ohm."
         },
         {
             "type": "multiple",
             "question": "Trị số của điện trở được xác định bằng các vòng màu. Vòng màu thứ nhất là Đỏ, thứ hai là Đỏ, thứ ba là Nâu, thứ tư là Kim nhũ. Trị số điện trở là:",
-            "options": ["22 Ohm.", "220 Ohm.", "2200 Ohm.", "22000 Ohm."],
+            "options": [
+                "22 Ohm.",
+                "220 Ohm.",
+                "2200 Ohm.",
+                "22000 Ohm."
+            ],
             "correct": 1,
             "explanation": "Đỏ (2), Đỏ (2), Nâu ($10^1$) = $22 \\\\times 10 = 220$ Ohm."
         },
@@ -82,40 +111,63 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Linh kiện điện tử có 3 cực: Emitter (E), Base (B) và Collector (C) được gọi là:",
-            "options": ["Diode.", "Transistor.", "Triac.", "IC."],
+            "options": [
+                "Diode.",
+                "Transistor.",
+                "Triac.",
+                "IC."
+            ],
             "correct": 1,
             "explanation": "Transistor là linh kiện tích cực dùng để khuếch đại hoặc đóng ngắt mạch điện."
         },
         {
             "type": "multiple",
             "question": "Mạch điện trong nhà hiện nay ở Việt Nam sử dụng nguồn điện có thông số là:",
-            "options": ["220V - 50Hz.", "110V - 60Hz.", "220V - 60Hz.", "380V - 50Hz."],
+            "options": [
+                "220V - 50Hz.",
+                "110V - 60Hz.",
+                "220V - 60Hz.",
+                "380V - 50Hz."
+            ],
             "correct": 0,
             "explanation": "Đây là chuẩn điện áp và tần số dân dụng phổ biến nhất."
         },
         {
             "type": "multiple",
             "question": "Thiết bị dùng để tự động ngắt mạch khi có sự cố quá tải hoặc ngắn mạch trong gia đình là:",
-            "options": ["Công tắc.", "Ổ cắm.", "Aptomat (MCB).", "Đồng hồ điện."],
+            "options": [
+                "Công tắc.",
+                "Ổ cắm.",
+                "Aptomat (MCB).",
+                "Đồng hồ điện."
+            ],
             "correct": 2,
             "explanation": "Aptomat giúp bảo vệ an toàn cho thiết bị và người dùng khi có sự cố dòng điện."
         },
         {
             "type": "multiple",
             "question": "Trong các nhà máy thủy điện, năng lượng nào được chuyển hóa thành điện năng?",
-            "options": ["Nhiệt năng.", "Quang năng.", "Thế năng và động năng của dòng nước.", "Năng lượng hạt nhân."],
+            "options": [
+                "Nhiệt năng.",
+                "Quang năng.",
+                "Thế năng và động năng của dòng nước.",
+                "Năng lượng hạt nhân."
+            ],
             "correct": 2,
             "explanation": "Dòng nước làm quay tuabin, kéo máy phát điện hoạt động."
         },
         {
             "type": "multiple",
             "question": "Đơn vị đo của Điện dung tụ điện là:",
-            "options": ["Ohm ($\\Omega$).", "Fara (F).", "Henri (H).", "Vôn (V)."],
+            "options": [
+                "Ohm ($\\Omega$).",
+                "Fara (F).",
+                "Henri (H).",
+                "Vôn (V)."
+            ],
             "correct": 1,
             "explanation": "Thường dùng các đơn vị nhỏ hơn như $\\mu F, nF, pF$."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về hệ thống điện:",
@@ -125,8 +177,19 @@ window.quizData = {
                 "Hệ thống điện quốc gia giúp điều hòa công suất giữa các vùng miền khác nhau.",
                 "Để đảm bảo an toàn, các đường dây truyền tải điện siêu cao áp luôn được đặt chìm dưới lòng đất trong khu dân cư."
             ],
-            "correct": [true, false, true, false],
-            "explanation": "Lưới điện truyền tải mới đi xa, lưới phân phối cấp điện tại chỗ. Đường dây siêu cao áp thường đi trên không để tản nhiệt và giảm chi phí."
+            "correct": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "explanation": "Lưới điện truyền tải mới đi xa, lưới phân phối cấp điện tại chỗ. Đường dây siêu cao áp thường đi trên không để tản nhiệt và giảm chi phí.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -137,8 +200,19 @@ window.quizData = {
                 "Điện trở nhiệt (Thermistor) có trị số thay đổi theo cường độ ánh sáng chiếu vào.",
                 "Sai số của điện trở được ký hiệu bằng vòng màu cuối cùng (thường là Kim nhũ hoặc Ngân nhũ)."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Linh kiện thay đổi theo ánh sáng là Quang trở (LDR), điện trở nhiệt thay đổi theo nhiệt độ."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Linh kiện thay đổi theo ánh sáng là Quang trở (LDR), điện trở nhiệt thay đổi theo nhiệt độ.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -149,8 +223,19 @@ window.quizData = {
                 "Nối đất vỏ kim loại của các thiết bị điện (như tủ lạnh, máy giặt) giúp phòng tránh điện giật khi rò điện.",
                 "Khi có người bị điện giật, việc đầu tiên cần làm là dùng tay kéo người đó ra khỏi nguồn điện."
             ],
-            "correct": [true, false, true, false],
-            "explanation": "Tuyệt đối không chạm vào người bị giật khi chưa ngắt điện. Phải dùng vật cách điện để tách nạn nhân."
+            "correct": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "explanation": "Tuyệt đối không chạm vào người bị giật khi chưa ngắt điện. Phải dùng vật cách điện để tách nạn nhân.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -161,11 +246,20 @@ window.quizData = {
                 "LED là một loại diode đặc biệt có khả năng phát sáng khi có dòng điện đi qua.",
                 "Transistor chỉ có thể hoạt động ở chế độ đóng hoặc ngắt (khóa), không có chế độ khuếch đại."
             ],
-            "correct": [true, false, true, false],
-            "explanation": "Transistor có 3 chế độ: Đóng, Ngắt và Khuếch đại. Loại NPN mới dẫn từ C sang E."
+            "correct": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "explanation": "Transistor có 3 chế độ: Đóng, Ngắt và Khuếch đại. Loại NPN mới dẫn từ C sang E.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                false
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tần số tiêu chuẩn của lưới điện quốc gia Việt Nam là bao nhiêu Hz?",
@@ -202,5 +296,12 @@ window.quizData = {
             "correct": "PNP",
             "explanation": "Hai loại bổ sung cho nhau trong các thiết kế mạch."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Công nghệ",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

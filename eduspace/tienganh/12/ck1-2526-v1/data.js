@@ -3,99 +3,171 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Choose the word whose underlined part is pronounced differently from that of the others:",
-            "options": ["admir**ed**", "stopp**ed**", "look**ed**", "finish**ed**"],
+            "options": [
+                "admir**ed**",
+                "stopp**ed**",
+                "look**ed**",
+                "finish**ed**"
+            ],
             "correct": 0,
             "explanation": "'Admired' is pronounced /ədˈmaɪəd/ (ends in /d/), while the others end in /t/."
         },
         {
             "type": "multiple",
             "question": "Steve Jobs is widely ______ as one of the pioneers of the personal computer revolution.",
-            "options": ["admired", "admire", "admiration", "admirable"],
+            "options": [
+                "admired",
+                "admire",
+                "admiration",
+                "admirable"
+            ],
             "correct": 0,
             "explanation": "Passive voice: 'is widely admired' (được ngưỡng mộ rộng rãi)."
         },
         {
             "type": "multiple",
             "question": "Living in a ______ society helps people understand and respect different cultures.",
-            "options": ["multicultural", "single", "local", "traditional"],
+            "options": [
+                "multicultural",
+                "single",
+                "local",
+                "traditional"
+            ],
             "correct": 0,
             "explanation": "Multicultural society: xã hội đa văn hóa."
         },
         {
             "type": "multiple",
             "question": "We should adopt a ______ lifestyle to reduce our carbon footprint and protect the planet.",
-            "options": ["green", "modern", "fast", "wasteful"],
+            "options": [
+                "green",
+                "modern",
+                "fast",
+                "wasteful"
+            ],
             "correct": 0,
             "explanation": "Green lifestyle: lối sống xanh."
         },
         {
             "type": "multiple",
             "question": "The ______ play an important role in shaping public opinion on various social issues.",
-            "options": ["mass media", "newspapers", "radio", "internet"],
+            "options": [
+                "mass media",
+                "newspapers",
+                "radio",
+                "internet"
+            ],
             "correct": 0,
             "explanation": "Mass media: truyền thông đại chúng (danh từ số nhiều đi với 'the')."
         },
         {
             "type": "multiple",
             "question": "Ha Long Bay is recognized as a World ______ Site by UNESCO.",
-            "options": ["Heritage", "Culture", "Tradition", "History"],
+            "options": [
+                "Heritage",
+                "Culture",
+                "Tradition",
+                "History"
+            ],
             "correct": 0,
             "explanation": "World Heritage Site: Di sản thế giới."
         },
         {
             "type": "multiple",
             "question": "The biography ______ by a famous writer last year became a best-seller.",
-            "options": ["written", "writing", "to write", "wrote"],
+            "options": [
+                "written",
+                "writing",
+                "to write",
+                "wrote"
+            ],
             "correct": 0,
             "explanation": "Reduced relative clause (passive): 'which was written' -> 'written'."
         },
         {
             "type": "multiple",
             "question": "If people ______ more aware of environmental problems, they would stop littering.",
-            "options": ["were", "are", "had been", "will be"],
+            "options": [
+                "were",
+                "are",
+                "had been",
+                "will be"
+            ],
             "correct": 0,
             "explanation": "Second conditional for hypothetical situations in the present."
         },
         {
             "type": "multiple",
             "question": "Traditional music and dance should be ______ for future generations.",
-            "options": ["preserved", "destroyed", "changed", "ignored"],
+            "options": [
+                "preserved",
+                "destroyed",
+                "changed",
+                "ignored"
+            ],
             "correct": 0,
             "explanation": "Preserve: bảo tồn."
         },
         {
             "type": "multiple",
             "question": "Social ______ have changed the way we communicate and share information.",
-            "options": ["networks", "systems", "societies", "groups"],
+            "options": [
+                "networks",
+                "systems",
+                "societies",
+                "groups"
+            ],
             "correct": 0,
             "explanation": "Social networks: mạng xã hội."
         },
         {
             "type": "multiple",
             "question": "The volunteers spent the whole day ______ up the trash on the beach.",
-            "options": ["cleaning", "to clean", "clean", "cleaned"],
+            "options": [
+                "cleaning",
+                "to clean",
+                "clean",
+                "cleaned"
+            ],
             "correct": 0,
             "explanation": "Spend time + V-ing: dành thời gian làm gì."
         },
         {
             "type": "multiple",
             "question": "Many young people are ______ in learning about their ancestors' stories.",
-            "options": ["interested", "interesting", "interest", "interests"],
+            "options": [
+                "interested",
+                "interesting",
+                "interest",
+                "interests"
+            ],
             "correct": 0,
             "explanation": "Interested in: quan tâm/hứng thú với cái gì."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Read the text about Green Living and decide whether the statements are True or False:",
@@ -105,8 +177,19 @@ window.quizData = {
                 "Using public transportation instead of private cars is a way to live green.",
                 "Environmental protection is the responsibility of only the government."
             ],
-            "correct": [false, true, true, false],
-            "explanation": "Green living involves many actions. Everyone is responsible for the environment."
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Green living involves many actions. Everyone is responsible for the environment.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -117,8 +200,19 @@ window.quizData = {
                 "Misunderstandings can happen when people are not aware of cultural differences.",
                 "Food is the only way to experience different cultures."
             ],
-            "correct": [true, false, true, false],
-            "explanation": "Respecting others' traditions is vital. Culture includes music, values, and languages too."
+            "correct": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "explanation": "Respecting others' traditions is vital. Culture includes music, values, and languages too.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -129,8 +223,19 @@ window.quizData = {
                 "Media only provides entertainment and has no educational value.",
                 "People should check multiple sources to verify the information."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Media has significant educational and informational roles."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Media has significant educational and informational roles.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -141,11 +246,20 @@ window.quizData = {
                 "Modernization always helps preserve traditional crafts.",
                 "Protecting heritage sites helps promote local tourism."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Modernization sometimes threatens traditional crafts."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Modernization sometimes threatens traditional crafts.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Fill in the blank with the correct form of the word in brackets: 'The story was very (INSPIRE) ______ to young people.'",
@@ -182,5 +296,12 @@ window.quizData = {
             "correct": "for",
             "explanation": "Famous for something: nổi tiếng vì cái gì."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Tiếng Anh",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

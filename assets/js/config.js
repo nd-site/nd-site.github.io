@@ -65,28 +65,29 @@ async function getEduKeys() {
     // If GitHub Secrets are already injected (at least Gemini and AppId), stop here
     if (_cachedKeys.gemini && _cachedKeys.fbAppId) return _cachedKeys;
 
-    // 2. If not in GitHub Environment, fallback to local .env (For development)
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    if (isLocalhost) {
-        // Try to fetch env.json first (works on servers that block dotfiles like Live Server)
-        try {
-            const res = await fetch('/env.json', { cache: 'no-store' });
-            if (res.ok) {
-                const data = await res.json();
-                if (data.GEMINI_API_KEY) _cachedKeys.gemini = data.GEMINI_API_KEY;
-                if (data.FIREBASE_API_KEY) _cachedKeys.firebase = data.FIREBASE_API_KEY;
-                if (data.FIREBASE_AUTH_DOMAIN) _cachedKeys.fbAuthDomain = data.FIREBASE_AUTH_DOMAIN;
-                if (data.FIREBASE_DATABASE_URL) _cachedKeys.fbDatabaseURL = data.FIREBASE_DATABASE_URL;
-                if (data.FIREBASE_PROJECT_ID) _cachedKeys.fbProjectId = data.FIREBASE_PROJECT_ID;
-                if (data.FIREBASE_STORAGE_BUCKET) _cachedKeys.fbStorageBucket = data.FIREBASE_STORAGE_BUCKET;
-                if (data.FIREBASE_MESSAGING_SENDER_ID) _cachedKeys.fbMessagingSenderId = data.FIREBASE_MESSAGING_SENDER_ID;
-                if (data.FIREBASE_APP_ID) _cachedKeys.fbAppId = data.FIREBASE_APP_ID;
-                if (data.FIREBASE_MEASUREMENT_ID) _cachedKeys.fbMeasurementId = data.FIREBASE_MEASUREMENT_ID;
-            }
-        } catch (e) {}
+    // 2. Fallback: đọc env.json hoặc .env (dành cho local dev hoặc deploy thủ công có env.json)
+    // Trên GitHub Pages: bước 1 đã inject đủ key nên không cần đến đây.
+    // Trên Firebase Hosting (deploy thủ công): env.json được tải lên nên vẫn hoạt động.
+    try {
+        const res = await fetch('/env.json', { cache: 'no-store' });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.GEMINI_API_KEY) _cachedKeys.gemini = data.GEMINI_API_KEY;
+            if (data.FIREBASE_API_KEY) _cachedKeys.firebase = data.FIREBASE_API_KEY;
+            if (data.FIREBASE_AUTH_DOMAIN) _cachedKeys.fbAuthDomain = data.FIREBASE_AUTH_DOMAIN;
+            if (data.FIREBASE_DATABASE_URL) _cachedKeys.fbDatabaseURL = data.FIREBASE_DATABASE_URL;
+            if (data.FIREBASE_PROJECT_ID) _cachedKeys.fbProjectId = data.FIREBASE_PROJECT_ID;
+            if (data.FIREBASE_STORAGE_BUCKET) _cachedKeys.fbStorageBucket = data.FIREBASE_STORAGE_BUCKET;
+            if (data.FIREBASE_MESSAGING_SENDER_ID) _cachedKeys.fbMessagingSenderId = data.FIREBASE_MESSAGING_SENDER_ID;
+            if (data.FIREBASE_APP_ID) _cachedKeys.fbAppId = data.FIREBASE_APP_ID;
+            if (data.FIREBASE_MEASUREMENT_ID) _cachedKeys.fbMeasurementId = data.FIREBASE_MEASUREMENT_ID;
+        }
+    } catch (e) {}
 
-        // Fallback to .env parser if env.json was not loaded
-        if (!_cachedKeys.gemini || !_cachedKeys.fbAppId) {
+    // Fallback thêm: thử đọc .env nếu env.json không có (chỉ hoạt động ở localhost)
+    if (!_cachedKeys.gemini || !_cachedKeys.fbAppId) {
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (isLocalhost) {
             const paths = ['/.env', '/eduspace/.env'];
             for (const path of paths) {
                 try {
@@ -100,7 +101,6 @@ async function getEduKeys() {
                             const [key, ...valParts] = trimmed.split('=');
                             if (!key || valParts.length === 0) continue;
                             const value = valParts.join('=').trim().replace(/['"]/g, '');
-
                             switch(key) {
                                 case 'GEMINI_API_KEY': if (!_cachedKeys.gemini) _cachedKeys.gemini = value; foundMatch = true; break;
                                 case 'FIREBASE_API_KEY': if (!_cachedKeys.firebase) _cachedKeys.firebase = value; foundMatch = true; break;
@@ -125,6 +125,7 @@ async function getEduKeys() {
     
     return _cachedKeys;
 }
+window.getEduKeys = getEduKeys;
 
 window.getGeminiApiKey = async () => {
     const keys = await getEduKeys();

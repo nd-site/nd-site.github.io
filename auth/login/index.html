@@ -93,6 +93,17 @@
             app = getApp();
         } else {
             const keys = await window.getEduKeys();
+            const effectiveApiKey = keys.firebase || EDU_CONFIG.firebaseApiKey;
+            const effectiveAppId = keys.fbAppId || EDU_CONFIG.firebaseAppId;
+            if (!isSet(effectiveApiKey) || !isSet(effectiveAppId)) {
+                console.error('Firebase credentials are not configured (placeholders detected). Skipping Firebase initialization.');
+                // Provide a visible notice in the form if possible
+                const notice = document.createElement('div');
+                notice.className = 'status-msg show error';
+                notice.textContent = 'Hệ thống chưa cấu hình dịch vụ xác thực (Firebase). Vui lòng liên hệ quản trị.';
+                document.body.prepend(notice);
+                throw new Error("Firebase credentials missing");
+            }
             const firebaseConfig = {
                 apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
                 authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,

@@ -3,17 +3,36 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Các nguyên tố hóa học chính cấu tạo nên tế bào bao gồm:",
-            "options": ["C, H, O, N.", "Ca, P, K, S.", "Fe, Cu, Zn, Mg.", "C, H, O, P."],
+            "options": [
+                "C, H, O, N.",
+                "Ca, P, K, S.",
+                "Fe, Cu, Zn, Mg.",
+                "C, H, O, P."
+            ],
             "correct": 0,
             "explanation": "C, H, O, N chiếm khoảng 96% khối lượng cơ thể sinh vật."
         },
@@ -32,7 +51,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Đơn phân cấu tạo nên phân tử Protein là:",
-            "options": ["Nucleotide.", "Amino acid.", "Glucose.", "Fatty acid."],
+            "options": [
+                "Nucleotide.",
+                "Amino acid.",
+                "Glucose.",
+                "Fatty acid."
+            ],
             "correct": 1,
             "explanation": "Có khoảng 20 loại amino acid chính cấu tạo nên các loại protein khác nhau."
         },
@@ -51,42 +75,72 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Thành phần nào sau đây chỉ có ở tế bào nhân thực mà không có ở tế bào nhân sơ?",
-            "options": ["Màng sinh chất.", "Ribosome.", "Nhân có màng bao bọc.", "Tế bào chất."],
+            "options": [
+                "Màng sinh chất.",
+                "Ribosome.",
+                "Nhân có màng bao bọc.",
+                "Tế bào chất."
+            ],
             "correct": 2,
             "explanation": "Tế bào nhân sơ chưa có nhân hoàn chỉnh (chỉ có vùng nhân)."
         },
         {
             "type": "multiple",
             "question": "Bào quan nào được coi là 'nhà máy năng lượng' của tế bào?",
-            "options": ["Lưới nội chất.", "Bộ máy Golgi.", "Ti thể.", "Lục lạp."],
+            "options": [
+                "Lưới nội chất.",
+                "Bộ máy Golgi.",
+                "Ti thể.",
+                "Lục lạp."
+            ],
             "correct": 2,
             "explanation": "Ti thể là nơi diễn ra quá trình hô hấp tế bào để tạo ra ATP (năng lượng)."
         },
         {
             "type": "multiple",
             "question": "Lục lạp là bào quan đặc trưng của loại tế bào nào?",
-            "options": ["Tế bào động vật.", "Tế bào thực vật.", "Tế bào nấm.", "Tế bào vi khuẩn."],
+            "options": [
+                "Tế bào động vật.",
+                "Tế bào thực vật.",
+                "Tế bào nấm.",
+                "Tế bào vi khuẩn."
+            ],
             "correct": 1,
             "explanation": "Lục lạp chứa diệp lục để thực hiện quá trình quang hợp ở cây xanh."
         },
         {
             "type": "multiple",
             "question": "Sự vận chuyển các chất từ nơi có nồng độ thấp đến nơi có nồng độ cao và cần tiêu tốn năng lượng được gọi là:",
-            "options": ["Vận chuyển thụ động.", "Khuếch tán đơn giản.", "Vận chuyển chủ động.", "Thẩm thấu."],
+            "options": [
+                "Vận chuyển thụ động.",
+                "Khuếch tán đơn giản.",
+                "Vận chuyển chủ động.",
+                "Thẩm thấu."
+            ],
             "correct": 2,
             "explanation": "Vận chuyển chủ động (tích cực) đi ngược chiều gradient nồng độ nên cần năng lượng ATP."
         },
         {
             "type": "multiple",
             "question": "Enzyme là chất xúc tác sinh học có bản chất là:",
-            "options": ["Lipid.", "Protein.", "Cacbonhydrat.", "Acid nucleic."],
+            "options": [
+                "Lipid.",
+                "Protein.",
+                "Cacbonhydrat.",
+                "Acid nucleic."
+            ],
             "correct": 1,
             "explanation": "Hầu hết các enzyme đều là các phân tử protein có cấu trúc không gian đặc thù."
         },
         {
             "type": "multiple",
             "question": "Thành tế bào của thực vật có cấu tạo chính từ chất nào?",
-            "options": ["Chitin.", "Peptidoglycan.", "Cellulose.", "Glycogen."],
+            "options": [
+                "Chitin.",
+                "Peptidoglycan.",
+                "Cellulose.",
+                "Glycogen."
+            ],
             "correct": 2,
             "explanation": "Cellulose tạo nên bộ khung bền vững cho tế bào thực vật."
         },
@@ -105,12 +159,15 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Quá trình một tế bào thu nhận các phân tử lớn hoặc vi khuẩn vào bên trong bằng cách biến dạng màng sinh chất gọi là:",
-            "options": ["Xuất bào.", "Thực bào.", "Khuếch tán.", "Thẩm thấu."],
+            "options": [
+                "Xuất bào.",
+                "Thực bào.",
+                "Khuếch tán.",
+                "Thẩm thấu."
+            ],
             "correct": 1,
             "explanation": "Thực bào là một hình thức của nhập bào, dùng để 'ăn' các chất rắn."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các phát biểu sau về thành phần hóa học của tế bào:",
@@ -120,8 +177,19 @@ window.quizData = {
                 "Protein chỉ đóng vai trò cấu trúc, không có chức năng bảo vệ hay điều hòa.",
                 "Phân tử ATP được coi là 'đồng tiền năng lượng' của tế bào."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Protein có rất nhiều chức năng: cấu trúc, xúc tác, bảo vệ, điều hòa, vận chuyển..."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Protein có rất nhiều chức năng: cấu trúc, xúc tác, bảo vệ, điều hòa, vận chuyển...",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -132,8 +200,19 @@ window.quizData = {
                 "Bộ máy Golgi có chức năng sửa đổi, đóng gói và phân phối sản phẩm của tế bào.",
                 "Màng sinh chất có tính thấm chọn lọc, chỉ cho phép một số chất đi qua."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Ribosome là nơi tổng hợp PROTEIN. Lưới nội chất trơn mới tổng hợp lipid."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Ribosome là nơi tổng hợp PROTEIN. Lưới nội chất trơn mới tổng hợp lipid.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -144,8 +223,19 @@ window.quizData = {
                 "Vận chuyển thụ động luôn cần sự hỗ trợ của năng lượng ATP.",
                 "Kênh protein giúp vận chuyển các chất có kích thước lớn hoặc tích điện qua màng."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Vận chuyển thụ động KHÔNG tiêu tốn năng lượng ATP."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Vận chuyển thụ động KHÔNG tiêu tốn năng lượng ATP.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -156,11 +246,20 @@ window.quizData = {
                 "Cơ chất là chất tham gia phản ứng được enzyme xúc tác.",
                 "Enzyme giúp làm tăng năng lượng hoạt hóa của phản ứng hóa học."
             ],
-            "correct": [true, true, true, false],
-            "explanation": "Enzyme làm GIẢM năng lượng hoạt hóa, từ đó làm tăng tốc độ phản ứng."
+            "correct": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Enzyme làm GIẢM năng lượng hoạt hóa, từ đó làm tăng tốc độ phản ứng.",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                false
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Viết tên loại đường đa (polysaccharide) dự trữ ở cơ thể động vật.",
@@ -197,5 +296,12 @@ window.quizData = {
             "correct": "Adenosine triphosphate",
             "explanation": "Gồm bazơ nitơ Adenine, đường Ribose và 3 nhóm phosphate."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Sinh học",
+        "grade": "Lớp 10",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

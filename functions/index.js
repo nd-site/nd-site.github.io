@@ -68,7 +68,7 @@ async function getGeminiKey() {
 /**
  * Cloud Function: geminiProxy
  *
- * POST body: { "contents": [...], "model": "gemini-3.1-flash-lite" }
+ * POST body: { "contents": [...], "model": "gemini-3.1-flash-lite", "generationConfig": {...} }
  * Response:  { "text": "...", "model": "..." }
  */
 exports.geminiProxy = onRequest(
@@ -92,7 +92,7 @@ exports.geminiProxy = onRequest(
         }
 
         try {
-            const { contents, model: requestedModel } = req.body;
+            const { contents, model: requestedModel, generationConfig } = req.body;
 
             if (!contents || !Array.isArray(contents)) {
                 res.status(400).json({ error: "Thiếu trường 'contents' trong request body." });
@@ -119,6 +119,7 @@ exports.geminiProxy = onRequest(
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     contents,
+                    ...(generationConfig ? { generationConfig } : {}),
                     safetySettings: [
                         { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
                         { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },

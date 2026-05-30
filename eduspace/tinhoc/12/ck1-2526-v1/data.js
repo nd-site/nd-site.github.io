@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Trí tuệ nhân tạo (AI) là gì?",
@@ -49,68 +63,111 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Thiết bị dùng để khuếch đại tín hiệu và truyền đi xa trong mạng máy tính gọi là:",
-            "options": ["Hub.", "Switch.", "Repeater.", "Bridge."],
+            "options": [
+                "Hub.",
+                "Switch.",
+                "Repeater.",
+                "Bridge."
+            ],
             "correct": 2,
             "explanation": "Repeater (Bộ lặp) nhận tín hiệu, khuếch đại và phát lại để mở rộng khoảng cách truyền."
         },
         {
             "type": "multiple",
             "question": "Kỹ thuật tấn công mạng nhằm chiếm đoạt tài khoản bằng cách giả mạo trang web uy tín gọi là:",
-            "options": ["Virus.", "Worm.", "Phishing.", "DDoS."],
+            "options": [
+                "Virus.",
+                "Worm.",
+                "Phishing.",
+                "DDoS."
+            ],
             "correct": 2,
             "explanation": "Phishing (tấn công giả mạo) thường lừa người dùng nhập thông tin vào trang web giả."
         },
         {
             "type": "multiple",
             "question": "Trong HTML, thẻ nào được dùng để tạo tiêu đề trang web (hiển thị trên thanh tiêu đề của trình duyệt)?",
-            "options": ["<header>", "<h1>", "<title>", "<body>"],
+            "options": [
+                "<header>",
+                "<h1>",
+                "<title>",
+                "<body>"
+            ],
             "correct": 2,
             "explanation": "Thẻ <title> nằm trong thẻ <head> dùng để xác định tiêu đề trang."
         },
         {
             "type": "multiple",
             "question": "Để định dạng màu chữ cho một đoạn văn bản trong CSS, ta dùng thuộc tính nào?",
-            "options": ["text-color", "font-style", "color", "background-color"],
+            "options": [
+                "text-color",
+                "font-style",
+                "color",
+                "background-color"
+            ],
             "correct": 2,
             "explanation": "Thuộc tính 'color' dùng để xác định màu của văn bản."
         },
         {
             "type": "multiple",
             "question": "Ứng dụng nào của AI có khả năng hiểu và trả lời câu hỏi của con người một cách tự nhiên?",
-            "options": ["Chatbot.", "Hệ thống khuyến nghị.", "Nhận diện khuôn mặt.", "Xe tự lái."],
+            "options": [
+                "Chatbot.",
+                "Hệ thống khuyến nghị.",
+                "Nhận diện khuôn mặt.",
+                "Xe tự lái."
+            ],
             "correct": 0,
             "explanation": "Chatbot (như ChatGPT) sử dụng xử lý ngôn ngữ tự nhiên (NLP) để tương tác."
         },
         {
             "type": "multiple",
             "question": "Hệ thống nào giúp bảo vệ mạng nội bộ trước các truy cập trái phép từ bên ngoài?",
-            "options": ["Modem.", "Tường lửa (Firewall).", "Card mạng.", "Cáp quang."],
+            "options": [
+                "Modem.",
+                "Tường lửa (Firewall).",
+                "Card mạng.",
+                "Cáp quang."
+            ],
             "correct": 1,
             "explanation": "Firewall kiểm soát lưu lượng mạng dựa trên các quy tắc bảo mật."
         },
         {
             "type": "multiple",
             "question": "Thẻ HTML nào dùng để chèn một hình ảnh vào trang web?",
-            "options": ["<image>", "<img>", "<picture>", "<src>"],
+            "options": [
+                "<image>",
+                "<img>",
+                "<picture>",
+                "<src>"
+            ],
             "correct": 1,
             "explanation": "Thẻ <img> yêu cầu thuộc tính src để chỉ đường dẫn đến ảnh."
         },
         {
             "type": "multiple",
             "question": "Giao thức nào dùng để bảo mật thông tin truyền tải trên web thông qua mã hóa?",
-            "options": ["HTTP.", "HTTPS.", "FTP.", "TELNET."],
+            "options": [
+                "HTTP.",
+                "HTTPS.",
+                "FTP.",
+                "TELNET."
+            ],
             "correct": 1,
             "explanation": "HTTPS (S = Secure) sử dụng chứng chỉ SSL/TLS để mã hóa dữ liệu."
         },
         {
             "type": "multiple",
             "question": "Việc sử dụng Deepfake để tạo ra các video giả mạo nhằm bôi nhọ người khác là vi phạm khía cạnh nào?",
-            "options": ["Kỹ thuật đồ họa.", "Đạo đức và pháp luật số.", "Tốc độ mạng.", "Dung lượng lưu trữ."],
+            "options": [
+                "Kỹ thuật đồ họa.",
+                "Đạo đức và pháp luật số.",
+                "Tốc độ mạng.",
+                "Dung lượng lưu trữ."
+            ],
             "correct": 1,
             "explanation": "Đây là hành vi lợi dụng công nghệ cao để xâm phạm quyền cá nhân và gây hại xã hội."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về Trí tuệ nhân tạo (AI):",
@@ -120,8 +177,19 @@ window.quizData = {
                 "Hệ thống gợi ý của Netflix hay YouTube là một ứng dụng của AI.",
                 "AI không gây ra bất kỳ lo ngại nào về vấn đề việc làm trong tương lai."
             ],
-            "correct": [false, true, true, false],
-            "explanation": "AI vẫn chưa có được cảm xúc và sự sáng tạo bản năng của con người. Sự phát triển của AI đang gây ra lo ngại về sự mất việc làm ở một số ngành nghề lặp đi lặp lại."
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "explanation": "AI vẫn chưa có được cảm xúc và sự sáng tạo bản năng của con người. Sự phát triển của AI đang gây ra lo ngại về sự mất việc làm ở một số ngành nghề lặp đi lặp lại.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -132,8 +200,19 @@ window.quizData = {
                 "Wifi 6 là chuẩn kết nối mạng có dây mới nhất hiện nay.",
                 "Phần mềm diệt virus là công cụ bảo mật duy nhất mà người dùng cần có."
             ],
-            "correct": [true, true, false, false],
-            "explanation": "Wifi là mạng KHÔNG DÂY. Bảo mật cần nhiều lớp: Firewall, ý thức người dùng, cập nhật phần mềm..."
+            "correct": [
+                true,
+                true,
+                false,
+                false
+            ],
+            "explanation": "Wifi là mạng KHÔNG DÂY. Bảo mật cần nhiều lớp: Firewall, ý thức người dùng, cập nhật phần mềm...",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -144,8 +223,19 @@ window.quizData = {
                 "Một trang web bắt buộc phải có thẻ <body> để hiển thị nội dung cho người dùng.",
                 "Để thay đổi kích thước chữ, ta dùng thuộc tính 'font-weight' trong CSS."
             ],
-            "correct": [true, true, true, false],
-            "explanation": "Thuộc tính 'font-size' dùng để đổi kích thước chữ. 'font-weight' dùng để đổi độ đậm nhạt."
+            "correct": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Thuộc tính 'font-size' dùng để đổi kích thước chữ. 'font-weight' dùng để đổi độ đậm nhạt.",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -156,11 +246,20 @@ window.quizData = {
                 "Mọi thông tin do AI tạo ra đều hoàn toàn chính xác và trung lập.",
                 "Việc ghi rõ nguồn khi sử dụng tư liệu từ Internet là hành động tôn trọng bản quyền."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "AI có thể tạo ra thông tin sai lệch (hallucination) dựa trên dữ liệu đào tạo có thành kiến."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "AI có thể tạo ra thông tin sai lệch (hallucination) dựa trên dữ liệu đào tạo có thành kiến.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tên một hệ thống AI nổi tiếng của OpenAI có khả năng hội thoại như con người.",
@@ -197,5 +296,12 @@ window.quizData = {
             "correct": "Switch",
             "explanation": "Bộ chuyển mạch (Switch)."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Tin học",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

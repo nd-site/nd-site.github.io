@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Phát biểu nào sau đây là đúng về tốc độ và vận tốc?",
@@ -73,7 +87,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Đại lượng đặc trưng cho khả năng thực hiện công nhanh hay chậm của lực được gọi là:",
-            "options": ["Công cơ học.", "Công suất.", "Động năng.", "Thế năng."],
+            "options": [
+                "Công cơ học.",
+                "Công suất.",
+                "Động năng.",
+                "Thế năng."
+            ],
             "correct": 1,
             "explanation": "Công suất $P = A/t$ là tốc độ thực hiện công."
         },
@@ -104,21 +123,36 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Đơn vị của công suất là:",
-            "options": ["Jun (J).", "Niutơn (N).", "Oat (W).", "Mã lực (HP) và Oat (W)."],
+            "options": [
+                "Jun (J).",
+                "Niutơn (N).",
+                "Oat (W).",
+                "Mã lực (HP) và Oat (W)."
+            ],
             "correct": 3,
             "explanation": "Watt (W) là đơn vị SI, HP cũng thường dùng trong kỹ thuật."
         },
         {
             "type": "multiple",
             "question": "Lực đẩy Archimedes tác dụng lên vật nhúng trong chất lỏng có chiều như thế nào?",
-            "options": ["Hướng sang ngang.", "Hướng thẳng đứng từ dưới lên.", "Hướng thẳng đứng từ trên xuống.", "Cùng chiều với trọng lực."],
+            "options": [
+                "Hướng sang ngang.",
+                "Hướng thẳng đứng từ dưới lên.",
+                "Hướng thẳng đứng từ trên xuống.",
+                "Cùng chiều với trọng lực."
+            ],
             "correct": 1,
             "explanation": "Lực đẩy Archimedes luôn hướng ngược chiều với trọng lực."
         },
         {
             "type": "multiple",
             "question": "Một xe máy đang chạy với vận tốc 36 km/h thì hãm phanh chuyển động chậm dần đều. Sau 5s xe dừng hẳn. Gia tốc của xe là:",
-            "options": ["$2 m/s^2$", "$-2 m/s^2$", "$7,2 m/s^2$", "$-7,2 m/s^2$"],
+            "options": [
+                "$2 m/s^2$",
+                "$-2 m/s^2$",
+                "$7,2 m/s^2$",
+                "$-7,2 m/s^2$"
+            ],
             "correct": 1,
             "explanation": "$v_0 = 10 m/s, v = 0, t = 5s \\\\Rightarrow a = (0 - 10) / 5 = -2 m/s^2$."
         },
@@ -134,8 +168,6 @@ window.quizData = {
             "correct": 0,
             "explanation": "Mét (m), Kilôgam (kg), Giây (s) là 3 trong số 7 đơn vị cơ bản của hệ SI."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các phát biểu sau về lực và chuyển động:",
@@ -145,8 +177,19 @@ window.quizData = {
                 "Trọng lực là lực hút của Trái Đất tác dụng lên vật, có điểm đặt tại trọng tâm của vật.",
                 "Lực và phản lực luôn xuất hiện và mất đi đồng thời (Định luật III Newton)."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Vật vẫn có thể chuyển động thẳng đều nếu tổng hợp lực bằng 0 (quán tính)."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Vật vẫn có thể chuyển động thẳng đều nếu tổng hợp lực bằng 0 (quán tính).",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -157,8 +200,19 @@ window.quizData = {
                 "Cơ năng của vật bằng tổng động năng và thế năng.",
                 "Công suất của một động cơ cho biết khả năng làm việc của động cơ đó trong một đơn vị thời gian."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Định luật bảo toàn cơ năng đúng khi vật chỉ chịu tác dụng của lực thế (như trọng lực, lực đàn hồi)."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Định luật bảo toàn cơ năng đúng khi vật chỉ chịu tác dụng của lực thế (như trọng lực, lực đàn hồi).",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -169,8 +223,19 @@ window.quizData = {
                 "Giá trị trung bình của các lần đo được coi là giá trị thực của đại lượng cần đo.",
                 "Cách viết kết quả đo đúng tiêu chuẩn là: $x = \\\\bar{x} \\\\pm \\\\Delta x$."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Giá trị trung bình chỉ là giá trị gần đúng nhất với giá trị thực."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Giá trị trung bình chỉ là giá trị gần đúng nhất với giá trị thực.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -181,11 +246,20 @@ window.quizData = {
                 "Ở cùng một độ cao, vật ném ngang và vật rơi tự do sẽ chạm đất cùng lúc.",
                 "Tầm xa của vật ném ngang tỉ lệ thuận với vận tốc ném ban đầu."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Vật ném ngang có quỹ đạo là một nhánh của đường parabol."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Vật ném ngang có quỹ đạo là một nhánh của đường parabol.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tính động năng (J) của một vật có khối lượng 2kg đang chuyển động với vận tốc 5 m/s.",
@@ -222,5 +296,12 @@ window.quizData = {
             "correct": "80",
             "explanation": "$H = (800 / 1000) . 100 = 80\\%$."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Vật lí",
+        "grade": "Lớp 10",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

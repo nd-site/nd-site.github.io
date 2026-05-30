@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Các hoạt động cơ bản của nền kinh tế bao gồm:",
@@ -25,7 +39,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Trong nền kinh tế, chủ thể nào đóng vai trò quan trọng nhất trong việc điều tiết vĩ mô và đảm bảo ổn định xã hội?",
-            "options": ["Chủ thể sản xuất.", "Chủ thể tiêu dùng.", "Chủ thể Nhà nước.", "Chủ thể trung gian."],
+            "options": [
+                "Chủ thể sản xuất.",
+                "Chủ thể tiêu dùng.",
+                "Chủ thể Nhà nước.",
+                "Chủ thể trung gian."
+            ],
             "correct": 2,
             "explanation": "Nhà nước sử dụng pháp luật và các chính sách kinh tế để quản lý và điều tiết nền kinh tế."
         },
@@ -68,7 +87,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Loại thuế nào sau đây là thuế trực thu?",
-            "options": ["Thuế giá trị gia tăng (VAT).", "Thuế tiêu thụ đặc biệt.", "Thuế thu nhập cá nhân.", "Thuế xuất nhập khẩu."],
+            "options": [
+                "Thuế giá trị gia tăng (VAT).",
+                "Thuế tiêu thụ đặc biệt.",
+                "Thuế thu nhập cá nhân.",
+                "Thuế xuất nhập khẩu."
+            ],
             "correct": 2,
             "explanation": "Thuế trực thu là loại thuế mà người nộp thuế cũng chính là người chịu thuế (đánh trực tiếp vào thu nhập)."
         },
@@ -87,7 +111,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Mô hình kinh tế nào sau đây là mô hình sản xuất kinh doanh phổ biến ở nông thôn Việt Nam hiện nay?",
-            "options": ["Tập đoàn đa quốc gia.", "Kinh tế trang trại.", "Công ty cổ phần.", "Doanh nghiệp nhà nước."],
+            "options": [
+                "Tập đoàn đa quốc gia.",
+                "Kinh tế trang trại.",
+                "Công ty cổ phần.",
+                "Doanh nghiệp nhà nước."
+            ],
             "correct": 1,
             "explanation": "Kinh tế trang trại giúp phát huy thế mạnh đất đai và lao động tại địa phương hiệu quả."
         },
@@ -118,19 +147,27 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Việc các chủ thể kinh tế tranh giành những điều kiện thuận lợi để thu lợi nhuận cao nhất được gọi là:",
-            "options": ["Cạnh tranh.", "Hợp tác.", "Đấu tranh.", "Thương lượng."],
+            "options": [
+                "Cạnh tranh.",
+                "Hợp tác.",
+                "Đấu tranh.",
+                "Thương lượng."
+            ],
             "correct": 0,
             "explanation": "Cạnh tranh là động lực thúc đẩy sự phát triển của nền kinh tế thị trường."
         },
         {
             "type": "multiple",
             "question": "Chủ thể nào sau đây là người trực tiếp sử dụng sản phẩm hàng hóa, dịch vụ để thỏa mãn nhu cầu của mình?",
-            "options": ["Người sản xuất.", "Người tiêu dùng.", "Thương nhân.", "Nhà môi giới."],
+            "options": [
+                "Người sản xuất.",
+                "Người tiêu dùng.",
+                "Thương nhân.",
+                "Nhà môi giới."
+            ],
             "correct": 1,
             "explanation": "Người tiêu dùng là điểm cuối cùng của chuỗi giá trị kinh tế."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về các chủ thể kinh tế và thị trường:",
@@ -140,8 +177,19 @@ window.quizData = {
                 "Thông tin thị trường giúp người tiêu dùng có sự lựa chọn hàng hóa phù hợp và hiệu quả nhất.",
                 "Giá cả thị trường do Nhà nước ấn định hoàn toàn cho tất cả các loại hàng hóa."
             ],
-            "correct": [false, true, true, false],
-            "explanation": "Thị trường hiện nay còn bao gồm cả không gian mạng (thương mại điện tử). Giá cả phần lớn do cung cầu quyết định."
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Thị trường hiện nay còn bao gồm cả không gian mạng (thương mại điện tử). Giá cả phần lớn do cung cầu quyết định.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -152,8 +200,19 @@ window.quizData = {
                 "Thuế giá trị gia tăng (VAT) được tính vào giá bán hàng hóa, do người tiêu dùng cuối cùng chịu.",
                 "Ngân sách nhà nước chỉ được dùng để chi cho hoạt động của các cơ quan nhà nước."
             ],
-            "correct": [true, true, true, false],
-            "explanation": "Ngân sách còn dùng để đầu tư phát triển, an sinh xã hội, quốc phòng an ninh..."
+            "correct": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Ngân sách còn dùng để đầu tư phát triển, an sinh xã hội, quốc phòng an ninh...",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -164,8 +223,19 @@ window.quizData = {
                 "Vay tiền qua 'tín dụng đen' với lãi suất cắt cổ là hành vi bị pháp luật nghiêm cấm.",
                 "Điểm tín dụng tốt sẽ giúp khách hàng dễ dàng tiếp cận các khoản vay ưu đãi."
             ],
-            "correct": [true, true, true, true],
-            "explanation": "Đây là những kiến thức thực tiễn quan trọng về quản lý tài chính cá nhân và doanh nghiệp."
+            "correct": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Đây là những kiến thức thực tiễn quan trọng về quản lý tài chính cá nhân và doanh nghiệp.",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -176,11 +246,20 @@ window.quizData = {
                 "Quy luật giá trị yêu cầu việc sản xuất và trao đổi hàng hóa phải dựa trên cơ sở hao phí lao động cá biệt của từng người.",
                 "Thị trường đóng vai trò kiểm tra, đánh giá chất lượng sản phẩm của người sản xuất."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Quy luật giá trị dựa trên hao phí lao động XÃ HỘI cần thiết, không phải cá biệt."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Quy luật giá trị dựa trên hao phí lao động XÃ HỘI cần thiết, không phải cá biệt.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Điền từ còn thiếu: 'Thị trường là nơi diễn ra các quan hệ sản xuất và ......'",
@@ -217,5 +296,12 @@ window.quizData = {
             "correct": "Công ty trách nhiệm hữu hạn",
             "explanation": "Hoặc Công ty cổ phần."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Giáo dục Kinh tế và Pháp luật",
+        "grade": "Lớp 10",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

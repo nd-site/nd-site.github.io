@@ -1,18 +1,23 @@
 window.quizData = {
     "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 12 (KNTT) – 2025-2026",
     "config": {
-        "testDuration": 5400, // 90 phút
+        "testDuration": 5400,
         "examLayout": {
-            "multiple": { "count": 8, "pointsPerQ": 0.25 }, // 2 điểm trắc nghiệm
-            "essay": { 
-                "count": 3, 
-                "pointsList": { "0": 1.0, "1": 1.0, "2": 6.0 } // 2 câu đọc hiểu (1đ/câu) + 1 bài nghị luận (6đ)
+            "multiple": {
+                "count": 8,
+                "pointsPerQ": 0.25
+            },
+            "essay": {
+                "count": 3,
+                "pointsList": {
+                    "0": 1,
+                    "1": 1,
+                    "2": 6
+                }
             }
         }
     },
     "questions": [
-        // --- PHẦN I: ĐỌC HIỂU ---
-        // Văn bản: Đoạn trích bài thơ 'Tây Tiến' (Quang Dũng)
         {
             "type": "multiple",
             "question": "Bài thơ 'Tây Tiến' của Quang Dũng được sáng tác trong hoàn cảnh nào?",
@@ -28,7 +33,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Bút pháp nghệ thuật chủ đạo của bài thơ 'Tây Tiến' là gì?",
-            "options": ["Bút pháp hiện thực nghiêm ngặt.", "Bút pháp lãng mạn kết hợp với tinh thần bi tráng.", "Bút pháp trào phúng, châm biếm.", "Bút pháp tượng trưng, siêu thực."],
+            "options": [
+                "Bút pháp hiện thực nghiêm ngặt.",
+                "Bút pháp lãng mạn kết hợp với tinh thần bi tráng.",
+                "Bút pháp trào phúng, châm biếm.",
+                "Bút pháp tượng trưng, siêu thực."
+            ],
             "correct": 1,
             "explanation": "Bài thơ sử dụng cảm hứng lãng mạn để tô đậm vẻ đẹp hào hùng, hào hoa của người lính trong gian khổ."
         },
@@ -47,7 +57,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Cụm từ 'Súng ngửi trời' trong câu thơ 'Heo hút cồn mây súng ngửi trời' sử dụng biện pháp tu từ nào?",
-            "options": ["So sánh.", "Nhân hóa.", "Hoán dụ.", "Nói giảm nói tránh."],
+            "options": [
+                "So sánh.",
+                "Nhân hóa.",
+                "Hoán dụ.",
+                "Nói giảm nói tránh."
+            ],
             "correct": 1,
             "explanation": "Biện pháp nhân hóa khiến khẩu súng trở nên có tâm hồn, đồng thời thể hiện cái nhìn tinh nghịch, lạc quan của người lính trẻ ở độ cao ngất trời."
         },
@@ -99,8 +114,6 @@ window.quizData = {
             "correct": 2,
             "explanation": "Bài thơ đã tạc một bức tượng đài bất tử về người lính vô danh trong thời kỳ đầu kháng chiến chống Pháp."
         },
-
-        // Câu hỏi essay đọc hiểu
         {
             "type": "essay",
             "question": "Em hiểu thế nào về ý nghĩa của câu thơ: 'Đêm mơ Hà Nội dáng kiều thơm'? Hình ảnh này có làm giảm đi tính chất anh hùng của người lính không? Vì sao?",
@@ -113,13 +126,18 @@ window.quizData = {
             "suggested": "Từ 'đoàn binh' gợi âm hưởng mạnh mẽ, trang trọng, mang đậm chất sử thi. Cách nói 'không mọc tóc', 'quân xanh màu lá' không che giấu sự khắc nghiệt của bệnh tật (sốt rét rừng) nhưng cụm từ 'dữ oai hùm' lại khẳng định sức mạnh tinh thần lấn át cả bệnh tật, thể hiện khí phách kiêu hùng của người chiến sĩ.",
             "points": 10
         },
-
-        // --- PHẦN II: VIẾT (NGHỊ LUẬN VĂN HỌC) ---
         {
             "type": "essay",
             "question": "Phân tích vẻ đẹp hình tượng người lính trong bài thơ 'Tây Tiến' của Quang Dũng. Từ đó, hãy bày tỏ suy nghĩ của em về trách nhiệm của thế hệ trẻ hôm nay đối với đất nước trong thời bình.",
             "suggested": "Dàn ý:\n1. Mở bài: Giới thiệu tác giả Quang Dũng, tác phẩm Tây Tiến và hình tượng người lính.\n2. Thân bài:\n- Vẻ đẹp hào hùng: Vượt qua thiên nhiên dữ dội, đối mặt với cái chết bằng thái độ ngạo nghễ ('chiến trường đi chẳng tiếc đời xanh').\n- Vẻ đẹp hào hoa, lãng mạn: Tâm hồn trẻ trung, yêu đời, nhớ về Hà Nội, yêu cảnh vật và con người miền Tây.\n- Vẻ đẹp bi tráng: Sự hy sinh cao cả được nâng lên tầm sử thi ('Áo bào thay chiếu anh về đất').\n3. Kết bài: Liên hệ thực tế - Trách nhiệm của thế hệ trẻ ngày nay (Học tập, lao động, giữ gìn hòa bình, phát huy giá trị truyền thống). Không phải cầm súng nhưng cần 'chiến đấu' với sự trì trệ, dốt nát để xây dựng quốc gia cường thịnh.",
             "points": 60
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Ngữ văn",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

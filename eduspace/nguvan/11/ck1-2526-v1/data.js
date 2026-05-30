@@ -1,22 +1,32 @@
 window.quizData = {
     "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 11 (KNTT) – 2025-2026",
     "config": {
-        "testDuration": 5400, // 90 phút
+        "testDuration": 5400,
         "examLayout": {
-            "multiple": { "count": 8, "pointsPerQ": 0.25 }, // 2 điểm trắc nghiệm
-            "essay": { 
-                "count": 3, 
-                "pointsList": { "0": 1.0, "1": 1.0, "2": 6.0 } // 2 câu đọc hiểu (1đ/câu) + 1 bài nghị luận (6đ)
+            "multiple": {
+                "count": 8,
+                "pointsPerQ": 0.25
+            },
+            "essay": {
+                "count": 3,
+                "pointsList": {
+                    "0": 1,
+                    "1": 1,
+                    "2": 6
+                }
             }
         }
     },
     "questions": [
-        // --- PHẦN I: ĐỌC HIỂU ---
-        // Văn bản: Đoạn trích 'Vĩnh biệt Cửu Trùng Đài' (Trích kịch Vũ Như Tô - Nguyễn Huy Tưởng)
         {
             "type": "multiple",
             "question": "Vở kịch 'Vũ Như Tô' của Nguyễn Huy Tưởng thuộc thể loại nào?",
-            "options": ["Hài kịch.", "Bi kịch.", "Chèo.", "Tuồng."],
+            "options": [
+                "Hài kịch.",
+                "Bi kịch.",
+                "Chèo.",
+                "Tuồng."
+            ],
             "correct": 1,
             "explanation": "Đây là vở bi kịch lịch sử nổi tiếng nhất của Nguyễn Huy Tưởng, đặt ra vấn đề gay gắt về mối quan hệ giữa nghệ thuật và đời sống."
         },
@@ -104,8 +114,6 @@ window.quizData = {
             "correct": 1,
             "explanation": "Nghệ thuật vị nghệ thuật mà xa rời nhân dân sẽ dẫn đến bi kịch hủy diệt."
         },
-
-        // Câu hỏi essay đọc hiểu
         {
             "type": "essay",
             "question": "Phân tích diễn biến tâm trạng của Vũ Như Tô từ khi nghe tin quân phản loạn đến khi bị dẫn ra pháp trường. Theo em, Vũ Như Tô là người có công hay có tội?",
@@ -118,13 +126,18 @@ window.quizData = {
             "suggested": "Lời thoại thể hiện khát vọng nghệ thuật thuần khiết và tinh thần tự tôn dân tộc cao độ. Vũ Như Tô muốn khẳng định tài năng của người thợ Việt không thua kém thế giới. Tuy nhiên, lý tưởng đó bị 'lệch pha' với bối cảnh lịch sử đầy đau khổ của nhân dân đương thời.",
             "points": 10
         },
-
-        // --- PHẦN II: VIẾT (NGHỊ LUẬN XÃ HỘI/VĂN HỌC) ---
         {
             "type": "essay",
             "question": "Viết bài văn nghị luận (khoảng 600 chữ) trình bày suy nghĩ của em về mối quan hệ giữa **Cái đẹp (Nghệ thuật)** và **Sự sống (Thực tế đời sống)**. Em có đồng tình với quan điểm 'Nghệ thuật vị nhân sinh' không? Tại sao?",
             "suggested": "Dàn ý:\n1. Mở bài: Dẫn dắt từ bi kịch Vũ Như Tô để nêu vấn đề nghị luận.\n2. Thân bài:\n- Giải thích: Cái đẹp (thỏa mãn tâm hồn), Sự sống (thỏa mãn nhu cầu sinh tồn, hạnh phúc con người).\n- Phân tích: Tại sao nghệ thuật cần gắn liền với đời sống? (Nghệ thuật bắt nguồn từ đời sống, đời sống là chất liệu và mục đích của nghệ thuật). Nghệ thuật xa rời đời sống sẽ trở nên vô nghĩa, thậm chí tàn nhẫn.\n- Chứng minh: Các tác phẩm văn học phục vụ kháng chiến, các chiến dịch nghệ thuật vì cộng đồng hiện nay.\n- Bàn luận mở rộng: 'Vị nhân sinh' không có nghĩa là hạ thấp tiêu chuẩn nghệ thuật. Nghệ thuật vẫn cần sự sáng tạo đỉnh cao nhưng đích đến phải là vì con người.\n3. Kết bài: Khẳng định trách nhiệm của người nghệ sĩ và người thưởng thức nghệ thuật.",
             "points": 60
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Ngữ văn",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

@@ -1,0 +1,2361 @@
+BÁO CÁO CHẤT LƯỢNG VÀ THÔNG TIN ĐỀ THI
+========================================
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Công nghệ 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Công nghệ 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/10/on-tap-gk2-2526-cncn-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: ÔN TẬP GIỮA HỌC KÌ II - MÔN: THIẾT KẾ VÀ CÔNG NGHỆ 10 (2025-2026)
+📊 Cấu trúc đề (Tổng số câu: 55):
+   - Trắc nghiệm nhiều lựa chọn: 47 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/10/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Công nghệ 10 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/10/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Công nghệ 10 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Công nghệ 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Công nghệ 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Công nghệ 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Công nghệ 11 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Công nghệ 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Công nghệ 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/12/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Công nghệ 12 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Công nghệ 12 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe-congnghiep/10/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ Công nghiệp | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Công nghệ 10 (Thiết kế và Công nghệ) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe-congnghiep/11/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ Công nghiệp | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Công nghệ 11 Cơ khí động lực (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe-congnghiep/12/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ Công nghiệp | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Công nghệ 12 Điện - Điện tử (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe-nongnghiep/10/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ Nông nghiệp | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Công nghệ 10 Nông nghiệp (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe-nongnghiep/11/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ Nông nghiệp | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Công nghệ 11 Chăn nuôi (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe-nongnghiep/12/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Công nghệ Nông nghiệp | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Công nghệ 12 Lâm nghiệp - Thủy sản (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe-nongnghiep/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Công nghệ Nông nghiệp | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Công Nghệ Nông Nghiệp (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe-nongnghiep/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Công nghệ Nông nghiệp | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Công Nghệ Nông Nghiệp (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /congnghe-nongnghiep/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Công nghệ Nông nghiệp | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Công Nghệ Nông Nghiệp (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Địa lí 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Địa lí 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/10/on-tap-hk1-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Ôn tập - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Ôn tập đầy đủ - Kiểm tra cuối Học kì I Địa lý 10 (2025-2026)
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 2 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/10/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Địa lí 10 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Địa lí 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Địa lí 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Địa lí 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Địa lí 11 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Địa lí 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Địa lí 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Địa Lý (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Địa Lý (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Địa Lý (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /diali/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Địa lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Địa lí 12 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /gdqp/10/on-tap-hk1-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Quốc phòng - An ninh | 🏫 Lớp: Lớp 10
+📝 Kì thi: Ôn tập - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: gdqp / 10 / on-tap-hk1-2526-v1
+📊 Cấu trúc đề (Tổng số câu: 20):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Hóa học 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/10/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Hóa Học 10 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 23):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Hóa học 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/10/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Hóa học 10 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Hóa học 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/11/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Hóa Học 11 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 23):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Hóa học 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Hóa học 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Hóa học 11 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Hóa học 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/12/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Hóa Học 12 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 23):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Hóa học 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Hóa Học (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 18 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Hóa Học (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 18 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Hóa Học (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 18 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /hoahoc/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Hóa học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Hóa học 12 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – GDKT-PL 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/10/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 10 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – GDKT-PL 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/10/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – GDKT-PL 10 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – GDKT-PL 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/11/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 11 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – GDKT-PL 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – GDKT-PL 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – GDKT-PL 11 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – GDKT-PL 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/12/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 12 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – GDKT-PL 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Giáo dục KT & PL (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Giáo dục Kinh tế và Pháp luật (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Giáo dục Kinh tế và Pháp luật (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /ktpl/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Giáo dục Kinh tế và Pháp luật | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – GDKT-PL 12 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/10/bai7-kntt
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 10
+📝 Kì thi: Không rõ kì thi 
+📅 Năm học/Thời gian: 
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Lịch Sử 10 bài 7 - Các cuộc Cách mạng Công nghiệp thời hiện đại - Sách Kết nối tri thức
+📊 Cấu trúc đề (Tổng số câu: 26):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 10 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Lịch sử 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/10/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Lịch Sử 10 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Lịch sử 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/10/on-tap-gk2-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: ÔN TẬP GIỮA HỌC KÌ II - MÔN: LỊCH SỬ 10 (2025-2026)
+📊 Cấu trúc đề (Tổng số câu: 60):
+   - Trắc nghiệm nhiều lựa chọn: 48 câu
+   - Trắc nghiệm đúng/sai: 8 câu
+   - Tự luận: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/10/on-tap-hk1-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 10
+📝 Kì thi: Ôn tập - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: ĐỀ CƯƠNG ÔN TẬP KIỂM TRA CUỐI HỌC KÌ I - MÔN: LỊCH SỬ 10 - NĂM HỌC 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 20):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/10/on-tap-hk2-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 10
+📝 Kì thi: Ôn tập - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: ĐỀ KIỂM TRA CUỐI HỌC KÌ II - MÔN: LỊCH SỬ 10 (2025-2026)
+📊 Cấu trúc đề (Tổng số câu: 51):
+   - Trắc nghiệm nhiều lựa chọn: 40 câu
+   - Trắc nghiệm đúng/sai: 8 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Lịch sử 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/11/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Lịch Sử 11 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Lịch sử 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Lịch sử 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Lịch sử 11 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Lịch sử 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/12/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Lịch Sử 12 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Lịch sử 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Lịch Sử (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Lịch Sử (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Lịch Sử (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Lịch sử 12 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /lichsu/9/on-tap-gk2-2526-v1
+📄 File: data.js
+📚 Môn: Lịch sử | 🏫 Lớp: Lớp 9
+📝 Kì thi: Kiểm tra Giữa Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: ĐỀ KIỂM TRA GIỮA HỌC KÌ II - MÔN: LỊCH SỬ 9 (2025-2026)
+📊 Cấu trúc đề (Tổng số câu: 32):
+   - Trắc nghiệm nhiều lựa chọn: 20 câu
+   - Trắc nghiệm đúng/sai: 8 câu
+   - Tự luận: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Ngữ văn 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 11):
+   - Trắc nghiệm nhiều lựa chọn: 8 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra giữa học kì I - Bản 1
+📅 Năm học/Thời gian: 2025-2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Ngữ Văn 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 2):
+   - Tự luận: 2 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/10/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra thường xuyên học kì II - Bản 1
+📅 Năm học/Thời gian: 2025-2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên - Ngữ văn 10 (KNTT) - HK II
+📊 Cấu trúc đề (Tổng số câu: 10):
+   - Trắc nghiệm nhiều lựa chọn: 10 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Ngữ văn 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 11):
+   - Trắc nghiệm nhiều lựa chọn: 8 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Ngữ văn 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Ngữ văn 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra thường xuyên học kì II - Bản 1
+📅 Năm học/Thời gian: 2025-2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên - Ngữ văn 11 (KNTT) - HK II
+📊 Cấu trúc đề (Tổng số câu: 10):
+   - Trắc nghiệm nhiều lựa chọn: 10 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Ngữ văn 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 11):
+   - Trắc nghiệm nhiều lựa chọn: 8 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Ngữ văn 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 12
+📝 Kì thi: Thi thử tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Ngữ Văn (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 2):
+   - Tự luận: 2 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 12
+📝 Kì thi: Thi thử tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Ngữ Văn (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 2):
+   - Tự luận: 2 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 12
+📝 Kì thi: Thi thử tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Ngữ Văn (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 2):
+   - Tự luận: 2 câu
+
+--------------------------------------------------------
+📁 Thư mục: /nguvan/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Ngữ văn | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra thường xuyên học kì II - Bản 1
+📅 Năm học/Thời gian: 2025-2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên - Ngữ văn 12 (KNTT) - HK II
+📊 Cấu trúc đề (Tổng số câu: 10):
+   - Trắc nghiệm nhiều lựa chọn: 10 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Sinh học 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Sinh học 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/10/on-tap-hk1-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: ĐỀ CƯƠNG ÔN TẬP SINH HỌC 10 - CUỐI HỌC KÌ I TRƯỜNG THPT LỘC AN
+📊 Cấu trúc đề (Tổng số câu: 23):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/10/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Sinh học 10 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Sinh học 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Sinh học 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Sinh học 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Sinh học 11 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Sinh học 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Sinh học 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Sinh Học (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 18 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Sinh Học (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 18 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Sinh Học (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 18 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /sinhhoc/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Sinh học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Sinh học 12 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Tiếng Anh 10 (Global Success) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/10/de-viet-doan-van-hk1-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra viết học kỳ I - Bản 1
+📅 Năm học/Thời gian: 2025-2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề kiểm tra viết Tiếng Anh 10 - Học kỳ I năm học 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Tự luận: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra giữa học kì I - Bản 1
+📅 Năm học/Thời gian: 2025-2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I - Tiếng Anh 10 (Global Success) - 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 25):
+   - Trắc nghiệm nhiều lựa chọn: 25 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/10/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Tiếng Anh 10 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Tiếng Anh 11 (Global Success) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Tiếng Anh 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Tiếng Anh 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Tiếng Anh 11 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Tiếng Anh 12 (Global Success) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Tiếng Anh 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Tiếng Anh (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 40):
+   - Trắc nghiệm nhiều lựa chọn: 40 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Tiếng Anh (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 40):
+   - Trắc nghiệm nhiều lựa chọn: 40 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Tiếng Anh (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 40):
+   - Trắc nghiệm nhiều lựa chọn: 40 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tienganh/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Tiếng Anh | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Tiếng Anh 12 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Tin học 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/10/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Tin Học 10 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Tin học 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/10/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Tin học 10 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/10/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Tin học 10 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Tin học 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/11/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Tin Học 11 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Tin học 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Tin học 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Tin học 11 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/caobang-thithu-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi thử tốt nghiệp THPT năm 2026 - Mã đề 0901
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị: Sở GD&ĐT Cao Bằng - Cao Bằng
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học - Cao Bằng (Mã đề 0901)
+📊 Cấu trúc đề (Tổng số câu: 30):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Tin học 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Tin Học 12 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 19):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/cqt-thptqg-tin-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi thử tốt nghiệp THPT năm học 2025-2026 - Mã đề 0801
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT năm học 2025-2026 môn Tin học - THPT Chuyên Quang Trung (Mã đề 0801)
+📊 Cấu trúc đề (Tổng số câu: 30):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/daklak-cum8-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Thi thử tốt nghiệp THPT - Lần 1
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị: Sở GD&ĐT Đắk Lắk - Đắk Lắk
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT năm 2026 – Cụm chuyên môn số 8 Sở GD&ĐT Đắk Lắk
+📊 Cấu trúc đề (Tổng số câu: 30):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/danang-cum-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Thi thử tốt nghiệp THPT - Đề 04
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị: Sở GD&ĐT Đà Nẵng - Đà Nẵng
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT năm 2026 – Sở GD&ĐT Đà Nẵng (Đề 04)
+📊 Cấu trúc đề (Tổng số câu: 30):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/dongnai-lan1-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi khảo sát chất lượng các môn thi tốt nghiệp THPT - Lần 1 (Mã đề 0501)
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị: Sở Giáo dục và Đào tạo Đồng Nai - Đồng Nai
+📌 Tiêu đề chi tiết: Đề thi khảo sát chất lượng môn Tin học lớp 12 năm học 2025 – 2026 (Lần 1) – Sở GD&ĐT Đồng Nai
+📊 Cấu trúc đề (Tổng số câu: 30):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Tin học 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/haiphong-cum7-lan2-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Thi thử tốt nghiệp THPT - Đợt 2
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị:  - Hải Phòng
+📌 Tiêu đề chi tiết: Đề thi thử TN THPT 2026 – Cụm 7 trường phía Đông Hải Phòng (Đợt 2)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/haiphong-lan2-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Đề khảo sát kỳ thi tốt nghiệp THPT - Lần 2 (Mã đề 0502)
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị: Sở Giáo dục và Đào tạo Hải Phòng - Hải Phòng
+📌 Tiêu đề chi tiết: Đề thi khảo sát tốt nghiệp THPT năm 2026 – Sở GD&ĐT Hải Phòng (Lần 2)
+📊 Cấu trúc đề (Tổng số câu: 30):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/nghean-lan2-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ khảo sát chất lượng kết hợp thi thử lớp 12 - Đợt 2 (Mã đề 0924)
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị: Sở Giáo dục và Đào tạo Nghệ An - Nghệ An
+📌 Tiêu đề chi tiết: Đề thi khảo sát chất lượng lớp 12 năm học 2025 – 2026 (Đợt 2) – Sở GD&ĐT Nghệ An
+📊 Cấu trúc đề (Tổng số câu: 30):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/ninhbinh-cum5-lan1-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Thi thử tốt nghiệp THPT - Đợt 1
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị:  - Ninh Bình
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT năm 2026 – Cụm 5 trường THPT Ninh Bình (Đợt 1)
+📊 Cấu trúc đề (Tổng số câu: 29):
+   - Trắc nghiệm nhiều lựa chọn: 23 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/thanhhoa-lan2-dapan-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Đáp án thi thử tốt nghiệp THPT - Lần 2
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị: Sở GD&ĐT Thanh Hóa - Thanh Hóa
+📌 Tiêu đề chi tiết: Đáp án thi thử tốt nghiệp THPT 2026 môn Tin học - Thanh Hóa lần 2
+📊 Cấu trúc đề (Tổng số câu: 3):
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Tin Học (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Tin Học (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Tin Học (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/thptqg-nghean-lan1-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Thi thử tốt nghiệp THPT - Lần 1
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị: Sở GD&ĐT Nghệ An - Nghệ An
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Sở GD&ĐT Nghệ An (Lần 1 - Đề 1)
+📊 Cấu trúc đề (Tổng số câu: 30):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/thptqg-nghean-lan1-2026-de2
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Thi thử tốt nghiệp THPT - Lần 1 - Đề 2
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị: Sở GD&ĐT Nghệ An - Nghệ An
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Sở GD&ĐT Nghệ An (Lần 1 - Đề 2)
+📊 Cấu trúc đề (Tổng số câu: 30):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/tuyenquang-lan2-2026
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi thử tốt nghiệp THPT - Lần 2 – Đề gốc số 2
+📅 Năm học/Thời gian: 2026
+🏢 Đơn vị: Sở GD&ĐT Tỉnh Tuyên Quang - Tuyên Quang
+📌 Tiêu đề chi tiết: Đề thi thử TN THPT năm 2026 – Sở GD&ĐT Tuyên Quang (Lần 2 – Đề gốc 2)
+📊 Cấu trúc đề (Tổng số câu: 30):
+   - Trắc nghiệm nhiều lựa chọn: 24 câu
+   - Trắc nghiệm đúng/sai: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Tin học 12 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /tinhoc/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Tin học | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Tin học 12 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Toán 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/10/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Toán 10 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 23):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra giữa học kì I - Bản 1
+📅 Năm học/Thời gian: 2025-2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I - Toán 10 (KNTT) - 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/10/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Toán 10 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Toán 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/11/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Toán 11 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 23):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Toán 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Toán 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Toán 11 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Toán 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/12/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Toán 12 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 23):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Toán 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Toán (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Toán (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Toán (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /toan/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Toán | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Toán 12 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/10/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Vật lí 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/10/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Vật Lý 10 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 23):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/10/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Vật lí 10 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/10/moment-luc
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Không rõ kì thi 
+📅 Năm học/Thời gian: 
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra 1 tiết: Moment lực và Cân bằng vật rắn (50 Câu)
+📊 Cấu trúc đề (Tổng số câu: 25):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 5 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/10/on-tap-gk2-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Giữa Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Ôn tập Giữa Học Kì II – Vật Lý 10 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 26):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/10/on-tap-hk1-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Ôn tập - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Ôn tập đầy đủ - Kiểm tra cuối Học kì I Vật lý 10 (2025)
+📊 Cấu trúc đề (Tổng số câu: 20):
+   - Trắc nghiệm nhiều lựa chọn: 16 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/10/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 10
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Vật lí 10 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/11/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Vật lí 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/11/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Vật Lý 11 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 23):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/11/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Vật lí 11 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/11/tx1-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Vật lí 11 (KNTT) – HK I
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/11/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 11
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Vật lí 11 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/12/ck1-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì I – Vật lí 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 22):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/12/ck2-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Cuối Học Kì II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Cuối Học Kì II – Vật Lý 12 (Kết nối tri thức) 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 23):
+   - Trắc nghiệm nhiều lựa chọn: 12 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 4 câu
+   - Tự luận: 3 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/12/gk1-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Giữa Học Kì I - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Giữa Học Kì I – Vật lí 12 (KNTT) – 2025-2026
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/12/thptqg-2026-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Vật Lý (Bản 1)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 18 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/12/thptqg-2026-v2
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 2
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Vật Lý (Bản 2)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 18 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/12/thptqg-2026-v3
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kỳ thi tốt nghiệp THPT - Bản 3
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Đề thi thử tốt nghiệp THPT 2026 - Môn Vật Lý (Bản 3)
+📊 Cấu trúc đề (Tổng số câu: 28):
+   - Trắc nghiệm nhiều lựa chọn: 18 câu
+   - Trắc nghiệm đúng/sai: 4 câu
+   - Trả lời ngắn: 6 câu
+
+--------------------------------------------------------
+📁 Thư mục: /vatly/12/tx2-2526-v1
+📄 File: data.js
+📚 Môn: Vật lí | 🏫 Lớp: Lớp 12
+📝 Kì thi: Kiểm tra Thường xuyên HK II - Bản 1
+📅 Năm học/Thời gian: Năm học 2025 - 2026
+🏢 Đơn vị:  
+📌 Tiêu đề chi tiết: Kiểm tra Thường xuyên – Vật lí 12 (KNTT) – HK II
+📊 Cấu trúc đề (Tổng số câu: 1):
+   - Trắc nghiệm nhiều lựa chọn: 1 câu
+
+========================================
+Tổng số đề đã kiểm tra: 196

@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Nhiệt độ là đại lượng vật lí đặc trưng cho:",
@@ -25,7 +39,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Công thức đổi từ nhiệt độ Celsius ($t$) sang nhiệt độ Kelvin ($T$) là:",
-            "options": ["$T = t + 273,15$", "$T = t - 273,15$", "$T = 273,15 - t$", "$T = t + 100$"],
+            "options": [
+                "$T = t + 273,15$",
+                "$T = t - 273,15$",
+                "$T = 273,15 - t$",
+                "$T = t + 100$"
+            ],
             "correct": 0,
             "explanation": "Thang Kelvin (thang tuyệt đối) bắt đầu từ 0K tương ứng với -273,15°C."
         },
@@ -44,14 +63,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Định luật I của Nhiệt động lực học được biểu diễn bằng công thức:",
-            "options": ["$\\\\Delta U = Q + A$", "$\\\\Delta U = Q - A$", "$Q = \\\\Delta U + A$", "$A = Q + \\\\Delta U$"],
+            "options": [
+                "$\\\\Delta U = Q + A$",
+                "$\\\\Delta U = Q - A$",
+                "$Q = \\\\Delta U + A$",
+                "$A = Q + \\\\Delta U$"
+            ],
             "correct": 0,
             "explanation": "Độ biến thiên nội năng bằng tổng công và nhiệt lượng mà hệ nhận được."
         },
         {
             "type": "multiple",
             "question": "Nhiệt lượng cần cung cấp để một đơn vị khối lượng chất lỏng hóa hơi hoàn toàn ở nhiệt độ sôi gọi là:",
-            "options": ["Nhiệt dung riêng.", "Nhiệt nóng chảy riêng.", "Nhiệt hóa hơi riêng.", "Nhiệt lượng riêng."],
+            "options": [
+                "Nhiệt dung riêng.",
+                "Nhiệt nóng chảy riêng.",
+                "Nhiệt hóa hơi riêng.",
+                "Nhiệt lượng riêng."
+            ],
             "correct": 2,
             "explanation": "Công thức: $Q = L.m$ với $L$ là nhiệt hóa hơi riêng."
         },
@@ -70,7 +99,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Định luật Boyle (Bôi-lơ - Ma-ri-ốt) áp dụng cho quá trình nào của khí lí tưởng?",
-            "options": ["Đẳng áp.", "Đẳng tích.", "Đẳng nhiệt.", "Đoạn nhiệt."],
+            "options": [
+                "Đẳng áp.",
+                "Đẳng tích.",
+                "Đẳng nhiệt.",
+                "Đoạn nhiệt."
+            ],
             "correct": 2,
             "explanation": "Trong quá trình đẳng nhiệt, áp suất tỉ lệ nghịch với thể tích: $pV = const$."
         },
@@ -89,21 +123,36 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Đơn vị của áp suất trong hệ SI là:",
-            "options": ["Jun (J).", "Niutơn (N).", "Pascal (Pa).", "Vôn (V)."],
+            "options": [
+                "Jun (J).",
+                "Niutơn (N).",
+                "Pascal (Pa).",
+                "Vôn (V)."
+            ],
             "correct": 2,
             "explanation": "1 Pa = 1 N/m2."
         },
         {
             "type": "multiple",
             "question": "Khi đun nóng một khối khí trong bình kín (thể tích không đổi), đại lượng nào sau đây tăng?",
-            "options": ["Thể tích khí.", "Khối lượng khí.", "Áp suất khí.", "Số phân tử khí."],
+            "options": [
+                "Thể tích khí.",
+                "Khối lượng khí.",
+                "Áp suất khí.",
+                "Số phân tử khí."
+            ],
             "correct": 2,
             "explanation": "Theo định luật Charles, khi $V = const$ thì $p$ tỉ lệ thuận với $T$."
         },
         {
             "type": "multiple",
             "question": "Một mol khí ở điều kiện tiêu chuẩn (0°C, 1 atm) có thể tích xấp xỉ là:",
-            "options": ["22,4 lít.", "24,79 lít.", "11,2 lít.", "10 lít."],
+            "options": [
+                "22,4 lít.",
+                "24,79 lít.",
+                "11,2 lít.",
+                "10 lít."
+            ],
             "correct": 1,
             "explanation": "Theo chuẩn mới (25°C, 1 bar) là 24,79 lít, nhưng ở 0°C, 1 atm thường dùng là 22,4 lít. Tuy nhiên sách KNTT mới thường dùng 24,79 (đkc)."
         },
@@ -119,8 +168,6 @@ window.quizData = {
             "correct": 1,
             "explanation": "Giữa các lần va chạm, các phân tử khí lí tưởng coi như không tương tác."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định về nhiệt học:",
@@ -130,8 +177,19 @@ window.quizData = {
                 "Trong quá trình truyền nhiệt, nhiệt lượng luôn tự truyền từ vật có nhiệt độ cao sang vật có nhiệt độ thấp.",
                 "Nhiệt dung riêng của một chất cho biết nhiệt lượng cần thiết để làm 1kg chất đó tăng thêm 1°C."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Nội năng còn phụ thuộc vào khối lượng. Một cốc nước sôi có nội năng thấp hơn một hồ nước lạnh."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Nội năng còn phụ thuộc vào khối lượng. Một cốc nước sôi có nội năng thấp hơn một hồ nước lạnh.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -142,8 +200,19 @@ window.quizData = {
                 "Trong đồ thị (p, V), đường đẳng nhiệt là một đường thẳng đi qua gốc tọa độ.",
                 "Áp suất khí là do sự va chạm của các phân tử khí lên thành bình."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Đường đẳng nhiệt trong hệ (p, V) là đường Hyperbol."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Đường đẳng nhiệt trong hệ (p, V) là đường Hyperbol.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -154,8 +223,19 @@ window.quizData = {
                 "Sự bay hơi chỉ diễn ra ở bề mặt chất lỏng và ở mọi nhiệt độ.",
                 "Sự sôi diễn ra ở cả bề mặt và trong lòng chất lỏng ở một nhiệt độ xác định."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Trong quá trình nóng chảy (hoặc sôi), nhiệt độ của chất nguyên chất được giữ không đổi."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Trong quá trình nóng chảy (hoặc sôi), nhiệt độ của chất nguyên chất được giữ không đổi.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -166,11 +246,20 @@ window.quizData = {
                 "Khi hệ tỏa nhiệt thì $Q < 0$.",
                 "Máy hơi nước hoạt động dựa trên việc chuyển hóa hoàn toàn nhiệt lượng thành công mà không tỏa nhiệt ra môi trường."
             ],
-            "correct": [true, true, true, false],
-            "explanation": "Theo định luật II NĐLH, không thể chuyển hóa hoàn toàn nhiệt thành công mà không gây ra biến đổi khác."
+            "correct": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Theo định luật II NĐLH, không thể chuyển hóa hoàn toàn nhiệt thành công mà không gây ra biến đổi khác.",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                false
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Một khối khí nhận nhiệt lượng 100J và thực hiện công 60J lên môi trường. Tính độ biến thiên nội năng (J) của khối khí.",
@@ -207,5 +296,12 @@ window.quizData = {
             "correct": "1,38",
             "explanation": "$k = 1,38 \\\\times 10^{-23} J/K$."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Vật lí",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

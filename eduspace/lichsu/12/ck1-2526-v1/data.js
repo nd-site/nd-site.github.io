@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Trật tự thế giới hai cực I-an-ta (Yalta) sụp đổ gắn liền với sự kiện nào?",
@@ -85,7 +99,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Phong trào cách mạng 1930 - 1931 với đỉnh cao là Xô viết Nghệ - Tĩnh đã khẳng định quyền lãnh đạo của giai cấp nào?",
-            "options": ["Giai cấp tư sản.", "Giai cấp nông dân.", "Giai cấp công nhân (thông qua Đảng).", "Giai cấp tiểu tư sản."],
+            "options": [
+                "Giai cấp tư sản.",
+                "Giai cấp nông dân.",
+                "Giai cấp công nhân (thông qua Đảng).",
+                "Giai cấp tiểu tư sản."
+            ],
             "correct": 2,
             "explanation": "Phong trào chứng minh Đảng Cộng sản đủ năng lực lãnh đạo quần chúng đấu tranh."
         },
@@ -116,7 +135,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Bản Tuyên ngôn Độc lập (2/9/1945) do ai soạn thảo và đọc tại Quảng trường Ba Đình?",
-            "options": ["Phan Bội Châu.", "Nguyễn Ái Quốc (Hồ Chí Minh).", "Trần Phú.", "Lê Hồng Phong."],
+            "options": [
+                "Phan Bội Châu.",
+                "Nguyễn Ái Quốc (Hồ Chí Minh).",
+                "Trần Phú.",
+                "Lê Hồng Phong."
+            ],
             "correct": 1,
             "explanation": "Chủ tịch Hồ Chí Minh đã khai sinh ra nước Việt Nam Dân chủ Cộng hòa."
         },
@@ -144,8 +168,6 @@ window.quizData = {
             "correct": 0,
             "explanation": "Bắt nguồn từ nhu cầu phục vụ chiến tranh và đời sống con người sau thế chiến II."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về tình hình thế giới và Việt Nam giai đoạn 1919 - 1945:",
@@ -155,8 +177,19 @@ window.quizData = {
                 "Cương lĩnh chính trị đầu tiên của Đảng (2/1930) xác định nhiệm vụ chiến lược là làm cách mạng tư sản dân quyền và thổ địa cách mạng.",
                 "Nhật đảo chính Pháp (9/3/1945) đã tạo ra cuộc khủng hoảng chính trị sâu sắc ở Đông Dương."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Việt Nam Quốc dân Đảng theo khuynh hướng tư sản (do Nguyễn Thái Học lãnh đạo)."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Việt Nam Quốc dân Đảng theo khuynh hướng tư sản (do Nguyễn Thái Học lãnh đạo).",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -167,8 +200,19 @@ window.quizData = {
                 "Hội đồng Bảo an là cơ quan giữ vai trò trọng yếu nhất trong việc duy trì hòa bình thế giới.",
                 "Tất cả các quốc gia trên thế giới đều có quyền phủ quyết trong Hội đồng Bảo an."
             ],
-            "correct": [true, true, true, false],
-            "explanation": "Chỉ có 5 nước ủy viên thường trực Hội đồng Bảo an mới có quyền phủ quyết."
+            "correct": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Chỉ có 5 nước ủy viên thường trực Hội đồng Bảo an mới có quyền phủ quyết.",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -176,11 +220,22 @@ window.quizData = {
             "options": [
                 "Xô viết Nghệ - Tĩnh là đỉnh cao của phong trào 1930 - 1931.",
                 "Phong trào Dân chủ 1936 - 1939 diễn ra chủ yếu bằng hình thức đấu tranh vũ trang bí mật.",
-                "Chỉ thị 'Nhật - Pháp bắn nhau và hành động của chúng ta' đã thay đổi khẩu hiệu 'Đánh đuổi phát xít Nhật'." ,
+                "Chỉ thị 'Nhật - Pháp bắn nhau và hành động của chúng ta' đã thay đổi khẩu hiệu 'Đánh đuổi phát xít Nhật'.",
                 "Kế hoạch Tổng khởi nghĩa tháng Tám đã được thông qua tại Đại hội quốc dân ở Tân Trào."
             ],
-            "correct": [true, false, false, true],
-            "explanation": "Phong trào 36-39 đấu tranh công khai, hợp pháp, hòa bình. Khẩu hiệu lúc đó là 'Đánh đuổi phát xít Nhật' thay cho 'Đánh đuổi Pháp - Nhật'."
+            "correct": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "explanation": "Phong trào 36-39 đấu tranh công khai, hợp pháp, hòa bình. Khẩu hiệu lúc đó là 'Đánh đuổi phát xít Nhật' thay cho 'Đánh đuổi Pháp - Nhật'.",
+            "correctAnswers": [
+                true,
+                false,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -191,11 +246,20 @@ window.quizData = {
                 "Giai cấp công nhân Việt Nam ra đời ngay trong cuộc khai thác lần thứ hai này.",
                 "Giai cấp tư sản Việt Nam bị phân hóa thành tư sản mại bản và tư sản dân tộc."
             ],
-            "correct": [true, false, false, true],
-            "explanation": "Kinh tế VN vẫn phụ thuộc vào Pháp. Giai cấp công nhân ra đời từ cuộc khai thác lần thứ NHẤT."
+            "correct": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "explanation": "Kinh tế VN vẫn phụ thuộc vào Pháp. Giai cấp công nhân ra đời từ cuộc khai thác lần thứ NHẤT.",
+            "correctAnswers": [
+                true,
+                false,
+                false,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tên viết tắt của tổ chức quốc tế lớn nhất thế giới được thành lập năm 1945 là gì?",
@@ -232,5 +296,12 @@ window.quizData = {
             "correct": "Nguyen Thai Hoc",
             "explanation": "Gắn liền với cuộc Khởi nghĩa Yên Bái năm 1930."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Lịch sử",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

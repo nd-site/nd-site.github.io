@@ -31,6 +31,16 @@ async function initEduFirebase() {
         measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
     };
 
+    // If the build-time placeholders were not replaced (common on non-deployed forks),
+    // avoid calling initializeApp with invalid credentials which causes 400/403 errors.
+    const effectiveApiKey = keys.firebase || EDU_CONFIG.firebaseApiKey;
+    const effectiveAppId = keys.fbAppId || EDU_CONFIG.firebaseAppId;
+    if (!isSet(effectiveApiKey) || !isSet(effectiveAppId)) {
+        console.warn('Firebase credentials missing or contain placeholders. Skipping Firebase initialization.');
+        window.dispatchEvent(new Event('firebase-missing'));
+        return;
+    }
+
     try {
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);

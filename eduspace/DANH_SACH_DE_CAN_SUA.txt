@@ -1,0 +1,80 @@
+# DANH_SACH_DE_CAN_SUA
+# Moi dong: duong_dan_data.js<TAB>nguon<TAB>loi_hoac_ly_do.
+# Sua theo thu tu tu tren xuong; sua xong thi xoa dong do khoi tep.
+# Cac dong BLOCKED/thieu de goc chi xoa khi da bo sung duoc tai lieu de goc hoac da go khoi danh sach hien thi.
+# Created: 2026-05-24T08:17:48.537Z
+toan/10/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Toán 10 (KNTT) – HK II
+toan/11/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Toán 11 (KNTT) – HK II
+toan/12/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Toán 12 (KNTT) – HK II
+tienganh/10/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Tiếng Anh 10 (KNTT) – HK II
+tienganh/11/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Tiếng Anh 11 (KNTT) – HK II
+tienganh/12/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Tiếng Anh 12 (KNTT) – HK II
+lichsu/11/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Lịch sử 11 (KNTT) – HK II
+lichsu/12/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Lịch sử 12 (KNTT) – HK II
+diali/10/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Địa lí 10 (KNTT) – HK II
+diali/11/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Địa lí 11 (KNTT) – HK II
+diali/12/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Địa lí 12 (KNTT) – HK II
+ktpl/10/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – GDKT-PL 10 (KNTT) – HK II
+ktpl/11/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – GDKT-PL 11 (KNTT) – HK II
+ktpl/12/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – GDKT-PL 12 (KNTT) – HK II
+vatly/10/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Vật lí 10 (KNTT) – HK II
+vatly/11/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Vật lí 11 (KNTT) – HK II
+vatly/12/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Vật lí 12 (KNTT) – HK II
+hoahoc/10/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Hóa học 10 (KNTT) – HK II
+hoahoc/11/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Hóa học 11 (KNTT) – HK II
+hoahoc/12/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Hóa học 12 (KNTT) – HK II
+sinhhoc/10/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Sinh học 10 (KNTT) – HK II
+sinhhoc/11/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Sinh học 11 (KNTT) – HK II
+sinhhoc/12/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Sinh học 12 (KNTT) – HK II
+congnghe/10/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Công nghệ 10 (KNTT) – HK II
+congnghe/11/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Công nghệ 11 (KNTT) – HK II
+congnghe/12/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Công nghệ 12 (KNTT) – HK II
+tinhoc/10/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Tin học 10 (KNTT) – HK II
+tinhoc/11/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Tin học 11 (KNTT) – HK II
+tinhoc/12/tx2-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Tin học 12 (KNTT) – HK II
+nguvan/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Ngữ văn 11 (KNTT) – 2025-2026
+nguvan/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Ngữ văn 12 (KNTT) – 2025-2026
+toan/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Toán 11 (KNTT) – 2025-2026
+toan/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Toán 12 (KNTT) – 2025-2026
+tienganh/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Tiếng Anh 11 (KNTT) – 2025-2026
+tienganh/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Tiếng Anh 12 (KNTT) – 2025-2026
+lichsu/10/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Lịch sử 10 (KNTT) – 2025-2026
+lichsu/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Lịch sử 11 (KNTT) – 2025-2026
+lichsu/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Lịch sử 12 (KNTT) – 2025-2026
+diali/10/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Địa lí 10 (KNTT) – 2025-2026
+diali/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Địa lí 11 (KNTT) – 2025-2026
+diali/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Địa lí 12 (KNTT) – 2025-2026
+ktpl/10/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – GDKT-PL 10 (KNTT) – 2025-2026
+ktpl/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – GDKT-PL 11 (KNTT) – 2025-2026
+ktpl/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – GDKT-PL 12 (KNTT) – 2025-2026
+vatly/10/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Vật lí 10 (KNTT) – 2025-2026
+vatly/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Vật lí 11 (KNTT) – 2025-2026
+vatly/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Vật lí 12 (KNTT) – 2025-2026
+hoahoc/10/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Hóa học 10 (KNTT) – 2025-2026
+hoahoc/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Hóa học 11 (KNTT) – 2025-2026
+hoahoc/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Hóa học 12 (KNTT) – 2025-2026
+sinhhoc/10/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Sinh học 10 (KNTT) – 2025-2026
+sinhhoc/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Sinh học 11 (KNTT) – 2025-2026
+sinhhoc/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Sinh học 12 (KNTT) – 2025-2026
+congnghe/10/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Công nghệ 10 (KNTT) – 2025-2026
+congnghe/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Công nghệ 11 (KNTT) – 2025-2026
+congnghe/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Công nghệ 12 (KNTT) – 2025-2026
+tinhoc/10/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Tin học 10 (KNTT) – 2025-2026
+tinhoc/11/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Tin học 11 (KNTT) – 2025-2026
+tinhoc/12/gk1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Giữa Học Kì I – Tin học 12 (KNTT) – 2025-2026
+nguvan/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Ngữ văn 11 (KNTT) – HK I
+toan/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Toán 11 (KNTT) – HK I
+tienganh/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Tiếng Anh 11 (KNTT) – HK I
+lichsu/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Lịch sử 11 (KNTT) – HK I
+diali/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Địa lí 11 (KNTT) – HK I
+ktpl/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – GDKT-PL 11 (KNTT) – HK I
+vatly/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Vật lí 11 (KNTT) – HK I
+hoahoc/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Hóa học 11 (KNTT) – HK I
+sinhhoc/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Sinh học 11 (KNTT) – HK I
+congnghe/10/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Công nghệ 10 (KNTT) – HK I
+congnghe/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Công nghệ 11 (KNTT) – HK I
+congnghe/12/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Công nghệ 12 (KNTT) – HK I
+tinhoc/10/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Tin học 10 (KNTT) – HK I
+tinhoc/11/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Tin học 11 (KNTT) – HK I
+tinhoc/12/tx1-2526-v1/data.js	LIST	LIST_COMING_SOON_OR_REVIEW; Kiểm tra Thường xuyên – Tin học 12 (KNTT) – HK I
+tinhoc/12/thanhhoa-lan2-dapan-2026/data.js	BLOCKED	Q1:SCAN_IMAGE_NOT_GRADEABLE; Q2:SCAN_IMAGE_NOT_GRADEABLE; Q3:SCAN_IMAGE_NOT_GRADEABLE; LIST_COMING_SOON_OR_REVIEW; Đáp án thi thử tốt nghiệp THPT 2026 – Môn Tin học Thanh Hóa (Lần 2)

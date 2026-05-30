@@ -147,7 +147,7 @@ window.eduspaceAI = (function () {
 
     // ─── Core Gemini Call ────────────────────────────────────────────────────
 
-    async function callDirect(apiKey, contents, modelName) {
+    async function callDirect(apiKey, contents, modelName, generationConfig) {
         for (const ver of ['v1beta', 'v1']) {
             let response;
             try {
@@ -158,6 +158,7 @@ window.eduspaceAI = (function () {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             contents,
+                            ...(generationConfig ? { generationConfig } : {}),
                             safetySettings: [
                                 { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_NONE' },
                                 { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_NONE' },
@@ -196,6 +197,7 @@ window.eduspaceAI = (function () {
     async function callGeminiAPI(payload) {
         const { contents } = payload;
         const preferredModel = payload.model || sessionModel;
+        const generationConfig = payload.generationConfig || null;
 
         // TẦNG 1: Cloud Function Proxy
         if (FUNCTION_PROXY_URL) {
@@ -203,7 +205,7 @@ window.eduspaceAI = (function () {
                 const r = await fetch(FUNCTION_PROXY_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents, model: preferredModel })
+                    body: JSON.stringify({ contents, model: preferredModel, generationConfig })
                 });
                 const d = await r.json();
                 if (!r.ok) throw new Error(d.error || `HTTP ${r.status}`);
@@ -231,7 +233,7 @@ window.eduspaceAI = (function () {
         let lastErr = null;
         for (const mdl of models) {
             try {
-                const text = await callDirect(apiKey, contents, mdl);
+                const text = await callDirect(apiKey, contents, mdl, generationConfig);
                 if (text !== null) return text; // Thành công
                 // text === null nghĩa là model không phản hồi, thử model kế
             } catch (e) {

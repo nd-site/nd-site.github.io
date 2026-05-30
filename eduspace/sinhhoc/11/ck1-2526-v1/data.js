@@ -3,24 +3,48 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Sự hấp thụ nước và khoáng ở rễ thực vật diễn ra chủ yếu qua bộ phận nào?",
-            "options": ["Miền sinh trưởng.", "Miền chóp rễ.", "Miền lông hút.", "Mạch rây."],
+            "options": [
+                "Miền sinh trưởng.",
+                "Miền chóp rễ.",
+                "Miền lông hút.",
+                "Mạch rây."
+            ],
             "correct": 2,
             "explanation": "Tế bào lông hút có thành mỏng, không thấm cutin và có áp suất thẩm thấu cao nên hấp thụ nước hiệu quả."
         },
         {
             "type": "multiple",
             "question": "Trong quá trình quang hợp ở thực vật, O2 được giải phóng từ phân tử nào?",
-            "options": ["$CO_2$.", "$H_2O$.", "Glucose.", "Chlorophyll."],
+            "options": [
+                "$CO_2$.",
+                "$H_2O$.",
+                "Glucose.",
+                "Chlorophyll."
+            ],
             "correct": 1,
             "explanation": "$O_2$ được sinh ra từ quá trình quang phân ly nước trong pha sáng của quang hợp."
         },
@@ -39,49 +63,84 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Quá trình hô hấp ở thực vật diễn ra chủ yếu ở bào quan nào?",
-            "options": ["Lục lạp.", "Ti thể.", "Ribosome.", "Lưới nội chất."],
+            "options": [
+                "Lục lạp.",
+                "Ti thể.",
+                "Ribosome.",
+                "Lưới nội chất."
+            ],
             "correct": 1,
             "explanation": "Ti thể là nơi diễn ra chu trình Krebs và chuỗi truyền electron hô hấp."
         },
         {
             "type": "multiple",
             "question": "Ở động vật chưa có cơ quan tiêu hóa (như amip), thức ăn được tiêu hóa bằng hình thức nào?",
-            "options": ["Tiêu hóa nội bào.", "Tiêu hóa ngoại bào.", "Cả nội bào và ngoại bào.", "Không tiêu hóa."],
+            "options": [
+                "Tiêu hóa nội bào.",
+                "Tiêu hóa ngoại bào.",
+                "Cả nội bào và ngoại bào.",
+                "Không tiêu hóa."
+            ],
             "correct": 0,
             "explanation": "Thức ăn được lấy vào bằng thực bào và tiêu hóa nhờ enzyme trong lysosome."
         },
         {
             "type": "multiple",
             "question": "Nhóm động vật nào sau đây có hệ tuần hoàn kép (máu đi qua tim hai lần trong một chu trình)?",
-            "options": ["Cá xương.", "Tôm, cua.", "Lưỡng cư, bò sát, chim, thú.", "Giun đất."],
+            "options": [
+                "Cá xương.",
+                "Tôm, cua.",
+                "Lưỡng cư, bò sát, chim, thú.",
+                "Giun đất."
+            ],
             "correct": 2,
             "explanation": "Hệ tuần hoàn kép gồm vòng tuần hoàn lớn (nuôi cơ thể) và vòng tuần hoàn nhỏ (trao đổi khí)."
         },
         {
             "type": "multiple",
             "question": "Ở người, sự trao đổi khí giữa máu và các mô diễn ra tại:",
-            "options": ["Phế nang.", "Động mạch.", "Tĩnh mạch.", "Mao mạch."],
+            "options": [
+                "Phế nang.",
+                "Động mạch.",
+                "Tĩnh mạch.",
+                "Mao mạch."
+            ],
             "correct": 3,
             "explanation": "Mao mạch có thành rất mỏng và diện tích tiếp xúc lớn, thuận lợi cho sự khuếch tán khí."
         },
         {
             "type": "multiple",
             "question": "Cơ quan bài tiết chính ở động vật có xương sống là:",
-            "options": ["Da.", "Phổi.", "Thận.", "Ruột."],
+            "options": [
+                "Da.",
+                "Phổi.",
+                "Thận.",
+                "Ruột."
+            ],
             "correct": 2,
             "explanation": "Thận lọc máu để tạo thành nước tiểu, loại bỏ các chất độc hại ra khỏi cơ thể."
         },
         {
             "type": "multiple",
             "question": "Máu vận chuyển từ phổi về tim là máu giàu khí gì?",
-            "options": ["$O_2$.", "$CO_2$.", "$N_2$.", "$CO$."],
+            "options": [
+                "$O_2$.",
+                "$CO_2$.",
+                "$N_2$.",
+                "$CO$."
+            ],
             "correct": 0,
             "explanation": "Sau khi trao đổi khí tại phế nang, máu trở nên giàu $O_2$ và theo tĩnh mạch phổi về tâm nhĩ trái."
         },
         {
             "type": "multiple",
             "question": "Sắc tố quang hợp trực tiếp tham gia chuyển hóa năng lượng ánh sáng thành năng lượng hóa học là:",
-            "options": ["Chlorophyll a.", "Chlorophyll b.", "Carotenoid.", "Xanthophyll."],
+            "options": [
+                "Chlorophyll a.",
+                "Chlorophyll b.",
+                "Carotenoid.",
+                "Xanthophyll."
+            ],
             "correct": 0,
             "explanation": "Chlorophyll a ở trung tâm phản ứng là sắc tố duy nhất thực hiện được việc này."
         },
@@ -109,8 +168,6 @@ window.quizData = {
             "correct": 2,
             "explanation": "Trong hệ tuần hoàn hở (ở côn trùng, thân mềm), máu tràn vào khoang cơ thể để tắm trực tiếp cho tế bào."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các phát biểu sau về trao đổi vật chất ở thực vật:",
@@ -120,8 +177,19 @@ window.quizData = {
                 "Hô hấp sáng là quá trình gây lãng phí sản phẩm quang hợp ở thực vật C3.",
                 "Động lực của dòng mạch rây là sự chênh lệch áp suất thẩm thấu giữa cơ quan nguồn và cơ quan chứa."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Thực vật không hấp thụ được $N_2$, chúng hấp thụ nitơ dưới dạng ion $NH_4^+$ và $NO_3^-$ từ đất."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Thực vật không hấp thụ được $N_2$, chúng hấp thụ nitơ dưới dạng ion $NH_4^+$ và $NO_3^-$ từ đất.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -132,8 +200,19 @@ window.quizData = {
                 "Thú ăn thịt có ruột rất dài so với thú ăn thực vật.",
                 "Dịch mật do gan tiết ra có chứa nhiều enzyme tiêu hóa protein."
             ],
-            "correct": [true, true, false, false],
-            "explanation": "Thú ăn thịt có ruột ngắn. Dịch mật không chứa enzyme, nó chỉ giúp nhũ tương hóa lipid."
+            "correct": [
+                true,
+                true,
+                false,
+                false
+            ],
+            "explanation": "Thú ăn thịt có ruột ngắn. Dịch mật không chứa enzyme, nó chỉ giúp nhũ tương hóa lipid.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -144,8 +223,19 @@ window.quizData = {
                 "Huyết áp cao nhất ở mao mạch và thấp nhất ở tĩnh mạch.",
                 "Tim hoạt động theo quy luật 'tất cả hoặc không có gì' và có tính tự động."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Huyết áp cao nhất ở ĐỘNG MẠCH chủ và thấp nhất ở TĨNH MẠCH chủ."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Huyết áp cao nhất ở ĐỘNG MẠCH chủ và thấp nhất ở TĨNH MẠCH chủ.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -156,11 +246,20 @@ window.quizData = {
                 "Hệ đệm trong máu giúp duy trì pH máu ổn định ở mức khoảng 7,35 - 7,45.",
                 "Cân bằng nội môi là sự duy trì ổn định tương đối các điều kiện lý hóa của môi trường trong cơ thể."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Khi đường huyết tăng, tụy tiết INSULIN. Glucagon tiết ra khi đường huyết giảm."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Khi đường huyết tăng, tụy tiết INSULIN. Glucagon tiết ra khi đường huyết giảm.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Viết phương trình tổng quát của quá trình quang hợp. (Dạng: $CO_2 + H_2O \\\\rightarrow ... + ...$)",
@@ -197,5 +296,12 @@ window.quizData = {
             "correct": "NaHCO3",
             "explanation": "Hệ đệm bicarbonate (H2CO3/NaHCO3)."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Sinh học",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

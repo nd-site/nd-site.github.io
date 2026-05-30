@@ -157,7 +157,7 @@
         <div class="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 mb-8">
             <div class="bg-gradient-to-r from-blue-700 to-indigo-600 p-8 text-white text-center">
                 <h1 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight">Tạo Đề Đa Năng</h1>
-                <p class="text-blue-100 text-sm md:text-base font-medium opacity-90">Tự động bóc tách từ file với AI, hoặc soạn thảo thủ công.</p>
+                <p class="text-blue-100 text-sm md:text-base font-medium opacity-90">Soạn thảo thủ công hoặc mở file data.js đã có để chỉnh sửa.</p>
             </div>
 
             <div class="p-6 md:p-10 space-y-6">
@@ -170,11 +170,11 @@
                     </div>
                 </div>
 
-                <!-- AI Upload Section -->
+                <!-- data.js Import Section -->
                 <div>
-                    <label class="text-xs font-black text-slate-500 uppercase tracking-widest block mb-2 ml-1">Nhập tự động bằng AI</label>
+                    <label class="text-xs font-black text-slate-500 uppercase tracking-widest block mb-2 ml-1">Mở file data.js để chỉnh sửa</label>
                     <div id="dropZone" class="drop-zone rounded-[2rem] p-8 md:p-12 text-center cursor-pointer group shadow-sm hover:shadow-md">
-                        <input type="file" id="fileInput" class="hidden" accept=".docx,.txt">
+                        <input type="file" id="fileInput" class="hidden" accept=".js">
                         <div id="fileInfo" class="space-y-4">
                             <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -182,8 +182,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-lg font-bold text-slate-800">Kéo thả tệp hoặc Bấm để tải lên</p>
-                                <p class="text-slate-500 text-sm mt-1">Hỗ trợ .docx, .txt. AI sẽ tự động phân tích và chuyển thành các khối bên dưới.</p>
+                                <p class="text-lg font-bold text-slate-800">Kéo thả hoặc bấm để mở file data.js</p>
+                                <p class="text-slate-500 text-sm mt-1">Tạm khóa trích xuất từ .docx, .doc, .txt. Trang này chỉ nhận .js đúng cấu trúc EduSpace để chỉnh sửa và xuất lại.</p>
                             </div>
                         </div>
                     </div>
@@ -193,8 +193,92 @@
                 <div id="loadingStatus" class="hidden flex flex-col items-center gap-4 py-6">
                     <div class="loader ease-linear rounded-full border-4 border-t-4 border-slate-100 h-10 w-10"></div>
                     <div class="text-center">
-                        <p class="text-blue-700 font-bold">AI đang phân tích và bóc tách dữ liệu...</p>
+                        <p class="text-blue-700 font-bold">Đang đọc file data.js...</p>
                         <p class="text-slate-500 text-xs italic mt-1">Vui lòng đợi trong giây lát.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- data.js Guide -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 mb-8">
+            <div class="flex items-start justify-between gap-4 mb-4">
+                <div>
+                    <h2 class="text-lg font-extrabold text-slate-800">Hướng Dẫn Viết File data.js</h2>
+                    <p class="text-sm text-slate-500 mt-1">File cần khai báo `window.quizData`, chứa thông tin đề, cấu hình thời gian/điểm và danh sách câu hỏi.</p>
+                </div>
+                <span class="text-[10px] font-black uppercase tracking-widest bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full">EduSpace Schema</span>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-5 text-sm text-slate-600">
+                <div class="space-y-3">
+                    <div>
+                        <h3 class="font-black text-slate-800 mb-1">Cấu trúc bắt buộc</h3>
+                        <p>Dùng `window.quizData = {...};`. Không dùng JSON thuần. `testDuration` tính bằng giây. `examLayout` quy định số câu và điểm mỗi dạng.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-slate-800 mb-1">Các dạng câu</h3>
+                        <p>`multiple`: trắc nghiệm, `correct` là index 0=A. `truefalse`: mảng phát biểu và mảng `correctAnswers`. `short`: đáp án ngắn. `essay`: tự luận.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-slate-800 mb-1">Nội dung nâng cao</h3>
+                        <p>Có thể dùng Markdown, LaTeX với dấu gạch chéo kép trong chuỗi JS, hình ảnh `![mô tả](url)`, âm thanh `[audio:url]`, video `[video:url]`.</p>
+                    </div>
+                </div>
+                <pre class="bg-slate-950 text-slate-100 rounded-2xl p-4 overflow-x-auto text-xs leading-relaxed"><code>window.quizData = {
+  title: "Đề kiểm tra mẫu",
+  pageTitle: "Đề kiểm tra mẫu",
+  config: {
+    testDuration: 2700,
+    examLayout: {
+      multiple: { count: 1, pointsPerQ: 0.25 },
+      truefalse: { count: 1, pointsPerQ: 1, partialScoring: [0.1, 0.25, 0.5, 1] },
+      short: { count: 1, pointsPerQ: 0.5 },
+      essay: { count: 0, pointsPerQ: 0 }
+    }
+  },
+  questions: [
+    {
+      type: "multiple",
+      question: "1 + 1 bằng mấy?",
+      options: ["1", "2", "3", "4"],
+      correct: 1,
+      explanation: "1 + 1 = 2."
+    },
+    {
+      type: "truefalse",
+      question: "Xét các phát biểu sau:",
+      options: ["HTML là ngôn ngữ đánh dấu.", "CSS dùng để truy vấn dữ liệu."],
+      correctAnswers: [true, false],
+      correct: [true, false]
+    },
+    {
+      type: "short",
+      question: "Kết quả của $2^3$ là bao nhiêu?",
+      correct: "8"
+    }
+  ]
+};</code></pre>
+            </div>
+
+            <div class="mt-5 grid md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                    <h3 class="font-black text-slate-800 mb-2">Bảng thuộc tính nhanh</h3>
+                    <div class="space-y-2 text-slate-600">
+                        <p><b>`title`</b>: tên đề hiển thị ở màn hình bắt đầu.</p>
+                        <p><b>`config.testDuration`</b>: thời gian làm bài, tính bằng giây.</p>
+                        <p><b>`config.examLayout[type].count`</b>: số câu lấy theo dạng khi chọn làm theo ma trận.</p>
+                        <p><b>`config.examLayout[type].pointsPerQ`</b>: điểm mỗi câu của dạng đó.</p>
+                        <p><b>`questions`</b>: ngân hàng câu hỏi, hệ thống lấy theo thứ tự trong mảng.</p>
+                    </div>
+                </div>
+                <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100">
+                    <h3 class="font-black text-amber-900 mb-2">Lỗi thường gặp cần tránh</h3>
+                    <div class="space-y-2 text-amber-900/80">
+                        <p>Thiếu dấu phẩy giữa các câu hỏi hoặc phương án.</p>
+                        <p>Dùng `correct: 4` cho câu có 4 đáp án. Index đúng phải là 0, 1, 2, 3.</p>
+                        <p>Viết công thức LaTeX bằng một dấu `\`; trong chuỗi JavaScript cần dùng `\\`.</p>
+                        <p>Dạng Đúng/Sai thiếu `correctAnswers` hoặc số đáp án không khớp số phát biểu.</p>
                     </div>
                 </div>
             </div>
@@ -402,19 +486,15 @@
 
         async function handleFile(file) {
             if (!file) return;
-            document.getElementById('fileInfo').innerHTML = '<div class="text-blue-600 font-bold text-lg">' + file.name + '</div><p class="text-xs text-slate-400 mt-1">Đang xử lý trích xuất...</p>';
-
-            let extractedText = "";
+            document.getElementById('fileInfo').innerHTML = '<div class="text-blue-600 font-bold text-lg">' + file.name + '</div><p class="text-xs text-slate-400 mt-1">Đang đọc cấu trúc data.js...</p>';
             try {
-                if (file.name.endsWith('.docx')) {
-                    const arrayBuffer = await file.arrayBuffer();
-                    const result = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
-                    extractedText = result.value;
-                } else {
-                    extractedText = await file.text();
+                if (!file.name.toLowerCase().endsWith('.js')) {
+                    throw new Error("Tính năng trích xuất từ .docx, .doc, .txt đang tạm khóa. Vui lòng chọn file data.js.");
                 }
-                if (extractedText.trim().length === 0) throw new Error("Tệp rỗng hoặc không đọc được chữ.");
-                await processWithAI(extractedText);
+                const code = await file.text();
+                const data = parseDataJS(code);
+                loadQuizDataIntoEditor(data);
+                showToast("✅ Đã mở file data.js để chỉnh sửa.");
             } catch (error) {
                 showToast("❌ Lỗi: " + error.message, true);
                 document.getElementById('fileInfo').innerHTML =
@@ -425,27 +505,385 @@
             fileInput.value = "";
         }
 
+        function parseDataJS(code) {
+            const normalizedCode = String(code || '')
+                .replace(/^\s*(?:const|let|var)\s+quizData\s*=/m, 'window.quizData =');
+            const sandbox = { quizData: undefined };
+            const runner = new Function('window', normalizedCode + '\n;return window.quizData;');
+            const data = runner(sandbox);
+            if (!data || !Array.isArray(data.questions)) {
+                throw new Error("File không chứa window.quizData.questions hợp lệ.");
+            }
+            return data;
+        }
+
+        function normalizeImportedQuestion(q) {
+            const copy = Object.assign({}, q);
+            const typeMap = {
+                choice: 'multiple',
+                'multiple-choice': 'multiple',
+                multiple_choice: 'multiple',
+                true_false: 'truefalse',
+                'true-false': 'truefalse',
+                short_answer: 'short'
+            };
+            copy.type = typeMap[copy.type] || copy.type || 'multiple';
+            if (copy.type === 'multiple') {
+                if (copy.correct === undefined && copy.answer !== undefined) copy.correct = copy.answer;
+                if (typeof copy.correct === 'string' && /^[A-D]$/i.test(copy.correct.trim())) {
+                    copy.correct = copy.correct.trim().toUpperCase().charCodeAt(0) - 65;
+                }
+                if (!Array.isArray(copy.options)) copy.options = [];
+                copy.correct = Number.isInteger(copy.correct) ? copy.correct : 0;
+            } else if (copy.type === 'truefalse') {
+                if (!Array.isArray(copy.options) && Array.isArray(copy.subQuestions)) {
+                    copy.options = copy.subQuestions.map(function(item) { return item.text || item.question || ''; });
+                }
+                if (!Array.isArray(copy.correctAnswers)) {
+                    if (Array.isArray(copy.correct)) copy.correctAnswers = copy.correct;
+                    else if (Array.isArray(copy.subQuestions)) {
+                        copy.correctAnswers = copy.subQuestions.map(function(item) {
+                            return item.correctAnswer === true || item.correctAnswer === 'Đúng' || item.correctAnswer === 'Dung';
+                        });
+                    } else {
+                        copy.correctAnswers = [];
+                    }
+                }
+                copy.correct = copy.correctAnswers;
+            }
+            return copy;
+        }
+
+        function clearEditor() {
+            Object.keys(sections).forEach(function(type) {
+                sections[type].el.remove();
+            });
+            sections = {};
+            qCounter = 0;
+            optCounter = 0;
+            tfCounter = 0;
+            updateEmptyState();
+        }
+
+        function loadQuizDataIntoEditor(data) {
+            clearEditor();
+            document.getElementById('meta-title').value = data.title || data.pageTitle || '';
+            document.getElementById('meta-duration').value = Math.max(1, Math.round((data.config?.testDuration || 2700) / 60));
+
+            const layout = data.config?.examLayout || {};
+            const questions = (data.questions || []).map(normalizeImportedQuestion);
+            populateUIWithJSON(questions);
+
+            TYPE_ORDER.forEach(function(type) {
+                if (sections[type] && layout[type]?.pointsPerQ !== undefined) {
+                    sections[type].el.querySelector('.section-pts').value = layout[type].pointsPerQ;
+                }
+            });
+
+            updateMatrix();
+            resetApproval();
+            document.getElementById('fileInfo').innerHTML =
+                '<div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto">' +
+                '<svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' +
+                '</div><div class="text-emerald-700 font-bold mt-2">Đã nạp ' + questions.length + ' câu hỏi từ data.js</div>' +
+                '<p class="text-xs text-slate-400 mt-1">Bạn có thể chỉnh sửa bên dưới rồi kiểm tra và xuất lại.</p>';
+        }
+
+        function updateLoadingMessage(main, sub) {
+            const box = loadingStatus.querySelector('.text-center');
+            if (!box) return;
+            box.innerHTML = '<p class="text-blue-700 font-bold">' + main + '</p><p class="text-slate-500 text-xs italic mt-1">' + (sub || '') + '</p>';
+        }
+
+        function normalizeExamText(text) {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = String(text || '')
+                .replace(/<br\s*\/?>/gi, '\n')
+                .replace(/<\/p>|<\/div>|<\/tr>|<\/li>|<\/h[1-6]>/gi, '\n')
+                .replace(/<[^>]+>/g, ' ');
+            return textarea.value
+                .replace(/\r/g, '\n')
+                .replace(/\u00a0/g, ' ')
+                .replace(/[ \t]+/g, ' ')
+                .replace(/\n[ \t]+/g, '\n')
+                .replace(/[ \t]+\n/g, '\n')
+                .replace(/\n{3,}/g, '\n\n')
+                .trim();
+        }
+
+        function splitQuestionBlocks(text) {
+            const clean = normalizeExamText(text);
+            const pattern = /(^|\n)\s*(?:Câu|Cau|C.{0,2}u|Question|Bài|Bai|B.{0,2}i)\s*(\d{1,3})[\s.:)\-]/gi;
+            const matches = [];
+            let match;
+            while ((match = pattern.exec(clean)) !== null) {
+                matches.push({ index: match.index + match[1].length, number: match[2] });
+            }
+
+            if (matches.length === 0) {
+                return [{ sourceId: 'Q1', sourceNumber: 1, raw: clean }];
+            }
+
+            return matches.map(function(item, i) {
+                const next = matches[i + 1]?.index ?? clean.length;
+                return {
+                    sourceId: 'B' + String(i + 1).padStart(3, '0'),
+                    sourceNumber: parseInt(item.number, 10),
+                    sourceOrder: i + 1,
+                    raw: clean.slice(item.index, next).trim()
+                };
+            }).filter(function(block) {
+                return block.raw.length > 12;
+            });
+        }
+
+        function parseAIJson(raw) {
+            const text = String(raw || '').replace(/```json/g, '').replace(/```/g, '').trim();
+            try {
+                return JSON.parse(text);
+            } catch (_) {
+                const arrStart = text.indexOf('[');
+                const arrEnd = text.lastIndexOf(']');
+                if (arrStart >= 0 && arrEnd > arrStart) return JSON.parse(text.slice(arrStart, arrEnd + 1));
+                const objStart = text.indexOf('{');
+                const objEnd = text.lastIndexOf('}');
+                if (objStart >= 0 && objEnd > objStart) return JSON.parse(text.slice(objStart, objEnd + 1));
+                throw new Error('AI không trả về JSON hợp lệ.');
+            }
+        }
+
+        function normalizeExtractedQuestion(q, fallbackId) {
+            const typeMap = {
+                choice: 'multiple',
+                multiple_choice: 'multiple',
+                'multiple-choice': 'multiple',
+                tf: 'truefalse',
+                true_false: 'truefalse',
+                'true-false': 'truefalse',
+                short_answer: 'short',
+                shortanswer: 'short'
+            };
+            const type = typeMap[q.type] || q.type || 'multiple';
+            const normalized = {
+                sourceId: q.sourceId || fallbackId,
+                type: TYPE_ORDER.includes(type) ? type : 'multiple',
+                question: String(q.question || '').trim(),
+                explanation: String(q.explanation || '').trim()
+            };
+
+            if (normalized.type === 'multiple') {
+                normalized.options = Array.isArray(q.options) ? q.options.map(function(x) { return String(x || '').trim(); }) : [];
+                let correct = q.correct;
+                if (typeof correct === 'string') {
+                    const letter = correct.trim().toUpperCase();
+                    if (/^[A-Z]$/.test(letter)) correct = letter.charCodeAt(0) - 65;
+                    else if (/^\d+$/.test(letter)) correct = parseInt(letter, 10);
+                }
+                normalized.correct = Number.isInteger(correct) ? correct : 0;
+            } else if (normalized.type === 'truefalse') {
+                normalized.options = Array.isArray(q.options) ? q.options.map(function(x) { return String(x || '').trim(); }) : [];
+                const sourceAnswers = Array.isArray(q.correctAnswers) ? q.correctAnswers : (Array.isArray(q.correct) ? q.correct : []);
+                normalized.correctAnswers = normalized.options.map(function(_, idx) {
+                    const val = sourceAnswers[idx];
+                    if (typeof val === 'string') return /^(true|đúng|dung|d|yes)$/i.test(val.trim());
+                    return val === true;
+                });
+                normalized.correct = normalized.correctAnswers;
+            } else {
+                normalized.correct = q.correct == null ? '' : String(q.correct).trim();
+            }
+            return normalized;
+        }
+
+        function stripQuestionLead(raw) {
+            return String(raw || '').replace(/^\s*(?:Câu|Cau|C.{0,2}u|Question|Bài|Bai|B.{0,2}i)\s*\d{1,3}(?:\s*\[[^\]]+\])?[\s.:)\-]*/i, '').trim();
+        }
+
+        function splitByChoiceMarkers(text, markerPattern) {
+            const source = String(text || '').replace(/\s+/g, ' ').trim();
+            const matches = [];
+            let match;
+            markerPattern.lastIndex = 0;
+            while ((match = markerPattern.exec(source)) !== null) {
+                matches.push({
+                    index: match.index,
+                    markerLength: match[0].length,
+                    letter: match[2],
+                    starred: !!match[1]
+                });
+            }
+            if (matches.length < 2) return null;
+
+            const question = source.slice(0, matches[0].index).trim();
+            const options = matches.map(function(item, idx) {
+                const next = matches[idx + 1]?.index ?? source.length;
+                return source.slice(item.index + item.markerLength, next).replace(/^\*\s*/, '').trim();
+            });
+            const correctIndex = matches.findIndex(function(item) { return item.starred; });
+            return { question, options, correctIndex };
+        }
+
+        function deterministicParseBlock(block) {
+            const raw = stripQuestionLead(block.raw);
+            const lowerTF = splitByChoiceMarkers(raw, /(\*?)([a-d])[\.)]\s*/g);
+            if (lowerTF && lowerTF.options.length >= 3) {
+                return {
+                    sourceId: block.sourceId,
+                    type: 'truefalse',
+                    question: lowerTF.question,
+                    options: lowerTF.options,
+                    correctAnswers: lowerTF.options.map(function(_, idx) {
+                        return lowerTF.correctIndex === idx;
+                    }),
+                    correct: lowerTF.options.map(function(_, idx) {
+                        return lowerTF.correctIndex === idx;
+                    }),
+                    explanation: ''
+                };
+            }
+
+            const multiple = splitByChoiceMarkers(raw, /(\*?)([A-D])[\.)]\s*/g);
+            if (multiple && multiple.options.length >= 2) {
+                return {
+                    sourceId: block.sourceId,
+                    type: 'multiple',
+                    question: multiple.question,
+                    options: multiple.options,
+                    correct: multiple.correctIndex >= 0 ? multiple.correctIndex : 0,
+                    explanation: ''
+                };
+            }
+            return null;
+        }
+
+        function needsDeterministicRepair(q, block) {
+            const raw = block.raw || '';
+            const hasUpperChoices = /\*?[A-D][\.)]\s*/.test(raw);
+            const hasLowerChoices = /\*?[a-d][\.)]\s*/.test(raw);
+            if (q.type === 'multiple' && hasUpperChoices && (!Array.isArray(q.options) || q.options.length < 2)) return true;
+            if (q.type === 'truefalse' && hasLowerChoices && (!Array.isArray(q.options) || q.options.length < 3)) return true;
+            if ((q.question || '').length < 12 && (hasUpperChoices || hasLowerChoices)) return true;
+            if (Array.isArray(q.options) && q.options.some(function(opt) { return /\*?[A-D][\.)]\s*/.test(opt); })) return true;
+            return false;
+        }
+
+        function repairExtractedQuestion(q, block) {
+            const deterministic = deterministicParseBlock(block);
+            if (!deterministic) return q;
+            if (!needsDeterministicRepair(q, block)) {
+                if ((!q.question || q.question.length < deterministic.question.length * 0.5) && deterministic.question) {
+                    q.question = deterministic.question;
+                }
+                return q;
+            }
+            deterministic.explanation = q.explanation || deterministic.explanation || '';
+            if (q.type === 'truefalse' && Array.isArray(q.correctAnswers) && q.correctAnswers.length === deterministic.options.length) {
+                deterministic.correctAnswers = q.correctAnswers;
+                deterministic.correct = q.correctAnswers;
+            }
+            if (q.type === 'multiple' && Number.isInteger(q.correct) && q.correct < deterministic.options.length) {
+                deterministic.correct = q.correct;
+            }
+            return deterministic;
+        }
+
+        async function extractBatchWithAI(blocks, batchIndex, totalBatches) {
+            const payload = blocks.map(function(block) {
+                return {
+                    sourceId: block.sourceId,
+                    sourceNumber: block.sourceNumber,
+                    sourceOrder: block.sourceOrder,
+                    raw: block.raw
+                };
+            });
+
+            const prompt = [
+                'Bạn là bộ chuyển đổi đề thi sang JSON. Nhiệm vụ là tách CHÍNH XÁC, KHÔNG BỎ SÓT ý trong từng block nguồn.',
+                'QUY TẮC BẮT BUỘC:',
+                '1. Trả về JSON array thuần. Không markdown, không giải thích ngoài JSON.',
+                '2. Mỗi block nguồn phải tạo đúng 1 object có sourceId giống hệt đầu vào. sourceId là mã duy nhất theo thứ tự xuất hiện, không phải số câu gốc.',
+                '3. Không gộp câu, không bỏ mệnh đề, không tóm tắt làm mất ý.',
+                '4. Với câu Đúng/Sai: mỗi ý a/b/c/d là một phần tử options, correctAnswers là mảng boolean nếu có đáp án. Nếu chưa có đáp án trong nguồn, dùng false nhưng giữ đủ phát biểu.',
+                '5. Với trắc nghiệm: options chỉ chứa nội dung phương án, không kèm A/B/C/D. correct là index 0-based nếu có đáp án; nếu không có đáp án, dùng 0.',
+                '6. Với trả lời ngắn/tự luận: giữ nguyên yêu cầu đề bài, correct lấy từ đáp án nếu có, nếu không có thì chuỗi rỗng.',
+                '7. Giữ nguyên công thức, số liệu, tên riêng, bảng, điều kiện và các cụm phủ định.',
+                '',
+                'Schema mỗi object:',
+                '{"sourceId":"Q1","type":"multiple|truefalse|short|essay","question":"...","options":["..."],"correct":0,"correctAnswers":[true,false],"explanation":"..."}',
+                '',
+                'Lô ' + batchIndex + '/' + totalBatches + ':',
+                JSON.stringify(payload, null, 2)
+            ].join('\n');
+
+            const rawRes = await window.eduspaceAI.call({
+                model: 'gemini-3.1-flash-lite',
+                generationConfig: {
+                    temperature: 0,
+                    responseMimeType: 'application/json'
+                },
+                contents: [{ role: 'user', parts: [{ text: prompt }] }]
+            });
+            const parsed = parseAIJson(rawRes);
+            const arr = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.questions) ? parsed.questions : []);
+            return arr.map(function(q, idx) {
+                const block = blocks.find(function(item) { return item.sourceId === q.sourceId; }) || blocks[idx];
+                return repairExtractedQuestion(normalizeExtractedQuestion(q, block?.sourceId), block || {});
+            });
+        }
+
         async function processWithAI(text) {
             dropZone.classList.add('hidden');
             loadingStatus.classList.remove('hidden');
             loadingStatus.classList.add('flex');
 
-            const systemPrompt = 'Bạn là chuyên gia phân tích đề thi.\n' +
-                'Nhiệm vụ: Chuyển đổi văn bản thành mảng JSON [ {type, question, options, correct, explanation} ].\n' +
-                'KHÔNG BAO GỒM ```json VÀ BẤT KỲ VĂN BẢN NÀO KHÁC.\n' +
-                'type: "multiple", "truefalse", "short", "essay".';
-
             try {
                 if (!window.eduspaceAI || !window.eduspaceAI.call) throw new Error("Hệ thống AI không khả dụng.");
-                let rawRes = await window.eduspaceAI.call({
-                    model: 'gemini-3.5-flash-lite',
-                    contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\nNội dung:\n' + text }] }]
+                const blocks = splitQuestionBlocks(text);
+                if (!blocks.length) throw new Error("Không nhận diện được câu hỏi trong tệp.");
+
+                const batchSize = 6;
+                const batches = [];
+                for (let i = 0; i < blocks.length; i += batchSize) batches.push(blocks.slice(i, i + batchSize));
+
+                const allQuestions = [];
+                const seen = new Set();
+                for (let i = 0; i < batches.length; i++) {
+                    updateLoadingMessage('AI đang tách đề theo lô ' + (i + 1) + '/' + batches.length + '...', 'Đã nhận diện ' + blocks.length + ' block câu hỏi từ tệp nguồn.');
+                    const extracted = await extractBatchWithAI(batches[i], i + 1, batches.length);
+                    extracted.forEach(function(q) {
+                        if (q.sourceId && !seen.has(q.sourceId)) {
+                            seen.add(q.sourceId);
+                            allQuestions.push(q);
+                        }
+                    });
+                }
+
+                const missing = blocks.filter(function(block) { return !seen.has(block.sourceId); });
+                for (let i = 0; i < missing.length; i++) {
+                    updateLoadingMessage('AI đang tách lại câu bị thiếu...', missing[i].sourceId + ' chưa có trong phản hồi lô đầu.');
+                    const retry = await extractBatchWithAI([missing[i]], i + 1, missing.length);
+                    retry.forEach(function(q) {
+                        if (q.sourceId && !seen.has(q.sourceId)) {
+                            seen.add(q.sourceId);
+                            allQuestions.push(q);
+                        }
+                    });
+                }
+
+                const orderMap = {};
+                blocks.forEach(function(block, index) { orderMap[block.sourceId] = index; });
+                allQuestions.sort(function(a, b) {
+                    return (orderMap[a.sourceId] ?? 0) - (orderMap[b.sourceId] ?? 0);
                 });
-                let cleanedJson = rawRes.replace(/```json/g, "").replace(/```/g, "").trim();
-                let parsedData = JSON.parse(cleanedJson);
-                if (!Array.isArray(parsedData) || parsedData.length === 0) throw new Error("Không tìm thấy câu hỏi.");
-                populateUIWithJSON(parsedData);
-                showToast('✅ Đã phân tích thành công ' + parsedData.length + ' câu hỏi!');
+
+                if (!Array.isArray(allQuestions) || allQuestions.length === 0) throw new Error("Không tìm thấy câu hỏi.");
+                populateUIWithJSON(allQuestions);
+                const finalMissing = blocks.length - allQuestions.length;
+                if (finalMissing > 0) {
+                    showToast('⚠️ Đã tách ' + allQuestions.length + '/' + blocks.length + ' câu. Cần kiểm tra lại các câu còn thiếu.', true);
+                } else {
+                    showToast('✅ Đã tách đủ ' + allQuestions.length + '/' + blocks.length + ' câu hỏi!');
+                }
             } catch (error) {
                 showToast("❌ Lỗi AI: " + error.message, true);
             } finally {
@@ -477,7 +915,7 @@
                     const tfContainer = qCard.querySelector('.tf-list');
                     tfContainer.innerHTML = '';
                     const options = Array.isArray(q.options) ? q.options : ["",""];
-                    const correctAnswers = Array.isArray(q.correctAnswers) ? q.correctAnswers : [true, false];
+                    const correctAnswers = Array.isArray(q.correctAnswers) ? q.correctAnswers : (Array.isArray(q.correct) ? q.correct : [true, false]);
                     options.forEach(function(optText, idx) { doAddTFStatementToContainer(qid, tfContainer, idx, optText, correctAnswers[idx]); });
                 } else if (type === 'short') {
                     if (qCard.querySelector('.correct-short')) qCard.querySelector('.correct-short').value = q.correct || '';
@@ -521,6 +959,7 @@
                 if (TYPE_ORDER.indexOf(child.dataset.type) > myOrder) { container.insertBefore(card, child); inserted = true; }
             });
             if (!inserted) container.appendChild(card);
+            resetApproval();
             updateEmptyState();
         }
 
@@ -528,6 +967,7 @@
             if (!sections[type] || !confirm('Xóa?')) return;
             sections[type].el.remove();
             delete sections[type];
+            resetApproval();
             updateEmptyState();
         }
 
@@ -557,6 +997,7 @@
                 else if (type === 'truefalse') { addTFStatementUI(qid); addTFStatementUI(qid); }
             }
             updateMatrix();
+            resetApproval();
             return qid;
         }
 
@@ -565,9 +1006,9 @@
             const row = document.createElement('div');
             row.className = 'opt-row';
             row.innerHTML = '<span class="w-6 h-6 flex items-center justify-center bg-slate-100 rounded-md text-xs font-black">' + String.fromCharCode(65+idx) + '</span>' +
-                '<input type="text" value="' + textVal.replace(/"/g, '&quot;') + '" class="opt-text flex-1 px-3 py-1.5 rounded-md border border-slate-200 text-sm">' +
+                '<input type="text" value="' + escapeAttr(textVal) + '" class="opt-text flex-1 px-3 py-1.5 rounded-md border border-slate-200 text-sm">' +
                 '<input type="radio" name="correct_' + qid + '" value="' + idx + '" ' + (isCorrect ? 'checked' : '') + ' class="w-4 h-4 accent-blue-600">' +
-                '<button onclick="this.closest(\'.opt-row\').remove();relabelOptions(\'' + qid + '\')" class="text-red-300">✕</button>';
+                '<button onclick="this.closest(\'.opt-row\').remove();relabelOptions(\'' + qid + '\');resetApproval();updateMatrix()" class="text-red-300">✕</button>';
             container.appendChild(row);
         }
 
@@ -588,10 +1029,10 @@
             const row = document.createElement('div');
             row.className = 'tf-row';
             row.innerHTML = '<span class="w-6 h-6 flex items-center justify-center bg-slate-100 rounded-md text-xs font-black">' + String.fromCharCode(97+idx) + '</span>' +
-                '<input type="text" value="' + textVal.replace(/"/g, '&quot;') + '" class="tf-text flex-1 px-3 py-1.5 rounded-md border border-slate-200 text-sm">' +
+                '<input type="text" value="' + escapeAttr(textVal) + '" class="tf-text flex-1 px-3 py-1.5 rounded-md border border-slate-200 text-sm">' +
                 '<input type="radio" name="tf_' + qid + '_' + idx + '" value="true" ' + (isCorrect ? 'checked' : '') + ' class="accent-emerald-600">' +
                 '<input type="radio" name="tf_' + qid + '_' + idx + '" value="false" ' + (!isCorrect ? 'checked' : '') + ' class="accent-red-500">' +
-                '<button onclick="this.closest(\'.tf-row\').remove()" class="text-red-300">✕</button>';
+                '<button onclick="this.closest(\'.tf-row\').remove();resetApproval();updateMatrix()" class="text-red-300">✕</button>';
             container.appendChild(row);
         }
 
@@ -602,19 +1043,164 @@
 
         function removeQuestion(type, qid) {
             document.getElementById(qid).remove();
+            relabelQuestions(type);
+            resetApproval();
             updateMatrix();
         }
 
         // ===================== EXPORT =====================
+        function escapeAttr(value) {
+            return String(value || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function resetApproval() {
+            isExamApproved = false;
+            updateExportState();
+        }
+
+        function updateExportState() {
+            const btn = document.getElementById('btnExport');
+            if (!btn) return;
+            if (isExamApproved) {
+                btn.className = btn.className
+                    .replace('bg-slate-400 cursor-not-allowed', 'bg-emerald-600 hover:bg-emerald-700')
+                    .replace('shadow-2xl', 'shadow-lg shadow-emerald-500/20');
+            } else {
+                btn.className = btn.className
+                    .replace('bg-emerald-600 hover:bg-emerald-700', 'bg-slate-400 cursor-not-allowed')
+                    .replace('shadow-lg shadow-emerald-500/20', 'shadow-2xl');
+            }
+        }
+
+        function relabelQuestions(type) {
+            if (!sections[type]) return;
+            sections[type].el.querySelectorAll('.q-card').forEach(function(card, index) {
+                const numberBadge = card.querySelector('.flex-shrink-0');
+                if (numberBadge) numberBadge.textContent = index + 1;
+            });
+        }
+
+        function collectQuizData() {
+            const title = (document.getElementById('meta-title').value || '').trim() || 'Đề kiểm tra tùy chỉnh';
+            const durationMinutes = Math.max(1, parseInt(document.getElementById('meta-duration').value, 10) || 45);
+            const quizDataObj = {
+                title: title,
+                pageTitle: title,
+                config: {
+                    testDuration: durationMinutes * 60,
+                    examLayout: {}
+                },
+                questions: []
+            };
+
+            TYPE_ORDER.forEach(function(type) {
+                if (!sections[type]) return;
+                const sectionEl = sections[type].el;
+                const cards = Array.from(sectionEl.querySelectorAll('.q-card'));
+                const pointsPerQ = parseFloat(sectionEl.querySelector('.section-pts').value) || 0;
+
+                quizDataObj.config.examLayout[type] = { count: cards.length, pointsPerQ: pointsPerQ };
+                if (type === 'truefalse') {
+                    quizDataObj.config.examLayout[type].partialScoring = [0.1, 0.25, 0.5, 1.0];
+                }
+
+                cards.forEach(function(card) {
+                    const question = (card.querySelector('.q-text')?.value || '').trim();
+                    const explanation = (card.querySelector('.q-explain')?.value || '').trim();
+                    const q = { type: type, question: question };
+                    if (explanation) q.explanation = explanation;
+
+                    if (type === 'multiple') {
+                        const rows = Array.from(card.querySelectorAll('.opt-row'));
+                        q.options = rows.map(function(row) { return (row.querySelector('.opt-text')?.value || '').trim(); });
+                        const checked = card.querySelector('input[type=radio][name="correct_' + card.id + '"]:checked');
+                        q.correct = checked ? parseInt(checked.value, 10) : 0;
+                    } else if (type === 'truefalse') {
+                        const rows = Array.from(card.querySelectorAll('.tf-row'));
+                        q.options = rows.map(function(row) { return (row.querySelector('.tf-text')?.value || '').trim(); });
+                        q.correctAnswers = rows.map(function(row) {
+                            const checked = row.querySelector('input[type=radio]:checked');
+                            return checked ? checked.value === 'true' : true;
+                        });
+                        q.correct = q.correctAnswers;
+                    } else if (type === 'short') {
+                        q.correct = (card.querySelector('.correct-short')?.value || '').trim();
+                    } else if (type === 'essay') {
+                        q.correct = (card.querySelector('.correct-essay')?.value || '').trim();
+                    }
+
+                    quizDataObj.questions.push(q);
+                });
+            });
+
+            return quizDataObj;
+        }
+
+        function validateQuizData(data) {
+            const issues = [];
+            if (!data.questions.length) issues.push('Đề chưa có câu hỏi.');
+
+            data.questions.forEach(function(q, index) {
+                const label = 'Câu ' + (index + 1);
+                if (!q.question) issues.push(label + ': chưa có nội dung câu hỏi.');
+
+                if (q.type === 'multiple') {
+                    if (!Array.isArray(q.options) || q.options.length < 2) issues.push(label + ': trắc nghiệm cần ít nhất 2 lựa chọn.');
+                    if ((q.options || []).some(function(opt) { return !opt; })) issues.push(label + ': còn lựa chọn trống.');
+                    if (!Number.isInteger(q.correct) || q.correct < 0 || q.correct >= q.options.length) issues.push(label + ': đáp án đúng không hợp lệ.');
+                } else if (q.type === 'truefalse') {
+                    if (!Array.isArray(q.options) || q.options.length === 0) issues.push(label + ': Đúng/Sai cần ít nhất 1 phát biểu.');
+                    if ((q.options || []).some(function(opt) { return !opt; })) issues.push(label + ': còn phát biểu trống.');
+                    if (!Array.isArray(q.correctAnswers) || q.correctAnswers.length !== q.options.length) issues.push(label + ': số đáp án Đúng/Sai chưa khớp số phát biểu.');
+                } else if (q.type === 'short') {
+                    if (!q.correct) issues.push(label + ': câu trả lời ngắn chưa có đáp án.');
+                    if (String(q.correct).length > 4) issues.push(label + ': đáp án trả lời ngắn nên tối đa 4 ký tự.');
+                } else if (q.type === 'essay') {
+                    if (!q.correct && !q.explanation) issues.push(label + ': tự luận nên có đáp án mẫu hoặc giải thích.');
+                }
+            });
+
+            return issues;
+        }
+
+        function buildReviewHtml(issues, aiText) {
+            const total = collectQuizData().questions.length;
+            const statusClass = issues.length ? 'bg-rose-50 text-rose-700 border-rose-100' : 'bg-emerald-50 text-emerald-700 border-emerald-100';
+            const statusText = issues.length ? 'Cần chỉnh sửa trước khi xuất file' : 'Đạt yêu cầu để xuất data.js';
+            const issuesHtml = issues.length
+                ? '<ul class="space-y-2 text-sm text-rose-700 font-semibold">' + issues.map(function(item) { return '<li>• ' + item + '</li>'; }).join('') + '</ul>'
+                : '<div class="text-sm text-emerald-700 font-semibold">Không phát hiện lỗi cấu trúc. Bạn có thể xuất file data.js.</div>';
+
+            return '<div class="rounded-2xl border p-4 ' + statusClass + '">' +
+                '<div class="text-xs font-black uppercase tracking-wider mb-1">Trạng thái</div>' +
+                '<div class="font-extrabold">' + statusText + '</div>' +
+                '</div>' +
+                '<div class="grid grid-cols-2 gap-3">' +
+                '<div class="bg-slate-50 rounded-2xl p-4"><div class="text-xs text-slate-500 font-bold uppercase">Số câu</div><div class="text-2xl font-black text-slate-900">' + total + '</div></div>' +
+                '<div class="bg-slate-50 rounded-2xl p-4"><div class="text-xs text-slate-500 font-bold uppercase">Số lỗi</div><div class="text-2xl font-black text-slate-900">' + issues.length + '</div></div>' +
+                '</div>' +
+                '<div><div class="text-xs font-black text-slate-500 uppercase mb-2">Chi tiết kiểm tra</div>' + issuesHtml + '</div>' +
+                (aiText ? '<div class="bg-indigo-50 text-indigo-900 p-4 rounded-xl text-sm font-medium whitespace-pre-wrap">' + aiText + '</div>' : '');
+        }
+
         function exportDataJS() {
-            if (!isExamApproved) return showToast('Chưa thẩm định!', true);
-            const quizDataObj = { title: 'Đề', config: {}, questions: [] };
-            // ... (Logic trích xuất từ DOM tương tự code cũ) ...
-            const code = 'const quizData = ' + JSON.stringify(quizDataObj, null, 2) + ';';
+            if (!isExamApproved) return showToast('Hãy bấm AI Kiểm Tra Đề trước khi xuất file.', true);
+            const quizDataObj = collectQuizData();
+            const issues = validateQuizData(quizDataObj);
+            if (issues.length) {
+                isExamApproved = false;
+                updateExportState();
+                document.getElementById('aiReviewContent').innerHTML = buildReviewHtml(issues, '');
+                document.getElementById('aiReviewModal').classList.remove('hidden');
+                document.getElementById('aiReviewModal').classList.add('flex');
+                return showToast('Đề còn lỗi cần sửa.', true);
+            }
+            const code = 'window.quizData = ' + JSON.stringify(quizDataObj, null, 2) + ';\n';
             const blob = new Blob([code], { type: 'text/javascript' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url; a.download = 'data.js'; a.click();
+            URL.revokeObjectURL(url);
             showToast('🎉 Xuất thành công!');
         }
 
@@ -634,6 +1220,22 @@
         function extractQuestionData(qid, type) {
             const card = document.getElementById(qid);
             const q = { type, question: card.querySelector('.q-text').value.trim() };
+            if (type === 'multiple') {
+                q.options = Array.from(card.querySelectorAll('.opt-row')).map(function(row) { return row.querySelector('.opt-text').value.trim(); });
+                const checked = card.querySelector('input[type=radio][name="correct_' + qid + '"]:checked');
+                q.correct = checked ? parseInt(checked.value, 10) : 0;
+            } else if (type === 'truefalse') {
+                q.options = Array.from(card.querySelectorAll('.tf-row')).map(function(row) { return row.querySelector('.tf-text').value.trim(); });
+                q.correctAnswers = Array.from(card.querySelectorAll('.tf-row')).map(function(row) {
+                    const checked = row.querySelector('input[type=radio]:checked');
+                    return checked ? checked.value === 'true' : true;
+                });
+            } else if (type === 'short') {
+                q.correct = card.querySelector('.correct-short')?.value.trim() || '';
+            } else if (type === 'essay') {
+                q.correct = card.querySelector('.correct-essay')?.value.trim() || '';
+            }
+            q.explanation = card.querySelector('.q-explain')?.value.trim() || '';
             return q;
         }
 
@@ -641,30 +1243,120 @@
             const qid = document.getElementById('aiEditQid').value;
             const type = document.getElementById('aiEditType').value;
             const qData = extractQuestionData(qid, type);
-            // Gọi AI...
-            closeAIEditModal();
+            const prompt = document.getElementById('aiEditPrompt').value.trim();
+            if (!prompt) return showToast('Hãy nhập yêu cầu chỉnh sửa.', true);
+
+            const btn = document.getElementById('btnSubmitAIEdit');
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span>Đang xử lý...</span>';
+
+            try {
+                if (!window.eduspaceAI || !window.eduspaceAI.call) throw new Error('Hệ thống AI không khả dụng.');
+                const rawRes = await window.eduspaceAI.call({
+                    model: 'gemini-3.5-flash-lite',
+                    contents: [{ role: 'user', parts: [{ text:
+                        'Hãy chỉnh sửa câu hỏi theo yêu cầu và chỉ trả về JSON hợp lệ. Schema giữ nguyên theo type hiện tại.\n' +
+                        'Yêu cầu: ' + prompt + '\n\nCâu hỏi hiện tại:\n' + JSON.stringify(qData, null, 2)
+                    }] }]
+                });
+                const cleanedJson = rawRes.replace(/```json/g, '').replace(/```/g, '').trim();
+                const updated = JSON.parse(cleanedJson);
+                populateSingleQuestion(qid, type, updated);
+                closeAIEditModal();
+                document.getElementById('aiEditPrompt').value = '';
+                showToast('✅ Đã áp dụng chỉnh sửa AI.');
+            } catch (e) {
+                showToast('❌ Lỗi chỉnh sửa AI: ' + e.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        }
+
+        function populateSingleQuestion(qid, type, q) {
+            const qCard = document.getElementById(qid);
+            if (!qCard) return;
+            qCard.querySelector('.q-text').value = q.question || '';
+            qCard.querySelector('.q-explain').value = q.explanation || '';
+            if (type === 'multiple') {
+                const optContainer = qCard.querySelector('.options-list');
+                optContainer.innerHTML = '';
+                (Array.isArray(q.options) ? q.options : ['', '', '', '']).forEach(function(optText, idx) {
+                    doAddOptionToContainer(qid, optContainer, idx, optText, idx === (Number.isInteger(q.correct) ? q.correct : 0));
+                });
+            } else if (type === 'truefalse') {
+                const tfContainer = qCard.querySelector('.tf-list');
+                tfContainer.innerHTML = '';
+                const answers = Array.isArray(q.correctAnswers) ? q.correctAnswers : (Array.isArray(q.correct) ? q.correct : []);
+                (Array.isArray(q.options) ? q.options : ['', '']).forEach(function(optText, idx) {
+                    doAddTFStatementToContainer(qid, tfContainer, idx, optText, answers[idx] !== false);
+                });
+            } else if (type === 'short') {
+                qCard.querySelector('.correct-short').value = q.correct || '';
+            } else if (type === 'essay') {
+                qCard.querySelector('.correct-essay').value = q.correct || '';
+            }
+            resetApproval();
+            updateMatrix();
         }
 
         async function runAIReview() {
-                            <div class="text-xs font-bold text-slate-500 uppercase mb-1">An toàn & Pháp luật</div>
-                            <div class="text-sm font-medium text-slate-800">\${result.criteria.safety}</div>
-                        </div>
-                    </div>
-                    <div class="bg-indigo-50 text-indigo-900 p-4 rounded-xl text-sm italic font-medium">
-                        " \${result.overallReview} "
-                    </div>
-                \`;
-                
+            const btn = document.getElementById('btnRunReview');
+            const originalHtml = btn.innerHTML;
+            const data = collectQuizData();
+            const issues = validateQuizData(data);
+            let aiText = '';
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="text-sm uppercase tracking-wider">Đang kiểm tra...</span>';
+
+            try {
+                if (!issues.length && window.eduspaceAI && window.eduspaceAI.call) {
+                    const rawRes = await window.eduspaceAI.call({
+                        model: 'gemini-3.5-flash-lite',
+                        contents: [{ role: 'user', parts: [{ text:
+                            'Bạn là chuyên gia thẩm định đề thi. Hãy nhận xét ngắn gọn về độ rõ ràng, đáp án, phân bố dạng câu và rủi ro lỗi. Trả về văn bản thuần, tối đa 8 dòng.\n\n' +
+                            JSON.stringify(data, null, 2)
+                        }] }]
+                    });
+                    aiText = String(rawRes || '').replace(/```/g, '').trim();
+                } else if (!issues.length) {
+                    aiText = 'AI chưa khả dụng, hệ thống đã kiểm tra cấu trúc nội bộ và không phát hiện lỗi bắt buộc.';
+                }
+
+                isExamApproved = issues.length === 0;
+                updateExportState();
+                document.getElementById('aiReviewContent').innerHTML = buildReviewHtml(issues, aiText);
                 const modal = document.getElementById('aiReviewModal');
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
-
             } catch(e) {
-                showToast('❌ Lỗi Thẩm định AI: ' + e.message, true);
+                isExamApproved = issues.length === 0;
+                updateExportState();
+                document.getElementById('aiReviewContent').innerHTML = buildReviewHtml(issues, 'Không thể lấy nhận xét AI: ' + e.message);
+                document.getElementById('aiReviewModal').classList.remove('hidden');
+                document.getElementById('aiReviewModal').classList.add('flex');
             } finally {
                 btn.disabled = false; btn.innerHTML = originalHtml;
             }
         }
+
+        function showToast(message, isError) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'fixed top-6 right-6 text-white text-sm font-bold px-6 py-3 rounded-xl shadow-2xl opacity-100 pointer-events-none transition-all duration-300 z-[9999] translate-x-0 ' + (isError ? 'bg-rose-600' : 'bg-slate-900');
+            clearTimeout(showToast._timer);
+            showToast._timer = setTimeout(function() {
+                toast.classList.add('opacity-0');
+                toast.classList.add('translate-x-4');
+            }, 2800);
+        }
+
+        document.getElementById('sections-container').addEventListener('input', resetApproval);
+        document.getElementById('meta-title').addEventListener('input', resetApproval);
+        document.getElementById('meta-duration').addEventListener('input', resetApproval);
+        updateExportState();
     </script>
     
     <!-- EduAI Assistant Floating Button Placeholder -->

@@ -1,19 +1,38 @@
 window.quizData = {
     "title": "Kiểm tra Cuối Học Kì I – Toán 11 (KNTT) – 2025-2026",
     "config": {
-        "testDuration": 5400, // 90 phút
+        "testDuration": 5400,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Chu kì của hàm số $y = \\\\sin x$ là:",
-            "options": ["$\\\\pi$", "$2\\\\pi$", "$\\\\pi/2$", "$3\\\\pi$"],
+            "options": [
+                "$\\\\pi$",
+                "$2\\\\pi$",
+                "$\\\\pi/2$",
+                "$3\\\\pi$"
+            ],
             "correct": 1,
             "explanation": "Hàm số $y = \\\\sin x$ tuần hoàn với chu kì cơ bản là $2\\\\pi$."
         },
@@ -32,28 +51,48 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Cho cấp số cộng $(u_n)$ có $u_1 = 3$ và công sai $d = 2$. Giá trị của $u_2$ là:",
-            "options": ["1", "5", "6", "9"],
+            "options": [
+                "1",
+                "5",
+                "6",
+                "9"
+            ],
             "correct": 1,
             "explanation": "$u_2 = u_1 + d = 3 + 2 = 5$."
         },
         {
             "type": "multiple",
             "question": "Cho cấp số nhân $(u_n)$ có $u_1 = 2$ và công bội $q = 3$. Số hạng thứ ba $u_3$ bằng:",
-            "options": ["6", "12", "18", "54"],
+            "options": [
+                "6",
+                "12",
+                "18",
+                "54"
+            ],
             "correct": 2,
             "explanation": "$u_3 = u_1 . q^2 = 2 . 3^2 = 18$."
         },
         {
             "type": "multiple",
             "question": "Giới hạn $\\\\lim_{n \\\\to +\\\\infty} \\\\frac{1}{n}$ bằng:",
-            "options": ["0", "1", "$+\\\\infty$", "Không tồn tại"],
+            "options": [
+                "0",
+                "1",
+                "$+\\\\infty$",
+                "Không tồn tại"
+            ],
             "correct": 0,
             "explanation": "Dãy số có tử số cố định và mẫu số tăng vô hạn thì hội tụ về 0."
         },
         {
             "type": "multiple",
             "question": "Tính giới hạn $L = \\\\lim_{x \\\\to 1} (x^2 + 2x - 1)$.",
-            "options": ["1", "2", "3", "4"],
+            "options": [
+                "1",
+                "2",
+                "3",
+                "4"
+            ],
             "correct": 1,
             "explanation": "Thay $x = 1$ vào đa thức: $1^2 + 2(1) - 1 = 2$."
         },
@@ -108,19 +147,27 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Số các giá trị đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm thường gặp là:",
-            "options": ["2", "3", "4", "5"],
+            "options": [
+                "2",
+                "3",
+                "4",
+                "5"
+            ],
             "correct": 2,
             "explanation": "Gồm: Số trung bình, Trung vị, Tứ phân vị và Mốt."
         },
         {
             "type": "multiple",
             "question": "Phương trình $\\\\tan x = \\\\sqrt{3}$ có một nghiệm là:",
-            "options": ["$\\\\pi/6$", "$\\\\pi/4$", "$\\\\pi/3$", "$\\\\pi/2$"],
+            "options": [
+                "$\\\\pi/6$",
+                "$\\\\pi/4$",
+                "$\\\\pi/3$",
+                "$\\\\pi/2$"
+            ],
             "correct": 2,
             "explanation": "$\\\\tan(\\\\pi/3) = \\\\sqrt{3}$."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Cho cấp số cộng $(u_n)$ có $u_1 = 1$ và công sai $d = 3$:",
@@ -130,8 +177,19 @@ window.quizData = {
                 "Tổng 10 số hạng đầu tiên là $S_{10} = 145$.",
                 "Dãy số $(u_n)$ là một dãy số tăng."
             ],
-            "correct": [true, true, true, true],
-            "explanation": "1. $u_n = 1 + (n-1)3 = 3n-2$. 2. $u_{10} = 3(10)-2 = 28$. 3. $S_{10} = 10(1+28)/2 = 145$. 4. $d = 3 > 0$ nên dãy tăng."
+            "correct": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "explanation": "1. $u_n = 1 + (n-1)3 = 3n-2$. 2. $u_{10} = 3(10)-2 = 28$. 3. $S_{10} = 10(1+28)/2 = 145$. 4. $d = 3 > 0$ nên dãy tăng.",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -142,8 +200,19 @@ window.quizData = {
                 "$\\\\lim_{x \\\\to 1} f(x) = 2$.",
                 "Nếu bổ sung $f(1) = 2$ thì hàm số trở nên liên tục trên $\\\\mathbb{R}$."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Hàm số không xác định tại $x=1$ nên không thể liên tục tại đó nếu không có quy ước thêm."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Hàm số không xác định tại $x=1$ nên không thể liên tục tại đó nếu không có quy ước thêm.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -154,8 +223,19 @@ window.quizData = {
                 "Hai mặt phẳng phân biệt cùng song song với một đường thẳng thì song song với nhau.",
                 "Nếu mặt phẳng $(P)$ chứa đường thẳng $a$ song song với mặt phẳng $(Q)$ thì $(P) // (Q)$."
             ],
-            "correct": [true, true, false, false],
-            "explanation": "Hai mặt phẳng có thể cắt nhau dù cùng song song với một đường thẳng. Để $(P) // (Q)$ cần $(P)$ chứa 2 đường thẳng cắt nhau cùng song song với $(Q)$."
+            "correct": [
+                true,
+                true,
+                false,
+                false
+            ],
+            "explanation": "Hai mặt phẳng có thể cắt nhau dù cùng song song với một đường thẳng. Để $(P) // (Q)$ cần $(P)$ chứa 2 đường thẳng cắt nhau cùng song song với $(Q)$.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -166,11 +246,20 @@ window.quizData = {
                 "Dãy số $(u_n)$ có giới hạn hữu hạn thì luôn luôn bị chặn.",
                 "$\\\\lim_{x \\\\to 1^+} \\\\frac{1}{x-1} = -\\\\infty$."
             ],
-            "correct": [true, true, true, false],
-            "explanation": "Khi $x \\\\to 1^+$, $x-1$ là số dương tiến về 0 nên giới hạn là $+\\\\infty$."
+            "correct": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Khi $x \\\\to 1^+$, $x-1$ là số dương tiến về 0 nên giới hạn là $+\\\\infty$.",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                false
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tìm số nghiệm của phương trình $\\\\sin x = 0$ trên đoạn $[0; 2\\\\pi]$. ",
@@ -207,5 +296,12 @@ window.quizData = {
             "correct": "16,3",
             "explanation": "$M_o = 10 + \\\\frac{10-5}{(10-5) + (10-7)} \\\\times 10 = 10 + 5/8 \\\\times 10 = 10 + 6,25 = 16,25 \\\\approx 16,3$."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Toán",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

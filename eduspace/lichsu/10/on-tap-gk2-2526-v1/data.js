@@ -3,14 +3,20 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0 },
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1
+            },
             "essay": {
                 "count": 4,
                 "pointsList": {
                     "0": 0.75,
                     "1": 0.75,
-                    "2": 1.0,
+                    "2": 1,
                     "-1": 0.5
                 }
             }
@@ -657,7 +663,19 @@ window.quizData = {
                 false
             ],
             "points": 20,
-            "explanation": "<ul><li>A) ĐÚNG (Đây là thời kỳ hình thành các nhà nước cổ đại sớm nhất trong khu vực.)</li><li>B) SAI (Giai đoạn này văn minh Đông Nam Á phát triển rực rỡ chứ không phải bước đầu hình thành.)</li><li>C) ĐÚNG (Đây là thời kỳ chủ nghĩa tư bản phương Tây bắt đầu xâm nhập và đô hộ khu vực.)</li><li>D) SAI (Trước khi tiếp xúc, cư dân đã có nền văn minh nông nghiệp lúa nước bản địa.)</li></ul>"
+            "explanation": "<ul><li>A) ĐÚNG (Đây là thời kỳ hình thành các nhà nước cổ đại sớm nhất trong khu vực.)</li><li>B) SAI (Giai đoạn này văn minh Đông Nam Á phát triển rực rỡ chứ không phải bước đầu hình thành.)</li><li>C) ĐÚNG (Đây là thời kỳ chủ nghĩa tư bản phương Tây bắt đầu xâm nhập và đô hộ khu vực.)</li><li>D) SAI (Trước khi tiếp xúc, cư dân đã có nền văn minh nông nghiệp lúa nước bản địa.)</li></ul>",
+            "options": [
+                "Giai đoạn từ đầu Công nguyên đến thế kỉ VII đánh dấu sự ra đời của các quốc gia đầu tiên.",
+                "Từ thế kỉ VII đến cuối thế kỉ XV là giai đoạn văn minh Đông Nam Á bước đầu hình thành.",
+                "Từ thế kỉ XVI đến thế kỉ XIX, văn minh Đông Nam Á có những chuyển biến do sự xâm nhập của phương Tây.",
+                "Nền văn minh bản địa chỉ xuất hiện sau khi tiếp xúc với văn minh Ấn Độ và Trung Hoa."
+            ],
+            "correct": [
+                true,
+                false,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -675,7 +693,19 @@ window.quizData = {
                 true
             ],
             "points": 20,
-            "explanation": "<ul><li>A) SAI (Đông Nam Á còn chịu ảnh hưởng sâu sắc từ nhiều tôn giáo khác như Hồi giáo và Hindu giáo.)</li><li>B) ĐÚNG (Con đường thương mại hàng hải đã đưa Hồi giáo lan tỏa rộng rãi vào khu vực.)</li><li>C) ĐÚNG (Đây là một đặc điểm văn hóa nổi bật, thể hiện tính bao dung của cư dân khu vực.)</li><li>D) ĐÚNG (Thờ cúng tổ tiên và vạn vật hữu linh là những tín ngưỡng gốc của cư dân bản địa.)</li></ul>"
+            "explanation": "<ul><li>A) SAI (Đông Nam Á còn chịu ảnh hưởng sâu sắc từ nhiều tôn giáo khác như Hồi giáo và Hindu giáo.)</li><li>B) ĐÚNG (Con đường thương mại hàng hải đã đưa Hồi giáo lan tỏa rộng rãi vào khu vực.)</li><li>C) ĐÚNG (Đây là một đặc điểm văn hóa nổi bật, thể hiện tính bao dung của cư dân khu vực.)</li><li>D) ĐÚNG (Thờ cúng tổ tiên và vạn vật hữu linh là những tín ngưỡng gốc của cư dân bản địa.)</li></ul>",
+            "options": [
+                "Phật giáo là tôn giáo duy nhất ảnh hưởng sâu sắc đến văn minh Đông Nam Á cổ đại.",
+                "Hồi giáo bắt đầu du nhập mạnh mẽ vào khu vực từ khoảng thế kỉ XIII thông qua các thương nhân.",
+                "Nhìn chung, các tôn giáo ở Đông Nam Á luôn cùng tồn tại và phát triển trong sự hòa hợp.",
+                "Trước khi tiếp nhận tôn giáo bên ngoài, cư dân đã có các tín ngưỡng bản địa như thờ cúng tổ tiên."
+            ],
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -693,7 +723,19 @@ window.quizData = {
                 true
             ],
             "points": 20,
-            "explanation": "<ul><li>A) SAI (Chữ Nôm được sáng tạo dựa trên việc tiếp thu và biến đổi chữ Hán của Trung Quốc.)</li><li>B) ĐÚNG (Chữ Phạn, Pali và chữ Hán là nền tảng để cư dân sáng tạo ra chữ viết dân tộc.)</li><li>C) ĐÚNG (Các hệ thống này phản ánh nhu cầu khẳng định bản sắc văn hóa riêng của từng dân tộc.)</li><li>D) ĐÚNG (Đây là kho tàng tri thức dân gian đúc kết kinh nghiệm sống và quan niệm về vũ trụ.)</li></ul>"
+            "explanation": "<ul><li>A) SAI (Chữ Nôm được sáng tạo dựa trên việc tiếp thu và biến đổi chữ Hán của Trung Quốc.)</li><li>B) ĐÚNG (Chữ Phạn, Pali và chữ Hán là nền tảng để cư dân sáng tạo ra chữ viết dân tộc.)</li><li>C) ĐÚNG (Các hệ thống này phản ánh nhu cầu khẳng định bản sắc văn hóa riêng của từng dân tộc.)</li><li>D) ĐÚNG (Đây là kho tàng tri thức dân gian đúc kết kinh nghiệm sống và quan niệm về vũ trụ.)</li></ul>",
+            "options": [
+                "Người Việt đã sáng tạo ra chữ Nôm trên cơ sở tiếp thu chữ Phạn của Ấn Độ.",
+                "Các nước Đông Nam Á đã sử dụng chữ cổ của Ấn Độ và Trung Quốc trước khi có chữ viết riêng.",
+                "Chữ Chăm cổ, chữ Khơ-me cổ là những hệ thống chữ viết dùng để ghi ngôn ngữ bản địa.",
+                "Văn học dân gian Đông Nam Á rất phong phú với các thể loại truyền thuyết, cổ tích, thần thoại."
+            ],
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -711,7 +753,19 @@ window.quizData = {
                 false
             ],
             "points": 20,
-            "explanation": "<ul><li>A) SAI (Ăng-co Vát là thành tựu của Campuchia, còn Bô-rô-bu-đua mới thuộc về In-đô-nê-xi-a.)</li><li>B) ĐÚNG (Điều kiện tự nhiên sông ngòi dày đặc rất thuận lợi cho việc canh tác lúa nước.)</li><li>C) ĐÚNG (Vị trí \"ngã tư đường\" này thúc đẩy sự giao thương và giao thoa văn hóa mạnh mẽ.)</li><li>D) SAI (Sông ngòi còn cung cấp phù sa màu mỡ, nguồn nước và là đường giao thông quan trọng.)</li></ul>"
+            "explanation": "<ul><li>A) SAI (Ăng-co Vát là thành tựu của Campuchia, còn Bô-rô-bu-đua mới thuộc về In-đô-nê-xi-a.)</li><li>B) ĐÚNG (Điều kiện tự nhiên sông ngòi dày đặc rất thuận lợi cho việc canh tác lúa nước.)</li><li>C) ĐÚNG (Vị trí \"ngã tư đường\" này thúc đẩy sự giao thương và giao thoa văn hóa mạnh mẽ.)</li><li>D) SAI (Sông ngòi còn cung cấp phù sa màu mỡ, nguồn nước và là đường giao thông quan trọng.)</li></ul>",
+            "options": [
+                "Ăng-co Vát là một trong những công trình kiến trúc tiêu biểu nhất của In-đô-nê-xi-a.",
+                "Hoạt động kinh tế chính xuyên suốt thời cổ \\- trung đại của cư dân là nông nghiệp lúa nước.",
+                "Vị trí địa lí của Đông Nam Á là cầu nối giữa Ấn Độ Dương và Thái Bình Dương.",
+                "Hệ thống sông ngòi dày đặc chỉ gây khó khăn cho cư dân do lũ lụt thường xuyên."
+            ],
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -729,7 +783,19 @@ window.quizData = {
                 false
             ],
             "points": 20,
-            "explanation": "<ul><li>A) ĐÚNG (Đây là những hệ chữ cổ làm nền tảng để cư dân sáng tạo chữ viết dân tộc.)</li><li>B) ĐÚNG (Việc này nhằm khẳng định bản sắc văn hóa riêng của mỗi dân tộc.)</li><li>C) SAI (Chữ Nôm được sáng tạo dựa trên việc tiếp thu và biến đổi từ chữ Hán của Trung Quốc.)</li><li>D) SAI (Các hệ chữ này được dùng rộng rãi để ghi lại ngôn ngữ và đời sống của cư dân bản địa.)</li></ul>"
+            "explanation": "<ul><li>A) ĐÚNG (Đây là những hệ chữ cổ làm nền tảng để cư dân sáng tạo chữ viết dân tộc.)</li><li>B) ĐÚNG (Việc này nhằm khẳng định bản sắc văn hóa riêng của mỗi dân tộc.)</li><li>C) SAI (Chữ Nôm được sáng tạo dựa trên việc tiếp thu và biến đổi từ chữ Hán của Trung Quốc.)</li><li>D) SAI (Các hệ chữ này được dùng rộng rãi để ghi lại ngôn ngữ và đời sống của cư dân bản địa.)</li></ul>",
+            "options": [
+                "Chữ Phạn và chữ Pali từ Ấn Độ được sử dụng phổ biến trước khi cư dân có chữ viết riêng.",
+                "Cư dân các nước đã sáng tạo chữ viết riêng để ghi lại ngôn ngữ bản địa của mình.",
+                "Chữ Nôm của người Việt là hệ thống chữ viết duy nhất không chịu ảnh hưởng từ bên ngoài.",
+                "Các hệ thống chữ cổ như chữ Chăm, chữ Khơ-me chỉ dùng để ghi chép kinh Phật."
+            ],
+            "correct": [
+                true,
+                true,
+                false,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -747,7 +813,19 @@ window.quizData = {
                 false
             ],
             "points": 20,
-            "explanation": "<ul><li>A) SAI (Nông nghiệp trồng lúa nước mới là hoạt động kinh tế chính và quan trọng nhất.)</li><li>B) ĐÚNG (Điều kiện tự nhiên sông ngòi thuận lợi là cơ sở cho sự phát triển của nghề nông.)</li><li>C) ĐÚNG (Đông Nam Á nằm trên đường hàng hải nối liền Ấn Độ Dương và Thái Bình Dương.)</li><li>D) SAI (Hai khu vực này có những đặc điểm địa hình và khí hậu mang sắc thái riêng biệt.)</li></ul>"
+            "explanation": "<ul><li>A) SAI (Nông nghiệp trồng lúa nước mới là hoạt động kinh tế chính và quan trọng nhất.)</li><li>B) ĐÚNG (Điều kiện tự nhiên sông ngòi thuận lợi là cơ sở cho sự phát triển của nghề nông.)</li><li>C) ĐÚNG (Đông Nam Á nằm trên đường hàng hải nối liền Ấn Độ Dương và Thái Bình Dương.)</li><li>D) SAI (Hai khu vực này có những đặc điểm địa hình và khí hậu mang sắc thái riêng biệt.)</li></ul>",
+            "options": [
+                "Hoạt động kinh tế chính của cư dân là thương nghiệp hàng hải xuyên suốt lịch sử.",
+                "Hệ thống sông ngòi dày đặc cung cấp phù sa và nước tưới cho nông nghiệp lúa nước.",
+                "Vị trí địa lý thuận lợi giúp khu vực trở thành cầu nối giữa các đại dương lớn.",
+                "Điều kiện tự nhiên của khu vực này không có sự khác biệt giữa phần lục địa và hải đảo."
+            ],
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -765,7 +843,19 @@ window.quizData = {
                 false
             ],
             "points": 20,
-            "explanation": "<ul><li>A) SAI (Cư dân luôn kết hợp đức tin mới với tín ngưỡng bản địa như thờ cúng tổ tiên.)</li><li>B) ĐÚNG (Đây là tôn giáo có ảnh hưởng lớn đến tư tưởng và kiến trúc của nhiều quốc gia.)</li><li>C) ĐÚNG (Thờ thần Mặt Trời, thần Sông, thần Núi gắn liền với nông nghiệp lúa nước.)</li><li>D) SAI (Hồi giáo lan tỏa mạnh mẽ vào khu vực thông qua các thương nhân và con đường thương mại.)</li></ul>"
+            "explanation": "<ul><li>A) SAI (Cư dân luôn kết hợp đức tin mới với tín ngưỡng bản địa như thờ cúng tổ tiên.)</li><li>B) ĐÚNG (Đây là tôn giáo có ảnh hưởng lớn đến tư tưởng và kiến trúc của nhiều quốc gia.)</li><li>C) ĐÚNG (Thờ thần Mặt Trời, thần Sông, thần Núi gắn liền với nông nghiệp lúa nước.)</li><li>D) SAI (Hồi giáo lan tỏa mạnh mẽ vào khu vực thông qua các thương nhân và con đường thương mại.)</li></ul>",
+            "options": [
+                "Các tôn giáo từ Ấn Độ đã xóa bỏ hoàn toàn các tín ngưỡng bản địa cổ xưa.",
+                "Phật giáo từ Ấn Độ đã du nhập và để lại dấu ấn sâu sắc trong văn minh khu vực.",
+                "Tín ngưỡng sùng bái tự nhiên là một trong ba nhóm chính của tín ngưỡng bản địa.",
+                "Hồi giáo du nhập vào khu vực chủ yếu thông qua con đường bành trướng quân sự."
+            ],
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -783,7 +873,19 @@ window.quizData = {
                 true
             ],
             "points": 20,
-            "explanation": "<ul><li>A) ĐÚNG (Đây là công trình kiến trúc tôn giáo đồ sộ và tiêu biểu nhất của người Khơ-me.)</li><li>B) SAI (Quần thể kiến trúc Bô-rô-bu-đua là thành tựu văn hóa vĩ đại của In-đô-nê-xi-a.)</li><li>C) ĐÚNG (Kiến trúc thường phục vụ cho mục đích tôn vinh Phật giáo hoặc Hindu giáo.)</li><li>D) ĐÚNG (Mỹ Sơn là trung tâm tôn giáo tiêu biểu của vương quốc Champa chịu ảnh hưởng Ấn Độ.)</li></ul>"
+            "explanation": "<ul><li>A) ĐÚNG (Đây là công trình kiến trúc tôn giáo đồ sộ và tiêu biểu nhất của người Khơ-me.)</li><li>B) SAI (Quần thể kiến trúc Bô-rô-bu-đua là thành tựu văn hóa vĩ đại của In-đô-nê-xi-a.)</li><li>C) ĐÚNG (Kiến trúc thường phục vụ cho mục đích tôn vinh Phật giáo hoặc Hindu giáo.)</li><li>D) ĐÚNG (Mỹ Sơn là trung tâm tôn giáo tiêu biểu của vương quốc Champa chịu ảnh hưởng Ấn Độ.)</li></ul>",
+            "options": [
+                "Quần thể kiến trúc Ăng-co Vát là thành tựu rực rỡ của văn minh Campuchia.",
+                "Bô-rô-bu-đua là một công trình kiến trúc Phật giáo tiêu biểu của Việt Nam.",
+                "Các công trình kiến trúc thời kỳ này thường gắn liền với các tôn giáo lớn.",
+                "Thánh địa Mỹ Sơn phản ánh sự giao thoa giữa văn hóa bản địa và văn hóa Ấn Độ."
+            ],
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "essay",
@@ -813,5 +915,12 @@ window.quizData = {
             "points": 25,
             "explanation": "AI sẽ chấm điểm dựa trên các ý chính."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Lịch sử",
+        "grade": "Lớp 10",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Giữa Học Kì II",
+        "attempt": "Bản 1"
+    }
 };

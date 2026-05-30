@@ -3,17 +3,36 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Chỉ số nào sau đây phản ánh tổng giá trị sản phẩm vật chất và dịch vụ cuối cùng do công dân một nước tạo ra trong một khoảng thời gian nhất định (thường là một năm)?",
-            "options": ["GDP.", "GNI.", "HDI.", "CPI."],
+            "options": [
+                "GDP.",
+                "GNI.",
+                "HDI.",
+                "CPI."
+            ],
             "correct": 1,
             "explanation": "GNI (Gross National Income) là Tổng thu nhập quốc gia, bao gồm cả thu nhập từ nước ngoài của công dân nước đó."
         },
@@ -44,7 +63,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Loại hình bảo hiểm do Nhà nước tổ chức nhằm thay thế hoặc bù đắp một phần thu nhập của người lao động khi họ bị mất hoặc giảm thu nhập do ốm đau, thai sản, tai nạn lao động... gọi là:",
-            "options": ["Bảo hiểm y tế.", "Bảo hiểm xã hội.", "Bảo hiểm nhân thọ.", "Bảo hiểm tài sản."],
+            "options": [
+                "Bảo hiểm y tế.",
+                "Bảo hiểm xã hội.",
+                "Bảo hiểm nhân thọ.",
+                "Bảo hiểm tài sản."
+            ],
             "correct": 1,
             "explanation": "Bảo hiểm xã hội là trụ cột chính của hệ thống an sinh xã hội."
         },
@@ -99,7 +123,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Việt Nam gia nhập Tổ chức Thương mại Thế giới (WTO) vào năm nào?",
-            "options": ["1995", "2000", "2007", "2015"],
+            "options": [
+                "1995",
+                "2000",
+                "2007",
+                "2015"
+            ],
             "correct": 2,
             "explanation": "Việt Nam chính thức trở thành thành viên thứ 150 của WTO vào ngày 11/01/2007."
         },
@@ -139,8 +168,6 @@ window.quizData = {
             "correct": 1,
             "explanation": "Bảo hiểm y tế mang tính xã hội sâu sắc, lấy số đông bù số ít may mắn."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về tăng trưởng và phát triển kinh tế:",
@@ -150,8 +177,19 @@ window.quizData = {
                 "Cơ cấu kinh tế chuyển dịch theo hướng tăng tỉ trọng ngành nông nghiệp là biểu hiện của sự phát triển.",
                 "Tăng trưởng kinh tế phải đi đôi với công bằng xã hội để đảm bảo ổn định chính trị."
             ],
-            "correct": [false, true, false, true],
-            "explanation": "Tăng trưởng chỉ là sự thay đổi về lượng, phát triển là sự thay đổi về cả chất. Chuyển dịch đúng hướng là tăng tỉ trọng Công nghiệp và Dịch vụ."
+            "correct": [
+                false,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Tăng trưởng chỉ là sự thay đổi về lượng, phát triển là sự thay đổi về cả chất. Chuyển dịch đúng hướng là tăng tỉ trọng Công nghiệp và Dịch vụ.",
+            "correctAnswers": [
+                false,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -162,8 +200,19 @@ window.quizData = {
                 "Hội nhập kinh tế quốc tế đòi hỏi các quốc gia phải hoàn thiện hệ thống pháp luật theo chuẩn mực chung.",
                 "Đa phương hóa, đa dạng hóa các quan hệ kinh tế là chủ trương đúng đắn của Đảng và Nhà nước ta."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Hội nhập mang lại cơ hội cho tất cả các nước nếu biết tận dụng lợi thế so sánh."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Hội nhập mang lại cơ hội cho tất cả các nước nếu biết tận dụng lợi thế so sánh.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -174,8 +223,19 @@ window.quizData = {
                 "Chính sách trợ giúp xã hội nhằm giúp đỡ kịp thời các cá nhân, gia đình gặp rủi ro, thiên tai đột xuất.",
                 "Mọi công dân Việt Nam đều có nghĩa vụ và quyền lợi tham gia bảo hiểm y tế."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Quỹ BHXH do Nhà nước quản lý thống nhất để đảm bảo an toàn và quyền lợi cho người dân."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Quỹ BHXH do Nhà nước quản lý thống nhất để đảm bảo an toàn và quyền lợi cho người dân.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -186,11 +246,20 @@ window.quizData = {
                 "Phân tích thị trường và đối thủ cạnh tranh là nội dung quan trọng trong kế hoạch kinh doanh.",
                 "Tiết kiệm là việc thắt lưng buộc bụng, không dám chi tiêu cho những nhu cầu thiết yếu nhất."
             ],
-            "correct": [false, true, true, false],
-            "explanation": "Mọi gia đình đều cần quản lý tài chính. Tiết kiệm là chi tiêu hợp lý, tránh lãng phí."
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Mọi gia đình đều cần quản lý tài chính. Tiết kiệm là chi tiêu hợp lý, tránh lãng phí.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tên viết tắt của chỉ số dùng để đánh giá trình độ phát triển của con người là gì?",
@@ -227,5 +296,12 @@ window.quizData = {
             "correct": "Quy du phong",
             "explanation": "Quỹ dự phòng (Emergency fund)."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Giáo dục Kinh tế và Pháp luật",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

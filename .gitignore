@@ -10,3 +10,18 @@ firebase-debug.log
 service-account.json
 set_gemini_key.js
 env.json
+
+# Script tạm thời của agent (không cần commit)
+*.cjs
+read_xlsx.cjs
+
+# File dữ liệu thô / tạm
+live_download/
+eduspace/tailieu/
+data.js
+TUYENQUANG_L2_DE02.txt
+THANHHOA_0924.txt
+
+# Report files của agent
+eduspace/_agent/*.json
+eduspace/_agent/*.md

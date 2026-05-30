@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Phản ứng thuận nghịch là phản ứng:",
@@ -25,70 +39,120 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Dung dịch nào sau đây có pH > 7 ở nhiệt độ thường?",
-            "options": ["$HCl$.", "$H_2SO_4$.", "$NaOH$.", "$NaCl$."],
+            "options": [
+                "$HCl$.",
+                "$H_2SO_4$.",
+                "$NaOH$.",
+                "$NaCl$."
+            ],
             "correct": 2,
             "explanation": "Dung dịch bazơ (kiềm) có pH > 7."
         },
         {
             "type": "multiple",
             "question": "Trong không khí, khí nào chiếm thể tích lớn nhất (khoảng 78%)?",
-            "options": ["Oxygen.", "Nitrogen.", "Argon.", "Carbon dioxide."],
+            "options": [
+                "Oxygen.",
+                "Nitrogen.",
+                "Argon.",
+                "Carbon dioxide."
+            ],
             "correct": 1,
             "explanation": "Nitrogen ($N_2$) là thành phần chính của khí quyển Trái Đất."
         },
         {
             "type": "multiple",
             "question": "Dung dịch Ammonia ($NH_3$) làm quỳ tím chuyển sang màu gì?",
-            "options": ["Đỏ.", "Xanh.", "Tím.", "Mất màu."],
+            "options": [
+                "Đỏ.",
+                "Xanh.",
+                "Tím.",
+                "Mất màu."
+            ],
             "correct": 1,
             "explanation": "$NH_3$ tan trong nước tạo ra môi trường bazơ yếu làm xanh quỳ tím."
         },
         {
             "type": "multiple",
             "question": "Mưa acid chủ yếu do sự có mặt của các khí nào sau đây trong khí quyển?",
-            "options": ["$CH_4$ và $CO$.", "$N_2$ và $O_2$.", "$SO_2$ và $NO_x$.", "$NH_3$ và $HCl$."],
+            "options": [
+                "$CH_4$ và $CO$.",
+                "$N_2$ và $O_2$.",
+                "$SO_2$ và $NO_x$.",
+                "$NH_3$ và $HCl$."
+            ],
             "correct": 2,
             "explanation": "$SO_2$ và $NO_x$ khi gặp nước mưa tạo thành $H_2SO_4$ và $HNO_3$ gây hại."
         },
         {
             "type": "multiple",
             "question": "Acid nào sau đây có tính oxi hóa rất mạnh và hòa tan được hầu hết các kim loại (trừ Au, Pt)?",
-            "options": ["$HCl$ loãng.", "$H_2SO_4$ loãng.", "$HNO_3$.", "$H_3PO_4$."],
+            "options": [
+                "$HCl$ loãng.",
+                "$H_2SO_4$ loãng.",
+                "$HNO_3$.",
+                "$H_3PO_4$."
+            ],
             "correct": 2,
             "explanation": "$HNO_3$ (Nitric acid) là chất oxi hóa mạnh ở cả dạng loãng và đặc."
         },
         {
             "type": "multiple",
             "question": "Hợp chất hữu cơ là hợp chất của:",
-            "options": ["Carbon (trừ một số chất như CO, $CO_2$, muối carbonate...).", "Hydrogen.", "Oxygen.", "Nitrogen."],
+            "options": [
+                "Carbon (trừ một số chất như CO, $CO_2$, muối carbonate...).",
+                "Hydrogen.",
+                "Oxygen.",
+                "Nitrogen."
+            ],
             "correct": 0,
             "explanation": "Đặc trưng cơ bản của hóa học hữu cơ là nghiên cứu các hợp chất của carbon."
         },
         {
             "type": "multiple",
             "question": "Liên kết hóa học chủ yếu trong các hợp chất hữu cơ là:",
-            "options": ["Liên kết ion.", "Liên kết cộng hóa trị.", "Liên kết hydrogen.", "Liên kết kim loại."],
+            "options": [
+                "Liên kết ion.",
+                "Liên kết cộng hóa trị.",
+                "Liên kết hydrogen.",
+                "Liên kết kim loại."
+            ],
             "correct": 1,
             "explanation": "Nguyên tử Carbon hình thành liên kết cộng hóa trị với các nguyên tử khác."
         },
         {
             "type": "multiple",
             "question": "Phương pháp nào dùng để tách các chất lỏng có nhiệt độ sôi khác nhau đáng kể?",
-            "options": ["Chiết.", "Kết tinh.", "Chưng cất.", "Sắc ký cột."],
+            "options": [
+                "Chiết.",
+                "Kết tinh.",
+                "Chưng cất.",
+                "Sắc ký cột."
+            ],
             "correct": 2,
             "explanation": "Chưng cất dựa trên sự khác biệt về độ bay hơi (nhiệt độ sôi)."
         },
         {
             "type": "multiple",
             "question": "Nhóm chức đặc trưng của ancol là:",
-            "options": ["$-CHO$.", "$-COOH$.", "$-OH$.", "$-NH_2$."],
+            "options": [
+                "$-CHO$.",
+                "$-COOH$.",
+                "$-OH$.",
+                "$-NH_2$."
+            ],
             "correct": 2,
             "explanation": "Nhóm hydroxyl ($-OH$) liên kết trực tiếp với carbon no."
         },
         {
             "type": "multiple",
             "question": "Phân tử khối của hợp chất hữu cơ thường được xác định chính xác bằng phương pháp nào?",
-            "options": ["Phổ IR.", "Phổ MS.", "Phổ NMR.", "Nhiệt kế."],
+            "options": [
+                "Phổ IR.",
+                "Phổ MS.",
+                "Phổ NMR.",
+                "Nhiệt kế."
+            ],
             "correct": 1,
             "explanation": "Phổ khối lượng (Mass Spectrometry - MS) giúp xác định giá trị $m/z$ của ion phân tử."
         },
@@ -104,8 +168,6 @@ window.quizData = {
             "correct": 2,
             "explanation": "Lưu huỳnh là phi kim tồn tại ở dạng tinh thể màu vàng."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các nhận định sau về cân bằng hóa học và sự điện li:",
@@ -115,8 +177,19 @@ window.quizData = {
                 "Dung dịch có $[H^+] = 10^{-3} M$ thì có pH = 11.",
                 "Hằng số cân bằng $K_c$ chỉ phụ thuộc vào bản chất của các chất và nhiệt độ."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "$[H^+] = 10^{-3} \\\\Rightarrow pH = 3$. pH = 11 ứng với môi trường bazơ."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "$[H^+] = 10^{-3} \\\\Rightarrow pH = 3$. pH = 11 ứng với môi trường bazơ.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -127,8 +200,19 @@ window.quizData = {
                 "Muối ammonium ($NH_4^+$) đều dễ tan và là chất điện li mạnh.",
                 "Quá trình tổng hợp Ammonia theo phương pháp Haber - Bosch cần áp suất cao và xúc tác bột sắt."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "$NH_3$ tan rất nhiều trong nước tạo thành dung dịch ammonia."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "$NH_3$ tan rất nhiều trong nước tạo thành dung dịch ammonia.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -139,8 +223,19 @@ window.quizData = {
                 "Khi pha loãng $H_2SO_4$ đặc, ta phải rót từ từ nước vào acid.",
                 "Muối sulfate có nhiều ứng dụng trong y tế và nông nghiệp (như thạch cao, phân bón)."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Quy tắc an toàn: Phải rót từ từ ACID vào NƯỚC, không làm ngược lại."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Quy tắc an toàn: Phải rót từ từ ACID vào NƯỚC, không làm ngược lại.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -151,11 +246,20 @@ window.quizData = {
                 "Liên kết đơn Carbon - Carbon luôn bền vững hơn liên kết đôi.",
                 "Phổ hồng ngoại (IR) dùng để xác định các nhóm chức có trong phân tử."
             ],
-            "correct": [true, false, false, true],
-            "explanation": "Đồng phân có cùng CTPT nhưng khác CTCT. Liên kết đôi gồm 1 liên kết $\\\\sigma$ bền và 1 liên kết $\\\\pi$ kém bền."
+            "correct": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "explanation": "Đồng phân có cùng CTPT nhưng khác CTCT. Liên kết đôi gồm 1 liên kết $\\\\sigma$ bền và 1 liên kết $\\\\pi$ kém bền.",
+            "correctAnswers": [
+                true,
+                false,
+                false,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tính pH của dung dịch $HCl$ có nồng độ 0,01 M.",
@@ -192,5 +296,12 @@ window.quizData = {
             "correct": "Pyrite",
             "explanation": "Quặng Pyrite sắt ($FeS_2$)."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Hóa học",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

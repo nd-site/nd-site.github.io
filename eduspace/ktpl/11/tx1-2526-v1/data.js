@@ -5,7 +5,7 @@ window.quizData = {
     },
     "questions": [
         {
-            "type": "choice",
+            "type": "multiple",
             "question": "Câu hỏi thường xuyên học kỳ I môn GDKT-PL lớp 11...",
             "options": [
                 "A",
@@ -13,7 +13,15 @@ window.quizData = {
                 "C",
                 "D"
             ],
-            "answer": 0
+            "answer": 0,
+            "correct": 0
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Giáo dục Kinh tế và Pháp luật",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Thường xuyên HK I",
+        "attempt": "Bản 1"
+    }
 };

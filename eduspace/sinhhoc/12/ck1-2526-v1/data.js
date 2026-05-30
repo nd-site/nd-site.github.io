@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Quá trình nhân đôi DNA diễn ra theo nguyên tắc nào?",
@@ -37,21 +51,36 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Dạng đột biến cấu trúc nhiễm sắc thể nào làm tăng số lượng gene trên một nhiễm sắc thể?",
-            "options": ["Mất đoạn.", "Lặp đoạn.", "Đảo đoạn.", "Chuyển đoạn trên cùng một NST."],
+            "options": [
+                "Mất đoạn.",
+                "Lặp đoạn.",
+                "Đảo đoạn.",
+                "Chuyển đoạn trên cùng một NST."
+            ],
             "correct": 1,
             "explanation": "Lặp đoạn dẫn đến một đoạn NST được lặp lại một hay nhiều lần."
         },
         {
             "type": "multiple",
             "question": "Theo Mendel, quy luật phân ly độc lập thực chất nói về sự phân ly độc lập của:",
-            "options": ["Các tính trạng.", "Các kiểu hình.", "Các cặp allele trong quá trình giảm phân tạo giao tử.", "Các dòng thuần chủng."],
+            "options": [
+                "Các tính trạng.",
+                "Các kiểu hình.",
+                "Các cặp allele trong quá trình giảm phân tạo giao tử.",
+                "Các dòng thuần chủng."
+            ],
             "correct": 2,
             "explanation": "Sự phân ly của cặp allele này không phụ thuộc vào sự phân ly của cặp allele khác."
         },
         {
             "type": "multiple",
             "question": "Hiện tượng một gene tác động đến sự biểu hiện của nhiều tính trạng khác nhau được gọi là:",
-            "options": ["Tương tác gene bổ trợ.", "Tương tác gene cộng gộp.", "Gene đa hiệu.", "Liên kết gene."],
+            "options": [
+                "Tương tác gene bổ trợ.",
+                "Tương tác gene cộng gộp.",
+                "Gene đa hiệu.",
+                "Liên kết gene."
+            ],
             "correct": 2,
             "explanation": "Ví dụ: Gene đột biến gây bệnh thiếu máu hồng cầu hình liềm ở người ảnh hưởng đến nhiều cơ quan."
         },
@@ -70,14 +99,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Kỹ thuật nào sau đây được dùng để tạo sinh vật biến đổi gene (GMO)?",
-            "options": ["Lai hữu tính.", "Kỹ thuật chuyển gene.", "Gây đột biến nhân tạo.", "Nuôi cấy mô tế bào."],
+            "options": [
+                "Lai hữu tính.",
+                "Kỹ thuật chuyển gene.",
+                "Gây đột biến nhân tạo.",
+                "Nuôi cấy mô tế bào."
+            ],
             "correct": 1,
             "explanation": "Kỹ thuật chuyển gene cho phép đưa gene từ loài này sang loài khác một cách chủ động."
         },
         {
             "type": "multiple",
             "question": "Theo Darwin, nhân tố chính đóng vai trò chủ đạo trong quá trình tiến hóa là:",
-            "options": ["Đột biến.", "Biến dị cá thể.", "Chọn lọc tự nhiên.", "Các cơ chế cách ly."],
+            "options": [
+                "Đột biến.",
+                "Biến dị cá thể.",
+                "Chọn lọc tự nhiên.",
+                "Các cơ chế cách ly."
+            ],
             "correct": 2,
             "explanation": "CLTN tích lũy các biến dị có lợi và đào thải các biến dị có hại cho sinh vật."
         },
@@ -96,26 +135,39 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Học thuyết tiến hóa tổng hợp hiện đại xác định nguồn biến dị sơ cấp cho tiến hóa là:",
-            "options": ["Biến dị tổ hợp.", "Đột biến gene.", "Thường biến.", "Sự di nhập gene."],
+            "options": [
+                "Biến dị tổ hợp.",
+                "Đột biến gene.",
+                "Thường biến.",
+                "Sự di nhập gene."
+            ],
             "correct": 1,
             "explanation": "Đột biến tạo ra các allele mới, là nguyên liệu sơ cấp của tiến hóa."
         },
         {
             "type": "multiple",
             "question": "Bệnh nào sau đây ở người do đột biến số lượng nhiễm sắc thể gây ra?",
-            "options": ["Mù màu.", "Máu khó đông.", "Hội chứng Down.", "Bạch tạng."],
+            "options": [
+                "Mù màu.",
+                "Máu khó đông.",
+                "Hội chứng Down.",
+                "Bạch tạng."
+            ],
             "correct": 2,
             "explanation": "Hội chứng Down do thừa 1 chiếc NST ở cặp số 21 (Thể tam nhiễm 21)."
         },
         {
             "type": "multiple",
             "question": "Nhân tố tiến hóa nào có thể làm thay đổi tần số allele của quần thể một cách đột ngột và không theo một hướng xác định?",
-            "options": ["Chọn lọc tự nhiên.", "Đột biến.", "Các yếu tố ngẫu nhiên.", "Giao phối không ngẫu nhiên."],
+            "options": [
+                "Chọn lọc tự nhiên.",
+                "Đột biến.",
+                "Các yếu tố ngẫu nhiên.",
+                "Giao phối không ngẫu nhiên."
+            ],
             "correct": 2,
             "explanation": "Các yếu tố ngẫu nhiên (thiên tai, dịch bệnh) có thể loại bỏ bất kỳ cá thể nào khỏi quần thể."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các phát biểu sau về cơ chế di truyền ở cấp độ phân tử:",
@@ -125,8 +177,19 @@ window.quizData = {
                 "Ở sinh vật nhân sơ, quá trình phiên mã và dịch mã diễn ra đồng thời trong nhân tế bào.",
                 "Operon Lac ở vi khuẩn E.coli chỉ hoạt động khi môi trường có lactose."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Sinh vật nhân sơ CHƯA có nhân hoàn chỉnh, các quá trình này diễn ra trong tế bào chất."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Sinh vật nhân sơ CHƯA có nhân hoàn chỉnh, các quá trình này diễn ra trong tế bào chất.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -137,8 +200,19 @@ window.quizData = {
                 "Tần số hoán vị gene không vượt quá 50%.",
                 "Gene nằm trên NST giới tính X có hiện tượng di truyền chéo."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Hoán vị gene xảy ra giữa 2 chromatid KHÁC nguồn gốc (không cùng chị em)."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Hoán vị gene xảy ra giữa 2 chromatid KHÁC nguồn gốc (không cùng chị em).",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -149,8 +223,19 @@ window.quizData = {
                 "Chọn lọc tự nhiên tác động trực tiếp lên kiểu gene, từ đó làm thay đổi kiểu hình của sinh vật.",
                 "Cách ly địa lý là nhân tố trực tiếp làm thay đổi tần số allele của quần thể."
             ],
-            "correct": [true, true, false, false],
-            "explanation": "CLTN tác động trực tiếp lên KIỂU HÌNH. Cách ly địa lý chỉ ngăn cản sự giao phối, tạo điều kiện cho các nhân tố tiến hóa khác làm thay đổi tần số allele."
+            "correct": [
+                true,
+                true,
+                false,
+                false
+            ],
+            "explanation": "CLTN tác động trực tiếp lên KIỂU HÌNH. Cách ly địa lý chỉ ngăn cản sự giao phối, tạo điều kiện cho các nhân tố tiến hóa khác làm thay đổi tần số allele.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -161,11 +246,20 @@ window.quizData = {
                 "Chọn lọc chống lại allele lặn làm thay đổi tần số allele nhanh hơn chọn lọc chống lại allele trội.",
                 "Đảo đại dương có hệ động thực vật nghèo nàn hơn đảo lục địa là bằng chứng địa lí sinh học."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Chọn lọc chống lại allele TRỘI nhanh hơn vì allele trội luôn biểu hiện ra kiểu hình."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Chọn lọc chống lại allele TRỘI nhanh hơn vì allele trội luôn biểu hiện ra kiểu hình.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Một gene có 1200 nucleotide. Tính chiều dài ($\\\\mathring{A}$) của gene đó.",
@@ -202,5 +296,12 @@ window.quizData = {
             "correct": "47",
             "explanation": "Bộ NST bình thường là 46, người này thừa 1 NST giới tính X."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Sinh học",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

@@ -3,31 +3,60 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Dữ liệu sau khi được xử lý và mang lại ý nghĩa cho con người được gọi là:",
-            "options": ["Vật mang tin.", "Thông tin.", "Tín hiệu.", "Bit."],
+            "options": [
+                "Vật mang tin.",
+                "Thông tin.",
+                "Tín hiệu.",
+                "Bit."
+            ],
             "correct": 1,
             "explanation": "Thông tin là kết quả của việc xử lý dữ liệu để trở nên có ích và có ý nghĩa."
         },
         {
             "type": "multiple",
             "question": "Đơn vị đo lượng thông tin nhỏ nhất là:",
-            "options": ["Byte.", "Bit.", "Kilobyte.", "Megabyte."],
+            "options": [
+                "Byte.",
+                "Bit.",
+                "Kilobyte.",
+                "Megabyte."
+            ],
             "correct": 1,
             "explanation": "Bit (Binary Digit) là đơn vị cơ bản chỉ nhận giá trị 0 hoặc 1."
         },
         {
             "type": "multiple",
             "question": "Thiết bị nào sau đây là thiết bị thông minh?",
-            "options": ["Bàn là điện.", "Máy tính bỏ túi.", "Điện thoại thông minh (Smartphone).", "Đèn sợi đốt."],
+            "options": [
+                "Bàn là điện.",
+                "Máy tính bỏ túi.",
+                "Điện thoại thông minh (Smartphone).",
+                "Đèn sợi đốt."
+            ],
             "correct": 2,
             "explanation": "Thiết bị thông minh có khả năng xử lý dữ liệu, kết nối mạng và tương tác linh hoạt."
         },
@@ -46,7 +75,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Dịch vụ nào của Internet cho phép người dùng trao đổi thư từ điện tử?",
-            "options": ["WWW.", "FTP.", "E-mail.", "Search Engine."],
+            "options": [
+                "WWW.",
+                "FTP.",
+                "E-mail.",
+                "Search Engine."
+            ],
             "correct": 2,
             "explanation": "E-mail (Electronic Mail) dùng để gửi và nhận thư qua mạng."
         },
@@ -89,14 +123,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Trong Excel, để bắt đầu một công thức, ta phải gõ ký tự nào đầu tiên?",
-            "options": ["#", "$", "=", "@"],
+            "options": [
+                "#",
+                "$",
+                "=",
+                "@"
+            ],
             "correct": 2,
             "explanation": "Mọi công thức trong Excel đều phải bắt đầu bằng dấu bằng (=)."
         },
         {
             "type": "multiple",
             "question": "Địa chỉ ô $B$5 trong Excel được gọi là:",
-            "options": ["Địa chỉ tương đối.", "Địa chỉ tuyệt đối.", "Địa chỉ hỗn hợp.", "Địa chỉ vùng."],
+            "options": [
+                "Địa chỉ tương đối.",
+                "Địa chỉ tuyệt đối.",
+                "Địa chỉ hỗn hợp.",
+                "Địa chỉ vùng."
+            ],
             "correct": 0,
             "explanation": "Địa chỉ không có dấu '$' sẽ tự động thay đổi khi sao chép công thức."
         },
@@ -124,8 +168,6 @@ window.quizData = {
             "correct": 1,
             "explanation": "Luật sở hữu trí tuệ bảo vệ các sản phẩm sáng tạo trên môi trường số."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các phát biểu sau về dữ liệu và thông tin:",
@@ -135,8 +177,19 @@ window.quizData = {
                 "Dữ liệu có thể ở dạng văn bản, hình ảnh, âm thanh hoặc video.",
                 "Máy tính có thể hiểu và xử lý trực tiếp ngôn ngữ tự nhiên của con người mà không cần chuyển đổi."
             ],
-            "correct": [true, false, true, false],
-            "explanation": "SSD nhanh hơn HDD nhiều lần. Máy tính chỉ xử lý dữ liệu ở dạng nhị phân (0 và 1)."
+            "correct": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "explanation": "SSD nhanh hơn HDD nhiều lần. Máy tính chỉ xử lý dữ liệu ở dạng nhị phân (0 và 1).",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -147,8 +200,19 @@ window.quizData = {
                 "Địa chỉ IP dùng để định danh duy nhất các thiết bị khi kết nối vào mạng.",
                 "Công cụ tìm kiếm (Google, Bing) giúp người dùng khai thác thông tin trên Internet hiệu quả."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Trình duyệt web (Chrome, Edge...) là phần mềm ỨNG DỤNG."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Trình duyệt web (Chrome, Edge...) là phần mềm ỨNG DỤNG.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -159,8 +223,19 @@ window.quizData = {
                 "Địa chỉ tuyệt đối (ví dụ: $A$1) sẽ không thay đổi khi sao chép công thức.",
                 "Biểu đồ hình cột thường được dùng để so sánh các đại lượng dữ liệu."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Hàm SUM dùng để tính TỔNG. Hàm tính trung bình là AVERAGE."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Hàm SUM dùng để tính TỔNG. Hàm tính trung bình là AVERAGE.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -171,11 +246,20 @@ window.quizData = {
                 "Nên cài đặt mật khẩu mạnh và thay đổi định kỳ để bảo vệ tài khoản cá nhân.",
                 "Mọi thông tin trên mạng Internet đều hoàn toàn chính xác và tin cậy được."
             ],
-            "correct": [false, true, true, false],
-            "explanation": "Dùng phần mềm crack là vi phạm bản quyền. Thông tin trên mạng cần được kiểm chứng vì có rất nhiều tin giả."
+            "correct": [
+                false,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Dùng phần mềm crack là vi phạm bản quyền. Thông tin trên mạng cần được kiểm chứng vì có rất nhiều tin giả.",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                false
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Đơn vị đo lượng thông tin tiếp theo sau Terabyte (TB) là gì? (Viết tắt)",
@@ -212,5 +296,12 @@ window.quizData = {
             "correct": "C10",
             "explanation": "Tên cột trước, số hàng sau."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Tin học",
+        "grade": "Lớp 10",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

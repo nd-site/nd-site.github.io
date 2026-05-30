@@ -1,15 +1,29 @@
 window.quizData = {
     "title": "Kiểm tra Cuối Học Kì I – Toán 12 (KNTT) – 2025-2026",
     "config": {
-        "testDuration": 5400, // 90 phút
+        "testDuration": 5400,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Cho hàm số $y = f(x)$ có đạo hàm $f'(x) > 0$ với mọi $x \\\\in (a; b)$. Khẳng định nào sau đây là đúng?",
@@ -25,70 +39,120 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Điểm cực tiểu của đồ thị hàm số $y = x^3 - 3x + 1$ là:",
-            "options": ["(1; -1)", "(-1; 3)", "(0; 1)", "(2; 3)"],
+            "options": [
+                "(1; -1)",
+                "(-1; 3)",
+                "(0; 1)",
+                "(2; 3)"
+            ],
             "correct": 0,
             "explanation": "$y' = 3x^2 - 3 = 0 \\\\Leftrightarrow x = \\\\pm 1$. Bảng biến thiên cho thấy cực tiểu tại $x = 1, y = -1$."
         },
         {
             "type": "multiple",
             "question": "Đường tiệm cận đứng của đồ thị hàm số $y = \\\\frac{2x - 1}{x + 1}$ là:",
-            "options": ["x = -1", "x = 2", "y = 2", "y = -1"],
+            "options": [
+                "x = -1",
+                "x = 2",
+                "y = 2",
+                "y = -1"
+            ],
             "correct": 0,
             "explanation": "Tiệm cận đứng là nghiệm của mẫu số: $x + 1 = 0 \\\\Rightarrow x = -1$."
         },
         {
             "type": "multiple",
             "question": "Giá trị lớn nhất của hàm số $y = -x^4 + 4x^2 + 1$ trên đoạn [-1; 2] là:",
-            "options": ["1", "4", "5", "6"],
+            "options": [
+                "1",
+                "4",
+                "5",
+                "6"
+            ],
             "correct": 2,
             "explanation": "$y' = -4x^3 + 8x = 0 \\\\Leftrightarrow x = 0, x = \\\\pm \\\\sqrt{2}$. So sánh $y(-1)=4, y(0)=1, y(\\\\sqrt{2})=5, y(2)=1$. Vậy Max = 5."
         },
         {
             "type": "multiple",
             "question": "Trong không gian Oxyz, cho vectơ $\\\\vec{a} = (1; -2; 3)$. Độ dài của vectơ $\\\\vec{a}$ bằng:",
-            "options": ["$\\\\sqrt{6}$", "$\\\\sqrt{14}$", "14", "6"],
+            "options": [
+                "$\\\\sqrt{6}$",
+                "$\\\\sqrt{14}$",
+                "14",
+                "6"
+            ],
             "correct": 1,
             "explanation": "$|\\\\vec{a}| = \\\\sqrt{1^2 + (-2)^2 + 3^2} = \\\\sqrt{1+4+9} = \\\\sqrt{14}$."
         },
         {
             "type": "multiple",
             "question": "Trong không gian Oxyz, tọa độ trung điểm M của đoạn thẳng AB với $A(1; 2; 3)$ và $B(3; 0; -1)$ là:",
-            "options": ["(4; 2; 2)", "(2; 1; 1)", "(2; 2; 2)", "(1; -1; -2)"],
+            "options": [
+                "(4; 2; 2)",
+                "(2; 1; 1)",
+                "(2; 2; 2)",
+                "(1; -1; -2)"
+            ],
             "correct": 1,
             "explanation": "$M = ((1+3)/2; (2+0)/2; (3-1)/2) = (2; 1; 1)$."
         },
         {
             "type": "multiple",
             "question": "Cho hai vectơ $\\\\vec{u} = (1; 0; 1)$ và $\\\\vec{v} = (0; 1; -1)$. Tích vô hướng $\\\\vec{u} \\\\cdot \\\\vec{v}$ bằng:",
-            "options": ["0", "1", "-1", "2"],
+            "options": [
+                "0",
+                "1",
+                "-1",
+                "2"
+            ],
             "correct": 2,
             "explanation": "$\\\\vec{u} \\\\cdot \\\\vec{v} = 1.0 + 0.1 + 1.(-1) = -1$."
         },
         {
             "type": "multiple",
             "question": "Trong các số đặc trưng sau, số nào dùng để đo mức độ phân tán của mẫu số liệu ghép nhóm?",
-            "options": ["Số trung bình.", "Trung vị.", "Độ lệch chuẩn.", "Mốt."],
+            "options": [
+                "Số trung bình.",
+                "Trung vị.",
+                "Độ lệch chuẩn.",
+                "Mốt."
+            ],
             "correct": 2,
             "explanation": "Độ lệch chuẩn (và phương sai) đặc trưng cho độ phân tán của các giá trị so với số trung bình."
         },
         {
             "type": "multiple",
             "question": "Tâm đối xứng của đồ thị hàm số bậc ba $y = ax^3 + bx^2 + cx + d$ là điểm có hoành độ $x_0$ thỏa mãn:",
-            "options": ["$y'(x_0) = 0$", "$y''(x_0) = 0$", "$y(x_0) = 0$", "$y'''(x_0) = 0$"],
+            "options": [
+                "$y'(x_0) = 0$",
+                "$y''(x_0) = 0$",
+                "$y(x_0) = 0$",
+                "$y'''(x_0) = 0$"
+            ],
             "correct": 1,
             "explanation": "Điểm uốn (nơi đạo hàm cấp hai bằng 0) là tâm đối xứng của đồ thị hàm bậc ba."
         },
         {
             "type": "multiple",
             "question": "Khoảng cách giữa hai điểm $A(1; 0; 0)$ và $B(0; 0; 1)$ trong không gian Oxyz là:",
-            "options": ["1", "2", "$\\\\sqrt{2}$", "0"],
+            "options": [
+                "1",
+                "2",
+                "$\\\\sqrt{2}$",
+                "0"
+            ],
             "correct": 2,
             "explanation": "$AB = \\\\sqrt{(0-1)^2 + (0-0)^2 + (1-0)^2} = \\\\sqrt{2}$."
         },
         {
             "type": "multiple",
             "question": "Đồ thị hàm số $y = \\\\frac{x^2 + 1}{x}$ có đường tiệm cận xiên là:",
-            "options": ["y = x", "y = 2x", "y = x + 1", "y = 1"],
+            "options": [
+                "y = x",
+                "y = 2x",
+                "y = x + 1",
+                "y = 1"
+            ],
             "correct": 0,
             "explanation": "$y = x + \\\\frac{1}{x}$. Khi $x \\\\to \\\\infty$, $\\\\frac{1}{x} \\\\to 0$ nên $y = x$ là tiệm cận xiên."
         },
@@ -104,8 +168,6 @@ window.quizData = {
             "correct": 0,
             "explanation": "$\\\\Delta_Q = Q_3 - Q_1$, đo độ phân tán của 50% dữ liệu trung tâm."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Cho hàm số $y = \\\\frac{x+1}{x-1}$:",
@@ -115,8 +177,19 @@ window.quizData = {
                 "Đồ thị hàm số có tiệm cận ngang là đường thẳng $y = 1$.",
                 "Giao điểm của hai đường tiệm cận là $I(1; 1)$."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "$y' = \\\\frac{-2}{(x-1)^2} < 0$ nên hàm số nghịch biến."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "$y' = \\\\frac{-2}{(x-1)^2} < 0$ nên hàm số nghịch biến.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -127,8 +200,19 @@ window.quizData = {
                 "Tọa độ trọng tâm G của tam giác ABC là $G(1; 2; 4/3)$.",
                 "Vectơ $\\\\vec{OA} + \\\\vec{OB} = (3; 4; 1)$."
             ],
-            "correct": [true, false, false, true],
-            "explanation": "Trọng tâm $G = ((1+2+0)/3; (1+3+2)/3; (1+0+3)/3) = (1; 2; 4/3)$ là ĐÚNG. Xin lỗi, tôi nhẩm sai ở phần check. $G(1; 2; 4/3)$ là đúng. Ba điểm không thẳng hàng vì $\\\\vec{AB}$ và $\\\\vec{AC}$ không cùng phương."
+            "correct": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "explanation": "Trọng tâm $G = ((1+2+0)/3; (1+3+2)/3; (1+0+3)/3) = (1; 2; 4/3)$ là ĐÚNG. Xin lỗi, tôi nhẩm sai ở phần check. $G(1; 2; 4/3)$ là đúng. Ba điểm không thẳng hàng vì $\\\\vec{AB}$ và $\\\\vec{AC}$ không cùng phương.",
+            "correctAnswers": [
+                true,
+                false,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -139,8 +223,19 @@ window.quizData = {
                 "Độ lệch chuẩn là căn bậc hai của phương sai.",
                 "Khoảng tứ phân vị ít bị ảnh hưởng bởi các giá trị bất thường (outliers) hơn khoảng biến thiên."
             ],
-            "correct": [true, false, true, true],
-            "explanation": "Phương sai lớn nghĩa là dữ liệu phân tán rộng, xa số trung bình."
+            "correct": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "explanation": "Phương sai lớn nghĩa là dữ liệu phân tán rộng, xa số trung bình.",
+            "correctAnswers": [
+                true,
+                false,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -151,11 +246,20 @@ window.quizData = {
                 "Giá trị cực tiểu của hàm số là $y_{CT} = 2$.",
                 "Hàm số nghịch biến trên khoảng $(1; +\\\\infty)$."
             ],
-            "correct": [true, true, true, false],
-            "explanation": "Tại $x=1, y=2$. Hàm số đồng biến trên $(1; +\\\\infty)$ vì $y' = 4x^3 - 4x > 0$ khi $x > 1$."
+            "correct": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Tại $x=1, y=2$. Hàm số đồng biến trên $(1; +\\\\infty)$ vì $y' = 4x^3 - 4x > 0$ khi $x > 1$.",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                false
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Tìm số tiệm cận (cả đứng và ngang) của đồ thị hàm số $y = \\\\frac{x+1}{x^2 - 1}$.",
@@ -192,5 +296,12 @@ window.quizData = {
             "correct": "0,707",
             "explanation": "$\\\\vec{i} = (1; 0; 0)$. $\\\\cos = (1.1 + 0.1 + 0.0) / (1 \\\\times \\\\sqrt{2}) = 1/\\\\sqrt{2} \\\\approx 0,707$."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Toán",
+        "grade": "Lớp 12",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

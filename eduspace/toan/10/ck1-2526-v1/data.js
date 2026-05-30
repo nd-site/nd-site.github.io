@@ -1,15 +1,29 @@
 window.quizData = {
     "title": "Kiểm tra Cuối Học Kì I – Toán 10 (KNTT) – 2025-2026",
     "config": {
-        "testDuration": 5400, // 90 phút
+        "testDuration": 5400,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Câu nào sau đây là một mệnh đề toán học?",
@@ -25,14 +39,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Cho tập hợp $A = \\\\{x \\\\in \\\\mathbb{R} | 1 \\\\le x < 5\\\\}$. Tập A viết dưới dạng khoảng, đoạn là:",
-            "options": ["$[1; 5]$.", "$(1; 5)$.", "$[1; 5)$.", "$(1; 5]$."],
+            "options": [
+                "$[1; 5]$.",
+                "$(1; 5)$.",
+                "$[1; 5)$.",
+                "$(1; 5]$."
+            ],
             "correct": 2,
             "explanation": "Dấu $\\\\le$ ứng với ngoặc vuông $[$, dấu $<$ ứng với ngoặc tròn $)$."
         },
         {
             "type": "multiple",
             "question": "Cặp số nào sau đây là một nghiệm của bất phương trình $x + 2y > 3$?",
-            "options": ["(1; 1)", "(0; 0)", "(2; 2)", "(1; 0)"],
+            "options": [
+                "(1; 1)",
+                "(0; 0)",
+                "(2; 2)",
+                "(1; 0)"
+            ],
             "correct": 2,
             "explanation": "Thay (2; 2) vào: $2 + 2(2) = 6 > 3$ (đúng)."
         },
@@ -87,7 +111,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Mẫu số liệu sau: 2, 5, 8, 9, 10. Số trung bình cộng của mẫu số liệu là:",
-            "options": ["6,8", "7", "7,2", "8"],
+            "options": [
+                "6,8",
+                "7",
+                "7,2",
+                "8"
+            ],
             "correct": 0,
             "explanation": "$(2+5+8+9+10)/5 = 34/5 = 6,8$."
         },
@@ -118,19 +147,27 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Cho hình bình hành ABCD. Vectơ $\\\\vec{AB} + \\\\vec{AD}$ bằng vectơ nào?",
-            "options": ["$\\\\vec{BD}$", "$\\\\vec{AC}$", "$\\\\vec{CA}$", "$\\\\vec{DB}$"],
+            "options": [
+                "$\\\\vec{BD}$",
+                "$\\\\vec{AC}$",
+                "$\\\\vec{CA}$",
+                "$\\\\vec{DB}$"
+            ],
             "correct": 1,
             "explanation": "Theo quy tắc hình bình hành, tổng hai vectơ chung gốc bằng vectơ đường chéo."
         },
         {
             "type": "multiple",
             "question": "Trung vị của mẫu số liệu: 3, 1, 4, 2, 5 là:",
-            "options": ["4", "2", "3", "2,5"],
+            "options": [
+                "4",
+                "2",
+                "3",
+                "2,5"
+            ],
             "correct": 2,
             "explanation": "Sắp xếp mẫu: 1, 2, 3, 4, 5. Giá trị chính giữa là 3."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Cho hai tập hợp $A = \\\\{1; 2; 3; 4\\\\}$ và $B = \\\\{2; 4; 6\\\\}$:",
@@ -140,8 +177,19 @@ window.quizData = {
                 "Tập hợp $A \\\\setminus B = \\\\{1; 3\\\\}$.",
                 "Số phần tử của tập hợp $A$ là 4."
             ],
-            "correct": [true, true, true, true],
-            "explanation": "Các phép toán tập hợp cơ bản: hợp (lấy tất cả), giao (lấy phần chung), hiệu (lấy thuộc A nhưng không thuộc B)."
+            "correct": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Các phép toán tập hợp cơ bản: hợp (lấy tất cả), giao (lấy phần chung), hiệu (lấy thuộc A nhưng không thuộc B).",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -152,8 +200,19 @@ window.quizData = {
                 "Bán kính đường tròn ngoại tiếp $R = 5$.",
                 "$\\\\cos A = 0,8$."
             ],
-            "correct": [true, true, true, true],
-            "explanation": "1. $6^2+8^2=10^2$ nên vuông tại C. 2. $S = 1/2.6.8=24$. 3. $R = c/2 = 5$. 4. $\\\\cos A = b/c = 8/10 = 0,8$."
+            "correct": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "explanation": "1. $6^2+8^2=10^2$ nên vuông tại C. 2. $S = 1/2.6.8=24$. 3. $R = c/2 = 5$. 4. $\\\\cos A = b/c = 8/10 = 0,8$.",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -164,8 +223,19 @@ window.quizData = {
                 "Hai vectơ bằng nhau khi chúng có cùng hướng và cùng độ dài.",
                 "$k\\\\vec{a}$ là một vectơ cùng hướng với $\\\\vec{a}$ khi $k < 0$."
             ],
-            "correct": [true, true, true, false],
-            "explanation": "Khi $k < 0$, $k\\\\vec{a}$ ngược hướng với $\\\\vec{a}$."
+            "correct": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "explanation": "Khi $k < 0$, $k\\\\vec{a}$ ngược hướng với $\\\\vec{a}$.",
+            "correctAnswers": [
+                true,
+                true,
+                true,
+                false
+            ]
         },
         {
             "type": "truefalse",
@@ -176,11 +246,20 @@ window.quizData = {
                 "Độ lệch chuẩn là căn bậc hai của phương sai.",
                 "Khoảng biến thiên là hiệu giữa giá trị lớn nhất và giá trị nhỏ nhất của mẫu số liệu."
             ],
-            "correct": [false, true, true, true],
-            "explanation": "Số trung bình có thể là số không nằm trong mẫu (ví dụ trung bình của 1 và 2 là 1.5)."
+            "correct": [
+                false,
+                true,
+                true,
+                true
+            ],
+            "explanation": "Số trung bình có thể là số không nằm trong mẫu (ví dụ trung bình của 1 và 2 là 1.5).",
+            "correctAnswers": [
+                false,
+                true,
+                true,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Cho tập hợp $A = [1; 3]$ và $B = (2; 4)$. Tìm số nguyên thuộc tập $A \\\\cap B$.",
@@ -217,5 +296,12 @@ window.quizData = {
             "correct": "1,63",
             "explanation": "Trung bình = 6. Phương sai $s^2 = [(4-6)^2 + (6-6)^2 + (8-6)^2]/3 = 8/3 \\\\approx 2,67$. Độ lệch chuẩn $\\\\sqrt{8/3} \\\\approx 1,63$."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Toán",
+        "grade": "Lớp 10",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };

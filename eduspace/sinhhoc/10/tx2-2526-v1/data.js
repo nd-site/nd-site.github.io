@@ -5,7 +5,7 @@ window.quizData = {
     },
     "questions": [
         {
-            "type": "choice",
+            "type": "multiple",
             "question": "Câu hỏi thường xuyên môn Sinh học HK2...",
             "options": [
                 "A",
@@ -13,7 +13,15 @@ window.quizData = {
                 "C",
                 "D"
             ],
-            "answer": 0
+            "answer": 0,
+            "correct": 0
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Sinh học",
+        "grade": "Lớp 10",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Thường xuyên HK II",
+        "attempt": "Bản 1"
+    }
 };

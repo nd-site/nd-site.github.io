@@ -3,13 +3,27 @@ window.quizData = {
     "config": {
         "testDuration": 2700,
         "examLayout": {
-            "multiple": { "count": 12, "pointsPerQ": 0.25 },
-            "truefalse": { "count": 4, "pointsPerQ": 1.0, "partialScoring": [0.1, 0.25, 0.5, 1.0] },
-            "short": { "count": 6, "pointsPerQ": 0.5 }
+            "multiple": {
+                "count": 12,
+                "pointsPerQ": 0.25
+            },
+            "truefalse": {
+                "count": 4,
+                "pointsPerQ": 1,
+                "partialScoring": [
+                    0.1,
+                    0.25,
+                    0.5,
+                    1
+                ]
+            },
+            "short": {
+                "count": 6,
+                "pointsPerQ": 0.5
+            }
         }
     },
     "questions": [
-        // --- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN ---
         {
             "type": "multiple",
             "question": "Chức năng chính của hệ điều hành là:",
@@ -25,21 +39,36 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Loại phần mềm nào sau đây là phần mềm nguồn mở?",
-            "options": ["Microsoft Windows.", "Microsoft Office.", "Hệ điều hành Linux.", "Adobe Photoshop."],
+            "options": [
+                "Microsoft Windows.",
+                "Microsoft Office.",
+                "Hệ điều hành Linux.",
+                "Adobe Photoshop."
+            ],
             "correct": 2,
             "explanation": "Linux là phần mềm nguồn mở (Open Source), cho phép người dùng tự do xem và sửa đổi mã nguồn."
         },
         {
             "type": "multiple",
             "question": "Giao thức truyền tải thông tin cơ bản trên Internet hiện nay là:",
-            "options": ["HTTP.", "FTP.", "TCP/IP.", "SMTP."],
+            "options": [
+                "HTTP.",
+                "FTP.",
+                "TCP/IP.",
+                "SMTP."
+            ],
             "correct": 2,
             "explanation": "TCP/IP là bộ giao thức cho phép các máy tính khác nhau giao tiếp được trên mạng Internet."
         },
         {
             "type": "multiple",
             "question": "Thiết bị dùng để kết nối mạng cục bộ (LAN) với Internet là:",
-            "options": ["Hub.", "Switch.", "Router.", "Access Point."],
+            "options": [
+                "Hub.",
+                "Switch.",
+                "Router.",
+                "Access Point."
+            ],
             "correct": 2,
             "explanation": "Router (Bộ định tuyến) có chức năng chuyển tiếp dữ liệu giữa các mạng khác nhau."
         },
@@ -82,7 +111,12 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Trong môi trường số, việc chia sẻ thông tin mà không được sự đồng ý của tác giả là hành vi vi phạm:",
-            "options": ["Luật Giao thông.", "Luật Sở hữu trí tuệ.", "Luật Bảo vệ môi trường.", "Luật Hình sự quốc tế."],
+            "options": [
+                "Luật Giao thông.",
+                "Luật Sở hữu trí tuệ.",
+                "Luật Bảo vệ môi trường.",
+                "Luật Hình sự quốc tế."
+            ],
             "correct": 1,
             "explanation": "Bản quyền và sở hữu trí tuệ bảo vệ quyền lợi hợp pháp của người sáng tạo nội dung số."
         },
@@ -101,14 +135,24 @@ window.quizData = {
         {
             "type": "multiple",
             "question": "Dữ liệu trong một bảng (Table) của CSDL được tổ chức dưới dạng:",
-            "options": ["Các hàng và cột.", "Các đoạn văn bản tự do.", "Các tệp tin rời rạc.", "Các thư mục lồng nhau."],
+            "options": [
+                "Các hàng và cột.",
+                "Các đoạn văn bản tự do.",
+                "Các tệp tin rời rạc.",
+                "Các thư mục lồng nhau."
+            ],
             "correct": 0,
             "explanation": "Hàng (Record/Bản ghi) chứa thông tin của một đối tượng, Cột (Field/Trường) chứa một loại dữ liệu nhất định."
         },
         {
             "type": "multiple",
             "question": "Địa chỉ IP (IPv4) gồm bao nhiêu nhóm số?",
-            "options": ["2", "3", "4", "6"],
+            "options": [
+                "2",
+                "3",
+                "4",
+                "6"
+            ],
             "correct": 2,
             "explanation": "IPv4 gồm 4 nhóm số thập phân cách nhau bởi dấu chấm (ví dụ: 192.168.1.1)."
         },
@@ -124,8 +168,6 @@ window.quizData = {
             "correct": 1,
             "explanation": "Ví dụ: google.com thay thế cho địa chỉ IP thực tế của máy chủ Google."
         },
-
-        // --- PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI ---
         {
             "type": "truefalse",
             "question": "Xét các phát biểu sau về hệ điều hành và phần mềm:",
@@ -135,8 +177,19 @@ window.quizData = {
                 "Người dùng phần mềm nguồn mở không có quyền sửa đổi mã nguồn của phần mềm đó.",
                 "Giao diện đồ họa (GUI) giúp người dùng tương tác với máy tính dễ dàng hơn giao diện dòng lệnh (CLI)."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Người dùng phần mềm nguồn mở CÓ quyền xem, sửa đổi và phân phối lại mã nguồn."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Người dùng phần mềm nguồn mở CÓ quyền xem, sửa đổi và phân phối lại mã nguồn.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -147,8 +200,19 @@ window.quizData = {
                 "Switch là thiết bị dùng để kết nối Internet cho toàn bộ mạng nội bộ.",
                 "Internet là mạng của các mạng máy tính trên quy mô toàn cầu."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Router mới là thiết bị kết nối LAN với Internet. Switch chỉ kết nối các thiết bị trong cùng mạng LAN."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Router mới là thiết bị kết nối LAN với Internet. Switch chỉ kết nối các thiết bị trong cùng mạng LAN.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -159,8 +223,19 @@ window.quizData = {
                 "Việc truy xuất dữ liệu từ CSDL luôn chậm hơn so với việc tìm kiếm trong tệp văn bản thông thường.",
                 "Dữ liệu trong CSDL cần được thiết kế để hạn chế tối đa sự trùng lặp (dư thừa)."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "CSDL được tối ưu hóa để truy xuất dữ liệu cực nhanh ngay cả với lượng dữ liệu khổng lồ."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "CSDL được tối ưu hóa để truy xuất dữ liệu cực nhanh ngay cả với lượng dữ liệu khổng lồ.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
         {
             "type": "truefalse",
@@ -171,11 +246,20 @@ window.quizData = {
                 "Bạn nên tin tưởng tuyệt đối vào các thông tin khuyến mãi trúng thưởng nhận được qua tin nhắn lạ.",
                 "Việc tôn trọng quyền tác giả trên Internet thể hiện văn hóa ứng xử văn minh trong môi trường số."
             ],
-            "correct": [true, true, false, true],
-            "explanation": "Tin nhắn trúng thưởng lạ thường là lừa đảo (Phishing) để chiếm đoạt tài sản hoặc thông tin."
+            "correct": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "explanation": "Tin nhắn trúng thưởng lạ thường là lừa đảo (Phishing) để chiếm đoạt tài sản hoặc thông tin.",
+            "correctAnswers": [
+                true,
+                true,
+                false,
+                true
+            ]
         },
-
-        // --- PHẦN III: TRẢ LỜI NGẮN ---
         {
             "type": "short",
             "question": "Viết tên một hệ điều hành phổ biến nhất cho máy tính để bàn và laptop hiện nay.",
@@ -212,5 +296,12 @@ window.quizData = {
             "correct": "AP",
             "explanation": "Access Point."
         }
-    ]
+    ],
+    "examInfo": {
+        "subject": "Tin học",
+        "grade": "Lớp 11",
+        "date": "Năm học 2025 - 2026",
+        "examName": "Kiểm tra Cuối Học Kì I",
+        "attempt": "Bản 1"
+    }
 };
