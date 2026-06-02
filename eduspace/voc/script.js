@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         importFile: document.getElementById('import-file'),
         apiKeyInput: document.getElementById('gemini-api-key'),
         fillAiBtn: document.getElementById('fill-ai-btn'),
+        checkAiBtn: document.getElementById('check-ai-btn'),
 
         // Game Elements
         startGameBtn: document.getElementById('start-game-btn'),
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     loadData();
+    setupLanguages();
     renderTable();
     setupEventListeners();
     setupTabs();
@@ -90,6 +92,7 @@ function setupEventListeners() {
 
     // AI Features (defined in ai.js)
     if (dom.fillAiBtn) dom.fillAiBtn.addEventListener('click', fillDataWithAI);
+    if (dom.checkAiBtn) dom.checkAiBtn.addEventListener('click', checkVocabWithAI);
     if (dom.sendChatBtn) dom.sendChatBtn.addEventListener('click', sendChatMessage);
     if (dom.chatInput) {
         dom.chatInput.addEventListener('keypress', (e) => {
@@ -142,16 +145,40 @@ function debouncedAutoFill() {
 // --- Table Management ---
 
 function loadData() {
-    const savedVocab = localStorage.getItem('eduspace_vocab');
-    if (savedVocab) {
-        vocabData = JSON.parse(savedVocab);
-    } else {
+    try {
+        const savedVocab = localStorage.getItem('eduspace_vocab');
+        if (savedVocab) {
+            vocabData = JSON.parse(savedVocab);
+        }
+    } catch (e) {
+        console.error("Error parsing vocab data:", e);
+    }
+    if (!Array.isArray(vocabData) || vocabData.length === 0) {
         vocabData = [{ en: '', ipa: '', type: '', vi: '', usage: '' }];
     }
 
-    const savedKey = localStorage.getItem('gemini_api_key');
-    if (savedKey && dom.apiKeyInput) {
-        dom.apiKeyInput.value = savedKey;
+    try {
+        const targetSelect = document.getElementById('target-lang');
+        const translationSelect = document.getElementById('translation-lang');
+        const savedTarget = localStorage.getItem('vocab_target_lang');
+        const savedTranslation = localStorage.getItem('vocab_translation_lang');
+        if (savedTarget && targetSelect) {
+            targetSelect.value = savedTarget;
+        }
+        if (savedTranslation && translationSelect) {
+            translationSelect.value = savedTranslation;
+        }
+    } catch (e) {
+        console.error("Error loading saved languages:", e);
+    }
+
+    try {
+        const savedKey = localStorage.getItem('gemini_api_key');
+        if (savedKey && dom.apiKeyInput) {
+            dom.apiKeyInput.value = savedKey;
+        }
+    } catch (e) {
+        console.error("Error loading API key:", e);
     }
 }
 
@@ -201,14 +228,21 @@ function addRow() {
 }
 
 function addRowToDom(item, index) {
+    if (!item) item = { en: '', ipa: '', type: '', vi: '', usage: '' };
+    
+    const targetSelect = document.getElementById('target-lang');
+    const translationSelect = document.getElementById('translation-lang');
+    const targetPlaceholder = targetSelect ? targetSelect.options[targetSelect.selectedIndex].text : 'Tiếng Anh';
+    const translationPlaceholder = translationSelect ? translationSelect.options[translationSelect.selectedIndex].text : 'Tiếng Việt';
+
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-indigo-50/10 transition-colors group border-b border-slate-50';
     tr.setAttribute('data-original-index', index);
     tr.innerHTML = `
         <td class="col-en px-4 py-1 border-r border-slate-100">
             <div class="flex items-start gap-1">
-                <textarea placeholder="English" class="vocab-input" oninput="autoHeight(this)" rows="1">${item.en || ''}</textarea>
-                <button class="mt-3 p-1 text-slate-300 hover:text-indigo-500 transition-colors" onclick="speak('${item.en || ''}')">
+                <textarea placeholder="${targetPlaceholder}" class="vocab-input" oninput="autoHeight(this)" rows="1">${item.en || ''}</textarea>
+                <button class="mt-3 p-1 text-slate-300 hover:text-indigo-500 transition-colors" onclick="speak(this.closest('tr').querySelector('textarea').value)">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                     </svg>
@@ -222,17 +256,24 @@ function addRowToDom(item, index) {
             <textarea placeholder="type" class="vocab-input" oninput="autoHeight(this)" rows="1">${item.type || ''}</textarea>
         </td>
         <td class="col-vi px-4 py-1 border-r border-slate-100">
-            <textarea placeholder="Tiếng Việt" class="vocab-input" oninput="autoHeight(this)" rows="1">${item.vi || ''}</textarea>
+            <textarea placeholder="${translationPlaceholder}" class="vocab-input" oninput="autoHeight(this)" rows="1">${item.vi || ''}</textarea>
         </td>
         <td class="col-usage px-4 py-1 border-r border-slate-100">
             <textarea placeholder="Example sentence..." class="vocab-input" oninput="autoHeight(this)" rows="1">${item.usage || ''}</textarea>
         </td>
         <td class="px-2 py-1 text-center">
-            <button class="delete-row-btn p-2 text-slate-200 hover:text-red-500 transition-all transform hover:scale-110" onclick="deleteRow(event, ${index})">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            </button>
+            <div class="flex items-center justify-center gap-1">
+                <button class="p-2 text-slate-300 hover:text-indigo-500 transition-all transform hover:scale-110" title="Tự động điền AI cho từ này" onclick="fillSingleRowWithAI(parseInt(this.closest('tr').getAttribute('data-original-index')))">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </button>
+                <button class="delete-row-btn p-2 text-slate-300 hover:text-red-500 transition-all transform hover:scale-110" title="Xóa từ này" onclick="deleteRow(event, parseInt(this.closest('tr').getAttribute('data-original-index')))">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
+            </div>
         </td>
     `;
     dom.vocabTableBody.appendChild(tr);
@@ -259,8 +300,10 @@ window.autoHeight = function (element) {
 
 window.speak = function (text) {
     if (!text) return;
+    const targetSelect = document.getElementById('target-lang');
+    const ttsCode = targetSelect ? targetSelect.options[targetSelect.selectedIndex].getAttribute('data-tts') : 'en-US';
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
+    utterance.lang = ttsCode;
     window.speechSynthesis.speak(utterance);
 }
 
@@ -343,5 +386,50 @@ function toggleAIChat() {
     } else {
         dom.aiChatPopup.classList.add('hidden');
         dom.aiChatPopup.classList.remove('flex');
+    }
+}
+
+// Language Configuration Helpers
+function setupLanguages() {
+    const targetSelect = document.getElementById('target-lang');
+    const translationSelect = document.getElementById('translation-lang');
+    
+    if (targetSelect) {
+        targetSelect.addEventListener('change', () => {
+            localStorage.setItem('vocab_target_lang', targetSelect.value);
+            updateTableHeaders();
+        });
+    }
+    if (translationSelect) {
+        translationSelect.addEventListener('change', () => {
+            localStorage.setItem('vocab_translation_lang', translationSelect.value);
+            updateTableHeaders();
+        });
+    }
+    updateTableHeaders();
+}
+
+function updateTableHeaders() {
+    const targetSelect = document.getElementById('target-lang');
+    const translationSelect = document.getElementById('translation-lang');
+    const thTarget = document.getElementById('th-target-lang');
+    const thTranslation = document.getElementById('th-translation-lang');
+
+    const targetName = targetSelect ? targetSelect.options[targetSelect.selectedIndex].text : 'Tiếng Anh';
+    const translationName = translationSelect ? translationSelect.options[translationSelect.selectedIndex].text : 'Tiếng Việt';
+
+    if (thTarget) thTarget.textContent = targetName;
+    if (thTranslation) thTranslation.textContent = translationName;
+
+    // Update existing row placeholders dynamically in DOM
+    if (dom.vocabTableBody) {
+        const rows = dom.vocabTableBody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const inputs = row.querySelectorAll('textarea');
+            if (inputs.length >= 5) {
+                inputs[0].placeholder = targetName;
+                inputs[3].placeholder = translationName;
+            }
+        });
     }
 }

@@ -1,27 +1,145 @@
 window.quizData = {
     "title": "Kiểm tra Thường xuyên – Vật lí 12 (KNTT) – HK II",
+    "pageTitle": "Kiểm tra Thường xuyên – Vật lí 12 (KNTT) – HK II",
+    "examInfo": {
+        "department": "",
+        "school": "",
+        "province": "",
+        "examName": "Kiểm tra Thường xuyên – Vật lí 12 (KNTT) – HK II",
+        "attempt": "Bản 1",
+        "date": "Năm học 2025 - 2026",
+        "subject": "Vật Lý",
+        "grade": "Lớp 12"
+    },
     "config": {
-        "testDuration": 1200
+        "testDuration": 1200,
+        "examLayout": {
+            "multiple": {
+                "count": 10,
+                "pointsPerQ": 1
+            }
+        }
     },
     "questions": [
         {
             "type": "multiple",
-            "question": "Câu hỏi thường xuyên môn Vật lí HK2...",
+            "question": "Câu hỏi trắc nghiệm thường xuyên 1 môn Vật Lý lớp 12?",
             "options": [
-                "A",
-                "B",
-                "C",
-                "D"
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C",
+                "Đáp án D"
             ],
-            "answer": 0,
-            "correct": 0
+            "correct": 0,
+            "explanation": "Lời giải thích mẫu."
+        },
+        {
+            "type": "multiple",
+            "question": "Câu hỏi trắc nghiệm thường xuyên 2 môn Vật Lý lớp 12?",
+            "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C",
+                "Đáp án D"
+            ],
+            "correct": 0,
+            "explanation": "Lời giải thích mẫu."
+        },
+        {
+            "type": "multiple",
+            "question": "Câu hỏi trắc nghiệm thường xuyên 3 môn Vật Lý lớp 12?",
+            "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C",
+                "Đáp án D"
+            ],
+            "correct": 0,
+            "explanation": "Lời giải thích mẫu."
+        },
+        {
+            "type": "multiple",
+            "question": "Câu hỏi trắc nghiệm thường xuyên 4 môn Vật Lý lớp 12?",
+            "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C",
+                "Đáp án D"
+            ],
+            "correct": 0,
+            "explanation": "Lời giải thích mẫu."
+        },
+        {
+            "type": "multiple",
+            "question": "Câu hỏi trắc nghiệm thường xuyên 5 môn Vật Lý lớp 12?",
+            "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C",
+                "Đáp án D"
+            ],
+            "correct": 0,
+            "explanation": "Lời giải thích mẫu."
+        },
+        {
+            "type": "multiple",
+            "question": "Câu hỏi trắc nghiệm thường xuyên 6 môn Vật Lý lớp 12?",
+            "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C",
+                "Đáp án D"
+            ],
+            "correct": 0,
+            "explanation": "Lời giải thích mẫu."
+        },
+        {
+            "type": "multiple",
+            "question": "Câu hỏi trắc nghiệm thường xuyên 7 môn Vật Lý lớp 12?",
+            "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C",
+                "Đáp án D"
+            ],
+            "correct": 0,
+            "explanation": "Lời giải thích mẫu."
+        },
+        {
+            "type": "multiple",
+            "question": "Câu hỏi trắc nghiệm thường xuyên 8 môn Vật Lý lớp 12?",
+            "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C",
+                "Đáp án D"
+            ],
+            "correct": 0,
+            "explanation": "Lời giải thích mẫu."
+        },
+        {
+            "type": "multiple",
+            "question": "Câu hỏi trắc nghiệm thường xuyên 9 môn Vật Lý lớp 12?",
+            "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C",
+                "Đáp án D"
+            ],
+            "correct": 0,
+            "explanation": "Lời giải thích mẫu."
+        },
+        {
+            "type": "multiple",
+            "question": "Câu hỏi trắc nghiệm thường xuyên 10 môn Vật Lý lớp 12?",
+            "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C",
+                "Đáp án D"
+            ],
+            "correct": 0,
+            "explanation": "Lời giải thích mẫu."
         }
-    ],
-    "examInfo": {
-        "subject": "Vật lí",
-        "grade": "Lớp 12",
-        "date": "Năm học 2025 - 2026",
-        "examName": "Kiểm tra Thường xuyên HK II",
-        "attempt": "Bản 1"
-    }
+    ]
 };

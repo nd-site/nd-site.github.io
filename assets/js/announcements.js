@@ -16,10 +16,8 @@
 (function () {
   // DANH SÁCH CÁC THÔNG BÁO CHẠY NGANG (Dễ dàng thêm/sửa/xóa ở đây)
   const ANNOUNCEMENTS = [
-    "EduSpace by ND Labs vừa thêm vào hệ thống các bài thi thử TN THPT QG năm 2026. <a href='/eduspace/thptqg/2026/index.html' class='nd-ticker-link'>Trải nghiệm ngay tại đây!</a>",
-    "Tính năng trợ lý AI EduAI đã hoạt động trở lại! Hãy thử hỏi EduAI để được hỗ trợ học tập ngay hôm nay!"
-  ];
-
+    "EduSpace by ND Labs vừa thêm vào hệ thống các bài thi thử TN THPT QG năm 2026. <a href='/eduspace/thptqg/2026/index.html' class='nd-ticker-link'>Trải nghiệm ngay tại đây!</a>"
+  ]
   // Lọc lấy các thông báo thực tế hợp lệ (không rỗng)
   const validAnnouncements = (ANNOUNCEMENTS || []).map(a => a.trim()).filter(a => a.length > 0);
 
@@ -252,7 +250,17 @@
     tickerTextEl.style.transform = `translateX(-${textWidth}px)`;
 
     // Đăng ký sự kiện chạy hết chữ để chuyển sang tin tiếp theo
-    tickerTextEl.addEventListener('transitionend', onTickerComplete, { once: true });
+    // Lọc chỉ xử lý khi đúng là transition `transform` của chính tickerTextEl,
+    // tránh bị kích hoạt bởi transition `color` khi hover vào link con.
+    tickerTextEl.addEventListener('transitionend', onTickerTransformEnd);
+  }
+
+  function onTickerTransformEnd(e) {
+    // Chỉ xử lý khi đúng property 'transform' của chính element này,
+    // bỏ qua mọi transition khác (e.g. color hover trên link con)
+    if (e.propertyName !== 'transform' || e.target !== tickerTextEl) return;
+    tickerTextEl.removeEventListener('transitionend', onTickerTransformEnd);
+    onTickerComplete();
   }
 
   function onTickerComplete() {

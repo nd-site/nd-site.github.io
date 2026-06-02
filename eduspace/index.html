@@ -89,14 +89,15 @@
         /* Glassmorphism utilities */
         .glass-panel {
             background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.8);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
         }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.85);
+            -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(226, 232, 240, 0.8);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -168,8 +169,6 @@
         }
 
         .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
         }
 
         /* Card Status Styles */
@@ -203,15 +202,15 @@
             display: flex;
             overflow-x: auto;
             overflow-y: hidden;
+            -webkit-user-select: none;
             user-select: none;
             gap: 1rem;
             padding: 1rem 0;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
             mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-            transition: mask-image 0.3s ease;
+            transition: mask-image 0.3s ease, -webkit-mask-image 0.3s ease;
             cursor: grab;
             scroll-behavior: auto;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
         }
 
         .marquee-container::-webkit-scrollbar {
@@ -247,6 +246,7 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
+            -webkit-user-select: none;
             user-select: none;
         }
 
@@ -271,6 +271,7 @@
             left: 0;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
             border: 1px solid #e2e8f0;
             border-radius: 1rem;
@@ -381,13 +382,13 @@
                         <i data-lucide="graduation-cap" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
                         Ôn thi THPT QG 2026
                     </a>
-                    <a href="https://scan2word.vercel.app/" target="_blank"
+                    <a href="https://scan2word.vercel.app/" target="_blank" rel="noopener"
                         class="flex items-center gap-2 bg-white hover:bg-blue-50 px-5 py-2.5 rounded-full text-xs font-bold text-blue-600 border border-blue-100 shadow-sm transition-all group">
                         <i data-lucide="scan-text"
                             class="w-4 h-4 text-blue-600 group-hover:scale-110 transition-transform"></i>
                         Scan2Word by ND Labs
                     </a>
-                    <a href="https://www.onlineide.pro/playground/python" target="_blank"
+                    <a href="https://www.onlineide.pro/playground/python" target="_blank" rel="noopener"
                         class="flex items-center gap-2 bg-white hover:bg-emerald-50 px-5 py-2.5 rounded-full text-xs font-bold text-emerald-600 border border-emerald-100 shadow-sm transition-all group">
                         <i data-lucide="code-2" class="w-4 h-4 group-hover:rotate-12 transition-transform"></i>
                         Python Online
@@ -615,16 +616,25 @@
                     content1.innerHTML = cards;
                     content2.innerHTML = '';
                     
-                    // Kiểm tra xem nội dung có tràn khung không
-                    if (content1.scrollWidth > container.clientWidth) {
-                        content2.innerHTML = cards;
-                        container.style.maskImage = '';
-                        setupInfiniteScroll(containerId, direction);
-                    } else {
-                        container.style.maskImage = 'none';
-                        // Hủy bỏ scroll loop nếu có (trong trường hợp setupInfiniteScroll chạy nhiều lần)
-                        // Tuy nhiên vì hàm setup chỉ được gọi khi overflow, nếu không overflow ta không gọi setup.
-                    }
+                    // Chờ một chút để trình duyệt render xong DOM rồi mới đo kích thước
+                    setTimeout(() => {
+                        // Kiểm tra xem nội dung có tràn khung không (có thể cuộn được không)
+                        if (content1.scrollWidth > container.clientWidth) {
+                            // Nhân bản 1 lần (dải băng nối tiếp) để cuộn vô tận
+                            content2.innerHTML = cards;
+                            container.style.maskImage = '';
+                            
+                            // Chỉ setup nếu chưa được setup trước đó
+                            if (!container.dataset.infiniteScrollSetup) {
+                                setupInfiniteScroll(containerId, direction);
+                                container.dataset.infiniteScrollSetup = "true";
+                            }
+                        } else {
+                            // Không tràn khung -> không cần dải băng xoay vòng
+                            container.style.maskImage = 'none';
+                            content2.innerHTML = '';
+                        }
+                    }, 100);
                 }
             }
 

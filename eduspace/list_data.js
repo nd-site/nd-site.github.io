@@ -14,8 +14,7 @@ const quizList = [
         "title": "Tạo Đề Nâng Cao – Tạo đề bằng AI",
         "url": "/eduspace/taode",
         "description": "Tự động phân tích và tạo bài tập từ file word/txt với AI.",
-        "tag": "Công Cụ",
-        "isComingSoon": true
+        "tag": "Công Cụ"
     },
     {
         "title": "Scan2Word by ND Labs",
@@ -513,13 +512,13 @@ const quizList = [
         "class": "10"
     },
     {
-        "title": "EduVoc by ND Labs - Học từ vựng tiếng Anh thú vị",
-        "url": "/eduspace/tienganh/voc",
-        "description": "EduVoc by ND Labs giúp bạn học từ vựng tiếng Anh thú vị hơn bằng nhiều tính năng như flashcard, thử thách nhanh tay, ...",
+        "title": "EduVoc by ND Labs - Học từ vựng đa ngôn ngữ thông minh",
+        "url": "/eduspace/voc",
+        "description": "EduVoc by ND Labs giúp bạn học từ vựng mọi ngôn ngữ thú vị hơn bằng nhiều tính năng như flashcard, thử thách nhanh tay với sự hỗ trợ của AI...",
         "tag": "Công Cụ",
         "type": "lesson",
-        "subject": "Tiếng Anh",
-        "buttonText": "Học ngay!"
+        "buttonText": "Học ngay!",
+        "isHot": true
     },
     {
         "title": "EduAI Assistant by ND Labs - Trợ lý AI về Giáo dục",

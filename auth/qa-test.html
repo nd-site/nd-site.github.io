@@ -147,6 +147,19 @@
 
         // Initialize
         const keys = await window.getEduKeys();
+        const effectiveApiKey = keys.firebase || EDU_CONFIG.firebaseApiKey;
+        const effectiveAppId = keys.fbAppId || EDU_CONFIG.firebaseAppId;
+        if (!isSet(effectiveApiKey) || !isSet(effectiveAppId)) {
+            console.error('Firebase credentials are not configured (placeholders detected). Skipping Firebase initialization.');
+            const logsEl = document.getElementById('logs');
+            if (logsEl) {
+                const d = document.createElement('div');
+                d.textContent = '[QA] Firebase chưa được cấu hình. Bỏ qua các kiểm thử liên quan tới auth.';
+                d.className = 'warning';
+                logsEl.appendChild(d);
+            }
+            return;
+        }
         const firebaseConfig = {
             apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
             authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,

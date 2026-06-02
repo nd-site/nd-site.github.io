@@ -20,11 +20,13 @@ const gameData = {
 };
 
 // Text-to-Speech function
-function speakWord(text, lang = 'en-US') {
+function speakWord(text, lang) {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
+        const targetSelect = document.getElementById('target-lang');
+        const ttsCode = lang || (targetSelect ? targetSelect.options[targetSelect.selectedIndex].getAttribute('data-tts') : 'en-US');
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang;
+        utterance.lang = ttsCode;
         utterance.rate = 0.85;
         utterance.pitch = 1;
         window.speechSynthesis.speak(utterance);
@@ -200,12 +202,16 @@ function stopGame() {
         document.getElementById('summary-score').textContent = `${gameData.score}/${gameData.processedCount}`;
         document.getElementById('summary-accuracy').textContent = `${accuracy}%`;
         summaryModal.classList.remove('hidden');
+        summaryModal.classList.add('flex');
     }
 }
 
 function closeSummary() {
     const summaryModal = document.getElementById('game-summary-modal');
-    if (summaryModal) summaryModal.classList.add('hidden');
+    if (summaryModal) {
+        summaryModal.classList.add('hidden');
+        summaryModal.classList.remove('flex');
+    }
 
     const gameView = document.getElementById('game-view');
     if (gameView) {
