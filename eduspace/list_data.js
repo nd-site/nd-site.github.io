@@ -14,7 +14,8 @@ const quizList = [
         "title": "Tạo Đề Nâng Cao – Tạo đề bằng AI",
         "url": "/eduspace/taode",
         "description": "Tự động phân tích và tạo bài tập từ file word/txt với AI.",
-        "tag": "Công Cụ",
+        "tag": "Công Cụ"
+        ,
         "isComingSoon": true
     },
     {
@@ -519,16 +520,14 @@ const quizList = [
         "tag": "Công Cụ",
         "type": "lesson",
         "buttonText": "Học ngay!",
-        "isHot": true,
-        "isComingSoon": true
+        "isHot": true
     },
     {
         "title": "EduAI Assistant by ND Labs - Trợ lý AI về Giáo dục",
         "url": "/eduspace/assistant",
         "description": "EduAI Assistant by ND Labs là trợ lý ảo AI về lĩnh vực Giáo dục.",
         "tag": "Công Cụ",
-        "buttonText": "Trò chuyện với EduAI",
-        "isComingSoon": true
+        "buttonText": "Trò chuyện với EduAI"
     },
     {
         "title": "Đề cương ôn tập Vật lý 10 - Học kì I năm học 2025-2026",
@@ -553,7 +552,7 @@ const quizList = [
         "description": "Bài kiểm tra giúp bạn rèn luyện và thử thách trí nhớ của mình qua các câu hỏi thú vị.",
         "tag": "Trí nhớ",
         "type": "quiz",
-        "buttonText": "Bắt đầu thử thách",
+        "buttonText": "Bắt đầu thử thách",
         "isComingSoon": true
     },
     {
