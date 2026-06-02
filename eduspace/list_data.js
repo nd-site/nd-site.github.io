@@ -14,7 +14,8 @@ const quizList = [
         "title": "Tạo Đề Nâng Cao – Tạo đề bằng AI",
         "url": "/eduspace/taode",
         "description": "Tự động phân tích và tạo bài tập từ file word/txt với AI.",
-        "tag": "Công Cụ"
+        "tag": "Công Cụ",
+        "isComingSoon": true
     },
     {
         "title": "Scan2Word by ND Labs",
@@ -518,14 +519,16 @@ const quizList = [
         "tag": "Công Cụ",
         "type": "lesson",
         "buttonText": "Học ngay!",
-        "isHot": true
+        "isHot": true,
+        "isComingSoon": true
     },
     {
         "title": "EduAI Assistant by ND Labs - Trợ lý AI về Giáo dục",
         "url": "/eduspace/assistant",
         "description": "EduAI Assistant by ND Labs là trợ lý ảo AI về lĩnh vực Giáo dục.",
         "tag": "Công Cụ",
-        "buttonText": "Trò chuyện với EduAI"
+        "buttonText": "Trò chuyện với EduAI",
+        "isComingSoon": true
     },
     {
         "title": "Đề cương ôn tập Vật lý 10 - Học kì I năm học 2025-2026",
@@ -550,7 +553,8 @@ const quizList = [
         "description": "Bài kiểm tra giúp bạn rèn luyện và thử thách trí nhớ của mình qua các câu hỏi thú vị.",
         "tag": "Trí nhớ",
         "type": "quiz",
-        "buttonText": "Bắt đầu thử thách"
+        "buttonText": "Bắt đầu thử thách",
+        "isComingSoon": true
     },
     {
         "title": "Đề kiểm tra viết Tiếng Anh 10 - Học kỳ I năm học 2025-2026",
@@ -870,13 +874,18 @@ const quizList = [
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "11",
-        "subject": "Hóa Học",
+        "subject": "Công Nghệ",
         "subSubject": "Công Nghiệp"
     },
     {
         "title": "Kiểm tra Cuối Học Kì II – Công nghệ 12 Điện - Điện tử 2025-2026",
         "url": "/eduspace/congnghe-congnghiep/12/ck2-2526-v1",
-        "description": "Đề kiểm tra cuối học kì II môn Công nghệ lớp 12 (Điện - Điện tử) theo chương trình GDPT 2018."
+        "description": "Đề kiểm tra cuối học kì II môn Công nghệ lớp 12 (Điện - Điện tử) theo chương trình GDPT 2018.",
+        "tag": "Công Nghệ",
+        "type": "quiz",
+        "class": "12",
+        "subject": "Công Nghệ",
+        "subSubject": "Công Nghiệp"
     },
     {
         "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 10 (KNTT) – 2025-2026",
