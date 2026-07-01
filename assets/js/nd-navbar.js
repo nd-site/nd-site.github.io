@@ -541,7 +541,7 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       border-radius: 28px;
-      max-width: 520px;
+      max-width: 650px;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -549,14 +549,14 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       transform: scale(0.95);
       transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-      max-height: 80vh;
+      max-height: 85vh;
       box-sizing: border-box;
     ">
       <div style="
-        padding: 18px 24px;
+        padding: 20px 28px;
         border-bottom: 1px solid #f1f5f9;
         font-weight: 800;
-        font-size: 14px;
+        font-size: 16px;
         color: #1e293b;
         display: flex;
         justify-content: space-between;
@@ -566,9 +566,9 @@
         width: 100%;
       ">
         <span style="display: flex; align-items: center; gap: 8px;">🔔 BẢNG TIN THÔNG BÁO</span>
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <button id="nd-notify-mark-all" style="background: transparent; border: none; font-size: 11px; font-weight: 800; color: #0070f3; cursor: pointer; padding: 0;">Đánh dấu đã đọc</button>
-          <button id="nd-notify-close-btn" style="background: #e2e8f0; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 11px; font-weight: bold; color: #475569; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <button id="nd-notify-mark-all" style="background: transparent; border: none; font-size: 12px; font-weight: 800; color: #0070f3; cursor: pointer; padding: 0;">Đánh dấu đã đọc</button>
+          <button id="nd-notify-close-btn" style="background: #e2e8f0; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 13px; font-weight: bold; color: #475569; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
         </div>
       </div>
       <div id="nd-navbar-notify-list" style="
@@ -577,10 +577,10 @@
         flex-direction: column;
         box-sizing: border-box;
         width: 100%;
-        max-height: calc(80vh - 65px);
+        max-height: calc(85vh - 75px);
         background: white;
       ">
-        <div style="padding: 40px; text-align: center; color: #94a3b8; font-size: 12px; font-weight: 600;">Đang tải thông báo...</div>
+        <div style="padding: 40px; text-align: center; color: #94a3b8; font-size: 13px; font-weight: 600;">Đang tải thông báo...</div>
       </div>
     </div>
   `;
@@ -1149,22 +1149,22 @@
         <div style="
           background: #fff;
           border-radius: 24px;
-          max-width: 420px;
+          max-width: 500px;
           width: 100%;
           box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-          padding: 22px 26px;
+          padding: 26px 32px;
           font-family: 'Plus Jakarta Sans', sans-serif;
           transform: scale(0.95);
           transition: transform 0.2s ease;
           box-sizing: border-box;
           text-align: left;
         ">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <span style="font-size: 10px; font-weight: 800; color: #94a3b8; font-family: monospace;">📅 ${date} &nbsp; ${time}</span>
-            <button id="nd-notify-detail-close" style="background: #f1f5f9; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 10px; font-weight: bold; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <span style="font-size: 11px; font-weight: 800; color: #94a3b8; font-family: monospace;">📅 ${date} &nbsp; ${time}</span>
+            <button id="nd-notify-detail-close" style="background: #f1f5f9; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 11px; font-weight: bold; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
           </div>
-          <h4 style="font-size: 15px; font-weight: 800; color: #0f172a; margin: 0 0 10px 0; line-height: 1.4;">${title}</h4>
-          <p style="font-size: 12.5px; color: #475569; line-height: 1.6; margin: 0; white-space: pre-wrap; word-wrap: break-word;">${parseMarkdownLinks(info)}</p>
+          <h4 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 12px 0; line-height: 1.4;">${title}</h4>
+          <p style="font-size: 15px; color: #475569; line-height: 1.65; margin: 0; white-space: pre-wrap; word-wrap: break-word;">${parseMarkdownLinks(info)}</p>
         </div>
       `;
       
@@ -1202,7 +1202,8 @@
       const cleanDbUrl = dbUrl.endsWith('/') ? dbUrl + 'notifications.json' : dbUrl + '/notifications.json';
 
       function fallbackFetch(url) {
-        fetch(url)
+        const busterUrl = url + (url.includes('?') ? '&' : '?') + 'nocache=' + Date.now();
+        fetch(busterUrl)
           .then(res => {
             if (!res.ok) throw new Error("Status " + res.status);
             return res.json();
@@ -1232,7 +1233,8 @@
               onValue(triggerRef, (snapshot) => {
                 const data = snapshot.val();
                 if (data && data.timestamp) {
-                  fetch(cleanDbUrl)
+                  const busterUrl = cleanDbUrl + (cleanDbUrl.includes('?') ? '&' : '?') + 'nocache=' + Date.now();
+                  fetch(busterUrl)
                     .then(res => res.json())
                     .then(newData => {
                       updateNotificationList(newData);
