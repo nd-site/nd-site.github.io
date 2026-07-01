@@ -993,7 +993,6 @@
 
     // ── Notification Interactions & Real-time Firebase Synchronization ──
     const notifyBtn = document.getElementById('nd-navbar-notify-btn');
-    const notifyModal = document.getElementById('nd-navbar-notify-modal');
     const notifyCloseBtn = document.getElementById('nd-notify-close-btn');
     const notifyMarkAll = document.getElementById('nd-notify-mark-all');
     let notificationsList = [];
