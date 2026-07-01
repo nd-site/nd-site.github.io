@@ -507,6 +507,26 @@
     `;
   }
 
+  /* ── Notification Bell Context ── */
+  const notifyWrapper = document.createElement('div');
+  notifyWrapper.id = 'nd-navbar-notify-wrapper';
+  notifyWrapper.style.cssText = 'position: relative; display: flex; align-items: center; margin-left: auto; flex-shrink: 0;';
+  notifyWrapper.innerHTML = `
+    <button id="nd-navbar-notify-btn" title="Thông báo" style="background: transparent; border: none; padding: 6px; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.2s; position: relative; outline: none;">
+      <i class="ph-duotone ph-bell" style="font-size: 1.25rem;"></i>
+      <span id="nd-navbar-notify-badge" style="display: none; position: absolute; top: 2px; right: 2px; width: 7px; height: 7px; background: #ef4444; border-radius: 50%; border: 1.5px solid #fff;"></span>
+    </button>
+    <div id="nd-navbar-notify-dropdown" style="display: none; position: absolute; top: 38px; right: 0; width: 300px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100005; flex-direction: column; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif;">
+      <div style="padding: 10px 14px; border-bottom: 1px solid #e2e8f0; font-weight: 800; font-size: 12px; color: #1e293b; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; box-sizing: border-box; width: 100%;">
+        <span>🔔 THÔNG BÁO MỚI</span>
+        <button id="nd-notify-mark-all" style="background: transparent; border: none; font-size: 9.5px; font-weight: 800; color: #0070f3; cursor: pointer; padding: 0;">Đánh dấu đã đọc</button>
+      </div>
+      <div id="nd-navbar-notify-list" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; box-sizing: border-box; width: 100%;">
+        <div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 11px; font-weight: 600;">Đang tải thông báo...</div>
+      </div>
+    </div>
+  `;
+
   function storageClear() {
     localStorage.removeItem('nd_user');
     window.location.reload();
@@ -515,6 +535,7 @@
   inner.appendChild(brand);
   inner.appendChild(sep);
   inner.appendChild(linksDiv);
+  inner.appendChild(notifyWrapper);
   inner.appendChild(userSection);
   nav.appendChild(inner);
 
@@ -910,6 +931,118 @@
     notesTextarea.addEventListener('input', () => {
       localStorage.setItem('nd_quick_notes', notesTextarea.value);
     });
+
+    // ── Notification Interactions & Real-time Firebase Synchronization ──
+    const notifyBtn = document.getElementById('nd-navbar-notify-btn');
+    const notifyDropdown = document.getElementById('nd-navbar-notify-dropdown');
+    const notifyMarkAll = document.getElementById('nd-notify-mark-all');
+    let notificationsList = [];
+
+    if (notifyBtn && notifyDropdown) {
+      notifyBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isVisible = notifyDropdown.style.display === 'flex';
+        if (isVisible) {
+          notifyDropdown.style.display = 'none';
+        } else {
+          notifyDropdown.style.display = 'flex';
+          if (notificationsList.length > 0) {
+            const maxStt = Math.max(...notificationsList.map(n => n.stt || 0));
+            localStorage.setItem('nd_last_read_stt', maxStt.toString());
+            const badge = document.getElementById('nd-navbar-notify-badge');
+            if (badge) badge.style.display = 'none';
+          }
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!notifyDropdown.contains(e.target) && e.target !== notifyBtn) {
+          notifyDropdown.style.display = 'none';
+        }
+      });
+
+      if (notifyMarkAll) {
+        notifyMarkAll.addEventListener('click', () => {
+          if (notificationsList.length > 0) {
+            const maxStt = Math.max(...notificationsList.map(n => n.stt || 0));
+            localStorage.setItem('nd_last_read_stt', maxStt.toString());
+            const badge = document.getElementById('nd-navbar-notify-badge');
+            if (badge) badge.style.display = 'none';
+          }
+        });
+      }
+
+      // Initialize Firebase listener
+      (async () => {
+        try {
+          const { ref, onValue } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+          const checkDb = setInterval(() => {
+            if (window.firebaseDb) {
+              clearInterval(checkDb);
+              const notifyRef = ref(window.firebaseDb, 'notifications');
+              onValue(notifyRef, (snapshot) => {
+                const data = snapshot.val();
+                updateNotificationList(data);
+              });
+            }
+          }, 300);
+        } catch (err) {
+          console.error("Firebase Realtime Database dynamic load failed, using fallback REST API", err);
+          const dbUrl = "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app/notifications.json";
+          fetch(dbUrl).then(res => res.json()).then(data => updateNotificationList(data)).catch(e => console.error(e));
+        }
+      })();
+    }
+
+    function updateNotificationList(data) {
+      const listContainer = document.getElementById('nd-navbar-notify-list');
+      const badge = document.getElementById('nd-navbar-notify-badge');
+      if (!listContainer) return;
+      
+      if (!data) {
+        listContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 11px; font-weight: 600;">Không có thông báo mới nào.</div>`;
+        if (badge) badge.style.display = 'none';
+        return;
+      }
+      
+      notificationsList = Object.values(data);
+      notificationsList.sort((a, b) => (b.stt || 0) - (a.stt || 0));
+      
+      if (notificationsList.length === 0) {
+        listContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 11px; font-weight: 600;">Không có thông báo mới nào.</div>`;
+        if (badge) badge.style.display = 'none';
+        return;
+      }
+      
+      const lastReadStt = parseInt(localStorage.getItem('nd_last_read_stt') || '0');
+      const maxStt = Math.max(...notificationsList.map(n => n.stt || 0));
+      
+      if (maxStt > lastReadStt) {
+        if (badge) badge.style.display = 'block';
+      } else {
+        if (badge) badge.style.display = 'none';
+      }
+      
+      listContainer.innerHTML = '';
+      notificationsList.forEach(item => {
+        const itemEl = document.createElement('div');
+        const borderAccent = item.color || '#0070f3';
+        
+        itemEl.style.cssText = `padding: 10px 14px; border-left: 3px solid ${borderAccent}; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 3px; transition: background 0.2s; cursor: pointer; box-sizing: border-box; width: 100%; text-align: left;`;
+        
+        itemEl.onmouseenter = () => { itemEl.style.background = '#f8fafc'; };
+        itemEl.onmouseleave = () => { itemEl.style.background = 'transparent'; };
+        
+        itemEl.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; box-sizing: border-box;">
+            <span style="font-weight: 800; font-size: 11px; color: #1e293b; line-height: 1.3;">${item.title || 'Thông báo'}</span>
+            <span style="font-size: 8.5px; font-weight: 700; color: #94a3b8; white-space: nowrap;">${item.time || ''}</span>
+          </div>
+          <p style="font-size: 10.5px; color: #64748b; line-height: 1.4; margin: 0; white-space: normal; word-wrap: break-word;">${item.info || ''}</p>
+        `;
+        listContainer.appendChild(itemEl);
+      });
+    }
   }
 
   if (document.body) {
