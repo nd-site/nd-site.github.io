@@ -190,11 +190,12 @@
     /* ── Floating Tool FAB ── */
     #nd-tools-fab {
       position: fixed !important;
-      bottom: 24px !important;
-      left: 24px !important;
-      width: 46px !important;
-      height: 46px !important;
-      border-radius: 50% !important;
+      top: 95px !important;
+      left: 16px !important;
+      bottom: auto !important;
+      width: 42px !important;
+      height: 42px !important;
+      border-radius: 12px !important;
       background: rgba(255, 255, 255, 0.85) !important;
       backdrop-filter: blur(12px) !important;
       -webkit-backdrop-filter: blur(12px) !important;
@@ -209,20 +210,21 @@
       color: #64748b !important;
     }
     #nd-tools-fab:hover {
-      transform: scale(1.08) !important;
+      transform: scale(1.05) !important;
       color: #0070f3 !important;
       border-color: rgba(0, 112, 243, 0.3) !important;
       box-shadow: 0 8px 30px rgba(0, 112, 243, 0.15) !important;
     }
     #nd-tools-fab i {
-      font-size: 1.3rem !important;
+      font-size: 1.25rem !important;
     }
     
     /* ── Panel Wrapper ── */
     #nd-tools-panel {
       position: fixed !important;
-      bottom: 82px !important;
-      left: 24px !important;
+      top: 145px !important;
+      left: 16px !important;
+      bottom: auto !important;
       width: 300px !important;
       background: rgba(255, 255, 255, 0.95) !important;
       backdrop-filter: blur(20px) !important;
@@ -593,7 +595,28 @@
       
       <!-- Timer Content -->
       <div id="nd-tools-content-timer" class="nd-tools-tab-content">
-        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block text-center mb-2">Đồng hồ Pomodoro</span>
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block text-center mb-2">Đồng hồ đếm ngược</span>
+        
+        <!-- Timer Modes -->
+        <div class="flex bg-slate-100 p-1 rounded-xl mb-4 gap-1">
+          <button id="nd-pomo-mode-btn" class="flex-1 py-1.5 text-[10px] font-bold text-slate-700 rounded-lg bg-white shadow-sm border-0 cursor-pointer">Pomodoro</button>
+          <button id="nd-custom-mode-btn" class="flex-1 py-1.5 text-[10px] font-bold text-slate-500 rounded-lg border-0 bg-transparent cursor-pointer">Tùy chỉnh</button>
+        </div>
+        
+        <!-- Custom Inputs -->
+        <div id="nd-timer-custom-inputs" class="hidden mb-4 flex items-center justify-center gap-1.5">
+          <div class="flex flex-col items-center">
+            <input type="number" id="nd-timer-min" min="0" max="999" value="25" class="w-12 text-center border border-slate-200 rounded-lg p-1 text-xs font-bold font-mono">
+            <span class="text-[8px] text-slate-400 font-bold mt-1 uppercase">Phút</span>
+          </div>
+          <span class="font-bold text-slate-400 mb-4">:</span>
+          <div class="flex flex-col items-center">
+            <input type="number" id="nd-timer-sec" min="0" max="59" value="0" class="w-12 text-center border border-slate-200 rounded-lg p-1 text-xs font-bold font-mono">
+            <span class="text-[8px] text-slate-400 font-bold mt-1 uppercase">Giây</span>
+          </div>
+          <button id="nd-timer-set-btn" class="py-1 px-2.5 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-[10px] rounded-lg border-0 cursor-pointer mb-4">Đặt</button>
+        </div>
+
         <div class="nd-pomo-display" id="nd-pomo-time">25:00</div>
         <div class="nd-pomo-controls">
           <button class="nd-pomo-btn bg-blue-600 text-white hover:bg-blue-700" id="nd-pomo-start">Bắt đầu</button>
@@ -688,16 +711,60 @@
       }
     });
 
-    // Pomodoro Logic
+    // Pomodoro & Custom Timer Logic
     let pomoInterval = null;
     let pomoTimeLeft = 25 * 60;
+    let pomoMode = 'pomo'; // 'pomo' or 'custom'
     const pomoDisplay = document.getElementById('nd-pomo-time');
-    
+    const pomoModeBtn = document.getElementById('nd-pomo-mode-btn');
+    const customModeBtn = document.getElementById('nd-custom-mode-btn');
+    const customInputsDiv = document.getElementById('nd-timer-custom-inputs');
+    const minInput = document.getElementById('nd-timer-min');
+    const secInput = document.getElementById('nd-timer-sec');
+
     function updatePomoDisplay() {
       const mins = Math.floor(pomoTimeLeft / 60);
       const secs = pomoTimeLeft % 60;
       pomoDisplay.innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
+
+    // Toggle Pomodoro Mode
+    pomoModeBtn.addEventListener('click', () => {
+      pomoMode = 'pomo';
+      pomoModeBtn.classList.add('bg-white', 'shadow-sm', 'text-slate-700');
+      pomoModeBtn.classList.remove('bg-transparent', 'text-slate-500');
+      customModeBtn.classList.add('bg-transparent', 'text-slate-500');
+      customModeBtn.classList.remove('bg-white', 'shadow-sm', 'text-slate-700');
+      customInputsDiv.classList.add('hidden');
+      
+      clearInterval(pomoInterval);
+      pomoInterval = null;
+      pomoTimeLeft = 25 * 60;
+      updatePomoDisplay();
+    });
+
+    // Toggle Custom Mode
+    customModeBtn.addEventListener('click', () => {
+      pomoMode = 'custom';
+      customModeBtn.classList.add('bg-white', 'shadow-sm', 'text-slate-700');
+      customModeBtn.classList.remove('bg-transparent', 'text-slate-500');
+      pomoModeBtn.classList.add('bg-transparent', 'text-slate-500');
+      pomoModeBtn.classList.remove('bg-white', 'shadow-sm', 'text-slate-700');
+      customInputsDiv.classList.remove('hidden');
+    });
+
+    // Set Custom Timer
+    document.getElementById('nd-timer-set-btn').addEventListener('click', () => {
+      const m = Math.max(0, parseInt(minInput.value) || 0);
+      const s = Math.max(0, Math.min(59, parseInt(secInput.value) || 0));
+      minInput.value = m;
+      secInput.value = s;
+      
+      clearInterval(pomoInterval);
+      pomoInterval = null;
+      pomoTimeLeft = m * 60 + s;
+      updatePomoDisplay();
+    });
 
     document.getElementById('nd-pomo-start').addEventListener('click', () => {
       if (pomoInterval) return;
@@ -708,8 +775,8 @@
         } else {
           clearInterval(pomoInterval);
           pomoInterval = null;
-          alert('Pomodoro hoàn thành! Hãy nghỉ ngơi chút nhé.');
-          pomoTimeLeft = 25 * 60;
+          alert(pomoMode === 'pomo' ? 'Pomodoro hoàn thành! Hãy nghỉ ngơi chút nhé.' : 'Đồng hồ đếm ngược đã kết thúc!');
+          pomoTimeLeft = pomoMode === 'pomo' ? 25 * 60 : 0;
           updatePomoDisplay();
         }
       }, 1000);
@@ -723,7 +790,13 @@
     document.getElementById('nd-pomo-reset').addEventListener('click', () => {
       clearInterval(pomoInterval);
       pomoInterval = null;
-      pomoTimeLeft = 25 * 60;
+      if (pomoMode === 'pomo') {
+        pomoTimeLeft = 25 * 60;
+      } else {
+        const m = Math.max(0, parseInt(minInput.value) || 0);
+        const s = Math.max(0, Math.min(59, parseInt(secInput.value) || 0));
+        pomoTimeLeft = m * 60 + s;
+      }
       updatePomoDisplay();
     });
 
