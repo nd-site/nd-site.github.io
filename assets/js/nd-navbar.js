@@ -245,10 +245,10 @@
     
     /* Shift FAB and Panel down when quiz is active to avoid covering the back button */
     body.quiz-active #nd-tools-fab {
-      top: 155px !important;
+      top: 160px !important;
     }
     body.quiz-active #nd-tools-panel {
-      top: 205px !important;
+      top: 210px !important;
     }
     
     /* ── Tabs Header ── */
@@ -641,18 +641,114 @@
     `;
     document.body.appendChild(panel);
 
-    // Toggle panel
+    // Dragging & Panel Positioning Logic
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let buttonStartX = 0;
+    let buttonStartY = 0;
+    let hasDraggedSignificant = false;
+
+    function repositionPanel() {
+      const fabRect = fab.getBoundingClientRect();
+      const panelWidth = 300;
+      const panelHeight = panel.offsetHeight || 330;
+      
+      let newLeft = fabRect.left;
+      let newTop = fabRect.bottom + 8;
+      
+      if (newLeft + panelWidth > window.innerWidth) {
+        newLeft = window.innerWidth - panelWidth - 16;
+      }
+      if (newLeft < 16) {
+        newLeft = 16;
+      }
+      
+      if (newTop + panelHeight > window.innerHeight) {
+        newTop = fabRect.top - panelHeight - 8;
+      }
+      if (newTop < 80) {
+        newTop = 80;
+      }
+
+      panel.style.setProperty('left', newLeft + 'px', 'important');
+      panel.style.setProperty('top', newTop + 'px', 'important');
+      panel.style.setProperty('bottom', 'auto', 'important');
+    }
+
+    fab.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      hasDraggedSignificant = false;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      
+      const rect = fab.getBoundingClientRect();
+      buttonStartX = rect.left;
+      buttonStartY = rect.top;
+      
+      fab.style.transition = 'none';
+      fab.setPointerCapture(e.pointerId);
+    });
+
+    fab.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      
+      const deltaX = e.clientX - dragStartX;
+      const deltaY = e.clientY - dragStartY;
+      
+      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+        hasDraggedSignificant = true;
+      }
+      
+      let newLeft = buttonStartX + deltaX;
+      let newTop = buttonStartY + deltaY;
+      
+      const fabSize = 42;
+      const minTop = 80; 
+      const maxTop = window.innerHeight - fabSize - 16;
+      const minLeft = 16;
+      const maxLeft = window.innerWidth - fabSize - 16;
+      
+      newLeft = Math.max(minLeft, Math.min(maxLeft, newLeft));
+      newTop = Math.max(minTop, Math.min(maxTop, newTop));
+      
+      fab.style.setProperty('left', newLeft + 'px', 'important');
+      fab.style.setProperty('top', newTop + 'px', 'important');
+      fab.style.setProperty('bottom', 'auto', 'important');
+      
+      if (panel.style.display === 'flex') {
+        repositionPanel();
+      }
+    });
+
+    fab.addEventListener('pointerup', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      fab.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+      fab.releasePointerCapture(e.pointerId);
+      
+      if (hasDraggedSignificant) {
+        e.stopPropagation();
+        e.preventDefault();
+        fab.dataset.dragged = "true";
+      }
+    });
+
     fab.addEventListener('click', (e) => {
+      if (hasDraggedSignificant) {
+        return;
+      }
       e.stopPropagation();
       const isVisible = panel.style.display === 'flex';
       if (isVisible) {
         panel.style.display = 'none';
       } else {
         panel.style.display = 'flex';
-        // Generate QR code and link when opened
         const currentUrl = window.location.href;
         document.getElementById('nd-tools-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(currentUrl)}`;
         document.getElementById('nd-tools-qr-url').value = currentUrl;
+        
+        setTimeout(repositionPanel, 0);
       }
     });
 
