@@ -972,24 +972,67 @@
         });
       }
 
-      // Initialize Firebase listener
+      // Initialize Firebase listener with auto-fallback
       (async () => {
+        let dbUrl = "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app";
+        try {
+          if (typeof getEduKeys === 'function') {
+            const keys = await getEduKeys();
+            if (keys && keys.fbDatabaseURL) {
+              dbUrl = keys.fbDatabaseURL;
+            }
+          }
+        } catch (e) {}
+
+        const cleanDbUrl = dbUrl.endsWith('/') ? dbUrl + 'notifications.json' : dbUrl + '/notifications.json';
+
+        function fallbackFetch(url) {
+          fetch(url)
+            .then(res => {
+              if (!res.ok) throw new Error("Status " + res.status);
+              return res.json();
+            })
+            .then(data => {
+              updateNotificationList(data);
+            })
+            .catch(err => {
+              console.error("REST API notification fetch failed", err);
+              const listContainer = document.getElementById('nd-navbar-notify-list');
+              if (listContainer) {
+                listContainer.innerHTML = `<div style="padding: 16px; text-align: center; color: #ef4444; font-size: 10px; font-weight: 700; line-height: 1.4;">⚠️ Không thể kết nối cơ sở dữ liệu. Vui lòng mở quyền đọc (Read Rules) tại nhánh '/notifications' hoặc cấu hình lại Firebase.</div>`;
+              }
+            });
+        }
+
         try {
           const { ref, onValue } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+          let attempts = 0;
           const checkDb = setInterval(() => {
+            attempts++;
             if (window.firebaseDb) {
               clearInterval(checkDb);
-              const notifyRef = ref(window.firebaseDb, 'notifications');
-              onValue(notifyRef, (snapshot) => {
-                const data = snapshot.val();
-                updateNotificationList(data);
-              });
+              try {
+                const notifyRef = ref(window.firebaseDb, 'notifications');
+                onValue(notifyRef, (snapshot) => {
+                  const data = snapshot.val();
+                  updateNotificationList(data);
+                }, (error) => {
+                  console.error("Firebase onValue subscription failed, falling back to REST", error);
+                  fallbackFetch(cleanDbUrl);
+                });
+              } catch (e) {
+                console.error("Firebase ref initialization failed, falling back to REST", e);
+                fallbackFetch(cleanDbUrl);
+              }
+            } else if (attempts > 15) { // ~4.5 seconds timeout
+              clearInterval(checkDb);
+              console.warn("FirebaseDb initialization timed out, falling back to REST API");
+              fallbackFetch(cleanDbUrl);
             }
           }, 300);
         } catch (err) {
           console.error("Firebase Realtime Database dynamic load failed, using fallback REST API", err);
-          const dbUrl = "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app/notifications.json";
-          fetch(dbUrl).then(res => res.json()).then(data => updateNotificationList(data)).catch(e => console.error(e));
+          fallbackFetch(cleanDbUrl);
         }
       })();
     }
