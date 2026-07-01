@@ -1023,24 +1023,59 @@
         if (badge) badge.style.display = 'none';
       }
       
-      listContainer.innerHTML = '';
+      // Group notifications by date
+      const groups = {};
       notificationsList.forEach(item => {
-        const itemEl = document.createElement('div');
-        const borderAccent = item.color || '#0070f3';
+        const dateStr = item.date || 'Thông báo khác';
+        if (!groups[dateStr]) {
+          groups[dateStr] = [];
+        }
+        groups[dateStr].push(item);
+      });
+      
+      listContainer.innerHTML = '';
+      
+      // Get unique dates in order of appearance (latest date first)
+      const uniqueDates = [];
+      notificationsList.forEach(item => {
+        const d = item.date || 'Thông báo khác';
+        if (!uniqueDates.includes(d)) {
+          uniqueDates.push(d);
+        }
+      });
+      
+      uniqueDates.forEach(dateStr => {
+        // Date Group Header
+        const groupHeader = document.createElement('div');
+        groupHeader.style.cssText = 'padding: 5px 12px; background: #f8fafc; font-size: 9px; font-weight: 800; color: #64748b; text-align: left; border-bottom: 1px solid #e2e8f0; border-top: 1px solid #f1f5f9; box-sizing: border-box; width: 100%;';
+        groupHeader.innerHTML = `📅 &nbsp; ${dateStr}`;
+        listContainer.appendChild(groupHeader);
         
-        itemEl.style.cssText = `padding: 10px 14px; border-left: 3px solid ${borderAccent}; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 3px; transition: background 0.2s; cursor: pointer; box-sizing: border-box; width: 100%; text-align: left;`;
-        
-        itemEl.onmouseenter = () => { itemEl.style.background = '#f8fafc'; };
-        itemEl.onmouseleave = () => { itemEl.style.background = 'transparent'; };
-        
-        itemEl.innerHTML = `
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; box-sizing: border-box;">
-            <span style="font-weight: 800; font-size: 11px; color: #1e293b; line-height: 1.3;">${item.title || 'Thông báo'}</span>
-            <span style="font-size: 8.5px; font-weight: 700; color: #94a3b8; white-space: nowrap;">${item.time || ''}</span>
-          </div>
-          <p style="font-size: 10.5px; color: #64748b; line-height: 1.4; margin: 0; white-space: normal; word-wrap: break-word;">${item.info || ''}</p>
-        `;
-        listContainer.appendChild(itemEl);
+        // Notifications in this date group
+        groups[dateStr].forEach(item => {
+          const itemEl = document.createElement('div');
+          const borderAccent = item.color || '#0070f3';
+          
+          itemEl.style.cssText = `padding: 10px 12px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 10px; transition: background 0.2s; cursor: pointer; box-sizing: border-box; width: 100%; text-align: left;`;
+          
+          itemEl.onmouseenter = () => { itemEl.style.background = '#f8fafc'; };
+          itemEl.onmouseleave = () => { itemEl.style.background = 'transparent'; };
+          
+          itemEl.innerHTML = `
+            <!-- Left: Hour -->
+            <div style="font-size: 9.5px; font-weight: 800; color: #94a3b8; width: 34px; text-align: right; flex-shrink: 0; padding-top: 1.5px; font-family: monospace;">
+              ${item.time || ''}
+            </div>
+            <!-- Vertical color bar -->
+            <div style="width: 3px; align-self: stretch; background: ${borderAccent}; border-radius: 1.5px; flex-shrink: 0;"></div>
+            <!-- Right: content -->
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+              <span style="font-weight: 800; font-size: 11px; color: #1e293b; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.title || 'Thông báo'}</span>
+              <p style="font-size: 10px; color: #64748b; line-height: 1.4; margin: 0; white-space: normal; word-wrap: break-word;">${item.info || ''}</p>
+            </div>
+          `;
+          listContainer.appendChild(itemEl);
+        });
       });
     }
   }
