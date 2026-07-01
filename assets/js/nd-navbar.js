@@ -243,6 +243,14 @@
       box-sizing: border-box !important;
     }
     
+    /* Shift FAB and Panel down when quiz is active to avoid covering the back button */
+    body.quiz-active #nd-tools-fab {
+      top: 155px !important;
+    }
+    body.quiz-active #nd-tools-panel {
+      top: 205px !important;
+    }
+    
     /* ── Tabs Header ── */
     .nd-tools-tab-header {
       display: flex !important;

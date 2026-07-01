@@ -1202,6 +1202,7 @@
             showModal("Xác nhận", "Bạn muốn dừng làm bài? Kết quả hiện tại sẽ không được lưu.", "confirm", () => {
                 clearInterval(timerInterval);
                 clearActiveSession();
+                document.body.classList.remove('quiz-active');
                 document.getElementById('main-quiz').classList.add('hidden');
                 document.getElementById('start-screen').classList.remove('hidden');
             });
@@ -1524,6 +1525,7 @@
 
         function startQuiz(mode, resumed = false) {
             quizMode = mode;
+            document.body.classList.add('quiz-active');
             document.getElementById('test-mode-selector').classList.add('hidden');
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('main-quiz').classList.remove('hidden');
@@ -1713,6 +1715,7 @@
         function processSubmit() {
             clearInterval(timerInterval);
             clearActiveSession();
+            document.body.classList.remove('quiz-active');
             
             const data = calculateScoreData();
             const total = quizData.activeQuestions.length;
