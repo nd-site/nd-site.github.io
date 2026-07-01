@@ -1054,70 +1054,216 @@
         });
       }
 
-      // Initialize Firebase listener with auto-fallback
-      (async () => {
-        let dbUrl = "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app";
-        try {
-          if (typeof getEduKeys === 'function') {
-            const keys = await getEduKeys();
-            if (keys && keys.fbDatabaseURL) {
-              dbUrl = keys.fbDatabaseURL;
-            }
-          }
-        } catch (e) {}
-
-        const cleanDbUrl = dbUrl.endsWith('/') ? dbUrl + 'notifications.json' : dbUrl + '/notifications.json';
-
-        function fallbackFetch(url) {
-          fetch(url)
-            .then(res => {
-              if (!res.ok) throw new Error("Status " + res.status);
-              return res.json();
-            })
-            .then(data => {
-              updateNotificationList(data);
-            })
-            .catch(err => {
-              console.error("REST API notification fetch failed", err);
-              const listContainer = document.getElementById('nd-navbar-notify-list');
-              if (listContainer) {
-                listContainer.innerHTML = `<div style="padding: 16px; text-align: center; color: #ef4444; font-size: 10px; font-weight: 700; line-height: 1.4;">⚠️ Không thể kết nối cơ sở dữ liệu. Vui lòng mở quyền đọc (Read Rules) tại nhánh '/notifications' hoặc cấu hình lại Firebase.</div>`;
-              }
-            });
+    // ── Toast Alert & Detail View Dialogs ──
+    function showToastNotification(title, info) {
+      let container = document.getElementById('nd-toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'nd-toast-container';
+        container.style.cssText = 'position: fixed; top: 85px; right: 20px; z-index: 100015; display: flex; flex-direction: column; gap: 10px; max-width: 340px; width: 90%; pointer-events: none;';
+        document.body.appendChild(container);
+      }
+      
+      const toast = document.createElement('div');
+      toast.style.cssText = `
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-left: 4px solid #0070f3;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        transform: translateX(120%);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: auto;
+        cursor: pointer;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      `;
+      
+      const cleanInfo = info.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '$1');
+      
+      toast.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;">
+          <span style="font-weight: 800; font-size: 11px; color: #0070f3; display: flex; align-items: center; gap: 6px;">🔔 THÔNG BÁO MỚI</span>
+          <button style="background: transparent; border: none; font-size: 10px; color: #94a3b8; cursor: pointer; padding: 0;">✕</button>
+        </div>
+        <div style="font-weight: 800; font-size: 12.5px; color: #0f172a; margin-top: 2px;">${title}</div>
+        <div style="font-size: 11px; color: #64748b; line-height: 1.4; max-height: 50px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${cleanInfo}</div>
+      `;
+      
+      toast.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON') {
+          openNotifyModal();
+          toast.style.transform = 'translateX(120%)';
+          toast.style.opacity = '0';
+          setTimeout(() => toast.remove(), 400);
         }
+      });
+      
+      toast.querySelector('button').addEventListener('click', (e) => {
+        e.stopPropagation();
+        toast.style.transform = 'translateX(120%)';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 400);
+      });
+      
+      container.appendChild(toast);
+      void toast.offsetWidth;
+      toast.style.transform = 'translateX(0)';
+      
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.style.transform = 'translateX(120%)';
+          toast.style.opacity = '0';
+          setTimeout(() => toast.remove(), 400);
+        }
+      }, 8000);
+    }
 
-        try {
-          const { ref, onValue } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-          let attempts = 0;
-          const checkDb = setInterval(() => {
-            attempts++;
-            if (window.firebaseDb) {
-              clearInterval(checkDb);
-              try {
-                const notifyRef = ref(window.firebaseDb, 'notifications');
-                onValue(notifyRef, (snapshot) => {
-                  const data = snapshot.val();
-                  updateNotificationList(data);
-                }, (error) => {
-                  console.error("Firebase onValue subscription failed, falling back to REST", error);
-                  fallbackFetch(cleanDbUrl);
-                });
-              } catch (e) {
-                console.error("Firebase ref initialization failed, falling back to REST", e);
+    function showNotificationDetail(title, info, date, time) {
+      let detailModal = document.getElementById('nd-notify-detail-modal');
+      if (!detailModal) {
+        detailModal = document.createElement('div');
+        detailModal.id = 'nd-notify-detail-modal';
+        detailModal.style.cssText = `
+          display: none;
+          position: fixed;
+          inset: 0;
+          z-index: 100019;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+          background: rgba(15, 23, 42, 0.4);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          box-sizing: border-box;
+        `;
+        document.body.appendChild(detailModal);
+      }
+      
+      detailModal.innerHTML = `
+        <div style="
+          background: #fff;
+          border-radius: 24px;
+          max-width: 420px;
+          width: 100%;
+          box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+          padding: 22px 26px;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          transform: scale(0.95);
+          transition: transform 0.2s ease;
+          box-sizing: border-box;
+          text-align: left;
+        ">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 10px; font-weight: 800; color: #94a3b8; font-family: monospace;">📅 ${date} &nbsp; ${time}</span>
+            <button id="nd-notify-detail-close" style="background: #f1f5f9; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 10px; font-weight: bold; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+          </div>
+          <h4 style="font-size: 15px; font-weight: 800; color: #0f172a; margin: 0 0 10px 0; line-height: 1.4;">${title}</h4>
+          <p style="font-size: 12.5px; color: #475569; line-height: 1.6; margin: 0; white-space: pre-wrap; word-wrap: break-word;">${parseMarkdownLinks(info)}</p>
+        </div>
+      `;
+      
+      detailModal.style.display = 'flex';
+      void detailModal.offsetWidth;
+      detailModal.style.opacity = '1';
+      detailModal.firstElementChild.style.transform = 'scale(1)';
+      
+      const closeBtn = detailModal.querySelector('#nd-notify-detail-close');
+      closeBtn.onclick = () => {
+        detailModal.style.opacity = '0';
+        detailModal.firstElementChild.style.transform = 'scale(0.95)';
+        setTimeout(() => detailModal.style.display = 'none', 200);
+      };
+      
+      detailModal.onclick = (e) => {
+        if (e.target === detailModal) {
+          closeBtn.onclick();
+        }
+      };
+    }
+
+    // Initialize Firebase listener with auto-fallback
+    (async () => {
+      let dbUrl = "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app";
+      try {
+        if (typeof getEduKeys === 'function') {
+          const keys = await getEduKeys();
+          if (keys && keys.fbDatabaseURL) {
+            dbUrl = keys.fbDatabaseURL;
+          }
+        }
+      } catch (e) {}
+
+      const cleanDbUrl = dbUrl.endsWith('/') ? dbUrl + 'notifications.json' : dbUrl + '/notifications.json';
+
+      function fallbackFetch(url) {
+        fetch(url)
+          .then(res => {
+            if (!res.ok) throw new Error("Status " + res.status);
+            return res.json();
+          })
+          .then(data => {
+            updateNotificationList(data);
+          })
+          .catch(err => {
+            console.error("REST API notification fetch failed", err);
+            const listContainer = document.getElementById('nd-navbar-notify-list');
+            if (listContainer) {
+              listContainer.innerHTML = `<div style="padding: 16px; text-align: center; color: #ef4444; font-size: 10px; font-weight: 700; line-height: 1.4;">⚠️ Không thể kết nối cơ sở dữ liệu. Vui lòng mở quyền đọc (Read Rules) tại nhánh '/notifications' hoặc cấu hình lại Firebase.</div>`;
+            }
+          });
+      }
+
+      try {
+        const { ref, onValue } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+        let attempts = 0;
+        const checkDb = setInterval(() => {
+          attempts++;
+          if (window.firebaseDb) {
+            clearInterval(checkDb);
+            try {
+              const triggerRef = ref(window.firebaseDb, 'notifications_trigger');
+              let firstLoad = true;
+              onValue(triggerRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.timestamp) {
+                  fetch(cleanDbUrl)
+                    .then(res => res.json())
+                    .then(newData => {
+                      updateNotificationList(newData);
+                      if (!firstLoad) {
+                        showToastNotification(data.title, data.info);
+                      }
+                      firstLoad = false;
+                    })
+                    .catch(e => console.error("Error fetching notifications on trigger", e));
+                }
+              }, (error) => {
+                console.error("Firebase trigger subscription failed, falling back to REST", error);
                 fallbackFetch(cleanDbUrl);
-              }
-            } else if (attempts > 15) { // ~4.5 seconds timeout
-              clearInterval(checkDb);
-              console.warn("FirebaseDb initialization timed out, falling back to REST API");
+              });
+            } catch (e) {
+              console.error("Firebase trigger initialization failed, falling back to REST", e);
               fallbackFetch(cleanDbUrl);
             }
-          }, 300);
-        } catch (err) {
-          console.error("Firebase Realtime Database dynamic load failed, using fallback REST API", err);
-          fallbackFetch(cleanDbUrl);
-        }
-      })();
-    }
+          } else if (attempts > 15) { // ~4.5 seconds timeout
+            clearInterval(checkDb);
+            console.warn("FirebaseDb initialization timed out, falling back to REST API");
+            fallbackFetch(cleanDbUrl);
+          }
+        }, 300);
+      } catch (err) {
+        console.error("Firebase Realtime Database dynamic load failed, using fallback REST API", err);
+        fallbackFetch(cleanDbUrl);
+      }
+    })();
+  }
 
     function updateNotificationList(data) {
       const listContainer = document.getElementById('nd-navbar-notify-list');
@@ -1200,10 +1346,32 @@
             <div style="width: 4px; align-self: stretch; background: ${borderAccent}; border-radius: 2px; flex-shrink: 0;"></div>
             <!-- Right: content -->
             <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0;">
-              <span style="font-weight: 800; font-size: 13.5px; color: #1e293b; line-height: 1.3;">${item.title || 'Thông báo'}</span>
+              <span class="nd-notify-title-text" style="font-weight: 800; font-size: 13.5px; color: #1e293b; line-height: 1.3; display: flex; align-items: center; flex-wrap: wrap;">${item.title || 'Thông báo'}</span>
               <p style="font-size: 12px; color: #64748b; line-height: 1.5; margin: 0; white-space: normal; word-wrap: break-word;">${parseMarkdownLinks(item.info || '')}</p>
             </div>
           `;
+          
+          // Click handler logic:
+          const hasLinkMatch = item.info && item.info.match(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/);
+          if (hasLinkMatch) {
+            itemEl.title = "Bấm để mở liên kết";
+            const badgeSpan = document.createElement('span');
+            badgeSpan.style.cssText = 'font-size: 9px; font-weight: 800; color: #0070f3; background: #e0f2fe; padding: 2px 6px; border-radius: 6px; margin-left: 6px; display: inline-flex; align-items: center; gap: 2px;';
+            badgeSpan.innerHTML = '🔗 Mở link';
+            itemEl.querySelector('.nd-notify-title-text').appendChild(badgeSpan);
+            
+            itemEl.addEventListener('click', (e) => {
+              if (e.target.tagName !== 'A') {
+                window.open(hasLinkMatch[2], '_blank');
+              }
+            });
+          } else {
+            itemEl.title = "Bấm để xem chi tiết";
+            itemEl.addEventListener('click', () => {
+              showNotificationDetail(item.title, item.info, dateStr, item.time);
+            });
+          }
+          
           listContainer.appendChild(itemEl);
         });
       });
