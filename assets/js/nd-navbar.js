@@ -516,13 +516,71 @@
       <i class="ph-duotone ph-bell" style="font-size: 1.25rem;"></i>
       <span id="nd-navbar-notify-badge" style="display: none; position: absolute; top: 2px; right: 2px; width: 7px; height: 7px; background: #ef4444; border-radius: 50%; border: 1.5px solid #fff;"></span>
     </button>
-    <div id="nd-navbar-notify-dropdown" style="display: none; position: absolute; top: 38px; right: 0; width: 300px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100005; flex-direction: column; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif;">
-      <div style="padding: 10px 14px; border-bottom: 1px solid #e2e8f0; font-weight: 800; font-size: 12px; color: #1e293b; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; box-sizing: border-box; width: 100%;">
-        <span>🔔 THÔNG BÁO MỚI</span>
-        <button id="nd-notify-mark-all" style="background: transparent; border: none; font-size: 9.5px; font-weight: 800; color: #0070f3; cursor: pointer; padding: 0;">Đánh dấu đã đọc</button>
+  `;
+
+  const notifyModal = document.createElement('div');
+  notifyModal.id = 'nd-navbar-notify-modal';
+  notifyModal.style.cssText = `
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100009;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    box-sizing: border-box;
+  `;
+  notifyModal.innerHTML = `
+    <div id="nd-navbar-notify-content" style="
+      background: rgba(255, 255, 255, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border-radius: 28px;
+      max-width: 520px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transform: scale(0.95);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-height: 80vh;
+      box-sizing: border-box;
+    ">
+      <div style="
+        padding: 18px 24px;
+        border-bottom: 1px solid #f1f5f9;
+        font-weight: 800;
+        font-size: 14px;
+        color: #1e293b;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f8fafc;
+        box-sizing: border-box;
+        width: 100%;
+      ">
+        <span style="display: flex; align-items: center; gap: 8px;">🔔 BẢNG TIN THÔNG BÁO</span>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button id="nd-notify-mark-all" style="background: transparent; border: none; font-size: 11px; font-weight: 800; color: #0070f3; cursor: pointer; padding: 0;">Đánh dấu đã đọc</button>
+          <button id="nd-notify-close-btn" style="background: #e2e8f0; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 11px; font-weight: bold; color: #475569; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
+        </div>
       </div>
-      <div id="nd-navbar-notify-list" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; box-sizing: border-box; width: 100%;">
-        <div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 11px; font-weight: 600;">Đang tải thông báo...</div>
+      <div id="nd-navbar-notify-list" style="
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        width: 100%;
+        max-height: calc(80vh - 65px);
+        background: white;
+      ">
+        <div style="padding: 40px; text-align: center; color: #94a3b8; font-size: 12px; font-weight: 600;">Đang tải thông báo...</div>
       </div>
     </div>
   `;
@@ -549,6 +607,7 @@
     if (document.getElementById('nd-navbar')) return; // idempotent
     // nav is fixed — insert anywhere (visible immediately)
     document.body.insertBefore(nav, document.body.firstChild);
+    document.body.appendChild(notifyModal);
     // spacer must be the first element in the normal flow to push content
     document.body.insertBefore(spacer, document.body.firstChild);
 
@@ -934,30 +993,53 @@
 
     // ── Notification Interactions & Real-time Firebase Synchronization ──
     const notifyBtn = document.getElementById('nd-navbar-notify-btn');
-    const notifyDropdown = document.getElementById('nd-navbar-notify-dropdown');
+    const notifyModal = document.getElementById('nd-navbar-notify-modal');
+    const notifyCloseBtn = document.getElementById('nd-notify-close-btn');
     const notifyMarkAll = document.getElementById('nd-notify-mark-all');
     let notificationsList = [];
 
-    if (notifyBtn && notifyDropdown) {
+    function openNotifyModal() {
+      if (!notifyModal) return;
+      notifyModal.style.display = 'flex';
+      void notifyModal.offsetWidth;
+      notifyModal.style.opacity = '1';
+      const content = notifyModal.querySelector('#nd-navbar-notify-content');
+      if (content) content.style.transform = 'scale(1)';
+      
+      if (notificationsList.length > 0) {
+        const maxStt = Math.max(...notificationsList.map(n => n.stt || 0));
+        localStorage.setItem('nd_last_read_stt', maxStt.toString());
+        const badge = document.getElementById('nd-navbar-notify-badge');
+        if (badge) badge.style.display = 'none';
+      }
+    }
+
+    function closeNotifyModal() {
+      if (!notifyModal) return;
+      notifyModal.style.opacity = '0';
+      const content = notifyModal.querySelector('#nd-navbar-notify-content');
+      if (content) content.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        notifyModal.style.display = 'none';
+      }, 250);
+    }
+
+    if (notifyBtn && notifyModal) {
       notifyBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const isVisible = notifyDropdown.style.display === 'flex';
-        if (isVisible) {
-          notifyDropdown.style.display = 'none';
-        } else {
-          notifyDropdown.style.display = 'flex';
-          if (notificationsList.length > 0) {
-            const maxStt = Math.max(...notificationsList.map(n => n.stt || 0));
-            localStorage.setItem('nd_last_read_stt', maxStt.toString());
-            const badge = document.getElementById('nd-navbar-notify-badge');
-            if (badge) badge.style.display = 'none';
-          }
-        }
+        openNotifyModal();
       });
 
-      document.addEventListener('click', (e) => {
-        if (!notifyDropdown.contains(e.target) && e.target !== notifyBtn) {
-          notifyDropdown.style.display = 'none';
+      if (notifyCloseBtn) {
+        notifyCloseBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeNotifyModal();
+        });
+      }
+
+      notifyModal.addEventListener('click', (e) => {
+        if (e.target === notifyModal) {
+          closeNotifyModal();
         }
       });
 
@@ -1087,10 +1169,15 @@
         }
       });
       
+      function parseMarkdownLinks(text) {
+        if (!text) return '';
+        return text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" style="color: #0070f3 !important; text-decoration: underline !important; font-weight: 800 !important;" onclick="event.stopPropagation();">$1</a>');
+      }
+
       uniqueDates.forEach(dateStr => {
         // Date Group Header
         const groupHeader = document.createElement('div');
-        groupHeader.style.cssText = 'padding: 5px 12px; background: #f8fafc; font-size: 9px; font-weight: 800; color: #64748b; text-align: left; border-bottom: 1px solid #e2e8f0; border-top: 1px solid #f1f5f9; box-sizing: border-box; width: 100%;';
+        groupHeader.style.cssText = 'padding: 8px 16px; background: #f8fafc; font-size: 11px; font-weight: 800; color: #64748b; text-align: left; border-bottom: 1px solid #e2e8f0; border-top: 1px solid #f1f5f9; box-sizing: border-box; width: 100%;';
         groupHeader.innerHTML = `📅 &nbsp; ${dateStr}`;
         listContainer.appendChild(groupHeader);
         
@@ -1099,22 +1186,22 @@
           const itemEl = document.createElement('div');
           const borderAccent = item.color || '#0070f3';
           
-          itemEl.style.cssText = `padding: 10px 12px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 10px; transition: background 0.2s; cursor: pointer; box-sizing: border-box; width: 100%; text-align: left;`;
+          itemEl.style.cssText = `padding: 14px 18px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 12px; transition: background 0.2s; cursor: pointer; box-sizing: border-box; width: 100%; text-align: left;`;
           
           itemEl.onmouseenter = () => { itemEl.style.background = '#f8fafc'; };
           itemEl.onmouseleave = () => { itemEl.style.background = 'transparent'; };
           
           itemEl.innerHTML = `
             <!-- Left: Hour -->
-            <div style="font-size: 9.5px; font-weight: 800; color: #94a3b8; width: 34px; text-align: right; flex-shrink: 0; padding-top: 1.5px; font-family: monospace;">
+            <div style="font-size: 11.5px; font-weight: 800; color: #94a3b8; width: 40px; text-align: right; flex-shrink: 0; padding-top: 1.5px; font-family: monospace;">
               ${item.time || ''}
             </div>
             <!-- Vertical color bar -->
-            <div style="width: 3px; align-self: stretch; background: ${borderAccent}; border-radius: 1.5px; flex-shrink: 0;"></div>
+            <div style="width: 4px; align-self: stretch; background: ${borderAccent}; border-radius: 2px; flex-shrink: 0;"></div>
             <!-- Right: content -->
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0;">
-              <span style="font-weight: 800; font-size: 11px; color: #1e293b; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.title || 'Thông báo'}</span>
-              <p style="font-size: 10px; color: #64748b; line-height: 1.4; margin: 0; white-space: normal; word-wrap: break-word;">${item.info || ''}</p>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+              <span style="font-weight: 800; font-size: 13.5px; color: #1e293b; line-height: 1.3;">${item.title || 'Thông báo'}</span>
+              <p style="font-size: 12px; color: #64748b; line-height: 1.5; margin: 0; white-space: normal; word-wrap: break-word;">${parseMarkdownLinks(item.info || '')}</p>
             </div>
           `;
           listContainer.appendChild(itemEl);
