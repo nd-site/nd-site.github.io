@@ -1,5 +1,3 @@
-
-
 /* HƯỚNG DẪN NHẬP LIỆU:
  * - type: 'quiz' (màu xanh dương) hoặc 'lesson' (màu xanh lá)
  * - class: Số lớp (vd: "10")
@@ -11,12 +9,33 @@
  */
 const quizList = [
     {
+        "id": "t111",
+        "title": "Bài 2: Công thức lượng giác",
+        "url": "/eduspace/exam?t111",
+        "description": "13 Bài tập Công thức lượng giác (có đáp án) - Kết nối tri thức Trắc nghiệm Toán 11",
+        "tag": "Toán 11",
+        "type": "quiz",
+        "class": "11",
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/11/bai-2-cong-thuc-luong-giac/data.js"
+    },
+    {
+        "id": "t112",
+        "title": "Bài 1: Giá trị lượng giác của góc lượng giác",
+        "url": "/eduspace/exam?t112",
+        "description": "13 Bài tập Giá trị lượng giác của góc lượng giác (có đáp án) - Kết nối tri thức Trắc nghiệm Toán 11",
+        "tag": "Toán 11",
+        "type": "quiz",
+        "class": "11",
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/11/bai-1-gia-tri-luong-giac/data.js"
+    },
+    {
         "title": "Tạo Đề Nâng Cao – Tạo đề bằng AI",
         "url": "/eduspace/taode",
         "description": "Tự động phân tích và tạo bài tập từ file word/txt với AI.",
-        "tag": "Công Cụ"
-        ,
-        "isComingSoon": true
+        "tag": "Công Cụ",
+        "isHot": true
     },
     {
         "title": "Scan2Word by ND Labs",
@@ -27,437 +46,490 @@ const quizList = [
         "isHot": true
     },
     {
+        "title": "Ôn thi tốt nghiệp THPT 2026",
+        "url": "/eduspace/thptqg/2026/",
+        "description": "Tổng hợp các đề thi thử tốt nghiệp THPT năm 2026",
+        "tag": "THPT 2026",
+        "type": "lesson",
+        "class": "12",
+        "buttonText": "Ôn tập ngay!",
+        "isHot": true
+    },
+    {
+        "id": "t121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Toán (Bản 1)",
-        "url": "/eduspace/toan/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?t121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Toán theo cấu trúc mới của Bộ GD&ĐT (Trắc nghiệm I, II, III).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Toán",
-        "isHot": true
+        "dataPath": "/eduspace/toan/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "t122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Toán (Bản 2)",
-        "url": "/eduspace/toan/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?t122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Toán (Bản 2) chuẩn GDPT 2018 (Trắc nghiệm I, II, III).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Toán",
-        "isHot": true
+        "dataPath": "/eduspace/toan/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "t123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Toán (Bản 3)",
-        "url": "/eduspace/toan/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?t123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Toán (Bản 3) với các bài toán tối ưu và xác suất thực tế chuẩn GDPT 2018.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Toán",
-        "isHot": true
+        "dataPath": "/eduspace/toan/12/thptqg-2026-v3/data.js"
     },
     {
+        "id": "n121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Ngữ văn (Bản 1)",
-        "url": "/eduspace/nguvan/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?n121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Ngữ văn với cấu trúc Đọc hiểu và Viết (Tự luận).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Ngữ Văn",
-        "isHot": true
+        "dataPath": "/eduspace/nguvan/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "n122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Ngữ văn (Bản 2)",
-        "url": "/eduspace/nguvan/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?n122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Ngữ văn (Bản 2) - Ngữ liệu và Đề bài hoàn toàn mới chuẩn GDPT 2018.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Ngữ Văn",
-        "isHot": true
+        "dataPath": "/eduspace/nguvan/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "n123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Ngữ văn (Bản 3)",
-        "url": "/eduspace/nguvan/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?n123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Ngữ văn (Bản 3) - Cập nhật nghị luận xã hội về tối giản công nghệ số và cảm nhận cội nguồn Đất Nước của Nguyễn Khoa Điềm chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Ngữ Văn",
-        "isHot": true
+        "dataPath": "/eduspace/nguvan/12/thptqg-2026-v3/data.js"
     },
     {
+        "id": "a121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Tiếng Anh (Bản 1)",
-        "url": "/eduspace/tienganh/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?a121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tiếng Anh (40 câu trắc nghiệm).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Tiếng Anh",
-        "isHot": true
+        "dataPath": "/eduspace/tienganh/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "a122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Tiếng Anh (Bản 2)",
-        "url": "/eduspace/tienganh/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?a122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tiếng Anh (Bản 2) - Cập nhật dạng bài đọc điền, sắp xếp đoạn văn chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Tiếng Anh",
-        "isHot": true
+        "dataPath": "/eduspace/tienganh/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "a123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Tiếng Anh (Bản 3)",
-        "url": "/eduspace/tienganh/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?a123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tiếng Anh (Bản 3) - Cập nhật kiến thức điền thông báo, sắp xếp hội thoại và đọc hiểu thành phố thông minh chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Tiếng Anh",
-        "isHot": true
+        "dataPath": "/eduspace/tienganh/12/thptqg-2026-v3/data.js"
     },
     {
+        "id": "v121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Vật lý (Bản 1)",
-        "url": "/eduspace/vatly/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?v121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Vật lý theo cấu trúc mới (Trắc nghiệm I, II, III).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Vật Lý",
-        "isHot": true
+        "dataPath": "/eduspace/vatly/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "v122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Vật lý (Bản 2)",
-        "url": "/eduspace/vatly/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?v122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Vật lý (Bản 2) - Cập nhật nội dung Vật lý nhiệt, khí lí tưởng chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Vật Lý",
-        "isHot": true
+        "dataPath": "/eduspace/vatly/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "v123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Vật lý (Bản 3)",
-        "url": "/eduspace/vatly/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?v123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Vật lý (Bản 3) - Cập nhật kiến thức nhiệt học thực nghiệm, từ học và phóng xạ năng lượng cao chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Vật Lý",
-        "isHot": true
+        "dataPath": "/eduspace/vatly/12/thptqg-2026-v3/data.js"
     },
     {
+        "id": "h121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Hóa học (Bản 1)",
-        "url": "/eduspace/hoahoc/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?h121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Hóa học theo cấu trúc mới (Trắc nghiệm I, II, III).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Hóa Học",
-        "isHot": true
+        "dataPath": "/eduspace/hoahoc/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "h122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Hóa học (Bản 2)",
-        "url": "/eduspace/hoahoc/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?h122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Hóa học (Bản 2) - Thực nghiệm hóa học, phức chất và hóa học ứng dụng xanh.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Hóa Học",
-        "isHot": true
+        "dataPath": "/eduspace/hoahoc/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "h123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Hóa học (Bản 3)",
-        "url": "/eduspace/hoahoc/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?h123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Hóa học (Bản 3) - Cập nhật nội dung phức chất amoniac, hiệu suất công nghiệp và hóa nhiệt học chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Hóa Học",
-        "isHot": true
+        "dataPath": "/eduspace/hoahoc/12/thptqg-2026-v3/data.js"
     },
     {
+        "id": "s121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Sinh học (Bản 1)",
-        "url": "/eduspace/sinhhoc/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?s121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Sinh học theo cấu trúc mới (Trắc nghiệm I, II, III).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Sinh Học",
-        "isHot": true
+        "dataPath": "/eduspace/sinhhoc/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "s122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Sinh học (Bản 2)",
-        "url": "/eduspace/sinhhoc/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?s122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Sinh học (Bản 2) - Cập nhật nội dung di truyền học tế bào và sinh thái thực tiễn.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Sinh Học",
-        "isHot": true
+        "dataPath": "/eduspace/sinhhoc/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "s123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Sinh học (Bản 3)",
-        "url": "/eduspace/sinhhoc/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?s123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Sinh học (Bản 3) - Cập nhật kiến thức cơ chế di truyền cấp phân tử, tự thụ phấn F2 và dòng năng lượng hệ sinh thái chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Sinh Học",
-        "isHot": true
+        "dataPath": "/eduspace/sinhhoc/12/thptqg-2026-v3/data.js"
     },
     {
+        "id": "l121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Lịch sử (Bản 1)",
-        "url": "/eduspace/lichsu/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?l121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Lịch sử theo cấu trúc mới (Trắc nghiệm I, II).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Lịch Sử",
-        "isHot": true
+        "dataPath": "/eduspace/lichsu/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "l122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Lịch sử (Bản 2)",
-        "url": "/eduspace/lichsu/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?l122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Lịch sử (Bản 2) - Cung cấp sử liệu gốc, đánh giá năng lực tư duy lịch sử.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Lịch Sử",
-        "isHot": true
+        "dataPath": "/eduspace/lichsu/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "l123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Lịch sử (Bản 3)",
-        "url": "/eduspace/lichsu/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?l123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Lịch sử (Bản 3) - Cập nhật kiến thức thành lập Đảng 1930, chuyển đổi phương châm Điện Biên Phủ và công cuộc Đổi mới chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Lịch Sử",
-        "isHot": true
+        "dataPath": "/eduspace/lichsu/12/thptqg-2026-v3/data.js"
     },
     {
+        "id": "d121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Địa lí (Bản 1)",
-        "url": "/eduspace/diali/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?d121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Địa lí theo cấu trúc mới (Trắc nghiệm I, II, III).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Địa Lý",
-        "isHot": true
+        "dataPath": "/eduspace/diali/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "d122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Địa lí (Bản 2)",
-        "url": "/eduspace/diali/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?d122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Địa lí (Bản 2) - Rèn luyện kỹ năng Atlat, bảng số liệu địa lí thực tế.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Địa Lý",
-        "isHot": true
+        "dataPath": "/eduspace/diali/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "d123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Địa lí (Bản 3)",
-        "url": "/eduspace/diali/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?d123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Địa lí (Bản 3) - Cập nhật kiến thức xói mòn đồi núi, mật độ Đồng bằng sông Hồng và cơ cấu dịch vụ GDP chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Địa Lý",
-        "isHot": true
+        "dataPath": "/eduspace/diali/12/thptqg-2026-v3/data.js"
     },
     {
+        "id": "k121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn KT & PL (Bản 1)",
-        "url": "/eduspace/ktpl/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?k121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Giáo dục Kinh tế và Pháp luật theo cấu trúc mới.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Kinh Tế và Pháp Luật",
-        "isHot": true
+        "dataPath": "/eduspace/ktpl/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "k122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn KT & PL (Bản 2)",
-        "url": "/eduspace/ktpl/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?k122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn KT & PL (Bản 2) - Tình huống kinh tế vĩ mô và pháp lý gắn liền với thực tiễn.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Kinh Tế và Pháp Luật",
-        "isHot": true
+        "dataPath": "/eduspace/ktpl/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "k123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn KT & PL (Bản 3)",
-        "url": "/eduspace/ktpl/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?k123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn KT & PL (Bản 3) - Cập nhật kiến thức thắt chặt chính sách tiền tệ, năng lực pháp lý và quyền học tập suốt đời chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Kinh Tế và Pháp Luật",
-        "isHot": true
+        "dataPath": "/eduspace/ktpl/12/thptqg-2026-v3/data.js"
     },
     {
+        "id": "i121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Tin học (Bản 1)",
-        "url": "/eduspace/tinhoc/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?i121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học (Bản 1) - Chuẩn cấu trúc GDPT 2018 (AI, CSDL, Python, Network).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "i122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Tin học (Bản 2)",
-        "url": "/eduspace/tinhoc/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?i122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học (Bản 2) - Chuẩn cấu trúc GDPT 2018 (AI, CSDL, Python, Network).",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "i123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Tin học (Bản 3)",
-        "url": "/eduspace/tinhoc/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?i123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học (Bản 3) - Cập nhật kiến thức đặc trưng Veracity Big Data, thuật toán nổi bọt và cấu trúc RDBMS chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/thptqg-2026-v3/data.js"
     },
     {
+        "id": "i124",
         "title": "Thi thử tốt nghiệp THPT Sở GD&ĐT Nghệ An (Lần 1 - Đề 1)",
-        "url": "/eduspace/tinhoc/12/thptqg-nghean-lan1-2026/",
+        "url": "/eduspace/exam?i124",
         "description": "Kỳ khảo sát chất lượng kết hợp thi thử lớp 12 năm học 2025-2026 của Sở GD&ĐT Nghệ An - Đợt 1 (Đề 1).",
         "tag": "Nghệ An",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/thptqg-nghean-lan1-2026/data.js"
     },
     {
+        "id": "i125",
         "title": "Thi thử tốt nghiệp THPT Sở GD&ĐT Nghệ An (Lần 1 - Đề 2)",
-        "url": "/eduspace/tinhoc/12/thptqg-nghean-lan1-2026-de2/",
+        "url": "/eduspace/exam?i125",
         "description": "Kỳ khảo sát chất lượng kết hợp thi thử lớp 12 năm học 2025-2026 của Sở GD&ĐT Nghệ An - Đợt 1 (Đề 2).",
         "tag": "Nghệ An",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/thptqg-nghean-lan1-2026-de2/data.js"
     },
     {
+        "id": "i126",
         "title": "Thi thử tốt nghiệp THPT Sở GD&ĐT Nghệ An (Lần 2 - Đợt 2)",
-        "url": "/eduspace/tinhoc/12/nghean-lan2-2026/",
+        "url": "/eduspace/exam?i126",
         "description": "Kỳ khảo sát chất lượng kết hợp thi thử lớp 12 năm học 2025-2026 của Sở GD&ĐT Nghệ An - Đợt 2 (Mã đề 0924). Cấu trúc 24 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II.",
         "tag": "Nghệ An",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/nghean-lan2-2026/data.js"
     },
     {
+        "id": "i127",
         "title": "Thi thử tốt nghiệp THPT Sở GD&ĐT Đồng Nai (Lần 1)",
-        "url": "/eduspace/tinhoc/12/dongnai-lan1-2026/",
+        "url": "/eduspace/exam?i127",
         "description": "Kỳ thi khảo sát chất lượng các môn thi tốt nghiệp THPT năm 2026 của Sở GD&ĐT Đồng Nai - Lần 1 (Mã đề 0501). Cấu trúc 24 câu Phần I + 6 câu Đúng/Sai Phần II.",
         "tag": "Đồng Nai",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/dongnai-lan1-2026/data.js"
     },
     {
+        "id": "i128",
         "title": "Thi thử TN THPT 2026 – Cụm 7 trường phía Đông Hải Phòng (Đợt 2)",
-        "url": "/eduspace/tinhoc/12/haiphong-cum7-lan2-2026/",
+        "url": "/eduspace/exam?i128",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Cụm 7 trường THPT phía Đông Hải Phòng, đợt 2. Cấu trúc 24 câu Phần I + 4 câu Đúng/Sai Phần II.",
         "tag": "Hải Phòng",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/haiphong-cum7-lan2-2026/data.js"
     },
     {
+        "id": "i129",
         "title": "Thi thử tốt nghiệp THPT 2026 – Sở GD&ĐT Hải Phòng (Lần 2)",
-        "url": "/eduspace/tinhoc/12/haiphong-lan2-2026/",
+        "url": "/eduspace/exam?i129",
         "description": "Đề khảo sát kỳ thi tốt nghiệp THPT năm học 2025-2026 môn Tin học của Sở GD&ĐT Hải Phòng - Lần 2 (Mã đề 0502). Cấu trúc chuẩn 24 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II.",
         "tag": "Hải Phòng",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/haiphong-lan2-2026/data.js"
     },
     {
+        "id": "i12a",
         "title": "Thi thử tốt nghiệp THPT 2026 – Cụm 5 trường THPT Ninh Bình (Đợt 1)",
-        "url": "/eduspace/tinhoc/12/ninhbinh-cum5-lan1-2026/",
+        "url": "/eduspace/exam?i12a",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Cụm 5 trường THPT Ninh Bình, đợt 1. Cấu trúc 23 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II.",
         "tag": "Ninh Bình",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/ninhbinh-cum5-lan1-2026/data.js"
     },
     {
+        "id": "i12b",
         "title": "Thi thử tốt nghiệp THPT 2026 – Cụm chuyên môn số 8 Đắk Lắk",
-        "url": "/eduspace/tinhoc/12/daklak-cum8-2026/",
+        "url": "/eduspace/exam?i12b",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Cụm chuyên môn số 8 Sở GD&ĐT Đắk Lắk. Cấu trúc 24 câu Phần I + 6 câu Đúng/Sai Phần II.",
         "tag": "Đắk Lắk",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/daklak-cum8-2026/data.js"
     },
     {
+        "id": "i12c",
         "title": "Thi thử tốt nghiệp THPT 2026 – Sở GD&ĐT Đà Nẵng (Đề 04)",
-        "url": "/eduspace/tinhoc/12/danang-cum-2026/",
+        "url": "/eduspace/exam?i12c",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Sở GD&ĐT Đà Nẵng (Đề 04). Cấu trúc 24 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II (KHMT & THƯD).",
         "tag": "Đà Nẵng",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/danang-cum-2026/data.js"
     },
     {
+        "id": "i12d",
         "title": "Thi thử TN THPT 2026 – Sở GD&ĐT Tuyên Quang (Lần 2 – Đề gốc 2)",
-        "url": "/eduspace/tinhoc/12/tuyenquang-lan2-2026/",
+        "url": "/eduspace/exam?i12d",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Tin học của Sở GD&ĐT Tỉnh Tuyên Quang – Lần 2, Đề gốc số 2. Cấu trúc 24 câu trắc nghiệm Phần I + 6 câu Đúng/Sai Phần II.",
         "tag": "Tuyên Quang",
         "type": "quiz",
         "class": "12",
         "subject": "Tin Học",
-        "isHot": true
+        "dataPath": "/eduspace/tinhoc/12/tuyenquang-lan2-2026/data.js"
     },
     {
+        "id": "c121",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Công nghệ (Bản 1)",
-        "url": "/eduspace/congnghe-nongnghiep/12/thptqg-2026-v1/",
+        "url": "/eduspace/exam?c121",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Công nghệ Nông nghiệp (Bản 1) - Canh tác công nghệ cao và an toàn sinh học.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Công Nghệ",
         "subSubject": "Nông Nghiệp",
-        "isHot": true
+        "dataPath": "/eduspace/congnghe-nongnghiep/12/thptqg-2026-v1/data.js"
     },
     {
+        "id": "c122",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Công nghệ (Bản 2)",
-        "url": "/eduspace/congnghe-nongnghiep/12/thptqg-2026-v2/",
+        "url": "/eduspace/exam?c122",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Công nghệ Nông nghiệp (Bản 2) - Canh tác công nghệ cao và an toàn sinh học.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Công Nghệ",
         "subSubject": "Nông Nghiệp",
-        "isHot": true
+        "dataPath": "/eduspace/congnghe-nongnghiep/12/thptqg-2026-v2/data.js"
     },
     {
+        "id": "c123",
         "title": "Thi thử tốt nghiệp THPT 2026 - Môn Công nghệ (Bản 3)",
-        "url": "/eduspace/congnghe-nongnghiep/12/thptqg-2026-v3/",
+        "url": "/eduspace/exam?c123",
         "description": "Đề thi thử tốt nghiệp THPT năm 2026 môn Công nghệ Nông nghiệp (Bản 3) - Cập nhật kiến thức giá thể trồng dâu tây, dịch tả lợn châu Phi và lâm nghiệp bền vững chuẩn xác.",
         "tag": "THPT 2026",
         "type": "quiz",
         "class": "12",
         "subject": "Công Nghệ",
         "subSubject": "Nông Nghiệp",
-        "isHot": true
+        "dataPath": "/eduspace/congnghe-nongnghiep/12/thptqg-2026-v3/data.js"
     },
     {
         "title": "Học bài viết Tiếng Anh 10 - Học kỳ II năm học 2025-2026",
@@ -469,13 +541,15 @@ const quizList = [
         "subject": "Tiếng Anh"
     },
     {
+        "id": "l101",
         "title": "Đề cương Lịch Sử 10 - Học kỳ II năm học 2025-2026",
-        "url": "/eduspace/lichsu/10/on-tap-hk2-2526-v1",
+        "url": "/eduspace/exam?l101",
         "description": "Tổng hợp các câu hỏi ôn tập học kỳ II môn Lịch Sử lớp 10 năm học 2025-2026 'Bản 1'",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "10",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/10/on-tap-hk2-2526-v1/data.js"
     },
     {
         "title": "Lịch sử bài 8 - Kết Nối Tri Thức",
@@ -487,13 +561,15 @@ const quizList = [
         "class": "10"
     },
     {
+        "id": "v101",
         "title": "Moment lực - Vật Lý 10 KNTT",
-        "url": "/eduspace/vatly/10/moment-luc",
+        "url": "/eduspace/exam?v101",
         "description": "Moment Lực. Cân bằng của vật rắn - Vật Lý 10 sách Kết Nối Tri Thức với Cuộc Sống - EduSpace by ND Labs",
         "tag": "Vật Lý",
         "type": "quiz",
         "subject": "Vật Lý",
-        "class": "10"
+        "class": "10",
+        "dataPath": "/eduspace/vatly/10/moment-luc/data.js"
     },
     {
         "title": "Học thơ - EduSpace by ND Labs",
@@ -530,76 +606,81 @@ const quizList = [
         "buttonText": "Trò chuyện với EduAI"
     },
     {
+        "id": "v102",
         "title": "Đề cương ôn tập Vật lý 10 - Học kì I năm học 2025-2026",
-        "url": "/eduspace/vatly/10/on-tap-hk1-2526-v1",
+        "url": "/eduspace/exam?v102",
         "description": "Tổng hợp các câu hỏi ôn tập học kỳ I môn Vật Lý lớp 10 năm học 2025-2026 'Bản 1'",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "10",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/10/on-tap-hk1-2526-v1/data.js"
     },
     {
+        "id": "d101",
         "title": "Đề cương Địa lí 10 - Học kỳ 1 năm học 2025-2026.",
-        "url": "/eduspace/diali/10/on-tap-hk1-2526-v1/index.html",
+        "url": "/eduspace/exam?d101",
         "tag": "Địa Lý",
         "type": "quiz",
         "subject": "Địa Lý",
-        "class": "10"
+        "class": "10",
+        "dataPath": "/eduspace/diali/10/on-tap-hk1-2526-v1/data.js"
     },
     {
-        "title": "Thử thách trí nhớ của bạn!",
-        "url": "/eduspace/memo",
-        "description": "Bài kiểm tra giúp bạn rèn luyện và thử thách trí nhớ của mình qua các câu hỏi thú vị.",
-        "tag": "Trí nhớ",
-        "type": "quiz",
-        "buttonText": "Bắt đầu thử thách",
-        "isComingSoon": true
-    },
-    {
+        "id": "a101",
         "title": "Đề kiểm tra viết Tiếng Anh 10 - Học kỳ I năm học 2025-2026",
-        "url": "/eduspace/tienganh/10/de-viet-doan-van-hk1-2526-v1",
+        "url": "/eduspace/exam?a101",
         "description": "Đề kiểm tra viết Tiếng Anh lớp 10 học kỳ I năm học 2025-2026 với yêu cầu viết đoạn văn về lợi ích của một phát minh.",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "10",
         "subject": "Tiếng Anh",
-        "buttonText": "Kiểm tra viết"
+        "buttonText": "Kiểm tra viết",
+        "dataPath": "/eduspace/tienganh/10/de-viet-doan-van-hk1-2526-v1/data.js"
     },
     {
+        "id": "l102",
         "title": "Đề cương Lịch Sử 10 - Học kỳ I năm học 2025-2026",
-        "url": "/eduspace/lichsu/10/on-tap-hk1-2526-v1",
+        "url": "/eduspace/exam?l102",
         "description": "Tổng hợp các câu hỏi ôn tập học kỳ I môn Lịch Sử lớp 10 năm học 2025-2026 'Bản 1'",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "10",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/10/on-tap-hk1-2526-v1/data.js"
     },
     {
+        "id": "s101",
         "title": "Đề cương Sinh Học 10 - Học kỳ I năm học 2025-2026",
-        "url": "/eduspace/sinhhoc/10/on-tap-hk1-2526-v1",
+        "url": "/eduspace/exam?s101",
         "description": "Tổng hợp các câu hỏi ôn tập học kỳ I môn Sinh Học lớp 10 năm học 2025-2026 'Bản 1'",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/10/on-tap-hk1-2526-v1/data.js"
     },
     {
+        "id": "q101",
         "title": "Đề cương GDQP-AN 10 - Học kỳ I năm học 2025-2026",
-        "url": "/eduspace/gdqp/10/on-tap-hk1-2526-v1",
+        "url": "/eduspace/exam?q101",
         "description": "Tổng hợp các câu hỏi ôn tập học kỳ I môn Giáo dục Quốc phòng và An ninh lớp 10 năm học 2025-2026 'Bản 1'",
         "tag": "GDQP-AN",
         "type": "quiz",
         "class": "10",
-        "subject": "Quốc Phòng và An Ninh"
+        "subject": "Quốc Phòng và An Ninh",
+        "dataPath": "/eduspace/gdqp/10/on-tap-hk1-2526-v1/data.js"
     },
     {
+        "id": "k101",
         "title": "Đề cương KTPL 10 - Học kỳ I năm học 2025-2026",
-        "url": "/eduspace/ktpl/10/hk1/on-tap-1",
+        "url": "/eduspace/exam?k101",
         "description": "Tổng hợp các câu hỏi ôn tập học kỳ I môn Kinh tế Pháp luật lớp 10 năm học 2025-2026 'Bản 1'",
         "tag": "KTPL",
         "type": "quiz",
         "class": "10",
-        "subject": "Kinh Tế và Pháp Luật"
+        "subject": "Kinh Tế và Pháp Luật",
+        "dataPath": "/eduspace/ktpl/10/hk1/on-tap-1/data.js"
     },
     {
         "title": "Hành trình văn minh nhân loại - Lịch Sử 10",
@@ -611,1260 +692,1588 @@ const quizList = [
         "buttonText": "Xem bài học"
     },
     {
+        "id": "l101",
         "title": "Bài tập Hành trình văn minh nhân loại - Lịch Sử 10",
-        "url": "/eduspace/lichsu/10/hanh-trinh-van-minh-nhan-loai/bai-tap",
+        "url": "/eduspace/exam?l101",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "10",
         "subject": "Lịch Sử",
-        "buttonText": "Thử sức ngay"
+        "buttonText": "Thử sức ngay",
+        "customUrl": "/eduspace/lichsu/10/hanh-trinh-van-minh-nhan-loai/bai-tap/"
     },
     {
+        "id": "l102",
         "title": "Kiểm tra Hành trình văn minh nhân loại - Lịch Sử 10",
-        "url": "/eduspace/lichsu/10/hanh-trinh-van-minh-nhan-loai/kiem-tra",
+        "url": "/eduspace/exam?l102",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "10",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "customUrl": "/eduspace/lichsu/10/hanh-trinh-van-minh-nhan-loai/kiem-tra/"
     },
     {
+        "id": "c101",
         "title": "ÔN TẬP GIỮA HỌC KÌ II - MÔN: CÔNG NGHỆ 10 (2025-2026)",
-        "url": "/eduspace/congnghe/10/on-tap-gk2-2526-cncn-v1/",
+        "url": "/eduspace/exam?c101",
         "description": "Tổng hợp các câu hỏi ôn tập giữa học kỳ II môn Thiết kế và Công nghệ lớp 10 năm học 2025-2026",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "10",
         "subject": "Công Nghệ",
-        "subSubject": "Công Nghiệp"
+        "subSubject": "Công Nghiệp",
+        "dataPath": "/eduspace/congnghe/10/on-tap-gk2-2526-cncn-v1/data.js"
     },
     {
+        "id": "l105",
         "title": "Ôn tập Giữa học kỳ II - Môn: Lịch Sử 10 (2025-2026)",
-        "url": "/eduspace/lichsu/10/on-tap-gk2-2526-v1/",
+        "url": "/eduspace/exam?l105",
         "description": "Tổng hợp các câu hỏi ôn tập giữa học kỳ II môn Lịch Sử lớp 10 năm học 2025-2026",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "10",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/10/on-tap-gk2-2526-v1/data.js"
     },
     {
+        "id": "v103",
         "title": "Ôn tập Giữa học kỳ II - Môn: Vật Lý 10 2025-2026",
-        "url": "/eduspace/vatly/10/on-tap-gk2-v1/",
+        "url": "/eduspace/exam?v103",
         "description": "Tổng hợp 60 câu trắc nghiệm và 6 bài tự luận ôn tập giữa học kỳ II môn Vật Lý lớp 10 năm học 2025-2026. Bài 21–26.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "10",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/10/on-tap-gk2-v1/data.js"
     },
     {
+        "id": "l091",
         "title": "Ôn tập Giữa học kỳ II - Môn: Lịch Sử 9 (2025-2026) v1",
-        "url": "/eduspace/lichsu/9/on-tap-gk2-2526-v1/",
+        "url": "/eduspace/exam?l091",
         "description": "Tổng hợp các câu hỏi ôn tập giữa học kỳ II môn Lịch Sử lớp 9 biên soạn bởi EduSpace by ND Labs theo sách Chân Trời Sáng Tạo năm học 2025-2026",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "9",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/9/on-tap-gk2-2526-v1/data.js"
     },
     {
+        "id": "v104",
         "title": "Kiểm tra Cuối Học Kì II – Vật Lý 10 2025-2026",
-        "url": "/eduspace/vatly/10/ck2-2526-v1/",
+        "url": "/eduspace/exam?v104",
         "description": "Đề kiểm tra cuối học kì II môn Vật Lý lớp 10 theo chương trình GDPT 2018 (sách Kết nối tri thức). Gồm trắc nghiệm và tự luận.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "10",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/10/ck2-2526-v1/data.js"
     },
     {
+        "id": "v111",
         "title": "Kiểm tra Cuối Học Kì II – Vật Lý 11 2025-2026",
-        "url": "/eduspace/vatly/11/ck2-2526-v1/",
+        "url": "/eduspace/exam?v111",
         "description": "Đề kiểm tra cuối học kì II môn Vật Lý lớp 11 theo chương trình GDPT 2018 (sách Kết nối tri thức). Gồm trắc nghiệm và tự luận.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "11",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/11/ck2-2526-v1/data.js"
     },
     {
+        "id": "v124",
         "title": "Kiểm tra Cuối Học Kì II – Vật Lý 12 2025-2026",
-        "url": "/eduspace/vatly/12/ck2-2526-v1/",
+        "url": "/eduspace/exam?v124",
         "description": "Đề kiểm tra cuối học kì II môn Vật Lý lớp 12 theo chương trình GDPT 2018 (sách Kết nối tri thức). Gồm trắc nghiệm và tự luận.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "12",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/12/ck2-2526-v1/data.js"
     },
     {
+        "id": "h101",
         "title": "Kiểm tra Cuối Học Kì II – Hóa Học 10 2025-2026",
-        "url": "/eduspace/hoahoc/10/ck2-2526-v1/",
+        "url": "/eduspace/exam?h101",
         "description": "Đề kiểm tra cuối học kì II môn Hóa Học lớp 10 theo chương trình GDPT 2018 (sách Kết nối tri thức). Gồm trắc nghiệm và tự luận.",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/10/ck2-2526-v1/data.js"
     },
     {
+        "id": "h111",
         "title": "Kiểm tra Cuối Học Kì II – Hóa Học 11 2025-2026",
-        "url": "/eduspace/hoahoc/11/ck2-2526-v1/",
+        "url": "/eduspace/exam?h111",
         "description": "Đề kiểm tra cuối học kì II môn Hóa Học lớp 11 theo chương trình GDPT 2018 (sách Kết nối tri thức). Gồm trắc nghiệm và tự luận.",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/11/ck2-2526-v1/data.js"
     },
     {
+        "id": "h124",
         "title": "Kiểm tra Cuối Học Kì II – Hóa Học 12 2025-2026",
-        "url": "/eduspace/hoahoc/12/ck2-2526-v1/",
+        "url": "/eduspace/exam?h124",
         "description": "Đề kiểm tra cuối học kì II môn Hóa Học lớp 12 theo chương trình GDPT 2018 (sách Kết nối tri thức). Gồm trắc nghiệm và tự luận.",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/12/ck2-2526-v1/data.js"
     },
     {
+        "id": "t101",
         "title": "Kiểm tra Cuối Học Kì II – Toán 10 2025-2026",
-        "url": "/eduspace/toan/10/ck2-2526-v1/",
+        "url": "/eduspace/exam?t101",
         "description": "Đề kiểm tra cuối học kì II môn Toán lớp 10 theo chương trình GDPT 2018 (sách Kết nối tri thức). Gồm trắc nghiệm và tự luận.",
         "tag": "Toán",
         "type": "quiz",
         "class": "10",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/10/ck2-2526-v1/data.js"
     },
     {
+        "id": "t113",
         "title": "Kiểm tra Cuối Học Kì II – Toán 11 2025-2026",
-        "url": "/eduspace/toan/11/ck2-2526-v1/",
+        "url": "/eduspace/exam?t113",
         "description": "Đề kiểm tra cuối học kì II môn Toán lớp 11 theo chương trình GDPT 2018 (sách Kết nối tri thức). Gồm trắc nghiệm và tự luận.",
         "tag": "Toán",
         "type": "quiz",
         "class": "11",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/11/ck2-2526-v1/data.js"
     },
     {
+        "id": "t124",
         "title": "Kiểm tra Cuối Học Kì II – Toán 12 2025-2026",
-        "url": "/eduspace/toan/12/ck2-2526-v1/",
+        "url": "/eduspace/exam?t124",
         "description": "Đề kiểm tra cuối học kì II môn Toán lớp 12 theo chương trình GDPT 2018 (sách Kết nối tri thức). Gồm trắc nghiệm và tự luận.",
         "tag": "Toán",
         "type": "quiz",
         "class": "12",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/12/ck2-2526-v1/data.js"
     },
     {
+        "id": "i101",
         "title": "Kiểm tra Cuối Học Kì II – Tin Học 10 2025-2026",
-        "url": "/eduspace/tinhoc/10/ck2-2526-v1",
+        "url": "/eduspace/exam?i101",
         "description": "Đề kiểm tra cuối học kì II môn Tin Học lớp 10 theo chương trình GDPT 2018 (sách Kết nối tri thức).",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/10/ck2-2526-v1/data.js"
     },
     {
+        "id": "i111",
         "title": "Kiểm tra Cuối Học Kì II – Tin Học 11 2025-2026",
-        "url": "/eduspace/tinhoc/11/ck2-2526-v1",
+        "url": "/eduspace/exam?i111",
         "description": "Đề kiểm tra cuối học kì II môn Tin Học lớp 11 theo chương trình GDPT 2018 (sách Kết nối tri thức).",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/11/ck2-2526-v1/data.js"
     },
     {
+        "id": "i12e",
         "title": "Kiểm tra Cuối Học Kì II – Tin Học 12 2025-2026",
-        "url": "/eduspace/tinhoc/12/ck2-2526-v1",
+        "url": "/eduspace/exam?i12e",
         "description": "Đề kiểm tra cuối học kì II môn Tin Học lớp 12 theo chương trình GDPT 2018 (sách Kết nối tri thức).",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/12/ck2-2526-v1/data.js"
     },
     {
+        "id": "l106",
         "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 10 2025-2026",
-        "url": "/eduspace/lichsu/10/ck2-2526-v1",
+        "url": "/eduspace/exam?l106",
         "description": "Đề kiểm tra cuối học kì II môn Lịch Sử lớp 10 theo chương trình GDPT 2018 (sách Kết nối tri thức).",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "10",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/10/ck2-2526-v1/data.js"
     },
     {
+        "id": "l111",
         "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 11 2025-2026",
-        "url": "/eduspace/lichsu/11/ck2-2526-v1",
+        "url": "/eduspace/exam?l111",
         "description": "Đề kiểm tra cuối học kì II môn Lịch Sử lớp 11 theo chương trình GDPT 2018 (sách Kết nối tri thức).",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "11",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/11/ck2-2526-v1/data.js"
     },
     {
+        "id": "l124",
         "title": "Kiểm tra Cuối Học Kì II – Lịch Sử 12 2025-2026",
-        "url": "/eduspace/lichsu/12/ck2-2526-v1",
+        "url": "/eduspace/exam?l124",
         "description": "Đề kiểm tra cuối học kì II môn Lịch Sử lớp 12 theo chương trình GDPT 2018 (sách Kết nối tri thức).",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "12",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/12/ck2-2526-v1/data.js"
     },
     {
+        "id": "k102",
         "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 10 2025-2026",
-        "url": "/eduspace/ktpl/10/ck2-2526-v1",
+        "url": "/eduspace/exam?k102",
         "description": "Đề kiểm tra cuối học kì II môn Kinh tế và Pháp luật lớp 10 theo chương trình GDPT 2018 (sách Kết nối tri thức).",
         "tag": "KTPL",
         "type": "quiz",
         "class": "10",
-        "subject": "Kinh Tế và Pháp Luật"
+        "subject": "Kinh Tế và Pháp Luật",
+        "dataPath": "/eduspace/ktpl/10/ck2-2526-v1/data.js"
     },
     {
+        "id": "k111",
         "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 11 2025-2026",
-        "url": "/eduspace/ktpl/11/ck2-2526-v1",
+        "url": "/eduspace/exam?k111",
         "description": "Đề kiểm tra cuối học kì II môn Kinh tế và Pháp luật lớp 11 theo chương trình GDPT 2018 (sách Kết nối tri thức).",
         "tag": "KTPL",
         "type": "quiz",
         "class": "11",
-        "subject": "Kinh Tế và Pháp Luật"
+        "subject": "Kinh Tế và Pháp Luật",
+        "dataPath": "/eduspace/ktpl/11/ck2-2526-v1/data.js"
     },
     {
+        "id": "k124",
         "title": "Kiểm tra Cuối Học Kì II – Kinh tế và Pháp luật 12 2025-2026",
-        "url": "/eduspace/ktpl/12/ck2-2526-v1",
+        "url": "/eduspace/exam?k124",
         "description": "Đề kiểm tra cuối học kì II môn Kinh tế và Pháp luật lớp 12 theo chương trình GDPT 2018 (sách Kết nối tri thức).",
         "tag": "KTPL",
         "type": "quiz",
         "class": "12",
-        "subject": "Kinh Tế và Pháp Luật"
+        "subject": "Kinh Tế và Pháp Luật",
+        "dataPath": "/eduspace/ktpl/12/ck2-2526-v1/data.js"
     },
     {
+        "id": "c102",
         "title": "Kiểm tra Cuối Học Kì II – Công nghệ 10 Nông nghiệp 2025-2026",
-        "url": "/eduspace/congnghe-nongnghiep/10/ck2-2526-v1",
+        "url": "/eduspace/exam?c102",
         "description": "Đề kiểm tra cuối học kì II môn Công nghệ lớp 10 (Nông nghiệp trồng trọt) theo chương trình GDPT 2018.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "10",
         "subject": "Công Nghệ",
-        "subSubject": "Nông Nghiệp"
+        "subSubject": "Nông Nghiệp",
+        "dataPath": "/eduspace/congnghe-nongnghiep/10/ck2-2526-v1/data.js"
     },
     {
+        "id": "c111",
         "title": "Kiểm tra Cuối Học Kì II – Công nghệ 11 Chăn nuôi 2025-2026",
-        "url": "/eduspace/congnghe-nongnghiep/11/ck2-2526-v1",
+        "url": "/eduspace/exam?c111",
         "description": "Đề kiểm tra cuối học kì II môn Công nghệ lớp 11 (Chăn nuôi) theo chương trình GDPT 2018.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "11",
         "subject": "Công Nghệ",
-        "subSubject": "Nông Nghiệp"
+        "subSubject": "Nông Nghiệp",
+        "dataPath": "/eduspace/congnghe-nongnghiep/11/ck2-2526-v1/data.js"
     },
     {
+        "id": "c124",
         "title": "Kiểm tra Cuối Học Kì II – Công nghệ 12 Lâm nghiệp - Thủy sản 2025-2026",
-        "url": "/eduspace/congnghe-nongnghiep/12/ck2-2526-v1",
+        "url": "/eduspace/exam?c124",
         "description": "Đề kiểm tra cuối học kì II môn Công nghệ lớp 12 (Lâm nghiệp - Thủy sản) theo chương trình GDPT 2018.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "12",
         "subject": "Công Nghệ",
-        "subSubject": "Nông Nghiệp"
+        "subSubject": "Nông Nghiệp",
+        "dataPath": "/eduspace/congnghe-nongnghiep/12/ck2-2526-v1/data.js"
     },
     {
+        "id": "c103",
         "title": "Kiểm tra Cuối Học Kì II – Công nghệ 10 (Thiết kế và Công nghệ) 2025-2026",
-        "url": "/eduspace/congnghe-congnghiep/10/ck2-2526-v1",
+        "url": "/eduspace/exam?c103",
         "description": "Đề kiểm tra cuối học kì II môn Công nghệ lớp 10 (Thiết kế và Công nghệ) theo chương trình GDPT 2018.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "10",
         "subject": "Công Nghệ",
-        "subSubject": "Công Nghiệp"
+        "subSubject": "Công Nghiệp",
+        "dataPath": "/eduspace/congnghe-congnghiep/10/ck2-2526-v1/data.js"
     },
     {
+        "id": "c112",
         "title": "Kiểm tra Cuối Học Kì II – Công nghệ 11 Cơ khí động lực 2025-2026",
-        "url": "/eduspace/congnghe-congnghiep/11/ck2-2526-v1",
+        "url": "/eduspace/exam?c112",
         "description": "Đề kiểm tra cuối học kì II môn Công nghệ lớp 11 (Cơ khí động lực) theo chương trình GDPT 2018.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "11",
         "subject": "Công Nghệ",
-        "subSubject": "Công Nghiệp"
+        "subSubject": "Công Nghiệp",
+        "dataPath": "/eduspace/congnghe-congnghiep/11/ck2-2526-v1/data.js"
     },
     {
+        "id": "c125",
         "title": "Kiểm tra Cuối Học Kì II – Công nghệ 12 Điện - Điện tử 2025-2026",
-        "url": "/eduspace/congnghe-congnghiep/12/ck2-2526-v1",
+        "url": "/eduspace/exam?c125",
         "description": "Đề kiểm tra cuối học kì II môn Công nghệ lớp 12 (Điện - Điện tử) theo chương trình GDPT 2018.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "12",
         "subject": "Công Nghệ",
-        "subSubject": "Công Nghiệp"
+        "subSubject": "Công Nghiệp",
+        "dataPath": "/eduspace/congnghe-congnghiep/12/ck2-2526-v1/data.js"
     },
     {
+        "id": "n101",
         "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/nguvan/10/ck1-2526-v1",
+        "url": "/eduspace/exam?n101",
         "tag": "Ngữ Văn",
         "type": "quiz",
         "class": "10",
-        "subject": "Ngữ Văn"
+        "subject": "Ngữ Văn",
+        "dataPath": "/eduspace/nguvan/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "n111",
         "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/nguvan/11/ck1-2526-v1",
+        "url": "/eduspace/exam?n111",
         "tag": "Ngữ Văn",
         "type": "quiz",
         "class": "11",
-        "subject": "Ngữ Văn"
+        "subject": "Ngữ Văn",
+        "dataPath": "/eduspace/nguvan/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "n124",
         "title": "Kiểm tra Cuối Học Kì I – Ngữ văn 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/nguvan/12/ck1-2526-v1",
+        "url": "/eduspace/exam?n124",
         "tag": "Ngữ Văn",
         "type": "quiz",
         "class": "12",
-        "subject": "Ngữ Văn"
+        "subject": "Ngữ Văn",
+        "dataPath": "/eduspace/nguvan/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "t102",
         "title": "Kiểm tra Cuối Học Kì I – Toán 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/toan/10/ck1-2526-v1",
+        "url": "/eduspace/exam?t102",
         "tag": "Toán",
         "type": "quiz",
         "class": "10",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "t114",
         "title": "Kiểm tra Cuối Học Kì I – Toán 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/toan/11/ck1-2526-v1",
+        "url": "/eduspace/exam?t114",
         "tag": "Toán",
         "type": "quiz",
         "class": "11",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "t125",
         "title": "Kiểm tra Cuối Học Kì I – Toán 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/toan/12/ck1-2526-v1",
+        "url": "/eduspace/exam?t125",
         "tag": "Toán",
         "type": "quiz",
         "class": "12",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "a102",
         "title": "Kiểm tra Cuối Học Kì I – Tiếng Anh 10 (Global Success) – 2025-2026",
-        "url": "/eduspace/tienganh/10/ck1-2526-v1",
+        "url": "/eduspace/exam?a102",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "10",
-        "subject": "Tiếng Anh"
+        "subject": "Tiếng Anh",
+        "dataPath": "/eduspace/tienganh/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "a111",
         "title": "Kiểm tra Cuối Học Kì I – Tiếng Anh 11 (Global Success) – 2025-2026",
-        "url": "/eduspace/tienganh/11/ck1-2526-v1",
+        "url": "/eduspace/exam?a111",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "11",
-        "subject": "Tiếng Anh"
+        "subject": "Tiếng Anh",
+        "dataPath": "/eduspace/tienganh/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "a124",
         "title": "Kiểm tra Cuối Học Kì I – Tiếng Anh 12 (Global Success) – 2025-2026",
-        "url": "/eduspace/tienganh/12/ck1-2526-v1",
+        "url": "/eduspace/exam?a124",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "12",
-        "subject": "Tiếng Anh"
+        "subject": "Tiếng Anh",
+        "dataPath": "/eduspace/tienganh/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "v105",
         "title": "Kiểm tra Cuối Học Kì I – Vật lí 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/vatly/10/ck1-2526-v1",
+        "url": "/eduspace/exam?v105",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "10",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "v112",
         "title": "Kiểm tra Cuối Học Kì I – Vật lí 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/vatly/11/ck1-2526-v1",
+        "url": "/eduspace/exam?v112",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "11",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "v125",
         "title": "Kiểm tra Cuối Học Kì I – Vật lí 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/vatly/12/ck1-2526-v1",
+        "url": "/eduspace/exam?v125",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "12",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "h102",
         "title": "Kiểm tra Cuối Học Kì I – Hóa học 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/hoahoc/10/ck1-2526-v1",
+        "url": "/eduspace/exam?h102",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "h112",
         "title": "Kiểm tra Cuối Học Kì I – Hóa học 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/hoahoc/11/ck1-2526-v1",
+        "url": "/eduspace/exam?h112",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "h125",
         "title": "Kiểm tra Cuối Học Kì I – Hóa học 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/hoahoc/12/ck1-2526-v1",
+        "url": "/eduspace/exam?h125",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "s102",
         "title": "Kiểm tra Cuối Học Kì I – Sinh học 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/sinhhoc/10/ck1-2526-v1",
+        "url": "/eduspace/exam?s102",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "s111",
         "title": "Kiểm tra Cuối Học Kì I – Sinh học 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/sinhhoc/11/ck1-2526-v1",
+        "url": "/eduspace/exam?s111",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "s124",
         "title": "Kiểm tra Cuối Học Kì I – Sinh học 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/sinhhoc/12/ck1-2526-v1",
+        "url": "/eduspace/exam?s124",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "l107",
         "title": "Kiểm tra Cuối Học Kì I – Lịch sử 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/lichsu/10/ck1-2526-v1",
+        "url": "/eduspace/exam?l107",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "10",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "l112",
         "title": "Kiểm tra Cuối Học Kì I – Lịch sử 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/lichsu/11/ck1-2526-v1",
+        "url": "/eduspace/exam?l112",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "11",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "l125",
         "title": "Kiểm tra Cuối Học Kì I – Lịch sử 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/lichsu/12/ck1-2526-v1",
+        "url": "/eduspace/exam?l125",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "12",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "d102",
         "title": "Kiểm tra Cuối Học Kì I – Địa lí 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/diali/10/ck1-2526-v1",
+        "url": "/eduspace/exam?d102",
         "tag": "Địa Lý",
         "type": "quiz",
         "class": "10",
-        "subject": "Địa Lý"
+        "subject": "Địa Lý",
+        "dataPath": "/eduspace/diali/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "d111",
         "title": "Kiểm tra Cuối Học Kì I – Địa lí 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/diali/11/ck1-2526-v1",
+        "url": "/eduspace/exam?d111",
         "tag": "Địa Lý",
         "type": "quiz",
         "class": "11",
-        "subject": "Địa Lý"
+        "subject": "Địa Lý",
+        "dataPath": "/eduspace/diali/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "d124",
         "title": "Kiểm tra Cuối Học Kì I – Địa lí 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/diali/12/ck1-2526-v1",
+        "url": "/eduspace/exam?d124",
         "tag": "Địa Lý",
         "type": "quiz",
         "class": "12",
-        "subject": "Địa Lý"
+        "subject": "Địa Lý",
+        "dataPath": "/eduspace/diali/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "x101",
         "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/ktpl/10/ck1-2526-v1",
+        "url": "/eduspace/exam?x101",
         "tag": "GDKT-PL",
         "type": "quiz",
         "class": "10",
-        "subject": "GDKT-PL"
+        "subject": "GDKT-PL",
+        "dataPath": "/eduspace/ktpl/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "x111",
         "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/ktpl/11/ck1-2526-v1",
+        "url": "/eduspace/exam?x111",
         "tag": "GDKT-PL",
         "type": "quiz",
         "class": "11",
-        "subject": "GDKT-PL"
+        "subject": "GDKT-PL",
+        "dataPath": "/eduspace/ktpl/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "x121",
         "title": "Kiểm tra Cuối Học Kì I – GDKT-PL 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/ktpl/12/ck1-2526-v1",
+        "url": "/eduspace/exam?x121",
         "tag": "GDKT-PL",
         "type": "quiz",
         "class": "12",
-        "subject": "GDKT-PL"
+        "subject": "GDKT-PL",
+        "dataPath": "/eduspace/ktpl/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "c104",
         "title": "Kiểm tra Cuối Học Kì I – Công nghệ 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/congnghe/10/ck1-2526-v1",
+        "url": "/eduspace/exam?c104",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "10",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "c113",
         "title": "Kiểm tra Cuối Học Kì I – Công nghệ 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/congnghe/11/ck1-2526-v1",
+        "url": "/eduspace/exam?c113",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "11",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "c126",
         "title": "Kiểm tra Cuối Học Kì I – Công nghệ 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/congnghe/12/ck1-2526-v1",
+        "url": "/eduspace/exam?c126",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "12",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "i102",
         "title": "Kiểm tra Cuối Học Kì I – Tin học 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/tinhoc/10/ck1-2526-v1",
+        "url": "/eduspace/exam?i102",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/10/ck1-2526-v1/data.js"
     },
     {
+        "id": "i112",
         "title": "Kiểm tra Cuối Học Kì I – Tin học 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/tinhoc/11/ck1-2526-v1",
+        "url": "/eduspace/exam?i112",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/11/ck1-2526-v1/data.js"
     },
     {
+        "id": "i12f",
         "title": "Kiểm tra Cuối Học Kì I – Tin học 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/tinhoc/12/ck1-2526-v1",
+        "url": "/eduspace/exam?i12f",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/12/ck1-2526-v1/data.js"
     },
     {
+        "id": "n102",
         "title": "Kiểm tra Giữa Học Kì I – Ngữ văn 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/nguvan/10/gk1-2526-v1",
+        "url": "/eduspace/exam?n102",
         "tag": "Ngữ Văn",
         "type": "quiz",
         "class": "10",
-        "subject": "Ngữ Văn"
+        "subject": "Ngữ Văn",
+        "dataPath": "/eduspace/nguvan/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "t103",
         "title": "Kiểm tra Giữa Học Kì I – Toán 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/toan/10/gk1-2526-v1",
+        "url": "/eduspace/exam?t103",
         "tag": "Toán",
         "type": "quiz",
         "class": "10",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "a103",
         "title": "Kiểm tra Giữa Học Kì I – Tiếng Anh 10 (Global Success) – 2025-2026",
-        "url": "/eduspace/tienganh/10/gk1-2526-v1",
+        "url": "/eduspace/exam?a103",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "10",
-        "subject": "Tiếng Anh"
+        "subject": "Tiếng Anh",
+        "dataPath": "/eduspace/tienganh/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "n103",
         "title": "Kiểm tra Thường xuyên – Ngữ văn 10 (KNTT) – HK II",
-        "url": "/eduspace/nguvan/10/tx2-2526-v1",
+        "url": "/eduspace/exam?n103",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Ngữ văn lớp 10.",
         "tag": "Ngữ Văn",
         "type": "quiz",
         "class": "10",
-        "subject": "Ngữ Văn"
+        "subject": "Ngữ Văn",
+        "dataPath": "/eduspace/nguvan/10/tx2-2526-v1/data.js"
     },
     {
+        "id": "n112",
         "title": "Kiểm tra Thường xuyên – Ngữ văn 11 (KNTT) – HK II",
-        "url": "/eduspace/nguvan/11/tx2-2526-v1",
+        "url": "/eduspace/exam?n112",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Ngữ văn lớp 11.",
         "tag": "Ngữ Văn",
         "type": "quiz",
         "class": "11",
-        "subject": "Ngữ Văn"
+        "subject": "Ngữ Văn",
+        "dataPath": "/eduspace/nguvan/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "n125",
         "title": "Kiểm tra Thường xuyên – Ngữ văn 12 (KNTT) – HK II",
-        "url": "/eduspace/nguvan/12/tx2-2526-v1",
+        "url": "/eduspace/exam?n125",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Ngữ văn lớp 12.",
         "tag": "Ngữ Văn",
         "type": "quiz",
         "class": "12",
-        "subject": "Ngữ Văn"
+        "subject": "Ngữ Văn",
+        "dataPath": "/eduspace/nguvan/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "t104",
         "title": "Kiểm tra Thường xuyên – Toán 10 (KNTT) – HK II",
-        "url": "/eduspace/toan/10/tx2-2526-v1",
+        "url": "/eduspace/exam?t104",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Toán lớp 10.",
         "tag": "Toán",
         "type": "quiz",
         "class": "10",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/10/tx2-2526-v1/data.js"
     },
     {
+        "id": "t115",
         "title": "Kiểm tra Thường xuyên – Toán 11 (KNTT) – HK II",
-        "url": "/eduspace/toan/11/tx2-2526-v1",
+        "url": "/eduspace/exam?t115",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Toán lớp 11.",
         "tag": "Toán",
         "type": "quiz",
         "class": "11",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "t126",
         "title": "Kiểm tra Thường xuyên – Toán 12 (KNTT) – HK II",
-        "url": "/eduspace/toan/12/tx2-2526-v1",
+        "url": "/eduspace/exam?t126",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Toán lớp 12.",
         "tag": "Toán",
         "type": "quiz",
         "class": "12",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "a104",
         "title": "Kiểm tra Thường xuyên – Tiếng Anh 10 (KNTT) – HK II",
-        "url": "/eduspace/tienganh/10/tx2-2526-v1",
+        "url": "/eduspace/exam?a104",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Tiếng Anh lớp 10.",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "10",
-        "subject": "Tiếng Anh"
+        "subject": "Tiếng Anh",
+        "dataPath": "/eduspace/tienganh/10/tx2-2526-v1/data.js"
     },
     {
+        "id": "a112",
         "title": "Kiểm tra Thường xuyên – Tiếng Anh 11 (KNTT) – HK II",
-        "url": "/eduspace/tienganh/11/tx2-2526-v1",
+        "url": "/eduspace/exam?a112",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Tiếng Anh lớp 11.",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "11",
-        "subject": "Tiếng Anh"
+        "subject": "Tiếng Anh",
+        "dataPath": "/eduspace/tienganh/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "a125",
         "title": "Kiểm tra Thường xuyên – Tiếng Anh 12 (KNTT) – HK II",
-        "url": "/eduspace/tienganh/12/tx2-2526-v1",
+        "url": "/eduspace/exam?a125",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Tiếng Anh lớp 12.",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "12",
-        "subject": "Tiếng Anh"
+        "subject": "Tiếng Anh",
+        "dataPath": "/eduspace/tienganh/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "l113",
         "title": "Kiểm tra Thường xuyên – Lịch sử 11 (KNTT) – HK II",
-        "url": "/eduspace/lichsu/11/tx2-2526-v1",
+        "url": "/eduspace/exam?l113",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Lịch sử lớp 11.",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "11",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "l126",
         "title": "Kiểm tra Thường xuyên – Lịch sử 12 (KNTT) – HK II",
-        "url": "/eduspace/lichsu/12/tx2-2526-v1",
+        "url": "/eduspace/exam?l126",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Lịch sử lớp 12.",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "12",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "d103",
         "title": "Kiểm tra Thường xuyên – Địa lí 10 (KNTT) – HK II",
-        "url": "/eduspace/diali/10/tx2-2526-v1",
+        "url": "/eduspace/exam?d103",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Địa lí lớp 10.",
         "tag": "Địa Lý",
         "type": "quiz",
         "class": "10",
-        "subject": "Địa Lý"
+        "subject": "Địa Lý",
+        "dataPath": "/eduspace/diali/10/tx2-2526-v1/data.js"
     },
     {
+        "id": "d112",
         "title": "Kiểm tra Thường xuyên – Địa lí 11 (KNTT) – HK II",
-        "url": "/eduspace/diali/11/tx2-2526-v1",
+        "url": "/eduspace/exam?d112",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Địa lí lớp 11.",
         "tag": "Địa Lý",
         "type": "quiz",
         "class": "11",
-        "subject": "Địa Lý"
+        "subject": "Địa Lý",
+        "dataPath": "/eduspace/diali/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "d125",
         "title": "Kiểm tra Thường xuyên – Địa lí 12 (KNTT) – HK II",
-        "url": "/eduspace/diali/12/tx2-2526-v1",
+        "url": "/eduspace/exam?d125",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Địa lí lớp 12.",
         "tag": "Địa Lý",
         "type": "quiz",
         "class": "12",
-        "subject": "Địa Lý"
+        "subject": "Địa Lý",
+        "dataPath": "/eduspace/diali/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "x102",
         "title": "Kiểm tra Thường xuyên – GDKT-PL 10 (KNTT) – HK II",
-        "url": "/eduspace/ktpl/10/tx2-2526-v1",
+        "url": "/eduspace/exam?x102",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn GDKT-PL lớp 10.",
         "tag": "GDKT-PL",
         "type": "quiz",
         "class": "10",
-        "subject": "GDKT-PL"
+        "subject": "GDKT-PL",
+        "dataPath": "/eduspace/ktpl/10/tx2-2526-v1/data.js"
     },
     {
+        "id": "x112",
         "title": "Kiểm tra Thường xuyên – GDKT-PL 11 (KNTT) – HK II",
-        "url": "/eduspace/ktpl/11/tx2-2526-v1",
+        "url": "/eduspace/exam?x112",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn GDKT-PL lớp 11.",
         "tag": "GDKT-PL",
         "type": "quiz",
         "class": "11",
-        "subject": "GDKT-PL"
+        "subject": "GDKT-PL",
+        "dataPath": "/eduspace/ktpl/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "x122",
         "title": "Kiểm tra Thường xuyên – GDKT-PL 12 (KNTT) – HK II",
-        "url": "/eduspace/ktpl/12/tx2-2526-v1",
+        "url": "/eduspace/exam?x122",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn GDKT-PL lớp 12.",
         "tag": "GDKT-PL",
         "type": "quiz",
         "class": "12",
-        "subject": "GDKT-PL"
+        "subject": "GDKT-PL",
+        "dataPath": "/eduspace/ktpl/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "v106",
         "title": "Kiểm tra Thường xuyên – Vật lí 10 (KNTT) – HK II",
-        "url": "/eduspace/vatly/10/tx2-2526-v1",
+        "url": "/eduspace/exam?v106",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Vật lí lớp 10.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "10",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/10/tx2-2526-v1/data.js"
     },
     {
+        "id": "v113",
         "title": "Kiểm tra Thường xuyên – Vật lí 11 (KNTT) – HK II",
-        "url": "/eduspace/vatly/11/tx2-2526-v1",
+        "url": "/eduspace/exam?v113",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Vật lí lớp 11.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "11",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "v126",
         "title": "Kiểm tra Thường xuyên – Vật lí 12 (KNTT) – HK II",
-        "url": "/eduspace/vatly/12/tx2-2526-v1",
+        "url": "/eduspace/exam?v126",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Vật lí lớp 12.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "12",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "h103",
         "title": "Kiểm tra Thường xuyên – Hóa học 10 (KNTT) – HK II",
-        "url": "/eduspace/hoahoc/10/tx2-2526-v1",
+        "url": "/eduspace/exam?h103",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Hóa học lớp 10.",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/10/tx2-2526-v1/data.js"
     },
     {
+        "id": "h113",
         "title": "Kiểm tra Thường xuyên – Hóa học 11 (KNTT) – HK II",
-        "url": "/eduspace/hoahoc/11/tx2-2526-v1",
+        "url": "/eduspace/exam?h113",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Hóa học lớp 11.",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "h126",
         "title": "Kiểm tra Thường xuyên – Hóa học 12 (KNTT) – HK II",
-        "url": "/eduspace/hoahoc/12/tx2-2526-v1",
+        "url": "/eduspace/exam?h126",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Hóa học lớp 12.",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "s103",
         "title": "Kiểm tra Thường xuyên – Sinh học 10 (KNTT) – HK II",
-        "url": "/eduspace/sinhhoc/10/tx2-2526-v1",
+        "url": "/eduspace/exam?s103",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Sinh học lớp 10.",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/10/tx2-2526-v1/data.js"
     },
     {
+        "id": "s112",
         "title": "Kiểm tra Thường xuyên – Sinh học 11 (KNTT) – HK II",
-        "url": "/eduspace/sinhhoc/11/tx2-2526-v1",
+        "url": "/eduspace/exam?s112",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Sinh học lớp 11.",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "s125",
         "title": "Kiểm tra Thường xuyên – Sinh học 12 (KNTT) – HK II",
-        "url": "/eduspace/sinhhoc/12/tx2-2526-v1",
+        "url": "/eduspace/exam?s125",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Sinh học lớp 12.",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "c105",
         "title": "Kiểm tra Thường xuyên – Công nghệ 10 (KNTT) – HK II",
-        "url": "/eduspace/congnghe/10/tx2-2526-v1",
+        "url": "/eduspace/exam?c105",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Công nghệ lớp 10.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "10",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/10/tx2-2526-v1/data.js"
     },
     {
+        "id": "c114",
         "title": "Kiểm tra Thường xuyên – Công nghệ 11 (KNTT) – HK II",
-        "url": "/eduspace/congnghe/11/tx2-2526-v1",
+        "url": "/eduspace/exam?c114",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Công nghệ lớp 11.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "11",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "c127",
         "title": "Kiểm tra Thường xuyên – Công nghệ 12 (KNTT) – HK II",
-        "url": "/eduspace/congnghe/12/tx2-2526-v1",
+        "url": "/eduspace/exam?c127",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Công nghệ lớp 12.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "12",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "i103",
         "title": "Kiểm tra Thường xuyên – Tin học 10 (KNTT) – HK II",
-        "url": "/eduspace/tinhoc/10/tx2-2526-v1",
+        "url": "/eduspace/exam?i103",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Tin học lớp 10.",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/10/tx2-2526-v1/data.js"
     },
     {
+        "id": "i113",
         "title": "Kiểm tra Thường xuyên – Tin học 11 (KNTT) – HK II",
-        "url": "/eduspace/tinhoc/11/tx2-2526-v1",
+        "url": "/eduspace/exam?i113",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Tin học lớp 11.",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/11/tx2-2526-v1/data.js"
     },
     {
+        "id": "i12g",
         "title": "Kiểm tra Thường xuyên – Tin học 12 (KNTT) – HK II",
-        "url": "/eduspace/tinhoc/12/tx2-2526-v1",
+        "url": "/eduspace/exam?i12g",
         "description": "Bài kiểm tra thường xuyên học kỳ II môn Tin học lớp 12.",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/12/tx2-2526-v1/data.js"
     },
     {
+        "id": "n113",
         "title": "Kiểm tra Giữa Học Kì I – Ngữ văn 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/nguvan/11/gk1-2526-v1",
+        "url": "/eduspace/exam?n113",
         "description": "Đề kiểm tra giữa học kì I môn Ngữ văn lớp 11.",
         "tag": "Ngữ Văn",
         "type": "quiz",
         "class": "11",
-        "subject": "Ngữ Văn"
+        "subject": "Ngữ Văn",
+        "dataPath": "/eduspace/nguvan/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "n126",
         "title": "Kiểm tra Giữa Học Kì I – Ngữ văn 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/nguvan/12/gk1-2526-v1",
+        "url": "/eduspace/exam?n126",
         "description": "Đề kiểm tra giữa học kì I môn Ngữ văn lớp 12.",
         "tag": "Ngữ Văn",
         "type": "quiz",
         "class": "12",
-        "subject": "Ngữ Văn"
+        "subject": "Ngữ Văn",
+        "dataPath": "/eduspace/nguvan/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "t116",
         "title": "Kiểm tra Giữa Học Kì I – Toán 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/toan/11/gk1-2526-v1",
+        "url": "/eduspace/exam?t116",
         "description": "Đề kiểm tra giữa học kì I môn Toán lớp 11.",
         "tag": "Toán",
         "type": "quiz",
         "class": "11",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "t127",
         "title": "Kiểm tra Giữa Học Kì I – Toán 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/toan/12/gk1-2526-v1",
+        "url": "/eduspace/exam?t127",
         "description": "Đề kiểm tra giữa học kì I môn Toán lớp 12.",
         "tag": "Toán",
         "type": "quiz",
         "class": "12",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "a113",
         "title": "Kiểm tra Giữa Học Kì I – Tiếng Anh 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/tienganh/11/gk1-2526-v1",
+        "url": "/eduspace/exam?a113",
         "description": "Đề kiểm tra giữa học kì I môn Tiếng Anh lớp 11.",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "11",
-        "subject": "Tiếng Anh"
+        "subject": "Tiếng Anh",
+        "dataPath": "/eduspace/tienganh/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "a126",
         "title": "Kiểm tra Giữa Học Kì I – Tiếng Anh 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/tienganh/12/gk1-2526-v1",
+        "url": "/eduspace/exam?a126",
         "description": "Đề kiểm tra giữa học kì I môn Tiếng Anh lớp 12.",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "12",
-        "subject": "Tiếng Anh"
+        "subject": "Tiếng Anh",
+        "dataPath": "/eduspace/tienganh/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "l108",
         "title": "Kiểm tra Giữa Học Kì I – Lịch sử 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/lichsu/10/gk1-2526-v1",
+        "url": "/eduspace/exam?l108",
         "description": "Đề kiểm tra giữa học kì I môn Lịch sử lớp 10.",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "10",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "l114",
         "title": "Kiểm tra Giữa Học Kì I – Lịch sử 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/lichsu/11/gk1-2526-v1",
+        "url": "/eduspace/exam?l114",
         "description": "Đề kiểm tra giữa học kì I môn Lịch sử lớp 11.",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "11",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "l127",
         "title": "Kiểm tra Giữa Học Kì I – Lịch sử 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/lichsu/12/gk1-2526-v1",
+        "url": "/eduspace/exam?l127",
         "description": "Đề kiểm tra giữa học kì I môn Lịch sử lớp 12.",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "12",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "d104",
         "title": "Kiểm tra Giữa Học Kì I – Địa lí 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/diali/10/gk1-2526-v1",
+        "url": "/eduspace/exam?d104",
         "description": "Đề kiểm tra giữa học kì I môn Địa lí lớp 10.",
         "tag": "Địa Lý",
         "type": "quiz",
         "class": "10",
-        "subject": "Địa Lý"
+        "subject": "Địa Lý",
+        "dataPath": "/eduspace/diali/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "d113",
         "title": "Kiểm tra Giữa Học Kì I – Địa lí 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/diali/11/gk1-2526-v1",
+        "url": "/eduspace/exam?d113",
         "description": "Đề kiểm tra giữa học kì I môn Địa lí lớp 11.",
         "tag": "Địa Lý",
         "type": "quiz",
         "class": "11",
-        "subject": "Địa Lý"
+        "subject": "Địa Lý",
+        "dataPath": "/eduspace/diali/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "d126",
         "title": "Kiểm tra Giữa Học Kì I – Địa lí 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/diali/12/gk1-2526-v1",
+        "url": "/eduspace/exam?d126",
         "description": "Đề kiểm tra giữa học kì I môn Địa lí lớp 12.",
         "tag": "Địa Lý",
         "type": "quiz",
         "class": "12",
-        "subject": "Địa Lý"
+        "subject": "Địa Lý",
+        "dataPath": "/eduspace/diali/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "x103",
         "title": "Kiểm tra Giữa Học Kì I – GDKT-PL 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/ktpl/10/gk1-2526-v1",
+        "url": "/eduspace/exam?x103",
         "description": "Đề kiểm tra giữa học kì I môn GDKT-PL lớp 10.",
         "tag": "GDKT-PL",
         "type": "quiz",
         "class": "10",
-        "subject": "GDKT-PL"
+        "subject": "GDKT-PL",
+        "dataPath": "/eduspace/ktpl/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "x113",
         "title": "Kiểm tra Giữa Học Kì I – GDKT-PL 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/ktpl/11/gk1-2526-v1",
+        "url": "/eduspace/exam?x113",
         "description": "Đề kiểm tra giữa học kì I môn GDKT-PL lớp 11.",
         "tag": "GDKT-PL",
         "type": "quiz",
         "class": "11",
-        "subject": "GDKT-PL"
+        "subject": "GDKT-PL",
+        "dataPath": "/eduspace/ktpl/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "x123",
         "title": "Kiểm tra Giữa Học Kì I – GDKT-PL 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/ktpl/12/gk1-2526-v1",
+        "url": "/eduspace/exam?x123",
         "description": "Đề kiểm tra giữa học kì I môn GDKT-PL lớp 12.",
         "tag": "GDKT-PL",
         "type": "quiz",
         "class": "12",
-        "subject": "GDKT-PL"
+        "subject": "GDKT-PL",
+        "dataPath": "/eduspace/ktpl/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "v107",
         "title": "Kiểm tra Giữa Học Kì I – Vật lí 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/vatly/10/gk1-2526-v1",
+        "url": "/eduspace/exam?v107",
         "description": "Đề kiểm tra giữa học kì I môn Vật lí lớp 10.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "10",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "v114",
         "title": "Kiểm tra Giữa Học Kì I – Vật lí 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/vatly/11/gk1-2526-v1",
+        "url": "/eduspace/exam?v114",
         "description": "Đề kiểm tra giữa học kì I môn Vật lí lớp 11.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "11",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "v127",
         "title": "Kiểm tra Giữa Học Kì I – Vật lí 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/vatly/12/gk1-2526-v1",
+        "url": "/eduspace/exam?v127",
         "description": "Đề kiểm tra giữa học kì I môn Vật lí lớp 12.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "12",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "h104",
         "title": "Kiểm tra Giữa Học Kì I – Hóa học 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/hoahoc/10/gk1-2526-v1",
+        "url": "/eduspace/exam?h104",
         "description": "Đề kiểm tra giữa học kì I môn Hóa học lớp 10.",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "h114",
         "title": "Kiểm tra Giữa Học Kì I – Hóa học 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/hoahoc/11/gk1-2526-v1",
+        "url": "/eduspace/exam?h114",
         "description": "Đề kiểm tra giữa học kì I môn Hóa học lớp 11.",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "h127",
         "title": "Kiểm tra Giữa Học Kì I – Hóa học 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/hoahoc/12/gk1-2526-v1",
+        "url": "/eduspace/exam?h127",
         "description": "Đề kiểm tra giữa học kì I môn Hóa học lớp 12.",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "s104",
         "title": "Kiểm tra Giữa Học Kì I – Sinh học 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/sinhhoc/10/gk1-2526-v1",
+        "url": "/eduspace/exam?s104",
         "description": "Đề kiểm tra giữa học kì I môn Sinh học lớp 10.",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "s113",
         "title": "Kiểm tra Giữa Học Kì I – Sinh học 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/sinhhoc/11/gk1-2526-v1",
+        "url": "/eduspace/exam?s113",
         "description": "Đề kiểm tra giữa học kì I môn Sinh học lớp 11.",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "s126",
         "title": "Kiểm tra Giữa Học Kì I – Sinh học 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/sinhhoc/12/gk1-2526-v1",
+        "url": "/eduspace/exam?s126",
         "description": "Đề kiểm tra giữa học kì I môn Sinh học lớp 12.",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "c106",
         "title": "Kiểm tra Giữa Học Kì I – Công nghệ 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/congnghe/10/gk1-2526-v1",
+        "url": "/eduspace/exam?c106",
         "description": "Đề kiểm tra giữa học kì I môn Công nghệ lớp 10.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "10",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "c115",
         "title": "Kiểm tra Giữa Học Kì I – Công nghệ 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/congnghe/11/gk1-2526-v1",
+        "url": "/eduspace/exam?c115",
         "description": "Đề kiểm tra giữa học kì I môn Công nghệ lớp 11.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "11",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "c128",
         "title": "Kiểm tra Giữa Học Kì I – Công nghệ 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/congnghe/12/gk1-2526-v1",
+        "url": "/eduspace/exam?c128",
         "description": "Đề kiểm tra giữa học kì I môn Công nghệ lớp 12.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "12",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "i104",
         "title": "Kiểm tra Giữa Học Kì I – Tin học 10 (KNTT) – 2025-2026",
-        "url": "/eduspace/tinhoc/10/gk1-2526-v1",
+        "url": "/eduspace/exam?i104",
         "description": "Đề kiểm tra giữa học kì I môn Tin học lớp 10.",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/10/gk1-2526-v1/data.js"
     },
     {
+        "id": "i114",
         "title": "Kiểm tra Giữa Học Kì I – Tin học 11 (KNTT) – 2025-2026",
-        "url": "/eduspace/tinhoc/11/gk1-2526-v1",
+        "url": "/eduspace/exam?i114",
         "description": "Đề kiểm tra giữa học kì I môn Tin học lớp 11.",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/11/gk1-2526-v1/data.js"
     },
     {
+        "id": "i12h",
         "title": "Kiểm tra Giữa Học Kì I – Tin học 12 (KNTT) – 2025-2026",
-        "url": "/eduspace/tinhoc/12/gk1-2526-v1",
+        "url": "/eduspace/exam?i12h",
         "description": "Đề kiểm tra giữa học kì I môn Tin học lớp 12.",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/12/gk1-2526-v1/data.js"
     },
     {
+        "id": "n114",
         "title": "Kiểm tra Thường xuyên – Ngữ văn 11 (KNTT) – HK I",
-        "url": "/eduspace/nguvan/11/tx1-2526-v1",
+        "url": "/eduspace/exam?n114",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Ngữ văn lớp 11.",
         "tag": "Ngữ Văn",
         "type": "quiz",
         "class": "11",
-        "subject": "Ngữ Văn"
+        "subject": "Ngữ Văn",
+        "dataPath": "/eduspace/nguvan/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "t117",
         "title": "Kiểm tra Thường xuyên – Toán 11 (KNTT) – HK I",
-        "url": "/eduspace/toan/11/tx1-2526-v1",
+        "url": "/eduspace/exam?t117",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Toán lớp 11.",
         "tag": "Toán",
         "type": "quiz",
         "class": "11",
-        "subject": "Toán"
+        "subject": "Toán",
+        "dataPath": "/eduspace/toan/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "a114",
         "title": "Kiểm tra Thường xuyên – Tiếng Anh 11 (KNTT) – HK I",
-        "url": "/eduspace/tienganh/11/tx1-2526-v1",
+        "url": "/eduspace/exam?a114",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Tiếng Anh lớp 11.",
         "tag": "Tiếng Anh",
         "type": "quiz",
         "class": "11",
-        "subject": "Tiếng Anh"
+        "subject": "Tiếng Anh",
+        "dataPath": "/eduspace/tienganh/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "l115",
         "title": "Kiểm tra Thường xuyên – Lịch sử 11 (KNTT) – HK I",
-        "url": "/eduspace/lichsu/11/tx1-2526-v1",
+        "url": "/eduspace/exam?l115",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Lịch sử lớp 11.",
         "tag": "Lịch Sử",
         "type": "quiz",
         "class": "11",
-        "subject": "Lịch Sử"
+        "subject": "Lịch Sử",
+        "dataPath": "/eduspace/lichsu/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "d114",
         "title": "Kiểm tra Thường xuyên – Địa lí 11 (KNTT) – HK I",
-        "url": "/eduspace/diali/11/tx1-2526-v1",
+        "url": "/eduspace/exam?d114",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Địa lí lớp 11.",
         "tag": "Địa Lý",
         "type": "quiz",
         "class": "11",
-        "subject": "Địa Lý"
+        "subject": "Địa Lý",
+        "dataPath": "/eduspace/diali/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "x114",
         "title": "Kiểm tra Thường xuyên – GDKT-PL 11 (KNTT) – HK I",
-        "url": "/eduspace/ktpl/11/tx1-2526-v1",
+        "url": "/eduspace/exam?x114",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn GDKT-PL lớp 11.",
         "tag": "GDKT-PL",
         "type": "quiz",
         "class": "11",
-        "subject": "GDKT-PL"
+        "subject": "GDKT-PL",
+        "dataPath": "/eduspace/ktpl/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "v115",
         "title": "Kiểm tra Thường xuyên – Vật lí 11 (KNTT) – HK I",
-        "url": "/eduspace/vatly/11/tx1-2526-v1",
+        "url": "/eduspace/exam?v115",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Vật lí lớp 11.",
         "tag": "Vật Lý",
         "type": "quiz",
         "class": "11",
-        "subject": "Vật Lý"
+        "subject": "Vật Lý",
+        "dataPath": "/eduspace/vatly/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "h115",
         "title": "Kiểm tra Thường xuyên – Hóa học 11 (KNTT) – HK I",
-        "url": "/eduspace/hoahoc/11/tx1-2526-v1",
+        "url": "/eduspace/exam?h115",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Hóa học lớp 11.",
         "tag": "Hóa Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Hóa Học"
+        "subject": "Hóa Học",
+        "dataPath": "/eduspace/hoahoc/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "s114",
         "title": "Kiểm tra Thường xuyên – Sinh học 11 (KNTT) – HK I",
-        "url": "/eduspace/sinhhoc/11/tx1-2526-v1",
+        "url": "/eduspace/exam?s114",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Sinh học lớp 11.",
         "tag": "Sinh Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Sinh Học"
+        "subject": "Sinh Học",
+        "dataPath": "/eduspace/sinhhoc/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "c107",
         "title": "Kiểm tra Thường xuyên – Công nghệ 10 (KNTT) – HK I",
-        "url": "/eduspace/congnghe/10/tx1-2526-v1",
+        "url": "/eduspace/exam?c107",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Công nghệ lớp 10.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "10",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/10/tx1-2526-v1/data.js"
     },
     {
+        "id": "c116",
         "title": "Kiểm tra Thường xuyên – Công nghệ 11 (KNTT) – HK I",
-        "url": "/eduspace/congnghe/11/tx1-2526-v1",
+        "url": "/eduspace/exam?c116",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Công nghệ lớp 11.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "11",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "c129",
         "title": "Kiểm tra Thường xuyên – Công nghệ 12 (KNTT) – HK I",
-        "url": "/eduspace/congnghe/12/tx1-2526-v1",
+        "url": "/eduspace/exam?c129",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Công nghệ lớp 12.",
         "tag": "Công Nghệ",
         "type": "quiz",
         "class": "12",
-        "subject": "Công Nghệ"
+        "subject": "Công Nghệ",
+        "dataPath": "/eduspace/congnghe/12/tx1-2526-v1/data.js"
     },
     {
+        "id": "i105",
         "title": "Kiểm tra Thường xuyên – Tin học 10 (KNTT) – HK I",
-        "url": "/eduspace/tinhoc/10/tx1-2526-v1",
+        "url": "/eduspace/exam?i105",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Tin học lớp 10.",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "10",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/10/tx1-2526-v1/data.js"
     },
     {
+        "id": "i115",
         "title": "Kiểm tra Thường xuyên – Tin học 11 (KNTT) – HK I",
-        "url": "/eduspace/tinhoc/11/tx1-2526-v1",
+        "url": "/eduspace/exam?i115",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Tin học lớp 11.",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "11",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/11/tx1-2526-v1/data.js"
     },
     {
+        "id": "i12i",
         "title": "Kiểm tra Thường xuyên – Tin học 12 (KNTT) – HK I",
-        "url": "/eduspace/tinhoc/12/tx1-2526-v1",
+        "url": "/eduspace/exam?i12i",
         "description": "Bài kiểm tra thường xuyên học kỳ I môn Tin học lớp 12.",
         "tag": "Tin Học",
         "type": "quiz",
         "class": "12",
-        "subject": "Tin Học"
+        "subject": "Tin Học",
+        "dataPath": "/eduspace/tinhoc/12/tx1-2526-v1/data.js"
+    },
+    {
+        "id": "a127",
+        "title": "Đề Tuyển sinh lớp 10 – Tiếng Anh – Sở GD&ĐT Gia Lai (2026-2027)",
+        "url": "/eduspace/exam?a127",
+        "description": "Đề thi chính thức kỳ thi tuyển sinh vào lớp 10 THPT môn Tiếng Anh ngày 27/6/2026 của Sở GD&ĐT Gia Lai. Gồm 31 câu: 20 trắc nghiệm, 1 điền True/False, 10 câu ngắn.",
+        "tag": "TS10 2027",
+        "isHot": true,
+        "type": "quiz",
+        "class": "10",
+        "subject": "Tiếng Anh",
+        "subSubject": "Tuyển sinh 10",
+        "buttonText": "Luyện thi ngay",
+        "dataPath": "/eduspace/tienganh/10/ts10-gia-lai-2627-v1/data.js"
+    },
+    {
+        "id": "a128",
+        "title": "Đề Tuyển sinh lớp 10 – Tiếng Anh – Sở GD&ĐT Đắk Lắk (2026-2027)",
+        "url": "/eduspace/exam?a128",
+        "description": "Đề thi chính thức kỳ thi tuyển sinh vào lớp 10 THPT môn Tiếng Anh năm học 2026-2027 của Sở GD&ĐT Đắk Lắk (Mã đề 286). Gồm 40 câu trắc nghiệm, thời gian 60 phút.",
+        "tag": "TS10 2027",
+        "isHot": true,
+        "type": "quiz",
+        "class": "10",
+        "subject": "Tiếng Anh",
+        "subSubject": "Tuyển sinh 10",
+        "buttonText": "Luyện thi ngay",
+        "dataPath": "/eduspace/tienganh/10/ts10-dak-lak-2627-v1/data.js"
+    },
+    {
+        "id": "a129",
+        "title": "Đề Tuyển sinh lớp 10 – Tiếng Anh – Sở GD&ĐT Lai Châu (2026-2027)",
+        "url": "/eduspace/exam?a129",
+        "description": "Đề thi chính thức kỳ thi tuyển sinh vào lớp 10 THPT môn Tiếng Anh năm học 2026-2027 của Sở GD&ĐT Lai Châu. Gồm 40 câu trắc nghiệm, thời gian 60 phút.",
+        "tag": "TS10 2027",
+        "isHot": true,
+        "type": "quiz",
+        "class": "10",
+        "subject": "Tiếng Anh",
+        "subSubject": "Tuyển sinh 10",
+        "buttonText": "Luyện thi ngay",
+        "dataPath": "/eduspace/tienganh/10/ts10-lai-chau-2627-v1/data.js"
     }
 ];

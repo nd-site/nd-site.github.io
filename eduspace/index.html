@@ -168,8 +168,7 @@
             display: none;
         }
 
-        .scrollbar-hide {
-        }
+        .scrollbar-hide {}
 
         /* Card Status Styles */
         .status-hot {
@@ -377,6 +376,11 @@
                 </p>
 
                 <div class="flex flex-wrap gap-3">
+                    <button onclick="openExamCodeModal()"
+                        class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-5 py-2.5 rounded-full text-xs font-bold text-white shadow-lg shadow-blue-600/20 transition-all group hover:scale-105 active:scale-95">
+                        <i data-lucide="key-round" class="w-4 h-4 group-hover:rotate-12 transition-transform"></i>
+                        Vào đề bằng mã
+                    </button>
                     <a href="/eduspace/thptqg/2026"
                         class="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 px-5 py-2.5 rounded-full text-xs font-bold text-white shadow-lg shadow-orange-600/20 transition-all group">
                         <i data-lucide="graduation-cap" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
@@ -397,7 +401,7 @@
             </div>
 
             <!-- Stats/Featured Card -->
-            <div class="hidden md:block glass-panel p-5 rounded-[2rem] relative overflow-hidden">
+            <div class="glass-panel p-5 rounded-[2rem] relative overflow-hidden">
                 <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl"></div>
 
                 <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Thống kê nền tảng</h3>
@@ -466,19 +470,20 @@
                     <div class="marquee-content reverse" id="upcomingContent1"></div>
                     <div class="marquee-content reverse" id="upcomingContent2"></div>
                 </div>
-                <!-- Tools Section -->
-                <section id="toolSection" class="hidden">
-                    <div class="section-header">
-                        <h2 class="section-title text-indigo-600">
-                            <i data-lucide="wrench" class="w-6 h-6"></i> Công cụ học tập
-                        </h2>
-                        <span class="section-badge bg-indigo-100 text-indigo-600">Tiện ích</span>
-                    </div>
-                    <div class="marquee-container" id="toolMarquee">
-                        <div class="marquee-content" id="toolContent1"></div>
-                        <div class="marquee-content" id="toolContent2"></div>
-                    </div>
-                </section>
+            </section>
+            <!-- Tools Section -->
+            <section id="toolSection" class="hidden">
+                <div class="section-header">
+                    <h2 class="section-title text-indigo-600">
+                        <i data-lucide="wrench" class="w-6 h-6"></i> Công cụ học tập
+                    </h2>
+                    <span class="section-badge bg-indigo-100 text-indigo-600">Tiện ích</span>
+                </div>
+                <div class="marquee-container" id="toolMarquee">
+                    <div class="marquee-content" id="toolContent1"></div>
+                    <div class="marquee-content" id="toolContent2"></div>
+                </div>
+            </section>
         </div>
 
         <!-- Controls Section -->
@@ -489,6 +494,13 @@
                 <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
                 <input type="text" id="searchInput" placeholder="Tìm kiếm bài tập, đề thi, môn học..."
                     class="w-full bg-white/80 border border-slate-200 rounded-xl py-3 pl-11 pr-5 text-sm text-slate-700 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+            </div>
+
+            <!-- Code Access -->
+            <div class="relative w-full md:w-56 shrink-0">
+                <i data-lucide="key-round" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                <input type="text" id="toolbarCodeInput" placeholder="Vào đề bằng mã (VD: t111)..." maxlength="10"
+                    class="w-full bg-white/80 border border-slate-200 rounded-xl py-3 pl-11 pr-5 text-sm text-slate-700 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all uppercase">
             </div>
 
             <!-- Filters -->
@@ -541,6 +553,57 @@
 
     <!-- EduAI Assistant Floating Button Placeholder -->
     <div id="eduai-root"></div>
+
+    <!-- Modal Vào đề bằng mã -->
+    <div id="codeModal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm hidden transition-all duration-300 opacity-0"
+        onclick="if(event.target === this) closeExamCodeModal()">
+        <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl p-8 max-w-md w-full transform scale-95 transition-all duration-300 relative"
+            onclick="event.stopPropagation()">
+            <!-- Close Button -->
+            <button onclick="closeExamCodeModal()"
+                class="absolute right-6 top-6 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="text-center">
+                <div
+                    class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="key-round" class="w-8 h-8"></i>
+                </div>
+
+                <h3 class="text-xl font-bold text-slate-800 mb-1">Vào Đề Bằng Mã</h3>
+                <p class="text-slate-400 text-sm mb-6 font-medium">Nhập mã đề thi gồm 4 ký tự để bắt đầu</p>
+
+                <div class="relative mb-4">
+                    <input type="text" id="modalCodeInput" placeholder="Ví dụ: t111" maxlength="10"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 px-5 text-center text-lg font-bold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all uppercase"
+                        onkeydown="if(event.key === 'Enter') submitModalCode()">
+                    <p id="modalCodeError" class="text-rose-500 text-xs font-semibold mt-2 hidden"></p>
+
+                    <!-- Preview Card -->
+                    <div id="modal-preview-card"
+                        class="mt-4 p-4 bg-slate-50 border border-slate-100 rounded-2xl text-left hidden">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
+                            <span class="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Tìm thấy đề
+                                thi</span>
+                        </div>
+                        <h4 id="modal-preview-title" class="font-bold text-xs text-slate-800 mb-1 leading-snug"></h4>
+                        <div class="mt-2.5 space-y-1 text-[10px] text-slate-600 border-t border-slate-100/70 pt-2.5"
+                            id="modal-preview-metadata"></div>
+                        <p id="modal-preview-desc" class="text-slate-500 text-[9px] leading-relaxed mt-2 line-clamp-2">
+                        </p>
+                    </div>
+                </div>
+
+                <button onclick="submitModalCode()"
+                    class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-600/20 transition-all text-sm">
+                    Bắt đầu làm bài
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Initialize Lucide Icons
@@ -611,11 +674,11 @@
                     section.classList.remove('hidden');
                     const content1 = document.getElementById(content1Id);
                     const content2 = document.getElementById(content2Id);
-                    
+
                     const cards = items.map((item, idx) => createCard(item, idx, true)).join('');
                     content1.innerHTML = cards;
                     content2.innerHTML = '';
-                    
+
                     // Chờ một chút để trình duyệt render xong DOM rồi mới đo kích thước
                     setTimeout(() => {
                         // Kiểm tra xem nội dung có tràn khung không (có thể cuộn được không)
@@ -623,7 +686,7 @@
                             // Nhân bản 1 lần (dải băng nối tiếp) để cuộn vô tận
                             content2.innerHTML = cards;
                             container.style.maskImage = '';
-                            
+
                             // Chỉ setup nếu chưa được setup trước đó
                             if (!container.dataset.infiniteScrollSetup) {
                                 setupInfiniteScroll(containerId, direction);
@@ -986,14 +1049,18 @@
             let tagsHTML = '';
             if (item.class) tagsHTML += `<span class="bg-slate-100 text-slate-600 text-[11px] font-bold px-2.5 py-1 rounded-lg">Lớp ${item.class}</span>`;
             if (item.subject) tagsHTML += `<span class="bg-slate-100 text-slate-600 text-[11px] font-bold px-2.5 py-1 rounded-lg">${item.subject}</span>`;
+            if (item.subSubject) tagsHTML += `<span class="bg-blue-50 text-blue-600 text-[11px] font-bold px-2.5 py-1 rounded-lg">${item.subSubject}</span>`;
 
             const fixedWidthClass = isFixedSize ? 'w-[280px] shrink-0' : '';
 
             return `
                 <div class="glass-card rounded-2xl p-4 flex flex-col h-full ${statusClass} ${fixedWidthClass}">
                     <div class="flex items-start justify-between mb-3">
-                        <div class="w-9 h-9 ${iconBg} rounded-lg flex items-center justify-center">
-                            <i data-lucide="${iconName}" class="w-4 h-4"></i>
+                        <div class="flex items-center gap-2">
+                            <div class="w-9 h-9 ${iconBg} rounded-lg flex items-center justify-center shrink-0">
+                                <i data-lucide="${iconName}" class="w-4 h-4"></i>
+                            </div>
+                            ${item.id ? `<span class="text-[10px] font-mono font-black text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md tracking-wider select-all">#${item.id}</span>` : ''}
                         </div>
                         <div class="flex flex-col items-end gap-1">
                             <span class="text-[8px] font-black uppercase tracking-widest text-slate-400">${item.tag || (isLesson ? 'Bài giảng' : 'Đề kiểm tra')}</span>
@@ -1066,6 +1133,228 @@
             document.addEventListener('click', () => {
                 document.querySelectorAll('.custom-dropdown-container').forEach(c => c.classList.remove('open'));
             });
+
+            // Toolbar Code Input Logic
+            const toolbarInput = document.getElementById('toolbarCodeInput');
+            if (toolbarInput) {
+                toolbarInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const code = toolbarInput.value.trim().toLowerCase();
+                        if (!code) return;
+
+                        const quizInfo = quizList.find(q => q.id && q.id.toLowerCase() === code);
+                        if (quizInfo) {
+                            window.location.href = `/eduspace/exam?${code}`;
+                        } else {
+                            toolbarInput.classList.add('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
+                            alert(`Mã đề thi "${code.toUpperCase()}" không tồn tại trong hệ thống.`);
+                        }
+                    }
+                });
+
+                toolbarInput.addEventListener('input', () => {
+                    toolbarInput.classList.remove('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
+                    const code = toolbarInput.value.trim().toLowerCase();
+                    if (code.length === 4) {
+                        const quizInfo = quizList.find(q => q.id && q.id.toLowerCase() === code);
+                        if (quizInfo) {
+                            window.location.href = `/eduspace/exam?${code}`;
+                        }
+                    }
+                });
+            }
+
+            // Modal Code Input Live Preview Logic
+            const modalInput = document.getElementById('modalCodeInput');
+            const modalPreview = document.getElementById('modal-preview-card');
+            const modalPreviewTitle = document.getElementById('modal-preview-title');
+            const modalPreviewMetadata = document.getElementById('modal-preview-metadata');
+            const modalPreviewDesc = document.getElementById('modal-preview-desc');
+            const modalError = document.getElementById('modalCodeError');
+
+            let currentPreviewCode = '';
+            if (modalInput) {
+                modalInput.addEventListener('input', () => {
+                    modalInput.classList.remove('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
+                    if (modalError) modalError.classList.add('hidden');
+
+                    const code = modalInput.value.trim().toLowerCase();
+                    if (code.length >= 3) {
+                        const quizInfo = quizList.find(q => q.id && q.id.toLowerCase() === code);
+                        if (quizInfo) {
+                            if (currentPreviewCode === code) return;
+                            currentPreviewCode = code;
+
+                            if (modalPreviewTitle) modalPreviewTitle.innerText = quizInfo.title;
+                            if (modalPreviewDesc) modalPreviewDesc.innerText = 'Đang tải thông tin đề thi...';
+                            if (modalPreviewMetadata) modalPreviewMetadata.innerHTML = '';
+                            if (modalPreview) modalPreview.classList.remove('hidden');
+
+                            loadPreviewMetadata(quizInfo).then(meta => {
+                                if (currentPreviewCode !== code) return;
+                                if (modalPreviewDesc) modalPreviewDesc.innerText = quizInfo.description || 'Không có mô tả.';
+
+                                let metaHTML = '';
+                                const fields = [
+                                    { label: "Tác giả", value: meta.author, icon: "👤" },
+                                    { label: "Trường", value: meta.school, icon: "🏫" },
+                                    { label: "Lớp", value: meta.class, icon: "🎒" },
+                                    { label: "Sách", value: meta.book, icon: "📖" },
+                                    { label: "Bài", value: meta.lesson, icon: "📝" },
+                                    { label: "Năm học", value: meta.year, icon: "📅" }
+                                ];
+
+                                fields.forEach(f => {
+                                    if (f.value && String(f.value).trim() !== "") {
+                                        metaHTML += `
+                                            <div class="flex items-start gap-1.5 py-0.5">
+                                                <span class="text-slate-400 font-semibold shrink-0">${f.icon} ${f.label}:</span>
+                                                <span class="font-bold text-slate-700">${String(f.value).trim()}</span>
+                                            </div>
+                                        `;
+                                    }
+                                });
+                                if (modalPreviewMetadata) modalPreviewMetadata.innerHTML = metaHTML;
+                            });
+                            return;
+                        }
+                    }
+                    currentPreviewCode = '';
+                    if (modalPreview) {
+                        modalPreview.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        async function loadPreviewMetadata(quizInfo) {
+            if (!quizInfo.dataPath) {
+                return {
+                    author: "EduSpace by ND Labs",
+                    school: "",
+                    class: quizInfo.class || "",
+                    book: "Kết nối tri thức",
+                    lesson: quizInfo.title || "",
+                    year: "Năm học 2025 - 2026"
+                };
+            }
+            return new Promise((resolve) => {
+                const oldScript = document.getElementById('temp-preview-script');
+                if (oldScript) oldScript.remove();
+
+                delete window.quizData;
+
+                const script = document.createElement('script');
+                script.id = 'temp-preview-script';
+                script.src = quizInfo.dataPath;
+                script.onload = () => {
+                    if (window.quizData) {
+                        const data = window.quizData;
+                        const meta = {
+                            author: data.author || data.examInfo?.author || "EduSpace by ND Labs",
+                            school: data.school || data.examInfo?.school || "",
+                            class: data.class || data.grade || data.examInfo?.class || data.examInfo?.grade || quizInfo.class || "",
+                            book: data.book || data.examInfo?.book || "",
+                            lesson: data.lesson || data.examInfo?.lesson || data.title || quizInfo.title || "",
+                            year: data.year || data.examInfo?.year || data.examInfo?.date || "Năm học 2025 - 2026"
+                        };
+                        resolve(meta);
+                    } else {
+                        resolve({
+                            author: "EduSpace by ND Labs",
+                            school: "",
+                            class: quizInfo.class || "",
+                            book: "",
+                            lesson: quizInfo.title || "",
+                            year: "Năm học 2025 - 2026"
+                        });
+                    }
+                };
+                script.onerror = () => {
+                    resolve({
+                        author: "EduSpace by ND Labs",
+                        school: "",
+                        class: quizInfo.class || "",
+                        book: "",
+                        lesson: quizInfo.title || "",
+                        year: "Năm học 2025 - 2026"
+                    });
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        // Code Access Logic (Modal & Toolbar)
+        function openExamCodeModal() {
+            const modal = document.getElementById('codeModal');
+            const input = document.getElementById('modalCodeInput');
+            const errorMsg = document.getElementById('modalCodeError');
+            const modalPreview = document.getElementById('modal-preview-card');
+
+            if (modal) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; // Force reflow
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                const card = modal.querySelector('.transform');
+                if (card) {
+                    card.classList.remove('scale-95');
+                    card.classList.add('scale-100');
+                }
+            }
+
+            if (input) {
+                input.value = '';
+                input.classList.remove('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
+                setTimeout(() => input.focus(), 150);
+            }
+            if (errorMsg) {
+                errorMsg.classList.add('hidden');
+                errorMsg.innerText = '';
+            }
+            if (modalPreview) {
+                modalPreview.classList.add('hidden');
+            }
+        }
+
+        function closeExamCodeModal() {
+            const modal = document.getElementById('codeModal');
+            if (modal) {
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0');
+                const card = modal.querySelector('.transform');
+                if (card) {
+                    card.classList.remove('scale-100');
+                    card.classList.add('scale-95');
+                }
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function submitModalCode() {
+            const input = document.getElementById('modalCodeInput');
+            const errorMsg = document.getElementById('modalCodeError');
+            if (!input) return;
+
+            const code = input.value.trim().toLowerCase();
+            if (!code) {
+                errorMsg.innerText = "Vui lòng nhập mã đề thi.";
+                errorMsg.classList.remove('hidden');
+                input.classList.add('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
+                return;
+            }
+
+            const quizInfo = quizList.find(q => q.id && q.id.toLowerCase() === code);
+            if (!quizInfo) {
+                errorMsg.innerText = `Mã đề thi "${code.toUpperCase()}" không tồn tại.`;
+                errorMsg.classList.remove('hidden');
+                input.classList.add('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
+                return;
+            }
+
+            window.location.href = `/eduspace/exam?${code}`;
         }
 
         // Run

@@ -257,6 +257,20 @@
             top: calc(var(--navbar-height) + var(--ticker-height) + var(--top-bar-height) + 8px);
             z-index: 90;
         }
+        /* Metadata Hover Scroll Effect */
+        .meta-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            white-space: nowrap;
+        }
+        .meta-text {
+            display: inline-block;
+            transition: transform 2.5s ease-in-out;
+        }
+        .meta-container:hover .meta-text.overflowing {
+            transform: translateX(var(--scroll-amount, 0px));
+        }
     </style>
 </head>
 
@@ -287,6 +301,66 @@
                 Hệ thống đang chuẩn bị nội dung câu hỏi và cấu trúc đề thi. Vui lòng đợi trong giây lát để có trải nghiệm tốt nhất.
             </p>
 
+            <!-- Detailed Quiz Metadata Display (Additive) -->
+            <div id="quiz-metadata-section" class="w-full max-w-md mx-auto my-5 p-5 bg-white/60 backdrop-blur-md rounded-3xl border border-slate-200/50 hidden">
+                <div class="space-y-2 text-left text-xs text-slate-600">
+                    <div id="meta-item-author" class="flex items-center gap-3 py-1.5 border-b border-slate-100/70 last:border-0 hidden overflow-hidden">
+                        <span class="text-slate-400 shrink-0 flex items-center gap-1.5 font-semibold">👤 Tác giả:</span>
+                        <div class="meta-container" id="meta-container-author">
+                            <span class="font-extrabold text-slate-700 meta-text" id="meta-val-author"></span>
+                        </div>
+                    </div>
+                    <div id="meta-item-school" class="flex items-center gap-3 py-1.5 border-b border-slate-100/70 last:border-0 hidden overflow-hidden">
+                        <span class="text-slate-400 shrink-0 flex items-center gap-1.5 font-semibold">🏫 Trường:</span>
+                        <div class="meta-container" id="meta-container-school">
+                            <span class="font-extrabold text-slate-700 meta-text" id="meta-val-school"></span>
+                        </div>
+                    </div>
+                    <div id="meta-item-class" class="flex items-center gap-3 py-1.5 border-b border-slate-100/70 last:border-0 hidden overflow-hidden">
+                        <span class="text-slate-400 shrink-0 flex items-center gap-1.5 font-semibold">🎒 Lớp:</span>
+                        <div class="meta-container" id="meta-container-class">
+                            <span class="font-extrabold text-slate-700 meta-text" id="meta-val-class"></span>
+                        </div>
+                    </div>
+                    <div id="meta-item-book" class="flex items-center gap-3 py-1.5 border-b border-slate-100/70 last:border-0 hidden overflow-hidden">
+                        <span class="text-slate-400 shrink-0 flex items-center gap-1.5 font-semibold">📖 Sách:</span>
+                        <div class="meta-container" id="meta-container-book">
+                            <span class="font-extrabold text-slate-700 meta-text" id="meta-val-book"></span>
+                        </div>
+                    </div>
+                    <div id="meta-item-lesson" class="flex items-center gap-3 py-1.5 border-b border-slate-100/70 last:border-0 hidden overflow-hidden">
+                        <span class="text-slate-400 shrink-0 flex items-center gap-1.5 font-semibold">📝 Bài:</span>
+                        <div class="meta-container" id="meta-container-lesson">
+                            <span class="font-extrabold text-slate-700 meta-text" id="meta-val-lesson"></span>
+                        </div>
+                    </div>
+                    <div id="meta-item-year" class="flex items-center gap-3 py-1.5 border-b border-slate-100/70 last:border-0 hidden overflow-hidden">
+                        <span class="text-slate-400 shrink-0 flex items-center gap-1.5 font-semibold">📅 Năm:</span>
+                        <div class="meta-container" id="meta-container-year">
+                            <span class="font-extrabold text-slate-700 meta-text" id="meta-val-year"></span>
+                        </div>
+                    </div>
+                    <div id="meta-item-department" class="flex items-center gap-3 py-1.5 border-b border-slate-100/70 last:border-0 hidden overflow-hidden">
+                        <span class="text-slate-400 shrink-0 flex items-center gap-1.5 font-semibold">🏛️ Đơn vị:</span>
+                        <div class="meta-container" id="meta-container-department">
+                            <span class="font-extrabold text-slate-700 meta-text" id="meta-val-department"></span>
+                        </div>
+                    </div>
+                    <div id="meta-item-examName" class="flex items-center gap-3 py-1.5 border-b border-slate-100/70 last:border-0 hidden overflow-hidden">
+                        <span class="text-slate-400 shrink-0 flex items-center gap-1.5 font-semibold">📋 Kỳ thi:</span>
+                        <div class="meta-container" id="meta-container-examName">
+                            <span class="font-extrabold text-slate-700 meta-text" id="meta-val-examName"></span>
+                        </div>
+                    </div>
+                    <div id="meta-item-attempt" class="flex items-center gap-3 py-1.5 border-b border-slate-100/70 last:border-0 hidden overflow-hidden">
+                        <span class="text-slate-400 shrink-0 flex items-center gap-1.5 font-semibold">📄 Loại đề:</span>
+                        <div class="meta-container" id="meta-container-attempt">
+                            <span class="font-extrabold text-slate-700 meta-text" id="meta-val-attempt"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="flex flex-col md:flex-row items-center justify-center gap-3">
                 <button onclick="showTestModeSelector()"
                     class="w-full md:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl shadow-xl shadow-blue-500/20 transition-all hover:scale-105 active:scale-95 text-sm">
@@ -296,6 +370,19 @@
                     class="w-full md:w-auto px-6 py-3 bg-white border-2 border-slate-200 text-slate-600 font-bold rounded-2xl hover:bg-slate-50 transition-all text-sm">
                     Lịch sử làm bài
                 </button>
+            </div>
+
+            <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+                <a href="/eduspace/exam"
+                    class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 bg-slate-100/80 hover:bg-blue-50/80 border border-slate-200/40 px-4 py-2 rounded-xl transition-all hover:scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key-round"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                    Quay lại Nhập mã đề
+                </a>
+                <a href="/eduspace"
+                    class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 bg-slate-100/80 hover:bg-blue-50/80 border border-slate-200/40 px-4 py-2 rounded-xl transition-all hover:scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Về Trang chủ EduSpace
+                </a>
             </div>
             
             <div class="mt-6 flex items-center justify-center gap-6 text-slate-400">
@@ -430,6 +517,12 @@
             </div>
 
             <div class="flex items-center gap-3 flex-shrink-0">
+                <!-- Info Button (Additive) -->
+                <button id="quiz-info-btn" onclick="showQuizInfoModal()" title="Thông tin đề thi" class="p-2 hover:bg-slate-100 rounded-xl transition-all flex items-center justify-center border border-slate-200 bg-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
                 <div id="timer-box" class="bg-slate-900 text-white px-3 py-1.5 rounded-xl font-black font-mono text-base shadow-lg">
                     00:00
                 </div>
@@ -663,6 +756,62 @@
                     const pTitle = document.getElementById('page-title');
                     if (pTitle) pTitle.innerText = quizData.pageTitle || quizData.title || "EduSpace by ND Labs";
                     
+                    // Populate metadata display
+                    const metaFields = {
+                        author: quizData.author || quizData.examInfo?.author || "",
+                        school: quizData.school || quizData.examInfo?.school || "",
+                        department: quizData.examInfo?.department || "",
+                        examName: quizData.examInfo?.examName || "",
+                        attempt: quizData.examInfo?.attempt || "",
+                        class: quizData.class || quizData.grade || quizData.examInfo?.class || quizData.examInfo?.grade || "",
+                        book: quizData.book || quizData.examInfo?.book || "",
+                        lesson: quizData.lesson || quizData.examInfo?.lesson || "",
+                        year: quizData.year || quizData.examInfo?.year || quizData.examInfo?.date || ""
+                    };
+
+                    let hasAnyMeta = false;
+                    for (const [key, value] of Object.entries(metaFields)) {
+                        const itemEl = document.getElementById(`meta-item-${key}`);
+                        const valEl = document.getElementById(`meta-val-${key}`);
+                        if (itemEl && valEl) {
+                            if (value && String(value).trim() !== "") {
+                                valEl.innerText = String(value).trim();
+                                itemEl.classList.remove('hidden');
+                                hasAnyMeta = true;
+                            } else {
+                                itemEl.classList.add('hidden');
+                            }
+                        }
+                    }
+
+                    const metaSection = document.getElementById('quiz-metadata-section');
+                    if (metaSection) {
+                        if (hasAnyMeta) {
+                            metaSection.classList.remove('hidden');
+                        } else {
+                            metaSection.classList.add('hidden');
+                        }
+                    }
+
+                    // Setup marquees for overflowing metadata
+                    setTimeout(adjustMetadataMarquees, 300);
+
+                    // Assign points from pointsList before shuffling/copying
+                    const pointsList = quizData.config?.examLayout?.pointsList || quizData.config?.pointsList;
+                    if (pointsList && quizData.questions) {
+                        quizData.questions.forEach((q, idx) => {
+                            // Check positive index
+                            if (pointsList[idx] !== undefined) {
+                                q.points = pointsList[idx];
+                            }
+                            // Check negative index
+                            const negIdx = idx - quizData.questions.length;
+                            if (pointsList[negIdx] !== undefined) {
+                                q.points = pointsList[negIdx];
+                            }
+                        });
+                    }
+
                     quizData.activeQuestions = [...(quizData.questions || [])];
                     
                     const totalQStat = document.getElementById('total-questions-stat');
@@ -934,6 +1083,55 @@
 
         function showHelp() {
             showModal("Hướng dẫn", "Chọn chế độ làm bài (Luyện tập hoặc Thi thử). Trong quá trình làm bài, bạn có thể xem giải thích ở chế độ luyện tập.", 'help');
+        }
+
+        function showQuizInfoModal() {
+            if (typeof quizData === 'undefined') return;
+            const title = quizData.title || "Chưa đặt tên";
+            const author = quizData.author || quizData.examInfo?.author || "";
+            const school = quizData.school || quizData.examInfo?.school || "";
+            const department = quizData.examInfo?.department || "";
+            const examName = quizData.examInfo?.examName || "";
+            const attempt = quizData.examInfo?.attempt || "";
+            const grade = quizData.class || quizData.grade || quizData.examInfo?.class || quizData.examInfo?.grade || "";
+            const book = quizData.book || quizData.examInfo?.book || "";
+            const lesson = quizData.lesson || quizData.examInfo?.lesson || "";
+            const year = quizData.year || quizData.examInfo?.year || quizData.examInfo?.date || "";
+
+            let htmlContent = `
+                <div class="text-left space-y-3.5 mt-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 max-h-[60vh] overflow-y-auto">
+                    <div class="border-b border-slate-200 pb-2">
+                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-0.5">Tên đề thi</span>
+                        <div class="font-bold text-slate-800 text-sm leading-snug">${title}</div>
+                    </div>
+            `;
+
+            const fields = [
+                { label: "Tác giả", value: author, icon: "👤" },
+                { label: "Trường học", value: school, icon: "🏫" },
+                { label: "Đơn vị", value: department, icon: "🏛️" },
+                { label: "Kỳ thi", value: examName, icon: "📋" },
+                { label: "Loại đề", value: attempt, icon: "📄" },
+                { label: "Lớp", value: grade, icon: "🎒" },
+                { label: "Sách giáo khoa", value: book, icon: "📖" },
+                { label: "Bài học", value: lesson, icon: "📝" },
+                { label: "Năm học/Ngày", value: year, icon: "📅" }
+            ];
+
+            fields.forEach(f => {
+                if (f.value && String(f.value).trim() !== "") {
+                    htmlContent += `
+                        <div class="border-b border-slate-100 pb-2 last:border-0 last:pb-0">
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-0.5">${f.label}</span>
+                            <div class="font-semibold text-slate-700 text-xs">${f.icon} ${String(f.value).trim()}</div>
+                        </div>
+                    `;
+                }
+            });
+
+            htmlContent += `</div>`;
+
+            showModal("Thông tin chi tiết", htmlContent, "info");
         }
 
         function goBackToStart() {
@@ -1231,11 +1429,33 @@
             }
         }
 
+        function adjustMetadataMarquees() {
+            const keys = ['author', 'school', 'class', 'book', 'lesson', 'year'];
+            keys.forEach(key => {
+                const containerEl = document.getElementById(`meta-container-${key}`);
+                const valEl = document.getElementById(`meta-val-${key}`);
+                if (containerEl && valEl) {
+                    valEl.classList.remove('overflowing');
+                    valEl.style.transform = 'translateX(0)';
+                    
+                    const diff = containerEl.clientWidth - valEl.scrollWidth;
+                    if (diff < 0) {
+                        valEl.classList.add('overflowing');
+                        valEl.style.setProperty('--scroll-amount', (diff - 8) + 'px');
+                    } else {
+                        valEl.classList.remove('overflowing');
+                        valEl.style.removeProperty('--scroll-amount');
+                    }
+                }
+            });
+        }
+
         window.addEventListener('resize', () => {
             const mainQuiz = document.getElementById('main-quiz');
             if (mainQuiz && !mainQuiz.classList.contains('hidden') && window.quizData && quizData.title) {
                 setupTitleMarquee(quizData.title);
             }
+            adjustMetadataMarquees();
         });
 
         function startQuiz(mode, resumed = false) {
@@ -1342,14 +1562,14 @@
                 let points = 0;
 
                 if (q.type === 'multiple') {
-                    const maxPts = layout.multiple?.pointsPerQ || 0.25;
+                    const maxPts = q.points !== undefined ? q.points : (layout.multiple?.pointsPerQ || 0.25);
                     totalMultipleCount++;
                     if (ans === q.correct) {
                         points = maxPts;
                         correctMultipleCount++;
                     }
                 } else if (q.type === 'truefalse') {
-                    const maxPts = layout.truefalse?.pointsPerQ || 1.0;
+                    const maxPts = q.points !== undefined ? q.points : (layout.truefalse?.pointsPerQ || 1.0);
                     if (ans && typeof ans === 'object') {
                         let correctStatements = 0;
                         const cArr = q.correctAnswers || q.correct || [];
@@ -1362,7 +1582,7 @@
                         }
                     }
                 } else if (q.type === 'short') {
-                    const maxPts = layout.short?.pointsPerQ || 0.5;
+                    const maxPts = q.points !== undefined ? q.points : (layout.short?.pointsPerQ || 0.5);
                     if (ans !== null && ans !== undefined && ans !== '') {
                         let formattedAns = ans.toString().trim().replace(/,/g, '.');
                         let formattedCorrect = (q.correct || '').toString().trim().replace(/,/g, '.');
