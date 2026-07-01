@@ -383,6 +383,11 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     Về Trang chủ EduSpace
                 </a>
+                <button onclick="showQRCodeModal()"
+                    class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 bg-slate-100/80 hover:bg-blue-50/80 border border-slate-200/40 px-4 py-2 rounded-xl transition-all hover:scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-qr-code"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M12 12v.01"/><path d="M16 12h.01"/><path d="M21 12v.01"/><path d="M12 16v.01"/><path d="M17 16v.01"/><path d="M21 17v.01"/><path d="M17 21v.01"/></svg>
+                    Chia sẻ / Mã QR
+                </button>
             </div>
             
             <div class="mt-6 flex items-center justify-center gap-6 text-slate-400">
@@ -1132,6 +1137,47 @@
             htmlContent += `</div>`;
 
             showModal("Thông tin chi tiết", htmlContent, "info");
+        }
+
+        function showQRCodeModal() {
+            const currentUrl = window.location.href;
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`;
+            
+            const htmlContent = `
+                <div class="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100 mt-4">
+                    <p class="text-xs text-slate-500 text-center mb-4 leading-normal font-medium">Quét mã QR dưới đây bằng điện thoại hoặc máy tính bảng để truy cập nhanh bài thi này</p>
+                    <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200/60 mb-4 flex items-center justify-center">
+                        <img src="${qrApiUrl}" alt="QR Code" class="w-[200px] h-[200px] rounded-lg" onerror="this.onerror=null; this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}';"/>
+                    </div>
+                    <div class="w-full flex flex-col gap-2">
+                        <div class="bg-white px-3 py-2.5 rounded-xl border border-slate-200/80 text-[11px] font-mono text-slate-600 truncate text-center select-all">${currentUrl}</div>
+                        <button id="btn-copy-link" onclick="copyCurrentUrlToClipboard(this)" class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all text-xs flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/10 active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                            <span>Sao chép liên kết</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            showModal("Mã QR & Chia sẻ", htmlContent, "info");
+        }
+
+        function copyCurrentUrlToClipboard(btn) {
+            const currentUrl = window.location.href;
+            navigator.clipboard.writeText(currentUrl).then(() => {
+                const textSpan = btn.querySelector('span');
+                const originalText = textSpan.innerText;
+                textSpan.innerText = 'Đã sao chép!';
+                btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+                
+                setTimeout(() => {
+                    textSpan.innerText = originalText;
+                    btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+                    btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                }, 2000);
+            }).catch(err => {
+                console.error('Không thể sao chép: ', err);
+            });
         }
 
         function goBackToStart() {
