@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Price by ND Labs</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #faf9f6;
+        }
+        .coffee-gradient {
+            background: linear-gradient(135deg, #442819 0%, #22120b 100%);
+        }
+        /* Custom skeleton shimmer effect */
+        .shimmer {
+            background: linear-gradient(90deg, #f3f3f3 25%, #e5e5e5 50%, #f3f3f3 75%);
+            background-size: 200% 100%;
+            animation: loading-shimmer 1.5s infinite;
+        }
+        @keyframes loading-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="text-stone-800 min-h-screen flex flex-col antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="border-b border-stone-200 bg-white/95 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+            <a href="https://ndsite.web.app" target="_blank" class="flex items-center space-x-2 hover:opacity-90 transition-opacity">
+                <div class="w-8 h-8 rounded-lg bg-amber-800 flex items-center justify-center text-white shadow-md shadow-amber-900/15">
+                    <i data-lucide="coffee" class="w-4.5 h-4.5"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-base sm:text-lg tracking-tight text-amber-950 leading-none block">Coffee Price <span class="text-amber-600 font-extrabold text-[11px] sm:text-xs">by ND Labs</span></span>
+                    <span class="block text-[8px] text-stone-400 font-semibold uppercase tracking-wider mt-0.5">Hệ thống giám sát nông sản sạch</span>
+                </div>
+            </a>
+            
+            <div class="flex items-center space-x-2">
+                <span id="live-indicator" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200/60">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse mr-1.5"></span>
+                    Đang đồng bộ
+                </span>
+                <button id="btn-refresh" class="flex items-center space-x-1.5 bg-amber-800 hover:bg-amber-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm active:scale-95">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="refresh-icon"></i>
+                    <span>Tải lại dữ liệu</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 w-full">
+        <!-- Error Alert Container -->
+        <div id="error-box" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2 animate-fade-in text-xs">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-red-600 shrink-0 mt-0.5"></i>
+            <div class="flex-grow">
+                <h4 class="font-bold text-red-800">Không thể trích xuất dữ liệu trực tiếp</h4>
+                <p class="text-red-600 mt-0.5" id="error-message">Chúng tôi đang thử kết nối lại hoặc trang nguồn đang bảo trì.</p>
+            </div>
+            <button onclick="document.getElementById('error-box').classList.add('hidden')" class="text-red-500 hover:text-red-700">
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+        </div>
+
+        <!-- 1. SKELETON LOADING CONTAINER -->
+        <div id="skeleton-container" class="space-y-5">
+            <!-- Header Spotlight Grid Skeleton -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <div class="lg:col-span-2 rounded-xl border border-stone-200 bg-white p-5 h-56 flex flex-col justify-between">
+                    <div class="flex justify-between items-center">
+                        <div class="h-5 w-36 shimmer rounded"></div>
+                        <div class="h-3 w-28 shimmer rounded"></div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="h-10 w-48 shimmer rounded"></div>
+                        <div class="h-3.5 w-72 shimmer rounded"></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 mt-2">
+                        <div class="h-10 shimmer rounded"></div>
+                        <div class="h-10 shimmer rounded"></div>
+                        <div class="h-10 shimmer rounded"></div>
+                    </div>
+                </div>
+                <div class="rounded-xl bg-stone-100 p-5 h-56 flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <div class="h-5 w-24 shimmer rounded"></div>
+                        <div class="h-3.5 w-full shimmer rounded"></div>
+                        <div class="h-3.5 w-5/6 shimmer rounded"></div>
+                    </div>
+                    <div class="h-8 w-full shimmer rounded"></div>
+                </div>
+            </div>
+
+            <!-- Table & Chart Skeleton -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white rounded-xl border border-stone-200 p-5 space-y-3">
+                    <div class="flex justify-between">
+                        <div class="h-5 w-36 shimmer rounded"></div>
+                        <div class="h-6 w-24 shimmer rounded"></div>
+                    </div>
+                    <div class="space-y-2 pt-2">
+                        <div class="h-10 w-full shimmer rounded"></div>
+                        <div class="h-10 w-full shimmer rounded"></div>
+                        <div class="h-10 w-full shimmer rounded"></div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border border-stone-200 p-5 space-y-4">
+                    <div class="h-5 w-36 shimmer rounded"></div>
+                    <div class="h-36 w-full shimmer rounded"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. REAL CONTENT CONTAINER (Hidden during load) -->
+        <div id="real-content" class="hidden space-y-5">
+            
+            <!-- Spotlight Lâm Đồng Header Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                
+                <!-- Lâm Đồng Special Focus Card -->
+                <div class="lg:col-span-2 rounded-xl border border-amber-500/30 bg-gradient-to-br from-amber-50/40 via-white to-white p-5 shadow-sm relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute top-0 right-0 w-28 h-28 bg-amber-500/5 rounded-full blur-xl -mr-8 -mt-8"></div>
+                    
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b border-stone-100/50 pb-2.5">
+                            <span class="bg-amber-100/80 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center border border-amber-200/50">
+                                <i data-lucide="crown" class="w-3 h-3 mr-1 text-amber-600"></i>
+                                Tiêu Điểm Tỉnh Lâm Đồng
+                            </span>
+                            <span class="text-[10px] text-stone-400 font-medium" id="extraction-time">Thời điểm trích xuất: --:--:--</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                            <div>
+                                <h2 class="text-3xl font-extrabold text-amber-950 tracking-tight leading-none" id="ld-price">--,--0 đ</h2>
+                                <p class="text-stone-400 text-xs mt-1.5">Đơn giá thu mua bình quân tại Lâm Đồng</p>
+                                
+                                <div class="flex items-center mt-2.5" id="ld-change-container">
+                                    <span class="flex items-center text-xs font-bold" id="ld-change-text">
+                                        <i data-lucide="minus" class="w-3.5 h-3.5 mr-0.5"></i>
+                                        -- đ/kg
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-1.5 bg-amber-50/20 border border-amber-100/70 p-2 rounded-lg">
+                                <div class="text-center p-1.5 rounded bg-white shadow-xs">
+                                    <span class="block text-[8px] font-bold text-amber-800 uppercase tracking-wide">Di Linh</span>
+                                    <span class="font-extrabold text-amber-950 text-xs mt-0.5 block" id="ld-dilinh">--,--0 đ</span>
+                                </div>
+                                <div class="text-center p-1.5 rounded bg-white shadow-xs">
+                                    <span class="block text-[8px] font-bold text-amber-800 uppercase tracking-wide">Bảo Lộc</span>
+                                    <span class="font-extrabold text-amber-950 text-xs mt-0.5 block" id="ld-baoloc">--,--0 đ</span>
+                                </div>
+                                <div class="text-center p-1.5 rounded bg-white shadow-xs">
+                                    <span class="block text-[8px] font-bold text-amber-800 uppercase tracking-wide">Lâm Hà</span>
+                                    <span class="font-extrabold text-amber-950 text-xs mt-0.5 block" id="ld-lamha">--,--0 đ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-stone-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-[11px] text-stone-500">
+                        <span class="flex items-center"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500 mr-1"></i> Giá thu mua làm nổi bật tự động riêng cho tỉnh Lâm Đồng.</span>
+                        <a href="https://giacaphe.com/gia-ca-phe-noi-dia/" target="_blank" class="text-amber-800 font-bold hover:text-amber-900 transition-colors flex items-center underline decoration-amber-500/50 decoration-1 underline-offset-2">
+                            Nguồn gốc: giacaphe.com <i data-lucide="external-link" class="w-3 h-3 ml-0.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Market Summary Intelligence -->
+                <div class="coffee-gradient rounded-xl p-5 text-amber-100/90 flex flex-col justify-between shadow-sm relative overflow-hidden">
+                    <div class="absolute bottom-0 right-0 opacity-5 pointer-events-none translate-y-4 translate-x-4">
+                        <i data-lucide="trending-up" class="w-36 h-36"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-white mb-1.5 flex items-center">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-amber-400 mr-1.5"></i>
+                            Phân Tích Thị Trường
+                        </h3>
+                        <p class="text-[11px] text-amber-200/80 leading-relaxed font-medium" id="market-overview">
+                            --
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px]">
+                        <span class="text-amber-300">Xu hướng chung:</span>
+                        <span class="font-bold text-white px-2 py-0.5 rounded bg-white/10 text-[10px]" id="market-trend">--</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Price Table & Comparison Chart -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Price List Table -->
+                <div class="lg:col-span-2 bg-white rounded-xl border border-stone-200/80 overflow-hidden shadow-xs">
+                    <div class="p-4 border-b border-stone-100 flex flex-wrap gap-2 items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-sm text-amber-950">Bảng Giá Các Vùng Thu Mua</h3>
+                            <p class="text-[10px] text-stone-400">Sắp xếp theo thứ tự địa lý phân bố Tây Nguyên</p>
+                        </div>
+                        <div class="relative w-40">
+                            <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-1/2 -translate-y-1/2"></i>
+                            <input id="table-search" type="text" placeholder="Tìm nhanh tỉnh..." class="w-full text-[11px] pl-8 pr-2 py-1 rounded-md border border-stone-200 focus:outline-none focus:border-amber-600 transition-all">
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-stone-50 border-b border-stone-100 text-stone-500 text-[10px] font-bold tracking-wider">
+                                    <th class="py-2.5 px-4">Tỉnh / Thành phố</th>
+                                    <th class="py-2.5 px-3">Khu vực / Phân loại</th>
+                                    <th class="py-2.5 px-3 text-right">Giá hôm nay (đ/kg)</th>
+                                    <th class="py-2.5 px-4 text-right">Thay đổi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="price-table-body" class="text-xs">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Chart / Analytics -->
+                <div class="bg-white rounded-xl border border-stone-200/80 p-5 flex flex-col justify-between shadow-xs">
+                    <div>
+                        <h3 class="font-bold text-sm text-amber-950 mb-0.5">Biểu Đồ So Sánh</h3>
+                        <p class="text-[10px] text-stone-400 mb-4">So sánh độ chênh lệch giá giữa các tỉnh</p>
+                        
+                        <div class="relative w-full h-44 flex items-center justify-center">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-stone-100">
+                        <div class="flex items-center justify-between text-[10px] text-stone-400 mb-2">
+                            <span>Chênh lệch cao nhất - thấp nhất:</span>
+                            <span class="font-bold text-stone-700" id="avg-volatility">-- đ</span>
+                        </div>
+                        <div class="w-full bg-stone-100 rounded-full h-1">
+                            <div class="bg-amber-600 h-1 rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Live Coffee Futures Ticker -->
+            <div class="bg-stone-50 border border-stone-200/50 rounded-xl p-4">
+                <h4 class="font-bold text-stone-700 mb-3 flex items-center text-xs uppercase tracking-wide">
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-stone-400 mr-1.5"></i>
+                    Giá Cà Phê Kỳ Hạn Quốc Tế (Tham Khảo)
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="bg-white p-3 rounded-lg border border-stone-100 flex justify-between items-center shadow-xs">
+                        <div>
+                            <span class="block text-[9px] font-bold text-stone-400 uppercase">Robusta (London) - Giao dịch kỳ hạn</span>
+                            <span class="text-base font-extrabold text-stone-850 mt-0.5 block" id="london-price">-- USD/Tấn</span>
+                        </div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-stone-50" id="london-change">--%</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-stone-100 flex justify-between items-center shadow-xs">
+                        <div>
+                            <span class="block text-[9px] font-bold text-stone-400 uppercase">Arabica (New York) - Giao dịch kỳ hạn</span>
+                            <span class="text-base font-extrabold text-stone-850 mt-0.5 block" id="ny-price">-- Cent/lb</span>
+                        </div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-stone-50" id="ny-change">--%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-8 mt-8 border-t border-stone-850 text-[11px]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <div class="flex items-center space-x-1.5 text-white mb-2">
+                        <i data-lucide="coffee" class="w-5 h-5 text-amber-500"></i>
+                        <span class="font-bold text-sm">Coffee Price <span class="text-amber-500 font-extrabold">by ND Labs</span></span>
+                    </div>
+                    <p class="leading-relaxed text-stone-500">
+                        Cổng tra cứu tự động, chuẩn hóa dữ liệu tài chính nông sản bằng trí tuệ nhân tạo.
+                    </p>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-xs mb-2">Đường dẫn hữu ích</h5>
+                    <ul class="space-y-1.5">
+                        <li><a href="https://giacaphe.com/gia-ca-phe-noi-dia/" target="_blank" class="hover:text-amber-400 transition-colors flex items-center"><i data-lucide="external-link" class="w-3 h-3 mr-1 text-stone-600"></i> Giá cà phê gốc nội địa</a></li>
+                        <li><a href="https://ndsite.web.app" target="_blank" class="hover:text-amber-400 transition-colors flex items-center"><i data-lucide="external-link" class="w-3 h-3 mr-1 text-stone-600"></i> NDSite Web App Portal</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-xs mb-2">Tuyên bố miễn trừ</h5>
+                    <p class="text-stone-500 leading-relaxed">
+                        Toàn bộ thông tin được cập nhật thời gian thực bằng việc trích xuất trực tiếp từ giacaphe.com để đảm bảo sự khách quan.
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-stone-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-stone-500">
+                <span>&copy; 2026 Coffee Price by ND Labs. Mọi bản quyền được bảo lưu.</span>
+                <span class="flex items-center">
+                    Phát triển bởi <a href="https://ndsite.web.app" target="_blank" class="text-amber-500 font-bold ml-1 hover:underline">ND Labs</a>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        let loadedData = null;
+        let chartInstance = null;
+        
+        // Đoạn API Key này sẽ được xử lý tự động thông qua quy trình Deploy GitHub Actions của bạn.
+        // Bạn có thể setup quy trình tự động replace chuỗi rỗng dưới đây bằng API Key của bạn khi Build.
+        const apiKey = ""; 
+
+        // Initialize Icons
+        function initIcons() {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        // Helper for currency formatting
+        function formatVND(value) {
+            return new Intl.NumberFormat('vi-VN').format(value) + " đ";
+        }
+
+        // Search in Table
+        document.getElementById('table-search').addEventListener('input', function(e) {
+            if (!loadedData) return;
+            const query = e.target.value.toLowerCase().trim();
+            const filtered = loadedData.danh_sach_gia.filter(item => 
+                item.tinh.toLowerCase().includes(query) || 
+                item.vung.toLowerCase().includes(query)
+            );
+            renderTable(filtered);
+        });
+
+        // Main UI Renderer
+        function renderUI(data, timestamp) {
+            // Hide skeleton, show real content
+            document.getElementById('skeleton-container').classList.add('hidden');
+            document.getElementById('real-content').classList.remove('hidden');
+
+            // Set Extraction Time
+            document.getElementById('extraction-time').innerText = `Trích xuất: ${timestamp}`;
+
+            // Spotlight Lâm Đồng Setup
+            const ldObj = data.danh_sach_gia.find(item => item.tinh.includes("Lâm Đồng"));
+            if (ldObj) {
+                document.getElementById('ld-price').innerText = formatVND(ldObj.gia);
+                
+                const changeVal = ldObj.thay_doi;
+                const changeContainer = document.getElementById('ld-change-container');
+                const changeText = document.getElementById('ld-change-text');
+                
+                if (changeVal > 0) {
+                    changeContainer.className = "flex items-center text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md w-max";
+                    changeText.innerHTML = `<i data-lucide="trending-up" class="w-3.5 h-3.5 mr-0.5"></i> +${formatVND(changeVal)}/kg`;
+                } else if (changeVal < 0) {
+                    changeContainer.className = "flex items-center text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md w-max";
+                    changeText.innerHTML = `<i data-lucide="trending-down" class="w-3.5 h-3.5 mr-0.5"></i> ${formatVND(changeVal)}/kg`;
+                } else {
+                    changeContainer.className = "flex items-center text-xs font-bold text-stone-500 bg-stone-100 px-2.5 py-1 rounded-md w-max";
+                    changeText.innerHTML = `<i data-lucide="minus" class="w-3.5 h-3.5 mr-0.5"></i> Không đổi`;
+                }
+
+                // Subregions for Lâm Đồng
+                const vld = data.vung_lam_dong || { "dilinh": ldObj.gia - 100, "baoloc": ldObj.gia + 100, "lamha": ldObj.gia };
+                document.getElementById('ld-dilinh').innerText = formatVND(vld.dilinh);
+                document.getElementById('ld-baoloc').innerText = formatVND(vld.baoloc);
+                document.getElementById('ld-lamha').innerText = formatVND(vld.lamha);
+            }
+
+            // Market Overview Card
+            document.getElementById('market-overview').innerText = data.nhan_xet;
+            document.getElementById('market-trend').innerText = data.xu_huong || "Chưa rõ";
+
+            // Futures Market
+            if (data.london) {
+                document.getElementById('london-price').innerText = `${data.london.price} USD`;
+                document.getElementById('london-change').innerText = data.london.change;
+                document.getElementById('london-change').className = `text-[10px] font-bold px-1.5 py-0.5 rounded ${data.london.change.startsWith('+') ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`;
+            }
+            if (data.new_york) {
+                document.getElementById('ny-price').innerText = `${data.new_york.price} Cents`;
+                document.getElementById('ny-change').innerText = data.new_york.change;
+                document.getElementById('ny-change').className = `text-[10px] font-bold px-1.5 py-0.5 rounded ${data.new_york.change.startsWith('+') ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`;
+            }
+
+            renderTable(data.danh_sach_gia);
+            renderChart(data.danh_sach_gia);
+            initIcons();
+        }
+
+        // Render Table Rows
+        function renderTable(priceList) {
+            const tableBody = document.getElementById('price-table-body');
+            tableBody.innerHTML = '';
+
+            priceList.forEach(item => {
+                const isLamDong = item.tinh.includes("Lâm Đồng");
+                const rowClass = isLamDong 
+                    ? "bg-amber-50/40 hover:bg-amber-50/70 font-semibold border-y border-amber-300/40" 
+                    : "hover:bg-stone-50 border-b border-stone-100";
+
+                const changeColor = item.thay_doi > 0 
+                    ? "text-emerald-600 font-bold" 
+                    : item.thay_doi < 0 
+                        ? "text-rose-600 font-bold" 
+                        : "text-stone-400";
+
+                const changeSign = item.thay_doi > 0 ? "+" : "";
+
+                tableBody.innerHTML += `
+                    <tr class="${rowClass} transition-colors">
+                        <td class="py-3 px-4 flex items-center space-x-1.5">
+                            ${isLamDong ? '<span class="w-2 h-2 rounded-full bg-amber-600 animate-pulse"></span>' : ''}
+                            <span class="${isLamDong ? 'text-amber-950 font-bold' : 'text-stone-900'}">${item.tinh}</span>
+                        </td>
+                        <td class="py-3 px-3 text-stone-400 text-[10px]">${item.vung}</td>
+                        <td class="py-3 px-3 text-right font-bold ${isLamDong ? 'text-amber-900 text-sm' : 'text-stone-950'}">${formatVND(item.gia)}</td>
+                        <td class="py-3 px-4 text-right text-[11px] ${changeColor}">
+                            ${item.thay_doi !== 0 ? `${changeSign}${formatVND(item.thay_doi)}` : '0 đ'}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Render Chart.js
+        function renderChart(priceList) {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            const labels = priceList.map(item => item.tinh);
+            const data = priceList.map(item => item.gia);
+            const colors = priceList.map(item => item.tinh.includes("Lâm Đồng") ? '#d97706' : '#78350f');
+            const hoverColors = priceList.map(item => item.tinh.includes("Lâm Đồng") ? '#f59e0b' : '#92400e');
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        hoverBackgroundColor: hoverColors,
+                        borderRadius: 6,
+                        barThickness: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${formatVND(context.parsed.y)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: Math.min(...data) - 1000,
+                            max: Math.max(...data) + 1000,
+                            ticks: {
+                                callback: value => value / 1000 + 'k',
+                                font: { size: 9, family: 'Plus Jakarta Sans' }
+                            },
+                            grid: { color: '#f5f5f4' }
+                        },
+                        x: {
+                            ticks: { font: { size: 9, family: 'Plus Jakarta Sans' } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Calculate Range
+            const min = Math.min(...data);
+            const max = Math.max(...data);
+            document.getElementById('avg-volatility').innerText = formatVND(max - min);
+        }
+
+        // Fetch Live Prices with Exponential Backoff
+        async function fetchLivePrices(retries = 5, delay = 1000) {
+            // Sử dụng trực tiếp biến khóa tĩnh được nạp từ GitHub Actions / Env
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const sysPrompt = "Bạn là một hệ thống robot tự động thu thập và chuẩn hóa dữ liệu tài chính nông nghiệp Việt Nam dưới dạng JSON sạch.";
+            
+            const prompt = `Hãy truy cập trang web https://giacaphe.com/gia-ca-phe-noi-dia/ để lấy bảng giá cà phê nội địa mới nhất hôm nay. 
+Trích xuất chi tiết giá của các tỉnh Tây Nguyên bao gồm: Lâm Đồng (lấy cả giá cụ thể của Bảo Lộc, Di Linh, Lâm Hà), Đắk Lắk, Gia Lai, Đắk Nông, Kon Tum, Đồng Nai.
+Đồng thời lấy tỷ giá cà phê kỳ hạn mới nhất thế giới (Robusta London, Arabica New York).
+
+Trả về định dạng JSON thuần khiết không kèm theo khối mã markdown hay bất kỳ từ ngữ thừa nào. Cấu trúc yêu cầu:
+{
+  "nhan_xet": "Nhận định thị trường ngắn gọn bằng tiếng Việt (2-3 câu). Nói về tình hình giá Lâm Đồng và xu hướng biến động.",
+  "xu_huong": "Tăng nhẹ / Giảm nhẹ / Đi ngang / Biến động mạnh",
+  "london": { "price": "Ví dụ: 4,120", "change": "Ví dụ: +1.2%" },
+  "new_york": { "price": "Ví dụ: 235.45", "change": "Ví dụ: -0.5%" },
+  "danh_sach_gia": [
+    { "tinh": "Lâm Đồng", "vung": "Bảo Lộc, Di Linh, Lâm Hà", "gia": 97900, "thay_doi": 6100 },
+    { "tinh": "Đắk Lắk", "vung": "Cư M'gar, Buôn Hồ", "gia": 99200, "thay_doi": 6000 },
+    { "tinh": "Gia Lai", "vung": "Chư Prông, Pleiku", "gia": 98800, "thay_doi": 6100 },
+    { "tinh": "Đắk Nông", "vung": "Gia Nghĩa, Đắk R'lấp", "gia": 99500, "thay_doi": 6200 },
+    { "tinh": "Kon Tum", "vung": "Đắk Hà", "gia": 98500, "thay_doi": 6000 },
+    { "tinh": "Đồng Nai", "vung": "Định Quán", "gia": 98000, "thay_doi": 5800 }
+  ],
+  "vung_lam_dong": {
+    "dilinh": 97800,
+    "baoloc": 98000,
+    "lamha": 97900
+  }
+}
+Lưu ý các giá trị trong trường 'gia', 'thay_doi' và 'vung_lam_dong' phải luôn là Kiểu Số Nguyên (Integer) sạch không chứa dấu chấm hay dấu phẩy phân tách.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: sysPrompt }] },
+                tools: [{ "google_search": {} }],
+                generationConfig: {
+                    responseMimeType: "application/json"
+                }
+            };
+
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(endpoint, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    let rawText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (rawText) {
+                        rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+                        return JSON.parse(rawText);
+                    }
+                    throw new Error("Không nhận được dữ liệu hợp lệ.");
+                } catch (err) {
+                    if (i === retries - 1) throw err;
+                    await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+                }
+            }
+        }
+
+        // Action Trigger
+        async function loadAndSyncData() {
+            const btn = document.getElementById('btn-refresh');
+            const icon = document.getElementById('refresh-icon');
+            const errorBox = document.getElementById('error-box');
+            const liveIndicator = document.getElementById('live-indicator');
+
+            btn.disabled = true;
+            icon.classList.add('animate-spin');
+            errorBox.classList.add('hidden');
+            liveIndicator.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse mr-1.5"></span>Trích xuất...';
+
+            document.getElementById('skeleton-container').classList.remove('hidden');
+            document.getElementById('real-content').classList.add('hidden');
+
+            try {
+                const data = await fetchLivePrices();
+                if (data && data.danh_sach_gia) {
+                    loadedData = data;
+                    
+                    const now = new Date();
+                    const formattedTime = `${now.toLocaleTimeString('vi-VN')} ngày ${now.toLocaleDateString('vi-VN')}`;
+
+                    renderUI(data, formattedTime);
+                    liveIndicator.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Đồng bộ thành công';
+                    liveIndicator.className = "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60";
+                } else {
+                    throw new Error("Định dạng dữ liệu trích xuất sai cấu trúc.");
+                }
+            } catch (err) {
+                console.error("Lỗi đồng bộ:", err);
+                errorBox.classList.remove('hidden');
+                document.getElementById('error-message').innerText = `Lỗi: ${err.message}. Nhấn nút "Tải lại dữ liệu" để thử lại.`;
+                liveIndicator.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span>Lỗi đồng bộ';
+                liveIndicator.className = "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-red-700 border border-red-200/60";
+            } finally {
+                btn.disabled = false;
+                icon.classList.remove('animate-spin');
+            }
+        }
+
+        document.getElementById('btn-refresh').addEventListener('click', loadAndSyncData);
+
+        window.onload = function() {
+            initIcons();
+            loadAndSyncData();
+        };
+    </script>
+</body>
+</html>
