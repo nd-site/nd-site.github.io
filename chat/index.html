@@ -113,26 +113,30 @@
             }
         });
 
-        let app;
-        if (getApps().length > 0) {
-            app = getApp();
-        } else {
-            const keys = await window.getEduKeys();
-            const firebaseConfig = {
-                apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
-                authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
-                databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
-                projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
-                storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
-                messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
-                appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
-                measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
-            };
-            app = initializeApp(firebaseConfig);
-        }
+        let app = getApps().length > 0 ? getApp() : null;
+        let auth = app ? getAuth(app) : null;
+        let db = app ? getFirestore(app) : null;
 
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        async function ensureFirebase() {
+            if (auth && db) return { auth, db };
+            let attempts = 0;
+            while ((!window.firebaseAuth || !window.firebaseFirestore) && attempts < 50) {
+                await new Promise(r => setTimeout(r, 50));
+                attempts++;
+            }
+            if (window.firebaseAuth && window.firebaseFirestore) {
+                auth = window.firebaseAuth;
+                db = window.firebaseFirestore;
+                return { auth, db };
+            }
+            if (getApps().length > 0) {
+                app = getApp();
+                auth = getAuth(app);
+                db = getFirestore(app);
+                return { auth, db };
+            }
+            return null;
+        }
 
         let currentUser = null;
         let currentUserNdid = '';
@@ -341,63 +345,80 @@
         }
 
         // Check Auth & Render UI Immediately (Zero Freeze guarantee)
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = '/auth/login/';
-                return;
-            }
-            currentUser = user;
+        ensureFirebase().then(services => {
+            if (!services || !services.auth) return;
+            const targetAuth = services.auth;
+            const targetDb = services.db;
 
-            // 1. Immediately render basic user info from Auth
-            let fullname = user.displayName || 'ND Member';
-            let ndid = user.email ? user.email.split('@')[0] : user.uid;
-            let avatar = user.photoURL || '/assets/images/logo.png';
-            let codeId = '';
-
-            currentUserNdid = ndid;
-            myName.textContent = fullname;
-            myNdid.textContent = `@${ndid}`;
-            myAvatar.src = avatar;
-
-            // 2. Call loadConversationsList IMMEDIATELY!
-            loadConversationsList();
-
-            // 3. Asynchronously enrich profile & CodeID from Firestore in background
-            getDoc(doc(db, 'users', user.uid)).then(async (snap) => {
-                if (snap.exists()) {
-                    const data = snap.data();
-                    fullname = data.fullname || fullname;
-                    ndid = data.ndid || ndid;
-                    if (data.photoURL) avatar = data.photoURL;
-                    codeId = data.codeId || '';
-
-                    currentUserNdid = ndid;
-                    myName.textContent = fullname;
-                    myAvatar.src = avatar;
+            onAuthStateChanged(targetAuth, async (user) => {
+                if (!user) {
+                    window.location.href = '/auth/login/';
+                    return;
                 }
+                currentUser = user;
 
-                if (!codeId) {
-                    codeId = await ensureUserCodeId(db, user.uid, ndid, user.email);
-                }
+                // 1. Immediately render profile from localStorage cache or Auth
+                let fullname = user.displayName || 'ND Member';
+                let ndid = user.email ? user.email.split('@')[0] : user.uid;
+                let avatar = user.photoURL || '/assets/images/logo.png';
+                let codeId = '';
 
-                myNdid.innerHTML = `@${ndid} <div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId || '...'}</div>`;
-            }).catch(() => {});
+                try {
+                    const cached = localStorage.getItem('nd_user');
+                    if (cached) {
+                        const parsed = JSON.parse(cached);
+                        fullname = parsed.displayName || fullname;
+                        ndid = parsed.ndid || ndid;
+                        if (parsed.photoURL) avatar = parsed.photoURL;
+                        if (parsed.codeId) codeId = parsed.codeId;
+                    }
+                } catch (_) {}
 
-            // 4. Asynchronously resolve Admin contact
-            resolveAdminContact();
+                currentUserNdid = ndid;
+                myName.textContent = fullname;
+                myNdid.innerHTML = `@${ndid}${codeId ? `<div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId}</div>` : ''}`;
+                myAvatar.src = avatar;
 
-            // 5. Auto-cleanup any invalid legacy admin_nhatdang chats asynchronously
-            getDocs(query(collection(db, 'chats'), where('participants', 'array-contains', 'admin_nhatdang'))).then(invalidChatsSnap => {
-                invalidChatsSnap.forEach(async (docSnap) => {
-                    try {
-                        const msgsSnap = await getDocs(collection(db, 'chats', docSnap.id, 'messages'));
-                        msgsSnap.forEach(async (mDoc) => {
-                            await deleteDoc(doc(db, 'chats', docSnap.id, 'messages', mDoc.id));
-                        });
-                        await deleteDoc(doc(db, 'chats', docSnap.id));
-                    } catch (_) {}
-                });
-            }).catch(() => {});
+                // 2. Call loadConversationsList IMMEDIATELY!
+                loadConversationsList();
+
+                // 3. Asynchronously enrich profile & CodeID from Firestore in background
+                getDoc(doc(targetDb, 'users', user.uid)).then(async (snap) => {
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        fullname = data.fullname || fullname;
+                        ndid = data.ndid || ndid;
+                        if (data.photoURL) avatar = data.photoURL;
+                        codeId = data.codeId || codeId;
+
+                        currentUserNdid = ndid;
+                        myName.textContent = fullname;
+                        myAvatar.src = avatar;
+                    }
+
+                    if (!codeId) {
+                        codeId = await ensureUserCodeId(targetDb, user.uid, ndid, user.email);
+                    }
+
+                    myNdid.innerHTML = `@${ndid} <div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId || '...'}</div>`;
+                }).catch(() => {});
+
+                // 4. Asynchronously resolve Admin contact
+                resolveAdminContact();
+
+                // 5. Auto-cleanup any invalid legacy admin_nhatdang chats asynchronously
+                getDocs(query(collection(targetDb, 'chats'), where('participants', 'array-contains', 'admin_nhatdang'))).then(invalidChatsSnap => {
+                    invalidChatsSnap.forEach(async (docSnap) => {
+                        try {
+                            const msgsSnap = await getDocs(collection(targetDb, 'chats', docSnap.id, 'messages'));
+                            msgsSnap.forEach(async (mDoc) => {
+                                await deleteDoc(doc(targetDb, 'chats', docSnap.id, 'messages', mDoc.id));
+                            });
+                            await deleteDoc(doc(targetDb, 'chats', docSnap.id));
+                        } catch (_) {}
+                    });
+                }).catch(() => {});
+            });
         });
 
         // Smart Search (Name + NDID + Admin)
