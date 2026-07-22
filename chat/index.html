@@ -251,7 +251,7 @@
             myNdid.textContent = ndid;
             myAvatar.src = avatar;
 
-            // 🌟 RESOLVE REAL ADMIN UID FROM FIRESTORE `ndids/nhatdang`
+            // 🌟 RESOLVE REAL ADMIN UID FROM FIRESTORE
             try {
                 const ndidSnap = await getDoc(doc(db, 'ndids', 'nhatdang'));
                 if (ndidSnap.exists()) {
@@ -260,6 +260,16 @@
                     const uSnap = await getDoc(doc(db, 'users', targetUid));
                     if (uSnap.exists()) {
                         const d = uSnap.data();
+                        adminContact.name = d.fullname || d.displayName || 'Nhật Đăng (Admin)';
+                        if (d.photoURL) adminContact.avatar = d.photoURL;
+                    }
+                } else {
+                    // Fallback to scan users collection for ndid === 'nhatdang'
+                    const usersSnap = await getDocs(query(collection(db, 'users'), where('ndid', '==', 'nhatdang')));
+                    if (!usersSnap.empty) {
+                        const targetUid = usersSnap.docs[0].id;
+                        adminContact.uid = targetUid;
+                        const d = usersSnap.docs[0].data();
                         adminContact.name = d.fullname || d.displayName || 'Nhật Đăng (Admin)';
                         if (d.photoURL) adminContact.avatar = d.photoURL;
                     }
@@ -530,6 +540,12 @@
                             if (ndidSnap.exists()) {
                                 adminContact.uid = ndidSnap.data().uid;
                                 contact.uid = adminContact.uid;
+                            } else {
+                                const usersSnap = await getDocs(query(collection(db, 'users'), where('ndid', '==', 'nhatdang')));
+                                if (!usersSnap.empty) {
+                                    adminContact.uid = usersSnap.docs[0].id;
+                                    contact.uid = adminContact.uid;
+                                }
                             }
                         } catch (_) {}
                     }
