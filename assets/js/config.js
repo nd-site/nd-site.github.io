@@ -134,7 +134,17 @@ async function getEduKeys() {
         }
     }
 
-    // Default fallbacks for local/empty state
+    // Default fallbacks for local/empty state & online deployments
+    if (!_cachedKeys.firebase || !_cachedKeys.fbAppId) {
+        _cachedKeys.firebase = "AIzaSyC6h0Uqg34PiT0p9l_cQOT7p7pt6kVHCHk";
+        _cachedKeys.fbAuthDomain = "ndlabs-0.firebaseapp.com";
+        _cachedKeys.fbDatabaseURL = "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app";
+        _cachedKeys.fbProjectId = "ndlabs-0";
+        _cachedKeys.fbStorageBucket = "ndlabs-0.firebasestorage.app";
+        _cachedKeys.fbMessagingSenderId = "600040258053";
+        _cachedKeys.fbAppId = "1:600040258053:web:617a19f62aafeb35d13a6c";
+        _cachedKeys.fbMeasurementId = "G-20W5SZ0BKB";
+    }
     if (!_cachedKeys.gemini) _cachedKeys.gemini = null;
     
     return _cachedKeys;

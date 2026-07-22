@@ -34,7 +34,7 @@
 
   const NAV_LINKS = [
     { href: '/', label: 'Trang Chủ', icon: 'ph-house-simple' },
-    { href: '/chat/', label: 'Trò Chuyện', icon: 'ph-chat-circle-dots' },
+    { href: '/chat/', label: 'ChatND by ND Labs', icon: 'ph-chat-circle-dots' },
     { href: '/eduspace', label: 'EduSpace', icon: 'ph-graduation-cap' },
     { href: '/games', label: 'Game', icon: 'ph-game-controller' },
     { href: '/media', label: 'Media', icon: 'ph-film-strip' },
@@ -508,12 +508,13 @@
           </a>
         `;
       }
+      const cleanNdid = (u.ndid || 'ND Member').replace(/^@/, '');
       userSection.innerHTML = `
         ${adminLink}
         <a href="/auth/settings/" class="nd-nav-link" title="Cài đặt tài khoản" style="gap: 6px;">
           <img src="${u.photoURL || '/assets/images/logo.png'}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">
           <span class="nd-lbl" style="display:flex; align-items:center; gap:4px;">
-            ${u.ndid || 'ND Member'}
+            ${cleanNdid}
             ${roleBadgeHtml}
           </span>
         </a>
