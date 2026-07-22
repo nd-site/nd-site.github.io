@@ -25,7 +25,7 @@
 <body>
     <div id="chat-app" class="chat-app-wrapper">
         <!-- Sidebar -->
-        <aside class="chat-sidebar">
+        <aside id="chat-sidebar" class="chat-sidebar">
             <div class="sidebar-header">
                 <div class="user-profile-bar">
                     <div class="user-info-mini">
@@ -51,6 +51,9 @@
                 </div>
             </div>
         </aside>
+
+        <!-- Resizable Divider Bar -->
+        <div id="chat-resizer" class="chat-resizer" title="Kéo để điều chỉnh kích thước thanh điều hướng"></div>
 
         <!-- Main Chat Panel -->
         <main class="chat-main-panel">
@@ -137,9 +140,9 @@
         let openPickerMsgId = null;
         let aiHasGreeted = false;
 
-        // Admin Contact Info
+        // Pinned Admin Contact Object (Will be resolved to real Firestore UID)
         let adminContact = {
-            uid: 'admin_nhatdang',
+            uid: null, // Resolved from ndids/nhatdang
             ndid: '@nhatdang',
             name: 'Nhật Đăng (Admin)',
             avatar: '/assets/images/logo.png',
@@ -147,7 +150,7 @@
             isPinned: true
         };
 
-        // NDAI Bot Contact Info
+        // Pinned NDAI Bot Contact Object
         const aiBotContact = {
             uid: 'ndai_bot',
             ndid: 'ndai',
@@ -178,8 +181,49 @@
         const messageInput = document.getElementById('message-text-input');
         const mobileBackBtn = document.getElementById('mobile-back-btn');
         const appWrapper = document.getElementById('chat-app');
+        const sidebarEl = document.getElementById('chat-sidebar');
+        const resizerEl = document.getElementById('chat-resizer');
 
-        // Check Auth
+        // Restore Saved Sidebar Width
+        const savedSidebarW = localStorage.getItem('chat_sidebar_width');
+        if (savedSidebarW && sidebarEl && window.innerWidth > 768) {
+            sidebarEl.style.width = `${savedSidebarW}px`;
+        }
+
+        // Resizable Sidebar Handle Dragging Logic
+        let isResizing = false;
+        resizerEl.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            resizerEl.classList.add('resizing');
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing || !sidebarEl) return;
+            const containerRect = appWrapper.getBoundingClientRect();
+            let newWidth = e.clientX - containerRect.left;
+            
+            // Constrain width safely between 240px and 520px
+            const MIN_W = 240;
+            const MAX_W = 520;
+            if (newWidth < MIN_W) newWidth = MIN_W;
+            if (newWidth > MAX_W) newWidth = MAX_W;
+
+            sidebarEl.style.width = `${newWidth}px`;
+            localStorage.setItem('chat_sidebar_width', newWidth);
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                resizerEl.classList.remove('resizing');
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            }
+        });
+
+        // Check Auth & Resolve Real Admin UID
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 window.location.href = '/auth/login/';
@@ -187,7 +231,7 @@
             }
             currentUser = user;
 
-            // Load profile
+            // Load user profile
             let fullname = user.displayName || 'ND Member';
             let ndid = user.email ? user.email.split('@')[0] : user.uid;
             let avatar = user.photoURL || '/assets/images/logo.png';
@@ -207,7 +251,7 @@
             myNdid.textContent = ndid;
             myAvatar.src = avatar;
 
-            // Fetch Admin's actual UID from Firestore ndids collection
+            // 🌟 RESOLVE REAL ADMIN UID FROM FIRESTORE `ndids/nhatdang`
             try {
                 const ndidSnap = await getDoc(doc(db, 'ndids', 'nhatdang'));
                 if (ndidSnap.exists()) {
@@ -220,7 +264,9 @@
                         if (d.photoURL) adminContact.avatar = d.photoURL;
                     }
                 }
-            } catch (_) {}
+            } catch (err) {
+                console.warn("Error resolving Admin UID:", err);
+            }
 
             loadConversationsList();
         });
@@ -281,7 +327,7 @@
                                         ndid: u.ndid || uUid,
                                         fullname: u.fullname || u.displayName || 'ND Member',
                                         photoURL: u.photoURL || '/assets/images/logo.png',
-                                        isAdmin: u.role === 'admin' || u.ndid === 'nhatdang'
+                                        isAdmin: u.role === 'admin' || u.ndid === 'nhatdang' || uUid === adminContact.uid
                                     });
                                 }
                             }
@@ -357,10 +403,12 @@
 
                     let html = '';
 
-                    // 1. PINNED ITEM 1: Admin @nhatdang (Direct Chat to Admin)
-                    const isAdminSelected = activeChatId === `chat_${[currentUser.uid, adminContact.uid].sort().join('_')}`;
+                    // 1. PINNED ITEM 1: Admin @nhatdang (Uses real Admin UID)
+                    const adminChatId = adminContact.uid ? `chat_${[currentUser.uid, adminContact.uid].sort().join('_')}` : null;
+                    const isAdminSelected = activeChatId === adminChatId;
+
                     html += `
-                        <div class="conv-item pinned admin-pinned ${isAdminSelected ? 'active' : ''}" data-type="admin" data-uid="${adminContact.uid}" data-ndid="@nhatdang" data-name="${escapeHtml(adminContact.name)}" data-avatar="${adminContact.avatar}">
+                        <div class="conv-item pinned admin-pinned ${isAdminSelected ? 'active' : ''}" data-type="admin" data-uid="${adminContact.uid || 'admin_nhatdang'}" data-ndid="@nhatdang" data-name="${escapeHtml(adminContact.name)}" data-avatar="${adminContact.avatar}">
                             <div class="conv-avatar-rel">
                                 <img src="${adminContact.avatar}" alt="" onerror="this.src='/assets/images/logo.png'">
                             </div>
@@ -451,7 +499,7 @@
                                 ndid: item.dataset.ndid,
                                 name: item.dataset.name,
                                 avatar: item.dataset.avatar,
-                                isAdmin: item.dataset.type === 'admin',
+                                isAdmin: item.dataset.type === 'admin' || item.dataset.ndid === '@nhatdang',
                                 isBot: item.dataset.type === 'ai'
                             };
                             selectConversation(contact);
@@ -465,14 +513,30 @@
             }
         }
 
-        // Select Conversation
+        // Select Conversation (Guarantees Admin UID matching)
         async function selectConversation(contact) {
             activeContact = contact;
 
             if (contact.isBot) {
                 activeChatId = 'chat_ndai_bot';
             } else {
+                // Ensure Admin contact always uses real Admin UID
+                if (contact.isAdmin || contact.ndid === '@nhatdang' || contact.ndid === 'nhatdang') {
+                    if (adminContact.uid) {
+                        contact.uid = adminContact.uid;
+                    } else {
+                        try {
+                            const ndidSnap = await getDoc(doc(db, 'ndids', 'nhatdang'));
+                            if (ndidSnap.exists()) {
+                                adminContact.uid = ndidSnap.data().uid;
+                                contact.uid = adminContact.uid;
+                            }
+                        } catch (_) {}
+                    }
+                }
+
                 activeChatId = `chat_${[currentUser.uid, contact.uid].sort().join('_')}`;
+
                 try {
                     const uSnap = await getDoc(doc(db, 'users', contact.uid));
                     if (uSnap.exists()) {
@@ -496,7 +560,7 @@
             // Highlight selected in list
             document.querySelectorAll('.conv-item').forEach(el => {
                 const isMatch = (contact.isBot && el.dataset.type === 'ai') ||
-                                (contact.isAdmin && el.dataset.type === 'admin') ||
+                                ((contact.isAdmin || contact.ndid === '@nhatdang') && el.dataset.type === 'admin') ||
                                 (el.dataset.chatId === activeChatId);
                 el.classList.toggle('active', isMatch);
             });
@@ -802,7 +866,6 @@
                         aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Dạ, tôi đã nhận được câu hỏi của bạn!";
                     }
 
-                    // EduAI sentence bubble splitting
                     const sentences = splitIntoSentences(aiReply);
                     thinkingDiv.remove();
 
