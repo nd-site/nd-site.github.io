@@ -31,7 +31,7 @@
 
                 <div class="search-box-rel">
                     <i class="ph-bold ph-magnifying-glass"></i>
-                    <input type="text" id="search-ndid-input" class="search-input" placeholder="Tìm tên hoặc NDID..." autocomplete="off">
+                    <input type="text" id="search-ndid-input" class="search-input" placeholder="Tìm theo tên hoặc NDID..." autocomplete="off">
                     <div id="search-results-overlay" class="search-results-overlay"></div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                     <i class="ph-duotone ph-chat-circle-dots"></i>
                 </div>
                 <h3>Chào mừng đến với ChatND by ND Labs</h3>
-                <p>Tìm kiếm bạn bè theo <strong>NDID</strong> hoặc chọn một cuộc trò chuyện để bắt đầu nhắn tin ngay.</p>
+                <p>Tìm kiếm bạn bè theo <strong>Tên</strong> hoặc <strong>NDID</strong>, chọn Admin hoặc Chatbot AI bên trái để bắt đầu nhắn tin ngay.</p>
             </div>
 
             <!-- Active Chat Interface -->
@@ -89,7 +89,7 @@
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import {
-            getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp
+            getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, addDoc, query, where, orderBy, onSnapshot, serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         // Global Error suppressor for DevTools clean output
@@ -127,6 +127,25 @@
         let unsubscribeMessages = null;
         let unsubscribeConversations = null;
         let openPickerMsgId = null;
+
+        // Pinned Contacts Info
+        let adminContact = {
+            uid: 'admin_nhatdang',
+            ndid: '@nhatdang',
+            name: 'Nhật Đăng (Admin)',
+            avatar: '/assets/images/logo.png',
+            isAdmin: true,
+            isPinned: true
+        };
+
+        const aiBotContact = {
+            uid: 'ndai_bot',
+            ndid: 'ndai',
+            name: 'NDAI Assistant ✨',
+            avatar: '/assets/images/logo.png',
+            isBot: true,
+            isPinned: true
+        };
 
         // Emojis list
         const EMOJI_LIST = ['❤️', '👍', '😂', '😮', '😢', '👏'];
@@ -178,14 +197,30 @@
             myNdid.textContent = ndid;
             myAvatar.src = avatar;
 
+            // Fetch live Admin profile
+            try {
+                const ndidSnap = await getDoc(doc(db, 'ndids', 'nhatdang'));
+                if (ndidSnap.exists()) {
+                    const targetUid = ndidSnap.data().uid;
+                    adminContact.uid = targetUid;
+                    const uSnap = await getDoc(doc(db, 'users', targetUid));
+                    if (uSnap.exists()) {
+                        const d = uSnap.data();
+                        adminContact.name = d.fullname || d.displayName || 'Nhật Đăng (Admin)';
+                        if (d.photoURL) adminContact.avatar = d.photoURL;
+                    }
+                }
+            } catch (_) {}
+
             loadConversationsList();
         });
 
-        // Search NDID
+        // Smart Search (Name + NDID + Admin)
         let searchTimeout = null;
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
-            const val = e.target.value.trim().toLowerCase().replace(/^@/, '');
+            const rawVal = e.target.value.trim();
+            const val = rawVal.toLowerCase().replace(/^@/, '');
             if (!val) {
                 searchOverlay.style.display = 'none';
                 searchOverlay.innerHTML = '';
@@ -194,28 +229,68 @@
 
             searchTimeout = setTimeout(async () => {
                 try {
-                    const ndidSnap = await getDoc(doc(db, 'ndids', val));
                     let results = [];
 
-                    if (ndidSnap.exists()) {
-                        const targetUid = ndidSnap.data().uid;
-                        if (targetUid !== currentUser.uid) {
-                            const uSnap = await getDoc(doc(db, 'users', targetUid));
-                            if (uSnap.exists()) {
-                                results.push({ uid: targetUid, ...uSnap.data() });
-                            }
-                        }
+                    // 1. Search Admin @nhatdang match
+                    if ('nhatdang'.includes(val) || 'admin'.includes(val) || 'nhật đăng'.includes(val)) {
+                        results.push({
+                            uid: adminContact.uid,
+                            ndid: '@nhatdang',
+                            fullname: adminContact.name,
+                            photoURL: adminContact.avatar,
+                            isAdmin: true
+                        });
                     }
 
+                    // 2. Search NDAI Bot match
+                    if ('ndai'.includes(val) || 'bot'.includes(val) || 'ai'.includes(val) || 'trợ lý'.includes(val)) {
+                        results.push({
+                            uid: 'ndai_bot',
+                            ndid: 'ndai',
+                            fullname: 'NDAI Assistant ✨',
+                            photoURL: '/assets/images/logo.png',
+                            isBot: true
+                        });
+                    }
+
+                    // 3. Search Firestore users collection by name or ndid
+                    try {
+                        const usersSnap = await getDocs(collection(db, 'users'));
+                        usersSnap.forEach(docSnap => {
+                            const u = docSnap.data();
+                            const uUid = docSnap.id;
+                            if (uUid === currentUser.uid) return;
+
+                            const uName = (u.fullname || u.displayName || '').toLowerCase();
+                            const uNdid = (u.ndid || '').toLowerCase();
+
+                            if (uName.includes(val) || uNdid.includes(val)) {
+                                if (!results.some(r => r.uid === uUid)) {
+                                    results.push({
+                                        uid: uUid,
+                                        ndid: u.ndid || uUid,
+                                        fullname: u.fullname || u.displayName || 'ND Member',
+                                        photoURL: u.photoURL || '/assets/images/logo.png',
+                                        isAdmin: u.role === 'admin' || u.ndid === 'nhatdang'
+                                    });
+                                }
+                            }
+                        });
+                    } catch (_) {}
+
                     if (results.length === 0) {
-                        searchOverlay.innerHTML = `<div style="padding:14px;text-align:center;color:var(--text-soft);font-size:13px;">Không tìm thấy NDID "${val}"</div>`;
+                        searchOverlay.innerHTML = `<div style="padding:14px;text-align:center;color:var(--text-soft);font-size:13px;">Không tìm thấy "${escapeHtml(rawVal)}"</div>`;
                     } else {
                         searchOverlay.innerHTML = results.map(u => `
-                            <div class="search-result-item" data-uid="${u.uid}" data-ndid="${u.ndid || val}" data-name="${u.fullname || u.displayName || 'ND Member'}" data-avatar="${u.photoURL || '/assets/images/logo.png'}">
-                                <img src="${u.photoURL || '/assets/images/logo.png'}" alt="" onerror="this.src='/assets/images/logo.png'">
+                            <div class="search-result-item" data-uid="${u.uid}" data-ndid="${u.ndid}" data-name="${escapeHtml(u.fullname)}" data-avatar="${u.photoURL}" data-is-admin="${u.isAdmin ? 'true' : 'false'}" data-is-bot="${u.isBot ? 'true' : 'false'}">
+                                <img src="${u.photoURL}" alt="" onerror="this.src='/assets/images/logo.png'">
                                 <div>
-                                    <div style="font-weight:800;font-size:14px;color:var(--text-main);">${u.fullname || u.displayName || 'ND Member'}</div>
-                                    <div style="font-size:12px;color:var(--primary);font-weight:700;">${u.ndid || val}</div>
+                                    <div style="font-weight:800;font-size:14px;color:var(--text-main);display:flex;align-items:center;gap:6px;">
+                                        ${escapeHtml(u.fullname)}
+                                        ${u.isAdmin ? '<span class="pinned-tag admin-badge">🛡️ Admin</span>' : ''}
+                                        ${u.isBot ? '<span class="pinned-tag ai-badge">🤖 AI</span>' : ''}
+                                    </div>
+                                    <div style="font-size:12px;color:var(--primary);font-weight:700;">${u.ndid}</div>
                                 </div>
                             </div>
                         `).join('');
@@ -226,7 +301,9 @@
                                     uid: item.dataset.uid,
                                     ndid: item.dataset.ndid,
                                     name: item.dataset.name,
-                                    avatar: item.dataset.avatar
+                                    avatar: item.dataset.avatar,
+                                    isAdmin: item.dataset.isAdmin === 'true',
+                                    isBot: item.dataset.isBot === 'true'
                                 };
                                 searchOverlay.style.display = 'none';
                                 searchInput.value = '';
@@ -250,7 +327,7 @@
             }
         });
 
-        // Load Conversations List
+        // Load Conversations List (with Admin & NDAI Pinned at top)
         function loadConversationsList() {
             if (unsubscribeConversations) unsubscribeConversations();
 
@@ -261,27 +338,64 @@
                 );
 
                 unsubscribeConversations = onSnapshot(q, async (snapshot) => {
-                    let convs = [];
+                    let userConvs = [];
                     snapshot.forEach(docSnap => {
-                        convs.push({ id: docSnap.id, ...docSnap.data() });
+                        userConvs.push({ id: docSnap.id, ...docSnap.data() });
                     });
 
-                    convs.sort((a, b) => (b.updatedAt?.toMillis?.() || 0) - (a.updatedAt?.toMillis?.() || 0));
-
-                    if (convs.length === 0) {
-                        convsListEl.innerHTML = `<div style="padding:28px 16px;text-align:center;color:var(--text-soft);font-size:13px;line-height:1.5;">Bạn chưa có cuộc trò chuyện nào.<br>Hãy nhập NDID ở trên để bắt đầu!</div>`;
-                        return;
-                    }
+                    userConvs.sort((a, b) => (b.updatedAt?.toMillis?.() || 0) - (a.updatedAt?.toMillis?.() || 0));
 
                     let html = '';
-                    for (const conv of convs) {
+
+                    // 1. PINNED ITEM 1: Admin @nhatdang
+                    const isAdminSelected = activeChatId === `chat_${[currentUser.uid, adminContact.uid].sort().join('_')}`;
+                    html += `
+                        <div class="conv-item pinned admin-pinned ${isAdminSelected ? 'active' : ''}" data-type="admin" data-uid="${adminContact.uid}" data-ndid="@nhatdang" data-name="${escapeHtml(adminContact.name)}" data-avatar="${adminContact.avatar}">
+                            <div class="conv-avatar-rel">
+                                <img src="${adminContact.avatar}" alt="" onerror="this.src='/assets/images/logo.png'">
+                            </div>
+                            <div class="conv-details">
+                                <div class="conv-top-row">
+                                    <span class="conv-name" style="display:flex;align-items:center;gap:4px;">
+                                        ${escapeHtml(adminContact.name)}
+                                        <span class="pinned-tag admin-badge">🛡️ Admin</span>
+                                    </span>
+                                    <span class="conv-time">📌 Ghim</span>
+                                </div>
+                                <div class="conv-last-msg">Nhắn tin trực tiếp với Admin ND Labs</div>
+                            </div>
+                        </div>
+                    `;
+
+                    // 2. PINNED ITEM 2: NDAI Assistant
+                    const isAiSelected = activeChatId === 'chat_ndai_bot';
+                    html += `
+                        <div class="conv-item pinned ai-pinned ${isAiSelected ? 'active' : ''}" data-type="ai" data-uid="ndai_bot" data-ndid="ndai" data-name="NDAI Assistant ✨" data-avatar="/assets/images/logo.png">
+                            <div class="conv-avatar-rel">
+                                <img src="/assets/images/logo.png" alt="" onerror="this.src='/assets/images/logo.png'">
+                            </div>
+                            <div class="conv-details">
+                                <div class="conv-top-row">
+                                    <span class="conv-name" style="display:flex;align-items:center;gap:4px;">
+                                        NDAI Assistant ✨
+                                        <span class="pinned-tag ai-badge">🤖 AI</span>
+                                    </span>
+                                    <span class="conv-time">📌 Ghim</span>
+                                </div>
+                                <div class="conv-last-msg">Trợ lý trí tuệ nhân tạo ND Labs</div>
+                            </div>
+                        </div>
+                    `;
+
+                    // 3. REGULAR USER CONVERSATIONS
+                    for (const conv of userConvs) {
                         const otherUid = conv.participants.find(id => id !== currentUser.uid) || currentUser.uid;
-                        
+                        if (otherUid === adminContact.uid) continue; // Skip since admin is already pinned
+
                         let otherName = 'ND Member';
                         let otherNdid = 'ndid';
                         let otherAvatar = '/assets/images/logo.png';
 
-                        // Always fetch live profile from Firestore users collection
                         try {
                             const uSnap = await getDoc(doc(db, 'users', otherUid));
                             if (uSnap.exists()) {
@@ -303,16 +417,16 @@
                         const timeStr = conv.updatedAt?.toDate ? formatShortTime(conv.updatedAt.toDate()) : '';
 
                         html += `
-                            <div class="conv-item ${isSelected ? 'active' : ''}" data-chat-id="${conv.id}" data-uid="${otherUid}" data-ndid="${otherNdid}" data-name="${otherName}" data-avatar="${otherAvatar}">
+                            <div class="conv-item ${isSelected ? 'active' : ''}" data-chat-id="${conv.id}" data-uid="${otherUid}" data-ndid="${otherNdid}" data-name="${escapeHtml(otherName)}" data-avatar="${otherAvatar}">
                                 <div class="conv-avatar-rel">
                                     <img src="${otherAvatar}" alt="" onerror="this.src='/assets/images/logo.png'">
                                 </div>
                                 <div class="conv-details">
                                     <div class="conv-top-row">
-                                        <span class="conv-name">${otherName}</span>
+                                        <span class="conv-name">${escapeHtml(otherName)}</span>
                                         <span class="conv-time">${timeStr}</span>
                                     </div>
-                                    <div class="conv-last-msg">${conv.lastMessage || 'Bắt đầu trò chuyện...'}</div>
+                                    <div class="conv-last-msg">${escapeHtml(conv.lastMessage || 'Bắt đầu trò chuyện...')}</div>
                                 </div>
                             </div>
                         `;
@@ -326,7 +440,9 @@
                                 uid: item.dataset.uid,
                                 ndid: item.dataset.ndid,
                                 name: item.dataset.name,
-                                avatar: item.dataset.avatar
+                                avatar: item.dataset.avatar,
+                                isAdmin: item.dataset.type === 'admin',
+                                isBot: item.dataset.type === 'ai'
                             };
                             selectConversation(contact);
                         });
@@ -339,21 +455,24 @@
             }
         }
 
-        // Select or Start Conversation
+        // Select Conversation
         async function selectConversation(contact) {
             activeContact = contact;
-            activeChatId = `chat_${[currentUser.uid, contact.uid].sort().join('_')}`;
 
-            // Fetch live profile from Firestore to guarantee fresh avatar
-            try {
-                const uSnap = await getDoc(doc(db, 'users', contact.uid));
-                if (uSnap.exists()) {
-                    const d = uSnap.data();
-                    if (d.photoURL) contact.avatar = d.photoURL;
-                    if (d.fullname || d.displayName) contact.name = d.fullname || d.displayName;
-                    if (d.ndid) contact.ndid = d.ndid;
-                }
-            } catch (_) {}
+            if (contact.isBot) {
+                activeChatId = 'chat_ndai_bot';
+            } else {
+                activeChatId = `chat_${[currentUser.uid, contact.uid].sort().join('_')}`;
+                try {
+                    const uSnap = await getDoc(doc(db, 'users', contact.uid));
+                    if (uSnap.exists()) {
+                        const d = uSnap.data();
+                        if (d.photoURL) contact.avatar = d.photoURL;
+                        if (d.fullname || d.displayName) contact.name = d.fullname || d.displayName;
+                        if (d.ndid) contact.ndid = d.ndid;
+                    }
+                } catch (_) {}
+            }
 
             // Update Header
             activeName.textContent = contact.name;
@@ -366,17 +485,20 @@
 
             // Highlight selected in list
             document.querySelectorAll('.conv-item').forEach(el => {
-                el.classList.toggle('active', el.dataset.chatId === activeChatId);
+                const isMatch = (contact.isBot && el.dataset.type === 'ai') ||
+                                (contact.isAdmin && el.dataset.type === 'admin') ||
+                                (el.dataset.chatId === activeChatId);
+                el.classList.toggle('active', isMatch);
             });
 
-            // Mark conversation read
-            try {
-                await setDoc(doc(db, 'chats', activeChatId), {
-                    [`lastReadTime_${currentUser.uid}`]: serverTimestamp()
-                }, { merge: true });
-            } catch (_) {}
+            if (!contact.isBot) {
+                try {
+                    await setDoc(doc(db, 'chats', activeChatId), {
+                        [`lastReadTime_${currentUser.uid}`]: serverTimestamp()
+                    }, { merge: true });
+                } catch (_) {}
+            }
 
-            // Subscribe to Messages
             subscribeMessages(activeChatId);
         }
 
@@ -385,6 +507,13 @@
             if (unsubscribeMessages) unsubscribeMessages();
             messagesContainer.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-soft);font-size:13px;">Đang tải tin nhắn...</div>`;
 
+            // NDAI BOT CHAT HANDLING
+            if (chatId === 'chat_ndai_bot') {
+                renderAiMessages();
+                return;
+            }
+
+            // STANDARD FIRESTORE CHAT MESSAGES
             try {
                 const q = query(
                     collection(db, 'chats', chatId, 'messages'),
@@ -397,7 +526,6 @@
                         return;
                     }
 
-                    // Get chat doc to inspect read timestamps
                     let contactLastRead = null;
                     try {
                         const chatSnap = await getDoc(doc(db, 'chats', chatId));
@@ -415,7 +543,6 @@
                         const msgTimeMillis = msg.createdAt?.toMillis ? msg.createdAt.toMillis() : Date.now();
                         const fullTimeStr = msg.createdAt?.toDate ? formatFullDateTime(msg.createdAt.toDate()) : '';
 
-                        // Status Tag (Đã gửi vs Đã xem)
                         let statusTag = '';
                         if (isSent) {
                             if (contactLastRead && contactLastRead >= msgTimeMillis) {
@@ -425,7 +552,6 @@
                             }
                         }
 
-                        // Reactions Badges
                         let reactionsHtml = '';
                         if (msg.reactions) {
                             const counts = {};
@@ -457,7 +583,6 @@
                     messagesContainer.innerHTML = html;
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-                    // Bind reaction handlers
                     messagesContainer.querySelectorAll('.msg-bubble').forEach(bubble => {
                         bubble.addEventListener('click', (e) => {
                             e.stopPropagation();
@@ -482,7 +607,30 @@
             }
         }
 
-        // Toggle Reaction Picker (Smart Top/Bottom Positioning)
+        // NDAI Bot Messages State
+        let aiHistory = [
+            { sender: 'bot', text: 'Xin chào! Tôi là Trợ lý AI của ND Labs ✨. Bạn cần tôi trợ giúp điều gì hôm nay?' }
+        ];
+
+        function renderAiMessages() {
+            let html = '';
+            aiHistory.forEach(msg => {
+                const isSent = msg.sender === 'user';
+                html += `
+                    <div class="msg-row ${isSent ? 'sent' : 'received'}">
+                        <div class="msg-bubble-wrapper">
+                            <div class="msg-bubble">${escapeHtml(msg.text).replace(/\n/g, '<br>')}</div>
+                        </div>
+                        <div class="msg-meta">${formatFullDateTime(new Date())}</div>
+                    </div>
+                `;
+            });
+
+            messagesContainer.innerHTML = html;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Toggle Reaction Picker
         function togglePicker(msgId) {
             if (openPickerMsgId && openPickerMsgId !== msgId) {
                 closePicker();
@@ -523,7 +671,7 @@
         // Add Reaction to Message
         async function addReaction(msgId, emoji) {
             closePicker();
-            if (!activeChatId || !currentUser) return;
+            if (!activeChatId || !currentUser || activeChatId === 'chat_ndai_bot') return;
 
             try {
                 const msgRef = doc(db, 'chats', activeChatId, 'messages', msgId);
@@ -547,7 +695,7 @@
             }
         }
 
-        // Send Message
+        // Send Message Handler (User & NDAI Bot AI Call)
         chatInputForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const text = messageInput.value.trim();
@@ -555,6 +703,46 @@
 
             messageInput.value = '';
 
+            // 1. NDAI BOT CHAT
+            if (activeChatId === 'chat_ndai_bot') {
+                aiHistory.push({ sender: 'user', text: text });
+                renderAiMessages();
+
+                // Show thinking placeholder
+                const thinkingDiv = document.createElement('div');
+                thinkingDiv.className = 'msg-row received';
+                thinkingDiv.innerHTML = `<div class="msg-bubble" style="font-style:italic;opacity:0.8;">🤖 NDAI đang suy nghĩ...</div>`;
+                messagesContainer.appendChild(thinkingDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                try {
+                    const apiKey = await window.getGeminiApiKey();
+                    const modelName = window.EDU_CONFIG?.stableModel || 'gemini-3.1-flash-lite';
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [
+                                {
+                                    role: 'user',
+                                    parts: [{ text: "Bạn là NDAI Assistant, trợ lý trí tuệ nhân tạo thông minh của ND Labs. Trả lời bằng tiếng Việt thân thiện, rõ ràng, ngắn gọn và hữu ích.\n\nCâu hỏi: " + text }]
+                                }
+                            ]
+                        })
+                    });
+
+                    const data = await res.json();
+                    const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Dạ, tôi đã nhận được thông tin của bạn!";
+                    aiHistory.push({ sender: 'bot', text: aiReply });
+                } catch (err) {
+                    aiHistory.push({ sender: 'bot', text: "Tôi đã nhận được tin nhắn của bạn!" });
+                }
+
+                renderAiMessages();
+                return;
+            }
+
+            // 2. REGULAR USER FIRESTORE CHAT
             try {
                 await addDoc(collection(db, 'chats', activeChatId, 'messages'), {
                     senderUid: currentUser.uid,

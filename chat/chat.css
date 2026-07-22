@@ -201,6 +201,36 @@ body {
     background: var(--primary-light);
 }
 
+.conv-item.pinned.admin-pinned {
+    border-left: 3px solid #ef4444;
+    background: #fff5f5;
+}
+
+.conv-item.pinned.ai-pinned {
+    border-left: 3px solid #16a34a;
+    background: #f0fdf4;
+}
+
+.pinned-tag {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.pinned-tag.admin-badge {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.pinned-tag.ai-badge {
+    background: #dcfce7;
+    color: #15803d;
+}
+
 .conv-avatar-rel {
     position: relative;
     flex-shrink: 0;
