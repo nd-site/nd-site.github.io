@@ -141,17 +141,20 @@
 
         let currentUser = null;
         let currentUserNdid = '';
+        let currentUserCodeId = '';
         let activeContact = null;
         let activeChatId = null;
         let unsubscribeMessages = null;
         let unsubscribeConversations = null;
         let openPickerMsgId = null;
         let aiHasGreeted = false;
+        const resolvedUsersCache = {};
 
         // Pinned Admin Contact Object (Will be resolved to real Firestore UID)
         let adminContact = {
             uid: null, // Resolved from ndids/nhatdang
-            ndid: '@nhatdang',
+            codeId: '00000000',
+            ndid: 'nhatdang',
             name: 'Nhật Đăng (Admin)',
             avatar: '/assets/images/logo.png',
             isAdmin: true,
@@ -378,12 +381,15 @@
                 } catch (_) {}
 
                 currentUserNdid = ndid;
+                currentUserCodeId = codeId;
                 myName.textContent = fullname;
                 myNdid.innerHTML = `${ndid}${codeId ? `<div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId}</div>` : ''}`;
                 myAvatar.src = avatar;
 
                 // 2. Call loadConversationsList IMMEDIATELY!
-                loadConversationsList();
+                if (currentUserCodeId) {
+                    loadConversationsList();
+                }
 
                 // 3. Asynchronously enrich profile & CodeID from Firestore in background
                 getDoc(doc(db, 'users', user.uid)).then(async (snap) => {
@@ -395,15 +401,20 @@
                         codeId = data.codeId || codeId;
 
                         currentUserNdid = ndid;
+                        currentUserCodeId = codeId;
                         myName.textContent = fullname;
                         myAvatar.src = avatar;
                     }
 
                     if (!codeId) {
                         codeId = await ensureUserCodeId(db, user.uid, ndid, user.email);
+                        currentUserCodeId = codeId;
                     }
 
                     myNdid.innerHTML = `${ndid} <div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId || '...'}</div>`;
+                    
+                    // Reload list with the accurate CodeID
+                    loadConversationsList();
                 }).catch(() => {});
 
                 // 4. Asynchronously resolve Admin contact
@@ -493,7 +504,7 @@
                         searchOverlay.innerHTML = `<div style="padding:14px;text-align:center;color:var(--text-soft);font-size:13px;">Không tìm thấy "${escapeHtml(rawVal)}"</div>`;
                     } else {
                         searchOverlay.innerHTML = results.map(u => `
-                            <div class="search-result-item" data-uid="${u.uid}" data-ndid="${u.ndid}" data-name="${escapeHtml(u.fullname)}" data-avatar="${u.photoURL}" data-is-admin="${u.isAdmin ? 'true' : 'false'}" data-is-bot="${u.isBot ? 'true' : 'false'}">
+                            <div class="search-result-item" data-uid="${u.uid}" data-codeid="${u.codeId || ''}" data-ndid="${u.ndid}" data-name="${escapeHtml(u.fullname)}" data-avatar="${u.photoURL}" data-is-admin="${u.isAdmin ? 'true' : 'false'}" data-is-bot="${u.isBot ? 'true' : 'false'}">
                                 <img src="${u.photoURL}" alt="" onerror="this.src='/assets/images/logo.png'">
                                 <div>
                                     <div style="font-weight:800;font-size:14px;color:var(--text-main);display:flex;align-items:center;gap:6px;">
@@ -512,10 +523,11 @@
                             item.addEventListener('click', () => {
                                 const contact = {
                                     uid: item.dataset.uid,
+                                    codeId: item.dataset.codeid || '',
                                     ndid: item.dataset.ndid,
                                     name: item.dataset.name,
                                     avatar: item.dataset.avatar,
-                                    isAdmin: item.dataset.isAdmin === 'true',
+                                    isAdmin: item.dataset.isAdmin === 'true' || item.dataset.codeid === '00000000',
                                     isBot: item.dataset.isBot === 'true'
                                 };
                                 searchOverlay.style.display = 'none';
@@ -543,11 +555,12 @@
         // Load Conversations List (Admin & NDAI Pinned at top)
         function loadConversationsList() {
             if (unsubscribeConversations) unsubscribeConversations();
+            if (!currentUserCodeId) return;
 
             try {
                 const q = query(
                     collection(db, 'chats'),
-                    where('participants', 'array-contains', currentUser.uid)
+                    where('participants', 'array-contains', currentUserCodeId)
                 );
 
                 unsubscribeConversations = onSnapshot(q, async (snapshot) => {
@@ -560,12 +573,12 @@
 
                     let html = '';
 
-                    // 1. PINNED ITEM 1: Admin @nhatdang (Uses real Admin UID)
-                    const adminChatId = adminContact.uid ? `chat_${[currentUser.uid, adminContact.uid].sort().join('_')}` : null;
+                    // 1. PINNED ITEM 1: Admin @nhatdang (Uses CodeID "00000000")
+                    const adminChatId = `chat_${[currentUserCodeId, '00000000'].sort().join('_')}`;
                     const isAdminSelected = activeChatId === adminChatId;
 
                     html += `
-                        <div class="conv-item pinned admin-pinned ${isAdminSelected ? 'active' : ''}" data-type="admin" data-uid="${adminContact.uid || 'admin_nhatdang'}" data-ndid="@nhatdang" data-name="${escapeHtml(adminContact.name)}" data-avatar="${adminContact.avatar}">
+                        <div class="conv-item pinned admin-pinned ${isAdminSelected ? 'active' : ''}" data-type="admin" data-codeid="00000000" data-ndid="nhatdang" data-name="${escapeHtml(adminContact.name)}" data-avatar="${adminContact.avatar}">
                             <div class="conv-avatar-rel">
                                 <img src="${adminContact.avatar}" alt="" onerror="this.src='/assets/images/logo.png'">
                             </div>
@@ -585,7 +598,7 @@
                     // 2. PINNED ITEM 2: NDAI Assistant (AI Engine)
                     const isAiSelected = activeChatId === 'chat_ndai_bot';
                     html += `
-                        <div class="conv-item pinned ai-pinned ${isAiSelected ? 'active' : ''}" data-type="ai" data-uid="ndai_bot" data-ndid="ndai" data-name="NDAI Assistant ✨" data-avatar="/assets/images/logo.png">
+                        <div class="conv-item pinned ai-pinned ${isAiSelected ? 'active' : ''}" data-type="ai" data-codeid="99999999" data-ndid="ndai" data-name="NDAI Assistant ✨" data-avatar="/assets/images/logo.png">
                             <div class="conv-avatar-rel">
                                 <img src="/assets/images/logo.png" alt="" onerror="this.src='/assets/images/logo.png'">
                             </div>
@@ -604,15 +617,15 @@
 
                     // 3. REGULAR USER CONVERSATIONS
                     for (const conv of userConvs) {
-                        const otherUid = conv.participants.find(id => id !== currentUser.uid) || currentUser.uid;
-                        if (otherUid === 'admin_nhatdang' || otherUid === 'ndai_bot' || (adminContact.uid && otherUid === adminContact.uid)) continue; // Skip admin and bot
+                        const otherCodeId = conv.participants.find(id => id !== currentUserCodeId) || currentUserCodeId;
+                        if (otherCodeId === '00000000' || otherCodeId === '99999999') continue; // Skip admin and bot
 
                         let otherName = 'ND Member';
                         let otherNdid = 'ndid';
                         let otherAvatar = '/assets/images/logo.png';
 
-                        if (conv.participantDetails && conv.participantDetails[otherUid]) {
-                            const d = conv.participantDetails[otherUid];
+                        if (conv.participantDetails && conv.participantDetails[otherCodeId]) {
+                            const d = conv.participantDetails[otherCodeId];
                             otherName = d.name || otherName;
                             otherNdid = d.ndid || otherNdid;
                             otherAvatar = d.avatar || otherAvatar;
@@ -622,7 +635,7 @@
                         const timeStr = conv.updatedAt?.toDate ? formatShortTime(conv.updatedAt.toDate()) : '';
 
                         html += `
-                            <div class="conv-item ${isSelected ? 'active' : ''}" data-chat-id="${conv.id}" data-uid="${otherUid}" data-ndid="${otherNdid}" data-name="${escapeHtml(otherName)}" data-avatar="${otherAvatar}">
+                            <div class="conv-item ${isSelected ? 'active' : ''}" data-chat-id="${conv.id}" data-codeid="${otherCodeId}" data-ndid="${otherNdid}" data-name="${escapeHtml(otherName)}" data-avatar="${otherAvatar}">
                                 <div class="conv-avatar-rel">
                                     <img src="${otherAvatar}" alt="" onerror="this.src='/assets/images/logo.png'">
                                 </div>
@@ -642,11 +655,11 @@
                     convsListEl.querySelectorAll('.conv-item').forEach(item => {
                         item.addEventListener('click', () => {
                             const contact = {
-                                uid: item.dataset.uid,
+                                codeId: item.dataset.codeid,
                                 ndid: item.dataset.ndid,
                                 name: item.dataset.name,
                                 avatar: item.dataset.avatar,
-                                isAdmin: item.dataset.type === 'admin' || item.dataset.ndid === '@nhatdang',
+                                isAdmin: item.dataset.type === 'admin' || item.dataset.codeid === '00000000',
                                 isBot: item.dataset.type === 'ai'
                             };
                             selectConversation(contact);
@@ -660,37 +673,39 @@
             }
         }
 
-        // Select Conversation (Guarantees Admin UID matching)
+        // Select Conversation (CodeID-based room matching)
         async function selectConversation(contact) {
             activeContact = contact;
 
             if (contact.isBot) {
                 activeChatId = 'chat_ndai_bot';
             } else {
-                // Ensure Admin contact always uses real Admin UID (Nhật Đăng)
-                if (contact.isAdmin || contact.ndid === '@nhatdang' || contact.ndid === 'nhatdang' || contact.uid === 'admin_nhatdang') {
-                    if (!adminContact.uid || adminContact.uid === 'admin_nhatdang') {
-                        await resolveAdminContact();
-                    }
-                    if (adminContact.uid) {
-                        contact.uid = adminContact.uid;
-                        contact.name = adminContact.name;
-                        contact.avatar = adminContact.avatar;
-                    }
+                // Ensure Admin contact always uses CodeID "00000000"
+                if (contact.isAdmin || contact.ndid === 'nhatdang' || contact.codeId === '00000000') {
+                    contact.codeId = '00000000';
+                    contact.name = adminContact.name;
+                    contact.avatar = adminContact.avatar;
+                    contact.ndid = adminContact.ndid;
                 }
 
-                activeChatId = `chat_${[currentUser.uid, contact.uid].sort().join('_')}`;
+                activeChatId = `chat_${[currentUserCodeId, contact.codeId].sort().join('_')}`;
 
-                try {
-                    const uSnap = await getDoc(doc(db, 'users', contact.uid));
-                    if (uSnap.exists()) {
-                        const d = uSnap.data();
-                        if (d.photoURL) contact.avatar = d.photoURL;
-                        if (d.fullname || d.displayName) contact.name = d.fullname || d.displayName;
-                        if (d.ndid) contact.ndid = d.ndid;
-                        if (d.codeId) contact.codeId = d.codeId;
-                    }
-                } catch (_) {}
+                // Enrich details from Firestore non-blockingly
+                if (contact.codeId !== '00000000') {
+                    try {
+                        const codeSnap = await getDoc(doc(db, 'code_ids', contact.codeId));
+                        if (codeSnap.exists()) {
+                            const targetUid = codeSnap.data().uid;
+                            const uSnap = await getDoc(doc(db, 'users', targetUid));
+                            if (uSnap.exists()) {
+                                const d = uSnap.data();
+                                if (d.photoURL) contact.avatar = d.photoURL;
+                                if (d.fullname || d.displayName) contact.name = d.fullname || d.displayName;
+                                if (d.ndid) contact.ndid = d.ndid;
+                            }
+                        }
+                    } catch (_) {}
+                }
             }
 
             // Update Header
@@ -706,7 +721,7 @@
             // Highlight selected in list
             document.querySelectorAll('.conv-item').forEach(el => {
                 const isMatch = (contact.isBot && el.dataset.type === 'ai') ||
-                                ((contact.isAdmin || contact.ndid === '@nhatdang') && el.dataset.type === 'admin') ||
+                                ((contact.isAdmin || contact.codeId === '00000000') && el.dataset.type === 'admin') ||
                                 (el.dataset.chatId === activeChatId);
                 el.classList.toggle('active', isMatch);
             });
@@ -714,7 +729,7 @@
             if (!contact.isBot) {
                 try {
                     await setDoc(doc(db, 'chats', activeChatId), {
-                        [`lastReadTime_${currentUser.uid}`]: serverTimestamp()
+                        [`lastReadTime_${currentUserCodeId}`]: serverTimestamp()
                     }, { merge: true });
                 } catch (_) {}
             }
@@ -750,7 +765,7 @@
                     try {
                         const chatSnap = await getDoc(doc(db, 'chats', chatId));
                         if (chatSnap.exists() && activeContact) {
-                            const readTs = chatSnap.data()[`lastReadTime_${activeContact.uid}`];
+                            const readTs = chatSnap.data()[`lastReadTime_${activeContact.codeId}`];
                             if (readTs?.toMillis) contactLastRead = readTs.toMillis();
                         }
                     } catch (_) {}
@@ -1033,33 +1048,34 @@
 
             // 2. REAL FIRESTORE CHAT (Direct User-to-User & Direct User-to-Admin)
             try {
-                // Double check Admin UID before saving message
-                if (activeContact.isAdmin || activeContact.ndid === '@nhatdang' || activeContact.ndid === 'nhatdang' || activeContact.uid === 'admin_nhatdang') {
-                    if (adminContact.uid && adminContact.uid !== 'admin_nhatdang') {
-                        activeContact.uid = adminContact.uid;
-                        activeChatId = `chat_${[currentUser.uid, adminContact.uid].sort().join('_')}`;
-                    }
+                // Ensure Admin contact always has CodeID "00000000"
+                if (activeContact.isAdmin || activeContact.ndid === 'nhatdang' || activeContact.codeId === '00000000') {
+                    activeContact.codeId = '00000000';
+                    activeContact.name = adminContact.name;
+                    activeContact.avatar = adminContact.avatar;
+                    activeContact.ndid = adminContact.ndid;
                 }
 
                 await addDoc(collection(db, 'chats', activeChatId, 'messages'), {
                     senderUid: currentUser.uid,
+                    senderCodeId: currentUserCodeId,
                     senderNdid: currentUserNdid,
                     text: text,
                     createdAt: serverTimestamp()
                 });
 
                 await setDoc(doc(db, 'chats', activeChatId), {
-                    participants: [currentUser.uid, activeContact.uid],
+                    participants: [currentUserCodeId, activeContact.codeId],
                     lastMessage: text,
                     updatedAt: serverTimestamp(),
-                    [`lastReadTime_${currentUser.uid}`]: serverTimestamp(),
+                    [`lastReadTime_${currentUserCodeId}`]: serverTimestamp(),
                     participantDetails: {
-                        [currentUser.uid]: {
+                        [currentUserCodeId]: {
                             name: myName.textContent,
                             ndid: currentUserNdid,
                             avatar: myAvatar.src
                         },
-                        [activeContact.uid]: {
+                        [activeContact.codeId]: {
                             name: activeContact.name,
                             ndid: activeContact.ndid,
                             avatar: activeContact.avatar
