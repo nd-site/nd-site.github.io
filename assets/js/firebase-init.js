@@ -59,7 +59,7 @@ async function initEduFirebase() {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // ─── Lấy role thật từ Firestore /users/{uid} ───────────────────────
-                let role = 'member', eduRole = '', ndid = '', fullname = '', grade = 'Khác', yob = null;
+                let role = 'member', eduRole = '', ndid = '', fullname = '', photoURL = '', grade = 'Khác', yob = null;
                 try {
                     const snap = await getDoc(doc(firestore, 'users', user.uid));
                     if (snap.exists()) {
@@ -88,6 +88,7 @@ async function initEduFirebase() {
 
                         ndid     = data.ndid     || '';
                         fullname = data.fullname || '';
+                        photoURL = data.photoURL || user.photoURL || '';
                         grade    = data.grade    || 'Khác';
                         yob      = data.yob      || null;
                     }
@@ -101,15 +102,17 @@ async function initEduFirebase() {
                             eduRole  = old.eduRole  || 'student';
                             ndid     = old.ndid     || '';
                             fullname = old.displayName || old.fullname || '';
+                            photoURL = old.photoURL || user.photoURL || '';
                             grade    = old.grade    || 'Khác';
                             yob      = old.yob      || null;
                         }
                     } catch (_) {}
                 }
 
-                // Fallback ndid/fullname từ Firebase Auth nếu Firestore trống
+                // Fallback ndid/fullname/photoURL từ Firebase Auth nếu Firestore trống
                 if (!ndid) ndid = user.displayName || user.email?.split('@')[0] || 'Khách';
                 if (!fullname) fullname = user.displayName || 'ND Member';
+                if (!photoURL) photoURL = user.photoURL || '/assets/images/logo.png';
 
                 // ─── Lưu session đầy đủ vào localStorage ───────────────────────────
                 const sessionData = {
@@ -117,7 +120,7 @@ async function initEduFirebase() {
                     ndid:        ndid,
                     displayName: fullname,
                     email:       user.email || '',
-                    photoURL:    user.photoURL || '/assets/images/logo.png',
+                    photoURL:    photoURL,
                     role:        role,
                     eduRole:     eduRole,
                     grade:       grade,
