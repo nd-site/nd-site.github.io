@@ -324,9 +324,19 @@
                         if (d.photoURL) adminContact.avatar = d.photoURL;
                     }
                 }
-            } catch (err) {
-                console.warn("Error resolving Admin UID:", err);
-            }
+            // Auto-cleanup any invalid legacy admin_nhatdang chats
+            try {
+                const invalidChatsSnap = await getDocs(query(collection(db, 'chats'), where('participants', 'array-contains', 'admin_nhatdang')));
+                invalidChatsSnap.forEach(async (docSnap) => {
+                    try {
+                        const msgsSnap = await getDocs(collection(db, 'chats', docSnap.id, 'messages'));
+                        msgsSnap.forEach(async (mDoc) => {
+                            await deleteDoc(doc(db, 'chats', docSnap.id, 'messages', mDoc.id));
+                        });
+                        await deleteDoc(doc(db, 'chats', docSnap.id));
+                    } catch (_) {}
+                });
+            } catch (_) {}
 
             loadConversationsList();
         });
@@ -508,7 +518,7 @@
                     // 3. REGULAR USER CONVERSATIONS
                     for (const conv of userConvs) {
                         const otherUid = conv.participants.find(id => id !== currentUser.uid) || currentUser.uid;
-                        if (otherUid === adminContact.uid) continue; // Skip admin since admin is pinned
+                        if (otherUid === 'admin_nhatdang' || otherUid === 'ndai_bot' || (adminContact.uid && otherUid === adminContact.uid)) continue; // Skip admin and bot
 
                         let otherName = 'ND Member';
                         let otherNdid = 'ndid';
@@ -581,23 +591,27 @@
                 activeChatId = 'chat_ndai_bot';
             } else {
                 // Ensure Admin contact always uses real Admin UID
-                if (contact.isAdmin || contact.ndid === '@nhatdang' || contact.ndid === 'nhatdang') {
-                    if (adminContact.uid) {
-                        contact.uid = adminContact.uid;
-                    } else {
+                if (contact.isAdmin || contact.ndid === '@nhatdang' || contact.ndid === 'nhatdang' || contact.uid === 'admin_nhatdang') {
+                    if (!adminContact.uid || adminContact.uid === 'admin_nhatdang') {
                         try {
                             const ndidSnap = await getDoc(doc(db, 'ndids', 'nhatdang'));
                             if (ndidSnap.exists()) {
                                 adminContact.uid = ndidSnap.data().uid;
-                                contact.uid = adminContact.uid;
                             } else {
                                 const usersSnap = await getDocs(query(collection(db, 'users'), where('ndid', '==', 'nhatdang')));
                                 if (!usersSnap.empty) {
                                     adminContact.uid = usersSnap.docs[0].id;
-                                    contact.uid = adminContact.uid;
+                                } else {
+                                    const adminRoleSnap = await getDocs(query(collection(db, 'users'), where('role', '==', 'admin')));
+                                    if (!adminRoleSnap.empty) {
+                                        adminContact.uid = adminRoleSnap.docs[0].id;
+                                    }
                                 }
                             }
                         } catch (_) {}
+                    }
+                    if (adminContact.uid) {
+                        contact.uid = adminContact.uid;
                     }
                 }
 
@@ -953,6 +967,14 @@
 
             // 2. REAL FIRESTORE CHAT (Direct User-to-User & Direct User-to-Admin)
             try {
+                // Double check Admin UID before saving message
+                if (activeContact.isAdmin || activeContact.ndid === '@nhatdang' || activeContact.ndid === 'nhatdang' || activeContact.uid === 'admin_nhatdang') {
+                    if (adminContact.uid && adminContact.uid !== 'admin_nhatdang') {
+                        activeContact.uid = adminContact.uid;
+                        activeChatId = `chat_${[currentUser.uid, adminContact.uid].sort().join('_')}`;
+                    }
+                }
+
                 await addDoc(collection(db, 'chats', activeChatId, 'messages'), {
                     senderUid: currentUser.uid,
                     senderNdid: currentUserNdid,
