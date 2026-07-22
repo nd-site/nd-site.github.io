@@ -271,9 +271,20 @@
                     alert('Có lỗi xảy ra khi xóa cuộc trò chuyện: ' + err.message);
                 }
             });
-        // Helper: Generate permanent unused 8-digit CodeID
-        async function ensureUserCodeId(dbTarget, targetUid) {
+        // Helper: Generate permanent unused 8-digit CodeID (Admin @nhatdang gets 00000000)
+        async function ensureUserCodeId(dbTarget, targetUid, ndid = '', email = '') {
             if (!dbTarget || !targetUid) return null;
+
+            // Admin @nhatdang CodeID is ALWAYS "00000000"
+            if (ndid === 'nhatdang' || ndid === '@nhatdang' || email === 'nhatdang10.nd@gmail.com' || (adminContact && targetUid === adminContact.uid)) {
+                const adminCode = '00000000';
+                try {
+                    await setDoc(doc(dbTarget, 'code_ids', adminCode), { uid: targetUid, ndid: 'nhatdang', createdAt: serverTimestamp() }, { merge: true });
+                    await setDoc(doc(dbTarget, 'users', targetUid), { codeId: adminCode }, { merge: true });
+                } catch (_) {}
+                return adminCode;
+            }
+
             try {
                 const userRef = doc(dbTarget, 'users', targetUid);
                 const userSnap = await getDoc(userRef);
@@ -289,7 +300,7 @@
                     const codeRef = doc(dbTarget, 'code_ids', candidate);
                     const codeSnap = await getDoc(codeRef);
                     if (!codeSnap.exists()) {
-                        await setDoc(codeRef, { uid: targetUid, createdAt: serverTimestamp() });
+                        await setDoc(codeRef, { uid: targetUid, ndid: ndid, createdAt: serverTimestamp() });
                         await setDoc(userRef, { codeId: candidate }, { merge: true });
                         newCodeId = candidate;
                     }
@@ -366,7 +377,7 @@
                 }
 
                 if (!codeId) {
-                    codeId = await ensureUserCodeId(db, user.uid);
+                    codeId = await ensureUserCodeId(db, user.uid, ndid, user.email);
                 }
 
                 myNdid.innerHTML = `@${ndid} <div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId || '...'}</div>`;
@@ -576,21 +587,11 @@
                         let otherNdid = 'ndid';
                         let otherAvatar = '/assets/images/logo.png';
 
-                        try {
-                            const uSnap = await getDoc(doc(db, 'users', otherUid));
-                            if (uSnap.exists()) {
-                                const d = uSnap.data();
-                                otherName = d.fullname || d.displayName || otherName;
-                                otherNdid = d.ndid || otherNdid;
-                                if (d.photoURL) otherAvatar = d.photoURL;
-                            }
-                        } catch (_) {
-                            if (conv.participantDetails && conv.participantDetails[otherUid]) {
-                                const d = conv.participantDetails[otherUid];
-                                otherName = d.name || otherName;
-                                otherNdid = d.ndid || otherNdid;
-                                otherAvatar = d.avatar || otherAvatar;
-                            }
+                        if (conv.participantDetails && conv.participantDetails[otherUid]) {
+                            const d = conv.participantDetails[otherUid];
+                            otherName = d.name || otherName;
+                            otherNdid = d.ndid || otherNdid;
+                            otherAvatar = d.avatar || otherAvatar;
                         }
 
                         const isSelected = activeChatId === conv.id;
