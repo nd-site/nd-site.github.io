@@ -128,6 +128,9 @@
         let unsubscribeConversations = null;
         let openPickerMsgId = null;
 
+        // Emojis list
+        const EMOJI_LIST = ['❤️', '👍', '😂', '😮', '😢', '👏'];
+
         // Elements
         const myAvatar = document.getElementById('my-avatar');
         const myName = document.getElementById('my-name');
@@ -146,9 +149,6 @@
         const messageInput = document.getElementById('message-text-input');
         const mobileBackBtn = document.getElementById('mobile-back-btn');
         const appWrapper = document.getElementById('chat-app');
-
-        // Available Reactions Emojis
-        const EMOJI_LIST = ['❤️', '👍', '😂', '😮', '😢', '👏'];
 
         // Check Auth
         onAuthStateChanged(auth, async (user) => {
@@ -250,7 +250,7 @@
             }
         });
 
-        // Load Active Conversations List
+        // Load Conversations List
         function loadConversationsList() {
             if (unsubscribeConversations) unsubscribeConversations();
 
@@ -281,21 +281,22 @@
                         let otherNdid = 'ndid';
                         let otherAvatar = '/assets/images/logo.png';
 
-                        if (conv.participantDetails && conv.participantDetails[otherUid]) {
-                            const d = conv.participantDetails[otherUid];
-                            otherName = d.name || otherName;
-                            otherNdid = d.ndid || otherNdid;
-                            otherAvatar = d.avatar || otherAvatar;
-                        } else {
-                            try {
-                                const uSnap = await getDoc(doc(db, 'users', otherUid));
-                                if (uSnap.exists()) {
-                                    const d = uSnap.data();
-                                    otherName = d.fullname || d.displayName || otherName;
-                                    otherNdid = d.ndid || otherNdid;
-                                    otherAvatar = d.photoURL || otherAvatar;
-                                }
-                            } catch (_) {}
+                        // Always fetch live profile from Firestore users collection
+                        try {
+                            const uSnap = await getDoc(doc(db, 'users', otherUid));
+                            if (uSnap.exists()) {
+                                const d = uSnap.data();
+                                otherName = d.fullname || d.displayName || otherName;
+                                otherNdid = d.ndid || otherNdid;
+                                if (d.photoURL) otherAvatar = d.photoURL;
+                            }
+                        } catch (_) {
+                            if (conv.participantDetails && conv.participantDetails[otherUid]) {
+                                const d = conv.participantDetails[otherUid];
+                                otherName = d.name || otherName;
+                                otherNdid = d.ndid || otherNdid;
+                                otherAvatar = d.avatar || otherAvatar;
+                            }
                         }
 
                         const isSelected = activeChatId === conv.id;
@@ -342,6 +343,17 @@
         async function selectConversation(contact) {
             activeContact = contact;
             activeChatId = `chat_${[currentUser.uid, contact.uid].sort().join('_')}`;
+
+            // Fetch live profile from Firestore to guarantee fresh avatar
+            try {
+                const uSnap = await getDoc(doc(db, 'users', contact.uid));
+                if (uSnap.exists()) {
+                    const d = uSnap.data();
+                    if (d.photoURL) contact.avatar = d.photoURL;
+                    if (d.fullname || d.displayName) contact.name = d.fullname || d.displayName;
+                    if (d.ndid) contact.ndid = d.ndid;
+                }
+            } catch (_) {}
 
             // Update Header
             activeName.textContent = contact.name;
@@ -445,7 +457,7 @@
                     messagesContainer.innerHTML = html;
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-                    // Bind reaction handlers & click to toggle picker
+                    // Bind reaction handlers
                     messagesContainer.querySelectorAll('.msg-bubble').forEach(bubble => {
                         bubble.addEventListener('click', (e) => {
                             e.stopPropagation();
@@ -470,7 +482,7 @@
             }
         }
 
-        // Toggle Reaction Picker
+        // Toggle Reaction Picker (Smart Top/Bottom Positioning)
         function togglePicker(msgId) {
             if (openPickerMsgId && openPickerMsgId !== msgId) {
                 closePicker();
@@ -478,8 +490,25 @@
             const picker = document.getElementById(`picker-${msgId}`);
             if (picker) {
                 const isHidden = picker.style.display === 'none';
-                picker.style.display = isHidden ? 'flex' : 'none';
-                openPickerMsgId = isHidden ? msgId : null;
+                if (isHidden) {
+                    const row = picker.closest('.msg-row');
+                    if (row && row.offsetTop < 80) {
+                        picker.style.bottom = 'auto';
+                        picker.style.top = '100%';
+                        picker.style.marginTop = '6px';
+                        picker.style.marginBottom = '0';
+                    } else {
+                        picker.style.bottom = '100%';
+                        picker.style.top = 'auto';
+                        picker.style.marginBottom = '6px';
+                        picker.style.marginTop = '0';
+                    }
+                    picker.style.display = 'flex';
+                    openPickerMsgId = msgId;
+                } else {
+                    picker.style.display = 'none';
+                    openPickerMsgId = null;
+                }
             }
         }
 
@@ -504,7 +533,6 @@
                     currentReactions = { ...snap.data().reactions };
                 }
 
-                // Toggle if same emoji, or update to new
                 if (currentReactions[currentUser.uid] === emoji) {
                     delete currentReactions[currentUser.uid];
                 } else {
@@ -528,7 +556,6 @@
             messageInput.value = '';
 
             try {
-                // 1. Add message doc
                 await addDoc(collection(db, 'chats', activeChatId, 'messages'), {
                     senderUid: currentUser.uid,
                     senderNdid: currentUserNdid,
@@ -536,7 +563,6 @@
                     createdAt: serverTimestamp()
                 });
 
-                // 2. Set/Update parent chat doc
                 await setDoc(doc(db, 'chats', activeChatId), {
                     participants: [currentUser.uid, activeContact.uid],
                     lastMessage: text,
