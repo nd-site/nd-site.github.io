@@ -19,6 +19,7 @@
     <script src="/assets/js/nd-navbar.js" defer></script>
     <script src="/assets/js/config.js"></script>
     <script src="/assets/js/api-service.js"></script>
+    <script src="/assets/js/firebase-init.js" type="module"></script>
     <script src="/font/font.js"></script>
 </head>
 
@@ -347,10 +348,10 @@
         // Check Auth & Render UI Immediately (Zero Freeze guarantee)
         ensureFirebase().then(services => {
             if (!services || !services.auth) return;
-            const targetAuth = services.auth;
-            const targetDb = services.db;
+            auth = services.auth;
+            db = services.db;
 
-            onAuthStateChanged(targetAuth, async (user) => {
+            onAuthStateChanged(auth, async (user) => {
                 if (!user) {
                     window.location.href = '/auth/login/';
                     return;
@@ -383,7 +384,7 @@
                 loadConversationsList();
 
                 // 3. Asynchronously enrich profile & CodeID from Firestore in background
-                getDoc(doc(targetDb, 'users', user.uid)).then(async (snap) => {
+                getDoc(doc(db, 'users', user.uid)).then(async (snap) => {
                     if (snap.exists()) {
                         const data = snap.data();
                         fullname = data.fullname || fullname;
@@ -397,7 +398,7 @@
                     }
 
                     if (!codeId) {
-                        codeId = await ensureUserCodeId(targetDb, user.uid, ndid, user.email);
+                        codeId = await ensureUserCodeId(db, user.uid, ndid, user.email);
                     }
 
                     myNdid.innerHTML = `@${ndid} <div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId || '...'}</div>`;
@@ -407,14 +408,14 @@
                 resolveAdminContact();
 
                 // 5. Auto-cleanup any invalid legacy admin_nhatdang chats asynchronously
-                getDocs(query(collection(targetDb, 'chats'), where('participants', 'array-contains', 'admin_nhatdang'))).then(invalidChatsSnap => {
+                getDocs(query(collection(db, 'chats'), where('participants', 'array-contains', 'admin_nhatdang'))).then(invalidChatsSnap => {
                     invalidChatsSnap.forEach(async (docSnap) => {
                         try {
-                            const msgsSnap = await getDocs(collection(targetDb, 'chats', docSnap.id, 'messages'));
+                            const msgsSnap = await getDocs(collection(db, 'chats', docSnap.id, 'messages'));
                             msgsSnap.forEach(async (mDoc) => {
-                                await deleteDoc(doc(targetDb, 'chats', docSnap.id, 'messages', mDoc.id));
+                                await deleteDoc(doc(db, 'chats', docSnap.id, 'messages', mDoc.id));
                             });
-                            await deleteDoc(doc(targetDb, 'chats', docSnap.id));
+                            await deleteDoc(doc(db, 'chats', docSnap.id));
                         } catch (_) {}
                     });
                 }).catch(() => {});
