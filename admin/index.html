@@ -1154,15 +1154,22 @@
             let successCount = 0;
             let errorCount = 0;
 
+            const counterRef = doc(db, 'counters', 'code_ids');
+            const counterSnap = await getDoc(counterRef);
             let currentMaxNum = 0;
-            allUsers.forEach(u => {
-                if (u.codeId && u.codeId.length === 8 && !isNaN(u.codeId)) {
-                    const num = parseInt(u.codeId, 10);
-                    if (num > currentMaxNum) {
-                        currentMaxNum = num;
+
+            if (counterSnap.exists()) {
+                currentMaxNum = counterSnap.data().lastNumber || 0;
+            } else {
+                allUsers.forEach(u => {
+                    if (u.codeId && u.codeId.length === 8 && !isNaN(u.codeId)) {
+                        const num = parseInt(u.codeId, 10);
+                        if (num > currentMaxNum) {
+                            currentMaxNum = num;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             let nextNum = currentMaxNum + 1;
 
@@ -1198,6 +1205,14 @@
                 } catch (e) {
                     console.error("Bulk assign CodeID error for UID: " + uid, e);
                     errorCount++;
+                }
+            }
+
+            if (successCount > 0) {
+                try {
+                    await setDoc(counterRef, { lastNumber: nextNum - 1 }, { merge: true });
+                } catch (err) {
+                    console.error("Error updating CodeID counter: ", err);
                 }
             }
 
@@ -1666,6 +1681,21 @@
                         ndid: newNdid,
                         createdAt: serverTimestamp()
                     });
+
+                    // Update counter if manually entered CodeID is higher than current lastNumber
+                    const numVal = parseInt(codeId, 10);
+                    if (!isNaN(numVal)) {
+                        try {
+                            const counterRef = doc(db, 'counters', 'code_ids');
+                            const counterSnap = await getDoc(counterRef);
+                            const curLast = counterSnap.exists() ? (counterSnap.data().lastNumber || 0) : 0;
+                            if (numVal > curLast) {
+                                await setDoc(counterRef, { lastNumber: numVal }, { merge: true });
+                            }
+                        } catch (err) {
+                            console.error("Error checking/updating CodeID counter: ", err);
+                        }
+                    }
                 }
 
                 if (oldNdid && newNdid !== oldNdid) {

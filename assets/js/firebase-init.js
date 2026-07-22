@@ -10,7 +10,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp, query, collection, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp, query, collection, orderBy, limit, getDocs, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 async function initEduFirebase() {
     if (typeof EDU_CONFIG === 'undefined') {
@@ -93,37 +93,47 @@ async function initEduFirebase() {
                         yob      = data.yob      || null;
                         codeId   = data.codeId   || '';
 
-                        // Auto generate permanent 8-digit CodeID if missing (incremental)
+                        // Auto generate permanent 8-digit CodeID if missing (incremental via transaction counter)
                         if (!codeId) {
                             try {
-                                const codeQuery = query(collection(firestore, 'code_ids'), orderBy('__name__', 'desc'), limit(1));
-                                const querySnap = await getDocs(codeQuery);
-                                let maxVal = 0;
-                                if (!querySnap.empty) {
-                                    const highestId = querySnap.docs[0].id;
-                                    if (highestId && highestId.length === 8 && !isNaN(highestId)) {
-                                        maxVal = parseInt(highestId, 10);
+                                const counterRef = doc(firestore, 'counters', 'code_ids');
+                                const counterSnap = await getDoc(counterRef);
+                                
+                                let initialMaxVal = 0;
+                                if (!counterSnap.exists()) {
+                                    const codeQuery = query(collection(firestore, 'code_ids'), orderBy('__name__', 'desc'), limit(1));
+                                    const querySnap = await getDocs(codeQuery);
+                                    if (!querySnap.empty) {
+                                        const highestId = querySnap.docs[0].id;
+                                        if (highestId && highestId.length === 8 && !isNaN(highestId)) {
+                                            initialMaxVal = parseInt(highestId, 10);
+                                        }
                                     }
                                 }
                                 
-                                let newCode = null;
-                                let attempts = 0;
-                                let nextVal = maxVal + 1;
-                                while (!newCode && attempts < 15) {
-                                    attempts++;
-                                    const candidate = String(nextVal).padStart(8, '0');
-                                    const codeRef = doc(firestore, 'code_ids', candidate);
-                                    const codeSnap = await getDoc(codeRef);
-                                    if (!codeSnap.exists()) {
-                                        await setDoc(codeRef, { uid: user.uid, createdAt: serverTimestamp() });
-                                        await setDoc(doc(firestore, 'users', user.uid), { codeId: candidate }, { merge: true });
-                                        newCode = candidate;
+                                const candidate = await runTransaction(firestore, async (transaction) => {
+                                    const freshSnap = await transaction.get(counterRef);
+                                    let nextNum = 1;
+                                    if (freshSnap.exists()) {
+                                        nextNum = (freshSnap.data().lastNumber || 0) + 1;
                                     } else {
-                                        nextVal++;
+                                        nextNum = initialMaxVal + 1;
                                     }
+                                    
+                                    const cand = String(nextNum).padStart(8, '0');
+                                    transaction.set(counterRef, { lastNumber: nextNum });
+                                    return cand;
+                                });
+
+                                if (candidate) {
+                                    const codeRef = doc(firestore, 'code_ids', candidate);
+                                    await setDoc(codeRef, { uid: user.uid, createdAt: serverTimestamp() });
+                                    await setDoc(doc(firestore, 'users', user.uid), { codeId: candidate }, { merge: true });
+                                    codeId = candidate;
                                 }
-                                if (newCode) codeId = newCode;
-                            } catch (_) {}
+                            } catch (err) {
+                                console.error("Error auto-generating incremental CodeID:", err);
+                            }
                         }
                     }
                 } catch (e) {
