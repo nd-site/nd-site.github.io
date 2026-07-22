@@ -1027,7 +1027,10 @@
                     <td class="px-6 py-4 text-center">
                         <input type="checkbox" class="user-row-checkbox w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer" data-uid="${u.uid}" ${isChecked}>
                     </td>
-                    <td class="px-6 py-4 font-bold text-slate-900">${u.ndid || '—'}</td>
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-slate-900">@${u.ndid || '—'}</div>
+                        <div class="text-[11px] font-mono text-slate-400 font-semibold">CodeID: ${u.codeId || 'chưa tạo'}</div>
+                    </td>
                     <td class="px-6 py-4 font-semibold text-slate-800">${u.fullname || '—'}</td>
                     <td class="px-6 py-4 text-slate-500 font-medium text-xs">${u.emails?.[0] || '—'}</td>
                     <td class="px-6 py-4">${roleBadge}</td>

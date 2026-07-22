@@ -10,7 +10,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 async function initEduFirebase() {
     if (typeof EDU_CONFIG === 'undefined') {
@@ -91,6 +91,27 @@ async function initEduFirebase() {
                         photoURL = data.photoURL || user.photoURL || '';
                         grade    = data.grade    || 'Khác';
                         yob      = data.yob      || null;
+                        codeId   = data.codeId   || '';
+
+                        // Auto generate permanent 8-digit CodeID if missing
+                        if (!codeId) {
+                            try {
+                                let newCode = null;
+                                let attempts = 0;
+                                while (!newCode && attempts < 15) {
+                                    attempts++;
+                                    const candidate = Math.floor(10000000 + Math.random() * 90000000).toString();
+                                    const codeRef = doc(firestore, 'code_ids', candidate);
+                                    const codeSnap = await getDoc(codeRef);
+                                    if (!codeSnap.exists()) {
+                                        await setDoc(codeRef, { uid: user.uid, createdAt: serverTimestamp() });
+                                        await setDoc(doc(firestore, 'users', user.uid), { codeId: candidate }, { merge: true });
+                                        newCode = candidate;
+                                    }
+                                }
+                                if (newCode) codeId = newCode;
+                            } catch (_) {}
+                        }
                     }
                 } catch (e) {
                     // Nếu offline/lỗi mạng → dùng dữ liệu cũ từ localStorage
@@ -105,6 +126,7 @@ async function initEduFirebase() {
                             photoURL = old.photoURL || user.photoURL || '';
                             grade    = old.grade    || 'Khác';
                             yob      = old.yob      || null;
+                            codeId   = old.codeId   || '';
                         }
                     } catch (_) {}
                 }
@@ -125,6 +147,7 @@ async function initEduFirebase() {
                     eduRole:     eduRole,
                     grade:       grade,
                     yob:         yob,
+                    codeId:      codeId
                 };
                 localStorage.setItem('nd_user', JSON.stringify(sessionData));
 

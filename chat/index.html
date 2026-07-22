@@ -271,7 +271,37 @@
                     alert('Có lỗi xảy ra khi xóa cuộc trò chuyện: ' + err.message);
                 }
             });
-        // Helper: Resolve Real Admin UID (Targeting Nhật Đăng @nhatdang / nhatdang10)
+        // Helper: Generate permanent unused 8-digit CodeID
+        async function ensureUserCodeId(dbTarget, targetUid) {
+            if (!dbTarget || !targetUid) return null;
+            try {
+                const userRef = doc(dbTarget, 'users', targetUid);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists() && userSnap.data().codeId) {
+                    return userSnap.data().codeId;
+                }
+
+                let newCodeId = null;
+                let attempts = 0;
+                while (!newCodeId && attempts < 15) {
+                    attempts++;
+                    const candidate = Math.floor(10000000 + Math.random() * 90000000).toString();
+                    const codeRef = doc(dbTarget, 'code_ids', candidate);
+                    const codeSnap = await getDoc(codeRef);
+                    if (!codeSnap.exists()) {
+                        await setDoc(codeRef, { uid: targetUid, createdAt: serverTimestamp() });
+                        await setDoc(userRef, { codeId: candidate }, { merge: true });
+                        newCodeId = candidate;
+                    }
+                }
+                return newCodeId;
+            } catch (e) {
+                console.warn("Error ensuring CodeID:", e);
+                return null;
+            }
+        }
+
+        // Helper: Resolve Real Admin UID (Targeting Nhật Đăng @nhatdang)
         async function resolveAdminContact() {
             try {
                 let targetUid = null;
@@ -279,27 +309,10 @@
                 if (map1.exists() && map1.data().uid) {
                     targetUid = map1.data().uid;
                 } else {
-                    const map2 = await getDoc(doc(db, 'ndids', 'nhatdang10'));
-                    if (map2.exists() && map2.data().uid) {
-                        targetUid = map2.data().uid;
+                    const uSnap = await getDocs(query(collection(db, 'users'), where('ndid', '==', 'nhatdang')));
+                    if (!uSnap.empty) {
+                        targetUid = uSnap.docs[0].id;
                     }
-                }
-
-                if (!targetUid) {
-                    const usersSnap = await getDocs(collection(db, 'users'));
-                    usersSnap.forEach(uSnap => {
-                        const u = uSnap.data();
-                        const uUid = uSnap.id;
-                        const uEmail = (u.email || u.emails?.[0] || '').toLowerCase();
-                        const uNdid = (u.ndid || '').toLowerCase();
-                        const uName = (u.fullname || u.displayName || '').toLowerCase();
-
-                        if (uEmail === 'nhatdang10.nd@gmail.com' || uNdid === 'nhatdang' || uNdid === 'nhatdang10') {
-                            targetUid = uUid;
-                        } else if (!targetUid && (uName.includes('nhật đăng') || uName.includes('nhat dang')) && u.role === 'admin') {
-                            targetUid = uUid;
-                        }
-                    });
                 }
 
                 if (targetUid) {
@@ -316,7 +329,7 @@
             }
         }
 
-        // Check Auth & Resolve Real Admin UID
+        // Check Auth & Render UI Immediately (Zero Freeze guarantee)
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 window.location.href = '/auth/login/';
@@ -324,30 +337,45 @@
             }
             currentUser = user;
 
-            // Load user profile
+            // 1. Immediately render basic user info from Auth
             let fullname = user.displayName || 'ND Member';
             let ndid = user.email ? user.email.split('@')[0] : user.uid;
             let avatar = user.photoURL || '/assets/images/logo.png';
+            let codeId = '';
 
-            try {
-                const snap = await getDoc(doc(db, 'users', user.uid));
+            currentUserNdid = ndid;
+            myName.textContent = fullname;
+            myNdid.textContent = `@${ndid}`;
+            myAvatar.src = avatar;
+
+            // 2. Call loadConversationsList IMMEDIATELY!
+            loadConversationsList();
+
+            // 3. Asynchronously enrich profile & CodeID from Firestore in background
+            getDoc(doc(db, 'users', user.uid)).then(async (snap) => {
                 if (snap.exists()) {
                     const data = snap.data();
                     fullname = data.fullname || fullname;
                     ndid = data.ndid || ndid;
                     if (data.photoURL) avatar = data.photoURL;
+                    codeId = data.codeId || '';
+
+                    currentUserNdid = ndid;
+                    myName.textContent = fullname;
+                    myAvatar.src = avatar;
                 }
-            } catch (_) {}
 
-            currentUserNdid = ndid;
-            myName.textContent = fullname;
-            myNdid.textContent = ndid;
-            myAvatar.src = avatar;
+                if (!codeId) {
+                    codeId = await ensureUserCodeId(db, user.uid);
+                }
 
-            // 🌟 RESOLVE REAL ADMIN UID FROM FIRESTORE
-            await resolveAdminContact();
+                myNdid.innerHTML = `@${ndid} <div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId || '...'}</div>`;
+            }).catch(() => {});
 
-            // Auto-cleanup any invalid legacy admin_nhatdang chats asynchronously
+            // 4. Asynchronously resolve Admin contact
+            resolveAdminContact();
+
+            // 5. Auto-cleanup any invalid legacy admin_nhatdang chats asynchronously
             getDocs(query(collection(db, 'chats'), where('participants', 'array-contains', 'admin_nhatdang'))).then(invalidChatsSnap => {
                 invalidChatsSnap.forEach(async (docSnap) => {
                     try {
@@ -359,8 +387,6 @@
                     } catch (_) {}
                 });
             }).catch(() => {});
-
-            loadConversationsList();
         });
 
         // Smart Search (Name + NDID + Admin)
@@ -411,12 +437,14 @@
 
                             const uName = (u.fullname || u.displayName || '').toLowerCase();
                             const uNdid = (u.ndid || '').toLowerCase();
+                            const uCodeId = (u.codeId || '').toLowerCase();
 
-                            if (uName.includes(val) || uNdid.includes(val)) {
+                            if (uName.includes(val) || uNdid.includes(val) || uCodeId.includes(val)) {
                                 if (!results.some(r => r.uid === uUid)) {
                                     results.push({
                                         uid: uUid,
                                         ndid: u.ndid || uUid,
+                                        codeId: u.codeId || '',
                                         fullname: u.fullname || u.displayName || 'ND Member',
                                         photoURL: u.photoURL || '/assets/images/logo.png',
                                         isAdmin: u.role === 'admin' || u.ndid === 'nhatdang' || uUid === adminContact.uid
@@ -438,7 +466,9 @@
                                         ${u.isAdmin ? '<span class="pinned-tag admin-badge">🛡️ Admin</span>' : ''}
                                         ${u.isBot ? '<span class="pinned-tag ai-badge">🤖 AI</span>' : ''}
                                     </div>
-                                    <div style="font-size:12px;color:var(--primary);font-weight:700;">${u.ndid}</div>
+                                    <div style="font-size:12px;color:var(--primary);font-weight:700;">
+                                        @${u.ndid} ${u.codeId ? `<span style="color:var(--text-muted);font-weight:600;margin-left:4px;">(CodeID: ${u.codeId})</span>` : ''}
+                                    </div>
                                 </div>
                             </div>
                         `).join('');
@@ -633,13 +663,15 @@
                         if (d.photoURL) contact.avatar = d.photoURL;
                         if (d.fullname || d.displayName) contact.name = d.fullname || d.displayName;
                         if (d.ndid) contact.ndid = d.ndid;
+                        if (d.codeId) contact.codeId = d.codeId;
                     }
                 } catch (_) {}
             }
 
             // Update Header
             activeName.textContent = contact.name;
-            activeNdid.textContent = contact.ndid;
+            const displayNdid = contact.ndid ? (contact.ndid.startsWith('@') ? contact.ndid : '@' + contact.ndid) : '';
+            activeNdid.innerHTML = `${escapeHtml(displayNdid)}${contact.codeId ? ` <span style="font-size:11px;opacity:0.85;margin-left:6px;">(CodeID: ${contact.codeId})</span>` : ''}`;
             activeAvatar.src = contact.avatar;
 
             chatEmptyState.style.display = 'none';
