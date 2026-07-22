@@ -1388,7 +1388,25 @@
         return;
       }
       
-      notificationsList = Object.values(data);
+      const nowTime = Date.now();
+      notificationsList = Object.values(data).filter(item => {
+        if (item.scheduled) {
+          if (item.scheduledTimestamp) {
+            return item.scheduledTimestamp <= nowTime;
+          }
+          if (item.date && item.time) {
+            try {
+              const dParts = item.date.split('/');
+              const tParts = item.time.split(':');
+              if (dParts.length === 3 && tParts.length === 2) {
+                const sched = new Date(dParts[2], dParts[1] - 1, dParts[0], tParts[0], tParts[1]).getTime();
+                return sched <= nowTime;
+              }
+            } catch(e) {}
+          }
+        }
+        return true;
+      });
       notificationsList.sort((a, b) => (b.stt || 0) - (a.stt || 0));
       
       if (notificationsList.length === 0) {

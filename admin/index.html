@@ -612,6 +612,11 @@
                     </div>
                 </div>
 
+                <div class="flex items-center gap-2 p-1 bg-slate-50/50 rounded-lg border border-slate-100 max-w-max">
+                    <input type="checkbox" id="notify-schedule-enable" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                    <label for="notify-schedule-enable" class="text-xs font-bold text-slate-700 cursor-pointer uppercase tracking-wider">Đặt lịch đăng theo thời gian</label>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Ngày phát hành</label>
@@ -723,6 +728,7 @@
         let allUsers = [];
         let allNotifications = {};
         let selectedUserUids = new Set();
+        let dateTimeInterval = null;
 
         // ================================================
         // EDU PROFILES PANEL
@@ -1791,13 +1797,28 @@
                 const dotColor = val.color || '#0070f3';
                 const contentHtml = parseMarkdownLinks(val.info || '');
 
+                let scheduleBadge = '';
+                if (val.scheduled) {
+                    const isFuture = val.scheduledTimestamp > Date.now();
+                    if (isFuture) {
+                        scheduleBadge = `<span class="px-1.5 py-0.5 text-[9px] font-extrabold uppercase rounded bg-amber-50 text-amber-600 border border-amber-100 flex-shrink-0">Hẹn giờ</span>`;
+                    } else {
+                        scheduleBadge = `<span class="px-1.5 py-0.5 text-[9px] font-extrabold uppercase rounded bg-emerald-50 text-emerald-600 border border-emerald-100 flex-shrink-0">Lịch đăng đã qua</span>`;
+                    }
+                }
+
                 tr.innerHTML = `
                     <td class="px-6 py-4 font-bold text-slate-900 font-mono">${val.stt || '—'}</td>
                     <td class="px-6 py-4 font-semibold text-slate-500 text-xs">
                         <div>${val.date || '—'}</div>
                         <div class="text-[10px] text-slate-400 mt-0.5">${val.time || ''}</div>
                     </td>
-                    <td class="px-6 py-4 font-extrabold text-slate-800 text-sm">${val.title || '—'}</td>
+                    <td class="px-6 py-4 font-extrabold text-slate-800 text-sm">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span>${val.title || '—'}</span>
+                            ${scheduleBadge}
+                        </div>
+                    </td>
                     <td class="px-6 py-4 text-xs font-semibold text-slate-600 max-w-sm break-words">${contentHtml}</td>
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-1.5 text-xs font-bold font-mono">
@@ -1871,32 +1892,76 @@
         document.getElementById('notify-time').addEventListener('input', updateLivePreview);
         document.getElementById('notify-info').addEventListener('input', updateLivePreview);
 
+        // Helper to convert DD/MM/YYYY and HH:MM to a timestamp
+        function getNotificationTimestamp(dateStr, timeStr) {
+            const dParts = dateStr.split('/');
+            const tParts = timeStr.split(':');
+            if (dParts.length === 3 && tParts.length === 2) {
+                return new Date(dParts[2], dParts[1] - 1, dParts[0], tParts[0], tParts[1]).getTime();
+            }
+            return Date.now();
+        }
+
+        // Toggle date/time state based on schedule checkbox
+        function updateNotifyScheduleInputsState() {
+            const checkbox = document.getElementById('notify-schedule-enable');
+            const dateInput = document.getElementById('notify-date');
+            const timeInput = document.getElementById('timeInput') || document.getElementById('notify-time'); // select element helper
+            
+            if (checkbox.checked) {
+                dateInput.disabled = false;
+                timeInput.disabled = false;
+                if (dateTimeInterval) {
+                    clearInterval(dateTimeInterval);
+                    dateTimeInterval = null;
+                }
+            } else {
+                dateInput.disabled = true;
+                timeInput.disabled = true;
+                const fillCurrent = () => {
+                    const today = new Date();
+                    const day = String(today.getDate()).padStart(2, '0');
+                    const month = String(today.getMonth() + 1).padStart(2, '0');
+                    const year = today.getFullYear();
+                    dateInput.value = `${day}/${month}/${year}`;
+                    
+                    const hour = String(today.getHours()).padStart(2, '0');
+                    const min = String(today.getMinutes()).padStart(2, '0');
+                    timeInput.value = `${hour}:${min}`;
+                    updateLivePreview();
+                };
+                fillCurrent();
+                if (!dateTimeInterval) {
+                    dateTimeInterval = setInterval(fillCurrent, 1000);
+                }
+            }
+        }
+
+        document.getElementById('notify-schedule-enable').addEventListener('change', updateNotifyScheduleInputsState);
+
         // Open/Close Notify modal
         window.openNotifyModal = function(key = null) {
             const form = document.getElementById('notify-form');
             form.reset();
 
+            // Clear any active date/time auto-update interval
+            if (dateTimeInterval) {
+                clearInterval(dateTimeInterval);
+                dateTimeInterval = null;
+            }
+
             if (!key) {
                 // CREATE NEW Mode
                 document.getElementById('notify-modal-title').textContent = "Thêm thông báo mới";
                 document.getElementById('notify-key').value = "";
-                
-                // Autofill current date and time
-                const today = new Date();
-                const day = String(today.getDate()).padStart(2, '0');
-                const month = String(today.getMonth() + 1).padStart(2, '0');
-                const year = today.getFullYear();
-                document.getElementById('notify-date').value = `${day}/${month}/${year}`;
-                
-                const hour = String(today.getHours()).padStart(2, '0');
-                const min = String(today.getMinutes()).padStart(2, '0');
-                document.getElementById('notify-time').value = `${hour}:${min}`;
+                document.getElementById('notify-schedule-enable').checked = false;
 
                 // Calculate next STT
                 const maxStt = Object.values(allNotifications).reduce((max, cur) => Math.max(max, cur.stt || 0), 0);
                 document.getElementById('notify-stt').value = maxStt + 1;
 
                 window.setNotifyColor('#0070f3');
+                updateNotifyScheduleInputsState();
             } else {
                 // EDIT Mode
                 const item = allNotifications[key];
@@ -1911,6 +1976,9 @@
                 
                 window.setNotifyColor(item.color || '#0070f3');
                 document.getElementById('notify-info').value = item.info || "";
+
+                document.getElementById('notify-schedule-enable').checked = item.scheduled || false;
+                updateNotifyScheduleInputsState();
             }
 
             updateLivePreview();
@@ -1918,6 +1986,10 @@
         };
 
         window.closeNotifyModal = function() {
+            if (dateTimeInterval) {
+                clearInterval(dateTimeInterval);
+                dateTimeInterval = null;
+            }
             document.getElementById('notify-modal').classList.add('hidden');
         };
 
@@ -1927,12 +1999,42 @@
             const key = document.getElementById('notify-key').value;
             const title = document.getElementById('notify-title').value.trim();
             const stt = Number(document.getElementById('notify-stt').value) || 1;
-            const date = document.getElementById('notify-date').value.trim();
-            const time = document.getElementById('notify-time').value.trim();
             const color = document.getElementById('notify-color').value.trim();
             const info = document.getElementById('notify-info').value.trim();
 
-            const notifyData = { title, stt, date, time, color, info };
+            const isScheduled = document.getElementById('notify-schedule-enable').checked;
+            let date = '';
+            let time = '';
+            let scheduledTimestamp = 0;
+
+            if (isScheduled) {
+                date = document.getElementById('notify-date').value.trim();
+                time = document.getElementById('notify-time').value.trim();
+                scheduledTimestamp = getNotificationTimestamp(date, time);
+            } else {
+                // Not scheduled: use current exact date & time
+                const today = new Date();
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const year = today.getFullYear();
+                date = `${day}/${month}/${year}`;
+                
+                const hour = String(today.getHours()).padStart(2, '0');
+                const min = String(today.getMinutes()).padStart(2, '0');
+                time = `${hour}:${min}`;
+                scheduledTimestamp = today.getTime();
+            }
+
+            const notifyData = { 
+                title, 
+                stt, 
+                date, 
+                time, 
+                color, 
+                info,
+                scheduled: isScheduled,
+                scheduledTimestamp: scheduledTimestamp
+            };
 
             try {
                 // Define key if creating new
@@ -1941,12 +2043,14 @@
                 // Write to notifications branch
                 await set(ref(rtdb, `/notifications/${finalKey}`), notifyData);
 
-                // Broadcast via notifications_trigger
-                await set(ref(rtdb, '/notifications_trigger'), {
-                    timestamp: Date.now(),
-                    title: title,
-                    info: info
-                });
+                // Broadcast via notifications_trigger only if not scheduled in future
+                if (!isScheduled || scheduledTimestamp <= Date.now()) {
+                    await set(ref(rtdb, '/notifications_trigger'), {
+                        timestamp: Date.now(),
+                        title: title,
+                        info: info
+                    });
+                }
 
                 showToast(key ? "Đã cập nhật thông báo thành công!" : "Đã đăng thông báo mới thành công!", "success");
                 window.closeNotifyModal();
