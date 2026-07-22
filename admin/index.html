@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị EduSpace - ND Labs</title>
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Base Scripts -->
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/assets/js/config.js"></script>
+    <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/font/font.js"></script>
+
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+        }
+
+        .bg-gradient-mesh {
+            background-color: #f8fafc;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(0, 112, 243, 0.04) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 180, 216, 0.04) 0px, transparent 50%);
+        }
+
+        /* custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Notification color preset buttons */
+        .notify-color-btn {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            border: 2px solid #fff;
+            outline: 2px solid transparent;
+            transition: outline-color 0.15s;
+        }
+        .notify-color-btn.active { outline-color: currentColor; }
+        .notify-color-blue   { background-color: #0070f3; }
+        .notify-color-red    { background-color: #ef4444; }
+        .notify-color-green  { background-color: #10b981; }
+        .notify-color-purple { background-color: #8b5cf6; }
+        .notify-color-amber  { background-color: #f59e0b; }
+
+        /* Notification preview color bar */
+        #preview-color-bar {
+            min-height: 40px;
+            background-color: #0070f3;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-mesh min-h-screen text-slate-800">
+
+    <!-- Access Verification Loader Overlay -->
+    <div id="admin-lock-screen" class="fixed inset-0 z-[99999] flex items-center justify-center bg-slate-900 text-white">
+        <div class="text-center max-w-sm p-8 glass-card rounded-3xl text-slate-900 border border-slate-200">
+            <div id="lock-icon-container" class="mx-auto w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm">
+                <i class="ph-bold ph-lock-keyhole animate-pulse"></i>
+            </div>
+            <h3 id="lock-title" class="text-xl font-extrabold mb-2 tracking-tight">Đang xác thực quyền Admin...</h3>
+            <p id="lock-desc" class="text-sm text-slate-500 mb-6">Hệ thống đang kiểm tra danh tính bảo mật của bạn qua hệ thống băm SHA-256...</p>
+            <div id="lock-action-btn" class="hidden">
+                <a href="/" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/10">
+                    <i class="ph-bold ph-house-line"></i> Quay về Trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Admin Dashboard Content (Hidden by default) -->
+    <div id="admin-dashboard" class="hidden max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider mb-1">
+                    <span>✨</span>
+                    <span>EduSpace Central Admin</span>
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-950">Bảng điều khiển quản trị</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="window.switchTab('lotus-bot')" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/20">
+                    <i class="ph-bold ph-robot"></i> Quản lý Lotus Bot
+                </button>
+                <span class="text-xs text-slate-500 font-medium bg-slate-100 border border-slate-200/60 px-3 py-1.5 rounded-full">
+                    SHA-256 Protected
+                </span>
+            </div>
+        </header>
+
+        <!-- Tabs Navigation Bar -->
+        <div class="flex border-b border-slate-200 mb-8 overflow-x-auto whitespace-nowrap gap-2 pb-1">
+            <button onclick="window.switchTab('overview')" id="tab-overview" class="tab-btn px-5 py-3 text-sm font-bold border-b-2 border-blue-600 text-blue-600 flex items-center gap-2 transition-all">
+                <i class="ph-bold ph-chart-bar"></i> Tổng quan
+            </button>
+            <button onclick="window.switchTab('users')" id="tab-users" class="tab-btn px-5 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300 flex items-center gap-2 transition-all">
+                <i class="ph-bold ph-users"></i> Người dùng
+            </button>
+            <button onclick="window.switchTab('notifications')" id="tab-notifications" class="tab-btn px-5 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300 flex items-center gap-2 transition-all">
+                <i class="ph-bold ph-bell-ringing"></i> Thông báo
+            </button>
+            <button onclick="window.switchTab('lotus-bot')" id="tab-lotus-bot" class="tab-btn px-5 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300 flex items-center gap-2 transition-all">
+                <i class="ph-bold ph-robot"></i> Lotus Bot
+            </button>
+            <button onclick="window.switchTab('edu-profiles')" id="tab-edu-profiles" class="tab-btn px-5 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300 flex items-center gap-2 transition-all">
+                <i class="ph-bold ph-graduation-cap"></i> Hồ sơ EduSpace
+            </button>
+            <button onclick="window.switchTab('chatnd')" id="tab-chatnd" class="tab-btn px-5 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300 flex items-center gap-2 transition-all">
+                <i class="ph-bold ph-chat-circle-dots"></i> Quản lý ChatND
+            </button>
+        </div>
+
+        <!-- PANEL OVERVIEW -->
+        <section id="panel-overview" class="tab-panel space-y-8">
+            <!-- Stats Section -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-card p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tổng người học</span>
+                        <h3 id="stat-total" class="text-3xl font-black text-slate-950 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                        <i class="ph-bold ph-student"></i>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Giáo viên</span>
+                        <h3 id="stat-teachers" class="text-3xl font-black text-slate-950 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                        <i class="ph-bold ph-chalkboard-teacher"></i>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Học sinh Lớp 12</span>
+                        <h3 id="stat-g12" class="text-3xl font-black text-slate-950 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                        <i class="ph-bold ph-exam"></i>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tỷ lệ điền thông tin</span>
+                        <h3 id="stat-profile-rate" class="text-3xl font-black text-slate-950 mt-1">0%</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                        <i class="ph-bold ph-chart-pie-slice"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health status & Database sync checks -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- System Health Card -->
+                <div class="glass-card p-6 rounded-3xl border border-slate-200/80 bg-white/50 col-span-1 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-extrabold text-slate-950 flex items-center gap-2 mb-2">
+                            <i class="ph-bold ph-activity text-emerald-500 animate-pulse"></i> Trạng thái kết nối
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-6">Thông tin trực tiếp từ các tài nguyên Firebase cloud.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between text-sm font-semibold">
+                                <span class="text-slate-500">Firebase Firestore</span>
+                                <span id="status-firestore" class="text-emerald-500 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Đang kết nối
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm font-semibold">
+                                <span class="text-slate-500">Realtime Database</span>
+                                <span id="status-rtdb" class="text-emerald-500 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Đang kết nối
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm font-semibold">
+                                <span class="text-slate-500">Phiên bản Website</span>
+                                <span id="status-version-badge" class="text-blue-600 font-bold bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-lg text-xs">
+                                    Đang tải...
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-6 border-t border-slate-100 mt-6 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+                        <span>EduSpace Central Admin Console</span>
+                        <span>v1.8</span>
+                    </div>
+                </div>
+
+                <!-- Database Alignment Diagnostics Card -->
+                <div class="glass-card p-6 rounded-3xl border border-slate-200/80 bg-white/50 lg:col-span-2">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div>
+                            <h3 class="text-lg font-extrabold text-slate-950 flex items-center gap-2">
+                                <i class="ph-bold ph-shield-check text-blue-600"></i> Chẩn đoán & Đồng bộ NDID
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Phát hiện và sửa các tài khoản mồ côi hoặc lỗi liên kết giữa danh sách người dùng và bản đồ định danh.</p>
+                        </div>
+                        <button onclick="window.runDiagnostics()" id="btn-run-diagnostics" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all shadow-md">
+                            <i class="ph-bold ph-scan"></i> Chạy quét chẩn đoán
+                        </button>
+                    </div>
+
+                    <div id="diagnostics-loader" class="hidden py-8 text-center text-slate-500 font-semibold text-sm">
+                        <i class="ph-bold ph-spinner animate-spin text-xl mr-2 text-blue-600"></i> Đang tải dữ liệu liên kết và kiểm tra tính toàn vẹn...
+                    </div>
+
+                    <div id="diagnostics-results" class="max-h-60 overflow-y-auto space-y-4 pr-1">
+                        <div class="p-4 border border-dashed border-slate-200 rounded-2xl text-center text-slate-400 text-sm font-semibold py-8">
+                            Nhấp vào "Chạy quét chẩn đoán" để phát hiện tài khoản mất đồng bộ hoặc lỗi ánh xạ NDID.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL USERS -->
+        <section id="panel-users" class="tab-panel hidden space-y-6">
+            <main class="glass-card rounded-3xl overflow-hidden border border-slate-200/85">
+                <!-- Table Header controls -->
+                <div class="p-6 border-b border-slate-200/80 bg-white/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="relative flex-1 max-w-md">
+                        <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="text" id="user-search" placeholder="Tìm kiếm NDID, Tên hoặc Email..." class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <select id="filter-role" title="Lọc theo vai trò" class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:bg-white focus:border-blue-500 transition-all">
+                            <option value="all">Tất cả vai trò</option>
+                            <option value="student">Học sinh (Student)</option>
+                            <option value="teacher">Giáo viên (Teacher)</option>
+                            <option value="admin">Quản trị viên (Admin)</option>
+                            <option value="other">Khác</option>
+                        </select>
+
+                        <select id="filter-grade" title="Lọc theo khối lớp" class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:bg-white focus:border-blue-500 transition-all">
+                            <option value="all">Tất cả khối lớp</option>
+                            <option value="10">Lớp 10</option>
+                            <option value="11">Lớp 11</option>
+                            <option value="12">Lớp 12</option>
+                            <option value="Đang dạy">Đang dạy (Teacher)</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+
+                        <button onclick="window.exportUsersCSV()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl flex items-center gap-2 text-sm font-bold text-slate-700 transition-all shadow-sm" title="Xuất danh sách ra CSV">
+                            <i class="ph-bold ph-download-simple text-base"></i> Xuất CSV
+                        </button>
+
+                        <button id="btn-refresh" class="w-10 h-10 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl flex items-center justify-center text-slate-600 transition-all" title="Làm mới danh sách">
+                            <i class="ph-bold ph-arrows-clockwise text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bulk Action Bar (Hidden by default, shown when checkboxes checked) -->
+                <div id="bulk-action-bar" class="hidden px-6 py-3.5 bg-blue-50/60 border-b border-blue-100 flex items-center justify-between gap-4 transition-all">
+                    <div class="flex items-center gap-2 text-blue-700 text-sm font-bold">
+                        <i class="ph-bold ph-check-square-offset text-lg animate-bounce"></i>
+                        <span id="bulk-select-count">Đã chọn 0 người dùng</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hành động hàng loạt:</span>
+                        <select id="bulk-role-select" title="Thay đổi vai trò hàng loạt" onchange="window.handleBulkChangeRole(this.value)" class="px-3 py-2 bg-white border border-blue-200 rounded-xl text-xs font-bold text-slate-700 outline-none focus:border-blue-500">
+                            <option value="">Thay đổi vai trò...</option>
+                            <option value="student">Đổi thành Học sinh</option>
+                            <option value="teacher">Đổi thành Giáo viên</option>
+                            <option value="admin">Đổi thành Admin</option>
+                            <option value="other">Đổi thành Khác</option>
+                        </select>
+                        <button onclick="window.handleBulkDelete()" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
+                            <i class="ph-bold ph-trash"></i> Xóa tài khoản
+                        </button>
+                        <button onclick="window.clearUserSelection()" class="px-3.5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition-all">
+                            Bỏ chọn
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Users List Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                                <th class="px-6 py-4 w-12 text-center">
+                                    <input type="checkbox" id="user-select-all" title="Chọn tất cả người dùng" aria-label="Chọn tất cả người dùng" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                </th>
+                                <th class="px-6 py-4">NDID</th>
+                                <th class="px-6 py-4">Họ và tên</th>
+                                <th class="px-6 py-4">Email</th>
+                                <th class="px-6 py-4">Vai trò</th>
+                                <th class="px-6 py-4">Năm sinh</th>
+                                <th class="px-6 py-4">Lớp học</th>
+                                <th class="px-6 py-4">Ngày tạo</th>
+                                <th class="px-6 py-4 text-right">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body" class="divide-y divide-slate-100 bg-white/40">
+                            <tr>
+                                <td colspan="9" class="text-center py-12 text-slate-400 font-semibold">Đang tải dữ liệu người dùng...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </section>
+
+        <!-- PANEL NOTIFICATIONS -->
+        <section id="panel-notifications" class="tab-panel hidden space-y-6">
+            <div class="glass-card rounded-3xl overflow-hidden border border-slate-200/85">
+                <!-- Table Header controls -->
+                <div class="p-6 border-b border-slate-200/80 bg-white/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-950 flex items-center gap-2">
+                            <i class="ph-bold ph-bell-ringing text-blue-600"></i> Quản lý Bảng tin Thông báo
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1">Thay thế bảng Google Sheet. Dữ liệu lưu trữ trên Firebase Realtime Database phát sóng lập tức đến người học.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="window.openNotifyModal()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/20">
+                            <i class="ph-bold ph-plus-circle"></i> Thêm thông báo
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-6 border-b border-slate-200/80 bg-slate-50/50 flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1">
+                        <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="text" id="notify-search" placeholder="Tìm kiếm tiêu đề, nội dung, ngày..." class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500 transition-all">
+                    </div>
+                    <select id="notify-sort" title="Sắp xếp thông báo" class="px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-blue-500 transition-all">
+                        <option value="newest">Mới nhất xếp trước</option>
+                        <option value="oldest">Cũ nhất xếp trước</option>
+                        <option value="stt-desc">STT giảm dần</option>
+                        <option value="stt-asc">STT tăng dần</option>
+                    </select>
+                </div>
+
+                <!-- Notifications List Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                                <th class="px-6 py-4 w-20">STT</th>
+                                <th class="px-6 py-4 w-32">Thời gian</th>
+                                <th class="px-6 py-4 w-40">Tiêu đề</th>
+                                <th class="px-6 py-4">Nội dung chi tiết (Markdown)</th>
+                                <th class="px-6 py-4 w-28">Màu sắc</th>
+                                <th class="px-6 py-4 text-right w-44">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="notifications-table-body" class="divide-y divide-slate-100 bg-white/40">
+                            <tr>
+                                <td colspan="6" class="text-center py-12 text-slate-400 font-semibold">Đang tải dữ liệu thông báo...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL LOTUS BOT -->
+        <section id="panel-lotus-bot" class="tab-panel hidden space-y-6">
+            <!-- Lotus Chat Bot Management Panel -->
+            <div class="glass-card rounded-3xl overflow-hidden border border-slate-200/85">
+                <div class="p-6 border-b border-slate-200/80 bg-white/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-950 flex items-center gap-2">
+                            <i class="ph-bold ph-robot"></i> Quản lý Lotus Chat Bot
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1">Đồng bộ trực tiếp với Firebase Realtime Database. Các bot chạy PM2 sẽ nhận cấu hình này tự động.</p>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="bots-list">
+                        <div class="text-center py-12 text-slate-400 font-semibold w-full col-span-full">
+                            <i class="ph-bold ph-spinner animate-spin text-xl mr-2"></i> Đang tải dữ liệu Bot...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL EduSpace PROFILES -->
+        <section id="panel-edu-profiles" class="tab-panel hidden space-y-6">
+            <div class="glass-card rounded-3xl overflow-hidden border border-slate-200/85">
+                <!-- Header -->
+                <div class="p-6 border-b border-slate-200/80 bg-white/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-950 flex items-center gap-2">
+                            <i class="ph-bold ph-graduation-cap text-blue-600"></i> Hồ sơ học tập EduSpace
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1">Xem và chỉnh sửa thông tin học tập của người dùng trong EduSpace. Dữ liệu được lưu riêng trong Firestore, chỉ liên kết qua UID.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="window.loadEduProfiles()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition-all border border-slate-200">
+                            <i class="ph-bold ph-arrows-clockwise"></i> Làm mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search & Filter bar -->
+                <div class="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row gap-3 items-center">
+                    <div class="relative flex-1 w-full">
+                        <i class="ph-bold ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="edu-profile-search" placeholder="Tìm theo NDID, họ tên, lớp..." oninput="window.filterEduProfiles()" title="Tìm kiếm hồ sơ" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                    </div>
+                    <select id="edu-profile-grade-filter" title="Lọc theo khối lớp" onchange="window.filterEduProfiles()" class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-blue-500 transition-all flex-shrink-0">
+                        <option value="">Tất cả khối lớp</option>
+                        <option value="10">Lớp 10</option>
+                        <option value="11">Lớp 11</option>
+                        <option value="12">Lớp 12</option>
+                        <option value="Đang dạy">Đang dạy</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                    <select id="edu-profile-role-filter" title="Lọc theo vai trò" onchange="window.filterEduProfiles()" class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-blue-500 transition-all flex-shrink-0">
+                        <option value="">Tất cả vai trò</option>
+                        <option value="student">Học sinh</option>
+                        <option value="teacher">Giáo viên</option>
+                        <option value="admin">Admin</option>
+                        <option value="other">Khác</option>
+                    </select>
+                </div>
+
+                <!-- Stats mini-bar -->
+                <div class="px-6 py-3 bg-slate-50/60 border-b border-slate-100 flex items-center gap-6 text-xs font-bold text-slate-500">
+                    <span>Tổng hồ sơ: <span id="edu-stat-total" class="text-slate-800">-</span></span>
+                    <span>Học sinh: <span id="edu-stat-students" class="text-blue-600">-</span></span>
+                    <span>Giáo viên: <span id="edu-stat-teachers" class="text-emerald-600">-</span></span>
+                    <span>Chưa có lớp: <span id="edu-stat-no-grade" class="text-amber-600">-</span></span>
+                </div>
+
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <div id="edu-profiles-loader" class="hidden py-12 text-center text-slate-400 font-semibold text-sm">
+                        <i class="ph-bold ph-spinner animate-spin text-2xl text-blue-500 block mb-2"></i>
+                        Đang tải hồ sơ...
+                    </div>
+                    <div id="edu-profiles-empty" class="hidden py-12 text-center text-slate-400 font-semibold text-sm">
+                        <i class="ph-bold ph-folder-open text-3xl block mb-2"></i>
+                        Không tìm thấy hồ sơ nào.
+                    </div>
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200">
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-5 py-3.5">NDID / Họ tên</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-5 py-3.5">Vai trò EduSpace</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-5 py-3.5">Khối lớp</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-5 py-3.5">Năm sinh</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-5 py-3.5">Subrole</th>
+                                <th class="text-right text-xs font-extrabold text-slate-400 uppercase tracking-wider px-5 py-3.5">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="edu-profiles-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL CHATND -->
+        <section id="panel-chatnd" class="tab-panel hidden space-y-6">
+            <div class="glass-card p-8 rounded-3xl border border-slate-200 bg-white/70">
+                <h3 class="text-xl font-extrabold text-slate-950 flex items-center gap-2 mb-3">
+                    <i class="ph-bold ph-chat-circle-dots text-blue-600"></i> Quản lý hệ thống tin nhắn ChatND
+                </h3>
+                <p class="text-sm text-slate-500 mb-8">Trang công cụ dành cho Quản trị viên để quản lý và làm sạch dữ liệu tin nhắn trò chuyện của toàn bộ người dùng trên EduSpace & ND Labs.</p>
+
+                <div class="p-6 border border-red-100 bg-red-50/50 rounded-2xl max-w-2xl">
+                    <h4 class="text-md font-bold text-red-700 flex items-center gap-2 mb-2">
+                        <i class="ph-bold ph-warning-octagon text-lg"></i> Vùng nguy hiểm: Xóa sạch dữ liệu tin nhắn
+                    </h4>
+                    <p class="text-xs text-slate-600 mb-6 leading-relaxed">Hành động này sẽ duyệt qua toàn bộ các tài liệu trong bộ sưu tập <strong>chats</strong> và các bộ sưu tập con <strong>messages</strong> trên Firestore trực tuyến để xóa sạch toàn bộ. Các tin nhắn sẽ bị xóa vĩnh viễn và không thể hoàn tác.</p>
+                    
+                    <button onclick="window.wipeAllChatNDData()" id="btn-wipe-all-chats" class="inline-flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-extrabold rounded-xl transition-all shadow-md shadow-red-500/10">
+                        <i class="ph-bold ph-trash-simple text-base"></i> Xóa sạch toàn bộ dữ liệu ChatND
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="edit-user-modal" class="fixed inset-0 z-[100000] hidden flex items-center justify-center bg-slate-900/40 backdrop-blur-md">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-100 mx-4">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-extrabold text-slate-950">Chỉnh sửa người dùng</h3>
+                <button onclick="closeEditModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all">✕</button>
+            </div>
+
+            <form id="edit-user-form" class="space-y-6">
+                <input type="hidden" id="edit-uid">
+                
+                <!-- Section 1: Tài khoản NDID -->
+                <div class="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 space-y-4">
+                    <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1.5"><i class="ph-bold ph-identification-card"></i> Tài khoản NDID</h4>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">NDID (Tên định danh)</label>
+                        <input type="text" id="edit-ndid" title="NDID (Tên định danh)" placeholder="Nhập NDID" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                        <p class="text-[10px] text-slate-400 mt-1">Admin có thể sửa tùy ý, không giới hạn ký tự hay cụm từ cấm.</p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Họ và tên</label>
+                        <input type="text" id="edit-fullname" title="Họ và tên" placeholder="Nhập họ và tên" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Vai trò hệ thống ND Labs</label>
+                        <select id="edit-role" title="Vai trò hệ thống ND Labs" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-blue-500 transition-all">
+                            <option value="member">Thành viên (Member)</option>
+                            <option value="admin">Quản trị viên (Admin)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section 2: Thông tin học tập/giáo dục EduSpace -->
+                <div class="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 space-y-4">
+                    <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1.5"><i class="ph-bold ph-graduation-cap"></i> Thông tin học tập EduSpace</h4>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Vai trò học tập EduSpace</label>
+                        <select id="edit-edu-role" title="Vai trò học tập EduSpace" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-blue-500 transition-all">
+                            <option value="student">Học sinh (Student)</option>
+                            <option value="teacher">Giáo viên (Teacher)</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Năm sinh</label>
+                        <input type="number" id="edit-yob" title="Năm sinh" placeholder="Ví dụ: 2008" min="1940" max="2026" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Khối lớp / Hoạt động</label>
+                        <select id="edit-grade" title="Khối lớp / Hoạt động" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-blue-500 transition-all">
+                            <option value="10">Lớp 10</option>
+                            <option value="11">Lớp 11</option>
+                            <option value="12">Lớp 12</option>
+                            <option value="Đang dạy">Giáo viên - Đang dạy</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4">
+                    <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition-all">Hủy</button>
+                    <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/10">Lưu thay đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add/Edit Notification Modal -->
+    <div id="notify-modal" class="fixed inset-0 z-[100000] hidden flex items-center justify-center bg-slate-900/40 backdrop-blur-md">
+        <div class="bg-white rounded-3xl p-8 max-w-2xl w-full shadow-2xl border border-slate-100 mx-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex items-center justify-between mb-6">
+                <h3 id="notify-modal-title" class="text-xl font-extrabold text-slate-950">Thêm thông báo mới</h3>
+                <button onclick="window.closeNotifyModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all">✕</button>
+            </div>
+
+            <form id="notify-form" class="space-y-5">
+                <input type="hidden" id="notify-key">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Tiêu đề</label>
+                        <input type="text" id="notify-title" required placeholder="Ví dụ: EduSpace" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Thứ tự ưu tiên (STT)</label>
+                        <input type="number" id="notify-stt" placeholder="Tự động tăng" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Ngày phát hành</label>
+                        <input type="text" id="notify-date" required placeholder="DD/MM/YYYY" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Giờ phát hành</label>
+                        <input type="text" id="notify-time" required placeholder="HH:MM" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Màu sắc chủ đề</label>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button type="button" onclick="window.setNotifyColor('#0070f3')" class="notify-color-btn notify-color-blue" id="color-btn-#0070f3" title="Xanh dương"></button>
+                        <button type="button" onclick="window.setNotifyColor('#ef4444')" class="notify-color-btn notify-color-red" id="color-btn-#ef4444" title="Đỏ"></button>
+                        <button type="button" onclick="window.setNotifyColor('#10b981')" class="notify-color-btn notify-color-green" id="color-btn-#10b981" title="Xanh lá"></button>
+                        <button type="button" onclick="window.setNotifyColor('#8b5cf6')" class="notify-color-btn notify-color-purple" id="color-btn-#8b5cf6" title="Tím"></button>
+                        <button type="button" onclick="window.setNotifyColor('#f59e0b')" class="notify-color-btn notify-color-amber" id="color-btn-#f59e0b" title="Cam"></button>
+                        <div class="flex items-center gap-2 border border-slate-200 rounded-xl px-2 py-1.5 bg-slate-50">
+                            <span class="text-xs font-bold text-slate-500">Mã tùy chọn:</span>
+                            <input type="color" id="notify-color-picker" title="Chọn màu tùy chỉnh" aria-label="Chọn màu sắc tùy chỉnh" oninput="window.setNotifyColor(this.value)" class="w-6 h-6 border-0 bg-transparent cursor-pointer">
+                            <input type="text" id="notify-color" required placeholder="#0070f3" class="w-20 px-1 py-0.5 border-b border-slate-300 text-xs font-semibold outline-none bg-transparent" onchange="window.setNotifyColor(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                        <span>Nội dung chi tiết (Hỗ trợ Markdown Link)</span>
+                        <span class="text-[10px] text-blue-600 font-bold lowercase">Cú pháp: [Tên Link](https://tên-miền)</span>
+                    </label>
+                    <textarea id="notify-info" required rows="4" placeholder="Nhập nội dung thông báo... Ví dụ: Đã cập nhật đề thi học kỳ [tại đây](https://ndsite.web.app/eduspace/...)" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"></textarea>
+                </div>
+
+                <!-- Markdown Live Preview -->
+                <div class="p-4 border border-slate-100 bg-slate-50 rounded-2xl">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Xem trước nội dung hiển thị</span>
+                    <div id="notify-preview-container" class="border border-slate-200 rounded-xl p-4 bg-white flex items-start gap-3">
+                        <!-- Left: Hour -->
+                        <div id="preview-time" class="text-[11.5px] font-bold text-slate-400 w-10 text-right flex-shrink-0 pt-[1.5px] font-mono">15:00</div>
+                        <!-- Vertical color bar -->
+                        <div id="preview-color-bar" class="w-1 align-self-stretch rounded-[2px] flex-shrink-0"></div>
+                        <!-- Right: content -->
+                        <div class="flex-1 flex flex-col gap-1 min-w-0">
+                            <span id="preview-title" class="font-extrabold text-sm text-slate-800 flex items-center flex-wrap">EduSpace</span>
+                            <p id="preview-text" class="text-xs text-slate-500 m-0 leading-relaxed break-words"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4">
+                    <button type="button" onclick="window.closeNotifyModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition-all">Hủy</button>
+                    <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/10">Đăng thông báo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Status Alerts -->
+    <div id="status-toast" class="fixed bottom-6 right-6 z-[100001] transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div id="status-toast-inner" class="flex items-center gap-3 px-5 py-3 rounded-xl bg-slate-900 text-white text-sm font-bold shadow-xl border border-slate-800">
+            <i id="status-toast-icon" class="ph-bold"></i>
+            <span id="status-toast-text">Thông báo hệ thống</span>
+        </div>
+    </div>
+
+    <!-- Firebase Integration Logic -->
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getDatabase, ref, onValue, set, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        // Initialize Firebase - wait for config to be ready
+        async function getFirebaseApp() {
+            if (getApps().length > 0) return getApp();
+            let attempts = 0;
+            while (typeof window.getEduKeys !== 'function' && attempts < 30) {
+                await new Promise(r => setTimeout(r, 200));
+                attempts++;
+            }
+            if (typeof window.getEduKeys !== 'function') throw new Error('Config script failed to load.');
+            const keys = await window.getEduKeys();
+            const firebaseConfig = {
+                apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
+                authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
+                databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
+                projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
+                storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
+                messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
+                appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
+                measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
+            };
+            return initializeApp(firebaseConfig);
+        }
+
+        let app, auth, db, rtdb;
+        try {
+            app = await getFirebaseApp();
+            auth = getAuth(app);
+            db = getFirestore(app);
+            rtdb = getDatabase(app);
+        } catch(initErr) {
+            showAccessDenied('Lỗi khởi động', initErr.message);
+        }
+
+        // Global UI state
+        let allUsers = [];
+        let allNotifications = {};
+        let selectedUserUids = new Set();
+
+        // ================================================
+        // EDU PROFILES PANEL
+        // ================================================
+        let allEduProfiles = [];
+
+        window.loadEduProfiles = async function() {
+            const tbody = document.getElementById('edu-profiles-tbody');
+            const loader = document.getElementById('edu-profiles-loader');
+            const empty = document.getElementById('edu-profiles-empty');
+            if (!tbody) return;
+
+            loader?.classList.remove('hidden');
+            tbody.innerHTML = '';
+            empty?.classList.add('hidden');
+
+            try {
+                const snap = await getDocs(collection(db, 'users'));
+                allEduProfiles = [];
+                snap.forEach(d => allEduProfiles.push({ uid: d.id, ...d.data() }));
+                loader?.classList.add('hidden');
+                window.renderEduProfiles(allEduProfiles);
+            } catch(err) {
+                loader?.classList.add('hidden');
+                showToast('Lỗi tải hồ sơ: ' + err.message, 'error');
+            }
+        };
+
+        window.filterEduProfiles = function() {
+            const q = (document.getElementById('edu-profile-search')?.value || '').toLowerCase();
+            const gradeF = document.getElementById('edu-profile-grade-filter')?.value || '';
+            const roleF = document.getElementById('edu-profile-role-filter')?.value || '';
+            const filtered = allEduProfiles.filter(u => {
+                const rawRole = u.role || 'student';
+                const rawSubrole = u.subrole || '';
+                let resolvedEduRole = u.eduRole || '';
+                if (!resolvedEduRole) {
+                    if (rawRole === 'admin') resolvedEduRole = rawSubrole || 'student';
+                    else if (rawRole === 'teacher') resolvedEduRole = 'teacher';
+                    else resolvedEduRole = 'student';
+                }
+
+                const matchText = !q || (u.ndid||'').toLowerCase().includes(q) || (u.fullname||'').toLowerCase().includes(q) || (u.grade||'').toLowerCase().includes(q);
+                const matchGrade = !gradeF || (u.grade || '') === gradeF;
+                const matchRole = !roleF || resolvedEduRole === roleF;
+                return matchText && matchGrade && matchRole;
+            });
+            window.renderEduProfiles(filtered);
+        };
+
+        window.renderEduProfiles = function(profiles) {
+            const tbody = document.getElementById('edu-profiles-tbody');
+            const empty = document.getElementById('edu-profiles-empty');
+            if (!tbody) return;
+
+            // Update stats
+            const all = allEduProfiles;
+            const resolvedAll = all.map(u => {
+                const rawRole = u.role || 'student';
+                const rawSubrole = u.subrole || '';
+                let resolvedEduRole = u.eduRole || '';
+                if (!resolvedEduRole) {
+                    if (rawRole === 'admin') resolvedEduRole = rawSubrole || 'student';
+                    else if (rawRole === 'teacher') resolvedEduRole = 'teacher';
+                    else resolvedEduRole = 'student';
+                }
+                return { ...u, resolvedEduRole };
+            });
+
+            document.getElementById('edu-stat-total').textContent = resolvedAll.length;
+            document.getElementById('edu-stat-students').textContent = resolvedAll.filter(u => u.resolvedEduRole === 'student').length;
+            document.getElementById('edu-stat-teachers').textContent = resolvedAll.filter(u => u.resolvedEduRole === 'teacher').length;
+            document.getElementById('edu-stat-no-grade').textContent = resolvedAll.filter(u => !u.grade || u.grade === 'Khác').length;
+
+            if (profiles.length === 0) {
+                empty?.classList.remove('hidden');
+                tbody.innerHTML = '';
+                return;
+            }
+            empty?.classList.add('hidden');
+
+            const roleBadge = (role) => {
+                const cfg = { teacher: 'bg-emerald-50 text-emerald-700 border-emerald-200', student: 'bg-blue-50 text-blue-700 border-blue-200' };
+                const lbl = { teacher: 'Giáo viên', student: 'Học sinh' };
+                const cls = cfg[role] || 'bg-slate-100 text-slate-500 border-slate-200';
+                return `<span class="inline-flex items-center px-2 py-0.5 rounded-lg border text-xs font-bold ${cls}">${lbl[role] || role || 'Khác'}</span>`;
+            };
+
+            tbody.innerHTML = profiles.map(u => {
+                const rawRole = u.role || 'student';
+                const rawSubrole = u.subrole || '';
+                let resolvedEduRole = u.eduRole || '';
+                if (!resolvedEduRole) {
+                    if (rawRole === 'admin') resolvedEduRole = rawSubrole || 'student';
+                    else if (rawRole === 'teacher') resolvedEduRole = 'teacher';
+                    else resolvedEduRole = 'student';
+                }
+
+                return `
+                <tr class="border-b border-slate-100 hover:bg-blue-50/30 transition-colors">
+                    <td class="px-5 py-3.5">
+                        <div class="font-bold text-slate-800">${u.ndid || '<span class="text-slate-300 font-normal">chưa có</span>'}</div>
+                        <div class="text-xs text-slate-400 mt-0.5">${u.fullname || ''}</div>
+                    </td>
+                    <td class="px-5 py-3.5">${roleBadge(resolvedEduRole)}</td>
+                    <td class="px-5 py-3.5">
+                        <span class="text-sm font-semibold text-slate-600">${u.grade || '<span class="text-slate-300">-</span>'}</span>
+                    </td>
+                    <td class="px-5 py-3.5">
+                        <span class="text-sm font-semibold text-slate-600">${u.yob || '<span class="text-slate-300">-</span>'}</span>
+                    </td>
+                    <td class="px-5 py-3.5">
+                        <span class="text-xs font-semibold text-slate-500">${resolvedEduRole === 'teacher' ? 'Dạy học' : 'Học tập'}</span>
+                    </td>
+                    <td class="px-5 py-3.5 text-right">
+                        <button onclick="window.openEditModal('${u.uid}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-100 transition-all">
+                            <i class="ph-bold ph-pencil"></i> Sửa
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        };
+
+        // Switch Dashboard Tabs
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('border-blue-600', 'text-blue-600');
+                b.classList.add('border-transparent', 'text-slate-500');
+            });
+            
+            const targetPanel = document.getElementById(`panel-${tabId}`);
+            if (tabId === 'edu-profiles') window.loadEduProfiles();
+            if (targetPanel) targetPanel.classList.remove('hidden');
+            
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-transparent', 'text-slate-500');
+                activeBtn.classList.add('border-blue-600', 'text-blue-600');
+            }
+        };
+
+        // Verify and authenticate Admin
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                showAccessDenied("Chưa đăng nhập", "Bạn cần đăng nhập bằng tài khoản Admin để tiếp tục.");
+                return;
+            }
+
+            try {
+                const userSnap = await getDoc(doc(db, 'users', user.uid));
+                if (!userSnap.exists()) {
+                    showAccessDenied("Không tìm thấy thông tin", "Tài khoản của bạn chưa có dữ liệu hồ sơ NDID.");
+                    return;
+                }
+
+                const userData = userSnap.data();
+                const ndid = userData.ndid || (user.email || '').split('@')[0] || user.uid;
+
+                if (userData.role !== 'admin') {
+                    showAccessDenied("Từ chối truy cập", `Tài khoản @${ndid} không được cấp quyền quản trị viên (Admin).`);
+                    return;
+                }
+
+                // Authorized! Remove lock screen and show overview
+                document.getElementById('admin-lock-screen').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                showToast("Xác thực quản trị viên thành công!", "success");
+                
+                // Show default tab
+                window.switchTab('overview');
+                
+                // Load global data
+                loadUsersList();
+                loadNotificationsList();
+
+                // Load version indicator
+                setTimeout(() => {
+                    const badge = document.getElementById('nd-version-badge');
+                    if (badge) {
+                        document.getElementById('status-version-badge').textContent = badge.textContent;
+                    } else {
+                        document.getElementById('status-version-badge').textContent = "ver:1.7";
+                    }
+                }, 1200);
+
+                // Listen to Realtime Database for Lotus Bots
+                onValue(ref(rtdb, '/lotus_bots'), (snapshot) => {
+                    const data = snapshot.val() || {};
+                    window.renderBots(data);
+                });
+
+            } catch (err) {
+                console.error(err);
+                showAccessDenied("Lỗi xác thực", "Hệ thống gặp sự cố khi xác minh quyền của bạn: " + err.message);
+            }
+        });
+
+        function showAccessDenied(title, desc) {
+            const lockIcon = document.getElementById('lock-icon-container');
+            const lockTitle = document.getElementById('lock-title');
+            const lockDesc = document.getElementById('lock-desc');
+            const lockAction = document.getElementById('lock-action-btn');
+
+            lockIcon.className = "mx-auto w-16 h-16 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm";
+            lockIcon.innerHTML = `<i class="ph-bold ph-lock-simple"></i>`;
+            lockTitle.textContent = title;
+            lockTitle.className = "text-xl font-extrabold mb-2 tracking-tight text-rose-600";
+            lockDesc.textContent = desc;
+            lockAction.classList.remove('hidden');
+        }
+
+        // Fetch user list from Firestore
+        async function loadUsersList() {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="9" class="text-center py-12 text-slate-400 font-semibold">
+                        <i class="ph-bold ph-spinner animate-spin text-xl mr-2"></i> Đang tải dữ liệu từ Firestore...
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const usersSnap = await getDocs(collection(db, 'users'));
+                allUsers = [];
+                usersSnap.forEach(u => {
+                    allUsers.push({
+                        uid: u.id,
+                        ...u.data()
+                    });
+                });
+
+                // Clear selection
+                window.clearUserSelection();
+                renderUsersTable(allUsers);
+                updateStats(allUsers);
+
+            } catch (err) {
+                console.error(err);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center py-12 text-rose-500 font-semibold">
+                            <i class="ph-bold ph-warning-octagon text-xl mr-2"></i> Lỗi tải dữ liệu: ${err.message}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Render data to table
+        function renderUsersTable(users) {
+            const tbody = document.getElementById('users-table-body');
+            if (users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center py-12 text-slate-400 font-semibold">
+                            Không tìm thấy người dùng phù hợp.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition-colors";
+
+                // Resolve roles
+                const rawRole = u.role || 'student';
+                const rawSubrole = u.subrole || '';
+
+                let resolvedRole = 'member';
+                if (rawRole === 'admin') resolvedRole = 'admin';
+
+                let resolvedEduRole = u.eduRole || '';
+                if (!resolvedEduRole) {
+                    if (rawRole === 'admin') resolvedEduRole = rawSubrole || 'student';
+                    else if (rawRole === 'teacher') resolvedEduRole = 'teacher';
+                    else resolvedEduRole = 'student';
+                }
+
+                const roleBadges = {
+                    admin: '<span class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded-md bg-red-50 text-red-600 border border-red-100 mr-1">Admin</span>',
+                    member: '<span class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded-md bg-slate-100 text-slate-600 border border-slate-200 mr-1">TV</span>',
+                    teacher: '<span class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded-md bg-emerald-50 text-emerald-600 border border-emerald-100">GV</span>',
+                    student: '<span class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded-md bg-blue-50 text-blue-600 border border-blue-100">HS</span>',
+                    other: '<span class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded-md bg-slate-100 text-slate-500 border border-slate-200">Khác</span>'
+                };
+
+                let roleBadge = roleBadges[resolvedRole] || roleBadges.member;
+                if (resolvedEduRole === 'teacher') {
+                    roleBadge += roleBadges.teacher;
+                } else if (resolvedEduRole === 'student') {
+                    roleBadge += roleBadges.student;
+                } else if (resolvedEduRole === 'other') {
+                    roleBadge += roleBadges.other;
+                }
+
+                const formattedDate = u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : '—';
+                const isChecked = selectedUserUids.has(u.uid) ? 'checked' : '';
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 text-center">
+                        <input type="checkbox" class="user-row-checkbox w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer" data-uid="${u.uid}" ${isChecked}>
+                    </td>
+                    <td class="px-6 py-4 font-bold text-slate-900">${u.ndid || '—'}</td>
+                    <td class="px-6 py-4 font-semibold text-slate-800">${u.fullname || '—'}</td>
+                    <td class="px-6 py-4 text-slate-500 font-medium text-xs">${u.emails?.[0] || '—'}</td>
+                    <td class="px-6 py-4">${roleBadge}</td>
+                    <td class="px-6 py-4 font-semibold text-slate-700">${u.yob || '—'}</td>
+                    <td class="px-6 py-4 font-bold text-slate-800">${u.grade || '—'}</td>
+                    <td class="px-6 py-4 text-slate-400 font-semibold text-xs">${formattedDate}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="openEditModal('${u.uid}')" class="px-3 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 border border-slate-200 rounded-lg text-xs font-bold transition-all mr-2">Sửa</button>
+                        <button onclick="deleteUser('${u.uid}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-bold transition-all">Xóa</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Bind checkbox events
+            document.querySelectorAll('.user-row-checkbox').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const uid = e.target.dataset.uid;
+                    if (e.target.checked) {
+                        selectedUserUids.add(uid);
+                    } else {
+                        selectedUserUids.delete(uid);
+                    }
+                    updateBulkActionBar();
+                });
+            });
+        }
+
+        // Header checkbox select all
+        document.getElementById('user-select-all').addEventListener('change', (e) => {
+            const visibleCheckboxes = document.querySelectorAll('.user-row-checkbox');
+            visibleCheckboxes.forEach(cb => {
+                cb.checked = e.target.checked;
+                const uid = cb.dataset.uid;
+                if (e.target.checked) {
+                    selectedUserUids.add(uid);
+                } else {
+                    selectedUserUids.delete(uid);
+                }
+            });
+            updateBulkActionBar();
+        });
+
+        // Update bulk action bar visibility and count
+        function updateBulkActionBar() {
+            const bar = document.getElementById('bulk-action-bar');
+            const countSpan = document.getElementById('bulk-select-count');
+            
+            if (selectedUserUids.size > 0) {
+                bar.classList.remove('hidden');
+                countSpan.textContent = `Đã chọn ${selectedUserUids.size} người dùng`;
+            } else {
+                bar.classList.add('hidden');
+                document.getElementById('user-select-all').checked = false;
+            }
+        }
+
+        // Clear Selection
+        window.clearUserSelection = function() {
+            selectedUserUids.clear();
+            document.getElementById('user-select-all').checked = false;
+            document.querySelectorAll('.user-row-checkbox').forEach(cb => cb.checked = false);
+            updateBulkActionBar();
+            document.getElementById('bulk-role-select').value = "";
+        };
+
+        // Handle bulk role change
+        window.handleBulkChangeRole = async function(newRole) {
+            if (!newRole) return;
+            if (!confirm(`Bạn có chắc chắn muốn đổi vai trò thành "${newRole.toUpperCase()}" cho ${selectedUserUids.size} tài khoản đã chọn?`)) {
+                document.getElementById('bulk-role-select').value = "";
+                return;
+            }
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (let uid of selectedUserUids) {
+                try {
+                    await updateDoc(doc(db, 'users', uid), { role: newRole });
+                    successCount++;
+                } catch (e) {
+                    console.error("Bulk role change error for UID: " + uid, e);
+                    errorCount++;
+                }
+            }
+
+            showToast(`Đã cập nhật vai trò thành công cho ${successCount} tài khoản!${errorCount > 0 ? ` (Thất bại ${errorCount})` : ''}`, "success");
+            loadUsersList();
+        };
+
+        // Handle bulk delete
+        window.handleBulkDelete = async function() {
+            if (!confirm(`CẢNH BÁO NGUY HIỂM!\n\nBạn đang chọn xóa HÀNG LOẠT ${selectedUserUids.size} tài khoản học viên.\nHành động này sẽ xóa dữ liệu trên Firestore và thu hồi bản đồ NDID.\n\nBạn có thực sự muốn tiếp tục?`)) {
+                return;
+            }
+
+            let successCount = 0;
+            for (let uid of selectedUserUids) {
+                try {
+                    const u = allUsers.find(user => user.uid === uid);
+                    await deleteDoc(doc(db, 'users', uid));
+                    if (u && u.ndid) {
+                        try {
+                            await deleteDoc(doc(db, 'ndids', u.ndid));
+                        } catch (_) {}
+                    }
+                    successCount++;
+                } catch (e) {
+                    console.error("Bulk delete error for UID: " + uid, e);
+                }
+            }
+
+            showToast(`Đã xóa thành công ${successCount} tài khoản!`, "success");
+            loadUsersList();
+        };
+
+        // Export Users to CSV
+        window.exportUsersCSV = function() {
+            // Get currently active/filtered list from user table row inputs
+            const visibleUids = Array.from(document.querySelectorAll('.user-row-checkbox')).map(cb => cb.dataset.uid);
+            const filteredUsers = allUsers.filter(u => visibleUids.includes(u.uid));
+
+            if (filteredUsers.length === 0) {
+                showToast("Không có dữ liệu phù hợp để xuất!", "error");
+                return;
+            }
+
+            let csvContent = "\uFEFF"; // UTF-8 BOM
+            csvContent += "NDID,Ho va Ten,Email,Vai tro,Nam sinh,Lop,Ngay tao,UID\n";
+
+            filteredUsers.forEach(u => {
+                const ndid = u.ndid || "";
+                const fullname = (u.fullname || "").replace(/"/g, '""');
+                const email = u.emails?.[0] || "";
+                const role = u.role || "student";
+                const yob = u.yob || "";
+                const grade = u.grade || "";
+                const date = u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : "";
+                
+                csvContent += `"${ndid}","${fullname}","${email}","${role}","${yob}","${grade}","${date}","${u.uid}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `eduspace_users_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Xuất tệp CSV thành công!", "success");
+        };
+
+        // --- NDID Diagnostic & Auto Sync Engine ---
+        window.runDiagnostics = async function() {
+            const loader = document.getElementById('diagnostics-loader');
+            const results = document.getElementById('diagnostics-results');
+            const runBtn = document.getElementById('btn-run-diagnostics');
+
+            loader.classList.remove('hidden');
+            results.classList.add('hidden');
+            runBtn.disabled = true;
+
+            try {
+                // Fetch users
+                const usersSnap = await getDocs(collection(db, 'users'));
+                const usersMap = {};
+                usersSnap.forEach(snap => {
+                    usersMap[snap.id] = { uid: snap.id, ...snap.data() };
+                });
+
+                // Fetch ndids
+                const ndidsSnap = await getDocs(collection(db, 'ndids'));
+                const ndidsList = [];
+                ndidsSnap.forEach(snap => {
+                    ndidsList.push({ ndid: snap.id, ...snap.data() });
+                });
+
+                // Analyze Orphaned NDIDs (exist in ndids, but UID does not exist in users)
+                const orphanedNdids = [];
+                ndidsList.forEach(item => {
+                    if (!usersMap[item.uid]) {
+                        orphanedNdids.push(item);
+                    }
+                });
+
+                // Analyze Users with Missing NDID Map
+                const usersMissingMap = [];
+                Object.values(usersMap).forEach(user => {
+                    if (user.ndid) {
+                        const hasMap = ndidsList.some(item => item.ndid === user.ndid && item.uid === user.uid);
+                        if (!hasMap) {
+                            usersMissingMap.push(user);
+                        }
+                    }
+                });
+
+                // Render Results
+                renderDiagnostics(orphanedNdids, usersMissingMap);
+
+            } catch (e) {
+                console.error("Diagnostics error", e);
+                results.innerHTML = `
+                    <div class="p-4 bg-rose-50 text-rose-600 rounded-2xl border border-rose-100 text-sm font-semibold">
+                        Có lỗi xảy ra khi chạy chẩn đoán: ${e.message}
+                    </div>
+                `;
+                results.classList.remove('hidden');
+            } finally {
+                loader.classList.add('hidden');
+                runBtn.disabled = false;
+            }
+        };
+
+        function renderDiagnostics(orphanedNdids, usersMissingMap) {
+            const results = document.getElementById('diagnostics-results');
+            results.innerHTML = "";
+            results.classList.remove('hidden');
+
+            const totalErrors = orphanedNdids.length + usersMissingMap.length;
+            if (totalErrors === 0) {
+                results.innerHTML = `
+                    <div class="p-6 bg-emerald-50 text-emerald-700 rounded-2xl border border-emerald-100 text-center font-bold text-sm">
+                        🎉 Tuyệt vời! Toàn bộ cơ sở dữ liệu đã đồng bộ hoàn hảo. Không phát hiện NDID mồ côi hoặc lỗi liên kết.
+                    </div>
+                `;
+                return;
+            }
+
+            // Fix all button
+            results.innerHTML += `
+                <div class="flex items-center justify-between p-4 bg-amber-50 rounded-2xl border border-amber-100">
+                    <span class="text-xs font-bold text-amber-700 flex items-center gap-1.5">
+                        <i class="ph-bold ph-warning-diamond text-base"></i> Phát hiện ${totalErrors} lỗi ánh xạ tài khoản NDID.
+                    </span>
+                    <button onclick="window.fixAllDiagnostics()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
+                        Khắc phục nhanh tất cả
+                    </button>
+                </div>
+            `;
+
+            // Orphaned NDIDs list
+            if (orphanedNdids.length > 0) {
+                let listHtml = "";
+                orphanedNdids.forEach(item => {
+                    listHtml += `
+                        <div class="flex items-center justify-between py-2 border-b border-slate-100 text-xs">
+                            <div>
+                                <span class="font-bold text-slate-800">@${item.ndid}</span>
+                                <span class="text-slate-400"> (UID mồ côi: ${item.uid.substring(0, 8)}...)</span>
+                            </div>
+                            <button onclick="window.fixOrphanedNdid('${item.ndid}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded text-[10px] font-bold">Xóa map</button>
+                        </div>
+                    `;
+                });
+                
+                results.innerHTML += `
+                    <div class="p-4 border border-slate-200 rounded-2xl bg-white">
+                        <h4 class="text-xs font-bold text-rose-600 uppercase tracking-wider mb-2 flex items-center gap-1">
+                            <i class="ph-bold ph-trash"></i> NDID mồ côi (${orphanedNdids.length})
+                        </h4>
+                        <p class="text-[10px] text-slate-400 mb-3">Tên đăng nhập tồn tại nhưng tài khoản người dùng đã bị xóa.</p>
+                        <div class="space-y-1 max-h-40 overflow-y-auto">${listHtml}</div>
+                    </div>
+                `;
+            }
+
+            // Users missing map
+            if (usersMissingMap.length > 0) {
+                let listHtml = "";
+                usersMissingMap.forEach(user => {
+                    listHtml += `
+                        <div class="flex items-center justify-between py-2 border-b border-slate-100 text-xs">
+                            <div>
+                                <span class="font-bold text-slate-800">${user.fullname || 'Học viên'}</span>
+                                <span class="text-slate-500 font-medium"> (@${user.ndid})</span>
+                            </div>
+                            <button onclick="window.fixMissingNdidMap('${user.uid}', '${user.ndid}', '${user.emails?.[1] || ''}')" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded text-[10px] font-bold">Tạo map</button>
+                        </div>
+                    `;
+                });
+
+                results.innerHTML += `
+                    <div class="p-4 border border-slate-200 rounded-2xl bg-white">
+                        <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2 flex items-center gap-1">
+                            <i class="ph-bold ph-link-break"></i> Lỗi thiếu map NDID (${usersMissingMap.length})
+                        </h4>
+                        <p class="text-[10px] text-slate-400 mb-3">Người dùng có NDID trong hồ sơ nhưng bản đồ định danh bị thiếu liên kết.</p>
+                        <div class="space-y-1 max-h-40 overflow-y-auto">${listHtml}</div>
+                    </div>
+                `;
+            }
+        }
+
+        window.fixOrphanedNdid = async function(ndid) {
+            try {
+                await deleteDoc(doc(db, 'ndids', ndid));
+                showToast(`Đã dọn dẹp bản đồ NDID @${ndid}`, "success");
+                window.runDiagnostics();
+            } catch (e) {
+                showToast("Lỗi: " + e.message, "error");
+            }
+        };
+
+        window.fixMissingNdidMap = async function(uid, ndid, recoveryEmail) {
+            try {
+                await setDoc(doc(db, 'ndids', ndid), {
+                    uid: uid,
+                    recoveryEmail: recoveryEmail || ''
+                });
+                showToast(`Đã thiết lập ánh xạ NDID cho @${ndid}`, "success");
+                window.runDiagnostics();
+            } catch (e) {
+                showToast("Lỗi: " + e.message, "error");
+            }
+        };
+
+        window.fixAllDiagnostics = async function() {
+            if (!confirm("Hệ thống sẽ tự động dọn dẹp NDID mồ côi và khôi phục tất cả ánh xạ bị thiếu. Bạn có muốn tiếp tục?")) {
+                return;
+            }
+            
+            try {
+                // Read fresh list
+                const usersSnap = await getDocs(collection(db, 'users'));
+                const usersMap = {};
+                usersSnap.forEach(snap => {
+                    usersMap[snap.id] = { uid: snap.id, ...snap.data() };
+                });
+
+                const ndidsSnap = await getDocs(collection(db, 'ndids'));
+                const ndidsList = [];
+                ndidsSnap.forEach(snap => {
+                    ndidsList.push({ ndid: snap.id, ...snap.data() });
+                });
+
+                let fixedCount = 0;
+
+                // 1. Delete orphaned ndids
+                for (let item of ndidsList) {
+                    if (!usersMap[item.uid]) {
+                        await deleteDoc(doc(db, 'ndids', item.ndid));
+                        fixedCount++;
+                    }
+                }
+
+                // 2. Re-create missing mappings
+                for (let user of Object.values(usersMap)) {
+                    if (user.ndid) {
+                        const hasMap = ndidsList.some(item => item.ndid === user.ndid && item.uid === user.uid);
+                        if (!hasMap) {
+                            await setDoc(doc(db, 'ndids', user.ndid), {
+                                uid: user.uid,
+                                recoveryEmail: user.emails?.[1] || ''
+                            });
+                            fixedCount++;
+                        }
+                    }
+                }
+
+                showToast(`Đã tự động sửa hoàn tất ${fixedCount} lỗi liên kết dữ liệu NDID!`, "success");
+                window.runDiagnostics();
+            } catch (e) {
+                showToast("Lỗi khôi phục tự động: " + e.message, "error");
+            }
+        };
+
+        // Calculate and render stats
+        function updateStats(users) {
+            const total = users.length;
+            const teachers = users.filter(u => u.role === 'teacher').length;
+            const g12 = users.filter(u => u.grade === '12' || u.grade === 12).length;
+
+            const profileCompleted = users.filter(u => u.yob && u.role && u.grade && u.grade !== 'Khác').length;
+            const completedPercent = total > 0 ? Math.round((profileCompleted / total) * 100) : 0;
+
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-teachers').textContent = teachers;
+            document.getElementById('stat-g12').textContent = g12;
+            document.getElementById('stat-profile-rate').textContent = completedPercent + "%";
+        }
+
+        // Live filtering and searching
+        const searchInput = document.getElementById('user-search');
+        const roleFilter = document.getElementById('filter-role');
+        const gradeFilter = document.getElementById('filter-grade');
+
+        function applyFilters() {
+            const query = searchInput.value.toLowerCase().trim();
+            const role = roleFilter.value;
+            const grade = gradeFilter.value;
+
+            const filtered = allUsers.filter(u => {
+                const matchesSearch = 
+                    (u.ndid || '').toLowerCase().includes(query) ||
+                    (u.fullname || '').toLowerCase().includes(query) ||
+                    (u.emails?.[0] || '').toLowerCase().includes(query);
+                
+                // Phân tách vai trò để lọc chính xác
+                const rawRole = u.role || 'student';
+                const rawSubrole = u.subrole || '';
+
+                let resolvedRole = 'member';
+                if (rawRole === 'admin') resolvedRole = 'admin';
+
+                let resolvedEduRole = u.eduRole || '';
+                if (!resolvedEduRole) {
+                    if (rawRole === 'admin') resolvedEduRole = rawSubrole || 'student';
+                    else if (rawRole === 'teacher') resolvedEduRole = 'teacher';
+                    else resolvedEduRole = 'student';
+                }
+
+                const matchesRole = role === 'all' || 
+                                    (role === 'admin' && resolvedRole === 'admin') ||
+                                    (role === 'teacher' && resolvedEduRole === 'teacher') ||
+                                    (role === 'student' && resolvedEduRole === 'student') ||
+                                    (role === 'other' && resolvedRole === 'member' && resolvedEduRole !== 'teacher' && resolvedEduRole !== 'student');
+
+                const matchesGrade = grade === 'all' || String(u.grade) === grade;
+
+                return matchesSearch && matchesRole && matchesGrade;
+            });
+
+            renderUsersTable(filtered);
+        }
+
+        searchInput.addEventListener('input', applyFilters);
+        roleFilter.addEventListener('change', applyFilters);
+        gradeFilter.addEventListener('change', applyFilters);
+
+        document.getElementById('btn-refresh').addEventListener('click', loadUsersList);
+
+        // Edit Modal functions
+        window.openEditModal = function(uid) {
+            const user = allUsers.find(u => u.uid === uid);
+            if (!user) return;
+
+            document.getElementById('edit-uid').value = user.uid;
+            document.getElementById('edit-ndid').value = user.ndid || '';
+            document.getElementById('edit-fullname').value = user.fullname || '';
+
+            // Phân tách & fallback vai trò ND Labs (role)
+            const rawRole = user.role || 'student';
+            const rawSubrole = user.subrole || '';
+            
+            let resolvedRole = 'member';
+            if (rawRole === 'admin') resolvedRole = 'admin';
+            
+            // Phân tách & fallback vai trò học tập EduSpace (eduRole)
+            let resolvedEduRole = user.eduRole || '';
+            if (!resolvedEduRole) {
+                if (rawRole === 'admin') resolvedEduRole = rawSubrole || 'student';
+                else if (rawRole === 'teacher') resolvedEduRole = 'teacher';
+                else resolvedEduRole = 'student';
+            }
+
+            document.getElementById('edit-role').value = resolvedRole;
+            document.getElementById('edit-edu-role').value = resolvedEduRole;
+            document.getElementById('edit-yob').value = user.yob || '';
+            document.getElementById('edit-grade').value = user.grade || 'Khác';
+
+            // Sync role to grade for teachers in editor
+            const editEduRole = document.getElementById('edit-edu-role');
+            const editGrade = document.getElementById('edit-grade');
+            editEduRole.onchange = () => {
+                if (editEduRole.value === 'teacher') editGrade.value = 'Đang dạy';
+                else if (editEduRole.value === 'student') editGrade.value = '10';
+            };
+
+            document.getElementById('edit-user-modal').classList.remove('hidden');
+        };
+
+        window.closeEditModal = function() {
+            document.getElementById('edit-user-modal').classList.add('hidden');
+        };
+
+        // Form Submit edit
+        document.getElementById('edit-user-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const uid = document.getElementById('edit-uid').value;
+            const newNdid = document.getElementById('edit-ndid').value.trim();
+            const fullname = document.getElementById('edit-fullname').value.trim();
+            const role = document.getElementById('edit-role').value;
+            const eduRole = document.getElementById('edit-edu-role').value;
+            const yob = document.getElementById('edit-yob').value.trim();
+            const grade = document.getElementById('edit-grade').value;
+
+            if (!uid) return;
+
+            const user = allUsers.find(u => u.uid === uid);
+            const oldNdid = user ? user.ndid : '';
+
+            try {
+                // If NDID changes, check map conflicts
+                if (newNdid !== oldNdid) {
+                    if (newNdid) {
+                        const ndidSnap = await getDoc(doc(db, 'ndids', newNdid));
+                        if (ndidSnap.exists() && ndidSnap.data().uid !== uid) {
+                            showToast("NDID này đã được sử dụng bởi người dùng khác!", "error");
+                            return;
+                        }
+                    }
+                }
+
+                // Update users document
+                await updateDoc(doc(db, 'users', uid), {
+                    ndid: newNdid,
+                    fullname,
+                    role,
+                    eduRole,
+                    subrole: null, // Xóa subrole cũ
+                    yob: yob ? Number(yob) : null,
+                    grade
+                });
+
+                // Update map ndids
+                if (newNdid) {
+                    await setDoc(doc(db, 'ndids', newNdid), {
+                        uid: uid,
+                        recoveryEmail: user?.emails?.[1] || ''
+                    });
+                }
+
+                if (oldNdid && newNdid !== oldNdid) {
+                    await deleteDoc(doc(db, 'ndids', oldNdid));
+                }
+
+                showToast("Cập nhật thông tin thành công!", "success");
+                closeEditModal();
+                loadUsersList();
+                // Nếu có tab hồ sơ đang bật → load lại luôn
+                if (typeof window.loadEduProfiles === 'function') {
+                    window.loadEduProfiles();
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Lỗi cập nhật: " + err.message, "error");
+            }
+        });
+
+        // Delete user
+        window.deleteUser = async function(uid) {
+            const user = allUsers.find(u => u.uid === uid);
+            if (!user) return;
+
+            if (!confirm(`Bạn có chắc chắn muốn xóa tài khoản của NDID "${user.ndid || 'chưa rõ'}"?\n\nHành động này sẽ:\n1. Xóa thông tin cá nhân và học tập trên Firestore.\n2. Thu hồi bản đồ định danh NDID để người khác có thể sử dụng lại.\n3. Vô hiệu hóa quyền truy cập hệ thống của tài khoản này.`)) {
+                return;
+            }
+
+            try {
+                await deleteDoc(doc(db, 'users', uid));
+                if (user.ndid) {
+                    try {
+                        await deleteDoc(doc(db, 'ndids', user.ndid));
+                    } catch (_) {}
+                }
+                showToast("Đã xóa hồ sơ người dùng thành công!", "success");
+                loadUsersList();
+            } catch (err) {
+                console.error(err);
+                showToast("Lỗi xóa: " + err.message, "error");
+            }
+        };
+
+        // Wipe all ChatND conversations and messages from Firestore
+        window.wipeAllChatNDData = async function() {
+            if (!confirm("⚠️ CẢNH BÁO NGUY HIỂM!\n\nBạn đang thực hiện xóa SẠCH TOÀN BỘ các cuộc hội thoại và tin nhắn trò chuyện của mọi người dùng trên hệ thống Firestore.\n\nHành động này sẽ XÓA VĨNH VIỄN và KHÔNG THỂ HOÀN TÁC. Bạn có chắc chắn 100% muốn thực hiện?")) {
+                return;
+            }
+            if (!confirm("Nhấn xác nhận một lần nữa để bắt đầu tiến hành xóa dữ liệu trò chuyện.")) {
+                return;
+            }
+
+            const btn = document.getElementById('btn-wipe-all-chats');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="ph-bold ph-spinner animate-spin mr-2"></i> Đang xóa sạch dữ liệu...`;
+            }
+
+            try {
+                const chatsSnap = await getDocs(collection(db, 'chats'));
+                let chatDeletedCount = 0;
+                let msgDeletedCount = 0;
+
+                for (let chatDoc of chatsSnap.docs) {
+                    const chatId = chatDoc.id;
+                    const msgsSnap = await getDocs(collection(db, 'chats', chatId, 'messages'));
+                    const msgPromises = msgsSnap.docs.map(msgDoc => 
+                        deleteDoc(doc(db, 'chats', chatId, 'messages', msgDoc.id))
+                    );
+                    await Promise.all(msgPromises);
+                    msgDeletedCount += msgsSnap.size;
+
+                    await deleteDoc(doc(db, 'chats', chatId));
+                    chatDeletedCount++;
+                }
+
+                showToast(`Đã xóa thành công ${chatDeletedCount} cuộc trò chuyện & ${msgDeletedCount} tin nhắn!`, "success");
+            } catch (err) {
+                console.error("Wipe all chats error:", err);
+                showToast("Lỗi khi xóa dữ liệu: " + err.message, "error");
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="ph-bold ph-trash-simple text-base"></i> Xóa sạch toàn bộ dữ liệu ChatND`;
+                }
+            }
+        };
+
+        // Toast utility
+        function showToast(message, type = "success") {
+            const toast = document.getElementById('status-toast');
+            const inner = document.getElementById('status-toast-inner');
+            const text = document.getElementById('status-toast-text');
+            const icon = document.getElementById('status-toast-icon');
+
+            text.textContent = message;
+            if (type === "success") {
+                inner.className = "flex items-center gap-3 px-5 py-3 rounded-xl bg-emerald-500 text-white text-sm font-bold shadow-xl border border-emerald-400";
+                icon.className = "ph-bold ph-check-circle text-lg";
+            } else {
+                inner.className = "flex items-center gap-3 px-5 py-3 rounded-xl bg-rose-500 text-white text-sm font-bold shadow-xl border border-rose-400";
+                icon.className = "ph-bold ph-warning-octagon text-lg";
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // --- Notification Board CRUD Management Logic ---
+        async function loadNotificationsList() {
+            const tbody = document.getElementById('notifications-table-body');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center py-12 text-slate-400 font-semibold">
+                        <i class="ph-bold ph-spinner animate-spin text-xl mr-2 text-blue-600"></i> Đang tải dữ liệu thông báo...
+                    </td>
+                </tr>
+            `;
+
+            try {
+                onValue(ref(rtdb, '/notifications'), (snapshot) => {
+                    allNotifications = snapshot.val() || {};
+                    applyNotificationFilters();
+                }, (error) => {
+                    console.error("RTDB read failed", error);
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center py-12 text-rose-500 font-semibold">
+                                <i class="ph-bold ph-warning-octagon text-xl mr-2"></i> Lỗi đọc dữ liệu RTDB: ${error.message}
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function parseMarkdownLinks(text) {
+            if (!text) return '';
+            return text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" class="text-blue-600 font-extrabold underline hover:text-blue-800">$1</a>');
+        }
+
+        function renderNotificationsTable(notifies) {
+            const tbody = document.getElementById('notifications-table-body');
+            if (Object.keys(notifies).length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-12 text-slate-400 font-semibold">
+                            Không tìm thấy thông báo nào.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = "";
+
+            // Convert to array of [key, val]
+            const sortedArray = Object.entries(notifies);
+            const sortMode = document.getElementById('notify-sort').value;
+
+            if (sortMode === 'newest') {
+                // Sort by date (desc) then time (desc)
+                sortedArray.sort((a, b) => {
+                    const dateA = a[1].date ? a[1].date.split('/').reverse().join('-') : '';
+                    const dateB = b[1].date ? b[1].date.split('/').reverse().join('-') : '';
+                    if (dateA !== dateB) return dateB.localeCompare(dateA);
+                    return (b[1].time || '').localeCompare(a[1].time || '');
+                });
+            } else if (sortMode === 'oldest') {
+                // Sort by date (asc) then time (asc)
+                sortedArray.sort((a, b) => {
+                    const dateA = a[1].date ? a[1].date.split('/').reverse().join('-') : '';
+                    const dateB = b[1].date ? b[1].date.split('/').reverse().join('-') : '';
+                    if (dateA !== dateB) return dateA.localeCompare(dateB);
+                    return (a[1].time || '').localeCompare(b[1].time || '');
+                });
+            } else if (sortMode === 'stt-desc') {
+                sortedArray.sort((a, b) => (b[1].stt || 0) - (a[1].stt || 0));
+            } else if (sortMode === 'stt-asc') {
+                sortedArray.sort((a, b) => (a[1].stt || 0) - (b[1].stt || 0));
+            }
+
+            sortedArray.forEach(([key, val]) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition-colors";
+                
+                const dotColor = val.color || '#0070f3';
+                const contentHtml = parseMarkdownLinks(val.info || '');
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-bold text-slate-900 font-mono">${val.stt || '—'}</td>
+                    <td class="px-6 py-4 font-semibold text-slate-500 text-xs">
+                        <div>${val.date || '—'}</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">${val.time || ''}</div>
+                    </td>
+                    <td class="px-6 py-4 font-extrabold text-slate-800 text-sm">${val.title || '—'}</td>
+                    <td class="px-6 py-4 text-xs font-semibold text-slate-600 max-w-sm break-words">${contentHtml}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-1.5 text-xs font-bold font-mono">
+                            <span class="w-3.5 h-3.5 rounded-full border border-slate-200" style="background-color: ${dotColor};"></span>
+                            <span>${dotColor}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="window.openNotifyModal('${key}')" class="px-3 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 border border-slate-200 rounded-lg text-xs font-bold transition-all mr-2">Sửa</button>
+                        <button onclick="window.deleteNotification('${key}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-bold transition-all">Xóa</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function applyNotificationFilters() {
+            const query = document.getElementById('notify-search').value.toLowerCase().trim();
+            const filtered = {};
+
+            Object.entries(allNotifications).forEach(([key, val]) => {
+                const matchesSearch = 
+                    (val.title || '').toLowerCase().includes(query) ||
+                    (val.info || '').toLowerCase().includes(query) ||
+                    (val.date || '').toLowerCase().includes(query) ||
+                    String(val.stt || '').includes(query);
+                
+                if (matchesSearch) {
+                    filtered[key] = val;
+                }
+            });
+
+            renderNotificationsTable(filtered);
+        }
+
+        document.getElementById('notify-search').addEventListener('input', applyNotificationFilters);
+        document.getElementById('notify-sort').addEventListener('change', applyNotificationFilters);
+
+        // Notify Form color selector presets handler
+        window.setNotifyColor = function(hex) {
+            document.getElementById('notify-color').value = hex;
+            document.getElementById('notify-color-picker').value = hex.startsWith('#') ? hex : '#' + hex;
+            
+            // Highlight active button ring
+            document.querySelectorAll('[id^="color-btn-"]').forEach(btn => {
+                btn.classList.remove('ring-offset-2', 'ring-blue-500');
+            });
+            const selectedBtn = document.getElementById(`color-btn-${hex}`);
+            if (selectedBtn) {
+                selectedBtn.classList.add('ring-offset-2', 'ring-blue-500');
+            }
+            updateLivePreview();
+        };
+
+        // Live markdown and details preview
+        function updateLivePreview() {
+            const titleVal = document.getElementById('notify-title').value || 'Tiêu đề';
+            const dateVal = document.getElementById('notify-date').value || '20/07/2026';
+            const timeVal = document.getElementById('notify-time').value || '12:00';
+            const colorVal = document.getElementById('notify-color').value || '#0070f3';
+            const infoVal = document.getElementById('notify-info').value || 'Nội dung thông báo';
+
+            document.getElementById('preview-title').textContent = titleVal;
+            document.getElementById('preview-time').textContent = timeVal;
+            document.getElementById('preview-color-bar').style.backgroundColor = colorVal;
+            document.getElementById('preview-text').innerHTML = parseMarkdownLinks(infoVal);
+        }
+
+        document.getElementById('notify-title').addEventListener('input', updateLivePreview);
+        document.getElementById('notify-date').addEventListener('input', updateLivePreview);
+        document.getElementById('notify-time').addEventListener('input', updateLivePreview);
+        document.getElementById('notify-info').addEventListener('input', updateLivePreview);
+
+        // Open/Close Notify modal
+        window.openNotifyModal = function(key = null) {
+            const form = document.getElementById('notify-form');
+            form.reset();
+
+            if (!key) {
+                // CREATE NEW Mode
+                document.getElementById('notify-modal-title').textContent = "Thêm thông báo mới";
+                document.getElementById('notify-key').value = "";
+                
+                // Autofill current date and time
+                const today = new Date();
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const year = today.getFullYear();
+                document.getElementById('notify-date').value = `${day}/${month}/${year}`;
+                
+                const hour = String(today.getHours()).padStart(2, '0');
+                const min = String(today.getMinutes()).padStart(2, '0');
+                document.getElementById('notify-time').value = `${hour}:${min}`;
+
+                // Calculate next STT
+                const maxStt = Object.values(allNotifications).reduce((max, cur) => Math.max(max, cur.stt || 0), 0);
+                document.getElementById('notify-stt').value = maxStt + 1;
+
+                window.setNotifyColor('#0070f3');
+            } else {
+                // EDIT Mode
+                const item = allNotifications[key];
+                if (!item) return;
+
+                document.getElementById('notify-modal-title').textContent = "Chỉnh sửa thông báo";
+                document.getElementById('notify-key').value = key;
+                document.getElementById('notify-title').value = item.title || "";
+                document.getElementById('notify-stt').value = item.stt || "";
+                document.getElementById('notify-date').value = item.date || "";
+                document.getElementById('notify-time').value = item.time || "";
+                
+                window.setNotifyColor(item.color || '#0070f3');
+                document.getElementById('notify-info').value = item.info || "";
+            }
+
+            updateLivePreview();
+            document.getElementById('notify-modal').classList.remove('hidden');
+        };
+
+        window.closeNotifyModal = function() {
+            document.getElementById('notify-modal').classList.add('hidden');
+        };
+
+        // Form notification submit logic
+        document.getElementById('notify-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const key = document.getElementById('notify-key').value;
+            const title = document.getElementById('notify-title').value.trim();
+            const stt = Number(document.getElementById('notify-stt').value) || 1;
+            const date = document.getElementById('notify-date').value.trim();
+            const time = document.getElementById('notify-time').value.trim();
+            const color = document.getElementById('notify-color').value.trim();
+            const info = document.getElementById('notify-info').value.trim();
+
+            const notifyData = { title, stt, date, time, color, info };
+
+            try {
+                // Define key if creating new
+                const finalKey = key || `item_${Date.now()}`;
+                
+                // Write to notifications branch
+                await set(ref(rtdb, `/notifications/${finalKey}`), notifyData);
+
+                // Broadcast via notifications_trigger
+                await set(ref(rtdb, '/notifications_trigger'), {
+                    timestamp: Date.now(),
+                    title: title,
+                    info: info
+                });
+
+                showToast(key ? "Đã cập nhật thông báo thành công!" : "Đã đăng thông báo mới thành công!", "success");
+                window.closeNotifyModal();
+            } catch (err) {
+                console.error(err);
+                showToast("Lỗi đồng bộ RTDB: " + err.message, "error");
+            }
+        });
+
+        // Delete Notification
+        window.deleteNotification = async function(key) {
+            if (!confirm("Bạn có chắc chắn muốn xóa thông báo này khỏi bảng tin hệ thống?")) {
+                return;
+            }
+
+            try {
+                await remove(ref(rtdb, `/notifications/${key}`));
+
+                // Get next latest remaining notification to publish in trigger
+                let remainingList = Object.entries(allNotifications).filter(([k, _]) => k !== key);
+                let latestTitle = "Hệ thống thông báo";
+                let latestInfo = "Bảng tin thông báo đã được cập nhật.";
+
+                if (remainingList.length > 0) {
+                    // Sort descending by stt
+                    remainingList.sort((a, b) => (b[1].stt || 0) - (a[1].stt || 0));
+                    latestTitle = remainingList[0][1].title || "EduSpace";
+                    latestInfo = remainingList[0][1].info || "";
+                }
+
+                // Broadcast trigger update
+                await set(ref(rtdb, '/notifications_trigger'), {
+                    timestamp: Date.now(),
+                    title: latestTitle,
+                    info: latestInfo
+                });
+
+                showToast("Đã xóa thông báo thành công!", "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Lỗi xóa thông báo: " + err.message, "error");
+            }
+        };
+
+        // --- Lotus Bot Management Functions ---
+        window.renderBots = function(bots) {
+            const container = document.getElementById("bots-list");
+            if (!container) return;
+            container.innerHTML = "";
+            
+            ['bot1', 'bot2'].forEach(botId => {
+                const botData = bots[botId] || { status: 'off', allowed_users: {}, allow_all: false };
+                const isOn = botData.status === 'on';
+                
+                let usersHtml = "";
+                if (botData.allowed_users) {
+                    Object.keys(botData.allowed_users).forEach(uid => {
+                        usersHtml += `
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-4 py-3 font-bold text-slate-900">${uid}</td>
+                                <td class="px-4 py-3 text-right">
+                                    <button onclick="window.removeBotUser('${botId}', '${uid}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-bold transition-all">Xóa</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                container.innerHTML += `
+                    <div class="border border-slate-200 rounded-2xl p-6 bg-slate-50/50 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-slate-900">Lotus Bot ${botId === 'bot1' ? '1' : '2'}</h3>
+                            <button onclick="window.toggleBot('${botId}', '${isOn ? 'off' : 'on'}')" class="px-4 py-1.5 rounded-full text-xs font-bold text-white transition-all ${isOn ? 'bg-emerald-500 hover:bg-emerald-600 shadow-md shadow-emerald-500/20' : 'bg-rose-500 hover:bg-rose-600 shadow-md shadow-rose-500/20'}">
+                                ${isOn ? 'Đang BẬT' : 'Đang TẮT'}
+                            </button>
+                        </div>
+                        
+                        <div class="mb-5 flex items-center gap-2">
+                            <input type="checkbox" id="allow_all_${botId}" ${botData.allow_all ? 'checked' : ''} onchange="window.toggleAllowAll('${botId}', this.checked)" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                            <label for="allow_all_${botId}" class="text-sm font-semibold text-slate-700 cursor-pointer">Cho phép tất cả (Public Mode)</label>
+                        </div>
+
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Danh sách cấp phép (Private Mode)</h4>
+                        <div class="overflow-x-auto border border-slate-200 rounded-xl bg-white mb-3 max-h-48 custom-scrollbar">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="sticky top-0 bg-slate-50">
+                                    <tr class="border-b border-slate-200 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                        <th class="px-4 py-3">User ID</th>
+                                        <th class="px-4 py-3 text-right">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    ${usersHtml || `<tr><td colspan="2" class="px-4 py-4 text-center text-sm text-slate-400 font-medium">Chưa có ai trong danh sách</td></tr>`}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <input type="text" id="new-user-${botId}" placeholder="Nhập Lotus Chat ID..." class="flex-1 px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500 transition-all">
+                            <button onclick="window.addBotUser('${botId}')" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-bold transition-all shadow-md">Thêm</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.toggleBot = async (botId, newStatus) => {
+            await set(ref(rtdb, `/lotus_bots/${botId}/status`), newStatus);
+            showToast(`Đã ${newStatus === 'on' ? 'bật' : 'tắt'} ${botId} thành công!`, "success");
+        };
+
+        window.toggleAllowAll = async (botId, checked) => {
+            await set(ref(rtdb, `/lotus_bots/${botId}/allow_all`), checked);
+            showToast("Đã cập nhật chế độ Public/Private!", "success");
+        };
+
+        window.addBotUser = async (botId) => {
+            const userId = document.getElementById(`new-user-${botId}`).value.trim();
+            if (!userId) return;
+            await set(ref(rtdb, `/lotus_bots/${botId}/allowed_users/${userId}`), true);
+            showToast(`Đã cấp quyền cho ${userId}!`, "success");
+            document.getElementById(`new-user-${botId}`).value = '';
+        };
+
+        window.removeBotUser = async (botId, userId) => {
+            if (!confirm(`Xoá quyền truy cập bot của ${userId}?`)) return;
+            await remove(ref(rtdb, `/lotus_bots/${botId}/allowed_users/${userId}`));
+            showToast(`Đã xoá quyền của ${userId}!`, "success");
+        };
+    </script>
+</body>
+
+</html>
