@@ -379,7 +379,7 @@
 
                 currentUserNdid = ndid;
                 myName.textContent = fullname;
-                myNdid.innerHTML = `@${ndid}${codeId ? `<div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId}</div>` : ''}`;
+                myNdid.innerHTML = `${ndid}${codeId ? `<div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId}</div>` : ''}`;
                 myAvatar.src = avatar;
 
                 // 2. Call loadConversationsList IMMEDIATELY!
@@ -403,7 +403,7 @@
                         codeId = await ensureUserCodeId(db, user.uid, ndid, user.email);
                     }
 
-                    myNdid.innerHTML = `@${ndid} <div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId || '...'}</div>`;
+                    myNdid.innerHTML = `${ndid} <div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId || '...'}</div>`;
                 }).catch(() => {});
 
                 // 4. Asynchronously resolve Admin contact
@@ -502,7 +502,7 @@
                                         ${u.isBot ? '<span class="pinned-tag ai-badge">🤖 AI</span>' : ''}
                                     </div>
                                     <div style="font-size:12px;color:var(--primary);font-weight:700;">
-                                        @${u.ndid} ${u.codeId ? `<span style="color:var(--text-muted);font-weight:600;margin-left:4px;">(CodeID: ${u.codeId})</span>` : ''}
+                                        ${u.ndid} ${u.codeId ? `<span style="color:var(--text-muted);font-weight:600;margin-left:4px;">(CodeID: ${u.codeId})</span>` : ''}
                                     </div>
                                 </div>
                             </div>
@@ -695,7 +695,7 @@
 
             // Update Header
             activeName.textContent = contact.name;
-            const displayNdid = contact.ndid ? (contact.ndid.startsWith('@') ? contact.ndid : '@' + contact.ndid) : '';
+            const displayNdid = contact.ndid || '';
             activeNdid.innerHTML = `${escapeHtml(displayNdid)}${contact.codeId ? ` <span style="font-size:11px;opacity:0.85;margin-left:6px;">(CodeID: ${contact.codeId})</span>` : ''}`;
             activeAvatar.src = contact.avatar;
 
