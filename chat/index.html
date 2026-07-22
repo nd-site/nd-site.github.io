@@ -24,14 +24,14 @@
                         <img id="my-avatar" src="/assets/images/logo.png" alt="Avatar">
                         <div class="user-details-mini">
                             <h4 id="my-name">ND Member</h4>
-                            <p id="my-ndid">@ndid</p>
+                            <p id="my-ndid">ndid</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="search-box-rel">
                     <i class="ph-bold ph-magnifying-glass"></i>
-                    <input type="text" id="search-ndid-input" class="search-input" placeholder="Tìm tên hoặc @NDID..." autocomplete="off">
+                    <input type="text" id="search-ndid-input" class="search-input" placeholder="Tìm tên hoặc NDID..." autocomplete="off">
                     <div id="search-results-overlay" class="search-results-overlay"></div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                     <i class="ph-duotone ph-chat-circle-dots"></i>
                 </div>
                 <h3>Chào mừng đến với ChatND by ND Labs</h3>
-                <p>Tìm kiếm bạn bè theo <strong>@NDID</strong> hoặc chọn một cuộc trò chuyện để bắt đầu nhắn tin ngay.</p>
+                <p>Tìm kiếm bạn bè theo <strong>NDID</strong> hoặc chọn một cuộc trò chuyện để bắt đầu nhắn tin ngay.</p>
             </div>
 
             <!-- Active Chat Interface -->
@@ -65,7 +65,7 @@
                         <img id="active-contact-avatar" src="/assets/images/logo.png" alt="Contact Avatar" class="chat-header-avatar">
                         <div>
                             <div id="active-contact-name" class="chat-header-title">Người dùng</div>
-                            <div id="active-contact-ndid" class="chat-header-sub">@ndid</div>
+                            <div id="active-contact-ndid" class="chat-header-sub">ndid</div>
                         </div>
                     </div>
                 </header>
@@ -171,7 +171,7 @@
 
             currentUserNdid = ndid;
             myName.textContent = fullname;
-            myNdid.textContent = `@${ndid}`;
+            myNdid.textContent = ndid;
             myAvatar.src = avatar;
 
             loadConversationsList();
@@ -205,14 +205,14 @@
                     }
 
                     if (results.length === 0) {
-                        searchOverlay.innerHTML = `<div style="padding:14px;text-align:center;color:var(--text-soft);font-size:13px;">Không tìm thấy NDID "@${val}"</div>`;
+                        searchOverlay.innerHTML = `<div style="padding:14px;text-align:center;color:var(--text-soft);font-size:13px;">Không tìm thấy NDID "${val}"</div>`;
                     } else {
                         searchOverlay.innerHTML = results.map(u => `
                             <div class="search-result-item" data-uid="${u.uid}" data-ndid="${u.ndid || val}" data-name="${u.fullname || u.displayName || 'ND Member'}" data-avatar="${u.photoURL || '/assets/images/logo.png'}">
                                 <img src="${u.photoURL || '/assets/images/logo.png'}" alt="">
                                 <div>
                                     <div style="font-weight:800;font-size:14px;color:var(--text-main);">${u.fullname || u.displayName || 'ND Member'}</div>
-                                    <div style="font-size:12px;color:var(--primary);font-weight:700;">@${u.ndid || val}</div>
+                                    <div style="font-size:12px;color:var(--primary);font-weight:700;">${u.ndid || val}</div>
                                 </div>
                             </div>
                         `).join('');
@@ -264,7 +264,7 @@
                     convs.sort((a, b) => (b.updatedAt?.toMillis?.() || 0) - (a.updatedAt?.toMillis?.() || 0));
 
                     if (convs.length === 0) {
-                        convsListEl.innerHTML = `<div style="padding:28px 16px;text-align:center;color:var(--text-soft);font-size:13px;line-height:1.5;">Bạn chưa có cuộc trò chuyện nào.<br>Hãy nhập @NDID ở trên để bắt đầu!</div>`;
+                        convsListEl.innerHTML = `<div style="padding:28px 16px;text-align:center;color:var(--text-soft);font-size:13px;line-height:1.5;">Bạn chưa có cuộc trò chuyện nào.<br>Hãy nhập NDID ở trên để bắt đầu!</div>`;
                         return;
                     }
 
@@ -342,7 +342,7 @@
 
             // Update Header
             activeName.textContent = contact.name;
-            activeNdid.textContent = `@${contact.ndid}`;
+            activeNdid.textContent = contact.ndid;
             activeAvatar.src = contact.avatar;
 
             chatEmptyState.style.display = 'none';

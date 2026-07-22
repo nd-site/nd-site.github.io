@@ -155,13 +155,12 @@ async function initEduFirebase() {
                            </a>`
                         : '';
 
-                    const cleanNdid = (ndid || '').replace(/^@/, '');
                     userSection.innerHTML = `
                         ${adminLink}
                         <a href="/auth/settings/" class="nd-nav-link" title="Cài đặt tài khoản" style="gap: 6px;">
                           <img src="${sessionData.photoURL}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">
                           <span class="nd-lbl" style="display:flex; align-items:center; gap:4px;">
-                            ${cleanNdid}
+                            ${ndid}
                             ${roleBadgeHtml}
                           </span>
                         </a>
