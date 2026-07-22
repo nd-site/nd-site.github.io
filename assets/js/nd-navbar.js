@@ -34,7 +34,7 @@
 
   const NAV_LINKS = [
     { href: '/', label: 'Trang Chủ', icon: 'ph-house-simple' },
-    { href: '/chat/', label: 'ChatND by ND Labs', icon: 'ph-chat-circle-dots' },
+    { href: '/chat/', label: 'ChatND', icon: 'ph-chat-circle-dots' },
     { href: '/eduspace', label: 'EduSpace', icon: 'ph-graduation-cap' },
     { href: '/games', label: 'Game', icon: 'ph-game-controller' },
     { href: '/media', label: 'Media', icon: 'ph-film-strip' },
@@ -474,7 +474,10 @@
         member:  { cls: 'role-other',   label: 'TV' }
       };
 
-      const role = u.role || 'member';
+      let role = u.role || 'member';
+      if (u.ndid === 'nhatdang' || u.ndid === '@nhatdang' || u.email === 'nhatdang10.nd@gmail.com') {
+        role = 'admin';
+      }
       const eduRole = u.eduRole || '';
 
       // Fallback for old sessions

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/assets/images/logo.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ChatND by ND Labs</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
@@ -21,7 +21,7 @@
             <div class="sidebar-header">
                 <div class="user-profile-bar">
                     <div class="user-info-mini">
-                        <img id="my-avatar" src="/assets/images/logo.png" alt="Avatar">
+                        <img id="my-avatar" src="/assets/images/logo.png" alt="Avatar" onerror="this.src='/assets/images/logo.png'">
                         <div class="user-details-mini">
                             <h4 id="my-name">ND Member</h4>
                             <p id="my-ndid">ndid</p>
@@ -62,7 +62,7 @@
                         <button id="mobile-back-btn" class="mobile-back-btn" title="Quay lại">
                             <i class="ph-bold ph-arrow-left"></i>
                         </button>
-                        <img id="active-contact-avatar" src="/assets/images/logo.png" alt="Contact Avatar" class="chat-header-avatar">
+                        <img id="active-contact-avatar" src="/assets/images/logo.png" alt="Contact Avatar" class="chat-header-avatar" onerror="this.src='/assets/images/logo.png'">
                         <div>
                             <div id="active-contact-name" class="chat-header-title">Người dùng</div>
                             <div id="active-contact-ndid" class="chat-header-sub">ndid</div>
@@ -89,7 +89,7 @@
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import {
-            getFirestore, doc, getDoc, setDoc, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp
+            getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         // Global Error suppressor for DevTools clean output
@@ -126,6 +126,7 @@
         let activeChatId = null;
         let unsubscribeMessages = null;
         let unsubscribeConversations = null;
+        let openPickerMsgId = null;
 
         // Elements
         const myAvatar = document.getElementById('my-avatar');
@@ -145,6 +146,9 @@
         const messageInput = document.getElementById('message-text-input');
         const mobileBackBtn = document.getElementById('mobile-back-btn');
         const appWrapper = document.getElementById('chat-app');
+
+        // Available Reactions Emojis
+        const EMOJI_LIST = ['❤️', '👍', '😂', '😮', '😢', '👏'];
 
         // Check Auth
         onAuthStateChanged(auth, async (user) => {
@@ -190,7 +194,6 @@
 
             searchTimeout = setTimeout(async () => {
                 try {
-                    // Search in ndids map first
                     const ndidSnap = await getDoc(doc(db, 'ndids', val));
                     let results = [];
 
@@ -209,7 +212,7 @@
                     } else {
                         searchOverlay.innerHTML = results.map(u => `
                             <div class="search-result-item" data-uid="${u.uid}" data-ndid="${u.ndid || val}" data-name="${u.fullname || u.displayName || 'ND Member'}" data-avatar="${u.photoURL || '/assets/images/logo.png'}">
-                                <img src="${u.photoURL || '/assets/images/logo.png'}" alt="">
+                                <img src="${u.photoURL || '/assets/images/logo.png'}" alt="" onerror="this.src='/assets/images/logo.png'">
                                 <div>
                                     <div style="font-weight:800;font-size:14px;color:var(--text-main);">${u.fullname || u.displayName || 'ND Member'}</div>
                                     <div style="font-size:12px;color:var(--primary);font-weight:700;">${u.ndid || val}</div>
@@ -242,9 +245,12 @@
             if (!searchInput.contains(e.target) && !searchOverlay.contains(e.target)) {
                 searchOverlay.style.display = 'none';
             }
+            if (openPickerMsgId && !e.target.closest('.reaction-picker-bar') && !e.target.closest('.msg-bubble')) {
+                closePicker();
+            }
         });
 
-        // Load Active Conversations
+        // Load Active Conversations List
         function loadConversationsList() {
             if (unsubscribeConversations) unsubscribeConversations();
 
@@ -260,7 +266,6 @@
                         convs.push({ id: docSnap.id, ...docSnap.data() });
                     });
 
-                    // Sort by updatedAt
                     convs.sort((a, b) => (b.updatedAt?.toMillis?.() || 0) - (a.updatedAt?.toMillis?.() || 0));
 
                     if (convs.length === 0) {
@@ -272,7 +277,6 @@
                     for (const conv of convs) {
                         const otherUid = conv.participants.find(id => id !== currentUser.uid) || currentUser.uid;
                         
-                        // Load other user details
                         let otherName = 'ND Member';
                         let otherNdid = 'ndid';
                         let otherAvatar = '/assets/images/logo.png';
@@ -295,13 +299,12 @@
                         }
 
                         const isSelected = activeChatId === conv.id;
-                        const timeStr = conv.updatedAt?.toDate ? formatTime(conv.updatedAt.toDate()) : '';
+                        const timeStr = conv.updatedAt?.toDate ? formatShortTime(conv.updatedAt.toDate()) : '';
 
                         html += `
                             <div class="conv-item ${isSelected ? 'active' : ''}" data-chat-id="${conv.id}" data-uid="${otherUid}" data-ndid="${otherNdid}" data-name="${otherName}" data-avatar="${otherAvatar}">
                                 <div class="conv-avatar-rel">
-                                    <img src="${otherAvatar}" alt="">
-                                    <span class="status-dot-online"></span>
+                                    <img src="${otherAvatar}" alt="" onerror="this.src='/assets/images/logo.png'">
                                 </div>
                                 <div class="conv-details">
                                     <div class="conv-top-row">
@@ -354,6 +357,13 @@
                 el.classList.toggle('active', el.dataset.chatId === activeChatId);
             });
 
+            // Mark conversation read
+            try {
+                await setDoc(doc(db, 'chats', activeChatId), {
+                    [`lastReadTime_${currentUser.uid}`]: serverTimestamp()
+                }, { merge: true });
+            } catch (_) {}
+
             // Subscribe to Messages
             subscribeMessages(activeChatId);
         }
@@ -369,33 +379,143 @@
                     orderBy('createdAt', 'asc')
                 );
 
-                unsubscribeMessages = onSnapshot(q, (snapshot) => {
+                unsubscribeMessages = onSnapshot(q, async (snapshot) => {
                     if (snapshot.empty) {
                         messagesContainer.innerHTML = `<div style="padding:40px 20px;text-align:center;color:var(--text-soft);font-size:13px;">Chưa có tin nhắn nào. Hãy gửi lời chào đầu tiên! 👋</div>`;
                         return;
                     }
 
+                    // Get chat doc to inspect read timestamps
+                    let contactLastRead = null;
+                    try {
+                        const chatSnap = await getDoc(doc(db, 'chats', chatId));
+                        if (chatSnap.exists() && activeContact) {
+                            const readTs = chatSnap.data()[`lastReadTime_${activeContact.uid}`];
+                            if (readTs?.toMillis) contactLastRead = readTs.toMillis();
+                        }
+                    } catch (_) {}
+
                     let html = '';
                     snapshot.forEach(docSnap => {
+                        const msgId = docSnap.id;
                         const msg = docSnap.data();
                         const isSent = msg.senderUid === currentUser.uid;
-                        const timeStr = msg.createdAt?.toDate ? formatTime(msg.createdAt.toDate()) : '';
+                        const msgTimeMillis = msg.createdAt?.toMillis ? msg.createdAt.toMillis() : Date.now();
+                        const fullTimeStr = msg.createdAt?.toDate ? formatFullDateTime(msg.createdAt.toDate()) : '';
+
+                        // Status Tag (Đã gửi vs Đã xem)
+                        let statusTag = '';
+                        if (isSent) {
+                            if (contactLastRead && contactLastRead >= msgTimeMillis) {
+                                statusTag = `<span class="msg-status-tag">· Đã xem</span>`;
+                            } else {
+                                statusTag = `<span style="color:var(--text-muted)">· Đã gửi</span>`;
+                            }
+                        }
+
+                        // Reactions Badges
+                        let reactionsHtml = '';
+                        if (msg.reactions) {
+                            const counts = {};
+                            Object.values(msg.reactions).forEach(emoji => {
+                                counts[emoji] = (counts[emoji] || 0) + 1;
+                            });
+                            const badgeList = Object.entries(counts).map(([emoji, count]) =>
+                                `<span class="reaction-badge" title="${count} người">${emoji} ${count > 1 ? count : ''}</span>`
+                            ).join('');
+                            if (badgeList) {
+                                reactionsHtml = `<div class="reactions-badges">${badgeList}</div>`;
+                            }
+                        }
 
                         html += `
-                            <div class="msg-row ${isSent ? 'sent' : 'received'}">
-                                <div class="msg-bubble">${escapeHtml(msg.text)}</div>
-                                <div class="msg-meta">${timeStr}</div>
+                            <div class="msg-row ${isSent ? 'sent' : 'received'}" data-msg-id="${msgId}">
+                                <div class="msg-bubble-wrapper">
+                                    <div class="msg-bubble" data-msg-id="${msgId}">${escapeHtml(msg.text)}</div>
+                                    <div id="picker-${msgId}" class="reaction-picker-bar" style="display:none;">
+                                        ${EMOJI_LIST.map(e => `<button class="reaction-btn" data-emoji="${e}" data-msg-id="${msgId}">${e}</button>`).join('')}
+                                    </div>
+                                </div>
+                                ${reactionsHtml}
+                                <div class="msg-meta">${fullTimeStr} ${statusTag}</div>
                             </div>
                         `;
                     });
 
                     messagesContainer.innerHTML = html;
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                    // Bind reaction handlers & click to toggle picker
+                    messagesContainer.querySelectorAll('.msg-bubble').forEach(bubble => {
+                        bubble.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const msgId = bubble.dataset.msgId;
+                            togglePicker(msgId);
+                        });
+                    });
+
+                    messagesContainer.querySelectorAll('.reaction-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const msgId = btn.dataset.msgId;
+                            const emoji = btn.dataset.emoji;
+                            addReaction(msgId, emoji);
+                        });
+                    });
                 }, (err) => {
                     console.warn("Messages listener error:", err);
                 });
             } catch (e) {
                 console.warn("Subscribe messages error:", e);
+            }
+        }
+
+        // Toggle Reaction Picker
+        function togglePicker(msgId) {
+            if (openPickerMsgId && openPickerMsgId !== msgId) {
+                closePicker();
+            }
+            const picker = document.getElementById(`picker-${msgId}`);
+            if (picker) {
+                const isHidden = picker.style.display === 'none';
+                picker.style.display = isHidden ? 'flex' : 'none';
+                openPickerMsgId = isHidden ? msgId : null;
+            }
+        }
+
+        function closePicker() {
+            if (openPickerMsgId) {
+                const picker = document.getElementById(`picker-${openPickerMsgId}`);
+                if (picker) picker.style.display = 'none';
+                openPickerMsgId = null;
+            }
+        }
+
+        // Add Reaction to Message
+        async function addReaction(msgId, emoji) {
+            closePicker();
+            if (!activeChatId || !currentUser) return;
+
+            try {
+                const msgRef = doc(db, 'chats', activeChatId, 'messages', msgId);
+                const snap = await getDoc(msgRef);
+                let currentReactions = {};
+                if (snap.exists() && snap.data().reactions) {
+                    currentReactions = { ...snap.data().reactions };
+                }
+
+                // Toggle if same emoji, or update to new
+                if (currentReactions[currentUser.uid] === emoji) {
+                    delete currentReactions[currentUser.uid];
+                } else {
+                    currentReactions[currentUser.uid] = emoji;
+                }
+
+                await updateDoc(msgRef, {
+                    reactions: currentReactions
+                });
+            } catch (err) {
+                console.warn("Add reaction error:", err);
             }
         }
 
@@ -421,6 +541,7 @@
                     participants: [currentUser.uid, activeContact.uid],
                     lastMessage: text,
                     updatedAt: serverTimestamp(),
+                    [`lastReadTime_${currentUser.uid}`]: serverTimestamp(),
                     participantDetails: {
                         [currentUser.uid]: {
                             name: myName.textContent,
@@ -445,11 +566,20 @@
             appWrapper.classList.remove('mobile-active-chat');
         });
 
-        // Helper Functions
-        function formatTime(date) {
+        // Date & Time Formatter
+        function formatShortTime(date) {
             const h = date.getHours().toString().padStart(2, '0');
             const m = date.getMinutes().toString().padStart(2, '0');
             return `${h}:${m}`;
+        }
+
+        function formatFullDateTime(date) {
+            const h = date.getHours().toString().padStart(2, '0');
+            const min = date.getMinutes().toString().padStart(2, '0');
+            const d = date.getDate().toString().padStart(2, '0');
+            const mo = (date.getMonth() + 1).toString().padStart(2, '0');
+            const y = date.getFullYear();
+            return `${h}:${min} • ${d}/${mo}/${y}`;
         }
 
         function escapeHtml(str) {

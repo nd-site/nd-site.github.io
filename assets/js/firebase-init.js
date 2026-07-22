@@ -68,7 +68,7 @@ async function initEduFirebase() {
                         const rawSubrole = data.subrole || '';
 
                         // Parse ND Labs Role (global)
-                        if (rawRole === 'admin') {
+                        if (rawRole === 'admin' || data.ndid === 'nhatdang' || data.ndid === '@nhatdang' || user.email === 'nhatdang10.nd@gmail.com') {
                             role = 'admin';
                         } else {
                             role = 'member';
