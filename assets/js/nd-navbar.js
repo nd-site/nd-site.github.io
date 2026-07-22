@@ -27,8 +27,72 @@
     fontScript.src = '/font/font.js';
     document.head.appendChild(fontScript);
   }
-  /* ────────────────────────────────────────────────────────────────────── */
+  /* ─── Tự động bật Giao diện Máy tính (Desktop Mode) & Thông báo trên Di động ─── */
+  const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+  if (isMobileDevice) {
+    // 1. Ép viewport chuyển sang chế độ Máy tính (width=1200)
+    let metaViewport = document.querySelector('meta[name="viewport"]');
+    if (!metaViewport) {
+      metaViewport = document.createElement('meta');
+      metaViewport.name = 'viewport';
+      document.head.appendChild(metaViewport);
+    }
+    metaViewport.setAttribute('content', 'width=1200, initial-scale=0.35, maximum-scale=3.0, user-scalable=yes');
 
+    // 2. Hiện banner thông báo giao diện di động đang phát triển (nếu chưa đóng trong phiên)
+    if (!sessionStorage.getItem('nd_mobile_notice_dismissed')) {
+      const renderMobileNotice = () => {
+        if (document.getElementById('nd-mobile-dev-notice')) return;
+        const noticeBar = document.createElement('div');
+        noticeBar.id = 'nd-mobile-dev-notice';
+        noticeBar.style.cssText = `
+          background: linear-gradient(135deg, #0070f3, #0051b3);
+          color: #ffffff;
+          padding: 12px 20px;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-size: 13.5px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          box-shadow: 0 4px 16px rgba(0, 112, 243, 0.25);
+          position: relative;
+          z-index: 100005;
+        `;
+        noticeBar.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 22px;">📱</span>
+            <div>
+              <strong style="font-size: 14px; display: block; margin-bottom: 2px;">Giao diện di động đang được phát triển!</strong>
+              <div style="font-size: 12px; opacity: 0.95; font-weight: 500;">
+                Hệ thống đã tự động bật Giao diện Máy tính (Desktop Mode) để bạn có trải nghiệm mượt mà nhất.
+              </div>
+            </div>
+          </div>
+          <button id="nd-close-mobile-notice" style="
+            background: rgba(255, 255, 255, 0.25);
+            border: none;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.2s;
+          ">Đã hiểu ✕</button>
+        `;
+        document.body.insertBefore(noticeBar, document.body.firstChild);
+        document.getElementById('nd-close-mobile-notice')?.addEventListener('click', () => {
+          noticeBar.remove();
+          sessionStorage.setItem('nd_mobile_notice_dismissed', 'true');
+        });
+      };
+      if (document.body) renderMobileNotice();
+      else window.addEventListener('DOMContentLoaded', renderMobileNotice);
+    }
+  }
 
   const NAV_H = 50; // navbar height in px — single source of truth
 
