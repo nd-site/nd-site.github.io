@@ -93,6 +93,27 @@
             border-color: #cbd5e1;
         }
 
+        .join-class-row {
+            display: flex;
+            gap: 8px;
+        }
+        .join-input-wrapper {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        .join-btn-custom {
+            padding: 0 16px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 12px;
+            height: 44px;
+            margin-top: 0;
+            width: auto !important;
+        }
+        .joined-list-wrapper {
+            margin-top: 12px;
+        }
+
         /* Semantic and utility classes for settings panels */
         .mb-28 { margin-bottom: 28px; }
         .mb-0 { margin-bottom: 0 !important; }
@@ -656,19 +677,19 @@
                         
                         <div class="form-group mb-0">
                             <label for="join-class-code">Tham gia lớp học mới</label>
-                            <div style="display: flex; gap: 8px;">
-                                <div class="input-container" style="flex: 1; margin-bottom: 0;">
+                            <div class="join-class-row">
+                                <div class="input-container join-input-wrapper">
                                     <i class="ph-duotone ph-key"></i>
                                     <input type="text" id="join-class-code" placeholder="Nhập mã lớp học (6 chữ số)" maxlength="6">
                                 </div>
-                                <button type="button" id="btn-join-class" class="btn-primary" style="padding: 0 16px; font-size: 13px; font-weight: 700; border-radius: 12px; height: 44px; margin-top: 0; width: auto !important;">
+                                <button type="button" id="btn-join-class" class="btn-primary join-btn-custom">
                                     Tham gia
                                 </button>
                             </div>
                         </div>
 
                         <!-- Danh sách lớp học đang tham gia -->
-                        <div id="joined-classrooms-list" class="flex-col-gap-16" style="margin-top: 12px;">
+                        <div id="joined-classrooms-list" class="flex-col-gap-16 joined-list-wrapper">
                             <p class="text-14-soft">Đang tải danh sách lớp học...</p>
                         </div>
                     </div>

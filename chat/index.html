@@ -47,7 +47,7 @@
 
             <!-- Active Conversations List -->
             <div id="conversations-list" class="conversations-list">
-                <div style="padding: 24px; text-align: center; color: var(--text-soft); font-size: 13px;">
+                <div class="chat-placeholder-info">
                     Đang tải danh sách trò chuyện...
                 </div>
             </div>
@@ -68,7 +68,7 @@
             </div>
 
             <!-- Active Chat Interface -->
-            <div id="active-chat-wrapper" class="active-chat-wrapper hidden" style="display: none;">
+            <div id="active-chat-wrapper" class="active-chat-wrapper hidden">
                 <header class="chat-header">
                     <div class="chat-header-user">
                         <button id="mobile-back-btn" class="mobile-back-btn" title="Quay lại">
@@ -80,7 +80,7 @@
                             <div id="active-contact-ndid" class="chat-header-sub">ndid</div>
                         </div>
                     </div>
-                    <button id="delete-conv-btn" class="delete-conv-btn" title="Xóa đoạn chat này" style="background:transparent;border:none;color:var(--text-soft);cursor:pointer;font-size:18px;padding:6px;border-radius:8px;transition:all 0.2s;" onmouseover="this.style.color='#ef4444';this.style.background='#fee2e2';" onmouseout="this.style.color='var(--text-soft)';this.style.background='transparent';">
+                    <button id="delete-conv-btn" class="delete-conv-btn" title="Xóa đoạn chat này">
                         <i class="ph-bold ph-trash"></i>
                     </button>
                 </header>

@@ -271,6 +271,17 @@
         .meta-container:hover .meta-text.overflowing {
             transform: translateX(var(--scroll-amount, 0px));
         }
+        .bg-blob-top-right {
+            top: -10%;
+            right: -5%;
+        }
+        .bg-blob-bottom-left {
+            bottom: -10%;
+            left: -5%;
+        }
+        .progress-bar-start {
+            width: 0%;
+        }
     </style>
 </head>
 
@@ -278,8 +289,8 @@
     <!-- Navbar placeholder — will be injected if not present -->
     <script src="/assets/js/nd-navbar.js" defer></script>
 
-    <div class="bg-blob" style="top: -10%; right: -5%;"></div>
-    <div class="bg-blob" style="bottom: -10%; left: -5%;"></div>
+    <div class="bg-blob bg-blob-top-right"></div>
+    <div class="bg-blob bg-blob-bottom-left"></div>
 
     <!-- Start Screen -->
     <div id="start-screen" class="max-w-3xl mx-auto px-4 py-4 pb-32 md:pb-16 flex flex-col items-center justify-center min-h-[85vh]">
@@ -604,7 +615,7 @@
                             </div>
                         </div>
                         <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                            <div id="progress-bar" class="h-full bg-blue-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            <div id="progress-bar" class="h-full bg-blue-500 rounded-full transition-all duration-500 progress-bar-start"></div>
                         </div>
                     </div>
 
