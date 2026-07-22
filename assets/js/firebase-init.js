@@ -10,7 +10,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp, query, collection, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 async function initEduFirebase() {
     if (typeof EDU_CONFIG === 'undefined') {
@@ -93,20 +93,33 @@ async function initEduFirebase() {
                         yob      = data.yob      || null;
                         codeId   = data.codeId   || '';
 
-                        // Auto generate permanent 8-digit CodeID if missing
+                        // Auto generate permanent 8-digit CodeID if missing (incremental)
                         if (!codeId) {
                             try {
+                                const codeQuery = query(collection(firestore, 'code_ids'), orderBy('__name__', 'desc'), limit(1));
+                                const querySnap = await getDocs(codeQuery);
+                                let maxVal = 0;
+                                if (!querySnap.empty) {
+                                    const highestId = querySnap.docs[0].id;
+                                    if (highestId && highestId.length === 8 && !isNaN(highestId)) {
+                                        maxVal = parseInt(highestId, 10);
+                                    }
+                                }
+                                
                                 let newCode = null;
                                 let attempts = 0;
+                                let nextVal = maxVal + 1;
                                 while (!newCode && attempts < 15) {
                                     attempts++;
-                                    const candidate = Math.floor(10000000 + Math.random() * 90000000).toString();
+                                    const candidate = String(nextVal).padStart(8, '0');
                                     const codeRef = doc(firestore, 'code_ids', candidate);
                                     const codeSnap = await getDoc(codeRef);
                                     if (!codeSnap.exists()) {
                                         await setDoc(codeRef, { uid: user.uid, createdAt: serverTimestamp() });
                                         await setDoc(doc(firestore, 'users', user.uid), { codeId: candidate }, { merge: true });
                                         newCode = candidate;
+                                    } else {
+                                        nextVal++;
                                     }
                                 }
                                 if (newCode) codeId = newCode;

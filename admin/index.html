@@ -307,6 +307,9 @@
                             <option value="admin">Đổi thành Admin</option>
                             <option value="other">Đổi thành Khác</option>
                         </select>
+                        <button onclick="window.handleBulkAssignCodeId()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
+                            <i class="ph-bold ph-fingerprint"></i> Cấp CodeID
+                        </button>
                         <button onclick="window.handleBulkDelete()" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
                             <i class="ph-bold ph-trash"></i> Xóa tài khoản
                         </button>
@@ -1129,6 +1132,76 @@
             }
 
             showToast(`Đã cập nhật vai trò thành công cho ${successCount} tài khoản!${errorCount > 0 ? ` (Thất bại ${errorCount})` : ''}`, "success");
+            loadUsersList();
+        };
+
+        // Handle bulk assign CodeID (incremental)
+        window.handleBulkAssignCodeId = async function() {
+            const targetUids = Array.from(selectedUserUids).filter(uid => {
+                const u = allUsers.find(user => user.uid === uid);
+                return u && !u.codeId;
+            });
+
+            if (targetUids.length === 0) {
+                showToast("Tất cả tài khoản được chọn đều đã có CodeID!", "error");
+                return;
+            }
+
+            if (!confirm(`Bạn có chắc chắn muốn cấp CodeID tự động tăng cho ${targetUids.length} tài khoản chưa có CodeID?`)) {
+                return;
+            }
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            let currentMaxNum = 0;
+            allUsers.forEach(u => {
+                if (u.codeId && u.codeId.length === 8 && !isNaN(u.codeId)) {
+                    const num = parseInt(u.codeId, 10);
+                    if (num > currentMaxNum) {
+                        currentMaxNum = num;
+                    }
+                }
+            });
+
+            let nextNum = currentMaxNum + 1;
+
+            for (let uid of targetUids) {
+                const u = allUsers.find(user => user.uid === uid);
+                if (!u) continue;
+
+                try {
+                    let candidateCode = String(nextNum).padStart(8, '0');
+                    let conflicted = true;
+                    while (conflicted) {
+                        const codeSnap = await getDoc(doc(db, 'code_ids', candidateCode));
+                        if (codeSnap.exists()) {
+                            nextNum++;
+                            candidateCode = String(nextNum).padStart(8, '0');
+                        } else {
+                            conflicted = false;
+                        }
+                    }
+
+                    await setDoc(doc(db, 'code_ids', candidateCode), {
+                        uid: uid,
+                        ndid: u.ndid || '',
+                        createdAt: serverTimestamp()
+                    });
+
+                    await updateDoc(doc(db, 'users', uid), {
+                        codeId: candidateCode
+                    });
+
+                    successCount++;
+                    nextNum++;
+                } catch (e) {
+                    console.error("Bulk assign CodeID error for UID: " + uid, e);
+                    errorCount++;
+                }
+            }
+
+            showToast(`Đã cấp CodeID thành công cho ${successCount} tài khoản!${errorCount > 0 ? ` (Thất bại ${errorCount})` : ''}`, "success");
             loadUsersList();
         };
 
