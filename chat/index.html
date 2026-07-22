@@ -1001,18 +1001,14 @@
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
                 try {
-                    const greetInstruction = aiHasGreeted
-                        ? 'Không chào hỏi, không dẫn nhập — trả lời thẳng vào câu hỏi.'
-                        : 'Chào người dùng ngắn gọn một câu rồi trả lời ngay.';
-                    aiHasGreeted = true;
-
-                    const systemPrompt = `Bạn là NDAI Assistant — trợ lý trí tuệ nhân tạo thông minh của ND Labs. ${greetInstruction} Trả lời ngắn gọn, súc tích (tối đa 3-5 câu), mỗi câu là một ý độc lập. Hãy sử dụng định dạng Markdown (in đậm, in nghiêng) và công thức Toán/Lý/Hóa bằng LaTeX (sử dụng dấu đô-la: $...$ cho công thức nội dòng và $$...$$ cho công thức dạng khối).`;
-
+                    const systemPrompt = `Bạn là trợ lý trí tuệ nhân tạo thông minh, thân thiện của ND Labs (tên bạn là NDAI Assistant). Hãy trò chuyện tự nhiên, giải đáp thắc mắc và hỗ trợ người dùng nhiệt tình như một trợ lý AI thông thường (như Gemini). Sử dụng định dạng Markdown phong phú để câu trả lời rõ ràng, sinh động.`;
                     const prompt = `${systemPrompt}\n\n[Câu hỏi của người dùng]: ${text}`;
 
                     let aiReply = '';
-                    if (window.eduspaceAI && window.eduspaceAI.askGemini) {
-                        aiReply = await window.eduspaceAI.askGemini(prompt);
+                    if (window.eduspaceAI && window.eduspaceAI.call) {
+                        aiReply = await window.eduspaceAI.call({
+                            contents: [{ role: 'user', parts: [{ text: prompt }] }]
+                        });
                     } else {
                         const apiKey = await window.getGeminiApiKey();
                         const modelName = window.EDU_CONFIG?.stableModel || 'gemini-3.1-flash-lite';
@@ -1027,16 +1023,10 @@
                         aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Dạ, tôi đã nhận được câu hỏi của bạn!";
                     }
 
-                    const sentences = splitIntoSentences(aiReply);
                     thinkingDiv.remove();
-
-                    for (let i = 0; i < sentences.length; i++) {
-                        const delay = Math.min(250 + sentences[i].length * 15, 1000);
-                        await new Promise(r => setTimeout(r, delay));
-                        history.push({ sender: 'bot', text: sentences[i] });
-                        saveAiHistory(history);
-                        renderAiMessages();
-                    }
+                    history.push({ sender: 'bot', text: aiReply });
+                    saveAiHistory(history);
+                    renderAiMessages();
                 } catch (err) {
                     if (thinkingDiv) thinkingDiv.remove();
                     history.push({ sender: 'bot', text: "Tôi đã nhận được câu hỏi của bạn!" });
