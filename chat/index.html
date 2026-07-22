@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/assets/images/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ND Chat — Trò chuyện NDID</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+    <link rel="stylesheet" href="/chat/chat.css">
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/font/font.js"></script>
+</head>
+
+<body>
+    <div id="chat-app" class="chat-app-wrapper">
+        <!-- Sidebar -->
+        <aside class="chat-sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile-bar">
+                    <div class="user-info-mini">
+                        <img id="my-avatar" src="/assets/images/logo.png" alt="Avatar">
+                        <div class="user-details-mini">
+                            <h4 id="my-name">ND Member</h4>
+                            <p id="my-ndid">@ndid</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-box-rel">
+                    <i class="ph-bold ph-magnifying-glass"></i>
+                    <input type="text" id="search-ndid-input" class="search-input" placeholder="Tìm tên hoặc @NDID..." autocomplete="off">
+                    <div id="search-results-overlay" class="search-results-overlay"></div>
+                </div>
+            </div>
+
+            <!-- Active Conversations List -->
+            <div id="conversations-list" class="conversations-list">
+                <div style="padding: 24px; text-align: center; color: var(--text-soft); font-size: 13px;">
+                    Đang tải danh sách trò chuyện...
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Panel -->
+        <main class="chat-main-panel">
+            <!-- Empty State when no conversation selected -->
+            <div id="chat-empty-state" class="chat-empty-state">
+                <div class="chat-empty-icon">
+                    <i class="ph-duotone ph-chat-circle-dots"></i>
+                </div>
+                <h3>Chào mừng đến với ND Chat</h3>
+                <p>Tìm kiếm bạn bè theo <strong>@NDID</strong> hoặc chọn một cuộc trò chuyện để bắt đầu nhắn tin ngay.</p>
+            </div>
+
+            <!-- Active Chat Interface -->
+            <div id="active-chat-wrapper" class="active-chat-wrapper hidden" style="display: none;">
+                <header class="chat-header">
+                    <div class="chat-header-user">
+                        <button id="mobile-back-btn" class="mobile-back-btn" title="Quay lại">
+                            <i class="ph-bold ph-arrow-left"></i>
+                        </button>
+                        <img id="active-contact-avatar" src="/assets/images/logo.png" alt="Contact Avatar" class="chat-header-avatar">
+                        <div>
+                            <div id="active-contact-name" class="chat-header-title">Người dùng</div>
+                            <div id="active-contact-ndid" class="chat-header-sub">@ndid</div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Messages Container -->
+                <div id="messages-container" class="messages-container"></div>
+
+                <!-- Input Form -->
+                <form id="chat-input-form" class="chat-input-bar">
+                    <input type="text" id="message-text-input" class="chat-message-input" placeholder="Nhập tin nhắn..." autocomplete="off" required>
+                    <button type="submit" id="btn-send-message" class="btn-send-message">
+                        <span>Gửi</span>
+                        <i class="ph-bold ph-paper-plane-right"></i>
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import {
+            getFirestore, doc, getDoc, setDoc, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        // Global Error suppressor for DevTools clean output
+        window.addEventListener('unhandledrejection', (event) => {
+            if (event.reason && (event.reason.code === 403 || event.reason.status === 403 || event.reason.code === 'permission-denied')) {
+                event.preventDefault();
+            }
+        });
+
+        let app;
+        if (getApps().length > 0) {
+            app = getApp();
+        } else {
+            const keys = await window.getEduKeys();
+            const firebaseConfig = {
+                apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
+                authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
+                databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
+                projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
+                storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
+                messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
+                appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
+                measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
+            };
+            app = initializeApp(firebaseConfig);
+        }
+
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let currentUserNdid = '';
+        let activeContact = null;
+        let activeChatId = null;
+        let unsubscribeMessages = null;
+        let unsubscribeConversations = null;
+
+        // Elements
+        const myAvatar = document.getElementById('my-avatar');
+        const myName = document.getElementById('my-name');
+        const myNdid = document.getElementById('my-ndid');
+        const searchInput = document.getElementById('search-ndid-input');
+        const searchOverlay = document.getElementById('search-results-overlay');
+        const convsListEl = document.getElementById('conversations-list');
+        
+        const chatEmptyState = document.getElementById('chat-empty-state');
+        const activeChatWrapper = document.getElementById('active-chat-wrapper');
+        const activeAvatar = document.getElementById('active-contact-avatar');
+        const activeName = document.getElementById('active-contact-name');
+        const activeNdid = document.getElementById('active-contact-ndid');
+        const messagesContainer = document.getElementById('messages-container');
+        const chatInputForm = document.getElementById('chat-input-form');
+        const messageInput = document.getElementById('message-text-input');
+        const mobileBackBtn = document.getElementById('mobile-back-btn');
+        const appWrapper = document.getElementById('chat-app');
+
+        // Check Auth
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = '/auth/login/';
+                return;
+            }
+            currentUser = user;
+
+            // Load profile
+            let fullname = user.displayName || 'ND Member';
+            let ndid = user.email ? user.email.split('@')[0] : user.uid;
+            let avatar = user.photoURL || '/assets/images/logo.png';
+
+            try {
+                const snap = await getDoc(doc(db, 'users', user.uid));
+                if (snap.exists()) {
+                    const data = snap.data();
+                    fullname = data.fullname || fullname;
+                    ndid = data.ndid || ndid;
+                    if (data.photoURL) avatar = data.photoURL;
+                }
+            } catch (_) {}
+
+            currentUserNdid = ndid;
+            myName.textContent = fullname;
+            myNdid.textContent = `@${ndid}`;
+            myAvatar.src = avatar;
+
+            loadConversationsList();
+        });
+
+        // Search NDID
+        let searchTimeout = null;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            const val = e.target.value.trim().toLowerCase().replace(/^@/, '');
+            if (!val) {
+                searchOverlay.style.display = 'none';
+                searchOverlay.innerHTML = '';
+                return;
+            }
+
+            searchTimeout = setTimeout(async () => {
+                try {
+                    // Search in ndids map first
+                    const ndidSnap = await getDoc(doc(db, 'ndids', val));
+                    let results = [];
+
+                    if (ndidSnap.exists()) {
+                        const targetUid = ndidSnap.data().uid;
+                        if (targetUid !== currentUser.uid) {
+                            const uSnap = await getDoc(doc(db, 'users', targetUid));
+                            if (uSnap.exists()) {
+                                results.push({ uid: targetUid, ...uSnap.data() });
+                            }
+                        }
+                    }
+
+                    if (results.length === 0) {
+                        searchOverlay.innerHTML = `<div style="padding:14px;text-align:center;color:var(--text-soft);font-size:13px;">Không tìm thấy NDID "@${val}"</div>`;
+                    } else {
+                        searchOverlay.innerHTML = results.map(u => `
+                            <div class="search-result-item" data-uid="${u.uid}" data-ndid="${u.ndid || val}" data-name="${u.fullname || u.displayName || 'ND Member'}" data-avatar="${u.photoURL || '/assets/images/logo.png'}">
+                                <img src="${u.photoURL || '/assets/images/logo.png'}" alt="">
+                                <div>
+                                    <div style="font-weight:800;font-size:14px;color:var(--text-main);">${u.fullname || u.displayName || 'ND Member'}</div>
+                                    <div style="font-size:12px;color:var(--primary);font-weight:700;">@${u.ndid || val}</div>
+                                </div>
+                            </div>
+                        `).join('');
+
+                        searchOverlay.querySelectorAll('.search-result-item').forEach(item => {
+                            item.addEventListener('click', () => {
+                                const contact = {
+                                    uid: item.dataset.uid,
+                                    ndid: item.dataset.ndid,
+                                    name: item.dataset.name,
+                                    avatar: item.dataset.avatar
+                                };
+                                searchOverlay.style.display = 'none';
+                                searchInput.value = '';
+                                selectConversation(contact);
+                            });
+                        });
+                    }
+                    searchOverlay.style.display = 'block';
+                } catch (err) {
+                    console.warn("Search error:", err);
+                }
+            }, 300);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchOverlay.contains(e.target)) {
+                searchOverlay.style.display = 'none';
+            }
+        });
+
+        // Load Active Conversations
+        function loadConversationsList() {
+            if (unsubscribeConversations) unsubscribeConversations();
+
+            try {
+                const q = query(
+                    collection(db, 'chats'),
+                    where('participants', 'array-contains', currentUser.uid)
+                );
+
+                unsubscribeConversations = onSnapshot(q, async (snapshot) => {
+                    let convs = [];
+                    snapshot.forEach(docSnap => {
+                        convs.push({ id: docSnap.id, ...docSnap.data() });
+                    });
+
+                    // Sort by updatedAt
+                    convs.sort((a, b) => (b.updatedAt?.toMillis?.() || 0) - (a.updatedAt?.toMillis?.() || 0));
+
+                    if (convs.length === 0) {
+                        convsListEl.innerHTML = `<div style="padding:28px 16px;text-align:center;color:var(--text-soft);font-size:13px;line-height:1.5;">Bạn chưa có cuộc trò chuyện nào.<br>Hãy nhập @NDID ở trên để bắt đầu!</div>`;
+                        return;
+                    }
+
+                    let html = '';
+                    for (const conv of convs) {
+                        const otherUid = conv.participants.find(id => id !== currentUser.uid) || currentUser.uid;
+                        
+                        // Load other user details
+                        let otherName = 'ND Member';
+                        let otherNdid = 'ndid';
+                        let otherAvatar = '/assets/images/logo.png';
+
+                        if (conv.participantDetails && conv.participantDetails[otherUid]) {
+                            const d = conv.participantDetails[otherUid];
+                            otherName = d.name || otherName;
+                            otherNdid = d.ndid || otherNdid;
+                            otherAvatar = d.avatar || otherAvatar;
+                        } else {
+                            try {
+                                const uSnap = await getDoc(doc(db, 'users', otherUid));
+                                if (uSnap.exists()) {
+                                    const d = uSnap.data();
+                                    otherName = d.fullname || d.displayName || otherName;
+                                    otherNdid = d.ndid || otherNdid;
+                                    otherAvatar = d.photoURL || otherAvatar;
+                                }
+                            } catch (_) {}
+                        }
+
+                        const isSelected = activeChatId === conv.id;
+                        const timeStr = conv.updatedAt?.toDate ? formatTime(conv.updatedAt.toDate()) : '';
+
+                        html += `
+                            <div class="conv-item ${isSelected ? 'active' : ''}" data-chat-id="${conv.id}" data-uid="${otherUid}" data-ndid="${otherNdid}" data-name="${otherName}" data-avatar="${otherAvatar}">
+                                <div class="conv-avatar-rel">
+                                    <img src="${otherAvatar}" alt="">
+                                    <span class="status-dot-online"></span>
+                                </div>
+                                <div class="conv-details">
+                                    <div class="conv-top-row">
+                                        <span class="conv-name">${otherName}</span>
+                                        <span class="conv-time">${timeStr}</span>
+                                    </div>
+                                    <div class="conv-last-msg">${conv.lastMessage || 'Bắt đầu trò chuyện...'}</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    convsListEl.innerHTML = html;
+
+                    convsListEl.querySelectorAll('.conv-item').forEach(item => {
+                        item.addEventListener('click', () => {
+                            const contact = {
+                                uid: item.dataset.uid,
+                                ndid: item.dataset.ndid,
+                                name: item.dataset.name,
+                                avatar: item.dataset.avatar
+                            };
+                            selectConversation(contact);
+                        });
+                    });
+                }, (err) => {
+                    console.warn("Conversations listener error:", err);
+                });
+            } catch (e) {
+                console.warn("Error subscribing conversations:", e);
+            }
+        }
+
+        // Select or Start Conversation
+        async function selectConversation(contact) {
+            activeContact = contact;
+            activeChatId = `chat_${[currentUser.uid, contact.uid].sort().join('_')}`;
+
+            // Update Header
+            activeName.textContent = contact.name;
+            activeNdid.textContent = `@${contact.ndid}`;
+            activeAvatar.src = contact.avatar;
+
+            chatEmptyState.style.display = 'none';
+            activeChatWrapper.style.display = 'flex';
+            appWrapper.classList.add('mobile-active-chat');
+
+            // Highlight selected in list
+            document.querySelectorAll('.conv-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.chatId === activeChatId);
+            });
+
+            // Subscribe to Messages
+            subscribeMessages(activeChatId);
+        }
+
+        // Realtime Messages Listener
+        function subscribeMessages(chatId) {
+            if (unsubscribeMessages) unsubscribeMessages();
+            messagesContainer.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-soft);font-size:13px;">Đang tải tin nhắn...</div>`;
+
+            try {
+                const q = query(
+                    collection(db, 'chats', chatId, 'messages'),
+                    orderBy('createdAt', 'asc')
+                );
+
+                unsubscribeMessages = onSnapshot(q, (snapshot) => {
+                    if (snapshot.empty) {
+                        messagesContainer.innerHTML = `<div style="padding:40px 20px;text-align:center;color:var(--text-soft);font-size:13px;">Chưa có tin nhắn nào. Hãy gửi lời chào đầu tiên! 👋</div>`;
+                        return;
+                    }
+
+                    let html = '';
+                    snapshot.forEach(docSnap => {
+                        const msg = docSnap.data();
+                        const isSent = msg.senderUid === currentUser.uid;
+                        const timeStr = msg.createdAt?.toDate ? formatTime(msg.createdAt.toDate()) : '';
+
+                        html += `
+                            <div class="msg-row ${isSent ? 'sent' : 'received'}">
+                                <div class="msg-bubble">${escapeHtml(msg.text)}</div>
+                                <div class="msg-meta">${timeStr}</div>
+                            </div>
+                        `;
+                    });
+
+                    messagesContainer.innerHTML = html;
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, (err) => {
+                    console.warn("Messages listener error:", err);
+                });
+            } catch (e) {
+                console.warn("Subscribe messages error:", e);
+            }
+        }
+
+        // Send Message
+        chatInputForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = messageInput.value.trim();
+            if (!text || !currentUser || !activeContact || !activeChatId) return;
+
+            messageInput.value = '';
+
+            try {
+                // 1. Add message doc
+                await addDoc(collection(db, 'chats', activeChatId, 'messages'), {
+                    senderUid: currentUser.uid,
+                    senderNdid: currentUserNdid,
+                    text: text,
+                    createdAt: serverTimestamp()
+                });
+
+                // 2. Set/Update parent chat doc
+                await setDoc(doc(db, 'chats', activeChatId), {
+                    participants: [currentUser.uid, activeContact.uid],
+                    lastMessage: text,
+                    updatedAt: serverTimestamp(),
+                    participantDetails: {
+                        [currentUser.uid]: {
+                            name: myName.textContent,
+                            ndid: currentUserNdid,
+                            avatar: myAvatar.src
+                        },
+                        [activeContact.uid]: {
+                            name: activeContact.name,
+                            ndid: activeContact.ndid,
+                            avatar: activeContact.avatar
+                        }
+                    }
+                }, { merge: true });
+
+            } catch (err) {
+                console.warn("Error sending message:", err);
+            }
+        });
+
+        // Mobile Back Button
+        mobileBackBtn.addEventListener('click', () => {
+            appWrapper.classList.remove('mobile-active-chat');
+        });
+
+        // Helper Functions
+        function formatTime(date) {
+            const h = date.getHours().toString().padStart(2, '0');
+            const m = date.getMinutes().toString().padStart(2, '0');
+            return `${h}:${m}`;
+        }
+
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+
+</html>

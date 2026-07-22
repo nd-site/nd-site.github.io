@@ -34,6 +34,7 @@
 
   const NAV_LINKS = [
     { href: '/', label: 'Trang Chủ', icon: 'ph-house-simple' },
+    { href: '/chat/', label: 'Trò Chuyện', icon: 'ph-chat-circle-dots' },
     { href: '/eduspace', label: 'EduSpace', icon: 'ph-graduation-cap' },
     { href: '/games', label: 'Game', icon: 'ph-game-controller' },
     { href: '/media', label: 'Media', icon: 'ph-film-strip' },
