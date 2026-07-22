@@ -324,9 +324,12 @@
                         if (d.photoURL) adminContact.avatar = d.photoURL;
                     }
                 }
-            // Auto-cleanup any invalid legacy admin_nhatdang chats
-            try {
-                const invalidChatsSnap = await getDocs(query(collection(db, 'chats'), where('participants', 'array-contains', 'admin_nhatdang')));
+            } catch (err) {
+                console.warn("Error resolving Admin UID:", err);
+            }
+
+            // Auto-cleanup any invalid legacy admin_nhatdang chats asynchronously
+            getDocs(query(collection(db, 'chats'), where('participants', 'array-contains', 'admin_nhatdang'))).then(invalidChatsSnap => {
                 invalidChatsSnap.forEach(async (docSnap) => {
                     try {
                         const msgsSnap = await getDocs(collection(db, 'chats', docSnap.id, 'messages'));
@@ -336,7 +339,7 @@
                         await deleteDoc(doc(db, 'chats', docSnap.id));
                     } catch (_) {}
                 });
-            } catch (_) {}
+            }).catch(() => {});
 
             loadConversationsList();
         });
