@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng Giáo Viên | EduSpace</title>
+    <link rel="icon" href="/assets/images/logo.png" type="image/png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Base Scripts -->
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/assets/js/config.js"></script>
+    <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/font/font.js"></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.03) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.03) 0px, transparent 50%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 99px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+
+    <!-- Access Denied Screen (Loader Overlay) -->
+    <div id="access-lock-screen" class="fixed inset-0 z-[99999] flex items-center justify-center bg-slate-900 text-white">
+        <div class="text-center max-w-sm p-8 glass-card rounded-3xl text-slate-900 border border-slate-200">
+            <div id="lock-icon-container" class="mx-auto w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm">
+                <i class="ph-bold ph-spinner animate-spin"></i>
+            </div>
+            <h3 id="lock-title" class="text-xl font-extrabold mb-2 tracking-tight">Đang kiểm tra quyền hạn...</h3>
+            <p id="lock-desc" class="text-sm text-slate-500 mb-6">EduSpace đang kiểm tra vai trò học tập của bạn trên hệ thống...</p>
+            <div id="lock-action-btn" class="hidden">
+                <a href="/eduspace" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/10">
+                    <i class="ph-bold ph-house-line"></i> Quay về Trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Dashboard -->
+    <div id="teacher-dashboard" class="hidden max-w-6xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-wider mb-1">
+                    <span>✨</span>
+                    <span>EduSpace Teacher Workspace</span>
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-950">Không gian Giáo viên</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="/eduspace/taode/" class="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/20 active:scale-95">
+                    <i class="ph-bold ph-plus"></i> Tạo đề thi mới
+                </a>
+            </div>
+        </header>
+
+        <!-- Stats Overview Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+            <div class="glass-card p-6 rounded-2xl flex items-center justify-between shadow-sm">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lớp học của tôi</span>
+                    <h3 id="stat-classrooms" class="text-3xl font-black text-slate-950 mt-1">0</h3>
+                </div>
+                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl">
+                    <i class="ph-bold ph-chalkboard"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl flex items-center justify-between shadow-sm">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Đề thi đã đăng</span>
+                    <h3 id="stat-quizzes" class="text-3xl font-black text-slate-950 mt-1">0</h3>
+                </div>
+                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-2xl">
+                    <i class="ph-bold ph-file-text"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl flex items-center justify-between shadow-sm">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lượt làm bài</span>
+                    <h3 id="stat-attempts" class="text-3xl font-black text-slate-950 mt-1">0</h3>
+                </div>
+                <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-2xl">
+                    <i class="ph-bold ph-student"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-200 mb-8 overflow-x-auto whitespace-nowrap gap-2 pb-1">
+            <button onclick="window.switchTab('classrooms')" id="tab-classrooms" class="tab-btn px-5 py-3 text-sm font-bold border-b-2 border-blue-600 text-blue-600 flex items-center gap-2 transition-all">
+                <i class="ph-bold ph-users-three"></i> Lớp học quản lý
+            </button>
+            <button onclick="window.switchTab('quizzes')" id="tab-quizzes" class="tab-btn px-5 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300 flex items-center gap-2 transition-all">
+                <i class="ph-bold ph-folders"></i> Kho đề thi online
+            </button>
+            <button onclick="window.switchTab('gradebook')" id="tab-gradebook" class="tab-btn px-5 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300 flex items-center gap-2 transition-all">
+                <i class="ph-bold ph-exam"></i> Bảng điểm học sinh
+            </button>
+        </div>
+
+        <!-- PANEL CLASSROOMS -->
+        <section id="panel-classrooms" class="tab-panel space-y-6">
+            <div class="glass-card rounded-2xl overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-200/80 bg-white/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-950">Danh sách lớp học</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Tạo lớp học và chia sẻ mã tham gia để quản lý học sinh và tiến độ làm bài.</p>
+                    </div>
+                    <button onclick="window.openCreateClassModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all shadow-sm">
+                        <i class="ph-bold ph-plus-circle"></i> Tạo lớp học mới
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200">
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Tên lớp học</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Mã tham gia (Join Code)</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Sĩ số học sinh</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Ngày tạo</th>
+                                <th class="text-right text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="classrooms-tbody">
+                            <tr>
+                                <td colspan="5" class="text-center py-12 text-slate-400 font-medium">Đang tải danh sách lớp...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL QUIZZES -->
+        <section id="panel-quizzes" class="tab-panel hidden space-y-6">
+            <div class="glass-card rounded-2xl overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-200/80 bg-white/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-950">Kho đề thi online đã đăng</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Quản lý cấu hình hiển thị và chỉ định làm bài.</p>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200">
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Mã đề / Tiêu đề</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Môn học / Lớp</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Thời gian</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Chế độ hiển thị</th>
+                                <th class="text-right text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quizzes-tbody">
+                            <tr>
+                                <td colspan="5" class="text-center py-12 text-slate-400 font-medium">Đang tải danh sách đề...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL GRADEBOOK -->
+        <section id="panel-gradebook" class="tab-panel hidden space-y-6">
+            <div class="glass-card rounded-2xl overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-200/80 bg-white/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-950">Kết quả làm bài thi của học sinh</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Theo dõi chi tiết điểm số học sinh của các lớp.</p>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200">
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Học sinh (NDID)</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Đề thi</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Số câu đúng</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Điểm số</th>
+                                <th class="text-left text-xs font-extrabold text-slate-400 uppercase tracking-wider px-6 py-3.5">Thời gian nộp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gradebook-tbody">
+                            <tr>
+                                <td colspan="5" class="text-center py-12 text-slate-400 font-medium">Đang tải bảng điểm...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Create Classroom Modal -->
+    <div id="create-class-modal" class="fixed inset-0 z-[100000] hidden flex items-center justify-center bg-slate-900/40 backdrop-blur-md">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-100 mx-4">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-extrabold text-slate-950">Tạo lớp học mới</h3>
+                <button onclick="window.closeCreateClassModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all">✕</button>
+            </div>
+            <form id="create-class-form" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Tên lớp học</label>
+                    <input type="text" id="class-name-input" required placeholder="VD: Lớp 11A1 - Toán học" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
+                </div>
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" onclick="window.closeCreateClassModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition-all">Hủy</button>
+                    <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/10">Tạo lớp</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Quiz Visibility Modal -->
+    <div id="quiz-visibility-modal" class="fixed inset-0 z-[100000] hidden flex items-center justify-center bg-slate-900/40 backdrop-blur-md">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-100 mx-4">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-extrabold text-slate-950">Phân quyền hiển thị đề</h3>
+                <button onclick="window.closeVisibilityModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all">✕</button>
+            </div>
+            <form id="visibility-form" class="space-y-5">
+                <input type="hidden" id="visibility-quiz-id">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Chế độ hiển thị</label>
+                    <select id="visibility-select" title="Chế độ hiển thị" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-blue-500 transition-all" onchange="window.toggleTargetClassroomsList()">
+                        <option value="public">Công khai (Tất cả học sinh đều thấy)</option>
+                        <option value="private">Riêng tư (Chỉ giáo viên xem)</option>
+                        <option value="classroom">Lớp học chỉ định (Chỉ lớp được chọn được làm)</option>
+                    </select>
+                </div>
+                <div id="target-classrooms-section" class="hidden space-y-2">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Chọn lớp làm bài</label>
+                    <div id="target-classrooms-checkboxes" class="space-y-2 max-h-40 overflow-y-auto p-3 border border-slate-100 bg-slate-50/50 rounded-xl custom-scrollbar">
+                        <!-- Classrooms checkboxes list -->
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" onclick="window.closeVisibilityModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition-all">Hủy</button>
+                    <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/10">Lưu phân quyền</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Class Students Modal -->
+    <div id="class-students-modal" class="fixed inset-0 z-[100000] hidden flex items-center justify-center bg-slate-900/40 backdrop-blur-md">
+        <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-slate-100 mx-4 max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between mb-4 flex-shrink-0">
+                <div>
+                    <h3 id="class-students-title" class="text-xl font-extrabold text-slate-950">Thành viên lớp học</h3>
+                    <p id="class-students-desc" class="text-xs text-slate-500 mt-0.5">Danh sách các học sinh đã tham gia lớp.</p>
+                </div>
+                <button onclick="window.closeClassStudentsModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all">✕</button>
+            </div>
+            <div class="flex-1 overflow-y-auto custom-scrollbar my-4">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold text-xs uppercase">
+                            <th class="text-left px-4 py-2">NDID</th>
+                            <th class="text-left px-4 py-2">Họ và tên</th>
+                        </tr>
+                    </thead>
+                    <tbody id="class-students-tbody" class="divide-y divide-slate-100">
+                        <tr>
+                            <td colspan="2" class="text-center py-8 text-slate-400 font-medium">Chưa có học sinh tham gia lớp này.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex justify-end pt-2 border-t border-slate-100 flex-shrink-0">
+                <button onclick="window.closeClassStudentsModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition-all">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Alerts -->
+    <div id="status-toast" class="fixed bottom-6 right-6 z-[100001] transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div id="status-toast-inner" class="flex items-center gap-3 px-5 py-3 rounded-xl bg-slate-900 text-white text-sm font-bold shadow-xl border border-slate-800">
+            <i id="status-toast-icon" class="ph-bold"></i>
+            <span id="status-toast-text">Thông báo hệ thống</span>
+        </div>
+    </div>
+
+    <!-- Firebase Integration -->
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, query, where, addDoc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        let auth, db;
+        let myClassrooms = [];
+        let myQuizzes = [];
+        let myAttempts = [];
+        let teacherUid = null;
+
+        async function initDashboard() {
+            if (getApps().length > 0) {
+                const app = getApp();
+                auth = getAuth(app);
+                db = getFirestore(app);
+            } else {
+                showAccessDenied("Lỗi kết nối", "Hệ thống Firebase chưa được cấu hình.");
+                return;
+            }
+
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    showAccessDenied("Chưa đăng nhập", "Vui lòng đăng nhập để truy cập Cổng Giáo viên.");
+                    return;
+                }
+                teacherUid = user.uid;
+
+                try {
+                    const userSnap = await getDoc(doc(db, 'users', user.uid));
+                    if (!userSnap.exists()) {
+                        showAccessDenied("Không tìm thấy thông tin", "Hồ sơ của bạn chưa được khởi tạo.");
+                        return;
+                    }
+
+                    const profile = userSnap.data();
+                    const hasAccess = profile.role === 'admin' || profile.eduRole === 'teacher' || profile.role === 'teacher';
+
+                    if (!hasAccess) {
+                        showAccessDenied("Không có quyền truy cập", "Tài khoản của bạn không có vai trò Giáo viên.");
+                        return;
+                    }
+
+                    // Unlock portal
+                    document.getElementById('access-lock-screen').classList.add('hidden');
+                    document.getElementById('teacher-dashboard').classList.remove('hidden');
+
+                    // Load portal data
+                    await loadDashboardData();
+
+                } catch (e) {
+                    showAccessDenied("Lỗi tải thông tin", "Không thể xác thực quyền truy cập: " + e.message);
+                }
+            });
+        }
+
+        async function loadDashboardData() {
+            try {
+                // 1. Load Classrooms
+                const classSnap = await getDocs(query(collection(db, 'classrooms'), where('creatorUid', '==', teacherUid)));
+                myClassrooms = [];
+                classSnap.forEach(d => myClassrooms.push({ classroomId: d.id, ...d.data() }));
+
+                // 2. Load Quizzes
+                const quizSnap = await getDocs(query(collection(db, 'quizzes'), where('creatorUid', '==', teacherUid)));
+                myQuizzes = [];
+                quizSnap.forEach(d => myQuizzes.push({ quizId: d.id, ...d.data() }));
+
+                // 3. Load Attempts
+                // Since attempts are general, we filter client-side for now or we query attempts matching our quizzes
+                const attemptSnap = await getDocs(collection(db, 'attempts'));
+                myAttempts = [];
+                attemptSnap.forEach(d => {
+                    const data = d.data();
+                    // filter to only attempts on quizzes created by this teacher
+                    if (myQuizzes.some(q => q.quizId === data.quizId)) {
+                        myAttempts.push({ attemptId: d.id, ...data });
+                    }
+                });
+
+                // Render UI stats
+                document.getElementById('stat-classrooms').textContent = myClassrooms.length;
+                document.getElementById('stat-quizzes').textContent = myQuizzes.length;
+                document.getElementById('stat-attempts').textContent = myAttempts.length;
+
+                renderClassrooms();
+                renderQuizzes();
+                renderGradebook();
+
+            } catch (e) {
+                showToast("Lỗi tải dữ liệu cổng giáo viên: " + e.message, "error");
+            }
+        }
+
+        function renderClassrooms() {
+            const tbody = document.getElementById('classrooms-tbody');
+            if (myClassrooms.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-slate-400 font-medium">Bạn chưa tạo lớp học nào.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = myClassrooms.map(c => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                    <td class="px-6 py-4 font-bold text-slate-900">${c.className}</td>
+                    <td class="px-6 py-4"><span class="bg-slate-100 text-slate-800 font-mono font-bold px-3 py-1.5 rounded-lg border border-slate-200/60">${c.classroomId}</span></td>
+                    <td class="px-6 py-4 font-semibold text-slate-600">${c.studentUids ? c.studentUids.length : 0} học sinh</td>
+                    <td class="px-6 py-4 text-slate-400 font-semibold text-xs">${c.createdAt ? new Date(c.createdAt).toLocaleDateString('vi-VN') : '—'}</td>
+                    <td class="px-6 py-4 text-right space-x-2">
+                        <button onclick="window.viewClassStudents('${c.classroomId}')" class="px-3 py-1.5 bg-blue-50 text-blue-600 border border-blue-100 rounded-lg text-xs font-bold hover:bg-blue-100 transition-all">Thành viên</button>
+                        <button onclick="window.deleteClassroom('${c.classroomId}')" class="px-3 py-1.5 bg-rose-50 text-rose-600 border border-rose-100 rounded-lg text-xs font-bold hover:bg-rose-100 transition-all">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderQuizzes() {
+            const tbody = document.getElementById('quizzes-tbody');
+            if (myQuizzes.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-slate-400 font-medium">Bạn chưa đăng đề thi nào.</td></tr>`;
+                return;
+            }
+            const visLabel = { public: 'Công khai', private: 'Riêng tư', classroom: 'Chỉ định lớp' };
+            const visCls = { public: 'bg-emerald-50 text-emerald-700 border-emerald-200', private: 'bg-slate-100 text-slate-600 border-slate-200', classroom: 'bg-blue-50 text-blue-700 border-blue-200' };
+
+            tbody.innerHTML = myQuizzes.map(q => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-slate-800">${q.title}</div>
+                        <div class="text-xs text-slate-400 mt-0.5">Mã đề: <span class="font-mono font-bold text-blue-600">${q.quizId}</span></div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="font-semibold text-slate-700">${q.subject || 'Công nghệ'}</div>
+                        <div class="text-xs text-slate-400">Khối: ${q.grade || '—'}</div>
+                    </td>
+                    <td class="px-6 py-4 font-semibold text-slate-600">${q.duration || 45} phút</td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-lg border text-xs font-bold ${visCls[q.visibility] || visCls.public}">${visLabel[q.visibility] || q.visibility}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right space-x-2">
+                        <a href="/eduspace/exam?id=${q.quizId}" target="_blank" class="inline-flex items-center px-3 py-1.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-lg text-xs font-bold hover:bg-slate-200 transition-all">Làm thử</a>
+                        <button onclick="window.openVisibilityModal('${q.quizId}', '${q.visibility}', '${(q.targetClassrooms || []).join(',')}')" class="px-3 py-1.5 bg-blue-50 text-blue-600 border border-blue-100 rounded-lg text-xs font-bold hover:bg-blue-100 transition-all">Phân quyền</button>
+                        <button onclick="window.deleteQuiz('${q.quizId}')" class="px-3 py-1.5 bg-rose-50 text-rose-600 border border-rose-100 rounded-lg text-xs font-bold hover:bg-rose-100 transition-all">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderGradebook() {
+            const tbody = document.getElementById('gradebook-tbody');
+            if (myAttempts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-slate-400 font-medium">Chưa có kết quả làm bài nào.</td></tr>`;
+                return;
+            }
+            // Sort attempts by time descending
+            const sorted = [...myAttempts].sort((a,b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+            tbody.innerHTML = sorted.map(a => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-slate-800">${a.studentName || 'Học sinh'}</div>
+                        <div class="text-xs text-slate-400 mt-0.5">NDID: ${a.studentNdid || '—'}</div>
+                    </td>
+                    <td class="px-6 py-4 font-semibold text-slate-700">${a.quizTitle || '—'}</td>
+                    <td class="px-6 py-4 font-semibold text-slate-600">${a.correctAnswers}/${a.totalQuestions}</td>
+                    <td class="px-6 py-4"><span class="text-sm font-black text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">${a.score.toFixed(2)}</span></td>
+                    <td class="px-6 py-4 text-slate-400 font-semibold text-xs">${a.submittedAt ? new Date(a.submittedAt).toLocaleString('vi-VN') : '—'}</td>
+                </tr>
+            `).join('');
+        }
+
+        // --- Classrooms Actions ---
+        window.openCreateClassModal = function() {
+            document.getElementById('class-name-input').value = '';
+            document.getElementById('create-class-modal').classList.remove('hidden');
+        };
+        window.closeCreateClassModal = function() {
+            document.getElementById('create-class-modal').classList.add('hidden');
+        };
+
+        document.getElementById('create-class-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const className = document.getElementById('class-name-input').value.trim();
+            if (!className) return;
+
+            // Generate 6-digit Join Code
+            let joinCode = '';
+            let codeConflicted = true;
+            while (codeConflicted) {
+                joinCode = String(Math.floor(100000 + Math.random() * 900000));
+                // check conflict
+                const cSnap = await getDoc(doc(db, 'classrooms', joinCode));
+                if (!cSnap.exists()) codeConflicted = false;
+            }
+
+            try {
+                await setDoc(doc(db, 'classrooms', joinCode), {
+                    className: className,
+                    creatorUid: teacherUid,
+                    studentUids: [],
+                    studentNdids: [],
+                    createdAt: new Date().toISOString()
+                });
+                showToast("Đã tạo lớp học thành công!", "success");
+                closeCreateClassModal();
+                await loadDashboardData();
+            } catch (err) {
+                showToast("Lỗi tạo lớp học: " + err.message, "error");
+            }
+        });
+
+        window.deleteClassroom = async function(classroomId) {
+            if (!confirm("Bạn có chắc chắn muốn xóa lớp học này? Mọi liên kết học sinh trong lớp sẽ bị hủy bỏ.")) return;
+            try {
+                await deleteDoc(doc(db, 'classrooms', classroomId));
+                showToast("Đã xóa lớp học thành công!", "success");
+                await loadDashboardData();
+            } catch(e) {
+                showToast("Lỗi xóa lớp học: " + e.message, "error");
+            }
+        };
+
+        window.viewClassStudents = async function(classroomId) {
+            const modal = document.getElementById('class-students-modal');
+            const tbody = document.getElementById('class-students-tbody');
+            const title = document.getElementById('class-students-title');
+            
+            const classroom = myClassrooms.find(c => c.classroomId === classroomId);
+            if (!classroom) return;
+
+            title.textContent = `${classroom.className}`;
+            tbody.innerHTML = `<tr><td colspan="2" class="text-center py-8 text-slate-400 font-medium">Đang tải thành viên...</td></tr>`;
+            modal.classList.remove('hidden');
+
+            try {
+                const uids = classroom.studentUids || [];
+                if (uids.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="2" class="text-center py-8 text-slate-400 font-medium">Lớp học này chưa có học sinh tham gia.</td></tr>`;
+                    return;
+                }
+
+                let rowsHtml = '';
+                for (const uid of uids) {
+                    const uSnap = await getDoc(doc(db, 'users', uid));
+                    if (uSnap.exists()) {
+                        const u = uSnap.data();
+                        rowsHtml += `
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="px-4 py-2.5 font-bold text-slate-800">${u.ndid || '—'}</td>
+                                <td class="px-4 py-2.5 text-slate-600 font-semibold">${u.fullname || '—'}</td>
+                            </tr>
+                        `;
+                    }
+                }
+                tbody.innerHTML = rowsHtml || `<tr><td colspan="2" class="text-center py-8 text-slate-400 font-medium">Lớp học này chưa có học sinh tham gia.</td></tr>`;
+            } catch(err) {
+                tbody.innerHTML = `<tr><td colspan="2" class="text-center py-8 text-red-500 font-medium">Lỗi tải danh sách: ${err.message}</td></tr>`;
+            }
+        };
+
+        window.closeClassStudentsModal = function() {
+            document.getElementById('class-students-modal').classList.add('hidden');
+        };
+
+        // --- Quizzes Actions ---
+        window.openVisibilityModal = function(quizId, currentVis, currentClassroomsStr) {
+            document.getElementById('visibility-quiz-id').value = quizId;
+            document.getElementById('visibility-select').value = currentVis || 'public';
+            
+            const selectedClassrooms = currentClassroomsStr ? currentClassroomsStr.split(',') : [];
+            const container = document.getElementById('target-classrooms-checkboxes');
+            
+            if (myClassrooms.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 font-semibold py-2">Bạn chưa có lớp học nào để chỉ định.</p>`;
+            } else {
+                container.innerHTML = myClassrooms.map(c => {
+                    const isChecked = selectedClassrooms.includes(c.classroomId) ? 'checked' : '';
+                    return `
+                        <label class="flex items-center gap-2.5 p-1 px-2 hover:bg-slate-100 rounded-lg cursor-pointer text-sm font-semibold text-slate-700">
+                            <input type="checkbox" name="target-classroom" value="${c.classroomId}" ${isChecked} class="w-4 h-4 text-blue-600 rounded border-slate-300">
+                            <span>${c.className}</span>
+                        </label>
+                    `;
+                }).join('');
+            }
+
+            window.toggleTargetClassroomsList();
+            document.getElementById('quiz-visibility-modal').classList.remove('hidden');
+        };
+
+        window.closeVisibilityModal = function() {
+            document.getElementById('quiz-visibility-modal').classList.add('hidden');
+        };
+
+        window.toggleTargetClassroomsList = function() {
+            const vis = document.getElementById('visibility-select').value;
+            document.getElementById('target-classrooms-section').classList.toggle('hidden', vis !== 'classroom');
+        };
+
+        document.getElementById('visibility-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const quizId = document.getElementById('visibility-quiz-id').value;
+            const visibility = document.getElementById('visibility-select').value;
+            
+            let targetClassrooms = [];
+            if (visibility === 'classroom') {
+                const checkedCheckboxes = document.querySelectorAll('input[name="target-classroom"]:checked');
+                checkedCheckboxes.forEach(cb => targetClassrooms.push(cb.value));
+            }
+
+            try {
+                await updateDoc(doc(db, 'quizzes', quizId), {
+                    visibility,
+                    targetClassrooms
+                });
+                showToast("Đã lưu phân quyền đề thi!", "success");
+                closeVisibilityModal();
+                await loadDashboardData();
+            } catch (err) {
+                showToast("Lỗi phân quyền đề thi: " + err.message, "error");
+            }
+        });
+
+        window.deleteQuiz = async function(quizId) {
+            if (!confirm("Bạn có chắc chắn muốn xóa đề thi này? Hành động này không thể hoàn tác.")) return;
+            try {
+                await deleteDoc(doc(db, 'quizzes', quizId));
+                showToast("Đã xóa đề thi thành công!", "success");
+                await loadDashboardData();
+            } catch(e) {
+                showToast("Lỗi xóa đề thi: " + e.message, "error");
+            }
+        };
+
+        // --- Helper UIs ---
+        function showAccessDenied(title, desc) {
+            document.getElementById('lock-title').textContent = title;
+            document.getElementById('lock-desc').textContent = desc;
+            document.getElementById('lock-icon-container').innerHTML = `<i class="ph-bold ph-shield-warning text-red-500 animate-bounce"></i>`;
+            document.getElementById('lock-icon-container').className = "mx-auto w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm";
+            document.getElementById('lock-action-btn').classList.remove('hidden');
+        }
+
+        function showToast(text, type = 'success') {
+            const toast = document.getElementById('status-toast');
+            const inner = document.getElementById('status-toast-inner');
+            const icon = document.getElementById('status-toast-icon');
+            const textEl = document.getElementById('status-toast-text');
+
+            if (type === 'success') {
+                inner.className = "flex items-center gap-3 px-5 py-3 rounded-xl bg-slate-900 text-white text-sm font-bold shadow-xl border border-slate-800";
+                icon.className = "ph-bold ph-check-circle text-emerald-400 text-lg";
+            } else {
+                inner.className = "flex items-center gap-3 px-5 py-3 rounded-xl bg-red-950 text-red-200 text-sm font-bold shadow-xl border border-red-900";
+                icon.className = "ph-bold ph-warning-circle text-red-400 text-lg";
+            }
+
+            textEl.textContent = text;
+            toast.classList.remove('opacity-0', 'translate-y-20');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-20');
+            }, 4000);
+        }
+
+        // Tab switches
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('border-blue-600', 'text-blue-600');
+                b.classList.add('border-transparent', 'text-slate-500');
+            });
+            
+            const targetPanel = document.getElementById(`panel-${tabId}`);
+            if (targetPanel) targetPanel.classList.remove('hidden');
+            
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-transparent', 'text-slate-500');
+                activeBtn.classList.add('border-blue-600', 'text-blue-600');
+            }
+        };
+
+        // Run safely by waiting for firebase-ready event if not loaded yet
+        if (getApps().length > 0) {
+            initDashboard();
+        } else {
+            window.addEventListener('firebase-ready', initDashboard);
+            setTimeout(() => {
+                if (getApps().length === 0) {
+                    showAccessDenied("Lỗi kết nối", "Hệ thống Firebase chưa được cấu hình hoặc tải chậm.");
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
