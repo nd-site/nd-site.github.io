@@ -27,6 +27,32 @@
     fontScript.src = '/font/font.js';
     document.head.appendChild(fontScript);
   }
+
+  /* ─── Ngăn chặn lưu Cache trình duyệt (Luôn lấy mã mới nhất từ Server) ─── */
+  (function enforceServerFreshness() {
+    try {
+      const metaTags = [
+        { key: 'Cache-Control', val: 'no-cache, no-store, must-revalidate' },
+        { key: 'Pragma', val: 'no-cache' },
+        { key: 'Expires', val: '0' }
+      ];
+      metaTags.forEach(item => {
+        if (!document.querySelector(`meta[http-equiv="${item.key}"]`)) {
+          const meta = document.createElement('meta');
+          meta.setAttribute('http-equiv', item.key);
+          meta.setAttribute('content', item.val);
+          document.head.appendChild(meta);
+        }
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(keys => keys.forEach(k => caches.delete(k))).catch(() => {});
+      }
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister())).catch(() => {});
+      }
+    } catch (_) {}
+  })();
   /* ─── Tự động bật Giao diện Máy tính (Desktop Mode) & Thông báo trên Di động ─── */
   const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
   if (isMobileDevice) {
