@@ -276,6 +276,8 @@
                     alert('Có lỗi xảy ra khi xóa cuộc trò chuyện: ' + err.message);
                 }
             });
+        }
+
         // Helper: Generate permanent unused 8-digit CodeID (Admin @nhatdang gets 00000000)
         async function ensureUserCodeId(dbTarget, targetUid, ndid = '', email = '') {
             if (!dbTarget || !targetUid) return null;

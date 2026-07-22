@@ -59,7 +59,7 @@ async function initEduFirebase() {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // ─── Lấy role thật từ Firestore /users/{uid} ───────────────────────
-                let role = 'member', eduRole = '', ndid = '', fullname = '', photoURL = '', grade = 'Khác', yob = null;
+                let role = 'member', eduRole = '', ndid = '', fullname = '', photoURL = '', grade = 'Khác', yob = null, codeId = '';
                 try {
                     const snap = await getDoc(doc(firestore, 'users', user.uid));
                     if (snap.exists()) {
