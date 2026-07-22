@@ -8,9 +8,17 @@
     <title>ChatND by ND Labs</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+
+    <!-- KaTeX & Marked.js for NDAI Math & Markdown rendering (Inherited from EduAI) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <link rel="stylesheet" href="/chat/chat.css">
     <script src="/assets/js/nd-navbar.js" defer></script>
     <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/api-service.js"></script>
     <script src="/font/font.js"></script>
 </head>
 
@@ -52,7 +60,7 @@
                     <i class="ph-duotone ph-chat-circle-dots"></i>
                 </div>
                 <h3>Chào mừng đến với ChatND by ND Labs</h3>
-                <p>Tìm kiếm bạn bè theo <strong>Tên</strong> hoặc <strong>NDID</strong>, chọn Admin hoặc Chatbot AI bên trái để bắt đầu nhắn tin ngay.</p>
+                <p>Nhắn tin trực tiếp với <strong>Admin @nhatdang</strong>, hỏi đáp cùng <strong>NDAI</strong> hoặc tìm bạn bè để bắt đầu trò chuyện.</p>
             </div>
 
             <!-- Active Chat Interface -->
@@ -127,8 +135,9 @@
         let unsubscribeMessages = null;
         let unsubscribeConversations = null;
         let openPickerMsgId = null;
+        let aiHasGreeted = false;
 
-        // Pinned Contacts Info
+        // Admin Contact Info
         let adminContact = {
             uid: 'admin_nhatdang',
             ndid: '@nhatdang',
@@ -138,6 +147,7 @@
             isPinned: true
         };
 
+        // NDAI Bot Contact Info
         const aiBotContact = {
             uid: 'ndai_bot',
             ndid: 'ndai',
@@ -197,7 +207,7 @@
             myNdid.textContent = ndid;
             myAvatar.src = avatar;
 
-            // Fetch live Admin profile
+            // Fetch Admin's actual UID from Firestore ndids collection
             try {
                 const ndidSnap = await getDoc(doc(db, 'ndids', 'nhatdang'));
                 if (ndidSnap.exists()) {
@@ -243,7 +253,7 @@
                     }
 
                     // 2. Search NDAI Bot match
-                    if ('ndai'.includes(val) || 'bot'.includes(val) || 'ai'.includes(val) || 'trợ lý'.includes(val)) {
+                    if ('ndai'.includes(val) || 'bot'.includes(val) || 'ai'.includes(val) || 'trợ lý'.includes(val) || 'eduai'.includes(val)) {
                         results.push({
                             uid: 'ndai_bot',
                             ndid: 'ndai',
@@ -327,7 +337,7 @@
             }
         });
 
-        // Load Conversations List (with Admin & NDAI Pinned at top)
+        // Load Conversations List (Admin & NDAI Pinned at top)
         function loadConversationsList() {
             if (unsubscribeConversations) unsubscribeConversations();
 
@@ -347,7 +357,7 @@
 
                     let html = '';
 
-                    // 1. PINNED ITEM 1: Admin @nhatdang
+                    // 1. PINNED ITEM 1: Admin @nhatdang (Direct Chat to Admin)
                     const isAdminSelected = activeChatId === `chat_${[currentUser.uid, adminContact.uid].sort().join('_')}`;
                     html += `
                         <div class="conv-item pinned admin-pinned ${isAdminSelected ? 'active' : ''}" data-type="admin" data-uid="${adminContact.uid}" data-ndid="@nhatdang" data-name="${escapeHtml(adminContact.name)}" data-avatar="${adminContact.avatar}">
@@ -362,12 +372,12 @@
                                     </span>
                                     <span class="conv-time">📌 Ghim</span>
                                 </div>
-                                <div class="conv-last-msg">Nhắn tin trực tiếp với Admin ND Labs</div>
+                                <div class="conv-last-msg">Nhắn tin trực tiếp tới Admin ND Labs</div>
                             </div>
                         </div>
                     `;
 
-                    // 2. PINNED ITEM 2: NDAI Assistant
+                    // 2. PINNED ITEM 2: NDAI Assistant (AI Engine)
                     const isAiSelected = activeChatId === 'chat_ndai_bot';
                     html += `
                         <div class="conv-item pinned ai-pinned ${isAiSelected ? 'active' : ''}" data-type="ai" data-uid="ndai_bot" data-ndid="ndai" data-name="NDAI Assistant ✨" data-avatar="/assets/images/logo.png">
@@ -390,7 +400,7 @@
                     // 3. REGULAR USER CONVERSATIONS
                     for (const conv of userConvs) {
                         const otherUid = conv.participants.find(id => id !== currentUser.uid) || currentUser.uid;
-                        if (otherUid === adminContact.uid) continue; // Skip since admin is already pinned
+                        if (otherUid === adminContact.uid) continue; // Skip admin since admin is pinned
 
                         let otherName = 'ND Member';
                         let otherNdid = 'ndid';
@@ -507,13 +517,13 @@
             if (unsubscribeMessages) unsubscribeMessages();
             messagesContainer.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-soft);font-size:13px;">Đang tải tin nhắn...</div>`;
 
-            // NDAI BOT CHAT HANDLING
+            // NDAI BOT CHAT HANDLING (EduAI Engine)
             if (chatId === 'chat_ndai_bot') {
                 renderAiMessages();
                 return;
             }
 
-            // STANDARD FIRESTORE CHAT MESSAGES
+            // STANDARD FIRESTORE REAL DIRECT CHAT (User to User & User to Admin)
             try {
                 const q = query(
                     collection(db, 'chats', chatId, 'messages'),
@@ -607,19 +617,55 @@
             }
         }
 
-        // NDAI Bot Messages State
-        let aiHistory = [
-            { sender: 'bot', text: 'Xin chào! Tôi là Trợ lý AI của ND Labs ✨. Bạn cần tôi trợ giúp điều gì hôm nay?' }
-        ];
+        // NDAI Bot Messages Storage & EduAI Multi-Bubble Sentence Splitter
+        function loadAiHistory() {
+            const saved = localStorage.getItem('ndai_history_' + (currentUser?.uid || 'guest'));
+            if (saved) {
+                try { return JSON.parse(saved); } catch (_) {}
+            }
+            return [
+                { sender: 'bot', text: 'Xin chào! Tôi là NDAI Assistant ✨, trợ lý trí tuệ nhân tạo của ND Labs. Tôi có thể giúp bạn giải đáp thắc mắc và học tập.' }
+            ];
+        }
+
+        function saveAiHistory(history) {
+            if (currentUser?.uid) {
+                localStorage.setItem('ndai_history_' + currentUser.uid, JSON.stringify(history.slice(-30)));
+            }
+        }
+
+        function splitIntoSentences(text) {
+            const raw = text
+                .replace(/\n{2,}/g, '\n')
+                .replace(/([.!?])\s+/g, '$1\n')
+                .split('\n')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+            
+            const merged = [];
+            for (const s of raw) {
+                if (merged.length && s.length < 25)
+                    merged[merged.length - 1] += ' ' + s;
+                else
+                    merged.push(s);
+            }
+            return merged;
+        }
 
         function renderAiMessages() {
+            const history = loadAiHistory();
             let html = '';
-            aiHistory.forEach(msg => {
+            history.forEach(msg => {
                 const isSent = msg.sender === 'user';
+                let contentHtml = escapeHtml(msg.text).replace(/\n/g, '<br>');
+                if (!isSent && typeof marked !== 'undefined') {
+                    try { contentHtml = marked.parse(msg.text); } catch (_) {}
+                }
+
                 html += `
                     <div class="msg-row ${isSent ? 'sent' : 'received'}">
                         <div class="msg-bubble-wrapper">
-                            <div class="msg-bubble">${escapeHtml(msg.text).replace(/\n/g, '<br>')}</div>
+                            <div class="msg-bubble">${contentHtml}</div>
                         </div>
                         <div class="msg-meta">${formatFullDateTime(new Date())}</div>
                     </div>
@@ -627,6 +673,18 @@
             });
 
             messagesContainer.innerHTML = html;
+
+            // Render KaTeX Math in AI messages (EduAI engine)
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(messagesContainer, {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '$', right: '$', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
@@ -695,7 +753,7 @@
             }
         }
 
-        // Send Message Handler (User & NDAI Bot AI Call)
+        // Send Message Handler
         chatInputForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const text = messageInput.value.trim();
@@ -703,9 +761,11 @@
 
             messageInput.value = '';
 
-            // 1. NDAI BOT CHAT
+            // 1. NDAI BOT CHAT (EduAI Engine Execution)
             if (activeChatId === 'chat_ndai_bot') {
-                aiHistory.push({ sender: 'user', text: text });
+                const history = loadAiHistory();
+                history.push({ sender: 'user', text: text });
+                saveAiHistory(history);
                 renderAiMessages();
 
                 // Show thinking placeholder
@@ -716,33 +776,53 @@
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
                 try {
-                    const apiKey = await window.getGeminiApiKey();
-                    const modelName = window.EDU_CONFIG?.stableModel || 'gemini-3.1-flash-lite';
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [
-                                {
-                                    role: 'user',
-                                    parts: [{ text: "Bạn là NDAI Assistant, trợ lý trí tuệ nhân tạo thông minh của ND Labs. Trả lời bằng tiếng Việt thân thiện, rõ ràng, ngắn gọn và hữu ích.\n\nCâu hỏi: " + text }]
-                                }
-                            ]
-                        })
-                    });
+                    const greetInstruction = aiHasGreeted
+                        ? 'Không chào hỏi, không dẫn nhập — trả lời thẳng vào câu hỏi.'
+                        : 'Chào người dùng ngắn gọn một câu rồi trả lời ngay.';
+                    aiHasGreeted = true;
 
-                    const data = await res.json();
-                    const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Dạ, tôi đã nhận được thông tin của bạn!";
-                    aiHistory.push({ sender: 'bot', text: aiReply });
+                    const systemPrompt = `Bạn là NDAI Assistant — trợ lý trí tuệ nhân tạo thông minh của ND Labs. ${greetInstruction} Trả lời ngắn gọn, súc tích (tối đa 3-5 câu), mỗi câu là một ý độc lập. Hãy sử dụng định dạng Markdown (in đậm, in nghiêng) và công thức Toán/Lý/Hóa bằng LaTeX (sử dụng dấu đô-la: $...$ cho công thức nội dòng và $$...$$ cho công thức dạng khối).`;
+
+                    const prompt = `${systemPrompt}\n\n[Câu hỏi của người dùng]: ${text}`;
+
+                    let aiReply = '';
+                    if (window.eduspaceAI && window.eduspaceAI.askGemini) {
+                        aiReply = await window.eduspaceAI.askGemini(prompt);
+                    } else {
+                        const apiKey = await window.getGeminiApiKey();
+                        const modelName = window.EDU_CONFIG?.stableModel || 'gemini-3.1-flash-lite';
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                contents: [{ role: 'user', parts: [{ text: prompt }] }]
+                            })
+                        });
+                        const data = await res.json();
+                        aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Dạ, tôi đã nhận được câu hỏi của bạn!";
+                    }
+
+                    // EduAI sentence bubble splitting
+                    const sentences = splitIntoSentences(aiReply);
+                    thinkingDiv.remove();
+
+                    for (let i = 0; i < sentences.length; i++) {
+                        const delay = Math.min(250 + sentences[i].length * 15, 1000);
+                        await new Promise(r => setTimeout(r, delay));
+                        history.push({ sender: 'bot', text: sentences[i] });
+                        saveAiHistory(history);
+                        renderAiMessages();
+                    }
                 } catch (err) {
-                    aiHistory.push({ sender: 'bot', text: "Tôi đã nhận được tin nhắn của bạn!" });
+                    if (thinkingDiv) thinkingDiv.remove();
+                    history.push({ sender: 'bot', text: "Tôi đã nhận được câu hỏi của bạn!" });
+                    saveAiHistory(history);
+                    renderAiMessages();
                 }
-
-                renderAiMessages();
                 return;
             }
 
-            // 2. REGULAR USER FIRESTORE CHAT
+            // 2. REAL FIRESTORE CHAT (Direct User-to-User & Direct User-to-Admin)
             try {
                 await addDoc(collection(db, 'chats', activeChatId, 'messages'), {
                     senderUid: currentUser.uid,
