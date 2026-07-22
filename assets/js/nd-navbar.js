@@ -464,27 +464,45 @@
   if (storedUser) {
     try {
       const u = JSON.parse(storedUser);
-      const role = u.role || 'other';
-      const subrole = u.subrole || '';
-
+      
       // Role badge config
       const roleCfg = {
         admin:   { cls: 'role-admin',   label: 'Admin' },
         teacher: { cls: 'role-teacher', label: 'GV' },
         student: { cls: 'role-student', label: 'HS' },
+        member:  { cls: 'role-other',   label: 'TV' }
       };
-      const rc = roleCfg[role] || { cls: 'role-other', label: 'TV' };
-      let roleBadgeHtml = `<span class="nd-role-badge ${rc.cls}">${rc.label}</span>`;
-      // Admin: show second badge for subrole if exists
-      if (role === 'admin' && subrole && roleCfg[subrole]) {
-        const sr = roleCfg[subrole];
-        roleBadgeHtml += `<span class="nd-role-badge ${sr.cls}">${sr.label}</span>`;
+
+      const role = u.role || 'member';
+      const eduRole = u.eduRole || '';
+
+      // Fallback for old sessions
+      let resolvedEduRole = eduRole;
+      if (!resolvedEduRole) {
+        if (role === 'admin') resolvedEduRole = u.subrole || 'student';
+        else if (role === 'teacher') resolvedEduRole = 'teacher';
+        else if (role === 'student') resolvedEduRole = 'student';
       }
+
+      let badges = [];
+      if (role === 'admin') {
+        badges.push(`<span class="nd-role-badge ${roleCfg.admin.cls}">${roleCfg.admin.label}</span>`);
+      }
+      if (resolvedEduRole === 'teacher') {
+        badges.push(`<span class="nd-role-badge ${roleCfg.teacher.cls}">${roleCfg.teacher.label}</span>`);
+      } else if (resolvedEduRole === 'student') {
+        badges.push(`<span class="nd-role-badge ${roleCfg.student.cls}">${roleCfg.student.label}</span>`);
+      }
+
+      if (badges.length === 0) {
+        badges.push(`<span class="nd-role-badge ${roleCfg.member.cls}">${roleCfg.member.label}</span>`);
+      }
+      const roleBadgeHtml = badges.join('');
 
       let adminLink = '';
       if (role === 'admin') {
         adminLink = `
-          <a href="/eduspace/admin/" class="nd-nav-link" style="color: #0070f3;" title="Bảng quản trị Admin">
+          <a href="/admin/" class="nd-nav-link" style="color: #0070f3;" title="Bảng quản trị Admin">
             <i class="ph-bold ph-shield-checkered"></i><span class="nd-lbl">Admin</span>
           </a>
         `;
@@ -1255,7 +1273,6 @@
             }
           } else if (attempts > 15) { // ~4.5 seconds timeout
             clearInterval(checkDb);
-            console.warn("FirebaseDb initialization timed out, falling back to REST API");
             fallbackFetch(cleanDbUrl);
           }
         }, 300);

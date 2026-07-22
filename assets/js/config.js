@@ -25,6 +25,12 @@ const EDU_CONFIG = {
     // URL của Firebase Cloud Function geminiProxy (inject bởi GitHub Actions)
     geminiFunctionUrl: "__GEMINI_FUNCTION_URL_PLACEHOLDER__",
 
+    // URL của Cloudflare Worker lưu trữ tệp (inject bởi GitHub Actions hoặc env)
+    cloudflareWorkerUrl: "__CLOUDFLARE_WORKER_URL_PLACEHOLDER__",
+
+    // ImgBB API Key (Lưu trữ ảnh miễn phí)
+    imgbbApiKey: "__IMGBB_API_KEY_PLACEHOLDER__",
+
     // AI Settings
     stableModel: "gemini-3.1-flash-lite",
 
@@ -42,7 +48,9 @@ let _cachedKeys = {
     fbStorageBucket: null,
     fbMessagingSenderId: null,
     fbAppId: null,
-    fbMeasurementId: null
+    fbMeasurementId: null,
+    cloudflareWorkerUrl: null,
+    imgbbApiKey: null
 };
 
 // Check if a value is a placeholder or truly set
@@ -61,6 +69,8 @@ async function getEduKeys() {
     if (isSet(EDU_CONFIG.firebaseMessagingSenderId)) _cachedKeys.fbMessagingSenderId = EDU_CONFIG.firebaseMessagingSenderId;
     if (isSet(EDU_CONFIG.firebaseAppId)) _cachedKeys.fbAppId = EDU_CONFIG.firebaseAppId;
     if (isSet(EDU_CONFIG.firebaseMeasurementId)) _cachedKeys.fbMeasurementId = EDU_CONFIG.firebaseMeasurementId;
+    if (isSet(EDU_CONFIG.cloudflareWorkerUrl)) _cachedKeys.cloudflareWorkerUrl = EDU_CONFIG.cloudflareWorkerUrl;
+    if (isSet(EDU_CONFIG.imgbbApiKey)) _cachedKeys.imgbbApiKey = EDU_CONFIG.imgbbApiKey;
 
     // If GitHub Secrets are already injected (at least Gemini and AppId), stop here
     if (_cachedKeys.gemini && _cachedKeys.fbAppId) return _cachedKeys;
@@ -81,6 +91,8 @@ async function getEduKeys() {
             if (data.FIREBASE_MESSAGING_SENDER_ID) _cachedKeys.fbMessagingSenderId = data.FIREBASE_MESSAGING_SENDER_ID;
             if (data.FIREBASE_APP_ID) _cachedKeys.fbAppId = data.FIREBASE_APP_ID;
             if (data.FIREBASE_MEASUREMENT_ID) _cachedKeys.fbMeasurementId = data.FIREBASE_MEASUREMENT_ID;
+            if (data.CLOUDFLARE_WORKER_URL) _cachedKeys.cloudflareWorkerUrl = data.CLOUDFLARE_WORKER_URL;
+            if (data.IMGBB_API_KEY) _cachedKeys.imgbbApiKey = data.IMGBB_API_KEY;
         }
     } catch (e) {}
 
@@ -111,6 +123,8 @@ async function getEduKeys() {
                                 case 'FIREBASE_MESSAGING_SENDER_ID': if (!_cachedKeys.fbMessagingSenderId) _cachedKeys.fbMessagingSenderId = value; foundMatch = true; break;
                                 case 'FIREBASE_APP_ID': if (!_cachedKeys.fbAppId) _cachedKeys.fbAppId = value; foundMatch = true; break;
                                 case 'FIREBASE_MEASUREMENT_ID': if (!_cachedKeys.fbMeasurementId) _cachedKeys.fbMeasurementId = value; foundMatch = true; break;
+                                case 'CLOUDFLARE_WORKER_URL': if (!_cachedKeys.cloudflareWorkerUrl) _cachedKeys.cloudflareWorkerUrl = value; foundMatch = true; break;
+                                case 'IMGBB_API_KEY': if (!_cachedKeys.imgbbApiKey) _cachedKeys.imgbbApiKey = value; foundMatch = true; break;
                             }
                         }
                         if (foundMatch) break;

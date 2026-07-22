@@ -92,16 +92,386 @@
             background: #f8fafc;
             border-color: #cbd5e1;
         }
+
+        /* Semantic and utility classes for settings panels */
+        .mb-28 { margin-bottom: 28px; }
+        .mb-0 { margin-bottom: 0 !important; }
+        .mt-4 { margin-top: 4px !important; }
+        .text-22-bold { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+        .text-14-soft { font-size: 14px; color: var(--text-soft); }
+        .text-primary { color: var(--primary) !important; }
+        .flex-col-gap-4 { display: flex; flex-direction: column; gap: 4px; }
+        .flex-row-gap-8 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .text-18-bold-m0 { font-size: 18px; font-weight: 800; margin: 0; }
+        .text-13-soft-semibold-m0 { font-size: 13px; color: var(--text-soft); font-weight: 600; margin: 0; }
+        .flex-col-gap-24 { display: flex; flex-direction: column; gap: 24px; }
+        
+        .settings-tab-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+        }
+        
+        .card-section {
+            padding: 24px;
+            border-radius: 20px;
+            border: 1.5px solid #e2e8f0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .card-section-title {
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .text-11-soft-mt4 {
+            font-size: 11px;
+            color: var(--text-soft);
+            margin-top: 4px;
+            line-height: 1.4;
+            font-family: inherit;
+        }
+        .btn-save-settings {
+            width: fit-content !important;
+            padding: 11px 28px !important;
+            margin-top: 4px !important;
+        }
+        .divider-36 { margin: 36px 0 !important; }
+        .text-14 { font-size: 14px; }
+        .text-12-soft-weight500-mt2 {
+            font-size: 12px;
+            color: var(--text-soft);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .flex-row-gap-8-center {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pass-sec-container {
+            padding: 20px;
+            border-radius: 16px;
+            border: 1.5px solid #e2e8f0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .pass-sec-title-h4 {
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+        }
+        .pass-sec-desc-p {
+            font-size: 13px;
+            color: var(--text-soft);
+            line-height: 1.5;
+            margin: 0;
+        }
+        .pass-sec-btn-style {
+            width: fit-content !important;
+            margin-top: 8px !important;
+            padding: 8px 20px !important;
+            font-size: 13px !important;
+        }
+        .flex-col-gap-16 {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .merge-acc-container {
+            padding: 20px;
+            border-radius: 16px;
+            border: 1.5px dashed #cbd5e1;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .btn-link-small-fit {
+            width: fit-content !important;
+            margin-top: 8px !important;
+        }
+        .delete-acc-container {
+            padding: 20px;
+            border-radius: 16px;
+            border: 1.5px solid #fecaca;
+            background: #fff5f5;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .btn-unlink-fit {
+            width: fit-content !important;
+            margin-top: 8px !important;
+            border: 1.5px solid #fecaca !important;
+            background: #fee2e2 !important;
+        }
+        .select-field-custom {
+            width: 100%;
+            padding: 12px 16px 12px 46px;
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text-main);
+            outline: none;
+        }
+        .role-hint-text {
+            font-size: 12px;
+            color: #94a3b8;
+            margin: 6px 0 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .logout-section {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid #fecaca;
+        }
+        .btn-unlink-fit-logout {
+            background: #fef2f2 !important;
+            color: #ef4444 !important;
+            border: 1.5px solid #fecaca !important;
+            padding: 12px 20px !important;
+            border-radius: 14px !important;
+            font-weight: 800 !important;
+            font-family: inherit !important;
+            font-size: 14px !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            transition: all 0.2s !important;
+        }
+
+        /* Modal classes */
+        .modal-scroll {
+            overflow-y: auto !important;
+        }
+        .modal-content-large {
+            max-width: 600px !important;
+            width: 100% !important;
+            margin: 40px auto !important;
+            padding: 28px !important;
+        }
+        .modal-content-medium {
+            max-width: 450px !important;
+            width: 100% !important;
+            padding: 24px !important;
+        }
+        .modal-content-pwd {
+            max-width: 450px !important;
+            width: 100% !important;
+            padding: 28px !important;
+        }
+        .modal-header-h3 {
+            font-weight: 800 !important;
+            font-size: 18px !important;
+            margin-bottom: 8px !important;
+        }
+        .modal-desc-p {
+            font-size: 13px !important;
+            color: var(--text-soft) !important;
+            margin-bottom: 20px !important;
+        }
+        .modal-footer {
+            display: flex !important;
+            justify-content: flex-end !important;
+            gap: 10px !important;
+            margin-top: 20px !important;
+        }
+        .btn-cancel-modal {
+            padding: 10px 18px !important;
+            border-radius: 10px !important;
+            border: none !important;
+            background: #f1f5f9 !important;
+            font-weight: 700 !important;
+            font-family: inherit !important;
+            cursor: pointer !important;
+        }
+        .btn-confirm-modal {
+            width: auto !important;
+            margin-top: 0 !important;
+            padding: 10px 20px !important;
+        }
+        .modal-header-row {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            margin-bottom: 20px !important;
+        }
+        .modal-title-large {
+            font-weight: 800 !important;
+            font-size: 20px !important;
+            color: var(--text-main) !important;
+            margin: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        .modal-close-btn {
+            border: none !important;
+            background: none !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            color: var(--text-soft) !important;
+            font-weight: 700 !important;
+        }
+        .merge-step-p {
+            font-size: 13px !important;
+            color: var(--text-soft) !important;
+            margin-bottom: 16px !important;
+            line-height: 1.5 !important;
+        }
+        .mb-16 { margin-bottom: 16px !important; }
+        .mb-20 { margin-bottom: 20px !important; }
+        .merge-or-divider {
+            text-align: center !important;
+            margin: 16px 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important;
+            color: var(--text-soft) !important;
+            font-size: 12px !important;
+        }
+        .merge-divider-line {
+            flex: 1 !important;
+            height: 1px !important;
+            background: #e2e8f0 !important;
+        }
+        .btn-merge-google {
+            width: 100% !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background: #fff !important;
+            padding: 10px !important;
+            border-radius: 12px !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            transition: all 0.2s !important;
+            font-family: inherit !important;
+            font-size: 13.5px !important;
+            color: var(--text-main) !important;
+        }
+        .google-icon-size {
+            width: 18px !important;
+            height: 18px !important;
+        }
+        .flex-end-gap-10 {
+            display: flex !important;
+            justify-content: flex-end !important;
+            gap: 10px !important;
+        }
+        .btn-confirm-step {
+            width: auto !important;
+            margin-top: 0 !important;
+            padding: 10px 24px !important;
+        }
+        .merge-table-container {
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 14px !important;
+            overflow: hidden !important;
+            margin-bottom: 20px !important;
+            font-size: 13px !important;
+        }
+        .merge-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            text-align: left !important;
+        }
+        .merge-table-thead {
+            background: #f8fafc !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            font-weight: 800 !important;
+        }
+        .merge-table-th-soft {
+            padding: 10px 12px !important;
+            color: var(--text-soft) !important;
+        }
+        .merge-table-th {
+            padding: 10px 12px !important;
+        }
+        .merge-warning-box {
+            font-size: 12px !important;
+            color: #b45309 !important;
+            background: #fffbeb !important;
+            border: 1px solid #fde68a !important;
+            padding: 12px !important;
+            border-radius: 10px !important;
+            margin-bottom: 20px !important;
+            line-height: 1.5 !important;
+        }
+        .btn-execute-merge {
+            width: auto !important;
+            margin-top: 0 !important;
+            padding: 10px 24px !important;
+            background: #059669 !important;
+            border-color: #059669 !important;
+        }
+        .delete-modal-title {
+            font-weight: 800 !important;
+            font-size: 18px !important;
+            color: #dc2626 !important;
+            margin: 0 0 8px 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        .btn-execute-delete {
+            width: auto !important;
+            margin-top: 0 !important;
+            padding: 10px 20px !important;
+            background: #dc2626 !important;
+            border-color: #dc2626 !important;
+        }
+        .pwd-modal-title {
+            font-weight: 800 !important;
+            font-size: 18px !important;
+            color: var(--text-main) !important;
+            margin: 0 !important;
+            font-family: inherit !important;
+        }
+        .pwd-modal-footer {
+            display: flex !important;
+            justify-content: flex-end !important;
+            gap: 10px !important;
+            margin-top: 24px !important;
+        }
     </style>
     <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/cloudflare-storage.js"></script>
     <script src="/font/font.js"></script>
 </head>
 
 <body>
     <div class="settings-main">
         <aside class="settings-nav">
-            <a href="/auth/settings/" class="active">
-                <i class="ph-duotone ph-user-circle"></i><span>Tài khoản</span>
+            <a href="javascript:void(0)" onclick="window.switchSettingsTab('general')" id="tab-general" class="active">
+                <i class="ph-duotone ph-user-circle"></i><span>Tài khoản NDID</span>
+            </a>
+            <a href="javascript:void(0)" onclick="window.switchSettingsTab('eduspace')" id="tab-eduspace">
+                <i class="ph-duotone ph-graduation-cap"></i><span>Học tập EduSpace</span>
             </a>
             <a href="/privacy/">
                 <i class="ph-duotone ph-shield-check"></i><span>Chính sách</span>
@@ -109,10 +479,9 @@
         </aside>
 
         <main class="settings-panel">
-            <div style="margin-bottom: 28px;">
-                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Cài đặt NDID</h2>
-                <p style="font-size: 14px; color: var(--text-soft);">Quản lý hồ sơ <strong id="ndid-display"
-                        style="color: var(--primary);">...</strong></p>
+            <div class="mb-28">
+                <h2 class="text-22-bold">Cài đặt tài khoản</h2>
+                <p class="text-14-soft">Quản lý hồ sơ <strong id="ndid-display" class="text-primary">...</strong></p>
             </div>
 
             <!-- Avatar Section -->
@@ -122,180 +491,197 @@
                     <label for="avatar-upload" class="cam-btn" title="Đổi ảnh">
                         <i class="ph-bold ph-camera"></i>
                     </label>
-                    <input type="file" id="avatar-upload" accept="image/*" style="display:none">
+                    <input type="file" id="avatar-upload" accept="image/*" class="hidden" title="Tải ảnh đại diện lên">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <h3 id="display-name" style="font-size: 18px; font-weight: 800; margin: 0;">ND Member</h3>
-                        <span id="display-role-badge" style="display: none; align-items: center; gap: 4px;"></span>
+                <div class="flex-col-gap-4">
+                    <div class="flex-row-gap-8">
+                        <h3 id="display-name" class="text-18-bold-m0">ND Member</h3>
+                        <span id="display-role-badge" class="hidden flex-row-gap-8-center"></span>
                     </div>
-                    <p id="display-email" style="font-size: 13px; color: var(--text-soft); font-weight: 600; margin: 0;">NDID: ...</p>
+                    <p id="display-email" class="text-13-soft-semibold-m0">NDID: ...</p>
                 </div>
             </div>
 
             <!-- Edit profile -->
-            <form id="profile-form" class="auth-form" style="display: flex; flex-direction: column; gap: 24px;">
-                <!-- Section 1: Thông tin tài khoản NDID -->
-                <div style="padding: 24px; border-radius: 20px; border: 1.5px solid #e2e8f0; background: #fff; display: flex; flex-direction: column; gap: 16px;">
-                    <h3 style="font-weight: 800; font-size: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; margin: 0; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
-                        <i class="ph-bold ph-identification-card" style="color: var(--primary);"></i> Thông tin tài khoản NDID
-                    </h3>
-                    
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label>NDID (Tên định danh)</label>
-                        <div class="input-container">
-                            <i class="ph-duotone ph-fingerprint"></i>
-                            <input type="text" id="edit-ndid" placeholder="Nhập NDID" required>
+            <form id="profile-form" class="auth-form flex-col-gap-24">
+                <!-- TAB PANEL GENERAL -->
+                <div id="panel-general" class="settings-tab-panel">
+                    <!-- Section 1: Thông tin tài khoản NDID -->
+                    <div class="card-section">
+                        <h3 class="card-section-title">
+                            <i class="ph-bold ph-identification-card text-primary"></i> Thông tin tài khoản NDID
+                        </h3>
+                        
+                        <div class="form-group mb-0">
+                            <label>NDID (Tên định danh)</label>
+                            <div class="input-container">
+                                <i class="ph-duotone ph-fingerprint"></i>
+                                <input type="text" id="edit-ndid" placeholder="Nhập NDID" required>
+                            </div>
+                            <p class="text-11-soft-mt4">Chỉ chứa chữ (hoa/thường), số, và ký tự <code>.</code> <code>_</code> <code>-</code>. Không được chứa từ "admin".</p>
                         </div>
-                        <p style="font-size: 11px; color: var(--text-soft); margin-top: 4px; line-height: 1.4; font-family: inherit;">Chỉ chứa chữ (hoa/thường), số, và ký tự <code>.</code> <code>_</code> <code>-</code>. Không được chứa từ "admin".</p>
+
+                        <div class="form-group mb-0">
+                            <label>Họ và tên</label>
+                            <div class="input-container">
+                                <i class="ph-duotone ph-user"></i>
+                                <input type="text" id="edit-name" placeholder="Tên của bạn" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label>Email khôi phục</label>
+                            <div class="input-container">
+                                <i class="ph-duotone ph-envelope-simple"></i>
+                                <input type="email" id="edit-recovery-email" placeholder="email@example.com">
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label>Họ và tên</label>
-                        <div class="input-container">
-                            <i class="ph-duotone ph-user"></i>
-                            <input type="text" id="edit-name" placeholder="Tên của bạn" required>
+                    <button type="submit" class="btn-primary btn-save-settings">
+                        <i class="ph-bold ph-floppy-disk"></i> Lưu thay đổi
+                    </button>
+
+                    <div class="divider divider-36"><span>Liên kết tài khoản</span></div>
+
+                    <!-- Google linking row -->
+                    <div class="google-row">
+                        <div class="google-row-left">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                            <div>
+                                <div class="text-14">Google</div>
+                                <div id="google-email-sub" class="text-12-soft-weight500-mt2">Chưa liên kết</div>
+                            </div>
+                        </div>
+                        <div class="flex-row-gap-8-center">
+                            <span id="google-linked-badge" class="google-linked-badge hidden">
+                                <i class="ph-bold ph-check"></i> Đã liên kết
+                            </span>
+                            <button type="button" id="link-google-btn" class="btn-link-small">
+                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
+                                Liên kết
+                            </button>
+                            <button type="button" id="unlink-google-btn" class="btn-unlink hidden">
+                                <i class="ph-bold ph-link-break"></i> Hủy liên kết
+                            </button>
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label>Email khôi phục</label>
-                        <div class="input-container">
-                            <i class="ph-duotone ph-envelope-simple"></i>
-                            <input type="email" id="edit-recovery-email" placeholder="email@example.com">
+                    <div class="divider divider-36"><span>Bảo mật & Mật khẩu</span></div>
+
+                    <div id="password-management-section" class="pass-sec-container">
+                        <h4 id="pass-sec-title" class="pass-sec-title-h4"><i class="ph-bold ph-key"></i> Đang tải thông tin...</h4>
+                        <p id="pass-sec-desc" class="pass-sec-desc-p">Đang kiểm tra cơ chế bảo mật tài khoản...</p>
+                        <button type="button" id="pass-sec-btn" class="btn-primary pass-sec-btn-style">
+                            Thiết lập
+                        </button>
+                    </div>
+
+                    <!-- Dangerous options -->
+                    <div class="divider divider-36"><span>Quản lý nâng cao</span></div>
+
+                    <div class="flex-col-gap-16">
+                        <!-- Merge Accounts Row -->
+                        <div class="merge-acc-container">
+                            <h4 class="pass-sec-title-h4"><i class="ph-bold ph-git-merge text-primary"></i> Sáp nhập tài khoản</h4>
+                            <p class="pass-sec-desc-p">Sáp nhập dữ liệu từ một tài khoản NDID khác vào tài khoản này. Bạn cần cung cấp mật khẩu của cả hai tài khoản.</p>
+                            <button type="button" id="start-merge-btn" class="btn-link-small btn-link-small-fit">
+                                Bắt đầu sáp nhập
+                            </button>
+                        </div>
+
+                        <!-- Delete Account Row -->
+                        <div class="delete-acc-container">
+                            <h4 class="pass-sec-title-h4 text-red-600"><i class="ph-bold ph-trash"></i> Xóa tài khoản</h4>
+                            <p class="pass-sec-desc-p text-red-800">Hành động này không thể hoàn tác. Mọi dữ liệu học tập của bạn trên EduSpace sẽ bị xóa vĩnh viễn.</p>
+                            <button type="button" id="delete-acc-btn" class="btn-unlink btn-unlink-fit">
+                                Xóa tài khoản vĩnh viễn
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Section 2: Thông tin trong EduSpace -->
-                <div style="padding: 24px; border-radius: 20px; border: 1.5px solid #e2e8f0; background: #fff; display: flex; flex-direction: column; gap: 16px;">
-                    <h3 style="font-weight: 800; font-size: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; margin: 0; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
-                        <i class="ph-bold ph-graduation-cap" style="color: var(--primary);"></i> Thông tin học tập EduSpace
-                    </h3>
+                <!-- TAB PANEL EDUSPACE -->
+                <div id="panel-eduspace" class="settings-tab-panel hidden">
+                    <!-- Section 2: Thông tin trong EduSpace -->
+                    <div class="card-section">
+                        <h3 class="card-section-title">
+                            <i class="ph-bold ph-graduation-cap text-primary"></i> Thông tin học tập EduSpace
+                        </h3>
 
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label for="edit-role">Vai trò</label>
-                        <div class="input-container">
-                            <i class="ph-duotone ph-users"></i>
-                            <select id="edit-role" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
-                                <option value="student">Học sinh (Study)</option>
-                                <option value="other">Khác</option>
-                                <!-- teacher và admin chỉ được Admin cấp -->
-                                <option value="teacher" disabled style="display:none;">Giáo viên (Teacher) — Liên hệ Admin</option>
-                                <option value="admin" disabled style="display:none;">Admin</option>
-                            </select>
+                        <div class="form-group mb-0">
+                            <label for="edit-role">Vai trò học tập</label>
+                            <div class="input-container">
+                                <i class="ph-duotone ph-users"></i>
+                                <select id="edit-role" required class="select-field-custom">
+                                    <option value="student">Học sinh (Student)</option>
+                                    <option value="teacher" disabled class="hidden">Giáo viên (Teacher) — Liên hệ Admin</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </div>
+                            <p class="role-hint-text">
+                                <i class="ph-bold ph-info text-sky-600"></i>
+                                Vai trò <strong>Giáo viên</strong> học tập cần được Admin cấp quyền. Liên hệ Admin để được hỗ trợ.
+                            </p>
                         </div>
-                        <p style="font-size: 12px; color: #94a3b8; margin: 6px 0 0 4px; display: flex; align-items: center; gap: 4px;">
-                            <i class="ph-bold ph-info" style="color: #0284c7;"></i>
-                            Vai trò <strong>Giáo viên</strong> cần được Admin cấp quyền. Liên hệ Admin để được hỗ trợ.
-                        </p>
-                    </div>
 
-                    <!-- Subrole: chỉ hiển thị khi role = admin -->
-                    <div id="subrole-section" class="form-group" style="margin-bottom: 0; display: none;">
-                        <label for="edit-subrole">Vai trò học tập (Admin)</label>
-                        <div class="input-container">
-                            <i class="ph-duotone ph-user-switch"></i>
-                            <select id="edit-subrole" style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
-                                <option value="">-- Không có --</option>
-                                <option value="student">Học sinh (Study)</option>
-                                <option value="teacher">Giáo viên (Teacher)</option>
-                            </select>
+                        <div class="form-group mb-0">
+                            <label for="edit-yob">Năm sinh</label>
+                            <div class="input-container">
+                                <i class="ph-duotone ph-calendar"></i>
+                                <input type="number" id="edit-yob" placeholder="Ví dụ: 2008" min="1940" max="2026" required>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label for="edit-yob">Năm sinh</label>
-                        <div class="input-container">
-                            <i class="ph-duotone ph-calendar"></i>
-                            <input type="number" id="edit-yob" placeholder="Ví dụ: 2008" min="1940" max="2026" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label for="edit-grade">Lớp học</label>
-                        <div class="input-container">
-                            <i class="ph-duotone ph-presentation"></i>
-                            <select id="edit-grade" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
-                                <option value="10">Lớp 10</option>
-                                <option value="11">Lớp 11</option>
-                                <option value="12">Lớp 12</option>
-                                <option value="Đang dạy">Giáo viên - Đang dạy</option>
-                                <option value="Khác">Khác</option>
-                            </select>
+                        <div class="form-group mb-0">
+                            <label for="edit-grade">Lớp học</label>
+                            <div class="input-container">
+                                <i class="ph-duotone ph-presentation"></i>
+                                <select id="edit-grade" required class="select-field-custom">
+                                    <option value="10">Lớp 10</option>
+                                    <option value="11">Lớp 11</option>
+                                    <option value="12">Lớp 12</option>
+                                    <option value="Đang dạy">Giáo viên - Đang dạy</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Section 3: Tham gia lớp học (Chỉ hiển thị nếu role là student) -->
+                    <div class="card-section" id="student-classrooms-section">
+                        <h3 class="card-section-title">
+                            <i class="ph-bold ph-chalkboard-teacher text-primary"></i> Lớp học của tôi
+                        </h3>
+                        
+                        <div class="form-group mb-0">
+                            <label for="join-class-code">Tham gia lớp học mới</label>
+                            <div style="display: flex; gap: 8px;">
+                                <div class="input-container" style="flex: 1; margin-bottom: 0;">
+                                    <i class="ph-duotone ph-key"></i>
+                                    <input type="text" id="join-class-code" placeholder="Nhập mã lớp học (6 chữ số)" maxlength="6">
+                                </div>
+                                <button type="button" id="btn-join-class" class="btn-primary" style="padding: 0 16px; font-size: 13px; font-weight: 700; border-radius: 12px; height: 44px; margin-top: 0; width: auto !important;">
+                                    Tham gia
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Danh sách lớp học đang tham gia -->
+                        <div id="joined-classrooms-list" class="flex-col-gap-16" style="margin-top: 12px;">
+                            <p class="text-14-soft">Đang tải danh sách lớp học...</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-save-settings">
+                        <i class="ph-bold ph-floppy-disk"></i> Lưu thông tin học tập
+                    </button>
                 </div>
-
-                <button type="submit" class="btn-primary" style="width: fit-content; padding: 11px 28px; margin-top: 4px;">
-                    <i class="ph-bold ph-floppy-disk"></i> Lưu thay đổi
-                </button>
             </form>
 
-            <div class="divider" style="margin: 36px 0;"><span>Liên kết tài khoản</span></div>
-
-            <!-- Google linking row -->
-            <div class="google-row">
-                <div class="google-row-left">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-                    <div>
-                        <div style="font-size: 14px;">Google</div>
-                        <div id="google-email-sub"
-                            style="font-size: 12px; color: var(--text-soft); font-weight: 500; margin-top: 2px;">Chưa
-                            liên kết</div>
-                    </div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span id="google-linked-badge" class="google-linked-badge hidden">
-                        <i class="ph-bold ph-check"></i> Đã liên kết
-                    </span>
-                    <button id="link-google-btn" class="btn-link-small">
-                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
-                        Liên kết
-                    </button>
-                    <button id="unlink-google-btn" class="btn-unlink hidden">
-                        <i class="ph-bold ph-link-break"></i> Hủy liên kết
-                    </button>
-                </div>
-            </div>
-
-            <div class="divider" style="margin: 36px 0;"><span>Bảo mật & Mật khẩu</span></div>
-
-            <div id="password-management-section" style="padding: 20px; border-radius: 16px; border: 1.5px solid #e2e8f0; background: #fff; display: flex; flex-direction: column; gap: 8px;">
-                <h4 id="pass-sec-title" style="font-weight: 800; font-size: 15px; color: var(--text-main); display: flex; align-items: center; gap: 6px; margin: 0;"><i class="ph-bold ph-key"></i> Đang tải thông tin...</h4>
-                <p id="pass-sec-desc" style="font-size: 13px; color: var(--text-soft); line-height: 1.5; margin: 0;">Đang kiểm tra cơ chế bảo mật tài khoản...</p>
-                <button id="pass-sec-btn" class="btn-primary" style="width: fit-content; margin-top: 8px; padding: 8px 20px; font-size: 13px;">
-                    Thiết lập
-                </button>
-            </div>
-
-            <!-- Dangerous options -->
-            <div class="divider" style="margin: 36px 0;"><span>Quản lý nâng cao</span></div>
-
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-                <!-- Merge Accounts Row -->
-                <div style="padding: 20px; border-radius: 16px; border: 1.5px dashed #cbd5e1; background: #f8fafc; display: flex; flex-direction: column; gap: 8px;">
-                    <h4 style="font-weight: 800; font-size: 15px; color: var(--text-main); display: flex; align-items: center; gap: 6px; margin: 0;"><i class="ph-bold ph-git-merge" style="color: var(--primary);"></i> Sáp nhập tài khoản</h4>
-                    <p style="font-size: 13px; color: var(--text-soft); line-height: 1.5; margin: 0;">Sáp nhập dữ liệu từ một tài khoản NDID khác vào tài khoản này. Bạn cần cung cấp mật khẩu của cả hai tài khoản.</p>
-                    <button id="start-merge-btn" class="btn-link-small" style="width: fit-content; margin-top: 8px;">
-                        Bắt đầu sáp nhập
-                    </button>
-                </div>
-
-                <!-- Delete Account Row -->
-                <div style="padding: 20px; border-radius: 16px; border: 1.5px solid #fecaca; background: #fff5f5; display: flex; flex-direction: column; gap: 8px;">
-                    <h4 style="font-weight: 800; font-size: 15px; color: #dc2626; display: flex; align-items: center; gap: 6px; margin: 0;"><i class="ph-bold ph-trash"></i> Xóa tài khoản</h4>
-                    <p style="font-size: 13px; color: #991b1b; line-height: 1.5; margin: 0;">Hành động này không thể hoàn tác. Mọi dữ liệu học tập của bạn trên EduSpace sẽ bị xóa vĩnh viễn.</p>
-                    <button id="delete-acc-btn" class="btn-unlink" style="width: fit-content; margin-top: 8px; border: 1.5px solid #fecaca; background: #fee2e2;">
-                        Xóa tài khoản vĩnh viễn
-                    </button>
-                </div>
-            </div>
-
             <!-- Logout -->
-            <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #fecaca;">
-                <button id="logout-btn"
-                    style="background: #fef2f2; color: #ef4444; border: 1.5px solid #fecaca; padding: 12px 20px; border-radius: 14px; font-weight: 800; font-family: inherit; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+            <div class="logout-section">
+                <button id="logout-btn" class="btn-unlink-fit-logout">
                     <i class="ph-bold ph-sign-out"></i> Đăng xuất
                 </button>
             </div>
@@ -305,93 +691,90 @@
     <!-- Re-auth Modal for linking -->
     <div id="reauth-modal" class="modal hidden">
         <div class="modal-content">
-            <h3 style="font-weight: 800; font-size: 18px; margin-bottom: 8px;">Xác minh bảo mật</h3>
-            <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 20px;" id="reauth-desc">Nhập lại mật khẩu
-                để liên kết tài khoản Google.</p>
+            <h3 class="modal-header-h3">Xác minh bảo mật</h3>
+            <p class="modal-desc-p" id="reauth-desc">Nhập lại mật khẩu để liên kết tài khoản Google.</p>
             <div class="form-group">
                 <div class="input-container">
                     <i class="ph-duotone ph-key"></i>
-                    <input type="password" id="reauth-password" placeholder="Mật khẩu của bạn">
+                    <input type="password" id="reauth-password" placeholder="Mật khẩu của bạn" title="Mật khẩu xác minh">
                 </div>
             </div>
-            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
-                <button id="cancel-reauth"
-                    style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; font-family: inherit; cursor: pointer;">Hủy</button>
-                <button id="confirm-reauth" class="btn-primary"
-                    style="width: auto; margin-top: 0; padding: 10px 20px;">Xác nhận</button>
+            <div class="modal-footer">
+                <button id="cancel-reauth" class="btn-cancel-modal">Hủy</button>
+                <button id="confirm-reauth" class="btn-primary btn-confirm-modal">Xác nhận</button>
             </div>
         </div>
     </div>
 
     <!-- Merge Account Modal -->
-    <div id="merge-modal" class="modal hidden" style="overflow-y: auto;">
-        <div class="modal-content" style="max-width: 600px; width: 100%; margin: 40px auto; padding: 28px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="font-weight: 800; font-size: 20px; color: var(--text-main); margin: 0; display: flex; align-items: center; gap: 8px;"><i class="ph-bold ph-git-merge"></i> Sáp nhập tài khoản</h3>
-                <button id="close-merge" style="border: none; background: none; font-size: 18px; cursor: pointer; color: var(--text-soft); font-weight: 700;">✕</button>
+    <div id="merge-modal" class="modal hidden modal-scroll">
+        <div class="modal-content modal-content-large">
+            <div class="modal-header-row">
+                <h3 class="modal-title-large"><i class="ph-bold ph-git-merge"></i> Sáp nhập tài khoản</h3>
+                <button id="close-merge" class="modal-close-btn">✕</button>
             </div>
 
             <!-- Step 1: Login Account 2 -->
             <div id="merge-step-1" class="merge-step">
-                <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 16px; line-height: 1.5;">Vui lòng nhập NDID và mật khẩu của <strong>tài khoản phụ (Account 2)</strong> cần sáp nhập.</p>
-                <div class="form-group" style="margin-bottom: 16px;">
+                <p class="merge-step-p">Vui lòng nhập NDID và mật khẩu của <strong>tài khoản phụ (Account 2)</strong> cần sáp nhập.</p>
+                <div class="form-group mb-16">
                     <label>NDID Tài khoản 2</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-identification-card"></i>
-                        <input type="text" id="merge-ndid2" placeholder="Nhập NDID của tài khoản 2">
+                        <input type="text" id="merge-ndid2" placeholder="Nhập NDID của tài khoản 2" title="NDID Tài khoản 2">
                     </div>
                 </div>
-                <div class="form-group" style="margin-bottom: 16px;">
+                <div class="form-group mb-16">
                     <label>Mật khẩu Tài khoản 2</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-lock"></i>
-                        <input type="password" id="merge-password2" placeholder="••••••••">
+                        <input type="password" id="merge-password2" placeholder="••••••••" title="Mật khẩu Tài khoản 2">
                     </div>
                 </div>
-                <div style="text-align: center; margin: 16px 0; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--text-soft); font-size: 12px;">
-                    <span style="flex: 1; height: 1px; background: #e2e8f0;"></span>
+                <div class="merge-or-divider">
+                    <span class="merge-divider-line"></span>
                     <span>Hoặc sử dụng</span>
-                    <span style="flex: 1; height: 1px; background: #e2e8f0;"></span>
+                    <span class="merge-divider-line"></span>
                 </div>
-                <div style="margin-bottom: 16px;">
-                    <button type="button" id="btn-merge-google-login" style="width: 100%; border: 1.5px solid #cbd5e1; background: #fff; padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; font-family: inherit; font-size: 13.5px; color: var(--text-main);">
-                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width: 18px; height: 18px;">
+                <div class="mb-16">
+                    <button type="button" id="btn-merge-google-login" class="btn-merge-google">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="google-icon-size">
                         Đăng nhập Tài khoản 2 bằng Google
                     </button>
                 </div>
-                <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button id="cancel-merge-s1" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer;">Hủy</button>
-                    <button id="btn-merge-to-step2" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 24px;">Tiếp tục</button>
+                <div class="flex-end-gap-10">
+                    <button id="cancel-merge-s1" class="btn-cancel-modal">Hủy</button>
+                    <button id="btn-merge-to-step2" class="btn-primary btn-confirm-step">Tiếp tục</button>
                 </div>
             </div>
 
             <!-- Step 2: Confirm Account 1 Password -->
             <div id="merge-step-2" class="merge-step hidden">
-                <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 16px; line-height: 1.5;">Xác thực tài khoản hiện tại: Vui lòng nhập mật khẩu của <strong>tài khoản hiện tại (Account 1 - <span id="merge-ndid1-display" style="color: var(--primary);">...</span>)</strong>.</p>
-                <div class="form-group" style="margin-bottom: 20px;">
+                <p class="merge-step-p">Xác thực tài khoản hiện tại: Vui lòng nhập mật khẩu của <strong>tài khoản hiện tại (Account 1 - <span id="merge-ndid1-display" class="text-primary">...</span>)</strong>.</p>
+                <div class="form-group mb-20">
                     <label>Mật khẩu của bạn</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-lock"></i>
-                        <input type="password" id="merge-password1" placeholder="••••••••">
+                        <input type="password" id="merge-password1" placeholder="••••••••" title="Mật khẩu hiện tại">
                     </div>
                 </div>
-                <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button id="btn-merge-back-step1" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer;">Quay lại</button>
-                    <button id="btn-merge-to-step3" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 24px;">Tiếp tục</button>
+                <div class="flex-end-gap-10">
+                    <button id="btn-merge-back-step1" class="btn-cancel-modal">Quay lại</button>
+                    <button id="btn-merge-to-step3" class="btn-primary btn-confirm-step">Tiếp tục</button>
                 </div>
             </div>
 
             <!-- Step 3: Choose Data Fields -->
             <div id="merge-step-3" class="merge-step hidden">
-                <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 16px; line-height: 1.5;">Chọn thông tin bạn muốn giữ lại cho tài khoản sau khi sáp nhập:</p>
+                <p class="merge-step-p">Chọn thông tin bạn muốn giữ lại cho tài khoản sau khi sáp nhập:</p>
                 
-                <div style="border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; margin-bottom: 20px; font-size: 13px;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <div class="merge-table-container">
+                    <table class="merge-table">
                         <thead>
-                            <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-weight: 800;">
-                                <th style="padding: 10px 12px; color: var(--text-soft);">Trường thông tin</th>
-                                <th style="padding: 10px 12px;">Acc 1 (Hiện tại)</th>
-                                <th style="padding: 10px 12px;">Acc 2 (Phụ)</th>
+                            <tr class="merge-table-thead">
+                                <th class="merge-table-th-soft">Trường thông tin</th>
+                                <th class="merge-table-th">Acc 1 (Hiện tại)</th>
+                                <th class="merge-table-th">Acc 2 (Phụ)</th>
                             </tr>
                         </thead>
                         <tbody id="merge-options-body">
@@ -400,13 +783,13 @@
                     </table>
                 </div>
 
-                <p style="font-size: 12px; color: #b45309; background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 10px; margin-bottom: 20px; line-height: 1.5;">
+                <p class="merge-warning-box">
                     ⚠️ <strong>Lưu ý:</strong> Sau khi hoàn tất, Tài khoản 2 sẽ bị xóa vĩnh viễn khỏi hệ thống. Tài khoản Google không được chọn giữ lại cũng sẽ bị hủy liên kết và xóa khỏi cơ sở dữ liệu.
                 </p>
 
-                <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button id="btn-merge-back-step2" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer;">Quay lại</button>
-                    <button id="btn-execute-merge" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 24px; background: #059669; border-color: #059669;">Hoàn tất Sáp nhập</button>
+                <div class="flex-end-gap-10">
+                    <button id="btn-merge-back-step2" class="btn-cancel-modal">Quay lại</button>
+                    <button id="btn-execute-merge" class="btn-primary btn-execute-merge">Hoàn tất Sáp nhập</button>
                 </div>
             </div>
         </div>
@@ -414,59 +797,59 @@
 
     <!-- Delete Account Modal -->
     <div id="delete-modal" class="modal hidden">
-        <div class="modal-content" style="max-width: 450px; width: 100%; padding: 24px;">
-            <h3 style="font-weight: 800; font-size: 18px; color: #dc2626; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; margin: 0 0 8px 0;"><i class="ph-bold ph-warning"></i> Xác nhận xóa tài khoản</h3>
-            <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 20px; line-height: 1.5;">Vui lòng nhập mật khẩu của bạn để xác nhận xóa vĩnh viễn tài khoản này.</p>
-            <div class="form-group" style="margin-bottom: 20px;">
+        <div class="modal-content modal-content-medium">
+            <h3 class="delete-modal-title"><i class="ph-bold ph-warning"></i> Xác nhận xóa tài khoản</h3>
+            <p class="merge-step-p">Vui lòng nhập mật khẩu của bạn để xác nhận xóa vĩnh viễn tài khoản này.</p>
+            <div class="form-group mb-20">
                 <div class="input-container">
                     <i class="ph-duotone ph-lock"></i>
-                    <input type="password" id="delete-password" placeholder="Mật khẩu của bạn">
+                    <input type="password" id="delete-password" placeholder="Mật khẩu của bạn" title="Nhập mật khẩu xác nhận xóa">
                 </div>
             </div>
-            <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                <button id="cancel-delete" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer;">Hủy</button>
-                <button id="confirm-delete" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 20px; background: #dc2626; border-color: #dc2626;">Xóa vĩnh viễn</button>
+            <div class="flex-end-gap-10">
+                <button id="cancel-delete" class="btn-cancel-modal">Hủy</button>
+                <button id="confirm-delete" class="btn-primary btn-execute-delete">Xóa vĩnh viễn</button>
             </div>
         </div>
     </div>
 
     <!-- Password Management Modal -->
     <div id="password-modal" class="modal hidden">
-        <div class="modal-content" style="max-width: 450px; width: 100%; padding: 28px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 id="password-modal-title" style="font-weight: 800; font-size: 18px; color: var(--text-main); margin: 0; font-family: inherit;">Đổi mật khẩu</h3>
-                <button id="close-password-modal" style="border: none; background: none; font-size: 18px; cursor: pointer; color: var(--text-soft); font-weight: 700;">✕</button>
+        <div class="modal-content modal-content-pwd">
+            <div class="modal-header-row">
+                <h3 id="password-modal-title" class="pwd-modal-title">Đổi mật khẩu</h3>
+                <button id="close-password-modal" class="modal-close-btn">✕</button>
             </div>
 
             <form id="password-modal-form" class="space-y-4">
                 <!-- Current Password Field -->
-                <div id="pwd-field-current" class="form-group" style="margin-bottom: 16px;">
+                <div id="pwd-field-current" class="form-group mb-16">
                     <label>Mật khẩu hiện tại</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-lock"></i>
-                        <input type="password" id="pwd-current" placeholder="••••••••">
+                        <input type="password" id="pwd-current" placeholder="••••••••" title="Mật khẩu hiện tại">
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 16px;">
+                <div class="form-group mb-16">
                     <label>Mật khẩu mới</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-key"></i>
-                        <input type="password" id="pwd-new" placeholder="••••••••" required>
+                        <input type="password" id="pwd-new" placeholder="••••••••" required title="Mật khẩu mới">
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 20px;">
+                <div class="form-group mb-20">
                     <label>Xác nhận mật khẩu mới</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-key"></i>
-                        <input type="password" id="pwd-confirm" placeholder="••••••••" required>
+                        <input type="password" id="pwd-confirm" placeholder="••••••••" required title="Xác nhận mật khẩu mới">
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
-                    <button type="button" id="cancel-password-modal" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer; font-family: inherit;">Hủy</button>
-                    <button type="submit" id="btn-save-password" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 20px;">Xác nhận</button>
+                <div class="pwd-modal-footer">
+                    <button type="button" id="cancel-password-modal" class="btn-cancel-modal">Hủy</button>
+                    <button type="submit" id="btn-save-password" class="btn-primary btn-confirm-modal">Xác nhận</button>
                 </div>
             </form>
         </div>
@@ -475,6 +858,15 @@
     <div id="status-msg" class="status-msg"></div>
 
     <script type="module">
+        window.addEventListener('unhandledrejection', (event) => {
+            if (event.reason) {
+                const r = event.reason;
+                if (r.code === 403 || r.status === 403 || r.code === 'permission-denied' || (r.httpStatus === 200 && r.code)) {
+                    event.preventDefault();
+                }
+            }
+        });
+
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import {
             getAuth, onAuthStateChanged, updateProfile, signOut,
@@ -482,7 +874,7 @@
             reauthenticateWithCredential, EmailAuthProvider, deleteUser, signInWithEmailAndPassword,
             updatePassword, linkWithCredential, signInWithCredential, signInWithPopup
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, arrayUnion, deleteDoc, setDoc }
+        import { getFirestore, doc, getDoc, updateDoc, arrayUnion, arrayRemove, deleteDoc, setDoc, getDocs, collection, query, where }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
@@ -527,6 +919,24 @@
             setTimeout(() => statusEl.className = 'status-msg', 4000);
         }
 
+        window.switchSettingsTab = function(tabId) {
+            document.querySelectorAll('.settings-tab-panel').forEach(p => {
+                p.style.display = 'none';
+            });
+            const targetPanel = document.getElementById(`panel-${tabId}`);
+            if (targetPanel) {
+                targetPanel.style.display = 'flex';
+            }
+
+            document.querySelectorAll('.settings-nav a').forEach(a => {
+                a.classList.remove('active');
+            });
+            const targetTabBtn = document.getElementById(`tab-${tabId}`);
+            if (targetTabBtn) {
+                targetTabBtn.classList.add('active');
+            }
+        };
+
         let currentUser = null;
         // track what we're reauthenticating for: 'link' or 'unlink'
         let reauthAction = 'link';
@@ -535,23 +945,30 @@
             admin:   { label: 'Admin',      bg: '#fee2e2', color: '#dc2626', border: '#fecaca' },
             teacher: { label: 'Giáo viên',  bg: '#f3e8ff', color: '#7c3aed', border: '#e9d5ff' },
             student: { label: 'Học sinh',   bg: '#e0f2fe', color: '#0284c7', border: '#bae6fd' },
-            other:   { label: 'Thành viên', bg: '#f1f5f9', color: '#475569', border: '#e2e8f0' },
+            member:  { label: 'Thành viên', bg: '#f1f5f9', color: '#475569', border: '#e2e8f0' },
         };
         function makeBadgeSpan(key) {
-            const c = ROLE_CFG[key] || ROLE_CFG.other;
+            const c = ROLE_CFG[key] || ROLE_CFG.member;
             return `<span style="font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;text-transform:uppercase;background:${c.bg};color:${c.color};border:1px solid ${c.border};">${c.label}</span>`;
         }
-        function updateRoleBadge(role, subrole) {
+        function updateRoleBadge(role, eduRole) {
             const container = document.getElementById('display-role-badge');
             if (!container) return;
             container.style.display = 'flex';
-            let html = makeBadgeSpan(role);
-            if (role === 'admin' && subrole) html += makeBadgeSpan(subrole);
-            container.innerHTML = html;
-        }
-        function toggleSubroleSection(role) {
-            const sec = document.getElementById('subrole-section');
-            if (sec) sec.style.display = (role === 'admin') ? 'block' : 'none';
+
+            let badges = [];
+            if (role === 'admin') {
+                badges.push(makeBadgeSpan('admin'));
+            }
+            if (eduRole === 'teacher') {
+                badges.push(makeBadgeSpan('teacher'));
+            } else if (eduRole === 'student') {
+                badges.push(makeBadgeSpan('student'));
+            }
+            if (badges.length === 0) {
+                badges.push(makeBadgeSpan('member'));
+            }
+            container.innerHTML = badges.join('');
         }
 
         function setGoogleLinked(linked, googleEmail) {
@@ -571,16 +988,29 @@
             }
             currentUser = user;
 
+            let role = 'member';
+            let eduRole = 'student';
+            let userSnapData = null;
+
+            const localSession = JSON.parse(localStorage.getItem('nd_user') || '{}');
+            const initAvatar = user.photoURL || localSession.photoURL;
+            if (initAvatar) document.getElementById('user-avatar').src = initAvatar;
+
             document.getElementById('display-name').textContent = user.displayName || 'ND Member';
             document.getElementById('edit-name').value = user.displayName || '';
-            if (user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
 
             // Firestore data
             try {
                 const snap = await getDoc(doc(db, 'users', user.uid));
+                if (snap.exists()) {
+                    userSnapData = snap.data();
+                    if (userSnapData.photoURL) {
+                        document.getElementById('user-avatar').src = userSnapData.photoURL;
+                    }
+                }
                 const email = user.email || '';
                 const emailPrefix = email.split('@')[0] || '';
-                const ndid = (snap.exists() && snap.data().ndid) ? snap.data().ndid : (emailPrefix || user.uid);
+                const ndid = (userSnapData && userSnapData.ndid) ? userSnapData.ndid : (emailPrefix || user.uid);
                 
                 document.getElementById('ndid-display').textContent = ndid;
                 document.getElementById('display-email').textContent = `NDID: ${ndid}`;
@@ -597,41 +1027,45 @@
                 }
                 document.getElementById('edit-recovery-email').value = recoveryEmail;
 
-                let role = 'student';
-                let subrole = '';
-                if (snap.exists()) {
-                    const data = snap.data();
-                    document.getElementById('edit-name').value = data.fullname || user.displayName || '';
-                    
+                if (userSnapData) {
+                    document.getElementById('edit-name').value = userSnapData.fullname || user.displayName || '';
+
                     const editRoleEl = document.getElementById('edit-role');
-                    const userRole = data.role || 'student';
-                    // Enable the restricted role option if the user already possesses it
-                    if (userRole === 'teacher' || userRole === 'admin') {
-                        const opt = editRoleEl.querySelector(`option[value="${userRole}"]`);
+                    const rawRole = userSnapData.role || 'student';
+                    const rawSubrole = userSnapData.subrole || '';
+
+                    // Phân tách vai trò ND Labs (role)
+                    if (rawRole === 'admin') role = 'admin';
+                    else role = 'member';
+
+                    // Phân tách vai trò học tập EduSpace (eduRole)
+                    eduRole = userSnapData.eduRole || '';
+                    if (!eduRole) {
+                        if (rawRole === 'admin') eduRole = rawSubrole || 'student';
+                        else if (rawRole === 'teacher') eduRole = 'teacher';
+                        else eduRole = 'student';
+                    }
+
+                    // Cho phép chọn "Giáo viên" nếu user đã là giáo viên học tập hoặc là admin hệ thống
+                    if (eduRole === 'teacher' || role === 'admin') {
+                        const opt = editRoleEl.querySelector('option[value="teacher"]');
                         if (opt) {
                             opt.disabled = false;
-                            opt.style.display = 'block';
-                            if (userRole === 'teacher') opt.textContent = 'Giáo viên (Teacher)';
-                            if (userRole === 'admin') opt.textContent = 'Admin';
+                            opt.classList.remove('hidden');
+                            opt.textContent = 'Giáo viên (Teacher)';
                         }
                     }
-                    editRoleEl.value = userRole;
+                    editRoleEl.value = eduRole;
 
-                    document.getElementById('edit-yob').value = data.yob || '';
-                    document.getElementById('edit-grade').value = data.grade || 'Khác';
-                    role = userRole;
-                    subrole = data.subrole || '';
-                    const subEl = document.getElementById('edit-subrole');
-                    if (subEl) subEl.value = subrole;
+                    document.getElementById('edit-yob').value = userSnapData.yob || '';
+                    document.getElementById('edit-grade').value = userSnapData.grade || 'Khác';
                 } else {
-                    // If Firestore user document doesn't exist, populate fields with sensible defaults
                     document.getElementById('edit-name').value = user.displayName || '';
                     document.getElementById('edit-role').value = 'student';
                     document.getElementById('edit-yob').value = '';
                     document.getElementById('edit-grade').value = 'Khác';
                 }
-                toggleSubroleSection(role);
-                updateRoleBadge(role, subrole);
+                updateRoleBadge(role, eduRole);
             } catch (err) {
                 console.error("Error loading user settings from Firestore:", err);
                 const email = user.email || '';
@@ -639,18 +1073,28 @@
                 document.getElementById('ndid-display').textContent = fallbackNdid;
                 document.getElementById('display-email').textContent = `NDID: ${fallbackNdid}`;
                 document.getElementById('edit-ndid').value = fallbackNdid;
-                
-                // Fallback field population
+
                 document.getElementById('edit-name').value = user.displayName || '';
                 document.getElementById('edit-role').value = 'student';
                 document.getElementById('edit-yob').value = '';
                 document.getElementById('edit-grade').value = 'Khác';
-                updateRoleBadge('student');
+                updateRoleBadge('member', 'student');
+            }
+
+            // Toggle classroom section based on eduRole
+            const studentClassroomsSec = document.getElementById('student-classrooms-section');
+            if (studentClassroomsSec) {
+                studentClassroomsSec.style.display = eduRole === 'student' ? 'flex' : 'none';
+            }
+            if (eduRole === 'student') {
+                loadJoinedClassrooms(user.uid).catch(() => {});
             }
 
             // Google link status
-            const googleProvider = user.providerData.find(p => p.providerId === 'google.com');
-            setGoogleLinked(!!googleProvider, googleProvider?.email);
+            let googleProvider = user.providerData.find(p => p.providerId === 'google.com');
+            let googleEmail = googleProvider?.email || (userSnapData && userSnapData.googleEmail) || null;
+            const isGoogleLinked = !!googleProvider || !!(userSnapData && userSnapData.googleEmail);
+            setGoogleLinked(isGoogleLinked, googleEmail);
 
             // Password status check
             const hasPassword = user.providerData.some(p => p.providerId === 'password');
@@ -691,16 +1135,20 @@
             const file = e.target.files[0];
             if (!file || !currentUser) return;
             try {
-                const storageRef = ref(storage, `avatars/${currentUser.uid}`);
-                await uploadBytes(storageRef, file);
-                const url = await getDownloadURL(storageRef);
-                await updateProfile(currentUser, { photoURL: url });
+                showStatus('Đang xử lý tải ảnh đại diện...', 'info');
+                const url = await window.uploadToCloudflare(file, { folder: 'avatars', uid: currentUser.uid });
                 document.getElementById('user-avatar').src = url;
+                if (url && (url.startsWith('http://') || url.startsWith('https://')) && url.length < 2000) {
+                    try { await updateProfile(currentUser, { photoURL: url }); } catch (_) { }
+                }
                 try { await updateDoc(doc(db, 'users', currentUser.uid), { photoURL: url }); } catch (_) { }
                 const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
-                s.photoURL = url; localStorage.setItem('nd_user', JSON.stringify(s));
-                showStatus('Cập nhật ảnh đại diện thành công!', 'success');
-            } catch (err) { showStatus('Lỗi tải ảnh: ' + err.message, 'error'); }
+                s.photoURL = url;
+                localStorage.setItem('nd_user', JSON.stringify(s));
+                showStatus('🎉 Cập nhật ảnh đại diện thành công!', 'success');
+            } catch (err) {
+                showStatus('Không thể tải ảnh đại diện. Vui lòng thử lại.', 'error');
+            }
         });
 
         // Profile form
@@ -711,8 +1159,7 @@
             const newNdid = document.getElementById('edit-ndid').value.trim();
             const newName = document.getElementById('edit-name').value.trim();
             const newRecoveryEmail = document.getElementById('edit-recovery-email').value.trim();
-            const newRole = document.getElementById('edit-role').value;
-            const newSubrole = (newRole === 'admin') ? (document.getElementById('edit-subrole')?.value || '') : '';
+            const newEduRole = document.getElementById('edit-role').value;
             const newYob = document.getElementById('edit-yob').value.trim();
             const newGrade = document.getElementById('edit-grade').value;
             // Find current NDID
@@ -747,12 +1194,17 @@
                 const emailsList = [currentUser.email].filter(Boolean);
                 if (newRecoveryEmail) emailsList.push(newRecoveryEmail);
 
-                // Update users document
+                // Preserve local system role
+                const cachedUser = JSON.parse(localStorage.getItem('nd_user') || '{}');
+                const preserveRole = cachedUser.role || 'member';
+
+                // Update users document in Firestore
                 await updateDoc(doc(db, 'users', currentUser.uid), {
                     ndid: newNdid,
                     fullname: newName,
-                    role: newRole,
-                    subrole: newSubrole || null,
+                    eduRole: newEduRole,
+                    // Xóa trường subrole cũ nếu có để tránh dữ liệu rác
+                    subrole: null,
                     yob: newYob ? Number(newYob) : null,
                     grade: newGrade,
                     emails: emailsList
@@ -776,13 +1228,13 @@
                 const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
                 s.displayName = newName;
                 s.ndid = newNdid;
-                s.role = newRole;
-                s.subrole = newSubrole || null;
+                s.role = preserveRole;
+                s.eduRole = newEduRole;
                 s.yob = newYob ? Number(newYob) : null;
                 s.grade = newGrade;
                 localStorage.setItem('nd_user', JSON.stringify(s));
 
-                updateRoleBadge(newRole, newSubrole);
+                updateRoleBadge(preserveRole, newEduRole);
 
                 showStatus('Cập nhật thông tin thành công!', 'success');
                 setTimeout(() => window.location.reload(), 1000);
@@ -791,16 +1243,86 @@
             }
         });
 
-        // Link Google → show reauth modal
-        document.getElementById('link-google-btn').addEventListener('click', () => {
-            reauthAction = 'link';
-            document.getElementById('reauth-desc').textContent = 'Nhập lại mật khẩu để liên kết tài khoản Google.';
-            document.getElementById('reauth-password').value = '';
-            document.getElementById('reauth-modal').classList.remove('hidden');
+        // Link Google directly via Popup
+        document.getElementById('link-google-btn').addEventListener('click', async () => {
+            if (!currentUser) return;
+            const btn = document.getElementById('link-google-btn');
+            const origHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="ph-bold ph-spinner spinner"></i> Đang liên kết...';
+            try {
+                const provider = new GoogleAuthProvider();
+                provider.setCustomParameters({ prompt: 'select_account' });
+                const result = await linkWithPopup(currentUser, provider);
+                const googleEmail = result.user.providerData.find(p => p.providerId === 'google.com')?.email || result.user.email;
+                setGoogleLinked(true, googleEmail);
+                try {
+                    await updateDoc(doc(db, 'users', currentUser.uid), {
+                        googleEmail: googleEmail,
+                        emails: arrayUnion(googleEmail)
+                    });
+                } catch (_) { }
+                showStatus('🎉 Liên kết Google thành công!', 'success');
+            } catch (linkErr) {
+                if (linkErr.code === 'auth/credential-already-in-use') {
+                    const googleCred = GoogleAuthProvider.credentialFromError(linkErr);
+                    if (googleCred) {
+                        const confirmMerge = confirm(
+                            "Tài khoản Google này đã được liên kết với một tài khoản khác trên hệ thống.\n\n" +
+                            "Bạn có muốn chuyển liên kết Google này sang tài khoản hiện tại không?\n" +
+                            "(Lưu ý: Dữ liệu của tài khoản Google cũ nếu trống sẽ bị xóa tự động)."
+                        );
+                        if (confirmMerge) {
+                            try {
+                                const sAuth = await getSecondaryAuth();
+                                const result2 = await signInWithCredential(sAuth, googleCred);
+                                const user2 = result2.user;
+
+                                const snap2 = await getDoc(doc(db, 'users', user2.uid));
+                                if (snap2.exists()) {
+                                    alert(
+                                        "Tài khoản Google này có chứa dữ liệu học tập khác.\n\n" +
+                                        "Vui lòng sử dụng tính năng 'Sáp nhập tài khoản' ở mục Quản lý nâng cao để gộp dữ liệu."
+                                    );
+                                    return;
+                                }
+
+                                await deleteUser(user2);
+                                await linkWithCredential(currentUser, googleCred);
+
+                                const googleEmail = currentUser.providerData.find(p => p.providerId === 'google.com')?.email || currentUser.email;
+                                setGoogleLinked(true, googleEmail);
+                                try {
+                                    await updateDoc(doc(db, 'users', currentUser.uid), {
+                                        googleEmail: googleEmail,
+                                        emails: arrayUnion(googleEmail)
+                                    });
+                                } catch (_) { }
+                                showStatus('🎉 Chuyển và liên kết Google thành công!', 'success');
+                                return;
+                            } catch (e) {
+                                showStatus('Lỗi chuyển liên kết: ' + e.message, 'error');
+                                return;
+                            }
+                        }
+                    }
+                } else if (linkErr.code !== 'auth/popup-closed-by-user') {
+                    showStatus('Liên kết thất bại: ' + linkErr.message, 'error');
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origHtml;
+            }
         });
 
         // Unlink Google → show reauth modal
         document.getElementById('unlink-google-btn').addEventListener('click', () => {
+            if (!currentUser) return;
+            const hasPassword = currentUser.providerData.some(p => p.providerId === 'password');
+            if (!hasPassword) {
+                alert('Tài khoản của bạn hiện chỉ đang đăng nhập bằng Google và chưa thiết lập mật khẩu.\nVui lòng thêm mật khẩu trước khi hủy liên kết Google.');
+                return;
+            }
             reauthAction = 'unlink';
             document.getElementById('reauth-desc').textContent = 'Nhập lại mật khẩu để xác nhận hủy liên kết Google.';
             document.getElementById('reauth-password').value = '';
@@ -823,56 +1345,12 @@
                 await reauthenticateWithCredential(currentUser, credential);
                 document.getElementById('reauth-modal').classList.add('hidden');
 
-                if (reauthAction === 'link') {
-                    const provider = new GoogleAuthProvider();
-                    try {
-                        const result = await linkWithPopup(currentUser, provider);
-                        const googleEmail = result.user.providerData.find(p => p.providerId === 'google.com')?.email;
-                        setGoogleLinked(true, googleEmail);
-                        try { await updateDoc(doc(db, 'users', currentUser.uid), { emails: arrayUnion(googleEmail) }); } catch (_) { }
-                        showStatus('🎉 Liên kết Google thành công!', 'success');
-                    } catch (linkErr) {
-                        if (linkErr.code === 'auth/credential-already-in-use') {
-                            const googleCred = GoogleAuthProvider.credentialFromError(linkErr);
-                            if (googleCred) {
-                                const confirmMerge = confirm(
-                                    "Tài khoản Google này đã được liên kết với một tài khoản khác trên hệ thống.\n\n" +
-                                    "Bạn có muốn chuyển liên kết Google này sang tài khoản hiện tại không?\n" +
-                                    "(Lưu ý: Dữ liệu của tài khoản Google cũ nếu trống sẽ bị xóa tự động)."
-                                );
-                                if (confirmMerge) {
-                                    const sAuth = await getSecondaryAuth();
-                                    const result2 = await signInWithCredential(sAuth, googleCred);
-                                    const user2 = result2.user;
-
-                                    const snap2 = await getDoc(doc(db, 'users', user2.uid));
-                                    if (snap2.exists()) {
-                                        alert(
-                                            "Tài khoản Google này có chứa dữ liệu học tập khác.\n\n" +
-                                            "Vui lòng sử dụng tính năng 'Sáp nhập tài khoản' ở mục Quản lý nâng cao để gộp dữ liệu."
-                                        );
-                                        return;
-                                    }
-
-                                    // Safely delete the empty user and link
-                                    await deleteUser(user2);
-                                    await linkWithCredential(currentUser, googleCred);
-
-                                    const googleEmail = currentUser.providerData.find(p => p.providerId === 'google.com')?.email;
-                                    setGoogleLinked(true, googleEmail);
-                                    try { await updateDoc(doc(db, 'users', currentUser.uid), { emails: arrayUnion(googleEmail) }); } catch (_) { }
-                                    showStatus('🎉 Chuyển và liên kết Google thành công!', 'success');
-                                    return;
-                                }
-                            }
-                        }
-                        throw linkErr;
-                    }
-                } else {
-                    await unlink(currentUser, 'google.com');
-                    setGoogleLinked(false, null);
-                    showStatus('Đã hủy liên kết Google.', 'success');
-                }
+                await unlink(currentUser, 'google.com');
+                try {
+                    await updateDoc(doc(db, 'users', currentUser.uid), { googleEmail: null });
+                } catch (_) {}
+                setGoogleLinked(false, null);
+                showStatus('Đã hủy liên kết Google thành công.', 'success');
             } catch (err) {
                 showStatus('Thao tác thất bại: ' + err.message, 'error');
             } finally {
@@ -1390,6 +1868,158 @@
                 btnSavePassword.textContent = 'Xác nhận';
             }
         });
+
+        // ===================== STUDENT CLASSROOMS LOGIC =====================
+        async function loadJoinedClassrooms(studentUid) {
+            const listEl = document.getElementById('joined-classrooms-list');
+            if (!listEl) return;
+
+            try {
+                const q = query(collection(db, 'classrooms'), where('studentUids', 'array-contains', studentUid));
+                const snap = await getDocs(q);
+                
+                let classrooms = [];
+                snap.forEach(doc => classrooms.push({ id: doc.id, ...doc.data() }));
+
+                if (classrooms.length === 0) {
+                    listEl.innerHTML = `<p class="text-14-soft">Bạn chưa tham gia lớp học nào.</p>`;
+                    return;
+                }
+
+                let html = '';
+                for (const c of classrooms) {
+                    let teacherName = 'Giáo viên';
+                    if (c.creatorUid) {
+                        try {
+                            const tSnap = await getDoc(doc(db, 'users', c.creatorUid));
+                            if (tSnap.exists()) {
+                                teacherName = tSnap.data().fullname || tSnap.data().displayName || 'Giáo viên';
+                            }
+                        } catch (e) {
+                            console.error("Error fetching teacher details:", e);
+                        }
+                    }
+
+                    // Query quizzes that target this classroom
+                    let quizListHtml = '';
+                    try {
+                        const qQuiz = query(collection(db, 'quizzes'), where('targetClassrooms', 'array-contains', c.id));
+                        const qSnap = await getDocs(qQuiz);
+                        qSnap.forEach(qd => {
+                            const qData = qd.data();
+                            quizListHtml += `
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: white; border: 1px solid #edf2f7; border-radius: 10px; margin-top: 6px;">
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 700; font-size: 13px; color: #1a202c;">${qData.title}</div>
+                                        <div style="font-size: 11px; color: #718096;">Mã đề: <span style="font-family: monospace; font-weight: 700; color: #3182ce;">${qd.id}</span></div>
+                                    </div>
+                                    <a href="/eduspace/exam?id=${qd.id}" target="_blank" class="btn-primary" style="padding: 6px 12px; font-size: 11px; border-radius: 8px; margin-top: 0; width: auto !important; height: auto !important; line-height: 1.4;">Làm bài</a>
+                                </div>
+                            `;
+                        });
+                    } catch (quizErr) {
+                        console.error("Error fetching quizzes for classroom:", quizErr);
+                    }
+
+                    html += `
+                        <div class="pass-sec-container" style="background: #f8fafc; border: 1.5px solid #edf2f7; gap: 12px; padding: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+                                <div>
+                                    <h4 class="pass-sec-title-h4" style="color: #2b6cb0; display: flex; align-items: center; gap: 6px; margin: 0; font-weight: 800; font-size: 15px;">${c.className}</h4>
+                                    <p class="pass-sec-desc-p" style="margin-top: 2px; font-size: 13px; color: var(--text-soft); line-height: 1.5; margin-bottom: 0;">Giáo viên: <strong>${teacherName}</strong> · Mã lớp: <strong>${c.id}</strong></p>
+                                </div>
+                                <button type="button" class="btn-unlink" style="padding: 4px 8px; font-size: 11px; height: auto !important; width: auto !important;" onclick="window.leaveClassroom('${c.id}')">Rời lớp</button>
+                            </div>
+                            
+                            <div style="margin-top: 8px; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
+                                <div style="font-size: 12px; font-weight: 800; color: #4a5568; margin-bottom: 6px;">📋 Đề thi được giao:</div>
+                                ${quizListHtml || '<div style="font-size: 11px; color: #a0aec0; font-style: italic;">Chưa có đề thi nào được giao cho lớp này.</div>'}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                listEl.innerHTML = html;
+
+            } catch(e) {
+                console.error("Error loading joined classrooms:", e);
+                listEl.innerHTML = `<p class="text-14-soft" style="color: #e53e3e;">Lỗi tải lớp học: ${e.message}</p>`;
+            }
+        }
+
+        async function joinClassroom() {
+            const codeEl = document.getElementById('join-class-code');
+            if (!codeEl) return;
+            const code = codeEl.value.trim();
+            if (code.length !== 6 || isNaN(code)) {
+                showStatus("Mã lớp học phải gồm 6 chữ số.", "error");
+                return;
+            }
+
+            if (!currentUser) return;
+
+            const btn = document.getElementById('btn-join-class');
+            const origText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = "...";
+
+            try {
+                const cSnap = await getDoc(doc(db, 'classrooms', code));
+                if (!cSnap.exists()) {
+                    showStatus("Lớp học không tồn tại. Vui lòng kiểm tra lại mã.", "error");
+                    return;
+                }
+
+                const cData = cSnap.data();
+                if (cData.studentUids && cData.studentUids.includes(currentUser.uid)) {
+                    showStatus("Bạn đã tham gia lớp học này rồi.", "error");
+                    return;
+                }
+
+                const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
+                const uData = uSnap.data() || {};
+
+                await updateDoc(doc(db, 'classrooms', code), {
+                    studentUids: arrayUnion(currentUser.uid),
+                    studentNdids: arrayUnion(uData.ndid || '')
+                });
+
+                showStatus("Đã tham gia lớp học thành công!", "success");
+                codeEl.value = '';
+                await loadJoinedClassrooms(currentUser.uid);
+
+            } catch(e) {
+                showStatus("Lỗi tham gia lớp: " + e.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = origText;
+            }
+        }
+
+        window.leaveClassroom = async function(classroomId) {
+            if (!confirm("Bạn có chắc chắn muốn rời lớp học này? Kết quả thi của bạn vẫn được lưu nhưng bạn sẽ không thấy đề của lớp này nữa.")) return;
+            try {
+                if (!currentUser) return;
+                
+                const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
+                const uData = uSnap.data() || {};
+                
+                await updateDoc(doc(db, 'classrooms', classroomId), {
+                    studentUids: arrayRemove(currentUser.uid),
+                    studentNdids: arrayRemove(uData.ndid || '')
+                });
+                
+                showStatus("Đã rời lớp học thành công!", "success");
+                await loadJoinedClassrooms(currentUser.uid);
+            } catch(e) {
+                showStatus("Lỗi rời lớp học: " + e.message, "error");
+            }
+        };
+
+        const btnJoin = document.getElementById('btn-join-class');
+        if (btnJoin) {
+            btnJoin.addEventListener('click', joinClassroom);
+        }
     </script>
 </body>
 
