@@ -4,7 +4,7 @@
  * To use: Add <script src="/font/font.js"></script> to any HTML <head>.
  */
 
-(function() {
+(function () {
     const style = document.createElement('style');
     style.innerHTML = `
         @font-face {
@@ -29,6 +29,6 @@
         }
     `;
     document.head.appendChild(style);
-    
+
     console.log('EduSpace: Font system loaded (Play).');
 })();

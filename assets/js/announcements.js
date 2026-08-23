@@ -42,7 +42,7 @@
     }
 
     #nd-ticker-inner {
-      max-width: 1200px !important; /* Khớp với giới hạn chiều rộng của navbar */
+      max-width: 1600px !important; /* Khớp với giới hạn chiều rộng của navbar */
       width: 100% !important;
       margin: 0 auto !important;
       padding: 0 16px !important;

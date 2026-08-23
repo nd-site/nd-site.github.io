@@ -12,7 +12,7 @@
     style.textContent = `
         #web-toast-container {
             position: fixed;
-            bottom: 30px;
+            bottom: 60px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;

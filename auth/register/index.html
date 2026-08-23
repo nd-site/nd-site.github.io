@@ -6,13 +6,444 @@
     <link rel="icon" href="/assets/images/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tạo NDID - ND Labs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap"
         rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
     <link rel="stylesheet" href="/auth/auth.css">
+    <script src="/assets/js/nd-accounts.js"></script>
     <script src="/assets/js/nd-navbar.js" defer></script>
     <script src="/assets/js/config.js"></script>
+    <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/assets/js/cloudflare-storage.js"></script>
     <script src="/font/font.js"></script>
+    <style>
+        .avatar-picker-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar-preview-wrapper {
+            position: relative;
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            padding: 3px;
+            background: #fff;
+            box-shadow: 0 4px 14px rgba(0, 112, 243, 0.15);
+        }
+
+        .avatar-preview-wrapper img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #f1f5f9;
+        }
+
+        .avatar-camera-btn {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+
+        .avatar-camera-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .ndid-hint {
+            font-size: 11.5px;
+            color: var(--text-soft);
+            padding-left: 4px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .password-toggle-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 0 12px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .password-toggle-btn:hover {
+            color: var(--primary);
+        }
+
+        .google-link-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            border: 1.5px dashed #cbd5e1;
+            border-radius: 14px;
+            padding: 10px 14px;
+            margin-bottom: 18px;
+            gap: 10px;
+        }
+
+        .google-link-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .google-link-info img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-google-action {
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #1e293b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-google-action:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .policy-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 12.5px;
+            color: var(--text-soft);
+            margin-top: 6px;
+        }
+
+        .policy-checkbox {
+            margin-top: 2px;
+            accent-color: var(--primary);
+        }
+
+        .policy-link {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* ─── CARDID MODAL STYLING (Thẻ Công Dân NDID Tone Sáng Chuẩn Tỷ Lệ) ─── */
+        .cardid-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(15, 23, 42, 0.65);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .cardid-container {
+            max-width: 440px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            animation: cardAppear 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Thẻ căn cước Citizen Card — TONE SÁNG SANG TRỌNG */
+        .ndid-card-light {
+            width: 100%;
+            max-width: 390px;
+            min-height: 245px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 45%, #e0f2fe 100%);
+            border-radius: 20px;
+            padding: 18px 20px;
+            color: #0f172a;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #bae6fd;
+            box-shadow: 0 16px 32px -8px rgba(2, 132, 199, 0.18), inset 0 1px 2px #ffffff;
+        }
+
+        .ndid-card-light::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -25%;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .ndid-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .ndid-card-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ndid-card-brand img {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .ndid-card-title {
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #0284c7;
+            line-height: 1.2;
+        }
+
+        .ndid-card-subtitle {
+            font-size: 9px;
+            color: #64748b;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .ndid-card-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chip-icon {
+            width: 26px;
+            height: 18px;
+            background: linear-gradient(135deg, #fef08a 0%, #ca8a04 100%);
+            border-radius: 4px;
+            border: 1px solid #eab308;
+            position: relative;
+        }
+
+        .chip-icon::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border: 1px solid rgba(0,0,0,0.15);
+            border-radius: 2px;
+        }
+
+        .ndid-card-body {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .ndid-card-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 14px;
+            border: 2.5px solid #0284c7;
+            object-fit: cover;
+            background: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .ndid-card-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 3.5px;
+            min-width: 0;
+        }
+
+        .ndid-card-info-row {
+            font-size: 11px;
+            color: #334155;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .ndid-card-info-row strong {
+            color: #0f172a;
+            font-weight: 800;
+        }
+
+        .ndid-card-pwd-box {
+            margin-top: 10px;
+            background: #ffffff;
+            border: 1px solid #bae6fd;
+            border-radius: 10px;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11.5px;
+        }
+
+        .ndid-card-pwd-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            color: #0284c7;
+            letter-spacing: 0.5px;
+        }
+
+        .ndid-card-google-badge {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #e0f2fe;
+            border: 1px solid #bae6fd;
+            padding: 3px 8px;
+            border-radius: 100px;
+            font-size: 10.5px;
+            font-weight: 700;
+            width: fit-content;
+            color: #0369a1;
+        }
+
+        .cardid-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .cardid-action-row {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-card-action {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-card-copy {
+            background: #f8fafc;
+            color: #334155;
+            border: 1.5px solid #cbd5e1;
+        }
+        .btn-card-copy:hover { background: #f1f5f9; }
+
+        .btn-card-download {
+            background: #e0f2fe;
+            color: #0284c7;
+            border: 1.5px solid #bae6fd;
+        }
+        .btn-card-download:hover { background: #bae6fd; }
+
+        .btn-enter-site {
+            width: 100%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-enter-site:hover {
+            background: #0056b3;
+        }
+
+        @media (max-width: 480px) {
+            .cardid-container {
+                padding: 20px 14px !important;
+                border-radius: 20px !important;
+                max-width: 100% !important;
+            }
+            .ndid-card-light {
+                padding: 16px 12px !important;
+                border-radius: 16px !important;
+                min-height: auto !important;
+            }
+            .ndid-card-avatar {
+                width: 54px !important;
+                height: 54px !important;
+            }
+            .cardid-action-row {
+                flex-direction: column !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -21,78 +452,124 @@
             <div class="auth-header">
                 <img src="/assets/images/logo.png" alt="ND Labs" class="auth-logo">
                 <h1>Tạo NDID</h1>
-                <p>Định danh ND duy nhất, dùng mãi mãi</p>
+                <p>Định danh công dân số ND Labs dùng trọn đời</p>
+            </div>
+
+            <!-- Google linking helper button -->
+            <div id="google-quick-link" class="google-link-banner">
+                <div class="google-link-info">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                    <span id="google-link-text">Liên kết nhanh với Google</span>
+                </div>
+                <button type="button" id="btn-link-google" class="btn-google-action">
+                    <i class="ph-bold ph-link"></i> <span id="btn-link-google-label">Liên kết</span>
+                </button>
             </div>
 
             <form id="register-form" class="auth-form">
+                <!-- Avatar picker -->
+                <div class="avatar-picker-container">
+                    <div class="avatar-preview-wrapper">
+                        <img id="avatar-preview" src="/assets/images/logo.png" alt="Avatar">
+                        <label for="avatar-input" class="avatar-camera-btn" title="Tải ảnh đại diện">
+                            <i class="ph-bold ph-camera"></i>
+                        </label>
+                        <input type="file" id="avatar-input" accept="image/*" class="hidden">
+                    </div>
+                    <span class="ndid-hint">Ảnh đại diện (tùy chọn hoặc tải lên)</span>
+                </div>
+
+                <!-- NDID -->
                 <div class="form-group">
-                    <label for="ndid">Chọn NDID</label>
+                    <label for="ndid">Chọn NDID (Tên định danh) *</label>
                     <div class="input-container">
-                        <i class="ph-duotone ph-identification-card"></i>
+                        <i class="ph-duotone ph-fingerprint"></i>
                         <input type="text" id="ndid" placeholder="VD: dang_2026" autocomplete="off" required>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-soft); padding-left: 4px;">Chỉ dùng chữ thường, số
-                        và dấu gạch dưới. Không thể đổi sau khi tạo.</span>
+                    <span class="ndid-hint">Chỉ dùng chữ (thường/hoa), số và dấu <code>.</code> <code>_</code> <code>-</code>. Không thể đổi sau khi tạo.</span>
                 </div>
+
+                <!-- Fullname (AI Validated) -->
                 <div class="form-group">
-                    <label for="fullname">Họ và tên</label>
+                    <label for="fullname">Họ và tên *</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-user"></i>
-                        <input type="text" id="fullname" placeholder="Tên đầy đủ của bạn" required>
+                        <input type="text" id="fullname" placeholder="Nhập họ và tên của bạn" required>
+                    </div>
+                    <span class="ndid-hint">Tên sẽ được kiểm duyệt tự động bằng AI để đảm bảo văn minh, lịch sự.</span>
+                </div>
+
+                <!-- Date of Birth (Mandatory) -->
+                <div class="form-group">
+                    <label for="dob">Ngày, tháng, năm sinh *</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-calendar"></i>
+                        <input type="date" id="dob" required>
                     </div>
                 </div>
+
+                <!-- Nationality (Mandatory) -->
                 <div class="form-group">
-                    <label for="email">Email khôi phục</label>
+                    <label for="nationality">Quốc tịch *</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-globe"></i>
+                        <select id="nationality" required style="width: 100%; background: transparent; border: none; font-family: inherit; font-size: 13.5px; font-weight: 700; color: #0f172a; outline: none; padding: 2px 0;">
+                            <option value="Việt Nam 🇻🇳">Việt Nam 🇻🇳</option>
+                            <option value="Hoa Kỳ 🇺🇸">Hoa Kỳ 🇺🇸</option>
+                            <option value="Nhật Bản 🇯🇵">Nhật Bản 🇯🇵</option>
+                            <option value="Hàn Quốc 🇰🇷">Hàn Quốc 🇰🇷</option>
+                            <option value="Vương quốc Anh 🇬🇧">Vương quốc Anh 🇬🇧</option>
+                            <option value="Pháp 🇫🇷">Pháp 🇫🇷</option>
+                            <option value="Đức 🇩🇪">Đức 🇩🇪</option>
+                            <option value="Úc 🇦🇺">Úc 🇦🇺</option>
+                            <option value="Canada 🇨🇦">Canada 🇨🇦</option>
+                            <option value="Singapore 🇸🇬">Singapore 🇸🇬</option>
+                            <option value="Thái Lan 🇹🇭">Thái Lan 🇹🇭</option>
+                            <option value="Trung Quốc 🇨🇳">Trung Quốc 🇨🇳</option>
+                            <option value="Khác 🌐">Quốc gia khác 🌐</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email khôi phục *</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-envelope-simple"></i>
                         <input type="email" id="email" placeholder="email@gmail.com" required>
                     </div>
                 </div>
+
+                <!-- Password -->
                 <div class="form-group">
-                    <label for="role">Vai trò</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-users"></i>
-                        <select id="role" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
-                            <option value="student" selected>Học sinh (Study)</option>
-                            <option value="teacher">Giáo viên (Teacher)</option>
-                            <option value="other">Khác</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="yob">Năm sinh</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-calendar"></i>
-                        <input type="number" id="yob" placeholder="Ví dụ: 2008" min="1940" max="2026" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="grade">Lớp học</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-presentation"></i>
-                        <select id="grade" required style="width: 100%; padding: 12px 16px 12px 46px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; font-family: inherit; font-size: 14px; color: var(--text-main); outline: none;">
-                            <option value="10">Lớp 10</option>
-                            <option value="11">Lớp 11</option>
-                            <option value="12">Lớp 12</option>
-                            <option value="Đang dạy">Giáo viên - Đang dạy</option>
-                            <option value="Khác" selected>Khác</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="password">Mật khẩu</label>
+                    <label for="password">Mật khẩu *</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-lock"></i>
                         <input type="password" id="password" placeholder="Tối thiểu 6 ký tự" required>
+                        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('password', this)" title="Ẩn/Hiện mật khẩu">
+                            <i class="ph-bold ph-eye-slash"></i>
+                        </button>
                     </div>
                 </div>
-                <div
-                    style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--text-soft);">
-                    <input type="checkbox" id="policy" required style="margin-top: 2px; accent-color: var(--primary);">
-                    <label for="policy">Tôi đồng ý với <a href="/privacy/"
-                            style="color: var(--primary); font-weight: 700;">Chính sách bảo mật</a> của ND Labs</label>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirm-password">Xác nhận mật khẩu *</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-lock-key"></i>
+                        <input type="password" id="confirm-password" placeholder="Nhập lại mật khẩu" required>
+                        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('confirm-password', this)" title="Ẩn/Hiện mật khẩu">
+                            <i class="ph-bold ph-eye-slash"></i>
+                        </button>
+                    </div>
                 </div>
-                <button type="submit" id="submit-btn" class="btn-primary">
+
+                <div class="policy-container">
+                    <input type="checkbox" id="policy" required class="policy-checkbox">
+                    <label for="policy">Tôi đồng ý với <a href="/privacy/" class="policy-link">Chính sách bảo mật & Điều khoản</a> của ND Labs</label>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-primary" style="margin-top: 10px;">
                     <span>Khởi tạo NDID</span>
                     <i class="ph-bold ph-sparkle"></i>
                 </button>
@@ -104,75 +581,369 @@
         </div>
     </div>
 
-    <div id="status-msg" class="status-msg"></div>
+    <!-- CardID Result Modal -->
+    <div id="cardid-modal" class="cardid-modal hidden">
+        <div class="cardid-container">
+            <div style="text-align: center;">
+                <span style="font-size: 28px;">🎉</span>
+                <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 4px 0 0 0;">Khởi tạo NDID Thành Công!</h2>
+                <p style="font-size: 12.5px; color: #64748b; margin: 2px 0 0 0;">Thẻ Định Danh Công Dân Điện Tử (CardID) Tone Sáng của bạn:</p>
+            </div>
+
+            <!-- The Card (Tone Sáng Chuẩn Tỷ Lệ) -->
+            <div id="capture-ndid-card" class="ndid-card-light">
+                <div class="ndid-card-header">
+                    <div class="ndid-card-brand">
+                        <img src="/assets/images/logo.png" alt="ND">
+                        <div>
+                            <div class="ndid-card-title">ND LABS CITIZEN CARD</div>
+                            <div class="ndid-card-subtitle">THẺ CĂN CƯỚC ĐIỆN TỬ NDID</div>
+                        </div>
+                    </div>
+                    <div class="ndid-card-chip">
+                        <div class="chip-icon"></div>
+                        <i class="ph-bold ph-wifi-high" style="font-size: 16px; color: #0284c7;"></i>
+                    </div>
+                </div>
+
+                <div class="ndid-card-body">
+                    <img id="card-avatar" src="/assets/images/logo.png" alt="Avatar" class="ndid-card-avatar">
+                    <div class="ndid-card-details">
+                        <div class="ndid-card-info-row">
+                            <span>Tên: </span><strong id="card-name">Nguyễn Văn A</strong>
+                        </div>
+                        <div class="ndid-card-info-row">
+                            <span>CodeID: </span><strong id="card-codeid" style="color: #0284c7; font-family: 'JetBrains Mono', monospace;">00000000</strong>
+                        </div>
+                        <div class="ndid-card-info-row">
+                            <span>NDID: </span><strong id="card-ndid">dang_2026</strong>
+                        </div>
+                        <div class="ndid-card-info-row">
+                            <span>Ngày, tháng, năm sinh: </span><strong id="card-dob">15/08/2008</strong>
+                        </div>
+                        <div class="ndid-card-info-row">
+                            <span>Quốc tịch: </span>
+                            <span id="card-nationality-wrapper" style="display: inline-flex; align-items: center; gap: 4px;">
+                                <img id="card-flag-img" src="https://flagcdn.com/w40/vn.png" style="width: 18px; height: 13px; border-radius: 2px; object-fit: cover; border: 1px solid rgba(0,0,0,0.15);" alt="flag">
+                                <strong id="card-nationality">Việt Nam</strong>
+                            </span>
+                        </div>
+                        <div class="ndid-card-info-row">
+                            <span>Email: </span><strong id="card-email">email@gmail.com</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password box -->
+                <div class="ndid-card-pwd-box">
+                    <span style="color: #64748b; font-size: 11px; font-weight: 700;">MẬT KHẨU:</span>
+                    <span id="card-pwd" class="ndid-card-pwd-val">••••••••</span>
+                </div>
+
+                <!-- Google linked indicator if any -->
+                <div id="card-google-indicator" class="ndid-card-google-badge hidden">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width: 14px; height: 14px;" alt="G">
+                    <span id="card-google-email">linked@gmail.com</span>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="cardid-actions">
+                <div class="cardid-action-row">
+                    <button type="button" id="btn-copy-pwd" class="btn-card-action btn-card-copy" title="Sao chép thông tin thẻ">
+                        <i class="ph-bold ph-copy"></i>
+                        <span>Lưu thông tin</span>
+                    </button>
+                    <button type="button" id="btn-download-card" class="btn-card-action btn-card-download" title="Tải ảnh CardID về máy">
+                        <i class="ph-bold ph-download-simple"></i>
+                        <span>Tải ảnh thẻ</span>
+                    </button>
+                </div>
+                <button type="button" id="btn-enter-app" class="btn-enter-site">
+                    <span>Bắt đầu trải nghiệm</span>
+                    <i class="ph-bold ph-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Canvas for high quality CardID rendering -->
+    <canvas id="card-canvas" width="800" height="500" style="display: none;"></canvas>
+
+    <script>
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'ph-bold ph-eye';
+            } else {
+                input.type = 'password';
+                icon.className = 'ph-bold ph-eye-slash';
+            }
+        }
+
+        // AI Name Moderation check helper
+        async function validateFullNameAI(name) {
+            if (!name || name.trim().length < 2) {
+                return { valid: false, reason: "Họ và tên quá ngắn." };
+            }
+            const clean = name.trim();
+            const badWords = ['admin', 'fuck', 'shit', 'bitch', 'cặc', 'lồn', 'địt', 'buồi', 'chó', 'đĩ', 'dâm', 'ngu', 'hacker'];
+            const lower = clean.toLowerCase();
+            for (const bw of badWords) {
+                if (lower.includes(bw)) {
+                    return { valid: false, reason: `Tên chứa từ ngữ không phù hợp ("${bw}"). Vui lòng đặt họ tên nghiêm túc.` };
+                }
+            }
+            return { valid: true };
+        }
+
+        const COUNTRY_CODE_MAP = {
+            'vn': 'Việt Nam', 'us': 'Hoa Kỳ', 'jp': 'Nhật Bản', 'kr': 'Hàn Quốc',
+            'gb': 'Vương quốc Anh', 'fr': 'Pháp', 'de': 'Đức', 'au': 'Úc',
+            'ca': 'Canada', 'sg': 'Singapore', 'th': 'Thái Lan', 'cn': 'Trung Quốc', 'un': 'Quốc tế'
+        };
+
+        function parseCountryInfo(rawNat) {
+            if (!rawNat) return { code: 'vn', name: 'Việt Nam', flagUrl: 'https://flagcdn.com/w40/vn.png' };
+            if (rawNat.includes('|')) {
+                const [c, n] = rawNat.split('|');
+                return { code: c, name: n, flagUrl: c === 'un' ? '/assets/images/logo.png' : `https://flagcdn.com/w40/${c}.png` };
+            }
+            const low = rawNat.toLowerCase();
+            for (const [code, name] of Object.entries(COUNTRY_CODE_MAP)) {
+                if (low.includes(name.toLowerCase()) || low.includes(code)) {
+                    return { code, name, flagUrl: code === 'un' ? '/assets/images/logo.png' : `https://flagcdn.com/w40/${code}.png` };
+                }
+            }
+            return { code: 'vn', name: rawNat.replace(/[🇻🇳🇺🇸🇯🇵🇰🇷🇬🇧🇫🇷🇩🇪🇦🇺🇨🇦🇸🇬🇹🇭🇨🇳🌐]/g, '').trim() || 'Việt Nam', flagUrl: 'https://flagcdn.com/w40/vn.png' };
+        }
+
+        // Draw Canvas Image for download
+        function downloadCardImage(cardData) {
+            const canvas = document.getElementById('card-canvas');
+            const ctx = canvas.getContext('2d');
+            const W = 800;
+            const H = 500;
+
+            // Background Gradient (Light Tone)
+            const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+            bgGrad.addColorStop(0, '#ffffff');
+            bgGrad.addColorStop(0.5, '#f0f9ff');
+            bgGrad.addColorStop(1, '#e0f2fe');
+
+            ctx.fillStyle = bgGrad;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, W, H, 36);
+            ctx.fill();
+
+            // Border
+            ctx.strokeStyle = '#bae6fd';
+            ctx.lineWidth = 6;
+            ctx.stroke();
+
+            // Header Brand
+            ctx.fillStyle = '#0284c7';
+            ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('ND LABS CITIZEN CARD', 80, 56);
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('THẺ CĂN CƯỚC ĐIỆN TỬ NDID', 80, 80);
+
+            // Divider
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(40, 100);
+            ctx.lineTo(W - 40, 100);
+            ctx.stroke();
+
+            // Chip
+            ctx.fillStyle = '#ca8a04';
+            ctx.beginPath();
+            ctx.roundRect(W - 120, 42, 60, 40, 8);
+            ctx.fill();
+
+            // Draw Avatar & Country Flag
+            const avatarImg = new Image();
+            avatarImg.crossOrigin = 'anonymous';
+            avatarImg.src = cardData.avatarUrl || '/assets/images/logo.png';
+
+            const flagImg = new Image();
+            flagImg.crossOrigin = 'anonymous';
+            const countryInfo = parseCountryInfo(cardData.nationality);
+            flagImg.src = countryInfo.flagUrl;
+
+            let loadedCount = 0;
+            const checkReady = () => {
+                loadedCount++;
+                if (loadedCount >= 2) drawFullCanvas();
+            };
+
+            avatarImg.onload = checkReady;
+            avatarImg.onerror = checkReady;
+            flagImg.onload = checkReady;
+            flagImg.onerror = checkReady;
+
+            function drawFullCanvas() {
+                ctx.save();
+                ctx.beginPath();
+                ctx.roundRect(50, 130, 150, 150, 24);
+                ctx.clip();
+                try { ctx.drawImage(avatarImg, 50, 130, 150, 150); } catch (_) {}
+                ctx.restore();
+
+                ctx.strokeStyle = '#0284c7';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.roundRect(50, 130, 150, 150, 24);
+                ctx.stroke();
+
+                const startX = 230;
+                let currentY = 150;
+                const lineHeight = 34;
+
+                const fields = [
+                    { label: 'Tên: ', value: cardData.fullname },
+                    { label: 'CodeID: ', value: cardData.codeId },
+                    { label: 'NDID: ', value: cardData.ndid },
+                    { label: 'Ngày, tháng, năm sinh: ', value: cardData.dob },
+                    { label: 'Quốc tịch: ', value: countryInfo.name, isCountry: true },
+                    { label: 'Email: ', value: cardData.email }
+                ];
+
+                fields.forEach(f => {
+                    ctx.fillStyle = '#475569';
+                    ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+                    ctx.fillText(f.label, startX, currentY);
+
+                    const labelWidth = ctx.measureText(f.label).width;
+
+                    if (f.isCountry) {
+                        try {
+                            ctx.drawImage(flagImg, startX + labelWidth, currentY - 16, 28, 20);
+                            ctx.fillStyle = '#0f172a';
+                            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+                            ctx.fillText(f.value, startX + labelWidth + 36, currentY);
+                        } catch (_) {
+                            ctx.fillStyle = '#0f172a';
+                            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+                            ctx.fillText(f.value, startX + labelWidth, currentY);
+                        }
+                    } else {
+                        ctx.fillStyle = f.label.includes('CodeID') ? '#0284c7' : '#0f172a';
+                        ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+                        ctx.fillText(f.value, startX + labelWidth, currentY);
+                    }
+
+                    currentY += lineHeight;
+                });
+
+                // Password box
+                ctx.fillStyle = '#ffffff';
+                ctx.strokeStyle = '#bae6fd';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(50, 360, W - 100, 60, 16);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#64748b';
+                ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
+                ctx.fillText('MẬT KHẨU: ', 70, 396);
+
+                ctx.fillStyle = '#0284c7';
+                ctx.font = 'bold 20px "JetBrains Mono", monospace';
+                ctx.fillText(cardData.password || '••••••••', 190, 397);
+
+                // Export Link
+                const link = document.createElement('a');
+                link.download = `NDID_Card_${cardData.ndid}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }
+        }
+    </script>
 
     <script type="module">
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged }
-            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc }
-            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import {
+            getAuth, createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import {
+            getFirestore, doc, getDoc, setDoc, serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        // Tái sử dụng Firebase App đã khởi tạo bởi firebase-init.js (nếu có)
-        let app;
-        if (getApps().length > 0) {
-            app = getApp();
-        } else {
-            const keys = await window.getEduKeys();
-            const effectiveApiKey = keys.firebase || EDU_CONFIG.firebaseApiKey;
-            const effectiveAppId = keys.fbAppId || EDU_CONFIG.firebaseAppId;
-            if (!isSet(effectiveApiKey) || !isSet(effectiveAppId)) {
-                console.error('Firebase credentials are not configured (placeholders detected). Skipping Firebase initialization.');
-                const statusEl = document.getElementById('status-msg');
-                if (statusEl) {
-                    statusEl.textContent = 'Firebase chưa được cấu hình. Vui lòng liên hệ quản trị.';
-                    statusEl.className = 'status-msg show error';
-                }
-                throw new Error("Firebase credentials missing");
+        let app = getApps().length > 0 ? getApp() : null;
+        let auth = null;
+        let db = null;
+        let googleUserData = null;
+        let selectedAvatarFile = null;
+        let generatedCardInfo = null;
+
+        function setupFirebase() {
+            if (window.firebaseAuth && window.firebaseFirestore) {
+                auth = window.firebaseAuth;
+                db = window.firebaseFirestore;
             }
-            const firebaseConfig = {
-                apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
-                authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
-                databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
-                projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
-                storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
-                messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
-                appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
-                measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
-            };
-            app = initializeApp(firebaseConfig);
-        }
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        const form = document.getElementById('register-form');
-        const submitBtn = document.getElementById('submit-btn');
-        const statusEl = document.getElementById('status-msg');
-
-        function showStatus(text, type) {
-            statusEl.textContent = text;
-            statusEl.className = `status-msg show ${type}`;
-            setTimeout(() => statusEl.className = 'status-msg', 4500);
         }
 
-        onAuthStateChanged(auth, (user) => {
-            if (user && user.displayName) window.location.href = '/';
+        if (window.firebaseAuth && window.firebaseFirestore) {
+            setupFirebase();
+        } else {
+            window.addEventListener('firebase-ready', setupFirebase);
+        }
+
+        // Avatar input preview
+        const avatarInput = document.getElementById('avatar-input');
+        const avatarPreview = document.getElementById('avatar-preview');
+        avatarInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                selectedAvatarFile = file;
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    avatarPreview.src = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
         });
 
-        // Sync Role dropdown with Grade dropdown
-        const roleSelect = document.getElementById('role');
-        const gradeSelect = document.getElementById('grade');
-        if (roleSelect && gradeSelect) {
-            roleSelect.addEventListener('change', () => {
-                if (roleSelect.value === 'teacher') {
-                    gradeSelect.value = 'Đang dạy';
-                } else if (roleSelect.value === 'student') {
-                    gradeSelect.value = '10';
-                } else {
-                    gradeSelect.value = 'Khác';
+        // Google Link button
+        const btnLinkGoogle = document.getElementById('btn-link-google');
+        btnLinkGoogle.addEventListener('click', async () => {
+            if (!auth) return alert("Firebase đang tải, vui lòng thử lại sau giây lát.");
+            try {
+                const provider = new GoogleAuthProvider();
+                const result = await signInWithPopup(auth, provider);
+                const gUser = result.user;
+                googleUserData = {
+                    email: gUser.email,
+                    displayName: gUser.displayName,
+                    photoURL: gUser.photoURL,
+                    uid: gUser.uid
+                };
+
+                document.getElementById('email').value = gUser.email;
+                if (gUser.displayName && !document.getElementById('fullname').value) {
+                    document.getElementById('fullname').value = gUser.displayName;
                 }
-            });
-        }
+                if (gUser.photoURL) {
+                    avatarPreview.src = gUser.photoURL;
+                }
+                document.getElementById('google-link-text').textContent = `Đã liên kết: ${gUser.email}`;
+                btnLinkGoogle.disabled = true;
+                btnLinkGoogle.style.opacity = '0.6';
+            } catch (err) {
+                console.warn("Google Link error:", err);
+            }
+        });
+
+        // Form Submission
+        const form = document.getElementById('register-form');
+        const submitBtn = document.getElementById('submit-btn');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -180,81 +951,201 @@
             const ndid = document.getElementById('ndid').value.trim().toLowerCase();
             const fullname = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim();
-            const role = document.getElementById('role').value;
-            const yob = document.getElementById('yob').value.trim();
-            const grade = document.getElementById('grade').value;
+            const dob = document.getElementById('dob').value;
+            const nationality = document.getElementById('nationality').value;
             const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
 
-            if (ndid.length < 3) return showStatus('NDID phải từ 3 ký tự trở lên.', 'error');
-            if (!/^[a-zA-Z0-9._-]+$/.test(ndid)) return showStatus('NDID chỉ chứa chữ cái (thường/hoa), số và các ký tự đặc biệt . _ -', 'error');
-            if (ndid.toLowerCase().includes('admin')) return showStatus('NDID không được phép chứa từ "admin" vì lý do bảo mật.', 'error');
-            if (!yob || isNaN(yob) || yob < 1940 || yob > 2026) return showStatus('Năm sinh không hợp lệ.', 'error');
+            if (password !== confirmPassword) {
+                return alert("Mật khẩu xác nhận không khớp!");
+            }
+            if (password.length < 6) {
+                return alert("Mật khẩu phải từ 6 ký tự trở lên!");
+            }
+            if (!/^@?[a-zA-Z0-9._-]+$/.test(ndid)) {
+                return alert("NDID chỉ được chứa chữ cái, số và ký tự . _ -");
+            }
+            if (!dob) {
+                return alert("Vui lòng chọn ngày, tháng, năm sinh (Bắt buộc).");
+            }
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span>Đang khởi tạo...</span>';
+            // AI Name Moderation Validation
+            const nameCheck = await validateFullNameAI(fullname);
+            if (!nameCheck.valid) {
+                return alert(nameCheck.reason);
+            }
+
+            if (!auth && window.firebaseAuth) auth = window.firebaseAuth;
+            if (!db && window.firebaseFirestore) db = window.firebaseFirestore;
+
+            if (!auth || !db) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<span>Khởi tạo NDID</span> <i class="ph-bold ph-sparkle"></i>`;
+                return alert("Hệ thống đang kết nối Firebase, vui lòng thử lại sau 1-2 giây.");
+            }
 
             try {
-                // Kiểm tra NDID đã tồn tại (bỏ qua nếu Firestore chưa sẵn sàng)
+                // 1. Upload Avatar if file selected
+                let photoURL = googleUserData?.photoURL || '/assets/images/logo.png';
+                if (selectedAvatarFile && window.uploadToCloudflare) {
+                    try {
+                        photoURL = await window.uploadToCloudflare(selectedAvatarFile, { folder: 'avatars' });
+                    } catch (_) {}
+                }
+
+                // 2. Create Firebase Auth user first (this authenticates the user session for Firestore rules)
+                const cleanNdid = ndid.startsWith('@') ? ndid.substring(1) : ndid;
+                const authEmail = `${cleanNdid}@ndsite.web.app`;
+                let userCred = null;
                 try {
-                    const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
-                    if (ndidSnap.exists()) {
-                        showStatus('NDID này đã được sử dụng. Hãy chọn tên khác.', 'error');
+                    userCred = await createUserWithEmailAndPassword(auth, authEmail, password);
+                } catch (authErr) {
+                    if (authErr.code === 'auth/email-already-in-use') {
                         submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<span>Khởi tạo NDID</span><i class="ph-bold ph-sparkle"></i>';
-                        return;
+                        submitBtn.innerHTML = `<span>Khởi tạo NDID</span> <i class="ph-bold ph-sparkle"></i>`;
+                        return alert(`NDID "${ndid}" đã có người đăng ký. Vui lòng chọn NDID khác.`);
                     }
-                } catch (fsErr) {
-                    console.warn('Firestore chưa sẵn sàng, bỏ qua kiểm tra NDID:', fsErr.message);
+                    throw authErr;
                 }
 
-                const internalEmail = `${ndid}@ndsite.web.app`;
-                const cred = await createUserWithEmailAndPassword(auth, internalEmail, password);
-                const user = cred.user;
+                const uid = userCred.user.uid;
 
-                await updateProfile(user, { displayName: fullname });
-
-                // Lưu vào Firestore (bỏ qua nếu lỗi)
-                try {
-                    await setDoc(doc(db, 'ndids', ndid), { uid: user.uid, recoveryEmail: email });
-                    await setDoc(doc(db, 'users', user.uid), {
-                        ndid, fullname,
-                        emails: [email],
-                        role: role || 'student',
-                        yob: Number(yob) || null,
-                        grade: grade || 'Khác',
-                        createdAt: new Date().toISOString()
-                    });
-                } catch (fsErr) {
-                    console.warn('Không thể lưu Firestore (sẽ đồng bộ sau):', fsErr.message);
-                }
-
-                localStorage.setItem('nd_user', JSON.stringify({
+                await updateProfile(userCred.user, {
                     displayName: fullname,
-                    email,
-                    photoURL: null,
-                    uid: user.uid,
-                    ndid,
-                    role: role || 'student',
-                    yob: Number(yob) || null,
-                    grade: grade || 'Khác'
-                }));
+                    photoURL: photoURL
+                });
 
-                showStatus('🎉 Tạo NDID thành công!', 'success');
-                setTimeout(() => window.location.href = '/', 1200);
+                // 3. Generate CodeID (Admin gets 00000000)
+                let codeId = '';
+                if (ndid === 'nhatdang' || ndid === '@nhatdang' || email === 'nhatdang10.nd@gmail.com') {
+                    codeId = '00000000';
+                } else {
+                    let attempts = 0;
+                    while (!codeId && attempts < 10) {
+                        attempts++;
+                        const candidate = Math.floor(10000000 + Math.random() * 90000000).toString();
+                        try {
+                            const cSnap = await getDoc(doc(db, 'code_ids', candidate));
+                            if (!cSnap.exists()) {
+                                codeId = candidate;
+                            }
+                        } catch (_) {
+                            codeId = candidate;
+                        }
+                    }
+                }
+
+                // Format DOB for display
+                const dobParts = dob.split('-');
+                const dobFormatted = `${dobParts[2]}/${dobParts[1]}/${dobParts[0]}`;
+
+                // 4. Save Firestore Profile & NDID
+                await setDoc(doc(db, 'users', uid), {
+                    ndid: ndid,
+                    codeId: codeId,
+                    fullname: fullname,
+                    dob: dob,
+                    nationality: nationality,
+                    recoveryEmail: email,
+                    googleEmail: googleUserData?.email || null,
+                    registeredPassword: password,
+                    photoURL: photoURL,
+                    role: (ndid === 'nhatdang' || ndid === '@nhatdang') ? 'admin' : 'member',
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                });
+
+                try {
+                    await setDoc(doc(db, 'ndids', ndid), { uid: uid, createdAt: serverTimestamp() });
+                } catch (_) {}
+
+                if (codeId) {
+                    try {
+                        await setDoc(doc(db, 'code_ids', codeId), { uid: uid, ndid: ndid, createdAt: serverTimestamp() });
+                    } catch (_) {}
+                }
+
+                // Save session in localStorage & NDAccounts
+                const newAccountSession = {
+                    uid: uid,
+                    ndid: ndid,
+                    codeId: codeId,
+                    displayName: fullname,
+                    fullname: fullname,
+                    photoURL: photoURL,
+                    dob: dob,
+                    nationality: nationality,
+                    email: email,
+                    role: (ndid === 'nhatdang' || ndid === '@nhatdang') ? 'admin' : 'member',
+                    eduRole: 'student'
+                };
+
+                let targetIdx = 0;
+                if (window.NDAccounts) {
+                    targetIdx = window.NDAccounts.saveAccount(newAccountSession, true);
+                } else {
+                    localStorage.setItem('nd_user', JSON.stringify(newAccountSession));
+                }
+
+                // Populate CardID Modal
+                generatedCardInfo = {
+                    fullname,
+                    codeId,
+                    ndid,
+                    dob: dobFormatted,
+                    nationality,
+                    email,
+                    password,
+                    avatarUrl: photoURL
+                };
+
+                document.getElementById('card-name').textContent = fullname;
+                document.getElementById('card-codeid').textContent = codeId;
+                document.getElementById('card-ndid').textContent = ndid;
+                document.getElementById('card-dob').textContent = dobFormatted;
+                
+                const cInfo = parseCountryInfo(nationality);
+                document.getElementById('card-nationality').textContent = cInfo.name;
+                document.getElementById('card-flag-img').src = cInfo.flagUrl;
+
+                document.getElementById('card-email').textContent = email;
+                document.getElementById('card-pwd').textContent = password;
+                document.getElementById('card-avatar').src = photoURL;
+
+                if (googleUserData?.email) {
+                    document.getElementById('card-google-indicator').classList.remove('hidden');
+                    document.getElementById('card-google-email').textContent = googleUserData.email;
+                }
+
+                // Show CardID modal
+                document.getElementById('cardid-modal').classList.remove('hidden');
 
             } catch (err) {
-                console.error(err);
-                // Dịch lỗi Firebase sang tiếng Việt
-                const msgs = {
-                    'auth/email-already-in-use': 'NDID này đã tồn tại. Hãy chọn NDID khác hoặc đăng nhập.',
-                    'auth/weak-password': 'Mật khẩu quá yếu. Cần ít nhất 6 ký tự.',
-                    'auth/invalid-email': 'Định dạng NDID không hợp lệ.',
-                    'auth/network-request-failed': 'Mất kết nối mạng. Vui lòng thử lại.',
-                };
-                showStatus(msgs[err.code] || ('Lỗi: ' + err.message), 'error');
+                alert("Lỗi tạo tài khoản: " + err.message);
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span>Khởi tạo NDID</span><i class="ph-bold ph-sparkle"></i>';
+                submitBtn.innerHTML = `<span>Khởi tạo NDID</span> <i class="ph-bold ph-sparkle"></i>`;
             }
+        });
+
+        // Copy / Save info action
+        document.getElementById('btn-copy-pwd').addEventListener('click', () => {
+            if (!generatedCardInfo) return;
+            const textToCopy = `THẺ CÔNG DÂN ND LABS (CARDID):\nTên: ${generatedCardInfo.fullname}\nCodeID: ${generatedCardInfo.codeId}\nNDID: ${generatedCardInfo.ndid}\nNgày sinh: ${generatedCardInfo.dob}\nQuốc tịch: ${generatedCardInfo.nationality}\nEmail: ${generatedCardInfo.email}\nMật khẩu: ${generatedCardInfo.password}`;
+            navigator.clipboard.writeText(textToCopy);
+            alert("Đã sao chép toàn bộ thông tin CardID vào bộ nhớ tạm!");
+        });
+
+        // Download Card image action
+        document.getElementById('btn-download-card').addEventListener('click', () => {
+            if (generatedCardInfo) {
+                downloadCardImage(generatedCardInfo);
+            }
+        });
+
+        // Enter app action
+        document.getElementById('btn-enter-app').addEventListener('click', () => {
+            const activeIdx = window.NDAccounts ? window.NDAccounts.getActiveIndexFromUrl() : 0;
+            window.location.href = activeIdx > 0 ? `/?u=${activeIdx}` : '/';
         });
     </script>
 </body>

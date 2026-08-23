@@ -45,7 +45,9 @@
     <script src="/assets/js/version.js" defer></script>
 
     <!-- Data -->
+    <!-- TẠM KHÓA list_data.js
     <script src="/eduspace/list_data.js"></script>
+    -->
 
     <script>
         tailwind.config = {
@@ -573,7 +575,7 @@
                 </div>
 
                 <h3 class="text-xl font-bold text-slate-800 mb-1">Vào Đề Bằng Mã</h3>
-                <p class="text-slate-400 text-sm mb-6 font-medium">Nhập mã đề thi gồm 4 ký tự để bắt đầu</p>
+                <p class="text-slate-400 text-sm mb-6 font-medium">Nhập mã đề thi (1–6 ký tự) để bắt đầu</p>
 
                 <div class="relative mb-4">
                     <input type="text" id="modalCodeInput" placeholder="Ví dụ: t111" maxlength="10"
@@ -605,6 +607,107 @@
         </div>
     </div>
 
+    <!-- Modal Hoàn tất & Cập nhật Hồ sơ EduSpace (Bắt buộc & Định kỳ tháng 9) -->
+    <div id="eduOnboardModal"
+        class="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md hidden transition-all duration-300">
+        <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl p-6 md:p-8 max-w-xl w-full relative max-h-[90vh] overflow-y-auto"
+            onclick="event.stopPropagation()">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-500/20 text-2xl">
+                    🎓
+                </div>
+                <h3 id="edu-onboard-title" class="text-xl font-black text-slate-800">Hoàn Tất Thông Tin EduSpace</h3>
+                <p id="edu-onboard-subtitle" class="text-slate-500 text-xs mt-1">
+                    Vui lòng cung cấp thông tin học tập / giảng dạy của bạn để tiếp tục trải nghiệm EduSpace.
+                </p>
+            </div>
+
+            <!-- Extracted DOB Banner from NDID -->
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-3.5 mb-5 flex items-center gap-3">
+                <i class="ph-bold ph-calendar text-blue-600 text-xl shrink-0"></i>
+                <div class="text-xs text-blue-900 leading-tight">
+                    <span>Ngày sinh (trích xuất từ NDID): </span>
+                    <strong id="edu-onboard-dob" class="text-blue-700 font-black">Đang lấy...</strong>
+                    <span class="block text-[11px] text-slate-500 mt-0.5">Tự động trích xuất từ tài khoản NDID của bạn</span>
+                </div>
+            </div>
+
+            <form id="edu-onboard-form" class="space-y-4 text-left">
+                <!-- Role Select -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Vai trò trong EduSpace *</label>
+                    <select id="onboard-role" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                        <option value="student">Học sinh (Lớp 1 → 12)</option>
+                        <option value="teacher">Giáo viên (Đang dạy trường học)</option>
+                        <option value="college_student">Sinh viên (Đại học / Cao đẳng)</option>
+                        <option value="lecturer">Giảng viên (Đại học / Học viện)</option>
+                    </select>
+                </div>
+
+                <!-- School -->
+                <div>
+                    <label id="onboard-label-school" class="block text-xs font-bold text-slate-700 mb-1.5">Trường đang học *</label>
+                    <input type="text" id="onboard-school" required placeholder="Ví dụ: THPT Nguyễn Trãi"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                </div>
+
+                <!-- Student Grade Section -->
+                <div id="onboard-sec-student">
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Khối lớp đang học *</label>
+                    <select id="onboard-student-grade" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                        <option value="1">Lớp 1</option>
+                        <option value="2">Lớp 2</option>
+                        <option value="3">Lớp 3</option>
+                        <option value="4">Lớp 4</option>
+                        <option value="5">Lớp 5</option>
+                        <option value="6">Lớp 6</option>
+                        <option value="7">Lớp 7</option>
+                        <option value="8">Lớp 8</option>
+                        <option value="9">Lớp 9</option>
+                        <option value="10">Lớp 10</option>
+                        <option value="11">Lớp 11</option>
+                        <option value="12">Lớp 12</option>
+                    </select>
+                </div>
+
+                <!-- College Student Major Section -->
+                <div id="onboard-sec-college" class="hidden">
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Ngành đang theo học *</label>
+                    <input type="text" id="onboard-major" placeholder="Ví dụ: Kỹ thuật Phần mềm, Quản trị Kinh doanh..."
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                </div>
+
+                <!-- Lecturer Subject Section -->
+                <div id="onboard-sec-lecturer" class="hidden">
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Môn / Chuyên ngành đang dạy *</label>
+                    <input type="text" id="onboard-lecturer-subject" placeholder="Ví dụ: Trí tuệ Nhân tạo, Giải tích..."
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                </div>
+
+                <!-- Teacher Section -->
+                <div id="onboard-sec-teacher" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Các khối lớp đang dạy (Lớp 1 → 12) *</label>
+                        <p class="text-[11px] text-slate-400 mb-2">Tích chọn các khối lớp bạn đang phụ trách:</p>
+                        <div id="onboard-teacher-grades" class="grid grid-cols-4 sm:grid-cols-6 gap-2"></div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Các môn đang dạy *</label>
+                        <p class="text-[11px] text-slate-400 mb-2">Tích chọn các bộ môn bạn đang tham gia giảng dạy:</p>
+                        <div id="onboard-teacher-subjects" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+                    </div>
+                </div>
+
+                <p id="onboard-error-msg" class="text-rose-500 text-xs font-bold hidden"></p>
+
+                <button type="submit" id="onboard-submit-btn"
+                    class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black rounded-2xl shadow-lg shadow-blue-500/20 transition-all text-xs uppercase tracking-wider mt-4">
+                    Xác Nhận & Bắt Đầu Học Tập
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
@@ -617,9 +720,20 @@
 
         // State
         let currentFilters = { search: '', class: '', subject: '' };
+        window.quizList = [];
 
         // Initialize
-        function init() {
+        async function init() {
+            if (!window.firebaseFirestore) {
+                await new Promise(resolve => {
+                    window.addEventListener('firebase-ready', resolve, { once: true });
+                });
+            }
+
+            if (window.loadDynamicLessons && window.firebaseFirestore) {
+                await window.loadDynamicLessons(window.firebaseFirestore);
+            }
+
             updateStats();
             buildFilterOptions();
             renderFeatured();
@@ -1140,9 +1254,8 @@
                 toolbarInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter') {
                         const code = toolbarInput.value.trim().toLowerCase();
-                        if (!code) return;
-
-                        const quizInfo = quizList.find(q => q.id && q.id.toLowerCase() === code);
+                        // Local quizList lookup
+                        const quizInfo = (typeof quizList !== 'undefined') ? quizList.find(i => (i.id || '').toLowerCase() === code) : null;
                         if (quizInfo) {
                             window.location.href = `/eduspace/exam?${code}`;
                         } else {
@@ -1154,13 +1267,6 @@
 
                 toolbarInput.addEventListener('input', () => {
                     toolbarInput.classList.remove('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
-                    const code = toolbarInput.value.trim().toLowerCase();
-                    if (code.length === 4) {
-                        const quizInfo = quizList.find(q => q.id && q.id.toLowerCase() === code);
-                        if (quizInfo) {
-                            window.location.href = `/eduspace/exam?${code}`;
-                        }
-                    }
                 });
             }
 
@@ -1174,12 +1280,12 @@
 
             let currentPreviewCode = '';
             if (modalInput) {
-                modalInput.addEventListener('input', () => {
+                modalInput.addEventListener('input', async () => {
                     modalInput.classList.remove('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
                     if (modalError) modalError.classList.add('hidden');
 
                     const code = modalInput.value.trim().toLowerCase();
-                    if (code.length >= 3) {
+                    if (code.length >= 1) {
                         const quizInfo = quizList.find(q => q.id && q.id.toLowerCase() === code);
                         if (quizInfo) {
                             if (currentPreviewCode === code) return;
@@ -1217,6 +1323,32 @@
                                 if (modalPreviewMetadata) modalPreviewMetadata.innerHTML = metaHTML;
                             });
                             return;
+                        } else if (code.length >= 1) {
+                            // Try Firestore for newly published quizzes
+                            if (currentPreviewCode === code) return;
+                            currentPreviewCode = code;
+                            if (window.firebaseFirestore) {
+                                const { doc: fsDoc, getDoc: fsGetDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js').catch(() => ({}));
+                                if (fsDoc && fsGetDoc) {
+                                    try {
+                                        const snap = await fsGetDoc(fsDoc(window.firebaseFirestore, 'quizzes', code.toUpperCase()));
+                                        if (snap.exists()) {
+                                            const qData = snap.data();
+                                            if (modalPreview) modalPreview.classList.remove('hidden');
+                                            if (modalPreviewTitle) modalPreviewTitle.innerText = qData.title || code.toUpperCase();
+                                            if (modalPreviewDesc) modalPreviewDesc.innerText = qData.description || 'Đề thi trực tuyến từ Firebase.';
+                                            if (modalPreviewMetadata) {
+                                                let mHtml = '';
+                                                if (qData.subject) mHtml += `<div class="flex items-start gap-1.5 py-0.5"><span class="text-slate-400 font-semibold shrink-0">📚 Môn:</span><span class="font-bold text-slate-700">${qData.subject}</span></div>`;
+                                                if (qData.grade) mHtml += `<div class="flex items-start gap-1.5 py-0.5"><span class="text-slate-400 font-semibold shrink-0">🎒 Lớp:</span><span class="font-bold text-slate-700">${qData.grade}</span></div>`;
+                                                if (qData.duration) mHtml += `<div class="flex items-start gap-1.5 py-0.5"><span class="text-slate-400 font-semibold shrink-0">⏱ Thời gian:</span><span class="font-bold text-slate-700">${qData.duration} phút</span></div>`;
+                                                modalPreviewMetadata.innerHTML = mHtml;
+                                            }
+                                            return;
+                                        }
+                                    } catch (_) {}
+                                }
+                            }
                         }
                     }
                     currentPreviewCode = '';
@@ -1333,7 +1465,7 @@
             }
         }
 
-        function submitModalCode() {
+        async function submitModalCode() {
             const input = document.getElementById('modalCodeInput');
             const errorMsg = document.getElementById('modalCodeError');
             if (!input) return;
@@ -1346,16 +1478,288 @@
                 return;
             }
 
-            const quizInfo = quizList.find(q => q.id && q.id.toLowerCase() === code);
-            if (!quizInfo) {
-                errorMsg.innerText = `Mã đề thi "${code.toUpperCase()}" không tồn tại.`;
-                errorMsg.classList.remove('hidden');
-                input.classList.add('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
+            // Check local quizList first
+            const quizInfo = (typeof quizList !== 'undefined') ? quizList.find(q => q.id && q.id.toLowerCase() === code) : null;
+            if (quizInfo) {
+                window.location.href = `/eduspace/exam?${code}`;
                 return;
             }
 
-            window.location.href = `/eduspace/exam?${code}`;
+            // Try Firestore for newly published quizzes
+            errorMsg.innerText = 'Đang kiểm tra...';
+            errorMsg.classList.remove('hidden');
+            try {
+                if (window.firebaseFirestore) {
+                    const { doc: fsDoc, getDoc: fsGetDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+                    let snap = await fsGetDoc(fsDoc(window.firebaseFirestore, 'quizzes', code.toUpperCase()));
+                    if (!snap.exists()) {
+                        snap = await fsGetDoc(fsDoc(window.firebaseFirestore, 'quizzes', code));
+                    }
+                    if (snap.exists()) {
+                        window.location.href = `/eduspace/exam?${code}`;
+                        return;
+                    }
+                }
+            } catch (_) {}
+
+            errorMsg.innerText = `Mã đề thi "${code.toUpperCase()}" không tồn tại.`;
+            errorMsg.classList.remove('hidden');
+            input.classList.add('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
         }
+
+        // ==========================================
+        // EDUSPACE PROFILE ONBOARDING & YEARLY RENEWAL (THÁNG 9)
+        // ==========================================
+        const ONBOARD_SUBJECTS = [
+            'Toán học', 'Ngữ văn', 'Tiếng Anh', 'Vật lí', 'Hóa học', 'Sinh học',
+            'Lịch sử', 'Địa lí', 'GDKT&PL', 'Tin học', 'Công nghệ', 'Âm nhạc',
+            'Mỹ thuật', 'Giáo dục thể chất', 'Hoạt động trải nghiệm'
+        ];
+
+        function initEduOnboardUI() {
+            const gradesCont = document.getElementById('onboard-teacher-grades');
+            if (gradesCont && gradesCont.children.length === 0) {
+                let gHtml = '';
+                for (let i = 1; i <= 12; i++) {
+                    gHtml += `
+                        <label class="flex items-center gap-1.5 p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 cursor-pointer hover:bg-blue-50 transition-all select-none">
+                            <input type="checkbox" name="onboard_teacher_grade" value="${i}" class="accent-blue-600">
+                            <span>Lớp ${i}</span>
+                        </label>
+                    `;
+                }
+                gradesCont.innerHTML = gHtml;
+            }
+
+            const subjsCont = document.getElementById('onboard-teacher-subjects');
+            if (subjsCont && subjsCont.children.length === 0) {
+                let sHtml = '';
+                ONBOARD_SUBJECTS.forEach(s => {
+                    sHtml += `
+                        <label class="flex items-center gap-1.5 p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 cursor-pointer hover:bg-blue-50 transition-all select-none">
+                            <input type="checkbox" name="onboard_teacher_subject" value="${s}" class="accent-blue-600">
+                            <span>${s}</span>
+                        </label>
+                    `;
+                });
+                subjsCont.innerHTML = sHtml;
+            }
+
+            const roleSel = document.getElementById('onboard-role');
+            if (roleSel) {
+                roleSel.onchange = () => updateOnboardRoleUI(roleSel.value);
+            }
+        }
+
+        function updateOnboardRoleUI(role) {
+            document.getElementById('onboard-sec-student').classList.add('hidden');
+            document.getElementById('onboard-sec-college').classList.add('hidden');
+            document.getElementById('onboard-sec-lecturer').classList.add('hidden');
+            document.getElementById('onboard-sec-teacher').classList.add('hidden');
+
+            const lblSchool = document.getElementById('onboard-label-school');
+
+            if (role === 'teacher') {
+                document.getElementById('onboard-sec-teacher').classList.remove('hidden');
+                lblSchool.textContent = 'Trường đang giảng dạy *';
+            } else if (role === 'lecturer') {
+                document.getElementById('onboard-sec-lecturer').classList.remove('hidden');
+                lblSchool.textContent = 'Trường Đại học / Cao đẳng đang giảng dạy *';
+            } else if (role === 'college_student') {
+                document.getElementById('onboard-sec-college').classList.remove('hidden');
+                lblSchool.textContent = 'Trường Đại học / Cao đẳng đang theo học *';
+            } else {
+                document.getElementById('onboard-sec-student').classList.remove('hidden');
+                lblSchool.textContent = 'Trường đang theo học *';
+            }
+        }
+
+        async function checkEduSpaceProfileRequirement(user) {
+            if (!user || !window.firebaseFirestore) return;
+            initEduOnboardUI();
+
+            const modal = document.getElementById('eduOnboardModal');
+            const errorMsg = document.getElementById('onboard-error-msg');
+            const form = document.getElementById('edu-onboard-form');
+            const submitBtn = document.getElementById('onboard-submit-btn');
+
+            try {
+                const { doc, getDoc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+                const snap = await getDoc(doc(window.firebaseFirestore, 'users', user.uid));
+                const data = snap.exists() ? snap.data() : {};
+
+                // Trích xuất ngày sinh từ NDID
+                const dob = data.dob || '';
+                const yob = data.yob || '';
+                let dobDisplay = 'Chưa cập nhật trong NDID';
+                if (dob) {
+                    if (dob.includes('-')) {
+                        const p = dob.split('-');
+                        dobDisplay = `${p[2]}/${p[1]}/${p[0]}`;
+                    } else {
+                        dobDisplay = dob;
+                    }
+                } else if (yob) {
+                    dobDisplay = `${yob}`;
+                }
+                document.getElementById('edu-onboard-dob').textContent = dobDisplay;
+
+                // Tính toán niên khóa hiện tại theo chu kỳ tháng 9
+                const now = new Date();
+                const curYear = now.getFullYear();
+                const curMonth = now.getMonth() + 1;
+                const currentSchoolYear = curMonth >= 9 ? `${curYear}-${curYear + 1}` : `${curYear - 1}-${curYear}`;
+
+                const hasSchool = !!data.school;
+                const hasRole = !!data.eduRole;
+                const isYearlyOutdated = data.lastSchoolYearUpdate !== currentSchoolYear;
+
+                // Cần hiển thị modal nếu:
+                // 1. Chưa có thông tin trường/vai trò (First-time onboarding)
+                // 2. Đã bước sang niên khóa mới (Hỏi lại vào tháng 9 hàng năm)
+                const needsOnboarding = !hasSchool || !hasRole;
+                const needsYearlyPrompt = hasSchool && hasRole && isYearlyOutdated;
+
+                if (!needsOnboarding && !needsYearlyPrompt) {
+                    return; // Đã đầy đủ thông tin
+                }
+
+                // Điền thông tin cũ nếu có
+                const existingRole = data.eduRole || 'student';
+                document.getElementById('onboard-role').value = existingRole;
+                updateOnboardRoleUI(existingRole);
+
+                document.getElementById('onboard-school').value = data.school || '';
+                document.getElementById('onboard-student-grade').value = data.grade || '10';
+                document.getElementById('onboard-major').value = data.major || '';
+                document.getElementById('onboard-lecturer-subject').value = data.subject || '';
+
+                if (data.teachingGrades && Array.isArray(data.teachingGrades)) {
+                    document.querySelectorAll('input[name="onboard_teacher_grade"]').forEach(cb => {
+                        cb.checked = data.teachingGrades.includes(cb.value);
+                    });
+                }
+                if (data.subjects && Array.isArray(data.subjects)) {
+                    document.querySelectorAll('input[name="onboard_teacher_subject"]').forEach(cb => {
+                        cb.checked = data.subjects.includes(cb.value);
+                    });
+                }
+
+                if (needsYearlyPrompt) {
+                    document.getElementById('edu-onboard-title').textContent = `Cập Nhật Năm Học Mới (${currentSchoolYear})`;
+                    document.getElementById('edu-onboard-subtitle').textContent = `Đã bước sang năm học mới! Vui lòng xác nhận hoặc cập nhật lại thông tin lớp học / trường học của bạn.`;
+                    submitBtn.textContent = 'Xác Nhận Năm Học Mới';
+                } else {
+                    document.getElementById('edu-onboard-title').textContent = 'Hoàn Tất Thông Tin EduSpace';
+                    document.getElementById('edu-onboard-subtitle').textContent = 'Vui lòng cung cấp thông tin học tập / giảng dạy của bạn để tiếp tục trải nghiệm EduSpace.';
+                    submitBtn.textContent = 'Xác Nhận & Bắt Đầu Học Tập';
+                }
+
+                // Mở Modal
+                modal.classList.remove('hidden');
+
+                // Xử lý Submit
+                form.onsubmit = async (e) => {
+                    e.preventDefault();
+                    errorMsg.classList.add('hidden');
+                    errorMsg.textContent = '';
+
+                    const selectedRole = document.getElementById('onboard-role').value;
+                    const school = document.getElementById('onboard-school').value.trim();
+                    const studentGrade = document.getElementById('onboard-student-grade').value;
+                    const major = document.getElementById('onboard-major').value.trim();
+                    const lecturerSubject = document.getElementById('onboard-lecturer-subject').value.trim();
+
+                    if (!school) {
+                        errorMsg.textContent = 'Vui lòng nhập tên trường học của bạn.';
+                        errorMsg.classList.remove('hidden');
+                        return;
+                    }
+
+                    let teachingGrades = [];
+                    let teachingSubjects = [];
+
+                    if (selectedRole === 'teacher') {
+                        document.querySelectorAll('input[name="onboard_teacher_grade"]:checked').forEach(cb => {
+                            teachingGrades.push(cb.value);
+                        });
+                        document.querySelectorAll('input[name="onboard_teacher_subject"]:checked').forEach(cb => {
+                            teachingSubjects.push(cb.value);
+                        });
+
+                        if (teachingGrades.length === 0) {
+                            errorMsg.textContent = 'Giáo viên vui lòng tích chọn ít nhất 1 khối lớp đang dạy.';
+                            errorMsg.classList.remove('hidden');
+                            return;
+                        }
+                        if (teachingSubjects.length === 0) {
+                            errorMsg.textContent = 'Giáo viên vui lòng tích chọn ít nhất 1 môn đang dạy.';
+                            errorMsg.classList.remove('hidden');
+                            return;
+                        }
+                    }
+
+                    if (selectedRole === 'lecturer' && !lecturerSubject) {
+                        errorMsg.textContent = 'Giảng viên vui lòng nhập môn / chuyên ngành đang dạy.';
+                        errorMsg.classList.remove('hidden');
+                        return;
+                    }
+
+                    if (selectedRole === 'college_student' && !major) {
+                        errorMsg.textContent = 'Sinh viên vui lòng nhập ngành đang theo học.';
+                        errorMsg.classList.remove('hidden');
+                        return;
+                    }
+
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Đang lưu thông tin...';
+
+                    try {
+                        const updatePayload = {
+                            eduRole: selectedRole,
+                            school: school,
+                            grade: selectedRole === 'student' ? studentGrade : (selectedRole === 'teacher' ? 'Đang dạy' : 'Khác'),
+                            major: selectedRole === 'college_student' ? major : null,
+                            subject: selectedRole === 'lecturer' ? lecturerSubject : null,
+                            teachingGrades: selectedRole === 'teacher' ? teachingGrades : null,
+                            subjects: selectedRole === 'teacher' ? teachingSubjects : null,
+                            lastSchoolYearUpdate: currentSchoolYear
+                        };
+
+                        await updateDoc(doc(window.firebaseFirestore, 'users', user.uid), updatePayload);
+
+                        const cached = JSON.parse(localStorage.getItem('nd_user') || '{}');
+                        cached.eduRole = selectedRole;
+                        cached.grade = updatePayload.grade;
+                        cached.school = school;
+                        localStorage.setItem('nd_user', JSON.stringify(cached));
+
+                        modal.classList.add('hidden');
+                    } catch (saveErr) {
+                        errorMsg.textContent = 'Lỗi lưu thông tin: ' + saveErr.message;
+                        errorMsg.classList.remove('hidden');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Xác Nhận & Tiếp Tục';
+                    }
+                };
+
+            } catch (err) {
+                console.warn("Lỗi kiểm tra hồ sơ EduSpace:", err);
+            }
+        }
+
+        // Lắng nghe đăng nhập để chạy kiểm tra hồ sơ EduSpace
+        window.addEventListener('firebase-ready', () => {
+            if (window.firebaseAuth) {
+                import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js').then(({ onAuthStateChanged }) => {
+                    onAuthStateChanged(window.firebaseAuth, (user) => {
+                        if (user) {
+                            checkEduSpaceProfileRequirement(user);
+                        }
+                    });
+                });
+            }
+        });
 
         // Run
         document.addEventListener('DOMContentLoaded', init);

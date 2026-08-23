@@ -199,6 +199,39 @@ window.eduspaceAI = (function () {
         const preferredModel = payload.model || sessionModel;
         const generationConfig = payload.generationConfig || null;
 
+        // TẦNG 0: Custom User Gemini API Key (Sử dụng API của tôi)
+        let customApiKey = null;
+        try {
+            const rawUser = localStorage.getItem('nd_user');
+            if (rawUser) {
+                const userObj = JSON.parse(rawUser);
+                customApiKey = userObj.customGeminiKey || null;
+            }
+        } catch (_) {}
+
+        if (customApiKey && customApiKey.trim() !== "") {
+            try {
+                const customModels = await discoverModels(customApiKey.trim());
+                let lastErr = null;
+                for (const mdl of customModels) {
+                    try {
+                        const text = await callDirect(customApiKey.trim(), contents, mdl, generationConfig);
+                        if (text !== null) return text;
+                    } catch (e) {
+                        if (e.isKeyError) {
+                            _cachedModels = null;
+                            localStorage.removeItem('edu_models_v2');
+                            throw new Error('API Key của bạn không hợp lệ hoặc đã hết hạn: ' + e.message);
+                        }
+                        lastErr = e;
+                    }
+                }
+                if (lastErr) throw lastErr;
+            } catch (err) {
+                console.warn('[EduAI] Lỗi khi sử dụng API key cá nhân, chuyển sang API mặc định:', err.message);
+            }
+        }
+
         // TẦNG 1: Cloud Function Proxy
         if (FUNCTION_PROXY_URL) {
             try {

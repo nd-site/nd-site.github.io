@@ -26,17 +26,14 @@ body {
 
 /* ── Auth card ───────────────────────────────────────── */
 .auth-wrapper {
-    position: fixed;
-    top: 50px; /* Below navbar */
-    left: 0;
-    right: 0;
-    bottom: 0;
+    min-height: calc(100vh - 50px);
+    margin-top: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 30px 16px;
     z-index: 10;
-    pointer-events: none; /* Let background blobs be potentially clickable if needed, but card needs pointer-events auto */
+    width: 100%;
 }
 
 .auth-card {

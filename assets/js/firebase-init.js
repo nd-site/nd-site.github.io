@@ -59,7 +59,7 @@ async function initEduFirebase() {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // ─── Lấy role thật từ Firestore /users/{uid} ───────────────────────
-                let role = 'member', eduRole = '', ndid = '', fullname = '', photoURL = '', grade = 'Khác', yob = null, codeId = '';
+                let role = 'member', eduRole = '', ndid = '', fullname = '', photoURL = '', grade = 'Khác', yob = null, codeId = '', customGeminiKey = '';
                 try {
                     const snap = await getDoc(doc(firestore, 'users', user.uid));
                     if (snap.exists()) {
@@ -92,6 +92,7 @@ async function initEduFirebase() {
                         grade    = data.grade    || 'Khác';
                         yob      = data.yob      || null;
                         codeId   = data.codeId   || '';
+                        customGeminiKey = data.customGeminiKey || '';
 
                         // Auto generate permanent 8-digit CodeID if missing (incremental via transaction counter)
                         if (!codeId) {
@@ -124,7 +125,7 @@ async function initEduFirebase() {
                                     transaction.set(counterRef, { lastNumber: nextNum });
                                     return cand;
                                 });
-
+ 
                                 if (candidate) {
                                     const codeRef = doc(firestore, 'code_ids', candidate);
                                     await setDoc(codeRef, { uid: user.uid, createdAt: serverTimestamp() });
@@ -150,6 +151,7 @@ async function initEduFirebase() {
                             grade    = old.grade    || 'Khác';
                             yob      = old.yob      || null;
                             codeId   = old.codeId   || '';
+                            customGeminiKey = old.customGeminiKey || '';
                         }
                     } catch (_) {}
                 }
@@ -170,7 +172,8 @@ async function initEduFirebase() {
                     eduRole:     eduRole,
                     grade:       grade,
                     yob:         yob,
-                    codeId:      codeId
+                    codeId:      codeId,
+                    customGeminiKey: customGeminiKey
                 };
                 localStorage.setItem('nd_user', JSON.stringify(sessionData));
 
@@ -201,7 +204,10 @@ async function initEduFirebase() {
                     const adminLink = role === 'admin'
                         ? `<a href="/admin/" class="nd-nav-link" style="color: #0070f3;" title="Bảng quản trị Admin">
                                <i class="ph-bold ph-shield-checkered"></i><span class="nd-lbl">Admin</span>
-                           </a>`
+                           </a>
+                           <button id="nd-admin-reload-btn" class="nd-nav-link" style="color: #ef4444; border: none; background: transparent; cursor: pointer; padding: 5px 12px;" title="Yêu cầu tải lại trang cho tất cả">
+                               <i class="ph-bold ph-arrows-clockwise"></i><span class="nd-lbl">Tải lại</span>
+                           </button>`
                         : '';
 
                     userSection.innerHTML = `
@@ -226,6 +232,34 @@ async function initEduFirebase() {
         console.error("Firebase init error", err);
     }
 }
+
+// Export loadDynamicLessons for pages to fetch exams from Firestore
+window.loadDynamicLessons = async function(firestore) {
+    if (!firestore) return;
+    try {
+        const { collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const q = query(collection(firestore, 'eduspace_lessons'), orderBy('createdAt', 'desc'));
+        const snap = await getDocs(q);
+        
+        if (typeof window.quizList === 'undefined') {
+            window.quizList = [];
+        }
+
+        snap.forEach(doc => {
+            const data = doc.data();
+            // skip if already in quizList (e.g. from static file)
+            if (!window.quizList.some(item => item.id === doc.id)) {
+                window.quizList.push({
+                    id: doc.id,
+                    ...data
+                });
+            }
+        });
+        console.log("🔥 Loaded dynamic lessons from Firestore:", window.quizList.length);
+    } catch(e) {
+        console.error("Lỗi khi tải bài học động từ Firebase:", e);
+    }
+};
 
 // Chạy luôn vì module defer mặc định
 initEduFirebase();

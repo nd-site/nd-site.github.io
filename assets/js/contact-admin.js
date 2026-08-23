@@ -56,70 +56,79 @@ const contactAdminUI = (function () {
             .contact-fab-container {
                 position: fixed;
                 bottom: 2rem;
-                left: 2rem;
+                left: 1.5rem;
                 z-index: 1000;
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 0.75rem;
+                box-sizing: border-box;
+            }
+
+            @keyframes pulse-glow {
+                0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+                70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
             }
 
             .contact-main-btn {
                 background: #2563eb;
                 color: white;
-                height: 3rem;
-                padding: 0 1.25rem;
-                border-radius: 9999px;
+                height: 3.25rem;
+                width: 3.25rem;
+                border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 0;
                 box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
                 cursor: pointer;
-                transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
                 border: none;
-                font-weight: 700;
-                font-size: 0.875rem;
-                overflow: hidden;
-                width: auto;
-                min-width: 3rem;
-            }
-
-            .contact-main-btn span {
-                max-width: 0;
-                opacity: 0;
-                white-space: nowrap;
-                transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-                margin-left: 0;
-            }
-
-            .contact-main-btn.expanded {
-                gap: 0.5rem;
-                padding: 0 1.25rem;
-            }
-
-            .contact-main-btn.expanded span {
-                max-width: 150px;
-                opacity: 1;
-                margin-left: 0.5rem;
+                position: relative;
+                animation: pulse-glow 2.5s infinite;
             }
 
             .contact-main-btn:hover {
-                transform: scale(1.05) translateY(-2px);
-                box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.5);
+                transform: scale(1.08) translateY(-2px);
                 background: #1d4ed8;
-                gap: 0.5rem;
+                animation: none;
+                box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.5);
             }
 
-            .contact-main-btn:hover span {
-                max-width: 150px;
+            .contact-main-btn:active, .contact-main-btn.active {
+                transform: scale(0.95);
+                background: #1e40af;
+            }
+
+            /* Tooltip for the main FAB */
+            .contact-main-btn::after {
+                content: attr(data-tooltip);
+                position: absolute;
+                left: 4rem;
+                background: rgba(15, 23, 42, 0.95);
+                color: white;
+                padding: 6px 12px;
+                border-radius: 8px;
+                font-size: 0.75rem;
+                font-weight: 700;
+                white-space: nowrap;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateX(-10px);
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                pointer-events: none;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+
+            .contact-main-btn:hover::after {
                 opacity: 1;
-                margin-left: 0.5rem;
+                visibility: visible;
+                transform: translateX(0);
             }
 
-            .contact-main-btn.active {
-                background: #2563eb;
-                box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+            /* Hide the original span text to keep it a pure icon button */
+            .contact-main-btn span.btn-label-text {
+                display: none;
             }
 
             .contact-menu {
@@ -187,12 +196,8 @@ const contactAdminUI = (function () {
                     gap: 0.5rem;
                 }
                 .contact-main-btn {
-                    height: 2.75rem;
-                    min-width: 2.75rem;
-                    padding: 0 1rem;
-                }
-                .contact-main-btn.expanded {
-                    padding: 0 1rem;
+                    height: 3.25rem;
+                    width: 3.25rem;
                 }
                 .contact-item {
                     width: 2.5rem;
@@ -213,9 +218,9 @@ const contactAdminUI = (function () {
         const html = `
             <div class="contact-fab-container">
                 <div class="contact-menu" id="contactMenu"></div>
-                <button class="contact-main-btn expanded" id="contactMainBtn" onclick="contactAdminUI.toggle()">
-                    <i data-lucide="headset" class="w-5 h-5"></i>
-                    <span>Liên hệ Admin</span>
+                <button class="contact-main-btn" id="contactMainBtn" data-tooltip="Liên hệ Admin" onclick="contactAdminUI.toggle()">
+                    <i data-lucide="headset" class="w-6 h-6"></i>
+                    <span class="btn-label-text">Liên hệ Admin</span>
                 </button>
             </div>
         `;
@@ -242,15 +247,6 @@ const contactAdminUI = (function () {
         }
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
-
-        // 3-second collapse logic
-        const btn = document.getElementById('contactMainBtn');
-        clearTimeout(contactTimer);
-        contactTimer = setTimeout(() => {
-            if (!menu.classList.contains('show')) {
-                btn.classList.remove('expanded');
-            }
-        }, 3000);
     }
 
     function toggle() {
@@ -258,13 +254,6 @@ const contactAdminUI = (function () {
         const btn = document.getElementById('contactMainBtn');
         const isActive = menu.classList.toggle('show');
         btn.classList.toggle('active', isActive);
-
-        if (isActive) {
-            btn.classList.add('expanded');
-            clearTimeout(contactTimer);
-        } else {
-            btn.classList.remove('expanded');
-        }
 
         const icon = btn.querySelector('i');
         if (isActive) {

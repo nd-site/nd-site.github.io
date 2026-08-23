@@ -6,102 +6,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chính sách bảo mật - ND Labs</title>
     <link rel="icon" href="/assets/images/logo.png" type="image/png">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap"
         rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+    <link rel="stylesheet" href="/auth/auth.css">
     <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/font/font.js"></script>
+
     <style>
-        :root {
-            --primary: #0070f3;
-            --bg: #f8fafc;
-            --text: #1e293b;
-            --card: #ffffff;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 40px;
-            background: var(--card);
+        .privacy-content-card {
+            background: #ffffff;
             border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1.5px solid #e2e8f0;
+            padding: 32px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+            line-height: 1.7;
+            color: #334155;
         }
 
-        h1 {
-            color: var(--primary);
+        .privacy-section-h2 {
+            font-size: 17px;
             font-weight: 800;
-            margin-bottom: 30px;
-            text-align: center;
+            color: #0f172a;
+            margin-top: 28px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1.5px solid #f1f5f9;
+            padding-bottom: 8px;
         }
 
-        h2 {
-            margin-top: 30px;
-            font-weight: 700;
-            border-left: 4px solid var(--primary);
-            padding-left: 15px;
+        .privacy-section-h2:first-of-type {
+            margin-top: 0;
         }
 
-        p {
-            margin-bottom: 15px;
+        .privacy-p {
+            font-size: 13.5px;
+            margin-bottom: 12px;
         }
 
-        ul {
-            margin-bottom: 15px;
+        .privacy-list {
             padding-left: 20px;
+            font-size: 13.5px;
+            margin-bottom: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 0.9rem;
-            color: #64748b;
+        .privacy-highlight-box {
+            background: #f0f9ff;
+            border: 1.5px solid #bae6fd;
+            border-radius: 14px;
+            padding: 16px;
+            margin: 16px 0;
+            font-size: 13px;
+            color: #0369a1;
         }
     </style>
-    <script src="/font/font.js"></script>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Chính sách bảo mật</h1>
-        <p>Chào mừng bạn đến với ND Labs. Chúng tôi cam kết bảo vệ quyền riêng tư và thông tin cá nhân của bạn.</p>
+    <div class="settings-main">
+        <aside class="settings-nav">
+            <a href="/auth/settings/#general" id="tab-general">
+                <i class="ph-duotone ph-user-circle"></i><span>Tài khoản NDID</span>
+            </a>
+            <a href="/auth/settings/#eduspace" id="tab-eduspace">
+                <i class="ph-duotone ph-graduation-cap"></i><span>Tài khoản EduSpace</span>
+            </a>
+            <a href="/auth/settings/#miniworld" id="tab-miniworld">
+                <i class="ph-duotone ph-game-controller"></i><span>Tài khoản Mini World</span>
+            </a>
+            <a href="/privacy/" class="active">
+                <i class="ph-duotone ph-shield-check"></i><span>Chính sách bảo mật</span>
+            </a>
+        </aside>
 
-        <h2>1. Thông tin chúng tôi thu thập</h2>
-        <p>Để cung cấp dịch vụ NDID, chúng tôi thu thập các thông tin sau:</p>
-        <ul>
-            <li>Họ và tên</li>
-            <li>Địa chỉ Email</li>
-            <li>Thông tin định danh thiết bị</li>
-            <li>Tiến trình sử dụng dịch vụ</li>
-        </ul>
+        <main class="settings-panel">
+            <div style="margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Chính sách bảo mật ND Labs</h2>
+                <p style="font-size: 13.5px; color: #64748b;">Quy chuẩn bảo vệ dữ liệu và quyền riêng tư theo tiêu chuẩn quốc tế</p>
+            </div>
 
-        <h2>2. Cách chúng tôi sử dụng thông tin</h2>
-        <p>Thông tin của bạn được sử dụng để:</p>
-        <ul>
-            <li>Tạo và quản lý tài khoản NDID của bạn.</li>
-            <li>Lưu trữ và đồng bộ hóa tiến trình học tập/chơi game của bạn trên các thiết bị.</li>
-            <li>Cung cấp hỗ trợ kỹ thuật và thông báo về các cập nhật quan trọng.</li>
-        </ul>
+            <div class="privacy-content-card">
+                <div class="privacy-highlight-box">
+                    <strong>Tóm tắt cam kết bảo mật:</strong> Khi bạn sử dụng dịch vụ số của ND Labs (NDID, EduSpace, Mini World Game Hub, ChatND), bạn tin tưởng trao cho chúng tôi thông tin của mình. Chúng tôi hiểu đây là trách nhiệm lớn và nỗ lực bảo vệ dữ liệu của bạn, đồng thời trao cho bạn toàn quyền kiểm soát thông tin cá nhân.
+                </div>
 
-        <h2>3. Bảo mật thông tin</h2>
-        <p>Chúng tôi sử dụng các dịch vụ uy tín như Firebase (Google Cloud) để lưu trữ và mã hóa dữ liệu. Chúng tôi
-            không bao giờ bán thông tin cá nhân của bạn cho bên thứ ba.</p>
+                <h2 class="privacy-section-h2">
+                    <i class="ph-bold ph-database text-primary"></i> 1. Thông tin chúng tôi thu thập
+                </h2>
+                <p class="privacy-p">Chúng tôi thu thập thông tin để cung cấp các dịch vụ tốt hơn cho mọi người dùng, bao gồm:</p>
+                <ul class="privacy-list">
+                    <li><strong>Thông tin định danh bạn cung cấp:</strong> Khi bạn tạo tài khoản NDID, bạn cung cấp họ và tên, địa chỉ email, ngày tháng năm sinh, quốc tịch và mật khẩu được mã hóa an toàn.</li>
+                    <li><strong>Thông tin học tập & trò chơi:</strong> Các khóa học, trường học, khối lớp giảng dạy hoặc theo học (EduSpace), máy chủ và UID Mini World (Mini World Hub).</li>
+                    <li><strong>Nội dung bạn tạo ra và gửi:</strong> Tin nhắn văn bản, tệp tin, hình ảnh, video và phản hồi trao đổi trong ChatND.</li>
+                    <li><strong>Thông tin thiết bị và nhật ký:</strong> Địa chỉ IP, loại trình duyệt, thời gian đăng nhập nhằm mục đích bảo vệ tài khoản khỏi truy cập trái phép.</li>
+                </ul>
 
-        <h2>4. Quyền của bạn</h2>
-        <p>Bạn có quyền yêu cầu truy cập, chỉnh sửa hoặc xóa dữ liệu cá nhân của mình bất kỳ lúc nào thông qua phần Cài
-            đặt tài khoản.</p>
+                <h2 class="privacy-section-h2">
+                    <i class="ph-bold ph-gear text-primary"></i> 2. Mục đích xử lý và sử dụng dữ liệu
+                </h2>
+                <p class="privacy-p">Chúng tôi sử dụng thông tin thu thập được từ tất cả dịch vụ nhằm các mục đích sau:</p>
+                <ul class="privacy-list">
+                    <li><strong>Cung cấp và duy trì dịch vụ:</strong> Định danh công dân số trọn đời qua NDID, đồng bộ dữ liệu học tập trên EduSpace và quản lý map/tổ chức trên Mini World.</li>
+                    <li><strong>Bảo vệ tài khoản và an ninh mạng:</strong> Sử dụng phương thức xác thực mã OTP gửi về email khôi phục để bảo vệ mật khẩu, phát hiện các nỗ lực xâm nhập đáng ngờ.</li>
+                    <li><strong>Kiểm duyệt văn minh bằng Trí tuệ nhân tạo (AI):</strong> Tự động kiểm tra tính hợp lệ của họ tên và nội dung chia sẻ, ngăn chặn từ ngữ thô tục, báng bổ hoặc nội dung độc hại.</li>
+                    <li><strong>Giao tiếp và hỗ trợ:</strong> Gửi thông báo hệ thống, thông tin cập nhật niên khóa tháng 9 hàng năm và hỗ trợ kỹ thuật trực tiếp.</li>
+                </ul>
 
-        <div class="footer">
-            &copy; 2026 ND Labs. Tất cả quyền được bảo lưu.
-        </div>
+                <h2 class="privacy-section-h2">
+                    <i class="ph-bold ph-lock-key text-primary"></i> 3. Tiêu chuẩn bảo mật và công nghệ lưu trữ
+                </h2>
+                <p class="privacy-p">Dữ liệu của bạn được xây dựng trên nền tảng hạ tầng bảo mật cấp doanh nghiệp của Google Cloud (Firebase) và Cloudflare:</p>
+                <ul class="privacy-list">
+                    <li>Mọi kết nối truyền tải đều được mã hóa bằng chuẩn HTTPS/TLS 1.3 cao nhất.</li>
+                    <li>Mật khẩu của người dùng được mã hóa một chiều nghiêm ngặt (hash & salt), không ai có thể xem mật khẩu gốc ngoài chính chủ tài khoản sau khi xác thực bảo mật OTP.</li>
+                    <li>Chúng tôi tuyệt đối <strong>KHÔNG</strong> bán, cho thuê hoặc chia sẻ dữ liệu cá nhân của người dùng cho bất kỳ bên thứ ba vì mục đích thương mại.</li>
+                </ul>
+
+                <h2 class="privacy-section-h2">
+                    <i class="ph-bold ph-user-gear text-primary"></i> 4. Quyền kiểm soát dữ liệu của bạn
+                </h2>
+                <p class="privacy-p">Bạn có đầy đủ quyền đối với dữ liệu của mình theo quy định pháp luật:</p>
+                <ul class="privacy-list">
+                    <li><strong>Xem và tải dữ liệu:</strong> Bạn có thể mở khóa và tải về Thẻ Công Dân (CardID) bất kỳ lúc nào tại trang Cài đặt.</li>
+                    <li><strong>Chỉnh sửa thông tin:</strong> Tự do cập nhật họ tên, trường lớp, quốc tịch và liên kết Google trong hồ sơ cá nhân.</li>
+                    <li><strong>Xóa tài khoản vĩnh viễn:</strong> Bạn có quyền yêu cầu xóa sạch toàn bộ tài khoản và dữ liệu liên quan khỏi hệ thống bất cứ lúc nào.</li>
+                </ul>
+
+                <h2 class="privacy-section-h2">
+                    <i class="ph-bold ph-envelope text-primary"></i> 5. Liên hệ với chúng tôi
+                </h2>
+                <p class="privacy-p">Nếu bạn có bất kỳ câu hỏi hoặc thắc mắc nào về Chính sách bảo mật này, xin vui lòng liên hệ:</p>
+                <ul class="privacy-list">
+                    <li><strong>Ban Quản Trị ND Labs:</strong> Nguyễn Nhật Đăng (Admin - CodeID: 00000000)</li>
+                    <li><strong>Email tiếp nhận:</strong> <a href="mailto:nhatdang10.nd@gmail.com" style="color: #0284c7; font-weight: 700;">nhatdang10.nd@gmail.com</a></li>
+                    <li><strong>Hỗ trợ trực tuyến:</strong> Trực tiếp qua ChatND tại <a href="/chat?nhatdang" style="color: #0284c7; font-weight: 700;">/chat?nhatdang</a></li>
+                </ul>
+
+                <div style="text-align: center; margin-top: 36px; padding-top: 20px; border-top: 1px solid #f1f5f9; font-size: 12px; color: #94a3b8;">
+                    &copy; 2026 ND Labs. Tất cả quyền được bảo lưu. Phiên bản cập nhật năm học 2026.
+                </div>
+            </div>
+        </main>
     </div>
 </body>
 

@@ -56,6 +56,24 @@ Hệ thống hỗ trợ cấu hình linh hoạt trong `data.js` -> `config.examL
 - **TUYỆT ĐỐI KHÔNG** hiển thị hậu tố tên miền `@ndsite.web.app` lên giao diện người dùng (ví dụ: trên trang cài đặt, trang quản trị, hoặc thanh điều hướng). Chỉ hiển thị tiền tố NDID thuần túy (ví dụ: `nhatdang`).
 - Hỗ trợ fallback tương thích ngược tự động cho tài khoản cũ (đuôi `@ndlabs.com`) tại màn hình đăng nhập, không yêu cầu người dùng nhập hậu tố email khi đăng nhập bằng NDID.
 
+## 10. Quy chuẩn Metadata đề thi & Hệ thống định tuyến mã đề (Mới)
+- **BẮT BUỘC** khai báo đầy đủ các thuộc tính metadata trong `window.quizData` khi tạo/cập nhật đề:
+  - `author` (Tác giả)
+  - `school` (Trường)
+  - `class` (Lớp)
+  - `book` (Sách)
+  - `lesson` (Bài)
+  - `year` (Năm)
+- Các trường này có thể khai báo ở cấp cao nhất của `window.quizData` hoặc trong `window.quizData.examInfo`.
+- **Hệ thống định tuyến**: Kể từ phiên bản này, đề thi không chạy qua tệp `index.html` cục bộ trong từng thư mục nữa mà được xử lý qua công cụ xem tập trung tại `/eduspace/exam?<mã đề 4 ký tự>`.
+- Mỗi khi thêm đề mới, bắt buộc:
+  1. Thêm đề vào danh sách `quizList` trong `list_data.js`.
+  2. Gán mã đề 4 ký tự độc nhất (vd: `t111` cho Toán 11 bài 1) vào thuộc tính `id`.
+  3. Chỉ định đường dẫn tới file dữ liệu trong thuộc tính `dataPath` (vd: `"/eduspace/toan/11/bai-1-gia-tri-luong-giac/data.js"`).
+  4. Đặt thuộc tính `url` thành `/eduspace/exam?<mã đề>`.
+  5. Loại bỏ file `index.html` trong thư mục đề thi đó để tối ưu hóa dung lượng (chỉ giữ lại `data.js`).
+
 ---
 // turbo-all
+
 

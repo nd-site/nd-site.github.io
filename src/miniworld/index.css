@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Custom animations for Mini World system */
+@theme {
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Light Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 10px 30px -5px rgba(0, 112, 243, 0.06);
+}
+
+.glass-modal {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.18);
+}
+
+.glass-sub {
+  background: rgba(248, 250, 252, 0.85);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}

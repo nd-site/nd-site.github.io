@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Lotus Bot - ND Labs Admin</title>
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/font/font.js"></script>
+
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+        }
+
+        .bg-gradient-mesh {
+            background-color: #f8fafc;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(0, 112, 243, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.05) 0px, transparent 50%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-mesh min-h-screen text-slate-800">
+
+    <!-- Lock Screen -->
+    <div id="admin-lock-screen" class="fixed inset-0 z-[99999] flex items-center justify-center bg-slate-900">
+        <div class="text-center max-w-sm p-8 glass-card rounded-3xl text-slate-900 border border-slate-200">
+            <div id="lock-icon-container"
+                class="mx-auto w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm">
+                <i class="ph-bold ph-lock-keyhole animate-pulse"></i>
+            </div>
+            <h3 id="lock-title" class="text-xl font-extrabold mb-2 tracking-tight">Đang xác thực...</h3>
+            <p id="lock-desc" class="text-sm text-slate-500 mb-6">Hệ thống đang kiểm tra quyền quản trị của bạn.</p>
+            <div id="lock-action-btn" class="hidden space-y-3">
+                <a href="/auth/login/"
+                    class="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md shadow-blue-500/10">
+                    <i class="ph-bold ph-sign-in"></i> Đăng nhập
+                </a>
+                <a href="/admin/"
+                    class="flex items-center justify-center gap-2 px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition-all">
+                    <i class="ph-bold ph-arrow-left"></i> Quay lại Admin
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="admin-dashboard" class="hidden max-w-5xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <a href="/admin/"
+                    class="inline-flex items-center gap-1.5 text-slate-500 hover:text-blue-600 text-sm font-bold mb-3 transition-colors">
+                    <i class="ph-bold ph-arrow-left text-sm"></i> Quay lại Admin EduSpace
+                </a>
+                <div class="flex items-center gap-2 text-violet-600 font-bold text-xs uppercase tracking-wider mb-1">
+                    <i class="ph-bold ph-robot"></i>
+                    <span>Lotus Chat Bot Manager</span>
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-950">Quản lý Lotus Bot</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <span id="user-badge"
+                    class="text-xs text-slate-500 font-medium bg-slate-100 border border-slate-200/60 px-3 py-1.5 rounded-full"></span>
+                <span
+                    class="text-xs text-slate-500 font-medium bg-violet-50 border border-violet-200/60 text-violet-700 px-3 py-1.5 rounded-full">
+                    Realtime Database
+                </span>
+            </div>
+        </header>
+
+        <!-- Info Banner -->
+        <div class="glass-card rounded-2xl p-4 mb-8 flex items-start gap-3 border border-blue-100 bg-blue-50/50">
+            <i class="ph-bold ph-info text-blue-500 text-lg mt-0.5 shrink-0"></i>
+            <div class="text-sm text-slate-700">
+                <strong>Cách hoạt động:</strong> Bot đang chạy ngầm trên máy tính qua PM2. Mọi thay đổi tại đây sẽ được
+                đồng bộ tức thì qua Firebase Realtime Database, và bot sẽ tự nhận cấu hình mới ngay lập tức.
+            </div>
+        </div>
+
+        <!-- Bot Cards -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="bots-list">
+            <div class="glass-card rounded-3xl p-8 text-center col-span-full">
+                <i class="ph-bold ph-spinner animate-spin text-3xl text-slate-400 mb-3 block"></i>
+                <p class="text-slate-400 font-semibold">Đang kết nối với Realtime Database...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="status-toast"
+        class="fixed bottom-6 right-6 z-[100001] transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div id="status-toast-inner"
+            class="flex items-center gap-3 px-5 py-3 rounded-xl bg-slate-900 text-white text-sm font-bold shadow-xl border border-slate-800">
+            <i id="status-toast-icon" class="ph-bold"></i>
+            <span id="status-toast-text">Thông báo</span>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const AUTHORIZED_ADMIN_HASHES = [
+            "681bb2d3f8a4e4cedbb0cba5d1763427361b99629bda0357c8c1a5b950f722e0", // nhatdang
+        ];
+
+        async function hashSHA256(text) {
+            const msgUint8 = new TextEncoder().encode(text);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function getFirebaseApp() {
+            if (getApps().length > 0) return getApp();
+            let attempts = 0;
+            while (typeof window.getEduKeys !== 'function' && attempts < 30) {
+                await new Promise(r => setTimeout(r, 200));
+                attempts++;
+            }
+            if (typeof window.getEduKeys !== 'function') throw new Error('Config chưa tải xong.');
+            const keys = await window.getEduKeys();
+            return initializeApp({
+                apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
+                authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
+                databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
+                projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
+                storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
+                messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
+                appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
+            });
+        }
+
+        function showAccessDenied(title, desc) {
+            document.getElementById('lock-icon-container').className = "mx-auto w-16 h-16 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm";
+            document.getElementById('lock-icon-container').innerHTML = `<i class="ph-bold ph-lock-simple"></i>`;
+            document.getElementById('lock-title').textContent = title;
+            document.getElementById('lock-title').className = "text-xl font-extrabold mb-2 tracking-tight text-rose-600";
+            document.getElementById('lock-desc').textContent = desc;
+            document.getElementById('lock-action-btn').classList.remove('hidden');
+        }
+
+        function showToast(message, type = "success") {
+            const toast = document.getElementById('status-toast');
+            const inner = document.getElementById('status-toast-inner');
+            document.getElementById('status-toast-text').textContent = message;
+            if (type === "success") {
+                inner.className = "flex items-center gap-3 px-5 py-3 rounded-xl bg-emerald-500 text-white text-sm font-bold shadow-xl border border-emerald-400";
+                document.getElementById('status-toast-icon').className = "ph-bold ph-check-circle text-lg";
+            } else {
+                inner.className = "flex items-center gap-3 px-5 py-3 rounded-xl bg-rose-500 text-white text-sm font-bold shadow-xl border border-rose-400";
+                document.getElementById('status-toast-icon').className = "ph-bold ph-warning-octagon text-lg";
+            }
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function renderBots(bots, rtdb) {
+            const container = document.getElementById("bots-list");
+            container.innerHTML = "";
+
+            ['bot1', 'bot2'].forEach((botId, idx) => {
+                const botData = bots[botId] || { status: 'off', allowed_users: {}, allow_all: false };
+                const isOn = botData.status === 'on';
+                const colors = ['blue', 'violet'];
+                const color = colors[idx];
+
+                let usersHtml = "";
+                if (botData.allowed_users && Object.keys(botData.allowed_users).length > 0) {
+                    Object.keys(botData.allowed_users).forEach(uid => {
+                        usersHtml += `
+                            <tr class="hover:bg-slate-50 transition-colors group">
+                                <td class="px-4 py-3 font-mono font-bold text-slate-800 text-sm">${uid}</td>
+                                <td class="px-4 py-3 text-right">
+                                    <button data-bot="${botId}" data-uid="${uid}" class="remove-user-btn px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-bold transition-all opacity-0 group-hover:opacity-100">Xóa</button>
+                                </td>
+                            </tr>`;
+                    });
+                } else {
+                    usersHtml = `<tr><td colspan="2" class="px-4 py-5 text-center text-sm text-slate-400 font-medium">Chưa có ai trong danh sách</td></tr>`;
+                }
+
+                container.innerHTML += `
+                    <div class="glass-card rounded-3xl overflow-hidden border border-slate-200/85">
+                        <!-- Card Header -->
+                        <div class="p-6 border-b border-slate-200/80 flex items-center justify-between bg-gradient-to-br from-${color}-50/50 to-transparent">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-${color}-100 text-${color}-600 rounded-xl flex items-center justify-center text-xl">
+                                    <i class="ph-bold ph-robot"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-extrabold text-slate-950">Lotus Bot ${idx + 1}</h3>
+                                    <p class="text-xs text-slate-400 font-medium">ID: ${botId}</p>
+                                </div>
+                            </div>
+                            <button data-bot="${botId}" data-target="${isOn ? 'off' : 'on'}" class="toggle-btn px-5 py-2 rounded-full text-sm font-extrabold text-white transition-all ${isOn ? 'bg-emerald-500 hover:bg-emerald-600 shadow-md shadow-emerald-500/25' : 'bg-rose-500 hover:bg-rose-600 shadow-md shadow-rose-500/25'}">
+                                <i class="ph-bold ${isOn ? 'ph-check-circle' : 'ph-x-circle'} mr-1"></i>${isOn ? 'Đang BẬT' : 'Đang TẮT'}
+                            </button>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-6 space-y-5">
+                            <!-- Public/Private toggle -->
+                            <label class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl cursor-pointer hover:bg-slate-100 transition-colors border border-slate-200/60">
+                                <div>
+                                    <p class="font-bold text-slate-800 text-sm">Chế độ Public</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">Cho phép tất cả mọi người nhắn tin</p>
+                                </div>
+                                <div class="relative">
+                                    <input type="checkbox" data-bot="${botId}" class="allow-all-cb sr-only" ${botData.allow_all ? 'checked' : ''}>
+                                    <div class="w-11 h-6 rounded-full transition-colors ${botData.allow_all ? 'bg-emerald-500' : 'bg-slate-300'} relative">
+                                        <div class="absolute top-0.5 ${botData.allow_all ? 'left-5' : 'left-0.5'} w-5 h-5 rounded-full bg-white shadow-sm transition-all"></div>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- Allowed users -->
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Danh sách cấp phép (Private Mode)</h4>
+                                <div class="border border-slate-200 rounded-xl overflow-hidden bg-white max-h-52 overflow-y-auto">
+                                    <table class="w-full text-left border-collapse">
+                                        <thead class="sticky top-0 bg-slate-50 border-b border-slate-200">
+                                            <tr class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                                <th class="px-4 py-3">Lotus Chat User ID</th>
+                                                <th class="px-4 py-3 text-right">Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="users-table-${botId}" class="divide-y divide-slate-100">
+                                            ${usersHtml}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Add user input -->
+                                <div class="flex gap-2 mt-3">
+                                    <input type="text" id="new-user-${botId}" placeholder="Nhập Lotus Chat User ID..." class="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-${color}-500 focus:ring-4 focus:ring-${color}-500/10 transition-all">
+                                    <button data-bot="${botId}" class="add-user-btn px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-bold transition-all shadow-md">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+
+            // Attach event listeners
+            container.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const botId = btn.dataset.bot;
+                    const target = btn.dataset.target;
+                    await set(ref(rtdb, `/lotus_bots/${botId}/status`), target);
+                    showToast(`Đã ${target === 'on' ? 'bật' : 'tắt'} ${botId}!`, 'success');
+                });
+            });
+
+            container.querySelectorAll('.allow-all-cb').forEach(cb => {
+                cb.addEventListener('change', async () => {
+                    const botId = cb.dataset.bot;
+                    await set(ref(rtdb, `/lotus_bots/${botId}/allow_all`), cb.checked);
+                    showToast(`Đã cập nhật chế độ ${cb.checked ? 'Public' : 'Private'}!`, 'success');
+                });
+            });
+
+            container.querySelectorAll('.add-user-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const botId = btn.dataset.bot;
+                    const input = document.getElementById(`new-user-${botId}`);
+                    const userId = input.value.trim();
+                    if (!userId) return;
+                    await set(ref(rtdb, `/lotus_bots/${botId}/allowed_users/${userId}`), true);
+                    input.value = '';
+                    showToast(`Đã cấp quyền cho ${userId}!`, 'success');
+                });
+            });
+
+            container.querySelectorAll('.remove-user-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const botId = btn.dataset.bot;
+                    const userId = btn.dataset.uid;
+                    if (!confirm(`Xoá quyền truy cập của ${userId}?`)) return;
+                    await remove(ref(rtdb, `/lotus_bots/${botId}/allowed_users/${userId}`));
+                    showToast(`Đã xoá quyền của ${userId}!`, 'success');
+                });
+            });
+        }
+
+        async function start() {
+            let app;
+            try {
+                app = await getFirebaseApp();
+            } catch (err) {
+                showAccessDenied('Lỗi cấu hình', err.message);
+                return;
+            }
+
+            const auth = getAuth(app);
+            const firestoreDb = getFirestore(app);
+            const rtdb = getDatabase(app);
+
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    showAccessDenied("Chưa đăng nhập", "Bạn cần đăng nhập bằng tài khoản Admin để tiếp tục.");
+                    return;
+                }
+
+                try {
+                    const userSnap = await getDoc(doc(firestoreDb, 'users', user.uid));
+                    if (!userSnap.exists()) {
+                        showAccessDenied("Không tìm thấy hồ sơ", "Tài khoản chưa có dữ liệu hồ sơ NDID.");
+                        return;
+                    }
+
+                    const userData = userSnap.data();
+                    const ndid = userData.ndid || (user.email || '').split('@')[0] || user.uid;
+
+                    if (userData.role !== 'admin' && ndid !== 'nhatdang' && ndid !== '@nhatdang' && user.email !== 'nhatdang10.nd@gmail.com') {
+                        showAccessDenied("Từ chối truy cập", `Tài khoản "${ndid}" không có quyền Admin.`);
+                        return;
+                    }
+
+                    // Granted!
+                    document.getElementById('admin-lock-screen').classList.add('hidden');
+                    document.getElementById('admin-dashboard').classList.remove('hidden');
+                    document.getElementById('user-badge').textContent = `${ndid}`;
+                    showToast("Xác thực thành công!", "success");
+
+                    // Listen realtime
+                    onValue(ref(rtdb, '/lotus_bots'), (snapshot) => {
+                        renderBots(snapshot.val() || {}, rtdb);
+                    });
+
+                } catch (err) {
+                    showAccessDenied("Lỗi xác thực", err.message);
+                }
+            });
+        }
+
+        start();
+    </script>
+</body>
+
+</html>

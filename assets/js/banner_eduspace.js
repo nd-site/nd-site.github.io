@@ -69,7 +69,7 @@ class AnnouncementCarousel {
             }
         }
 
-        container.className = "w-full max-w-4xl mx-auto mb-8 overflow-hidden relative touch-pan-y select-none";
+        container.className = "w-full max-w-4xl mx-auto mt-6 mb-8 overflow-hidden relative touch-pan-y select-none";
 
         this.renderStructure();
         this.startAutoSlide();
@@ -89,7 +89,7 @@ class AnnouncementCarousel {
             slide.className = "w-full flex-shrink-0 px-4 md:px-0";
 
             slide.innerHTML = `
-                <div class="relative flex flex-col md:flex-row items-center justify-between p-1 bg-gradient-to-r ${item.gradient} rounded-[1.5rem] shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group">
+                <div class="relative flex flex-col md:flex-row items-center justify-between p-1 bg-gradient-to-r ${item.gradient} rounded-[1.5rem] transition-all duration-500 overflow-hidden group">
                     
                     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none"></div>
                     <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/20 rounded-full blur-3xl group-hover:bg-white/30 transition-all duration-700 pointer-events-none"></div>

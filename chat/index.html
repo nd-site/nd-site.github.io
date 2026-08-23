@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/assets/images/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatND by ND Labs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>ChatND - ND Labs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
 
-    <!-- KaTeX & Marked.js for NDAI Math & Markdown rendering (Inherited from EduAI) -->
+    <!-- KaTeX & Marked.js for Math & Markdown -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -18,9 +18,118 @@
     <link rel="stylesheet" href="/chat/chat.css">
     <script src="/assets/js/nd-navbar.js" defer></script>
     <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/api-service.js"></script>
+    <script src="/assets/js/cloudflare-storage.js"></script>
+    <script src="/assets/js/nd-chat-core.js"></script>
     <script src="/assets/js/firebase-init.js" type="module"></script>
     <script src="/font/font.js"></script>
+
+    <style>
+        .chat-media-preview-box {
+            padding: 8px 12px;
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .media-tag-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #0369a1;
+            background: #e0f2fe;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        .msg-file-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 14px;
+            padding: 10px 14px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            color: #1e293b;
+        }
+
+        .msg-file-download-btn {
+            background: #0284c7;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .msg-file-download-btn:hover {
+            background: #0369a1;
+        }
+
+        .msg-img-preview {
+            max-width: 280px;
+            max-height: 240px;
+            border-radius: 14px;
+            object-fit: cover;
+            margin-top: 6px;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .msg-video-player {
+            max-width: 320px;
+            border-radius: 14px;
+            margin-top: 6px;
+        }
+
+        .msg-audio-player {
+            width: 260px;
+            margin-top: 6px;
+        }
+
+        .sidebar-tabs-row {
+            display: flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 12px;
+            margin-top: 10px;
+            gap: 4px;
+        }
+
+        .sidebar-tab-btn {
+            flex: 1;
+            padding: 6px 10px;
+            border: none;
+            background: transparent;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .sidebar-tab-btn.active {
+            background: #fff;
+            color: #0284c7;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+    </style>
 </head>
 
 <body>
@@ -40,21 +149,42 @@
 
                 <div class="search-box-rel">
                     <i class="ph-bold ph-magnifying-glass"></i>
-                    <input type="text" id="search-ndid-input" class="search-input" placeholder="Tìm theo tên hoặc NDID..." autocomplete="off">
+                    <input type="text" id="search-ndid-input" class="search-input" placeholder="Tìm theo tên, NDID hoặc CodeID..." autocomplete="off">
                     <div id="search-results-overlay" class="search-results-overlay"></div>
+                </div>
+
+                <!-- Tabs: Trò chuyện cá nhân & Nhóm chat -->
+                <div class="sidebar-tabs-row">
+                    <button type="button" id="tab-btn-direct" class="sidebar-tab-btn active">
+                        <i class="ph-bold ph-user"></i> Cá nhân
+                    </button>
+                    <button type="button" id="tab-btn-groups" class="sidebar-tab-btn">
+                        <i class="ph-bold ph-users-three"></i> Nhóm chat
+                    </button>
                 </div>
             </div>
 
             <!-- Active Conversations List -->
             <div id="conversations-list" class="conversations-list">
-                <div class="chat-placeholder-info">
-                    Đang tải danh sách trò chuyện...
+                <div class="chat-placeholder-info">Đang tải danh sách trò chuyện...</div>
+            </div>
+
+            <!-- Groups List Container -->
+            <div id="groups-list" class="conversations-list hidden">
+                <div style="padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 12px; font-weight: 800; color: #475569;">NHÓM TRÒ CHUYỆN</span>
+                    <button type="button" id="btn-create-group" style="padding: 4px 10px; background: #0284c7; color: #fff; border-radius: 8px; font-size: 11px; font-weight: 700; border: none; cursor: pointer;">
+                        + Tạo nhóm
+                    </button>
+                </div>
+                <div id="group-items-container">
+                    <div class="chat-placeholder-info">Đang tải nhóm chat...</div>
                 </div>
             </div>
         </aside>
 
         <!-- Resizable Divider Bar -->
-        <div id="chat-resizer" class="chat-resizer" title="Kéo để điều chỉnh kích thước thanh điều hướng"></div>
+        <div id="chat-resizer" class="chat-resizer" title="Kéo để điều chỉnh kích thước"></div>
 
         <!-- Main Chat Panel -->
         <main class="chat-main-panel">
@@ -64,7 +194,7 @@
                     <i class="ph-duotone ph-chat-circle-dots"></i>
                 </div>
                 <h3>Chào mừng đến với ChatND by ND Labs</h3>
-                <p>Nhắn tin trực tiếp với <strong>Admin @nhatdang</strong>, hỏi đáp cùng <strong>NDAI</strong> hoặc tìm bạn bè để bắt đầu trò chuyện.</p>
+                <p>Nhắn tin trực tiếp với <strong>Admin @nhatdang</strong>, tham gia <strong>Nhóm chat</strong> hoặc gửi tệp tin đa phương tiện chất lượng cao.</p>
             </div>
 
             <!-- Active Chat Interface -->
@@ -74,7 +204,7 @@
                         <button id="mobile-back-btn" class="mobile-back-btn" title="Quay lại">
                             <i class="ph-bold ph-arrow-left"></i>
                         </button>
-                        <img id="active-contact-avatar" src="/assets/images/logo.png" alt="Contact Avatar" class="chat-header-avatar" onerror="this.src='/assets/images/logo.png'">
+                        <img id="active-contact-avatar" src="/assets/images/logo.png" alt="Avatar" class="chat-header-avatar" onerror="this.src='/assets/images/logo.png'">
                         <div>
                             <div id="active-contact-name" class="chat-header-title">Người dùng</div>
                             <div id="active-contact-ndid" class="chat-header-sub">ndid</div>
@@ -88,9 +218,24 @@
                 <!-- Messages Container -->
                 <div id="messages-container" class="messages-container"></div>
 
+                <!-- Attachment Pending Bar -->
+                <div id="attachment-preview-bar" class="chat-media-preview-box hidden">
+                    <div class="media-tag-chip">
+                        <i id="preview-file-icon" class="ph-bold ph-file"></i>
+                        <span id="preview-file-name">file.png</span>
+                        <span id="preview-file-size" style="opacity: 0.7; font-size: 11px;">(0 KB)</span>
+                    </div>
+                    <button type="button" id="btn-cancel-attachment" style="background: none; border: none; color: #ef4444; font-weight: 800; cursor: pointer;">✕</button>
+                </div>
+
                 <!-- Input Form -->
                 <form id="chat-input-form" class="chat-input-bar">
-                    <input type="text" id="message-text-input" class="chat-message-input" placeholder="Nhập tin nhắn..." autocomplete="off" required>
+                    <label for="chat-file-input" class="btn-attach-file" title="Gửi hình ảnh, video, âm thanh, tệp tin...">
+                        <i class="ph-bold ph-paperclip" style="font-size: 20px; color: #64748b; cursor: pointer;"></i>
+                    </label>
+                    <input type="file" id="chat-file-input" class="hidden" accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.zip,.rar">
+
+                    <input type="text" id="message-text-input" class="chat-message-input" placeholder="Nhập tin nhắn..." autocomplete="off">
                     <button type="submit" id="btn-send-message" class="btn-send-message">
                         <span>Gửi</span>
                         <i class="ph-bold ph-paper-plane-right"></i>
@@ -100,88 +245,71 @@
         </main>
     </div>
 
+    <!-- Create Group Modal -->
+    <div id="create-group-modal" class="modal hidden" style="position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 16px;">
+        <div style="background: #fff; max-width: 440px; width: 100%; border-radius: 24px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0;">Tạo Nhóm Trò Chuyện Mới</h3>
+                <button type="button" id="close-create-group-modal" style="border: none; background: none; font-size: 18px; cursor: pointer; color: #94a3b8;">✕</button>
+            </div>
+            <form id="create-group-form" style="display: flex; flex-direction: column; gap: 14px;">
+                <div>
+                    <label style="font-size: 12px; font-weight: 700; color: #334155;">Tên nhóm chat *</label>
+                    <input type="text" id="new-group-name" required placeholder="Ví dụ: Hội Học Tập Toán 10" style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-family: inherit; font-size: 13px; margin-top: 4px; box-sizing: border-box;">
+                </div>
+                <div>
+                    <label style="font-size: 12px; font-weight: 700; color: #334155;">Mô tả nhóm</label>
+                    <input type="text" id="new-group-desc" placeholder="Giới thiệu mục đích nhóm..." style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-family: inherit; font-size: 13px; margin-top: 4px; box-sizing: border-box;">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #334155; cursor: pointer;">
+                        <input type="checkbox" id="new-group-public" checked style="accent-color: #0284c7;">
+                        <span>Công khai</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #334155; cursor: pointer;">
+                        <input type="checkbox" id="new-group-approval" style="accent-color: #0284c7;">
+                        <span>Cần duyệt khi vào</span>
+                    </label>
+                </div>
+                <button type="submit" style="background: #0284c7; color: #fff; border: none; padding: 12px; border-radius: 14px; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 6px;">
+                    Tạo Nhóm Ngay
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import {
             getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, addDoc, query, where, orderBy, onSnapshot, serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-        // Global Error suppressor for DevTools clean output
-        window.addEventListener('unhandledrejection', (event) => {
-            if (event.reason && (event.reason.code === 403 || event.reason.status === 403 || event.reason.code === 'permission-denied')) {
-                event.preventDefault();
-            }
-        });
+        import { getDatabase, ref as rRef, onValue as rOnValue, push as rPush, set as rSet } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
         let app = getApps().length > 0 ? getApp() : null;
         let auth = app ? getAuth(app) : null;
         let db = app ? getFirestore(app) : null;
-
-        async function ensureFirebase() {
-            if (auth && db) return { auth, db };
-            let attempts = 0;
-            while ((!window.firebaseAuth || !window.firebaseFirestore) && attempts < 50) {
-                await new Promise(r => setTimeout(r, 50));
-                attempts++;
-            }
-            if (window.firebaseAuth && window.firebaseFirestore) {
-                auth = window.firebaseAuth;
-                db = window.firebaseFirestore;
-                return { auth, db };
-            }
-            if (getApps().length > 0) {
-                app = getApp();
-                auth = getAuth(app);
-                db = getFirestore(app);
-                return { auth, db };
-            }
-            return null;
-        }
+        let rdb = app ? getDatabase(app) : null;
 
         let currentUser = null;
         let currentUserNdid = '';
         let currentUserCodeId = '';
         let activeContact = null;
         let activeChatId = null;
+        let activeGroupRoom = null;
+        let selectedAttachmentFile = null;
         let unsubscribeMessages = null;
         let unsubscribeConversations = null;
-        let openPickerMsgId = null;
-        let aiHasGreeted = false;
-        const resolvedUsersCache = {};
-
-        // Pinned Admin Contact Object (Will be resolved to real Firestore UID)
-        let adminContact = {
-            uid: null, // Resolved from ndids/nhatdang
-            codeId: '00000000',
-            ndid: 'nhatdang',
-            name: 'Nhật Đăng (Admin)',
-            avatar: '/assets/images/logo.png',
-            isAdmin: true,
-            isPinned: true
-        };
-
-        // Pinned NDAI Bot Contact Object
-        const aiBotContact = {
-            uid: 'ndai_bot',
-            ndid: 'ndai',
-            name: 'NDAI Assistant ✨',
-            avatar: '/assets/images/logo.png',
-            isBot: true,
-            isPinned: true
-        };
-
-        // Emojis list
-        const EMOJI_LIST = ['❤️', '👍', '😂', '😮', '😢', '👏'];
 
         // Elements
         const myAvatar = document.getElementById('my-avatar');
         const myName = document.getElementById('my-name');
         const myNdid = document.getElementById('my-ndid');
-        const searchInput = document.getElementById('search-ndid-input');
-        const searchOverlay = document.getElementById('search-results-overlay');
         const convsListEl = document.getElementById('conversations-list');
-        
+        const groupsListEl = document.getElementById('groups-list');
+        const groupItemsContainer = document.getElementById('group-items-container');
+        const tabBtnDirect = document.getElementById('tab-btn-direct');
+        const tabBtnGroups = document.getElementById('tab-btn-groups');
         const chatEmptyState = document.getElementById('chat-empty-state');
         const activeChatWrapper = document.getElementById('active-chat-wrapper');
         const activeAvatar = document.getElementById('active-contact-avatar');
@@ -190,936 +318,442 @@
         const messagesContainer = document.getElementById('messages-container');
         const chatInputForm = document.getElementById('chat-input-form');
         const messageInput = document.getElementById('message-text-input');
-        const mobileBackBtn = document.getElementById('mobile-back-btn');
-        const appWrapper = document.getElementById('chat-app');
-        const sidebarEl = document.getElementById('chat-sidebar');
-        const resizerEl = document.getElementById('chat-resizer');
+        const fileInput = document.getElementById('chat-file-input');
+        const attachmentPreviewBar = document.getElementById('attachment-preview-bar');
+        const previewFileName = document.getElementById('preview-file-name');
+        const previewFileSize = document.getElementById('preview-file-size');
+        const previewFileIcon = document.getElementById('preview-file-icon');
+        const btnCancelAttachment = document.getElementById('btn-cancel-attachment');
 
-        // Restore Saved Sidebar Width
-        const savedSidebarW = localStorage.getItem('chat_sidebar_width');
-        if (savedSidebarW && sidebarEl && window.innerWidth > 768) {
-            sidebarEl.style.width = `${savedSidebarW}px`;
-        }
-
-        // Resizable Sidebar Handle Dragging Logic
-        let isResizing = false;
-        resizerEl.addEventListener('mousedown', (e) => {
-            isResizing = true;
-            resizerEl.classList.add('resizing');
-            document.body.style.cursor = 'col-resize';
-            document.body.style.userSelect = 'none';
+        // Tab Switching
+        tabBtnDirect.addEventListener('click', () => {
+            tabBtnDirect.classList.add('active');
+            tabBtnGroups.classList.remove('active');
+            convsListEl.classList.remove('hidden');
+            groupsListEl.classList.add('hidden');
         });
 
-        document.addEventListener('mousemove', (e) => {
-            if (!isResizing || !sidebarEl) return;
-            const containerRect = appWrapper.getBoundingClientRect();
-            let newWidth = e.clientX - containerRect.left;
+        tabBtnGroups.addEventListener('click', () => {
+            tabBtnGroups.classList.add('active');
+            tabBtnDirect.classList.remove('active');
+            groupsListEl.classList.remove('hidden');
+            convsListEl.classList.add('hidden');
+            loadGroupsList();
+        });
+
+        // File attachment handler
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            selectedAttachmentFile = file;
+            const category = window.NDChatCore ? window.NDChatCore.getFileCategory(file.type, file.name) : 'document';
             
-            // Constrain width safely between 240px and 520px
-            const MIN_W = 240;
-            const MAX_W = 520;
-            if (newWidth < MIN_W) newWidth = MIN_W;
-            if (newWidth > MAX_W) newWidth = MAX_W;
+            previewFileName.textContent = file.name;
+            previewFileSize.textContent = `(${window.NDChatCore ? window.NDChatCore.formatBytes(file.size) : file.size + ' B'})`;
+            
+            if (category === 'image') previewFileIcon.className = 'ph-bold ph-image';
+            else if (category === 'video') previewFileIcon.className = 'ph-bold ph-video';
+            else if (category === 'audio') previewFileIcon.className = 'ph-bold ph-speaker-high';
+            else previewFileIcon.className = 'ph-bold ph-file';
 
-            sidebarEl.style.width = `${newWidth}px`;
-            localStorage.setItem('chat_sidebar_width', newWidth);
+            attachmentPreviewBar.classList.remove('hidden');
         });
 
-        document.addEventListener('mouseup', () => {
-            if (isResizing) {
-                isResizing = false;
-                resizerEl.classList.remove('resizing');
-                document.body.style.cursor = '';
-                document.body.style.userSelect = '';
-            }
+        btnCancelAttachment.addEventListener('click', () => {
+            selectedAttachmentFile = null;
+            fileInput.value = '';
+            attachmentPreviewBar.classList.add('hidden');
         });
 
-        // Delete Conversation Event Listener
-        const deleteConvBtn = document.getElementById('delete-conv-btn');
-        if (deleteConvBtn) {
-            deleteConvBtn.addEventListener('click', async () => {
-                if (!activeChatId || !currentUser) return;
-                
-                if (activeChatId === 'chat_ndai_bot') {
-                    if (confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử trò chuyện với NDAI Assistant?')) {
-                        localStorage.removeItem('ndai_history_' + currentUser.uid);
-                        aiHistory = [
-                            { sender: 'bot', text: 'Xin chào! Tôi là NDAI Assistant ✨, trợ lý trí tuệ nhân tạo của ND Labs. Tôi có thể giúp bạn giải đáp thắc mắc và học tập.' }
-                        ];
-                        renderAiMessages();
-                    }
-                    return;
-                }
+        // Check direct URL param: /chat?<NDID> or /chat?u=<NDID>
+        function checkDirectUrlRouting() {
+            const search = window.location.search;
+            if (!search || search === '?') return;
 
-                if (!confirm('Bạn có chắc chắn muốn xóa vĩnh viễn cuộc trò chuyện này? Toàn bộ tin nhắn sẽ bị xóa sạch.')) {
-                    return;
-                }
-
-                try {
-                    // Delete all messages in subcollection
-                    const msgsSnap = await getDocs(collection(db, 'chats', activeChatId, 'messages'));
-                    const deletePromises = msgsSnap.docs.map(docSnap => 
-                        deleteDoc(doc(db, 'chats', activeChatId, 'messages', docSnap.id))
-                    );
-                    await Promise.all(deletePromises);
-
-                    // Delete main chat document
-                    await deleteDoc(doc(db, 'chats', activeChatId));
-
-                    // Reset UI state
-                    chatEmptyState.style.display = 'flex';
-                    activeChatWrapper.style.display = 'none';
-                    activeChatId = null;
-                    activeContact = null;
-                    appWrapper.classList.remove('mobile-active-chat');
-                    
-                    alert('Đã xóa cuộc trò chuyện thành công!');
-                } catch (err) {
-                    console.error("Delete conversation error:", err);
-                    alert('Có lỗi xảy ra khi xóa cuộc trò chuyện: ' + err.message);
-                }
-            });
-        }
-
-        // Helper: Generate permanent unused 8-digit CodeID (Admin @nhatdang gets 00000000)
-        async function ensureUserCodeId(dbTarget, targetUid, ndid = '', email = '') {
-            if (!dbTarget || !targetUid) return null;
-
-            // Admin @nhatdang CodeID is ALWAYS "00000000"
-            if (ndid === 'nhatdang' || ndid === '@nhatdang' || email === 'nhatdang10.nd@gmail.com' || (adminContact && targetUid === adminContact.uid)) {
-                const adminCode = '00000000';
-                try {
-                    await setDoc(doc(dbTarget, 'code_ids', adminCode), { uid: targetUid, ndid: 'nhatdang', createdAt: serverTimestamp() }, { merge: true });
-                    await setDoc(doc(dbTarget, 'users', targetUid), { codeId: adminCode }, { merge: true });
-                } catch (_) {}
-                return adminCode;
+            let targetNdid = '';
+            if (search.includes('=')) {
+                const params = new URLSearchParams(search);
+                targetNdid = params.get('u') || params.get('id') || params.get('ndid') || '';
+            } else {
+                targetNdid = search.substring(1);
             }
 
-            try {
-                const userRef = doc(dbTarget, 'users', targetUid);
-                const userSnap = await getDoc(userRef);
-                if (userSnap.exists() && userSnap.data().codeId) {
-                    return userSnap.data().codeId;
-                }
-
-                let newCodeId = null;
-                let attempts = 0;
-                while (!newCodeId && attempts < 15) {
-                    attempts++;
-                    const candidate = Math.floor(10000000 + Math.random() * 90000000).toString();
-                    const codeRef = doc(dbTarget, 'code_ids', candidate);
-                    const codeSnap = await getDoc(codeRef);
-                    if (!codeSnap.exists()) {
-                        await setDoc(codeRef, { uid: targetUid, ndid: ndid, createdAt: serverTimestamp() });
-                        await setDoc(userRef, { codeId: candidate }, { merge: true });
-                        newCodeId = candidate;
-                    }
-                }
-                return newCodeId;
-            } catch (e) {
-                console.warn("Error ensuring CodeID:", e);
-                return null;
-            }
-        }
-
-        // Helper: Resolve Real Admin UID (Targeting Nhật Đăng @nhatdang)
-        async function resolveAdminContact() {
-            try {
-                let targetUid = null;
-                const map1 = await getDoc(doc(db, 'ndids', 'nhatdang'));
-                if (map1.exists() && map1.data().uid) {
-                    targetUid = map1.data().uid;
-                } else {
-                    const uSnap = await getDocs(query(collection(db, 'users'), where('ndid', '==', 'nhatdang')));
-                    if (!uSnap.empty) {
-                        targetUid = uSnap.docs[0].id;
-                    }
-                }
-
-                if (targetUid) {
-                    adminContact.uid = targetUid;
-                    const uSnap = await getDoc(doc(db, 'users', targetUid));
-                    if (uSnap.exists()) {
-                        const d = uSnap.data();
-                        adminContact.name = d.fullname || d.displayName || 'Nhật Đăng (Admin)';
-                        if (d.photoURL) adminContact.avatar = d.photoURL;
-                    }
-                }
-            } catch (err) {
-                console.warn("Error resolving Admin UID:", err);
-            }
-        }
-
-        // Check Auth & Render UI Immediately (Zero Freeze guarantee)
-        ensureFirebase().then(services => {
-            if (!services || !services.auth) return;
-            auth = services.auth;
-            db = services.db;
-
-            onAuthStateChanged(auth, async (user) => {
-                if (!user) {
-                    window.location.href = '/auth/login/';
-                    return;
-                }
-                currentUser = user;
-
-                // 1. Immediately render profile from localStorage cache or Auth
-                let fullname = user.displayName || 'ND Member';
-                let ndid = user.email ? user.email.split('@')[0] : user.uid;
-                let avatar = user.photoURL || '/assets/images/logo.png';
-                let codeId = '';
-
-                try {
-                    const cached = localStorage.getItem('nd_user');
-                    if (cached) {
-                        const parsed = JSON.parse(cached);
-                        fullname = parsed.displayName || fullname;
-                        ndid = parsed.ndid || ndid;
-                        if (parsed.photoURL) avatar = parsed.photoURL;
-                        if (parsed.codeId) codeId = parsed.codeId;
-                    }
-                } catch (_) {}
-
-                currentUserNdid = ndid;
-                currentUserCodeId = codeId;
-                myName.textContent = fullname;
-                myNdid.innerHTML = `${ndid}${codeId ? `<div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId}</div>` : ''}`;
-                myAvatar.src = avatar;
-
-                // 2. Call loadConversationsList IMMEDIATELY!
-                if (currentUserCodeId) {
-                    loadConversationsList();
-                }
-
-                // 3. Asynchronously enrich profile & CodeID from Firestore in background
-                getDoc(doc(db, 'users', user.uid)).then(async (snap) => {
-                    if (snap.exists()) {
-                        const data = snap.data();
-                        fullname = data.fullname || fullname;
-                        ndid = data.ndid || ndid;
-                        if (data.photoURL) avatar = data.photoURL;
-                        codeId = data.codeId || codeId;
-
-                        currentUserNdid = ndid;
-                        currentUserCodeId = codeId;
-                        myName.textContent = fullname;
-                        myAvatar.src = avatar;
-                    }
-
-                    if (!codeId) {
-                        codeId = await ensureUserCodeId(db, user.uid, ndid, user.email);
-                        currentUserCodeId = codeId;
-                    }
-
-                    myNdid.innerHTML = `${ndid} <div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">CodeID: ${codeId || '...'}</div>`;
-                    
-                    // Reload list with the accurate CodeID
-                    loadConversationsList();
-                }).catch(() => {});
-
-                // 4. Asynchronously resolve Admin contact
-                resolveAdminContact();
-
-                // 5. Auto-cleanup any invalid legacy admin_nhatdang chats asynchronously
-                getDocs(query(collection(db, 'chats'), where('participants', 'array-contains', 'admin_nhatdang'))).then(invalidChatsSnap => {
-                    invalidChatsSnap.forEach(async (docSnap) => {
-                        try {
-                            const msgsSnap = await getDocs(collection(db, 'chats', docSnap.id, 'messages'));
-                            msgsSnap.forEach(async (mDoc) => {
-                                await deleteDoc(doc(db, 'chats', docSnap.id, 'messages', mDoc.id));
-                            });
-                            await deleteDoc(doc(db, 'chats', docSnap.id));
-                        } catch (_) {}
+            if (targetNdid) {
+                targetNdid = targetNdid.replace(/^@/, '').toLowerCase();
+                if (targetNdid === 'nhatdang' || targetNdid === 'admin') {
+                    selectConversation({
+                        codeId: '00000000',
+                        ndid: 'nhatdang',
+                        name: 'Nhật Đăng (Admin)',
+                        avatar: '/assets/images/logo.png',
+                        isAdmin: true
                     });
-                }).catch(() => {});
-            });
-        });
-
-        // Smart Search (Name + NDID + Admin)
-        let searchTimeout = null;
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            const rawVal = e.target.value.trim();
-            const val = rawVal.toLowerCase().replace(/^@/, '');
-            if (!val) {
-                searchOverlay.style.display = 'none';
-                searchOverlay.innerHTML = '';
-                return;
+                } else {
+                    // Find user in Firestore
+                    getDocs(query(collection(db, 'users'), where('ndid', '==', targetNdid))).then(snap => {
+                        if (!snap.empty) {
+                            const u = snap.docs[0].data();
+                            selectConversation({
+                                uid: snap.docs[0].id,
+                                codeId: u.codeId || '',
+                                ndid: u.ndid || targetNdid,
+                                name: u.fullname || u.displayName || 'ND Member',
+                                avatar: u.photoURL || '/assets/images/logo.png'
+                            });
+                        }
+                    }).catch(() => {});
+                }
             }
+        }
 
-            searchTimeout = setTimeout(async () => {
-                try {
-                    let results = [];
+        // Initialize Firebase services and state
+        window.addEventListener('firebase-ready', () => {
+            if (window.firebaseAuth && window.firebaseFirestore) {
+                auth = window.firebaseAuth;
+                db = window.firebaseFirestore;
+                rdb = window.firebaseDb;
 
-                    // 1. Search Admin @nhatdang match
-                    if ('nhatdang'.includes(val) || 'admin'.includes(val) || 'nhật đăng'.includes(val)) {
-                        results.push({
-                            uid: adminContact.uid,
-                            ndid: '@nhatdang',
-                            fullname: adminContact.name,
-                            photoURL: adminContact.avatar,
-                            isAdmin: true
-                        });
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user) {
+                        window.location.href = '/auth/login/';
+                        return;
                     }
+                    currentUser = user;
 
-                    // 2. Search NDAI Bot match
-                    if ('ndai'.includes(val) || 'bot'.includes(val) || 'ai'.includes(val) || 'trợ lý'.includes(val) || 'eduai'.includes(val)) {
-                        results.push({
-                            uid: 'ndai_bot',
-                            ndid: 'ndai',
-                            fullname: 'NDAI Assistant ✨',
-                            photoURL: '/assets/images/logo.png',
-                            isBot: true
-                        });
-                    }
+                    const cached = JSON.parse(localStorage.getItem('nd_user') || '{}');
+                    currentUserNdid = cached.ndid || user.displayName || user.uid;
+                    currentUserCodeId = cached.codeId || '';
 
-                    // 3. Search Firestore users collection by name or ndid
+                    myAvatar.src = user.photoURL || cached.photoURL || '/assets/images/logo.png';
+                    myName.textContent = user.displayName || cached.displayName || 'ND Member';
+                    myNdid.innerHTML = `${currentUserNdid}${currentUserCodeId ? `<div style="font-size:11px;color:#94a3b8;margin-top:2px;">CodeID: ${currentUserCodeId}</div>` : ''}`;
+
+                    // Fetch Firestore user doc
                     try {
-                        const usersSnap = await getDocs(collection(db, 'users'));
-                        usersSnap.forEach(docSnap => {
-                            const u = docSnap.data();
-                            const uUid = docSnap.id;
-                            if (uUid === currentUser.uid) return;
-
-                            const uName = (u.fullname || u.displayName || '').toLowerCase();
-                            const uNdid = (u.ndid || '').toLowerCase();
-                            const uCodeId = (u.codeId || '').toLowerCase();
-
-                            if (uName.includes(val) || uNdid.includes(val) || uCodeId.includes(val)) {
-                                if (!results.some(r => r.uid === uUid)) {
-                                    results.push({
-                                        uid: uUid,
-                                        ndid: u.ndid || uUid,
-                                        codeId: u.codeId || '',
-                                        fullname: u.fullname || u.displayName || 'ND Member',
-                                        photoURL: u.photoURL || '/assets/images/logo.png',
-                                        isAdmin: u.role === 'admin' || u.ndid === 'nhatdang' || uUid === adminContact.uid
-                                    });
-                                }
-                            }
-                        });
+                        const snap = await getDoc(doc(db, 'users', user.uid));
+                        if (snap.exists()) {
+                            const d = snap.data();
+                            currentUserNdid = d.ndid || currentUserNdid;
+                            currentUserCodeId = d.codeId || currentUserCodeId;
+                            myNdid.innerHTML = `${currentUserNdid} <div style="font-size:11px;color:#94a3b8;margin-top:2px;">CodeID: ${currentUserCodeId}</div>`;
+                        }
                     } catch (_) {}
 
-                    if (results.length === 0) {
-                        searchOverlay.innerHTML = `<div style="padding:14px;text-align:center;color:var(--text-soft);font-size:13px;">Không tìm thấy "${escapeHtml(rawVal)}"</div>`;
-                    } else {
-                        searchOverlay.innerHTML = results.map(u => `
-                            <div class="search-result-item" data-uid="${u.uid}" data-codeid="${u.codeId || ''}" data-ndid="${u.ndid}" data-name="${escapeHtml(u.fullname)}" data-avatar="${u.photoURL}" data-is-admin="${u.isAdmin ? 'true' : 'false'}" data-is-bot="${u.isBot ? 'true' : 'false'}">
-                                <img src="${u.photoURL}" alt="" onerror="this.src='/assets/images/logo.png'">
-                                <div>
-                                    <div style="font-weight:800;font-size:14px;color:var(--text-main);display:flex;align-items:center;gap:6px;">
-                                        ${escapeHtml(u.fullname)}
-                                        ${u.isAdmin ? '<span class="pinned-tag admin-badge">🛡️ Admin</span>' : ''}
-                                        ${u.isBot ? '<span class="pinned-tag ai-badge">🤖 AI</span>' : ''}
-                                    </div>
-                                    <div style="font-size:12px;color:var(--primary);font-weight:700;">
-                                        ${u.ndid} ${u.codeId ? `<span style="color:var(--text-muted);font-weight:600;margin-left:4px;">(CodeID: ${u.codeId})</span>` : ''}
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('');
-
-                        searchOverlay.querySelectorAll('.search-result-item').forEach(item => {
-                            item.addEventListener('click', () => {
-                                const contact = {
-                                    uid: item.dataset.uid,
-                                    codeId: item.dataset.codeid || '',
-                                    ndid: item.dataset.ndid,
-                                    name: item.dataset.name,
-                                    avatar: item.dataset.avatar,
-                                    isAdmin: item.dataset.isAdmin === 'true' || item.dataset.codeid === '00000000',
-                                    isBot: item.dataset.isBot === 'true'
-                                };
-                                searchOverlay.style.display = 'none';
-                                searchInput.value = '';
-                                selectConversation(contact);
-                            });
-                        });
-                    }
-                    searchOverlay.style.display = 'block';
-                } catch (err) {
-                    console.warn("Search error:", err);
-                }
-            }, 300);
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!searchInput.contains(e.target) && !searchOverlay.contains(e.target)) {
-                searchOverlay.style.display = 'none';
-            }
-            if (openPickerMsgId && !e.target.closest('.reaction-picker-bar') && !e.target.closest('.msg-bubble')) {
-                closePicker();
+                    loadDirectConversations();
+                    checkDirectUrlRouting();
+                });
             }
         });
 
-        // Load Conversations List (Admin & NDAI Pinned at top)
-        function loadConversationsList() {
+        // Load Direct Conversations
+        function loadDirectConversations() {
             if (unsubscribeConversations) unsubscribeConversations();
             if (!currentUserCodeId) return;
 
-            try {
-                const q = query(
-                    collection(db, 'chats'),
-                    where('participants', 'array-contains', currentUserCodeId)
-                );
+            const q = query(
+                collection(db, 'chats'),
+                where('participants', 'array-contains', currentUserCodeId)
+            );
 
-                unsubscribeConversations = onSnapshot(q, async (snapshot) => {
-                    let userConvs = [];
-                    snapshot.forEach(docSnap => {
-                        userConvs.push({ id: docSnap.id, ...docSnap.data() });
-                    });
+            unsubscribeConversations = onSnapshot(q, (snapshot) => {
+                let list = [];
+                snapshot.forEach(d => list.push({ id: d.id, ...d.data() }));
 
-                    userConvs.sort((a, b) => (b.updatedAt?.toMillis?.() || 0) - (a.updatedAt?.toMillis?.() || 0));
+                let html = '';
 
-                    let html = '';
+                // Admin Nhật Đăng Pinned item
+                const adminChatId = `chat_${[currentUserCodeId, '00000000'].sort().join('_')}`;
+                const isAdminActive = activeChatId === adminChatId;
 
-                    // 1. PINNED ITEM 1: Admin @nhatdang (Uses CodeID "00000000")
-                    const adminChatId = `chat_${[currentUserCodeId, '00000000'].sort().join('_')}`;
-                    const isAdminSelected = activeChatId === adminChatId;
+                html += `
+                    <div class="conv-item pinned admin-pinned ${isAdminActive ? 'active' : ''}" data-codeid="00000000" data-ndid="nhatdang" data-name="Nhật Đăng (Admin)" data-avatar="/assets/images/logo.png">
+                        <div class="conv-avatar-rel">
+                            <img src="/assets/images/logo.png" alt="Admin">
+                        </div>
+                        <div class="conv-details">
+                            <div class="conv-top-row">
+                                <span class="conv-name">Nhật Đăng <span class="pinned-tag admin-badge">🛡️ Admin</span></span>
+                                <span class="conv-time">📌 Ghim</span>
+                            </div>
+                            <div class="conv-last-msg">Nhắn tin trực tiếp tới Admin ND Labs</div>
+                        </div>
+                    </div>
+                `;
+
+                // Render other direct messages
+                list.forEach(conv => {
+                    const otherCodeId = conv.participants.find(id => id !== currentUserCodeId) || currentUserCodeId;
+                    if (otherCodeId === '00000000') return;
+
+                    const d = conv.participantDetails?.[otherCodeId] || {};
+                    const isSel = activeChatId === conv.id;
 
                     html += `
-                        <div class="conv-item pinned admin-pinned ${isAdminSelected ? 'active' : ''}" data-type="admin" data-codeid="00000000" data-ndid="nhatdang" data-name="${escapeHtml(adminContact.name)}" data-avatar="${adminContact.avatar}">
+                        <div class="conv-item ${isSel ? 'active' : ''}" data-chat-id="${conv.id}" data-codeid="${otherCodeId}" data-ndid="${d.ndid || 'ndid'}" data-name="${d.name || 'Thành viên'}" data-avatar="${d.avatar || '/assets/images/logo.png'}">
                             <div class="conv-avatar-rel">
-                                <img src="${adminContact.avatar}" alt="" onerror="this.src='/assets/images/logo.png'">
+                                <img src="${d.avatar || '/assets/images/logo.png'}" alt="">
                             </div>
                             <div class="conv-details">
                                 <div class="conv-top-row">
-                                    <span class="conv-name" style="display:flex;align-items:center;gap:4px;">
-                                        ${escapeHtml(adminContact.name)}
-                                        <span class="pinned-tag admin-badge">🛡️ Admin</span>
-                                    </span>
-                                    <span class="conv-time">📌 Ghim</span>
+                                    <span class="conv-name">${d.name || 'Thành viên'}</span>
                                 </div>
-                                <div class="conv-last-msg">Nhắn tin trực tiếp tới Admin ND Labs</div>
+                                <div class="conv-last-msg">${conv.lastMessage || 'Bắt đầu trò chuyện...'}</div>
                             </div>
                         </div>
                     `;
+                });
 
-                    // 2. PINNED ITEM 2: NDAI Assistant (AI Engine)
-                    const isAiSelected = activeChatId === 'chat_ndai_bot';
-                    html += `
-                        <div class="conv-item pinned ai-pinned ${isAiSelected ? 'active' : ''}" data-type="ai" data-codeid="99999999" data-ndid="ndai" data-name="NDAI Assistant ✨" data-avatar="/assets/images/logo.png">
-                            <div class="conv-avatar-rel">
-                                <img src="/assets/images/logo.png" alt="" onerror="this.src='/assets/images/logo.png'">
-                            </div>
-                            <div class="conv-details">
-                                <div class="conv-top-row">
-                                    <span class="conv-name" style="display:flex;align-items:center;gap:4px;">
-                                        NDAI Assistant ✨
-                                        <span class="pinned-tag ai-badge">🤖 AI</span>
-                                    </span>
-                                    <span class="conv-time">📌 Ghim</span>
-                                </div>
-                                <div class="conv-last-msg">Trợ lý trí tuệ nhân tạo ND Labs</div>
-                            </div>
-                        </div>
-                    `;
+                convsListEl.innerHTML = html;
 
-                    // 3. REGULAR USER CONVERSATIONS
-                    for (const conv of userConvs) {
-                        const otherCodeId = conv.participants.find(id => id !== currentUserCodeId) || currentUserCodeId;
-                        if (otherCodeId === '00000000' || otherCodeId === '99999999') continue; // Skip admin and bot
-
-                        let otherName = 'ND Member';
-                        let otherNdid = 'ndid';
-                        let otherAvatar = '/assets/images/logo.png';
-
-                        if (conv.participantDetails && conv.participantDetails[otherCodeId]) {
-                            const d = conv.participantDetails[otherCodeId];
-                            otherName = d.name || otherName;
-                            otherNdid = d.ndid || otherNdid;
-                            otherAvatar = d.avatar || otherAvatar;
-                        }
-
-                        const isSelected = activeChatId === conv.id;
-                        const timeStr = conv.updatedAt?.toDate ? formatShortTime(conv.updatedAt.toDate()) : '';
-
-                        html += `
-                            <div class="conv-item ${isSelected ? 'active' : ''}" data-chat-id="${conv.id}" data-codeid="${otherCodeId}" data-ndid="${otherNdid}" data-name="${escapeHtml(otherName)}" data-avatar="${otherAvatar}">
-                                <div class="conv-avatar-rel">
-                                    <img src="${otherAvatar}" alt="" onerror="this.src='/assets/images/logo.png'">
-                                </div>
-                                <div class="conv-details">
-                                    <div class="conv-top-row">
-                                        <span class="conv-name">${escapeHtml(otherName)}</span>
-                                        <span class="conv-time">${timeStr}</span>
-                                    </div>
-                                    <div class="conv-last-msg">${escapeHtml(conv.lastMessage || 'Bắt đầu trò chuyện...')}</div>
-                                </div>
-                            </div>
-                        `;
-                    }
-
-                    convsListEl.innerHTML = html;
-
-                    convsListEl.querySelectorAll('.conv-item').forEach(item => {
-                        item.addEventListener('click', () => {
-                            const contact = {
-                                codeId: item.dataset.codeid,
-                                ndid: item.dataset.ndid,
-                                name: item.dataset.name,
-                                avatar: item.dataset.avatar,
-                                isAdmin: item.dataset.type === 'admin' || item.dataset.codeid === '00000000',
-                                isBot: item.dataset.type === 'ai'
-                            };
-                            selectConversation(contact);
+                convsListEl.querySelectorAll('.conv-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        selectConversation({
+                            codeId: item.dataset.codeid,
+                            ndid: item.dataset.ndid,
+                            name: item.dataset.name,
+                            avatar: item.dataset.avatar,
+                            isAdmin: item.dataset.codeid === '00000000'
                         });
                     });
-                }, (err) => {
-                    console.warn("Conversations listener error:", err);
                 });
-            } catch (e) {
-                console.warn("Error subscribing conversations:", e);
-            }
+            });
         }
 
-        // Select Conversation (CodeID-based room matching)
-        async function selectConversation(contact) {
+        // Load Group Conversations (Realtime Database)
+        function loadGroupsList() {
+            if (!rdb) return;
+            rOnValue(rRef(rdb, 'chatnd_groups'), (snap) => {
+                if (!snap.exists()) {
+                    groupItemsContainer.innerHTML = `<div class="chat-placeholder-info">Chưa có nhóm chat nào. Hãy tạo nhóm đầu tiên!</div>`;
+                    return;
+                }
+                const data = snap.val();
+                let html = '';
+                Object.keys(data).forEach(gId => {
+                    const g = data[gId];
+                    const isMember = g.members && currentUser && g.members[currentUser.uid];
+                    html += `
+                        <div class="conv-item" data-group-id="${gId}">
+                            <div class="conv-avatar-rel">
+                                <div style="width: 44px; height: 44px; border-radius: 12px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 20px;">👥</div>
+                            </div>
+                            <div class="conv-details">
+                                <div class="conv-top-row">
+                                    <span class="conv-name">${g.name}</span>
+                                    <span style="font-size: 10px; color: ${isMember ? '#16a34a' : '#64748b'}; font-weight: 700;">${isMember ? 'Đã vào' : (g.isPublic ? 'Công khai' : 'Riêng tư')}</span>
+                                </div>
+                                <div class="conv-last-msg">${g.description || 'Nhóm trò chuyện cộng đồng'}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                groupItemsContainer.innerHTML = html;
+
+                groupItemsContainer.querySelectorAll('.conv-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const gId = item.dataset.groupId;
+                        const g = data[gId];
+                        selectGroupConversation(gId, g);
+                    });
+                });
+            });
+        }
+
+        function selectConversation(contact) {
             activeContact = contact;
+            activeGroupRoom = null;
 
-            if (contact.isBot) {
-                activeChatId = 'chat_ndai_bot';
-            } else {
-                // Ensure Admin contact always uses CodeID "00000000"
-                if (contact.isAdmin || contact.ndid === 'nhatdang' || contact.codeId === '00000000') {
-                    contact.codeId = '00000000';
-                    contact.name = adminContact.name;
-                    contact.avatar = adminContact.avatar;
-                    contact.ndid = adminContact.ndid;
-                }
+            activeChatId = `chat_${[currentUserCodeId, contact.codeId].sort().join('_')}`;
 
-                activeChatId = `chat_${[currentUserCodeId, contact.codeId].sort().join('_')}`;
-
-                // Enrich details from Firestore non-blockingly
-                if (contact.codeId !== '00000000') {
-                    try {
-                        const codeSnap = await getDoc(doc(db, 'code_ids', contact.codeId));
-                        if (codeSnap.exists()) {
-                            const targetUid = codeSnap.data().uid;
-                            const uSnap = await getDoc(doc(db, 'users', targetUid));
-                            if (uSnap.exists()) {
-                                const d = uSnap.data();
-                                if (d.photoURL) contact.avatar = d.photoURL;
-                                if (d.fullname || d.displayName) contact.name = d.fullname || d.displayName;
-                                if (d.ndid) contact.ndid = d.ndid;
-                            }
-                        }
-                    } catch (_) {}
-                }
-            }
-
-            // Update Header
             activeName.textContent = contact.name;
-            const displayNdid = contact.ndid || '';
-            activeNdid.innerHTML = `${escapeHtml(displayNdid)}${contact.codeId ? ` <span style="font-size:11px;opacity:0.85;margin-left:6px;">(CodeID: ${contact.codeId})</span>` : ''}`;
+            activeNdid.textContent = `NDID: ${contact.ndid} (CodeID: ${contact.codeId})`;
             activeAvatar.src = contact.avatar;
 
             chatEmptyState.style.display = 'none';
-            activeChatWrapper.style.display = 'flex';
-            appWrapper.classList.add('mobile-active-chat');
+            activeChatWrapper.classList.remove('hidden');
+            document.getElementById('chat-app').classList.add('mobile-active-chat');
 
-            // Highlight selected in list
-            document.querySelectorAll('.conv-item').forEach(el => {
-                const isMatch = (contact.isBot && el.dataset.type === 'ai') ||
-                                ((contact.isAdmin || contact.codeId === '00000000') && el.dataset.type === 'admin') ||
-                                (el.dataset.chatId === activeChatId);
-                el.classList.toggle('active', isMatch);
+            subscribeDirectMessages(activeChatId);
+        }
+
+        function selectGroupConversation(groupId, groupData) {
+            activeGroupRoom = { id: groupId, ...groupData };
+            activeContact = null;
+            activeChatId = null;
+
+            activeName.textContent = groupData.name;
+            activeNdid.textContent = `Nhóm chat • ${Object.keys(groupData.members || {}).length} thành viên`;
+            activeAvatar.src = '/assets/images/logo.png';
+
+            chatEmptyState.style.display = 'none';
+            activeChatWrapper.classList.remove('hidden');
+            document.getElementById('chat-app').classList.add('mobile-active-chat');
+
+            subscribeGroupMessages(groupId);
+        }
+
+        // Mobile back button event
+        const mobileBackBtn = document.getElementById('mobile-back-btn');
+        if (mobileBackBtn) {
+            mobileBackBtn.addEventListener('click', () => {
+                document.getElementById('chat-app').classList.remove('mobile-active-chat');
             });
-
-            if (!contact.isBot) {
-                try {
-                    await setDoc(doc(db, 'chats', activeChatId), {
-                        [`lastReadTime_${currentUserCodeId}`]: serverTimestamp()
-                    }, { merge: true });
-                } catch (_) {}
-            }
-
-            subscribeMessages(activeChatId);
         }
 
-        // Realtime Messages Listener
-        function subscribeMessages(chatId) {
-            if (unsubscribeMessages) unsubscribeMessages();
-            messagesContainer.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-soft);font-size:13px;">Đang tải tin nhắn...</div>`;
-
-            // NDAI BOT CHAT HANDLING (EduAI Engine)
-            if (chatId === 'chat_ndai_bot') {
-                renderAiMessages();
-                return;
+        function renderFileInMessage(file) {
+            if (!file || !file.url) return '';
+            if (file.category === 'image') {
+                return `<a href="${file.url}" target="_blank"><img src="${file.url}" class="msg-img-preview" alt="Image"></a>`;
             }
-
-            // STANDARD FIRESTORE REAL DIRECT CHAT (User to User & User to Admin)
-            try {
-                const q = query(
-                    collection(db, 'chats', chatId, 'messages'),
-                    orderBy('createdAt', 'asc')
-                );
-
-                unsubscribeMessages = onSnapshot(q, async (snapshot) => {
-                    if (snapshot.empty) {
-                        messagesContainer.innerHTML = `<div style="padding:40px 20px;text-align:center;color:var(--text-soft);font-size:13px;">Chưa có tin nhắn nào. Hãy gửi lời chào đầu tiên! 👋</div>`;
-                        return;
-                    }
-
-                    let contactLastRead = null;
-                    try {
-                        const chatSnap = await getDoc(doc(db, 'chats', chatId));
-                        if (chatSnap.exists() && activeContact) {
-                            const readTs = chatSnap.data()[`lastReadTime_${activeContact.codeId}`];
-                            if (readTs?.toMillis) contactLastRead = readTs.toMillis();
-                        }
-                    } catch (_) {}
-
-                    let html = '';
-                    snapshot.forEach(docSnap => {
-                        const msgId = docSnap.id;
-                        const msg = docSnap.data();
-                        const isSent = msg.senderUid === currentUser.uid;
-                        const msgTimeMillis = msg.createdAt?.toMillis ? msg.createdAt.toMillis() : Date.now();
-                        const fullTimeStr = msg.createdAt?.toDate ? formatFullDateTime(msg.createdAt.toDate()) : '';
-
-                        let statusTag = '';
-                        if (isSent) {
-                            if (contactLastRead && contactLastRead >= msgTimeMillis) {
-                                statusTag = `<span class="msg-status-tag">· Đã xem</span>`;
-                            } else {
-                                statusTag = `<span style="color:var(--text-muted)">· Đã gửi</span>`;
-                            }
-                        }
-
-                        let reactionsHtml = '';
-                        if (msg.reactions) {
-                            const counts = {};
-                            Object.values(msg.reactions).forEach(emoji => {
-                                counts[emoji] = (counts[emoji] || 0) + 1;
-                            });
-                            const badgeList = Object.entries(counts).map(([emoji, count]) =>
-                                `<span class="reaction-badge" title="${count} người">${emoji} ${count > 1 ? count : ''}</span>`
-                            ).join('');
-                            if (badgeList) {
-                                reactionsHtml = `<div class="reactions-badges">${badgeList}</div>`;
-                            }
-                        }
-
-                        html += `
-                            <div class="msg-row ${isSent ? 'sent' : 'received'}" data-msg-id="${msgId}">
-                                <div class="msg-bubble-wrapper">
-                                    <div class="msg-bubble" data-msg-id="${msgId}">${escapeHtml(msg.text)}</div>
-                                    <div id="picker-${msgId}" class="reaction-picker-bar" style="display:none;">
-                                        ${EMOJI_LIST.map(e => `<button class="reaction-btn" data-emoji="${e}" data-msg-id="${msgId}">${e}</button>`).join('')}
-                                    </div>
-                                </div>
-                                ${reactionsHtml}
-                                <div class="msg-meta">${fullTimeStr} ${statusTag}</div>
-                            </div>
-                        `;
-                    });
-
-                    messagesContainer.innerHTML = html;
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-                    messagesContainer.querySelectorAll('.msg-bubble').forEach(bubble => {
-                        bubble.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            const msgId = bubble.dataset.msgId;
-                            togglePicker(msgId);
-                        });
-                    });
-
-                    messagesContainer.querySelectorAll('.reaction-btn').forEach(btn => {
-                        btn.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            const msgId = btn.dataset.msgId;
-                            const emoji = btn.dataset.emoji;
-                            addReaction(msgId, emoji);
-                        });
-                    });
-                }, (err) => {
-                    console.warn("Messages listener error:", err);
-                });
-            } catch (e) {
-                console.warn("Subscribe messages error:", e);
+            if (file.category === 'video') {
+                return `<video src="${file.url}" controls class="msg-video-player"></video>`;
             }
-        }
-
-        // NDAI Bot Messages Storage & EduAI Multi-Bubble Sentence Splitter
-        function loadAiHistory() {
-            const saved = localStorage.getItem('ndai_history_' + (currentUser?.uid || 'guest'));
-            if (saved) {
-                try { return JSON.parse(saved); } catch (_) {}
+            if (file.category === 'audio') {
+                return `<audio src="${file.url}" controls class="msg-audio-player"></audio>`;
             }
-            return [
-                { sender: 'bot', text: 'Xin chào! Tôi là NDAI Assistant ✨, trợ lý trí tuệ nhân tạo của ND Labs. Tôi có thể giúp bạn giải đáp thắc mắc và học tập.' }
-            ];
-        }
-
-        function saveAiHistory(history) {
-            if (currentUser?.uid) {
-                localStorage.setItem('ndai_history_' + currentUser.uid, JSON.stringify(history.slice(-30)));
-            }
-        }
-
-        function splitIntoSentences(text) {
-            const raw = text
-                .replace(/\n{2,}/g, '\n')
-                .replace(/([.!?])\s+/g, '$1\n')
-                .split('\n')
-                .map(s => s.trim())
-                .filter(s => s.length > 0);
-            
-            const merged = [];
-            for (const s of raw) {
-                if (merged.length && s.length < 25)
-                    merged[merged.length - 1] += ' ' + s;
-                else
-                    merged.push(s);
-            }
-            return merged;
-        }
-
-        function renderAiMessages() {
-            const history = loadAiHistory();
-            let html = '';
-            history.forEach(msg => {
-                const isSent = msg.sender === 'user';
-                let contentHtml = escapeHtml(msg.text).replace(/\n/g, '<br>');
-                if (!isSent && typeof marked !== 'undefined') {
-                    try { contentHtml = marked.parse(msg.text); } catch (_) {}
-                }
-
-                html += `
-                    <div class="msg-row ${isSent ? 'sent' : 'received'}">
-                        <div class="msg-bubble-wrapper">
-                            <div class="msg-bubble">${contentHtml}</div>
+            return `
+                <div class="msg-file-card">
+                    <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                        <i class="ph-bold ph-file-text" style="font-size: 24px; color: #0284c7; flex-shrink: 0;"></i>
+                        <div style="min-width: 0;">
+                            <div style="font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${file.name}</div>
+                            <div style="font-size: 10.5px; color: #64748b;">${file.sizeFormatted || ''}</div>
                         </div>
-                        <div class="msg-meta">${formatFullDateTime(new Date())}</div>
                     </div>
-                `;
+                    <a href="${file.url}" download="${file.name}" target="_blank" class="msg-file-download-btn">
+                        <i class="ph-bold ph-download-simple"></i> Tải về
+                    </a>
+                </div>
+            `;
+        }
+
+        function subscribeDirectMessages(chatId) {
+            if (unsubscribeMessages) unsubscribeMessages();
+            messagesContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">Đang tải tin nhắn...</div>';
+
+            const q = query(collection(db, 'chats', chatId, 'messages'), orderBy('createdAt', 'asc'));
+            unsubscribeMessages = onSnapshot(q, (snap) => {
+                if (snap.empty) {
+                    messagesContainer.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">Chưa có tin nhắn nào. Hãy gửi lời chào! 👋</div>';
+                    return;
+                }
+
+                let html = '';
+                snap.forEach(docSnap => {
+                    const m = docSnap.data();
+                    const isSent = m.senderUid === currentUser.uid;
+                    html += `
+                        <div class="msg-row ${isSent ? 'sent' : 'received'}">
+                            <div class="msg-bubble ${isSent ? 'msg-bubble-sent' : 'msg-bubble-received'}">
+                                ${m.text ? `<div>${m.text}</div>` : ''}
+                                ${renderFileInMessage(m.file)}
+                            </div>
+                        </div>
+                    `;
+                });
+                messagesContainer.innerHTML = html;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
             });
+        }
 
-            messagesContainer.innerHTML = html;
+        function subscribeGroupMessages(groupId) {
+            if (unsubscribeMessages) unsubscribeMessages();
+            messagesContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">Đang tải tin nhắn nhóm...</div>';
 
-            // Render KaTeX Math in AI messages (EduAI engine)
-            if (typeof renderMathInElement === 'function') {
-                renderMathInElement(messagesContainer, {
-                    delimiters: [
-                        { left: '$$', right: '$$', display: true },
-                        { left: '$', right: '$', display: false }
-                    ],
-                    throwOnError: false
+            rOnValue(rRef(rdb, `chatnd_messages/${groupId}`), (snap) => {
+                if (!snap.exists()) {
+                    messagesContainer.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">Chưa có tin nhắn trong nhóm. Hãy gửi tin nhắn đầu tiên!</div>';
+                    return;
+                }
+                const data = snap.val();
+                let html = '';
+                Object.keys(data).forEach(mId => {
+                    const m = data[mId];
+                    const isSent = m.senderId === currentUser?.uid;
+                    html += `
+                        <div class="msg-row ${isSent ? 'sent' : 'received'}">
+                            <div style="font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 2px;">${m.senderName || 'Thành viên'}</div>
+                            <div class="msg-bubble ${isSent ? 'msg-bubble-sent' : 'msg-bubble-received'}">
+                                ${m.text ? `<div>${m.text}</div>` : ''}
+                                ${renderFileInMessage(m.file)}
+                            </div>
+                        </div>
+                    `;
                 });
-            }
-
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                messagesContainer.innerHTML = html;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            });
         }
 
-        // Toggle Reaction Picker
-        function togglePicker(msgId) {
-            if (openPickerMsgId && openPickerMsgId !== msgId) {
-                closePicker();
-            }
-            const picker = document.getElementById(`picker-${msgId}`);
-            if (picker) {
-                const isHidden = picker.style.display === 'none';
-                if (isHidden) {
-                    const row = picker.closest('.msg-row');
-                    if (row && row.offsetTop < 80) {
-                        picker.style.bottom = 'auto';
-                        picker.style.top = '100%';
-                        picker.style.marginTop = '6px';
-                        picker.style.marginBottom = '0';
-                    } else {
-                        picker.style.bottom = '100%';
-                        picker.style.top = 'auto';
-                        picker.style.marginBottom = '6px';
-                        picker.style.marginTop = '0';
-                    }
-                    picker.style.display = 'flex';
-                    openPickerMsgId = msgId;
-                } else {
-                    picker.style.display = 'none';
-                    openPickerMsgId = null;
-                }
-            }
-        }
-
-        function closePicker() {
-            if (openPickerMsgId) {
-                const picker = document.getElementById(`picker-${openPickerMsgId}`);
-                if (picker) picker.style.display = 'none';
-                openPickerMsgId = null;
-            }
-        }
-
-        // Add Reaction to Message
-        async function addReaction(msgId, emoji) {
-            closePicker();
-            if (!activeChatId || !currentUser || activeChatId === 'chat_ndai_bot') return;
-
-            try {
-                const msgRef = doc(db, 'chats', activeChatId, 'messages', msgId);
-                const snap = await getDoc(msgRef);
-                let currentReactions = {};
-                if (snap.exists() && snap.data().reactions) {
-                    currentReactions = { ...snap.data().reactions };
-                }
-
-                if (currentReactions[currentUser.uid] === emoji) {
-                    delete currentReactions[currentUser.uid];
-                } else {
-                    currentReactions[currentUser.uid] = emoji;
-                }
-
-                await updateDoc(msgRef, {
-                    reactions: currentReactions
-                });
-            } catch (err) {
-                console.warn("Add reaction error:", err);
-            }
-        }
-
-        // Send Message Handler
+        // Send Message Form Submit
         chatInputForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const text = messageInput.value.trim();
-            if (!text || !currentUser || !activeContact || !activeChatId) return;
+            const file = selectedAttachmentFile;
+            if (!text && !file) return;
 
             messageInput.value = '';
+            selectedAttachmentFile = null;
+            attachmentPreviewBar.classList.add('hidden');
 
-            // 1. NDAI BOT CHAT (EduAI Engine Execution)
-            if (activeChatId === 'chat_ndai_bot') {
-                const history = loadAiHistory();
-                history.push({ sender: 'user', text: text });
-                saveAiHistory(history);
-                renderAiMessages();
+            const senderInfo = {
+                uid: currentUser.uid,
+                codeId: currentUserCodeId,
+                ndid: currentUserNdid,
+                displayName: currentUser.displayName || 'ND Member',
+                photoURL: currentUser.photoURL || '/assets/images/logo.png'
+            };
 
-                // Show thinking placeholder
-                const thinkingDiv = document.createElement('div');
-                thinkingDiv.className = 'msg-row received';
-                thinkingDiv.innerHTML = `<div class="msg-bubble" style="font-style:italic;opacity:0.8;">🤖 NDAI đang suy nghĩ...</div>`;
-                messagesContainer.appendChild(thinkingDiv);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-                try {
-                    const systemPrompt = `Bạn là NDAI Assistant — trợ lý AI thông minh, thân thiện của ND Labs. Hãy trò chuyện tự nhiên, ngắn gọn và đúng trọng tâm giống như một người bạn đang nhắn tin qua lại (tuyệt đối không giải thích dài dòng hay làm văn mẫu). Trả lời ngắn tối đa 1-3 câu ngắn và đi thẳng vào câu hỏi.`;
-                    const prompt = `${systemPrompt}\n\n[Câu hỏi của người dùng]: ${text}`;
-
-                    let aiReply = '';
-                    if (window.eduspaceAI && window.eduspaceAI.call) {
-                        aiReply = await window.eduspaceAI.call({
-                            contents: [{ role: 'user', parts: [{ text: prompt }] }]
-                        });
-                    } else {
-                        const apiKey = await window.getGeminiApiKey();
-                        const modelName = window.EDU_CONFIG?.stableModel || 'gemini-3.1-flash-lite';
-                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                contents: [{ role: 'user', parts: [{ text: prompt }] }]
-                            })
-                        });
-                        const data = await res.json();
-                        aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Dạ, tôi đã nhận được câu hỏi của bạn!";
-                    }
-
-                    const sentences = splitIntoSentences(aiReply);
-                    thinkingDiv.remove();
-
-                    for (let i = 0; i < sentences.length; i++) {
-                        const delay = Math.min(250 + sentences[i].length * 15, 1000);
-                        await new Promise(r => setTimeout(r, delay));
-                        history.push({ sender: 'bot', text: sentences[i] });
-                        saveAiHistory(history);
-                        renderAiMessages();
-                    }
-                } catch (err) {
-                    if (thinkingDiv) thinkingDiv.remove();
-                    history.push({ sender: 'bot', text: "Tôi đã nhận được câu hỏi của bạn!" });
-                    saveAiHistory(history);
-                    renderAiMessages();
-                }
-                return;
-            }
-
-            // 2. REAL FIRESTORE CHAT (Direct User-to-User & Direct User-to-Admin)
             try {
-                // Ensure Admin contact always has CodeID "00000000"
-                if (activeContact.isAdmin || activeContact.ndid === 'nhatdang' || activeContact.codeId === '00000000') {
-                    activeContact.codeId = '00000000';
-                    activeContact.name = adminContact.name;
-                    activeContact.avatar = adminContact.avatar;
-                    activeContact.ndid = adminContact.ndid;
+                if (activeGroupRoom && rdb) {
+                    await window.NDChatCore.sendGroupMessage(rdb, 'chatnd', activeGroupRoom.id, senderInfo, text, file);
+                } else if (activeContact && db) {
+                    await window.NDChatCore.sendDirectMessage(db, senderInfo, activeContact, text, file);
                 }
-
-                await addDoc(collection(db, 'chats', activeChatId, 'messages'), {
-                    senderUid: currentUser.uid,
-                    senderCodeId: currentUserCodeId,
-                    senderNdid: currentUserNdid,
-                    text: text,
-                    createdAt: serverTimestamp()
-                });
-
-                await setDoc(doc(db, 'chats', activeChatId), {
-                    participants: [currentUserCodeId, activeContact.codeId],
-                    lastMessage: text,
-                    updatedAt: serverTimestamp(),
-                    [`lastReadTime_${currentUserCodeId}`]: serverTimestamp(),
-                    participantDetails: {
-                        [currentUserCodeId]: {
-                            name: myName.textContent,
-                            ndid: currentUserNdid,
-                            avatar: myAvatar.src
-                        },
-                        [activeContact.codeId]: {
-                            name: activeContact.name,
-                            ndid: activeContact.ndid,
-                            avatar: activeContact.avatar
-                        }
-                    }
-                }, { merge: true });
-
             } catch (err) {
-                console.warn("Error sending message:", err);
+                alert('Lỗi gửi tin nhắn: ' + err.message);
             }
         });
 
-        // Mobile Back Button
-        mobileBackBtn.addEventListener('click', () => {
-            appWrapper.classList.remove('mobile-active-chat');
+        // Group creation modal
+        const createGroupModal = document.getElementById('create-group-modal');
+        document.getElementById('btn-create-group').onclick = () => {
+            createGroupModal.classList.remove('hidden');
+        };
+        document.getElementById('close-create-group-modal').onclick = () => {
+            createGroupModal.classList.add('hidden');
+        };
+
+        document.getElementById('create-group-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('new-group-name').value.trim();
+            const desc = document.getElementById('new-group-desc').value.trim();
+            const isPublic = document.getElementById('new-group-public').checked;
+            const requireApproval = document.getElementById('new-group-approval').checked;
+
+            if (!name || !rdb || !currentUser) return;
+
+            const newGroupRef = rPush(rRef(rdb, 'chatnd_groups'));
+            const payload = {
+                name,
+                description: desc,
+                isPublic,
+                requireApproval,
+                createdBy: currentUser.uid,
+                createdAt: Date.now(),
+                members: {
+                    [currentUser.uid]: {
+                        role: 'owner',
+                        name: currentUser.displayName || 'Chủ nhóm',
+                        joinedAt: Date.now()
+                    }
+                }
+            };
+
+            await rSet(newGroupRef, payload);
+            createGroupModal.classList.add('hidden');
+            loadGroupsList();
         });
-
-        // Date & Time Formatter
-        function formatShortTime(date) {
-            const h = date.getHours().toString().padStart(2, '0');
-            const m = date.getMinutes().toString().padStart(2, '0');
-            return `${h}:${m}`;
-        }
-
-        function formatFullDateTime(date) {
-            const h = date.getHours().toString().padStart(2, '0');
-            const min = date.getMinutes().toString().padStart(2, '0');
-            const d = date.getDate().toString().padStart(2, '0');
-            const mo = (date.getMonth() + 1).toString().padStart(2, '0');
-            const y = date.getFullYear();
-            return `${h}:${min} • ${d}/${mo}/${y}`;
-        }
-
-        function escapeHtml(str) {
-            return str
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
-        }
-
-        // Suppress any floating version pill tags on chat page
-        setInterval(() => {
-            document.querySelectorAll('.ver-tag, .version-tag, #version-tag, [class*="ver-tag"], [id*="version-tag"]').forEach(el => {
-                el.remove();
-            });
-        }, 300);
     </script>
 </body>
 

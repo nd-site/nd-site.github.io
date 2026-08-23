@@ -21,11 +21,16 @@
     window.location.replace(target);
     return; // Dừng mọi xử lý phía dưới — trang sẽ redirect ngay lập tức
   }
-  /* ─── Tự động nạp font.js cho toàn bộ hệ thống ─────────────────────── */
+  /* ─── Tự động nạp font.js và nd-accounts.js cho toàn bộ hệ thống ───── */
   if (!document.querySelector('script[src*="font.js"]')) {
     const fontScript = document.createElement('script');
     fontScript.src = '/font/font.js';
     document.head.appendChild(fontScript);
+  }
+  if (!document.querySelector('script[src*="nd-accounts.js"]')) {
+    const accScript = document.createElement('script');
+    accScript.src = '/assets/js/nd-accounts.js';
+    document.head.appendChild(accScript);
   }
 
   /* ─── Ngăn chặn lưu Cache trình duyệt (Luôn lấy mã mới nhất từ Server) ─── */
@@ -53,72 +58,14 @@
       }
     } catch (_) {}
   })();
-  /* ─── Tự động bật Giao diện Máy tính (Desktop Mode) & Thông báo trên Di động ─── */
-  const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
-  if (isMobileDevice) {
-    // 1. Ép viewport chuyển sang chế độ Máy tính (width=1200)
-    let metaViewport = document.querySelector('meta[name="viewport"]');
-    if (!metaViewport) {
-      metaViewport = document.createElement('meta');
-      metaViewport.name = 'viewport';
-      document.head.appendChild(metaViewport);
-    }
-    metaViewport.setAttribute('content', 'width=1200, initial-scale=0.35, maximum-scale=3.0, user-scalable=yes');
-
-    // 2. Hiện banner thông báo giao diện di động đang phát triển (nếu chưa đóng trong phiên)
-    if (!sessionStorage.getItem('nd_mobile_notice_dismissed')) {
-      const renderMobileNotice = () => {
-        if (document.getElementById('nd-mobile-dev-notice')) return;
-        const noticeBar = document.createElement('div');
-        noticeBar.id = 'nd-mobile-dev-notice';
-        noticeBar.style.cssText = `
-          background: linear-gradient(135deg, #0070f3, #0051b3);
-          color: #ffffff;
-          padding: 12px 20px;
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-size: 13.5px;
-          font-weight: 700;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 12px;
-          box-shadow: 0 4px 16px rgba(0, 112, 243, 0.25);
-          position: relative;
-          z-index: 100005;
-        `;
-        noticeBar.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 22px;">📱</span>
-            <div>
-              <strong style="font-size: 14px; display: block; margin-bottom: 2px;">Giao diện di động đang được phát triển!</strong>
-              <div style="font-size: 12px; opacity: 0.95; font-weight: 500;">
-                Hệ thống đã tự động bật Giao diện Máy tính (Desktop Mode) để bạn có trải nghiệm mượt mà nhất.
-              </div>
-            </div>
-          </div>
-          <button id="nd-close-mobile-notice" style="
-            background: rgba(255, 255, 255, 0.25);
-            border: none;
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: background 0.2s;
-          ">Đã hiểu ✕</button>
-        `;
-        document.body.insertBefore(noticeBar, document.body.firstChild);
-        document.getElementById('nd-close-mobile-notice')?.addEventListener('click', () => {
-          noticeBar.remove();
-          sessionStorage.setItem('nd_mobile_notice_dismissed', 'true');
-        });
-      };
-      if (document.body) renderMobileNotice();
-      else window.addEventListener('DOMContentLoaded', renderMobileNotice);
-    }
+  /* ─── Ngăn chặn zoom in/out tuỳ tiện nhưng không ép cứng desktop ─── */
+  let metaViewport = document.querySelector('meta[name="viewport"]');
+  if (!metaViewport) {
+    metaViewport = document.createElement('meta');
+    metaViewport.name = 'viewport';
+    document.head.appendChild(metaViewport);
   }
+  metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
 
   const NAV_H = 50; // navbar height in px — single source of truth
 
@@ -172,7 +119,8 @@
     /* ── Inner row: centered with max-width ── */
     #nd-navbar-inner {
       height: 100%;
-      max-width: 1200px;
+      max-width: 1600px;
+      width: 100%;
       margin: 0 auto;
       padding: 0 16px;
       display: flex;
@@ -211,7 +159,17 @@
       flex-shrink: 0;
     }
 
-    /* ── Links: scrollable, takes remaining width ── */
+    /* ── Links Wrapper: takes remaining width with overflow indicator ── */
+    #nd-navbar-links-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* ── Links: scrollable, smooth swipe ── */
     #nd-navbar-links {
       display: flex;
       align-items: center;
@@ -219,10 +177,42 @@
       flex: 1;
       min-width: 0;
       overflow-x: auto;
-      overflow-y: hidden;
+      scroll-behavior: smooth;
       scrollbar-width: none;
+      -ms-overflow-style: none;
+      transition: all 0.3s ease;
     }
-    #nd-navbar-links::-webkit-scrollbar { display: none; }
+    #nd-navbar-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ── Overflow Blue Scroll Indicator with Fade Boundary ── */
+    #nd-nav-overflow-indicator {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 44px;
+      display: none;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 6px;
+      background: linear-gradient(to right, rgba(248, 250, 252, 0) 0%, rgba(248, 250, 252, 0.82) 40%, rgba(248, 250, 252, 0.98) 100%);
+      pointer-events: auto;
+      cursor: pointer;
+      z-index: 10;
+      transition: opacity 0.2s ease;
+    }
+    #nd-nav-overflow-indicator i {
+      color: #0284c7;
+      font-size: 16px;
+      font-weight: 800;
+      animation: pulseNavIndicator 1.5s infinite;
+    }
+    @keyframes pulseNavIndicator {
+      0%, 100% { transform: translateX(0); opacity: 0.8; }
+      50% { transform: translateX(3px); opacity: 1; }
+    }
 
     /* ── Individual link ── */
     .nd-nav-link {
@@ -270,20 +260,49 @@
     .nd-role-badge.role-student { background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
     .nd-role-badge.role-other   { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
 
-    /* ── Responsive: hide label text on very small screens ── */
-    @media (max-width: 500px) {
-      .nd-lbl { display: none; }
-      .nd-nav-link { padding: 6px 8px; }
+    /* ── Mobile Hamburger ── */
+    #nd-hamburger {
+      display: none;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      color: #64748b;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+    }
+
+    /* ── Responsive: Hamburger menu ── */
+    @media (max-width: 768px) {
+      .nd-lbl { display: inline; }
       #nd-brand-name { display: none; }
       .nd-role-badge { display: none; }
+      #nd-hamburger { display: flex; align-items: center; justify-content: center; }
+      #nd-navbar-links {
+        position: fixed;
+        top: 50px;
+        left: -100%;
+        width: 250px;
+        height: calc(100vh - 50px);
+        background: rgba(255, 255, 255, 0.98);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+        z-index: 99999;
+      }
+      #nd-navbar-links.open { left: 0; }
+      .nd-nav-link { width: 100%; padding: 12px 16px; margin-bottom: 8px; }
+      #nd-navbar-user { margin-left: 10px; }
     }
 
     /* ── Floating Tool FAB ── */
     #nd-tools-fab {
       position: fixed !important;
       top: 95px !important;
-      left: 16px !important;
+      left: 20px !important;
       bottom: auto !important;
+      right: auto !important;
       width: 42px !important;
       height: 42px !important;
       border-radius: 12px !important;
@@ -314,8 +333,9 @@
     #nd-tools-panel {
       position: fixed !important;
       top: 145px !important;
-      left: 16px !important;
+      left: 20px !important;
       bottom: auto !important;
+      right: auto !important;
       width: 300px !important;
       background: rgba(255, 255, 255, 0.95) !important;
       backdrop-filter: blur(20px) !important;
@@ -335,11 +355,12 @@
     }
     
     /* Shift FAB and Panel down when quiz is active to avoid covering the back button */
+    /* Shift FAB and Panel down when quiz is active to avoid covering the back button */
     body.quiz-active #nd-tools-fab {
-      top: 160px !important;
+      bottom: 80px !important;
     }
     body.quiz-active #nd-tools-panel {
-      top: 210px !important;
+      bottom: 130px !important;
     }
     
     /* ── Tabs Header ── */
@@ -532,7 +553,10 @@
   sep.className = 'nd-sep';
   sep.setAttribute('aria-hidden', 'true');
 
-  // Links
+  // Links Wrapper & Container with Overflow Indicator
+  const linksWrapper = document.createElement('div');
+  linksWrapper.id = 'nd-navbar-links-wrapper';
+
   const linksDiv = document.createElement('div');
   linksDiv.id = 'nd-navbar-links';
 
@@ -544,6 +568,47 @@
     a.innerHTML = `<i class="ph-duotone ${icon}" aria-hidden="true"></i><span class="nd-lbl">${label}</span>`;
     linksDiv.appendChild(a);
   });
+
+  // Blue Overflow Indicator with Fade
+  const overflowIndicator = document.createElement('div');
+  overflowIndicator.id = 'nd-nav-overflow-indicator';
+  overflowIndicator.title = 'Cuộn sang phải để xem thêm tab';
+  overflowIndicator.innerHTML = '<i class="ph-bold ph-caret-right"></i>';
+  overflowIndicator.onclick = () => {
+    linksDiv.scrollBy({ left: 140, behavior: 'smooth' });
+  };
+
+  linksWrapper.appendChild(linksDiv);
+  linksWrapper.appendChild(overflowIndicator);
+
+  function checkNavOverflow() {
+    if (!linksDiv || !overflowIndicator) return;
+    const isOverflowing = linksDiv.scrollWidth > linksDiv.clientWidth + 4;
+    const isScrolledToEnd = linksDiv.scrollLeft >= linksDiv.scrollWidth - linksDiv.clientWidth - 8;
+
+    if (isOverflowing && !isScrolledToEnd && linksDiv.clientWidth > 160) {
+      overflowIndicator.style.display = 'flex';
+    } else {
+      overflowIndicator.style.display = 'none';
+    }
+  }
+
+  linksDiv.addEventListener('scroll', checkNavOverflow);
+  window.addEventListener('resize', checkNavOverflow);
+  setTimeout(checkNavOverflow, 500);
+
+  // Hamburger Button
+  const hamburger = document.createElement('button');
+  hamburger.id = 'nd-hamburger';
+  hamburger.innerHTML = '<i class="ph-duotone ph-list"></i>';
+  hamburger.onclick = () => {
+    linksDiv.classList.toggle('open');
+    if (linksDiv.classList.contains('open')) {
+      hamburger.innerHTML = '<i class="ph-duotone ph-x"></i>';
+    } else {
+      hamburger.innerHTML = '<i class="ph-duotone ph-list"></i>';
+    }
+  };
 
   /* ── User Session Context ── */
   const userSection = document.createElement('div');
@@ -599,18 +664,122 @@
           <a href="/admin/" class="nd-nav-link" style="color: #0070f3;" title="Bảng quản trị Admin">
             <i class="ph-bold ph-shield-checkered"></i><span class="nd-lbl">Admin</span>
           </a>
+          <button id="nd-admin-reload-btn" class="nd-nav-link" style="color: #ef4444; border: none; background: transparent; cursor: pointer; padding: 5px 12px;" title="Yêu cầu tải lại trang cho tất cả">
+            <i class="ph-bold ph-arrows-clockwise"></i><span class="nd-lbl">Tải lại</span>
+          </button>
         `;
       }
+
+      const activeIdx = (function() {
+        try {
+          const p = new URLSearchParams(window.location.search);
+          const u = p.get('u');
+          if (u !== null && !isNaN(parseInt(u, 10))) return parseInt(u, 10);
+        } catch (_) {}
+        return 0;
+      })();
+
+      userSection.style.position = 'relative';
       userSection.innerHTML = `
         ${adminLink}
-        <a href="/auth/settings/" class="nd-nav-link" title="Cài đặt tài khoản" style="gap: 6px;">
-          <img src="${u.photoURL || '/assets/images/logo.png'}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+        <button type="button" id="nd-account-switcher-trigger" class="nd-nav-link" style="gap: 6px; background: transparent; border: none; cursor: pointer; padding: 4px 8px; border-radius: 12px;">
+          <img src="${u.photoURL || '/assets/images/logo.png'}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; flex-shrink:0; border: 1.5px solid #0070f3;">
           <span class="nd-lbl" style="display:flex; align-items:center; gap:4px;">
             ${u.ndid || 'ND Member'}
             ${roleBadgeHtml}
+            <i class="ph-bold ph-caret-down" style="font-size: 11px; color: #64748b;"></i>
           </span>
-        </a>
+        </button>
       `;
+
+      // Account Switcher Popover Modal
+      const popover = document.createElement('div');
+      popover.id = 'nd-account-switcher-popover';
+      popover.style.cssText = `
+        display: none;
+        position: absolute;
+        top: 48px;
+        right: 0;
+        width: 320px;
+        max-width: min(320px, 92vw);
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06);
+        padding: 18px;
+        z-index: 100010;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        box-sizing: border-box;
+      `;
+
+      function renderAccountSwitcherDropdown() {
+        const allAccounts = window.NDAccounts ? window.NDAccounts.getAllAccounts() : [u];
+        let accountsListHtml = '';
+
+        allAccounts.forEach((acc, idx) => {
+          const isCurr = idx === activeIdx;
+          const targetUrl = idx === 0 ? window.location.pathname : `${window.location.pathname}?u=${idx}`;
+          accountsListHtml += `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 12px; background: ${isCurr ? '#f0f9ff' : '#ffffff'}; border: 1px solid ${isCurr ? '#bae6fd' : '#f1f5f9'}; margin-bottom: 6px;">
+              <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                <img src="${acc.photoURL || '/assets/images/logo.png'}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid ${isCurr ? '#0284c7' : '#cbd5e1'}; shrink: 0;">
+                <div style="min-width: 0;">
+                  <div style="font-size: 12px; font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${acc.displayName || acc.fullname || 'ND Member'}</div>
+                  <div style="font-size: 10.5px; color: #64748b; font-family: monospace;">${acc.ndid || acc.email || '—'}</div>
+                </div>
+              </div>
+              <div>
+                ${isCurr ? '<span style="font-size: 10px; font-weight: 800; color: #0284c7; background: #e0f2fe; padding: 2px 8px; border-radius: 100px;">Đang dùng</span>' : `<a href="${targetUrl}" style="font-size: 11px; font-weight: 700; color: #0070f3; text-decoration: none; padding: 4px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">Chuyển</a>`}
+              </div>
+            </div>
+          `;
+        });
+
+        popover.innerHTML = `
+          <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.5px; color: #64748b; text-transform: uppercase; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span>Tài khoản NDID (${allAccounts.length}/10)</span>
+            <button id="close-acc-popover" style="border: none; background: transparent; cursor: pointer; color: #94a3b8; font-size: 14px;">✕</button>
+          </div>
+
+          <div style="max-height: 220px; overflow-y: auto; margin-bottom: 12px;">
+            ${accountsListHtml}
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid #f1f5f9;">
+            ${allAccounts.length < 10 ? `
+              <a href="/auth/login/?addAccount=true" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #f8fafc; color: #0070f3; text-decoration: none; font-size: 12px; font-weight: 700; border: 1px dashed #93c5fd;">
+                <i class="ph-bold ph-user-plus" style="font-size: 15px;"></i> Thêm tài khoản khác
+              </a>
+            ` : ''}
+            <a href="${activeIdx > 0 ? `/auth/settings/?u=${activeIdx}` : '/auth/settings/'}" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #ffffff; color: #334155; text-decoration: none; font-size: 12px; font-weight: 700; border: 1px solid #e2e8f0;">
+              <i class="ph-bold ph-gear" style="font-size: 15px;"></i> Cài đặt tài khoản
+            </a>
+            <button id="popover-logout-all-btn" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; font-size: 12px; font-weight: 700; cursor: pointer; text-align: left; width: 100%; font-family: inherit;">
+              <i class="ph-bold ph-power" style="font-size: 15px;"></i> Đăng xuất tất cả tài khoản
+            </button>
+          </div>
+        `;
+      }
+
+      userSection.appendChild(popover);
+
+      document.body.addEventListener('click', (e) => {
+        const trigger = e.target.closest('#nd-account-switcher-trigger');
+        const closeBtn = e.target.closest('#close-acc-popover');
+        const logoutAll = e.target.closest('#popover-logout-all-btn');
+
+        if (trigger) {
+          e.stopPropagation();
+          renderAccountSwitcherDropdown();
+          popover.style.display = popover.style.display === 'block' ? 'none' : 'block';
+        } else if (closeBtn) {
+          popover.style.display = 'none';
+        } else if (logoutAll) {
+          if (window.NDAccounts) window.NDAccounts.removeAllAccounts();
+          else storageClear();
+        } else if (!e.target.closest('#nd-account-switcher-popover')) {
+          popover.style.display = 'none';
+        }
+      });
     } catch (e) { storageClear(); }
   } else {
     userSection.innerHTML = `
@@ -702,9 +871,100 @@
     window.location.reload();
   }
 
+  /* ─── System Commands Listener (Tải lại trang) ─── */
+  async function initSystemCommands() {
+    if (!window.firebaseDb) return;
+    try {
+      const { ref, onValue, set } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js');
+      const cmdRef = ref(window.firebaseDb, 'system_commands/reload');
+      let firstLoad = true;
+      onValue(cmdRef, (snapshot) => {
+        if (firstLoad) {
+          firstLoad = false;
+          return;
+        }
+        const data = snapshot.val();
+        // Bỏ qua lệnh nếu cũ hơn 10 giây
+        if (data && data.timestamp && (Date.now() - data.timestamp < 10000)) {
+          showReloadModal();
+        }
+      });
+      
+      // Bắt sự kiện click vào nút gửi lệnh tải lại
+      document.body.addEventListener('click', (e) => {
+        const btn = e.target.closest('#nd-admin-reload-btn');
+        if (btn) {
+          if (confirm('Gửi lệnh tải lại trang cho tất cả người dùng đang online?')) {
+            set(cmdRef, { timestamp: Date.now() }).catch(err => {
+              alert('Lỗi khi gửi lệnh: ' + err.message);
+            });
+          }
+        }
+      });
+    } catch (e) {
+      console.error('Lỗi khi khởi tạo system commands:', e);
+    }
+  }
+
+  if (window.firebaseDb) {
+    initSystemCommands();
+  } else {
+    window.addEventListener('firebase-ready', initSystemCommands);
+  }
+
+  function showReloadModal() {
+    if (document.getElementById('nd-reload-modal')) return;
+    
+    const modal = document.createElement('div');
+    modal.id = 'nd-reload-modal';
+    modal.style.cssText = `
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      z-index: 999999; display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s ease;
+    `;
+    
+    modal.innerHTML = `
+      <div style="background: rgba(255, 255, 255, 0.98); padding: 24px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.2); text-align: center; max-width: 90%; width: 340px; font-family: 'Plus Jakarta Sans', sans-serif; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+        <i class="ph-duotone ph-arrows-clockwise" style="font-size: 52px; color: #ef4444; margin-bottom: 12px; display: inline-block;"></i>
+        <h3 style="margin: 0 0 12px 0; color: #1e293b; font-size: 18px; font-weight: 800;">Lệnh Cập Nhật Hệ Thống</h3>
+        <p style="margin: 0 0 24px 0; color: #64748b; font-size: 14.5px; line-height: 1.5;">Trang web sẽ tự động tải lại sau <span id="nd-reload-countdown" style="font-weight: 800; color: #ef4444; font-size: 16px;">3</span> giây để đồng bộ dữ liệu mới nhất...</p>
+        <button id="nd-cancel-reload-btn" style="background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 10px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 14px; width: 100%;">Hủy Tải Lại</button>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    requestAnimationFrame(() => {
+      modal.style.opacity = '1';
+      modal.children[0].style.transform = 'scale(1)';
+    });
+    
+    let timeLeft = 3;
+    const countSpan = document.getElementById('nd-reload-countdown');
+    
+    const timer = setInterval(() => {
+      timeLeft--;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        window.location.reload();
+      } else {
+        countSpan.textContent = timeLeft;
+      }
+    }, 1000);
+    
+    document.getElementById('nd-cancel-reload-btn').addEventListener('click', () => {
+      clearInterval(timer);
+      modal.style.opacity = '0';
+      modal.children[0].style.transform = 'scale(0.95)';
+      setTimeout(() => modal.remove(), 300);
+    });
+  }
+
   inner.appendChild(brand);
   inner.appendChild(sep);
-  inner.appendChild(linksDiv);
+  inner.appendChild(linksWrapper);
+  inner.appendChild(hamburger);
   inner.appendChild(notifyWrapper);
   inner.appendChild(userSection);
   nav.appendChild(inner);

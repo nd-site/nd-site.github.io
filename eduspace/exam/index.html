@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSpace Exam - Đề kiểm tra trực tuyến | ND Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/assets/images/logo.png" type="image/x-icon">
+    <script src="/font/font.js"></script>
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <!-- TẠM KHÓA list_data.js
+    <script src="/eduspace/list_data.js"></script>
+    -->
+</head>
+
+<body class="bg-blue-50">
+    <div id="app-root">
+        <div class="flex justify-center items-center h-screen font-sans text-blue-900">
+            <div class="text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900 mx-auto mb-4"></div>
+                <p class="font-bold">Đang tải cấu trúc đề thi...</p>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        let auth, db;
+        
+        function initFirebase() {
+            if (getApps().length > 0) {
+                const app = getApp();
+                auth = getAuth(app);
+                db = getFirestore(app);
+            }
+        }
+
+        function getExamId() {
+            const search = window.location.search.substring(1);
+            if (!search) return null;
+            if (search.startsWith('id=')) {
+                return search.substring(3);
+            }
+            return search.split('&')[0];
+        }
+
+        async function loadExam() {
+            try {
+                initFirebase();
+                // Tạm khóa check list_data.js bắt buộc
+                /*
+                if (typeof quizList === 'undefined') {
+                    throw new Error("Không thể tải danh sách đề thi (list_data.js).");
+                }
+                */
+
+                if (!window.firebaseFirestore) {
+                    await new Promise(resolve => {
+                        window.addEventListener('firebase-ready', resolve, { once: true });
+                        setTimeout(resolve, 3000);
+                    });
+                }
+                
+                // Cập nhật lại db sau khi firebase đã ready
+                if (!db && window.firebaseFirestore) {
+                    db = window.firebaseFirestore;
+                    auth = window.firebaseAuth;
+                }
+
+                if (window.firebaseFirestore && window.loadDynamicLessons) {
+                    await window.loadDynamicLessons(window.firebaseFirestore);
+                }
+
+                const examId = getExamId();
+                if (!examId) {
+                    showExamCodeInputScreen();
+                    return;
+                }
+
+                let quizInfo = null;
+                let isFirestoreQuiz = false;
+                let firestoreQuizData = null;
+
+                // 1. Try to fetch directly from Firestore quizzes collection first
+                if (db) {
+                    try {
+                        let qSnap = await getDoc(doc(db, 'quizzes', examId.toUpperCase()));
+                        if (!qSnap.exists()) {
+                            qSnap = await getDoc(doc(db, 'quizzes', examId));
+                        }
+                        if (qSnap.exists()) {
+                            const qData = qSnap.data();
+                            
+                            // Check visibility permissions
+                            if (qData.visibility === 'private') {
+                                const user = auth.currentUser;
+                                if (!user || user.uid !== qData.creatorUid) {
+                                    throw new Error("Đề thi này đang ở chế độ riêng tư.");
+                                }
+                            } else if (qData.visibility === 'classroom') {
+                                let user = auth.currentUser;
+                                if (!user) {
+                                    await new Promise((resolve) => {
+                                        const unsub = auth.onAuthStateChanged((u) => {
+                                            user = u;
+                                            resolve();
+                                            unsub();
+                                        });
+                                    });
+                                }
+                                if (!user) {
+                                    throw new Error("Đề thi này chỉ dành riêng cho lớp học chỉ định. Vui lòng đăng nhập.");
+                                }
+                                
+                                const uSnap = await getDoc(doc(db, 'users', user.uid));
+                                const uProfile = uSnap.data() || {};
+                                const isOwner = user.uid === qData.creatorUid || uProfile.role === 'admin';
+                                
+                                if (!isOwner) {
+                                    let enrolled = false;
+                                    for (const cid of qData.targetClassrooms || []) {
+                                        const cSnap = await getDoc(doc(db, 'classrooms', cid));
+                                        if (cSnap.exists()) {
+                                            const cData = cSnap.data();
+                                            if (cData.studentUids && cData.studentUids.includes(user.uid)) {
+                                                enrolled = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (!enrolled) {
+                                        throw new Error("Tài khoản của bạn không thuộc lớp học được chỉ định làm đề thi này.");
+                                    }
+                                }
+                            }
+                            
+                            isFirestoreQuiz = true;
+                            firestoreQuizData = qData.quizData || qData;
+                            firestoreQuizData.isOnline = true;
+                            firestoreQuizData.quizId = examId.toUpperCase();
+                            
+                            quizInfo = {
+                                id: examId,
+                                title: qData.title || firestoreQuizData.title,
+                                class: qData.grade || firestoreQuizData.class || '',
+                                subject: qData.subject || firestoreQuizData.subject || '',
+                                isOnline: true
+                            };
+                        }
+                    } catch (fsErr) {
+                        console.error("Lỗi xác thực quyền làm đề thi từ Firestore:", fsErr);
+                        throw fsErr;
+                    }
+                }
+
+                // 2. If not found in Firestore quizzes, lookup from quizList (dynamic/static)
+                if (!quizInfo && typeof quizList !== 'undefined') {
+                    quizInfo = quizList.find(q => q.id && q.id.toLowerCase() === examId.toLowerCase());
+                }
+
+                if (!quizInfo) {
+                    showExamCodeInputScreen(examId);
+                    return;
+                }
+
+                if (quizInfo.customUrl) {
+                    window.location.replace(quizInfo.customUrl);
+                    return;
+                }
+
+                if (isFirestoreQuiz) {
+                    window.quizData = firestoreQuizData;
+                } else {
+                    // TẠM KHÓA logic đọc file data.js cục bộ để test bắt buộc đọc từ Firestore
+                    /*
+                    if (!quizInfo.dataPath) {
+                        showExamCodeInputScreen(examId);
+                        return;
+                    }
+
+                    // Load the data.js script dynamically
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = quizInfo.dataPath;
+                        script.onload = resolve;
+                        script.onerror = () => reject(new Error("Không thể tải dữ liệu câu hỏi từ " + quizInfo.dataPath));
+                        document.head.appendChild(script);
+                    });
+                    */
+                    throw new Error("Tạm khóa chế độ đọc file data.js. Vui lòng đồng bộ mã đề này lên Firebase để sử dụng!");
+                }
+
+                // Load template.html
+                const response = await fetch('/eduspace/template.html');
+                if (!response.ok) throw new Error("Không thể tải template.html");
+                const htmlText = await response.text();
+                const parser = new DOMParser();
+                const docHTML = parser.parseFromString(htmlText, 'text/html');
+
+                if (typeof quizData !== 'undefined') {
+                    const quizTitle = quizData.title || "EduSpace by ND Labs";
+                    document.title = quizTitle;
+                    const titleDisplay = docHTML.getElementById('quiz-title-display');
+                    if (titleDisplay) titleDisplay.innerText = quizTitle;
+                    const pageTitle = docHTML.getElementById('page-title');
+                    if (pageTitle) pageTitle.innerText = quizTitle;
+                }
+
+                const headElements = docHTML.querySelectorAll('link[rel="stylesheet"], style');
+                headElements.forEach(el => document.head.appendChild(el.cloneNode(true)));
+                document.body.innerHTML = docHTML.body.innerHTML;
+
+                const scripts = docHTML.querySelectorAll('script');
+                for (const oldScript of scripts) {
+                    const newScript = document.createElement("script");
+                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.text = oldScript.text;
+                    if (newScript.src) {
+                        await new Promise((resolve) => {
+                            newScript.onload = resolve;
+                            newScript.onerror = resolve;
+                            document.body.appendChild(newScript);
+                        });
+                    } else {
+                        document.body.appendChild(newScript);
+                    }
+                }
+
+                setTimeout(() => {
+                    const finalTitle = document.getElementById('quiz-title-display');
+                    if (finalTitle && quizData.title) finalTitle.innerText = quizData.title;
+                    if (quizData.title) document.title = quizData.title;
+                    if (typeof renderMath === 'function') renderMath();
+                    window.dispatchEvent(new Event('load'));
+                }, 100);
+
+            } catch (error) {
+                console.error("Lỗi nạp đề thi:", error);
+                document.getElementById('app-root').innerHTML = `
+                    <div class="flex justify-center items-center h-screen font-sans text-red-900 p-4">
+                        <div class="text-center bg-white p-8 rounded-[2rem] shadow-xl border border-red-100 max-w-md w-full">
+                            <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">⚠️</div>
+                            <p class="font-bold text-lg mb-2">Lỗi Nạp Đề Thi</p>
+                            <p class="text-slate-500 text-sm mb-6">${error.message}</p>
+                            <a href="/eduspace" class="inline-block px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors text-sm">Quay lại Trang chủ</a>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadPreviewMetadata(quizInfo) {
+            if (!quizInfo.dataPath) {
+                return {
+                    author: "EduSpace by ND Labs",
+                    school: "",
+                    class: quizInfo.class || "",
+                    book: "Kết nối tri thức",
+                    lesson: quizInfo.title || "",
+                    year: "Năm học 2025 - 2026"
+                };
+            }
+            return new Promise((resolve) => {
+                const oldScript = document.getElementById('temp-preview-script');
+                if (oldScript) oldScript.remove();
+
+                delete window.quizData;
+
+                const script = document.createElement('script');
+                script.id = 'temp-preview-script';
+                script.src = quizInfo.dataPath;
+                script.onload = () => {
+                    if (window.quizData) {
+                        const data = window.quizData;
+                        const meta = {
+                            author: data.author || data.examInfo?.author || "EduSpace by ND Labs",
+                            school: data.school || data.examInfo?.school || "",
+                            class: data.class || data.grade || data.examInfo?.class || data.examInfo?.grade || quizInfo.class || "",
+                            book: data.book || data.examInfo?.book || "",
+                            lesson: data.lesson || data.examInfo?.lesson || data.title || quizInfo.title || "",
+                            year: data.year || data.examInfo?.year || data.examInfo?.date || "Năm học 2025 - 2026"
+                        };
+                        resolve(meta);
+                    } else {
+                        resolve({
+                            author: "EduSpace by ND Labs",
+                            school: "",
+                            class: quizInfo.class || "",
+                            book: "",
+                            lesson: quizInfo.title || "",
+                            year: "Năm học 2025 - 2026"
+                        });
+                    }
+                };
+                script.onerror = () => {
+                    resolve({
+                        author: "EduSpace by ND Labs",
+                        school: "",
+                        class: quizInfo.class || "",
+                        book: "",
+                        lesson: quizInfo.title || "",
+                        year: "Năm học 2025 - 2026"
+                    });
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        function showExamCodeInputScreen(invalidCode = null) {
+            let errorMsg = '';
+            if (invalidCode) {
+                errorMsg = `Mã đề thi "${invalidCode.toUpperCase()}" không tồn tại trong hệ thống. Vui lòng nhập lại mã khác.`;
+            }
+
+            document.getElementById('app-root').innerHTML = `
+                <div class="flex justify-center items-center h-screen font-sans text-slate-800 p-4">
+                    <div class="text-center bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100 max-w-md w-full">
+                        <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key-round"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <p class="font-bold text-xl mb-1 text-slate-800">Vào Đề Thi Bằng Mã</p>
+                        <p class="text-slate-400 text-sm mb-6">Hệ sinh thái học tập EduSpace</p>
+                        
+                        <div class="relative mb-4">
+                            <input type="text" id="exam-code-input" placeholder="Nhập mã đề (VD: t111)" maxlength="10" autofocus
+                                class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 px-5 text-center text-lg font-bold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all uppercase"
+                                onkeydown="if(event.key === 'Enter') window.submitExamCode()">
+                            <p id="exam-code-error" class="text-rose-500 text-xs font-semibold mt-2 ${errorMsg ? '' : 'hidden'}">${errorMsg}</p>
+                            
+                            <!-- Preview Card -->
+                            <div id="exam-preview-card" class="mt-4 p-4 bg-slate-50 border border-slate-100 rounded-2xl text-left hidden">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
+                                    <span class="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Tìm thấy đề thi</span>
+                                </div>
+                                <h4 id="preview-title" class="font-bold text-xs text-slate-800 mb-1 leading-snug"></h4>
+                                <div class="mt-2.5 space-y-1 text-[10px] text-slate-600 border-t border-slate-100/70 pt-2.5" id="preview-metadata"></div>
+                                <p id="preview-desc" class="text-slate-500 text-[9px] leading-relaxed mt-2 line-clamp-2"></p>
+                            </div>
+                        </div>
+                        
+                        <button onclick="window.submitExamCode()" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all text-sm shadow-lg shadow-blue-600/20">
+                            Vào làm bài
+                        </button>
+                        
+                        <a href="/eduspace" class="inline-block mt-6 text-sm text-slate-500 hover:text-blue-600 font-medium transition-colors">Quay lại Trang chủ</a>
+                    </div>
+                </div>
+            `;
+
+            // Focus and add input listener
+            let currentPreviewCode = '';
+            setTimeout(() => {
+                const inputEl = document.getElementById('exam-code-input');
+                const errorEl = document.getElementById('exam-code-error');
+                const previewEl = document.getElementById('exam-preview-card');
+                const previewTitle = document.getElementById('preview-title');
+                const previewMetadata = document.getElementById('preview-metadata');
+                const previewDesc = document.getElementById('preview-desc');
+
+                if (inputEl) {
+                    inputEl.focus();
+                    if (invalidCode) {
+                        inputEl.classList.add('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
+                    }
+
+                    inputEl.addEventListener('input', () => {
+                        inputEl.classList.remove('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
+                        if (errorEl) errorEl.classList.add('hidden');
+
+                        const code = inputEl.value.trim().toLowerCase();
+                        if (code.length >= 3) {
+                            const quizInfo = quizList.find(q => q.id && q.id.toLowerCase() === code);
+                            if (quizInfo) {
+                                if (currentPreviewCode === code) return;
+                                currentPreviewCode = code;
+
+                                if (previewTitle) previewTitle.innerText = quizInfo.title;
+                                if (previewDesc) previewDesc.innerText = 'Đang tải thông tin đề thi...';
+                                if (previewMetadata) previewMetadata.innerHTML = '';
+                                if (previewEl) previewEl.classList.remove('hidden');
+
+                                loadPreviewMetadata(quizInfo).then(meta => {
+                                    if (currentPreviewCode !== code) return;
+                                    if (previewDesc) previewDesc.innerText = quizInfo.description || 'Không có mô tả.';
+
+                                    let metaHTML = '';
+                                    const fields = [
+                                        { label: "Tác giả", value: meta.author, icon: "👤" },
+                                        { label: "Trường", value: meta.school, icon: "🏫" },
+                                        { label: "Lớp", value: meta.class, icon: "🎒" },
+                                        { label: "Sách", value: meta.book, icon: "📖" },
+                                        { label: "Bài", value: meta.lesson, icon: "📝" },
+                                        { label: "Năm học", value: meta.year, icon: "📅" }
+                                    ];
+
+                                    fields.forEach(f => {
+                                        if (f.value && String(f.value).trim() !== "") {
+                                            metaHTML += `
+                                                <div class="flex items-start gap-1.5 py-0.5">
+                                                    <span class="text-slate-400 font-semibold shrink-0">${f.icon} ${f.label}:</span>
+                                                    <span class="font-bold text-slate-700">${String(f.value).trim()}</span>
+                                                </div>
+                                            `;
+                                        }
+                                    });
+                                    if (previewMetadata) previewMetadata.innerHTML = metaHTML;
+                                });
+                                return;
+                            }
+                        }
+                        currentPreviewCode = '';
+                        if (previewEl) {
+                            previewEl.classList.add('hidden');
+                        }
+                    });
+                }
+            }, 100);
+        }
+
+        function submitExamCode() {
+            const inputEl = document.getElementById('exam-code-input');
+            const errorEl = document.getElementById('exam-code-error');
+            if (!inputEl) return;
+
+            const code = inputEl.value.trim().toLowerCase();
+            if (!code) {
+                errorEl.innerText = "Vui lòng nhập mã đề thi.";
+                errorEl.classList.remove('hidden');
+                inputEl.classList.add('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
+                return;
+            }
+
+            // Redirect directly to let loadExam handle the validation
+            window.location.search = '?' + code;
+        }
+
+        // Firestore Submission Hook
+        window.submitAttemptToFirestore = async function(score, correct, total) {
+            try {
+                initFirebase();
+                const storedUser = localStorage.getItem('nd_user');
+                if (!storedUser || !db) return;
+                const user = JSON.parse(storedUser);
+
+                const attemptId = user.uid + "_" + window.quizData.quizId + "_" + Date.now();
+
+                await setDoc(doc(db, 'attempts', attemptId), {
+                    studentUid: user.uid,
+                    studentNdid: user.ndid || 'Khách',
+                    studentName: user.fullname || user.displayName || 'ND Member',
+                    quizId: window.quizData.quizId,
+                    quizTitle: window.quizData.title,
+                    score: score,
+                    correctAnswers: correct,
+                    totalQuestions: total,
+                    submittedAt: new Date().toISOString()
+                });
+                console.log("Successfully submitted attempt to Firestore!");
+            } catch(e) {
+                console.error("Failed to submit attempt to Firestore:", e);
+            }
+        };
+
+        window.submitExamCode = submitExamCode;
+        
+        loadExam();
+    </script>
+</body>
+
+</html>

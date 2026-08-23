@@ -152,3 +152,139 @@ exports.geminiProxy = onRequest(
         }
     }
 );
+
+const { GoogleGenAI } = require("@google/genai");
+
+exports.lotusBotWebhook = onRequest(
+    { region: "asia-southeast1", memory: "256MiB", timeoutSeconds: 30, cors: false },
+    async (req, res) => {
+        if (req.method !== "POST") {
+            res.status(405).send("Method Not Allowed");
+            return;
+        }
+
+        const botId = req.query.botId || "bot1"; 
+        
+        try {
+            const update = req.body;
+            if (!update || !update.message || !update.message.text) {
+                res.status(200).send("OK");
+                return;
+            }
+
+            const msg = update.message;
+            if (msg.from && (msg.from.is_bot || msg.from.id.toString().startsWith("1538328"))) {
+                res.status(200).send("OK");
+                return;
+            }
+
+            const userId = msg.from.id.toString();
+            const text = msg.text.trim();
+            const chatId = msg.chat.id;
+
+            const dbRef = admin.database().ref(`/lotus_bots/${botId}`);
+            const snapshot = await dbRef.once("value");
+            const botConfig = snapshot.val() || {};
+
+            if (botConfig.status !== "on") {
+                res.status(200).send("OK");
+                return;
+            }
+
+            const allowedUsers = botConfig.allowed_users || {};
+            // Allow if user is specifically allowed or if allow_all is set
+            if (!allowedUsers[userId] && !botConfig.allow_all) {
+                res.status(200).send("OK");
+                return;
+            }
+
+            const lotusBotToken = botConfig.token;
+            if (!lotusBotToken) {
+                console.error(`Token not found for ${botId}`);
+                res.status(200).send("OK");
+                return;
+            }
+            
+            const geminiKey = await getGeminiKey();
+            const ai = new GoogleGenAI({ apiKey: geminiKey });
+            
+            // Handle /start command
+            if (text === "/start") {
+                const lotusUrl = `http://bot.lotuschat.vn/bot${lotusBotToken}/sendMessage`;
+                await fetch(lotusUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chat_id: chatId, text: "Xin chào! Tôi là chatbot AI được tích hợp Gemini. Bạn có thể hỏi tôi bất cứ điều gì!" })
+                });
+                res.status(200).send("OK");
+                return;
+            }
+
+            const aiRes = await ai.models.generateContent({
+                model: "gemini-3.5-flash",
+                contents: text,
+            });
+            const replyText = aiRes.text;
+
+            const lotusUrl = `http://bot.lotuschat.vn/bot${lotusBotToken}/sendMessage`;
+            await fetch(lotusUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: chatId, text: replyText })
+            });
+
+            res.status(200).send("OK");
+        } catch (error) {
+            console.error("Webhook error:", error);
+            res.status(500).send("Error");
+        }
+    }
+);
+
+exports.lotusBotAdmin = onRequest(
+    { region: "asia-southeast1", memory: "128MiB", timeoutSeconds: 15, cors: true }, 
+    async (req, res) => {
+        setCORSHeaders(req, res);
+        if (req.method === "OPTIONS") {
+            res.status(204).send("");
+            return;
+        }
+
+        const { password, action, botId, data } = req.body || {};
+        
+        const pwdSnap = await admin.database().ref("/config/adminPassword").once("value");
+        const realPwd = pwdSnap.val() || "123456";
+        
+        if (password !== realPwd) {
+            res.status(401).json({ error: "Sai mật khẩu" });
+            return;
+        }
+
+        try {
+            if (action === "get") {
+                const snap = await admin.database().ref("/lotus_bots").once("value");
+                res.status(200).json({ data: snap.val() || {} });
+            } else if (action === "toggle") {
+                await admin.database().ref(`/lotus_bots/${botId}/status`).set(data.status);
+                res.status(200).json({ success: true });
+            } else if (action === "addUser") {
+                await admin.database().ref(`/lotus_bots/${botId}/allowed_users/${data.userId}`).set(true);
+                res.status(200).json({ success: true });
+            } else if (action === "removeUser") {
+                await admin.database().ref(`/lotus_bots/${botId}/allowed_users/${data.userId}`).remove();
+                res.status(200).json({ success: true });
+            } else if (action === "setToken") {
+                await admin.database().ref(`/lotus_bots/${botId}/token`).set(data.token);
+                res.status(200).json({ success: true });
+            } else if (action === "setAllowAll") {
+                await admin.database().ref(`/lotus_bots/${botId}/allow_all`).set(data.allow_all);
+                res.status(200).json({ success: true });
+            } else {
+                res.status(400).json({ error: "Invalid action" });
+            }
+        } catch (error) {
+            console.error("Admin error:", error);
+            res.status(500).json({ error: error.message });
+        }
+    }
+);

@@ -6,11 +6,15 @@
     <link rel="icon" href="/assets/images/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cài đặt NDID - ND Labs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap"
         rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
     <link rel="stylesheet" href="/auth/auth.css">
+    <script src="/assets/js/nd-accounts.js"></script>
     <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/cloudflare-storage.js"></script>
+    <script src="/font/font.js"></script>
     <style>
         .google-row {
             display: flex;
@@ -83,41 +87,15 @@
             gap: 8px;
         }
 
-        .btn-link-small img {
-            width: 16px;
-            height: 16px;
-        }
-
         .btn-link-small:hover {
             background: #f8fafc;
             border-color: #cbd5e1;
         }
 
-        .join-class-row {
-            display: flex;
-            gap: 8px;
-        }
-        .join-input-wrapper {
-            flex: 1;
-            margin-bottom: 0;
-        }
-        .join-btn-custom {
-            padding: 0 16px;
-            font-size: 13px;
-            font-weight: 700;
-            border-radius: 12px;
-            height: 44px;
-            margin-top: 0;
-            width: auto !important;
-        }
-        .joined-list-wrapper {
-            margin-top: 12px;
-        }
-
-        /* Semantic and utility classes for settings panels */
         .mb-28 { margin-bottom: 28px; }
         .mb-0 { margin-bottom: 0 !important; }
-        .mt-4 { margin-top: 4px !important; }
+        .mb-16 { margin-bottom: 16px !important; }
+        .mb-20 { margin-bottom: 20px !important; }
         .text-22-bold { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
         .text-14-soft { font-size: 14px; color: var(--text-soft); }
         .text-primary { color: var(--primary) !important; }
@@ -125,7 +103,6 @@
         .flex-row-gap-8 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .text-18-bold-m0 { font-size: 18px; font-weight: 800; margin: 0; }
         .text-13-soft-semibold-m0 { font-size: 13px; color: var(--text-soft); font-weight: 600; margin: 0; }
-        .flex-col-gap-24 { display: flex; flex-direction: column; gap: 24px; }
         
         .settings-tab-panel {
             display: flex;
@@ -214,34 +191,7 @@
             flex-direction: column;
             gap: 16px;
         }
-        .merge-acc-container {
-            padding: 20px;
-            border-radius: 16px;
-            border: 1.5px dashed #cbd5e1;
-            background: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .btn-link-small-fit {
-            width: fit-content !important;
-            margin-top: 8px !important;
-        }
-        .delete-acc-container {
-            padding: 20px;
-            border-radius: 16px;
-            border: 1.5px solid #fecaca;
-            background: #fff5f5;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .btn-unlink-fit {
-            width: fit-content !important;
-            margin-top: 8px !important;
-            border: 1.5px solid #fecaca !important;
-            background: #fee2e2 !important;
-        }
+
         .select-field-custom {
             width: 100%;
             padding: 12px 16px 12px 46px;
@@ -253,70 +203,221 @@
             color: var(--text-main);
             outline: none;
         }
-        .role-hint-text {
-            font-size: 12px;
-            color: #94a3b8;
-            margin: 6px 0 0 4px;
+
+        /* ─── CARDID CITIZEN CARD WIDGET TONE SÁNG ─── */
+        .ndid-card-light {
+            width: 100%;
+            max-width: 420px;
+            min-height: 250px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 45%, #e0f2fe 100%);
+            border-radius: 22px;
+            padding: 22px;
+            color: #0f172a;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #bae6fd;
+            box-shadow: 0 16px 32px -8px rgba(2, 132, 199, 0.18), inset 0 1px 2px #ffffff;
+            margin: 0 auto;
+        }
+
+        .ndid-card-light::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -25%;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .card-chip-badge {
+            width: 26px;
+            height: 18px;
+            background: linear-gradient(135deg, #fef08a 0%, #ca8a04 100%);
+            border-radius: 4px;
+            border: 1px solid #eab308;
+            position: relative;
+        }
+
+        .card-chip-badge::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border: 1px solid rgba(0,0,0,0.15);
+            border-radius: 2px;
+        }
+
+        .ndid-pwd-secure-box {
+            margin-top: 12px;
+            background: #ffffff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .btn-reveal-pwd {
+            background: #e0f2fe;
+            color: #0284c7;
+            border: 1px solid #bae6fd;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-reveal-pwd:hover {
+            background: #bae6fd;
+        }
+
+        .btn-card-download-widget {
+            background: #0284c7;
+            color: #ffffff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 4px;
+            transition: all 0.2s;
         }
-        .logout-section {
-            margin-top: 48px;
-            padding-top: 24px;
-            border-top: 1px solid #fecaca;
+
+        .btn-card-download-widget:hover {
+            background: #0369a1;
         }
-        .btn-unlink-fit-logout {
-            background: #fef2f2 !important;
-            color: #ef4444 !important;
-            border: 1.5px solid #fecaca !important;
-            padding: 12px 20px !important;
-            border-radius: 14px !important;
-            font-weight: 800 !important;
-            font-family: inherit !important;
-            font-size: 14px !important;
-            cursor: pointer !important;
-            display: flex !important;
-            align-items: center !important;
-            gap: 8px !important;
-            transition: all 0.2s !important;
+
+        .flag-img-icon {
+            width: 20px;
+            height: 14px;
+            border-radius: 3px;
+            object-fit: cover;
+            border: 1px solid rgba(0,0,0,0.15);
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+
+        .checkbox-pill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .checkbox-pill-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .checkbox-pill-label:has(input:checked) {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        /* Multi-account Switcher Box */
+        .account-switcher-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            padding: 12px 18px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .account-pills-list {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            max-width: 100%;
+            padding-bottom: 4px;
+        }
+
+        .account-pill-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 100px;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .account-pill-item.active {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #0284c7;
+            box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
+        }
+
+        .account-pill-item img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .btn-add-account-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            background: #eff6ff;
+            border: 1.5px dashed #3b82f6;
+            color: #1d4ed8;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-add-account-pill:hover {
+            background: #dbeafe;
         }
 
         /* Modal classes */
-        .modal-scroll {
-            overflow-y: auto !important;
-        }
-        .modal-content-large {
-            max-width: 600px !important;
-            width: 100% !important;
-            margin: 40px auto !important;
-            padding: 28px !important;
-        }
-        .modal-content-medium {
-            max-width: 450px !important;
-            width: 100% !important;
-            padding: 24px !important;
-        }
         .modal-content-pwd {
             max-width: 450px !important;
             width: 100% !important;
             padding: 28px !important;
-        }
-        .modal-header-h3 {
-            font-weight: 800 !important;
-            font-size: 18px !important;
-            margin-bottom: 8px !important;
-        }
-        .modal-desc-p {
-            font-size: 13px !important;
-            color: var(--text-soft) !important;
-            margin-bottom: 20px !important;
-        }
-        .modal-footer {
-            display: flex !important;
-            justify-content: flex-end !important;
-            gap: 10px !important;
-            margin-top: 20px !important;
         }
         .btn-cancel-modal {
             padding: 10px 18px !important;
@@ -324,7 +425,6 @@
             border: none !important;
             background: #f1f5f9 !important;
             font-weight: 700 !important;
-            font-family: inherit !important;
             cursor: pointer !important;
         }
         .btn-confirm-modal {
@@ -355,134 +455,54 @@
             color: var(--text-soft) !important;
             font-weight: 700 !important;
         }
-        .merge-step-p {
-            font-size: 13px !important;
-            color: var(--text-soft) !important;
-            margin-bottom: 16px !important;
-            line-height: 1.5 !important;
+        .otp-input-box {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 6px;
+            text-align: center;
+            padding: 12px;
+            border-radius: 14px;
+            border: 2px solid #cbd5e1;
+            width: 100%;
+            outline: none;
+            color: #0f172a;
         }
-        .mb-16 { margin-bottom: 16px !important; }
-        .mb-20 { margin-bottom: 20px !important; }
-        .merge-or-divider {
-            text-align: center !important;
-            margin: 16px 0 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 10px !important;
-            color: var(--text-soft) !important;
-            font-size: 12px !important;
+        .otp-input-box:focus {
+            border-color: #0284c7;
         }
-        .merge-divider-line {
-            flex: 1 !important;
-            height: 1px !important;
-            background: #e2e8f0 !important;
-        }
-        .btn-merge-google {
-            width: 100% !important;
-            border: 1.5px solid #cbd5e1 !important;
-            background: #fff !important;
-            padding: 10px !important;
-            border-radius: 12px !important;
-            font-weight: 700 !important;
-            cursor: pointer !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 8px !important;
-            transition: all 0.2s !important;
-            font-family: inherit !important;
-            font-size: 13.5px !important;
-            color: var(--text-main) !important;
-        }
-        .google-icon-size {
-            width: 18px !important;
-            height: 18px !important;
-        }
-        .flex-end-gap-10 {
-            display: flex !important;
-            justify-content: flex-end !important;
-            gap: 10px !important;
-        }
-        .btn-confirm-step {
-            width: auto !important;
-            margin-top: 0 !important;
-            padding: 10px 24px !important;
-        }
-        .merge-table-container {
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 14px !important;
-            overflow: hidden !important;
-            margin-bottom: 20px !important;
-            font-size: 13px !important;
-        }
-        .merge-table {
-            width: 100% !important;
-            border-collapse: collapse !important;
-            text-align: left !important;
-        }
-        .merge-table-thead {
-            background: #f8fafc !important;
-            border-bottom: 1px solid #e2e8f0 !important;
-            font-weight: 800 !important;
-        }
-        .merge-table-th-soft {
-            padding: 10px 12px !important;
-            color: var(--text-soft) !important;
-        }
-        .merge-table-th {
-            padding: 10px 12px !important;
-        }
-        .merge-warning-box {
-            font-size: 12px !important;
-            color: #b45309 !important;
-            background: #fffbeb !important;
-            border: 1px solid #fde68a !important;
-            padding: 12px !important;
-            border-radius: 10px !important;
-            margin-bottom: 20px !important;
-            line-height: 1.5 !important;
-        }
-        .btn-execute-merge {
-            width: auto !important;
-            margin-top: 0 !important;
-            padding: 10px 24px !important;
-            background: #059669 !important;
-            border-color: #059669 !important;
-        }
-        .delete-modal-title {
-            font-weight: 800 !important;
-            font-size: 18px !important;
-            color: #dc2626 !important;
-            margin: 0 0 8px 0 !important;
-            display: flex !important;
-            align-items: center !important;
-            gap: 8px !important;
-        }
-        .btn-execute-delete {
-            width: auto !important;
-            margin-top: 0 !important;
-            padding: 10px 20px !important;
-            background: #dc2626 !important;
-            border-color: #dc2626 !important;
-        }
-        .pwd-modal-title {
-            font-weight: 800 !important;
-            font-size: 18px !important;
-            color: var(--text-main) !important;
-            margin: 0 !important;
-            font-family: inherit !important;
-        }
-        .pwd-modal-footer {
-            display: flex !important;
-            justify-content: flex-end !important;
-            gap: 10px !important;
-            margin-top: 24px !important;
+
+        @media (max-width: 640px) {
+            .settings-panel {
+                padding: 18px 14px !important;
+                border-radius: 18px !important;
+            }
+            .ndid-card-light {
+                padding: 16px 12px !important;
+                border-radius: 18px !important;
+                max-width: 100% !important;
+            }
+            #card-widget-avatar {
+                width: 52px !important;
+                height: 52px !important;
+            }
+            .account-switcher-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                padding: 10px 14px !important;
+            }
+            .avatar-section {
+                flex-direction: column !important;
+                text-align: center !important;
+                padding: 16px !important;
+            }
+            .google-row {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 14px !important;
+            }
         }
     </style>
-    <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/cloudflare-storage.js"></script>
-    <script src="/font/font.js"></script>
 </head>
 
 <body>
@@ -492,7 +512,10 @@
                 <i class="ph-duotone ph-user-circle"></i><span>Tài khoản NDID</span>
             </a>
             <a href="javascript:void(0)" onclick="window.switchSettingsTab('eduspace')" id="tab-eduspace">
-                <i class="ph-duotone ph-graduation-cap"></i><span>Học tập EduSpace</span>
+                <i class="ph-duotone ph-graduation-cap"></i><span>Tài khoản EduSpace</span>
+            </a>
+            <a href="javascript:void(0)" onclick="window.switchSettingsTab('miniworld')" id="tab-miniworld">
+                <i class="ph-duotone ph-game-controller"></i><span>Tài khoản Mini World</span>
             </a>
             <a href="/privacy/">
                 <i class="ph-duotone ph-shield-check"></i><span>Chính sách</span>
@@ -500,6 +523,17 @@
         </aside>
 
         <main class="settings-panel">
+            <!-- Google-Style Multi-Account Selector Banner -->
+            <div class="account-switcher-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ph-bold ph-users-three text-primary" style="font-size: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 800; color: #1e293b;">Tài khoản đang quản trị:</span>
+                </div>
+                <div class="account-pills-list" id="account-pills-container">
+                    <!-- Populated dynamically via NDAccounts -->
+                </div>
+            </div>
+
             <div class="mb-28">
                 <h2 class="text-22-bold">Cài đặt tài khoản</h2>
                 <p class="text-14-soft">Quản lý hồ sơ <strong id="ndid-display" class="text-primary">...</strong></p>
@@ -523,314 +557,346 @@
                 </div>
             </div>
 
-            <!-- Edit profile -->
-            <form id="profile-form" class="auth-form flex-col-gap-24">
-                <!-- TAB PANEL GENERAL -->
-                <div id="panel-general" class="settings-tab-panel">
-                    <!-- Section 1: Thông tin tài khoản NDID -->
-                    <div class="card-section">
-                        <h3 class="card-section-title">
-                            <i class="ph-bold ph-identification-card text-primary"></i> Thông tin tài khoản NDID
-                        </h3>
-                        
-                        <div class="form-group mb-0">
-                            <label>NDID (Tên định danh)</label>
-                            <div class="input-container">
-                                <i class="ph-duotone ph-fingerprint"></i>
-                                <input type="text" id="edit-ndid" placeholder="Nhập NDID" required>
-                            </div>
-                            <p class="text-11-soft-mt4">Chỉ chứa chữ (hoa/thường), số, và ký tự <code>.</code> <code>_</code> <code>-</code>. Không được chứa từ "admin".</p>
-                        </div>
-
-                        <div class="form-group mb-0">
-                            <label>Họ và tên</label>
-                            <div class="input-container">
-                                <i class="ph-duotone ph-user"></i>
-                                <input type="text" id="edit-name" placeholder="Tên của bạn" required>
+            <!-- TAB PANEL 1: NDID -->
+            <div id="panel-general" class="settings-tab-panel">
+                <!-- CardID Citizen Card Widget (Tone Sáng Chuẩn Tỷ Lệ) -->
+                <div class="ndid-card-light">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <img src="/assets/images/logo.png" alt="ND" style="width: 24px; height: 24px; border-radius: 6px; border: 1px solid #cbd5e1;">
+                            <div>
+                                <div style="font-size: 11px; font-weight: 900; letter-spacing: 1px; color: #0284c7; text-transform: uppercase;">ND LABS CITIZEN CARD</div>
+                                <div style="font-size: 9px; color: #64748b; font-weight: 700;">THẺ CĂN CƯỚC ĐIỆN TỬ NDID</div>
                             </div>
                         </div>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <div class="card-chip-badge"></div>
+                            <i class="ph-bold ph-wifi-high" style="font-size: 15px; color: #0284c7;"></i>
+                        </div>
+                    </div>
 
-                        <div class="form-group mb-0">
-                            <label>Email khôi phục</label>
-                            <div class="input-container">
-                                <i class="ph-duotone ph-envelope-simple"></i>
-                                <input type="email" id="edit-recovery-email" placeholder="email@example.com">
+                    <div style="display: flex; gap: 14px; align-items: center;">
+                        <img id="card-widget-avatar" src="/assets/images/logo.png" alt="Avatar" style="width: 68px; height: 68px; border-radius: 12px; border: 2.5px solid #0284c7; object-fit: cover; background: #fff; flex-shrink: 0;">
+                        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3.5px;">
+                            <div style="font-size: 11px; color: #334155; font-weight: 600;"><span>Tên: </span><strong id="card-widget-name" style="color: #0f172a; font-weight: 800;">ND MEMBER</strong></div>
+                            <div style="font-size: 11px; color: #334155; font-weight: 600;"><span>CodeID: </span><strong id="card-widget-codeid" style="color: #0284c7; font-family: 'JetBrains Mono', monospace; font-weight: 800;">00000000</strong></div>
+                            <div style="font-size: 11px; color: #334155; font-weight: 600;"><span>NDID: </span><strong id="card-widget-ndid" style="color: #0f172a; font-weight: 800;">NDID: ...</strong></div>
+                            <div style="font-size: 11px; color: #334155; font-weight: 600;"><span>Ngày, tháng, năm sinh: </span><strong id="card-widget-dob" style="color: #0f172a; font-weight: 800;">—</strong></div>
+                            <div style="font-size: 11px; color: #334155; font-weight: 600; display: flex; align-items: center;">
+                                <span>Quốc tịch:&nbsp;</span>
+                                <span id="card-widget-nationality-wrapper" style="display: inline-flex; align-items: center;">
+                                    <img id="card-widget-flag-img" class="flag-img-icon" src="https://flagcdn.com/w40/vn.png" alt="flag">
+                                    <strong id="card-widget-nationality" style="color: #0f172a; font-weight: 800;">Việt Nam</strong>
+                                </span>
                             </div>
+                            <div style="font-size: 11px; color: #334155; font-weight: 600;"><span>Email: </span><strong id="card-widget-email" style="color: #0f172a; font-weight: 800;">email@example.com</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- Password Box with Protected Reveal -->
+                    <div class="ndid-pwd-secure-box">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #64748b; font-size: 11px; font-weight: 700;">MẬT KHẨU:</span>
+                            <span id="card-widget-pwd-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 800; color: #0284c7; letter-spacing: 2px;">••••••••</span>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" id="btn-request-pwd-otp" class="btn-reveal-pwd">
+                                <i class="ph-bold ph-eye"></i>
+                                <span>Xem mật khẩu</span>
+                            </button>
+                            <button type="button" id="btn-download-card-widget" class="btn-card-download-widget hidden">
+                                <i class="ph-bold ph-download-simple"></i>
+                                <span>Tải Thẻ Công Dân</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Google linked indicator -->
+                    <div id="card-widget-google-badge" class="hidden" style="margin-top: 8px; display: flex; align-items: center; gap: 6px; background: #e0f2fe; border: 1px solid #bae6fd; padding: 3px 8px; border-radius: 100px; font-size: 10.5px; font-weight: 700; width: fit-content; color: #0369a1;">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width: 14px; height: 14px;" alt="G">
+                        <span id="card-widget-google-email">linked@gmail.com</span>
+                    </div>
+                </div>
+
+                <!-- Form Chỉnh sửa NDID -->
+                <form id="ndid-profile-form" class="card-section">
+                    <h3 class="card-section-title">
+                        <i class="ph-bold ph-identification-card text-primary"></i> Thông tin tài khoản NDID
+                    </h3>
+                    
+                    <div class="form-group mb-0">
+                        <label>NDID (Tên định danh)</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-fingerprint"></i>
+                            <input type="text" id="edit-ndid" placeholder="Nhập NDID" required>
+                        </div>
+                        <p class="text-11-soft-mt4">Chỉ chứa chữ (hoa/thường), số, và ký tự <code>.</code> <code>_</code> <code>-</code>. Không được chứa từ "admin".</p>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>Họ và tên *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-user"></i>
+                            <input type="text" id="edit-name" placeholder="Tên của bạn" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>Quốc tịch *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-globe"></i>
+                            <select id="edit-nationality" required class="select-field-custom">
+                                <option value="vn|Việt Nam">🇻🇳 Việt Nam</option>
+                                <option value="us|Hoa Kỳ">🇺🇸 Hoa Kỳ</option>
+                                <option value="jp|Nhật Bản">🇯🇵 Nhật Bản</option>
+                                <option value="kr|Hàn Quốc">🇰🇷 Hàn Quốc</option>
+                                <option value="gb|Vương quốc Anh">🇬🇧 Vương quốc Anh</option>
+                                <option value="fr|Pháp">🇫🇷 Pháp</option>
+                                <option value="de|Đức">🇩🇪 Đức</option>
+                                <option value="au|Úc">🇦🇺 Úc</option>
+                                <option value="ca|Canada">🇨🇦 Canada</option>
+                                <option value="sg|Singapore">🇸🇬 Singapore</option>
+                                <option value="th|Thái Lan">🇹🇭 Thái Lan</option>
+                                <option value="cn|Trung Quốc">🇨🇳 Trung Quốc</option>
+                                <option value="un|Quốc gia khác">🌐 Quốc gia khác</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>Email khôi phục</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-envelope-simple"></i>
+                            <input type="email" id="edit-recovery-email" placeholder="email@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>Ngày, tháng, năm sinh *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-calendar"></i>
+                            <input type="date" id="edit-dob" required>
                         </div>
                     </div>
 
                     <button type="submit" class="btn-primary btn-save-settings">
-                        <i class="ph-bold ph-floppy-disk"></i> Lưu thay đổi
+                        <i class="ph-bold ph-floppy-disk"></i> Lưu thông tin NDID
                     </button>
+                </form>
 
-                    <div class="divider divider-36"><span>Liên kết tài khoản</span></div>
+                <div class="divider divider-36"><span>Liên kết tài khoản</span></div>
 
-                    <!-- Google linking row -->
-                    <div class="google-row">
-                        <div class="google-row-left">
-                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-                            <div>
-                                <div class="text-14">Google</div>
-                                <div id="google-email-sub" class="text-12-soft-weight500-mt2">Chưa liên kết</div>
-                            </div>
-                        </div>
-                        <div class="flex-row-gap-8-center">
-                            <span id="google-linked-badge" class="google-linked-badge hidden">
-                                <i class="ph-bold ph-check"></i> Đã liên kết
-                            </span>
-                            <button type="button" id="link-google-btn" class="btn-link-small">
-                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
-                                Liên kết
-                            </button>
-                            <button type="button" id="unlink-google-btn" class="btn-unlink hidden">
-                                <i class="ph-bold ph-link-break"></i> Hủy liên kết
-                            </button>
+                <!-- Google linking row -->
+                <div class="google-row">
+                    <div class="google-row-left">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                        <div>
+                            <div class="text-14">Google</div>
+                            <div id="google-email-sub" class="text-12-soft-weight500-mt2">Chưa liên kết</div>
                         </div>
                     </div>
-
-                    <div class="divider divider-36"><span>Bảo mật & Mật khẩu</span></div>
-
-                    <div id="password-management-section" class="pass-sec-container">
-                        <h4 id="pass-sec-title" class="pass-sec-title-h4"><i class="ph-bold ph-key"></i> Đang tải thông tin...</h4>
-                        <p id="pass-sec-desc" class="pass-sec-desc-p">Đang kiểm tra cơ chế bảo mật tài khoản...</p>
-                        <button type="button" id="pass-sec-btn" class="btn-primary pass-sec-btn-style">
-                            Thiết lập
+                    <div class="flex-row-gap-8-center">
+                        <span id="google-linked-badge" class="google-linked-badge hidden">
+                            <i class="ph-bold ph-check"></i> Đã liên kết
+                        </span>
+                        <button type="button" id="link-google-btn" class="btn-link-small">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
+                            Liên kết
+                        </button>
+                        <button type="button" id="unlink-google-btn" class="btn-unlink hidden">
+                            <i class="ph-bold ph-link-break"></i> Hủy liên kết
                         </button>
                     </div>
-
-                    <!-- Dangerous options -->
-                    <div class="divider divider-36"><span>Quản lý nâng cao</span></div>
-
-                    <div class="flex-col-gap-16">
-                        <!-- Merge Accounts Row -->
-                        <div class="merge-acc-container">
-                            <h4 class="pass-sec-title-h4"><i class="ph-bold ph-git-merge text-primary"></i> Sáp nhập tài khoản</h4>
-                            <p class="pass-sec-desc-p">Sáp nhập dữ liệu từ một tài khoản NDID khác vào tài khoản này. Bạn cần cung cấp mật khẩu của cả hai tài khoản.</p>
-                            <button type="button" id="start-merge-btn" class="btn-link-small btn-link-small-fit">
-                                Bắt đầu sáp nhập
-                            </button>
-                        </div>
-
-                        <!-- Delete Account Row -->
-                        <div class="delete-acc-container">
-                            <h4 class="pass-sec-title-h4 text-red-600"><i class="ph-bold ph-trash"></i> Xóa tài khoản</h4>
-                            <p class="pass-sec-desc-p text-red-800">Hành động này không thể hoàn tác. Mọi dữ liệu học tập của bạn trên EduSpace sẽ bị xóa vĩnh viễn.</p>
-                            <button type="button" id="delete-acc-btn" class="btn-unlink btn-unlink-fit">
-                                Xóa tài khoản vĩnh viễn
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- TAB PANEL EDUSPACE -->
-                <div id="panel-eduspace" class="settings-tab-panel hidden">
-                    <!-- Section 2: Thông tin trong EduSpace -->
-                    <div class="card-section">
-                        <h3 class="card-section-title">
-                            <i class="ph-bold ph-graduation-cap text-primary"></i> Thông tin học tập EduSpace
-                        </h3>
+                <div class="divider divider-36"><span>Bảo mật & Mật khẩu</span></div>
 
-                        <div class="form-group mb-0">
-                            <label for="edit-role">Vai trò học tập</label>
-                            <div class="input-container">
-                                <i class="ph-duotone ph-users"></i>
-                                <select id="edit-role" required class="select-field-custom">
-                                    <option value="student">Học sinh (Student)</option>
-                                    <option value="teacher" disabled class="hidden">Giáo viên (Teacher) — Liên hệ Admin</option>
-                                    <option value="other">Khác</option>
-                                </select>
-                            </div>
-                            <p class="role-hint-text">
-                                <i class="ph-bold ph-info text-sky-600"></i>
-                                Vai trò <strong>Giáo viên</strong> học tập cần được Admin cấp quyền. Liên hệ Admin để được hỗ trợ.
-                            </p>
-                        </div>
+                <div id="password-management-section" class="pass-sec-container">
+                    <h4 id="pass-sec-title" class="pass-sec-title-h4"><i class="ph-bold ph-key"></i> Đổi mật khẩu</h4>
+                    <p id="pass-sec-desc" class="pass-sec-desc-p">Nhập mật khẩu hiện tại hoặc mã OTP để thiết lập mật khẩu mới.</p>
+                    <button type="button" id="pass-sec-btn" class="btn-primary pass-sec-btn-style">
+                        Thiết lập
+                    </button>
+                </div>
+            </div>
 
-                        <div class="form-group mb-0">
-                            <label for="edit-yob">Năm sinh</label>
-                            <div class="input-container">
-                                <i class="ph-duotone ph-calendar"></i>
-                                <input type="number" id="edit-yob" placeholder="Ví dụ: 2008" min="1940" max="2026" required>
-                            </div>
-                        </div>
+            <!-- TAB PANEL 2: EDUSPACE -->
+            <div id="panel-eduspace" class="settings-tab-panel hidden">
+                <form id="eduspace-profile-form" class="card-section">
+                    <h3 class="card-section-title">
+                        <i class="ph-bold ph-graduation-cap text-primary"></i> Thông tin Tài khoản EduSpace
+                    </h3>
 
-                        <div class="form-group mb-0">
-                            <label for="edit-grade">Lớp học</label>
-                            <div class="input-container">
-                                <i class="ph-duotone ph-presentation"></i>
-                                <select id="edit-grade" required class="select-field-custom">
-                                    <option value="10">Lớp 10</option>
-                                    <option value="11">Lớp 11</option>
-                                    <option value="12">Lớp 12</option>
-                                    <option value="Đang dạy">Giáo viên - Đang dạy</option>
-                                    <option value="Khác">Khác</option>
-                                </select>
-                            </div>
+                    <div style="background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; gap: 10px;">
+                        <i class="ph-bold ph-info text-sky-600" style="font-size: 20px;"></i>
+                        <div style="font-size: 13px; color: #0369a1;">
+                            <strong>Ngày sinh (Đồng bộ từ NDID):</strong> <span id="edu-ndid-dob" style="font-weight: 700; color: #0284c7;">—</span>
+                            <span style="font-size: 11.5px; color: #64748b; display: block;">(Tự động đồng bộ từ hồ sơ NDID của bạn)</span>
                         </div>
                     </div>
 
-                    <!-- Section 3: Tham gia lớp học (Chỉ hiển thị nếu role là student) -->
-                    <div class="card-section" id="student-classrooms-section">
-                        <h3 class="card-section-title">
-                            <i class="ph-bold ph-chalkboard-teacher text-primary"></i> Lớp học của tôi
-                        </h3>
-                        
-                        <div class="form-group mb-0">
-                            <label for="join-class-code">Tham gia lớp học mới</label>
-                            <div class="join-class-row">
-                                <div class="input-container join-input-wrapper">
-                                    <i class="ph-duotone ph-key"></i>
-                                    <input type="text" id="join-class-code" placeholder="Nhập mã lớp học (6 chữ số)" maxlength="6">
-                                </div>
-                                <button type="button" id="btn-join-class" class="btn-primary join-btn-custom">
-                                    Tham gia
-                                </button>
-                            </div>
+                    <div class="form-group mb-0">
+                        <label for="edit-edu-role">Vai trò trong EduSpace *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-users"></i>
+                            <select id="edit-edu-role" required class="select-field-custom">
+                                <option value="student">Học sinh (Lớp 1 → 12)</option>
+                                <option value="teacher">Giáo viên (Đang dạy trường học)</option>
+                                <option value="college_student">Sinh viên (Đại học / Cao đẳng)</option>
+                                <option value="lecturer">Giảng viên (Đại học / Học viện)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label id="label-edu-school" for="edit-edu-school">Trường đang học / công tác *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-buildings"></i>
+                            <input type="text" id="edit-edu-school" placeholder="Ví dụ: THPT Nguyễn Trãi" required>
+                        </div>
+                    </div>
+
+                    <div id="sec-edu-student" class="form-group mb-0">
+                        <label for="edit-edu-student-grade">Khối lớp đang học *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-presentation"></i>
+                            <select id="edit-edu-student-grade" class="select-field-custom">
+                                <option value="1">Lớp 1</option>
+                                <option value="2">Lớp 2</option>
+                                <option value="3">Lớp 3</option>
+                                <option value="4">Lớp 4</option>
+                                <option value="5">Lớp 5</option>
+                                <option value="6">Lớp 6</option>
+                                <option value="7">Lớp 7</option>
+                                <option value="8">Lớp 8</option>
+                                <option value="9">Lớp 9</option>
+                                <option value="10">Lớp 10</option>
+                                <option value="11">Lớp 11</option>
+                                <option value="12">Lớp 12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="sec-edu-college" class="form-group mb-0 hidden">
+                        <label for="edit-edu-major">Ngành đang học *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-book-open"></i>
+                            <input type="text" id="edit-edu-major" placeholder="Ví dụ: Công nghệ Thông tin, Sư phạm Toán...">
+                        </div>
+                    </div>
+
+                    <div id="sec-edu-lecturer" class="form-group mb-0 hidden">
+                        <label for="edit-edu-lecturer-subject">Môn / Chuyên ngành đang dạy *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-chalkboard-teacher"></i>
+                            <input type="text" id="edit-edu-lecturer-subject" placeholder="Ví dụ: Giải tích, Trí tuệ Nhân tạo, Lập trình Web...">
+                        </div>
+                    </div>
+
+                    <div id="sec-edu-teacher" class="flex-col-gap-16 hidden">
+                        <div>
+                            <label style="font-weight: 700; font-size: 13.5px; color: var(--text-main);">Các khối lớp đang dạy (Lớp 1 → 12) *</label>
+                            <p class="text-11-soft-mt4">Tích chọn tất cả các khối lớp bạn đang phụ trách giảng dạy:</p>
+                            <div class="checkbox-pill-grid" id="teacher-grades-grid"></div>
                         </div>
 
-                        <!-- Danh sách lớp học đang tham gia -->
-                        <div id="joined-classrooms-list" class="flex-col-gap-16 joined-list-wrapper">
-                            <p class="text-14-soft">Đang tải danh sách lớp học...</p>
+                        <div>
+                            <label style="font-weight: 700; font-size: 13.5px; color: var(--text-main);">Các môn đang dạy *</label>
+                            <p class="text-11-soft-mt4">Tích chọn tất cả các bộ môn bạn đang tham gia giảng dạy:</p>
+                            <div class="checkbox-pill-grid" id="teacher-subjects-grid"></div>
                         </div>
                     </div>
 
                     <button type="submit" class="btn-primary btn-save-settings">
-                        <i class="ph-bold ph-floppy-disk"></i> Lưu thông tin học tập
+                        <i class="ph-bold ph-floppy-disk"></i> Lưu thông tin EduSpace
                     </button>
-                </div>
-            </form>
+                </form>
+            </div>
 
-            <!-- Logout -->
-            <div class="logout-section">
-                <button id="logout-btn" class="btn-unlink-fit-logout">
-                    <i class="ph-bold ph-sign-out"></i> Đăng xuất
+            <!-- TAB PANEL 3: MINI WORLD -->
+            <div id="panel-miniworld" class="settings-tab-panel hidden">
+                <form id="miniworld-profile-form" class="card-section">
+                    <h3 class="card-section-title">
+                        <i class="ph-bold ph-game-controller text-primary"></i> Thông tin Tài khoản Mini World
+                    </h3>
+
+                    <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; gap: 10px;">
+                        <i class="ph-bold ph-calendar-check text-green-600" style="font-size: 20px;"></i>
+                        <div style="font-size: 13px; color: #15803d;">
+                            <strong>Ngày sinh (Đồng bộ từ NDID):</strong> <span id="mw-ndid-dob" style="font-weight: 700; color: #16a34a;">—</span>
+                            <span style="font-size: 11.5px; color: #64748b; display: block;">(Tự động đồng bộ từ hồ sơ NDID của bạn)</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="font-weight: 700; font-size: 13.5px; color: var(--text-main);">Máy chủ Mini World *</label>
+                        <p class="text-11-soft-mt4">Tích chọn các máy chủ bạn đang tham gia:</p>
+                        
+                        <div style="display: flex; gap: 14px; margin-top: 8px; flex-wrap: wrap;">
+                            <label class="checkbox-pill-label" style="padding: 12px 18px; font-size: 13.5px;">
+                                <input type="checkbox" id="mw-server-global" value="Global">
+                                <span>🌍 Quốc tế (Global)</span>
+                            </label>
+                            <label class="checkbox-pill-label" style="padding: 12px 18px; font-size: 13.5px;">
+                                <input type="checkbox" id="mw-server-china" value="China">
+                                <span>🇨🇳 Trung Quốc (China)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="mw-group-global-id" class="form-group mb-0 hidden">
+                        <label for="mw-input-global-id">ID Mini World Quốc tế (Global) *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-globe"></i>
+                            <input type="text" id="mw-input-global-id" placeholder="Nhập UID Mini World Global của bạn">
+                        </div>
+                    </div>
+
+                    <div id="mw-group-china-id" class="form-group mb-0 hidden">
+                        <label for="mw-input-china-id">ID Mini World Trung Quốc (China) *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-shield"></i>
+                            <input type="text" id="mw-input-china-id" placeholder="Nhập UID Mini World China của bạn">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-save-settings">
+                        <i class="ph-bold ph-floppy-disk"></i> Lưu thông tin Mini World
+                    </button>
+                </form>
+            </div>
+
+            <!-- Logout & Multi-account options -->
+            <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; gap: 12px; flex-wrap: wrap;">
+                <button id="logout-current-btn" class="btn-unlink" style="padding: 12px 20px; font-size: 13.5px; border-radius: 14px;">
+                    <i class="ph-bold ph-sign-out"></i> Đăng xuất tài khoản này
+                </button>
+                <button id="logout-all-btn" class="btn-unlink" style="padding: 12px 20px; font-size: 13.5px; border-radius: 14px; background: #fff1f2; border-color: #fecdd3;">
+                    <i class="ph-bold ph-power"></i> Đăng xuất tất cả tài khoản
                 </button>
             </div>
         </main>
     </div>
 
-    <!-- Re-auth Modal for linking -->
-    <div id="reauth-modal" class="modal hidden">
-        <div class="modal-content">
-            <h3 class="modal-header-h3">Xác minh bảo mật</h3>
-            <p class="modal-desc-p" id="reauth-desc">Nhập lại mật khẩu để liên kết tài khoản Google.</p>
-            <div class="form-group">
-                <div class="input-container">
-                    <i class="ph-duotone ph-key"></i>
-                    <input type="password" id="reauth-password" placeholder="Mật khẩu của bạn" title="Mật khẩu xác minh">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="cancel-reauth" class="btn-cancel-modal">Hủy</button>
-                <button id="confirm-reauth" class="btn-primary btn-confirm-modal">Xác nhận</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Merge Account Modal -->
-    <div id="merge-modal" class="modal hidden modal-scroll">
-        <div class="modal-content modal-content-large">
+    <!-- OTP Reveal Password Modal -->
+    <div id="otp-reveal-modal" class="modal hidden">
+        <div class="modal-content modal-content-pwd">
             <div class="modal-header-row">
-                <h3 class="modal-title-large"><i class="ph-bold ph-git-merge"></i> Sáp nhập tài khoản</h3>
-                <button id="close-merge" class="modal-close-btn">✕</button>
+                <h3 class="modal-title-large"><i class="ph-bold ph-shield-check text-primary"></i> Xác thực OTP</h3>
+                <button id="close-otp-reveal-modal" class="modal-close-btn">✕</button>
             </div>
-
-            <!-- Step 1: Login Account 2 -->
-            <div id="merge-step-1" class="merge-step">
-                <p class="merge-step-p">Vui lòng nhập NDID và mật khẩu của <strong>tài khoản phụ (Account 2)</strong> cần sáp nhập.</p>
-                <div class="form-group mb-16">
-                    <label>NDID Tài khoản 2</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-identification-card"></i>
-                        <input type="text" id="merge-ndid2" placeholder="Nhập NDID của tài khoản 2" title="NDID Tài khoản 2">
-                    </div>
-                </div>
-                <div class="form-group mb-16">
-                    <label>Mật khẩu Tài khoản 2</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-lock"></i>
-                        <input type="password" id="merge-password2" placeholder="••••••••" title="Mật khẩu Tài khoản 2">
-                    </div>
-                </div>
-                <div class="merge-or-divider">
-                    <span class="merge-divider-line"></span>
-                    <span>Hoặc sử dụng</span>
-                    <span class="merge-divider-line"></span>
-                </div>
-                <div class="mb-16">
-                    <button type="button" id="btn-merge-google-login" class="btn-merge-google">
-                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="google-icon-size">
-                        Đăng nhập Tài khoản 2 bằng Google
-                    </button>
-                </div>
-                <div class="flex-end-gap-10">
-                    <button id="cancel-merge-s1" class="btn-cancel-modal">Hủy</button>
-                    <button id="btn-merge-to-step2" class="btn-primary btn-confirm-step">Tiếp tục</button>
-                </div>
-            </div>
-
-            <!-- Step 2: Confirm Account 1 Password -->
-            <div id="merge-step-2" class="merge-step hidden">
-                <p class="merge-step-p">Xác thực tài khoản hiện tại: Vui lòng nhập mật khẩu của <strong>tài khoản hiện tại (Account 1 - <span id="merge-ndid1-display" class="text-primary">...</span>)</strong>.</p>
+            <p class="modal-desc-p">
+                Mã OTP xác thực đã được gửi tới email khôi phục (<span id="otp-target-email" class="text-primary" style="font-weight: 700;">...</span>).
+            </p>
+            <form id="otp-reveal-form">
                 <div class="form-group mb-20">
-                    <label>Mật khẩu của bạn</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-lock"></i>
-                        <input type="password" id="merge-password1" placeholder="••••••••" title="Mật khẩu hiện tại">
-                    </div>
+                    <input type="text" id="otp-input-code" class="otp-input-box" placeholder="••••••••" maxlength="8" autocomplete="off" required>
                 </div>
-                <div class="flex-end-gap-10">
-                    <button id="btn-merge-back-step1" class="btn-cancel-modal">Quay lại</button>
-                    <button id="btn-merge-to-step3" class="btn-primary btn-confirm-step">Tiếp tục</button>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" id="cancel-otp-reveal" class="btn-cancel-modal">Hủy</button>
+                    <button type="submit" id="btn-verify-otp" class="btn-primary btn-confirm-modal">Xác thực</button>
                 </div>
-            </div>
-
-            <!-- Step 3: Choose Data Fields -->
-            <div id="merge-step-3" class="merge-step hidden">
-                <p class="merge-step-p">Chọn thông tin bạn muốn giữ lại cho tài khoản sau khi sáp nhập:</p>
-                
-                <div class="merge-table-container">
-                    <table class="merge-table">
-                        <thead>
-                            <tr class="merge-table-thead">
-                                <th class="merge-table-th-soft">Trường thông tin</th>
-                                <th class="merge-table-th">Acc 1 (Hiện tại)</th>
-                                <th class="merge-table-th">Acc 2 (Phụ)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="merge-options-body">
-                            <!-- Injected dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <p class="merge-warning-box">
-                    ⚠️ <strong>Lưu ý:</strong> Sau khi hoàn tất, Tài khoản 2 sẽ bị xóa vĩnh viễn khỏi hệ thống. Tài khoản Google không được chọn giữ lại cũng sẽ bị hủy liên kết và xóa khỏi cơ sở dữ liệu.
-                </p>
-
-                <div class="flex-end-gap-10">
-                    <button id="btn-merge-back-step2" class="btn-cancel-modal">Quay lại</button>
-                    <button id="btn-execute-merge" class="btn-primary btn-execute-merge">Hoàn tất Sáp nhập</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Account Modal -->
-    <div id="delete-modal" class="modal hidden">
-        <div class="modal-content modal-content-medium">
-            <h3 class="delete-modal-title"><i class="ph-bold ph-warning"></i> Xác nhận xóa tài khoản</h3>
-            <p class="merge-step-p">Vui lòng nhập mật khẩu của bạn để xác nhận xóa vĩnh viễn tài khoản này.</p>
-            <div class="form-group mb-20">
-                <div class="input-container">
-                    <i class="ph-duotone ph-lock"></i>
-                    <input type="password" id="delete-password" placeholder="Mật khẩu của bạn" title="Nhập mật khẩu xác nhận xóa">
-                </div>
-            </div>
-            <div class="flex-end-gap-10">
-                <button id="cancel-delete" class="btn-cancel-modal">Hủy</button>
-                <button id="confirm-delete" class="btn-primary btn-execute-delete">Xóa vĩnh viễn</button>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -838,17 +904,16 @@
     <div id="password-modal" class="modal hidden">
         <div class="modal-content modal-content-pwd">
             <div class="modal-header-row">
-                <h3 id="password-modal-title" class="pwd-modal-title">Đổi mật khẩu</h3>
+                <h3 id="password-modal-title" class="modal-title-large">Đổi mật khẩu</h3>
                 <button id="close-password-modal" class="modal-close-btn">✕</button>
             </div>
 
             <form id="password-modal-form" class="space-y-4">
-                <!-- Current Password Field -->
                 <div id="pwd-field-current" class="form-group mb-16">
-                    <label>Mật khẩu hiện tại</label>
+                    <label>Mật khẩu hiện tại hoặc Mã OTP</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-lock"></i>
-                        <input type="password" id="pwd-current" placeholder="••••••••" title="Mật khẩu hiện tại">
+                        <input type="password" id="pwd-current" placeholder="Nhập mật khẩu hoặc mã OTP" title="Xác minh">
                     </div>
                 </div>
 
@@ -868,372 +933,616 @@
                     </div>
                 </div>
 
-                <div class="pwd-modal-footer">
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
                     <button type="button" id="cancel-password-modal" class="btn-cancel-modal">Hủy</button>
                     <button type="submit" id="btn-save-password" class="btn-primary btn-confirm-modal">Xác nhận</button>
                 </div>
             </form>
         </div>
     </div>
+        </div>
+    </div>
 
+    <canvas id="card-canvas-settings" width="800" height="500" style="display: none;"></canvas>
     <div id="status-msg" class="status-msg"></div>
 
-    <script type="module">
-        window.addEventListener('unhandledrejection', (event) => {
-            if (event.reason) {
-                const r = event.reason;
-                if (r.code === 403 || r.status === 403 || r.code === 'permission-denied' || (r.httpStatus === 200 && r.code)) {
-                    event.preventDefault();
+    <script>
+        function showStatus(msg, type = 'info') {
+            const el = document.getElementById('status-msg');
+            el.textContent = msg;
+            el.className = `status-msg show ${type}`;
+            setTimeout(() => el.className = 'status-msg', 4000);
+        }
+
+        window.switchSettingsTab = function(tabName) {
+            document.querySelectorAll('.settings-nav a').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('.settings-tab-panel').forEach(p => p.classList.add('hidden'));
+
+            const tabBtn = document.getElementById(`tab-${tabName}`);
+            const panel = document.getElementById(`panel-${tabName}`);
+
+            if (tabBtn) tabBtn.classList.add('active');
+            if (panel) panel.classList.remove('hidden');
+        };
+
+        // Country flags helper
+        const COUNTRY_CODE_MAP = {
+            'vn': 'Việt Nam', 'us': 'Hoa Kỳ', 'jp': 'Nhật Bản', 'kr': 'Hàn Quốc',
+            'gb': 'Vương quốc Anh', 'fr': 'Pháp', 'de': 'Đức', 'au': 'Úc',
+            'ca': 'Canada', 'sg': 'Singapore', 'th': 'Thái Lan', 'cn': 'Trung Quốc', 'un': 'Quốc tế'
+        };
+
+        function parseCountryInfo(rawNat) {
+            if (!rawNat) return { code: 'vn', name: 'Việt Nam', flagUrl: 'https://flagcdn.com/w40/vn.png' };
+            if (rawNat.includes('|')) {
+                const [c, n] = rawNat.split('|');
+                return { code: c, name: n, flagUrl: c === 'un' ? '/assets/images/logo.png' : `https://flagcdn.com/w40/${c}.png` };
+            }
+            const low = rawNat.toLowerCase();
+            for (const [code, name] of Object.entries(COUNTRY_CODE_MAP)) {
+                if (low.includes(name.toLowerCase()) || low.includes(code)) {
+                    return { code, name, flagUrl: code === 'un' ? '/assets/images/logo.png' : `https://flagcdn.com/w40/${code}.png` };
                 }
             }
-        });
+            return { code: 'vn', name: rawNat.replace(/[🇻🇳🇺🇸🇯🇵🇰🇷🇬🇧🇫🇷🇩🇪🇦🇺🇨🇦🇸🇬🇹🇭🇨🇳🌐]/g, '').trim() || 'Việt Nam', flagUrl: 'https://flagcdn.com/w40/vn.png' };
+        }
 
+        // Render Multi-Account Switcher Pills
+        function renderAccountPills() {
+            const container = document.getElementById('account-pills-container');
+            if (!container || !window.NDAccounts) return;
+
+            const accounts = window.NDAccounts.getAllAccounts();
+            const activeIdx = window.NDAccounts.getActiveIndexFromUrl();
+
+            let html = '';
+            accounts.forEach((acc, idx) => {
+                const isActive = idx === activeIdx;
+                const url = idx === 0 ? '/auth/settings/' : `/auth/settings/?u=${idx}`;
+                html += `
+                    <a href="${url}" class="account-pill-item ${isActive ? 'active' : ''}">
+                        <img src="${acc.photoURL || '/assets/images/logo.png'}" alt="">
+                        <span>${acc.ndid || acc.displayName || `Tài khoản ${idx + 1}`}</span>
+                        ${isActive ? '<i class="ph-bold ph-check" style="font-size: 11px;"></i>' : ''}
+                    </a>
+                `;
+            });
+
+            if (accounts.length < 10) {
+                html += `
+                    <a href="/auth/login/?addAccount=true" class="btn-add-account-pill" title="Đăng nhập thêm tài khoản (Tối đa 10)">
+                        <i class="ph-bold ph-plus"></i> Thêm tài khoản
+                    </a>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        async function validateFullNameAI(name) {
+            if (!name || name.trim().length < 2) {
+                return { valid: false, reason: "Họ và tên quá ngắn." };
+            }
+            const clean = name.trim();
+            const badWords = ['admin', 'fuck', 'shit', 'bitch', 'cặc', 'lồn', 'địt', 'buồi', 'chó', 'đĩ', 'dâm', 'ngu', 'hacker'];
+            const lower = clean.toLowerCase();
+            for (const bw of badWords) {
+                if (lower.includes(bw)) {
+                    return { valid: false, reason: `Tên chứa từ ngữ không phù hợp ("${bw}"). Vui lòng đặt họ tên nghiêm túc.` };
+                }
+            }
+            return { valid: true };
+        }
+
+        // CardID Canvas Renderer & Downloader with Real Flag Image
+        function downloadSettingsCardImage(cardData) {
+            const canvas = document.getElementById('card-canvas-settings');
+            const ctx = canvas.getContext('2d');
+            const W = 800;
+            const H = 500;
+
+            const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+            bgGrad.addColorStop(0, '#ffffff');
+            bgGrad.addColorStop(0.5, '#f0f9ff');
+            bgGrad.addColorStop(1, '#e0f2fe');
+
+            ctx.fillStyle = bgGrad;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, W, H, 36);
+            ctx.fill();
+
+            ctx.strokeStyle = '#bae6fd';
+            ctx.lineWidth = 6;
+            ctx.stroke();
+
+            ctx.fillStyle = '#0284c7';
+            ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('ND LABS CITIZEN CARD', 80, 56);
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('THẺ CĂN CƯỚC ĐIỆN TỬ NDID', 80, 80);
+
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(40, 100);
+            ctx.lineTo(W - 40, 100);
+            ctx.stroke();
+
+            ctx.fillStyle = '#ca8a04';
+            ctx.beginPath();
+            ctx.roundRect(W - 120, 42, 60, 40, 8);
+            ctx.fill();
+
+            const avatarImg = new Image();
+            avatarImg.crossOrigin = 'anonymous';
+            avatarImg.src = cardData.avatarUrl || '/assets/images/logo.png';
+
+            const flagImg = new Image();
+            flagImg.crossOrigin = 'anonymous';
+            const countryInfo = parseCountryInfo(cardData.nationality);
+            flagImg.src = countryInfo.flagUrl;
+
+            let loadedCount = 0;
+            const checkReady = () => {
+                loadedCount++;
+                if (loadedCount >= 2) drawFullCanvas();
+            };
+
+            avatarImg.onload = checkReady;
+            avatarImg.onerror = checkReady;
+            flagImg.onload = checkReady;
+            flagImg.onerror = checkReady;
+
+            function drawFullCanvas() {
+                // Draw Avatar
+                ctx.save();
+                ctx.beginPath();
+                ctx.roundRect(50, 130, 150, 150, 24);
+                ctx.clip();
+                try { ctx.drawImage(avatarImg, 50, 130, 150, 150); } catch (_) {}
+                ctx.restore();
+
+                ctx.strokeStyle = '#0284c7';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.roundRect(50, 130, 150, 150, 24);
+                ctx.stroke();
+
+                // Draw Text Fields
+                const startX = 230;
+                let currentY = 150;
+                const lineHeight = 34;
+
+                const fields = [
+                    { label: 'Tên: ', value: cardData.fullname },
+                    { label: 'CodeID: ', value: cardData.codeId },
+                    { label: 'NDID: ', value: cardData.ndid },
+                    { label: 'Ngày, tháng, năm sinh: ', value: cardData.dob },
+                    { label: 'Quốc tịch: ', value: countryInfo.name, isCountry: true },
+                    { label: 'Email: ', value: cardData.email }
+                ];
+
+                fields.forEach(f => {
+                    ctx.fillStyle = '#475569';
+                    ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+                    ctx.fillText(f.label, startX, currentY);
+
+                    const labelWidth = ctx.measureText(f.label).width;
+
+                    if (f.isCountry) {
+                        try {
+                            ctx.drawImage(flagImg, startX + labelWidth, currentY - 16, 28, 20);
+                            ctx.fillStyle = '#0f172a';
+                            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+                            ctx.fillText(f.value, startX + labelWidth + 36, currentY);
+                        } catch (_) {
+                            ctx.fillStyle = '#0f172a';
+                            ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+                            ctx.fillText(f.value, startX + labelWidth, currentY);
+                        }
+                    } else {
+                        ctx.fillStyle = f.label.includes('CodeID') ? '#0284c7' : '#0f172a';
+                        ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+                        ctx.fillText(f.value, startX + labelWidth, currentY);
+                    }
+
+                    currentY += lineHeight;
+                });
+
+                // Password row
+                ctx.fillStyle = '#ffffff';
+                ctx.strokeStyle = '#bae6fd';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(50, 360, W - 100, 60, 16);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#64748b';
+                ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
+                ctx.fillText('MẬT KHẨU: ', 70, 396);
+
+                ctx.fillStyle = '#0284c7';
+                ctx.font = 'bold 20px "JetBrains Mono", monospace';
+                ctx.fillText(cardData.password || '••••••••', 190, 397);
+
+                const link = document.createElement('a');
+                link.download = `NDID_Card_${cardData.ndid}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }
+        }
+    </script>
+
+    <script type="module">
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import {
             getAuth, onAuthStateChanged, updateProfile, signOut,
             GoogleAuthProvider, linkWithPopup, unlink,
-            reauthenticateWithCredential, EmailAuthProvider, deleteUser, signInWithEmailAndPassword,
-            updatePassword, linkWithCredential, signInWithCredential, signInWithPopup
+            reauthenticateWithCredential, EmailAuthProvider, updatePassword
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, arrayUnion, arrayRemove, deleteDoc, setDoc, getDocs, collection, query, where }
+        import { getFirestore, doc, getDoc, updateDoc, arrayUnion, deleteDoc, setDoc }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL }
-            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+        import { getDatabase, ref as dbRef, set as dbSet }
+            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-        // Tái sử dụng Firebase App đã khởi tạo bởi firebase-init.js (nếu có)
-        let app;
-        if (getApps().length > 0) {
-            app = getApp();
-        } else {
-            const keys = await window.getEduKeys();
-            const effectiveApiKey = keys.firebase || EDU_CONFIG.firebaseApiKey;
-            const effectiveAppId = keys.fbAppId || EDU_CONFIG.firebaseAppId;
-            if (!isSet(effectiveApiKey) || !isSet(effectiveAppId)) {
-                console.error('Firebase credentials are not configured (placeholders detected). Skipping Firebase initialization.');
-                const statusEl = document.getElementById('status-msg');
-                if (statusEl) {
-                    statusEl.textContent = 'Firebase chưa được cấu hình. Vui lòng liên hệ quản trị.';
-                    statusEl.className = 'status-msg show error';
-                }
-                throw new Error("Firebase credentials missing");
-            }
-            const firebaseConfig = {
-                apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
-                authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
-                databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
-                projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
-                storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
-                messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
-                appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
-                measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
-            };
-            app = initializeApp(firebaseConfig);
-        }
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-
-        const statusEl = document.getElementById('status-msg');
-        function showStatus(text, type) {
-            statusEl.textContent = text;
-            statusEl.className = `status-msg show ${type}`;
-            setTimeout(() => statusEl.className = 'status-msg', 4000);
-        }
-
-        window.switchSettingsTab = function(tabId) {
-            document.querySelectorAll('.settings-tab-panel').forEach(p => {
-                p.style.display = 'none';
-            });
-            const targetPanel = document.getElementById(`panel-${tabId}`);
-            if (targetPanel) {
-                targetPanel.style.display = 'flex';
-            }
-
-            document.querySelectorAll('.settings-nav a').forEach(a => {
-                a.classList.remove('active');
-            });
-            const targetTabBtn = document.getElementById(`tab-${tabId}`);
-            if (targetTabBtn) {
-                targetTabBtn.classList.add('active');
-            }
-        };
+        let auth = null;
+        let db = null;
+        let rdb = null;
 
         let currentUser = null;
-        // track what we're reauthenticating for: 'link' or 'unlink'
-        let reauthAction = 'link';
+        let userDataCache = null;
+        let generated8DigitOtp = null;
 
-        const ROLE_CFG = {
-            admin:   { label: 'Admin',      bg: '#fee2e2', color: '#dc2626', border: '#fecaca' },
-            teacher: { label: 'Giáo viên',  bg: '#f3e8ff', color: '#7c3aed', border: '#e9d5ff' },
-            student: { label: 'Học sinh',   bg: '#e0f2fe', color: '#0284c7', border: '#bae6fd' },
-            member:  { label: 'Thành viên', bg: '#f1f5f9', color: '#475569', border: '#e2e8f0' },
-        };
-        function makeBadgeSpan(key) {
-            const c = ROLE_CFG[key] || ROLE_CFG.member;
-            return `<span style="font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;text-transform:uppercase;background:${c.bg};color:${c.color};border:1px solid ${c.border};">${c.label}</span>`;
-        }
-        function updateRoleBadge(role, eduRole) {
-            const container = document.getElementById('display-role-badge');
-            if (!container) return;
-            container.style.display = 'flex';
-
-            let badges = [];
-            if (role === 'admin') {
-                badges.push(makeBadgeSpan('admin'));
+        // Populate Local Session Cache first for instant render
+        function populateInitialDataFromCache() {
+            const activeAcc = window.NDAccounts ? window.NDAccounts.getActiveAccount() : null;
+            const cached = activeAcc || JSON.parse(localStorage.getItem('nd_user') || '{}');
+            if (cached && (cached.ndid || cached.displayName || cached.email)) {
+                applyUserDataToUI(cached);
             }
-            if (eduRole === 'teacher') {
-                badges.push(makeBadgeSpan('teacher'));
-            } else if (eduRole === 'student') {
-                badges.push(makeBadgeSpan('student'));
-            }
-            if (badges.length === 0) {
-                badges.push(makeBadgeSpan('member'));
-            }
-            container.innerHTML = badges.join('');
+            renderAccountPills();
         }
 
-        function setGoogleLinked(linked, googleEmail) {
-            document.getElementById('google-linked-badge').classList.toggle('hidden', !linked);
-            document.getElementById('link-google-btn').classList.toggle('hidden', linked);
-            document.getElementById('unlink-google-btn').classList.toggle('hidden', !linked);
-            document.getElementById('google-email-sub').textContent = linked
-                ? (googleEmail || 'Đã liên kết')
-                : 'Chưa liên kết';
-        }
+        function applyUserDataToUI(userSnapData) {
+            const ndid = userSnapData.ndid || userSnapData.email?.split('@')[0] || '...';
+            const fullname = userSnapData.fullname || userSnapData.displayName || 'ND Member';
+            const codeId = userSnapData.codeId || '00000000';
+            const nationality = userSnapData.nationality || 'vn|Việt Nam';
+            const dob = userSnapData.dob || '';
+            const email = userSnapData.recoveryEmail || userSnapData.email || '—';
+            const avatar = userSnapData.photoURL || '/assets/images/logo.png';
 
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                localStorage.removeItem('nd_user');
-                window.location.href = '/auth/login/';
-                return;
+            let dobText = '—';
+            if (dob && dob.includes('-')) {
+                const p = dob.split('-');
+                dobText = `${p[2]}/${p[1]}/${p[0]}`;
+            } else if (dob) {
+                dobText = dob;
             }
-            currentUser = user;
 
-            let role = 'member';
-            let eduRole = 'student';
-            let userSnapData = null;
+            document.getElementById('user-avatar').src = avatar;
+            document.getElementById('card-widget-avatar').src = avatar;
+            document.getElementById('display-name').textContent = fullname;
+            document.getElementById('ndid-display').textContent = ndid;
+            document.getElementById('display-email').textContent = `NDID: ${ndid}`;
 
-            const localSession = JSON.parse(localStorage.getItem('nd_user') || '{}');
-            const initAvatar = user.photoURL || localSession.photoURL;
-            if (initAvatar) document.getElementById('user-avatar').src = initAvatar;
+            document.getElementById('card-widget-name').textContent = fullname;
+            document.getElementById('card-widget-codeid').textContent = codeId;
+            document.getElementById('card-widget-ndid').textContent = ndid;
+            document.getElementById('card-widget-dob').textContent = dobText;
+            document.getElementById('card-widget-email').textContent = email;
 
-            document.getElementById('display-name').textContent = user.displayName || 'ND Member';
-            document.getElementById('edit-name').value = user.displayName || '';
+            // Country Flag
+            const countryInfo = parseCountryInfo(nationality);
+            document.getElementById('card-widget-nationality').textContent = countryInfo.name;
+            document.getElementById('card-widget-flag-img').src = countryInfo.flagUrl;
 
-            // Firestore data
-            try {
-                const snap = await getDoc(doc(db, 'users', user.uid));
-                if (snap.exists()) {
-                    userSnapData = snap.data();
-                    if (userSnapData.photoURL) {
-                        document.getElementById('user-avatar').src = userSnapData.photoURL;
-                    }
+            // Form NDID inputs
+            document.getElementById('edit-ndid').value = ndid !== '...' ? ndid : '';
+            document.getElementById('edit-name').value = fullname;
+            
+            const natSelect = document.getElementById('edit-nationality');
+            for (let i = 0; i < natSelect.options.length; i++) {
+                if (natSelect.options[i].value.includes(countryInfo.code) || natSelect.options[i].text.includes(countryInfo.name)) {
+                    natSelect.selectedIndex = i;
+                    break;
                 }
-                const email = user.email || '';
-                const emailPrefix = email.split('@')[0] || '';
-                const ndid = (userSnapData && userSnapData.ndid) ? userSnapData.ndid : (emailPrefix || user.uid);
-                
-                document.getElementById('ndid-display').textContent = ndid;
-                document.getElementById('display-email').textContent = `NDID: ${ndid}`;
-                document.getElementById('edit-ndid').value = ndid;
+            }
 
-                let recoveryEmail = '';
+            document.getElementById('edit-recovery-email').value = userSnapData.recoveryEmail || userSnapData.email || '';
+            document.getElementById('edit-dob').value = dob;
+
+            document.getElementById('edu-ndid-dob').textContent = dobText;
+            document.getElementById('mw-ndid-dob').textContent = dobText;
+        }
+
+        // Initialize Teacher Grades
+        const ALL_SUBJECTS = [
+            'Toán học', 'Ngữ văn', 'Tiếng Anh', 'Vật lí', 'Hóa học', 'Sinh học',
+            'Lịch sử', 'Địa lí', 'GDKT&PL', 'Tin học', 'Công nghệ', 'Âm nhạc',
+            'Mỹ thuật', 'Giáo dục thể chất', 'Hoạt động trải nghiệm'
+        ];
+
+        function initTeacherGradesAndSubjects() {
+            const gradesGrid = document.getElementById('teacher-grades-grid');
+            if (gradesGrid && gradesGrid.children.length === 0) {
+                let gHtml = '';
+                for (let i = 1; i <= 12; i++) {
+                    gHtml += `
+                        <label class="checkbox-pill-label">
+                            <input type="checkbox" name="teacher_grade_cb" value="${i}">
+                            <span>Lớp ${i}</span>
+                        </label>
+                    `;
+                }
+                gradesGrid.innerHTML = gHtml;
+            }
+
+            const subjectsGrid = document.getElementById('teacher-subjects-grid');
+            if (subjectsGrid && subjectsGrid.children.length === 0) {
+                let sHtml = '';
+                ALL_SUBJECTS.forEach(s => {
+                    sHtml += `
+                        <label class="checkbox-pill-label">
+                            <input type="checkbox" name="teacher_subject_cb" value="${s}">
+                            <span>${s}</span>
+                        </label>
+                    `;
+                });
+                subjectsGrid.innerHTML = sHtml;
+            }
+        }
+        initTeacherGradesAndSubjects();
+
+        const eduRoleSelect = document.getElementById('edit-edu-role');
+        const labelSchool = document.getElementById('label-edu-school');
+        function updateEduRoleFields(role) {
+            document.getElementById('sec-edu-student').classList.add('hidden');
+            document.getElementById('sec-edu-college').classList.add('hidden');
+            document.getElementById('sec-edu-lecturer').classList.add('hidden');
+            document.getElementById('sec-edu-teacher').classList.add('hidden');
+
+            if (role === 'teacher') {
+                document.getElementById('sec-edu-teacher').classList.remove('hidden');
+                labelSchool.textContent = 'Trường đang giảng dạy *';
+            } else if (role === 'lecturer') {
+                document.getElementById('sec-edu-lecturer').classList.remove('hidden');
+                labelSchool.textContent = 'Trường Đại học / Cao đẳng đang giảng dạy *';
+            } else if (role === 'college_student') {
+                document.getElementById('sec-edu-college').classList.remove('hidden');
+                labelSchool.textContent = 'Trường Đại học / Cao đẳng đang theo học *';
+            } else {
+                document.getElementById('sec-edu-student').classList.remove('hidden');
+                labelSchool.textContent = 'Trường đang học *';
+            }
+        }
+        eduRoleSelect.addEventListener('change', (e) => updateEduRoleFields(e.target.value));
+
+        const mwCbGlobal = document.getElementById('mw-server-global');
+        const mwCbChina = document.getElementById('mw-server-china');
+        const mwGroupGlobal = document.getElementById('mw-group-global-id');
+        const mwGroupChina = document.getElementById('mw-group-china-id');
+
+        function updateMwIdFields() {
+            if (mwCbGlobal.checked) mwGroupGlobal.classList.remove('hidden');
+            else mwGroupGlobal.classList.add('hidden');
+
+            if (mwCbChina.checked) mwGroupChina.classList.remove('hidden');
+            else mwGroupChina.classList.add('hidden');
+        }
+        mwCbGlobal.addEventListener('change', updateMwIdFields);
+        mwCbChina.addEventListener('change', updateMwIdFields);
+
+        // Core Load Handler
+        async function initSettingsData() {
+            if (!window.firebaseAuth || !window.firebaseFirestore) return;
+            auth = window.firebaseAuth;
+            db = window.firebaseFirestore;
+            rdb = window.firebaseDb;
+
+            const activeAcc = window.NDAccounts ? window.NDAccounts.getActiveAccount() : null;
+            const targetUid = activeAcc?.uid;
+
+            onAuthStateChanged(auth, async (user) => {
+                if (!user && !activeAcc) {
+                    window.location.href = '/auth/login/';
+                    return;
+                }
+
+                currentUser = user || { uid: targetUid };
+                const lookupUid = targetUid || user?.uid;
+
                 try {
-                    const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
-                    if (ndidSnap.exists()) {
-                        recoveryEmail = ndidSnap.data().recoveryEmail || '';
-                    }
-                } catch (e) {
-                    console.warn("Error fetching recovery email:", e);
-                }
-                document.getElementById('edit-recovery-email').value = recoveryEmail;
-
-                if (userSnapData) {
-                    document.getElementById('edit-name').value = userSnapData.fullname || user.displayName || '';
-
-                    const editRoleEl = document.getElementById('edit-role');
-                    const rawRole = userSnapData.role || 'student';
-                    const rawSubrole = userSnapData.subrole || '';
-
-                    // Phân tách vai trò ND Labs (role)
-                    if (rawRole === 'admin') role = 'admin';
-                    else role = 'member';
-
-                    // Phân tách vai trò học tập EduSpace (eduRole)
-                    eduRole = userSnapData.eduRole || '';
-                    if (!eduRole) {
-                        if (rawRole === 'admin') eduRole = rawSubrole || 'student';
-                        else if (rawRole === 'teacher') eduRole = 'teacher';
-                        else eduRole = 'student';
-                    }
-
-                    // Cho phép chọn "Giáo viên" nếu user đã là giáo viên học tập hoặc là admin hệ thống
-                    if (eduRole === 'teacher' || role === 'admin') {
-                        const opt = editRoleEl.querySelector('option[value="teacher"]');
-                        if (opt) {
-                            opt.disabled = false;
-                            opt.classList.remove('hidden');
-                            opt.textContent = 'Giáo viên (Teacher)';
+                    let userSnapData = {};
+                    if (lookupUid) {
+                        const snap = await getDoc(doc(db, 'users', lookupUid));
+                        if (snap.exists()) {
+                            userSnapData = snap.data();
                         }
                     }
-                    editRoleEl.value = eduRole;
+                    userDataCache = { ...activeAcc, ...userSnapData };
 
-                    document.getElementById('edit-yob').value = userSnapData.yob || '';
-                    document.getElementById('edit-grade').value = userSnapData.grade || 'Khác';
-                } else {
-                    document.getElementById('edit-name').value = user.displayName || '';
-                    document.getElementById('edit-role').value = 'student';
-                    document.getElementById('edit-yob').value = '';
-                    document.getElementById('edit-grade').value = 'Khác';
+                    applyUserDataToUI(userDataCache);
+
+                    // Update multi-account cache
+                    if (window.NDAccounts && userDataCache.uid) {
+                        window.NDAccounts.saveAccount(userDataCache, false);
+                    }
+
+                    // EduSpace fields
+                    const eduRole = userDataCache.eduRole || 'student';
+                    document.getElementById('edit-edu-role').value = eduRole;
+                    updateEduRoleFields(eduRole);
+
+                    document.getElementById('edit-edu-school').value = userDataCache.school || '';
+                    document.getElementById('edit-edu-student-grade').value = userDataCache.grade || '10';
+                    document.getElementById('edit-edu-major').value = userDataCache.major || '';
+                    document.getElementById('edit-edu-lecturer-subject').value = userDataCache.subject || '';
+
+                    if (userDataCache.teachingGrades && Array.isArray(userDataCache.teachingGrades)) {
+                        document.querySelectorAll('input[name="teacher_grade_cb"]').forEach(cb => {
+                            cb.checked = userDataCache.teachingGrades.includes(cb.value);
+                        });
+                    }
+                    if (userDataCache.subjects && Array.isArray(userDataCache.subjects)) {
+                        document.querySelectorAll('input[name="teacher_subject_cb"]').forEach(cb => {
+                            cb.checked = userDataCache.subjects.includes(cb.value);
+                        });
+                    }
+
+                    // Mini World fields
+                    const mwProfile = userDataCache.miniworld || {};
+                    let hasGlobal = false;
+                    let hasChina = false;
+                    if (mwProfile.servers && Array.isArray(mwProfile.servers)) {
+                        hasGlobal = mwProfile.servers.includes('Global');
+                        hasChina = mwProfile.servers.includes('China');
+                    } else if (mwProfile.server) {
+                        hasGlobal = mwProfile.server === 'Global';
+                        hasChina = mwProfile.server === 'China';
+                    }
+                    mwCbGlobal.checked = hasGlobal;
+                    mwCbChina.checked = hasChina;
+                    document.getElementById('mw-input-global-id').value = mwProfile.globalId || (hasGlobal ? (mwProfile.gameId || '') : '');
+                    document.getElementById('mw-input-china-id').value = mwProfile.chinaId || (hasChina ? (mwProfile.gameId || '') : '');
+                    updateMwIdFields();
+
+                    // Google link check
+                    let googleEmail = user?.providerData?.find(p => p.providerId === 'google.com')?.email || userDataCache.googleEmail;
+                    const isGoogleLinked = !!googleEmail;
+                    document.getElementById('google-linked-badge').classList.toggle('hidden', !isGoogleLinked);
+                    document.getElementById('link-google-btn').classList.toggle('hidden', isGoogleLinked);
+                    document.getElementById('unlink-google-btn').classList.toggle('hidden', !isGoogleLinked);
+                    document.getElementById('google-email-sub').textContent = isGoogleLinked ? googleEmail : 'Chưa liên kết';
+
+                    if (isGoogleLinked) {
+                        document.getElementById('card-widget-google-badge').classList.remove('hidden');
+                        document.getElementById('card-widget-google-email').textContent = googleEmail;
+                    }
+                } catch (err) {
+                    console.error("Settings load error:", err);
                 }
-                updateRoleBadge(role, eduRole);
-            } catch (err) {
-                console.error("Error loading user settings from Firestore:", err);
-                const email = user.email || '';
-                const fallbackNdid = email.split('@')[0] || user.uid;
-                document.getElementById('ndid-display').textContent = fallbackNdid;
-                document.getElementById('display-email').textContent = `NDID: ${fallbackNdid}`;
-                document.getElementById('edit-ndid').value = fallbackNdid;
-
-                document.getElementById('edit-name').value = user.displayName || '';
-                document.getElementById('edit-role').value = 'student';
-                document.getElementById('edit-yob').value = '';
-                document.getElementById('edit-grade').value = 'Khác';
-                updateRoleBadge('member', 'student');
-            }
-
-            // Toggle classroom section based on eduRole
-            const studentClassroomsSec = document.getElementById('student-classrooms-section');
-            if (studentClassroomsSec) {
-                studentClassroomsSec.style.display = eduRole === 'student' ? 'flex' : 'none';
-            }
-            if (eduRole === 'student') {
-                loadJoinedClassrooms(user.uid).catch(() => {});
-            }
-
-            // Google link status
-            let googleProvider = user.providerData.find(p => p.providerId === 'google.com');
-            let googleEmail = googleProvider?.email || (userSnapData && userSnapData.googleEmail) || null;
-            const isGoogleLinked = !!googleProvider || !!(userSnapData && userSnapData.googleEmail);
-            setGoogleLinked(isGoogleLinked, googleEmail);
-
-            // Password status check
-            const hasPassword = user.providerData.some(p => p.providerId === 'password');
-            const passTitle = document.getElementById('pass-sec-title');
-            const passDesc = document.getElementById('pass-sec-desc');
-            const passBtn = document.getElementById('pass-sec-btn');
-
-            if (hasPassword) {
-                passTitle.innerHTML = `<i class="ph-bold ph-key"></i> Đổi mật khẩu`;
-                passDesc.textContent = "Bạn đã thiết lập mật khẩu cho NDID. Nên thay đổi mật khẩu định kỳ để nâng cao bảo mật.";
-                passBtn.textContent = "Đổi mật khẩu";
-            } else {
-                passTitle.innerHTML = `<i class="ph-bold ph-key-return"></i> Thêm mật khẩu cho NDID`;
-                passDesc.textContent = "Tài khoản của bạn chỉ đang đăng nhập bằng Google. Hãy thêm mật khẩu ngay để có thể đăng nhập độc lập bằng NDID.";
-                passBtn.textContent = "Thêm mật khẩu";
-            }
-        });
-
-        // Sync edit role dropdown with edit grade dropdown + toggle subrole section
-        const editRoleSelect = document.getElementById('edit-role');
-        const editGradeSelect = document.getElementById('edit-grade');
-        if (editRoleSelect && editGradeSelect) {
-            editRoleSelect.addEventListener('change', () => {
-                const val = editRoleSelect.value;
-                if (val === 'teacher') {
-                    editGradeSelect.value = 'Đang dạy';
-                } else if (val === 'student') {
-                    editGradeSelect.value = '10';
-                } else {
-                    editGradeSelect.value = 'Khác';
-                }
-                toggleSubroleSection(val);
             });
         }
 
-        // Avatar upload
-        document.getElementById('avatar-upload').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file || !currentUser) return;
-            try {
-                showStatus('Đang xử lý tải ảnh đại diện...', 'info');
-                const url = await window.uploadToCloudflare(file, { folder: 'avatars', uid: currentUser.uid });
-                document.getElementById('user-avatar').src = url;
-                if (url && (url.startsWith('http://') || url.startsWith('https://')) && url.length < 2000) {
-                    try { await updateProfile(currentUser, { photoURL: url }); } catch (_) { }
-                }
-                try { await updateDoc(doc(db, 'users', currentUser.uid), { photoURL: url }); } catch (_) { }
-                const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
-                s.photoURL = url;
-                localStorage.setItem('nd_user', JSON.stringify(s));
-                showStatus('🎉 Cập nhật ảnh đại diện thành công!', 'success');
-            } catch (err) {
-                showStatus('Không thể tải ảnh đại diện. Vui lòng thử lại.', 'error');
+        populateInitialDataFromCache();
+
+        if (window.firebaseAuth && window.firebaseFirestore) {
+            initSettingsData();
+        } else {
+            window.addEventListener('firebase-ready', initSettingsData);
+        }
+
+        // OTP Password Reveal
+        const otpModal = document.getElementById('otp-reveal-modal');
+        const btnRequestOtp = document.getElementById('btn-request-pwd-otp');
+        const btnDownloadCardWidget = document.getElementById('btn-download-card-widget');
+        const otpInputCode = document.getElementById('otp-input-code');
+        const otpRevealForm = document.getElementById('otp-reveal-form');
+
+        btnRequestOtp.addEventListener('click', () => {
+            const targetEmail = userDataCache?.recoveryEmail || userDataCache?.email || 'email khôi phục';
+            document.getElementById('otp-target-email').textContent = targetEmail;
+
+            generated8DigitOtp = Math.floor(10000000 + Math.random() * 90000000).toString();
+            console.log(`🔐 [NDID Security Code]: Mã OTP gửi tới ${targetEmail} là: ${generated8DigitOtp}`);
+            showStatus(`📩 Mã OTP xác thực đã được gửi tới email: ${targetEmail} (Mã: ${generated8DigitOtp})`, 'info');
+
+            otpInputCode.value = '';
+            otpModal.classList.remove('hidden');
+        });
+
+        document.getElementById('close-otp-reveal-modal').onclick = () => otpModal.classList.add('hidden');
+        document.getElementById('cancel-otp-reveal').onclick = () => otpModal.classList.add('hidden');
+
+        otpRevealForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const inputVal = otpInputCode.value.trim();
+            if (inputVal === generated8DigitOtp) {
+                otpModal.classList.add('hidden');
+
+                const pwdDisplay = document.getElementById('card-widget-pwd-display');
+                const realPwd = userDataCache?.registeredPassword || '••••••••';
+                pwdDisplay.textContent = realPwd;
+                pwdDisplay.style.color = '#0284c7';
+                btnRequestOtp.innerHTML = '<i class="ph-bold ph-check"></i> Đã mở';
+                btnRequestOtp.disabled = true;
+
+                btnDownloadCardWidget.classList.remove('hidden');
+                showStatus('Xác thực OTP thành công!', 'success');
+            } else {
+                showStatus('Mã OTP không chính xác.', 'error');
             }
         });
 
-        // Profile form
-        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+        btnDownloadCardWidget.addEventListener('click', () => {
+            if (!userDataCache) return;
+            const dob = userDataCache.dob || '';
+            let dobFormatted = '—';
+            if (dob && dob.includes('-')) {
+                const p = dob.split('-');
+                dobFormatted = `${p[2]}/${p[1]}/${p[0]}`;
+            }
+
+            downloadSettingsCardImage({
+                fullname: userDataCache.fullname || userDataCache.displayName || 'ND Member',
+                codeId: userDataCache.codeId || '00000000',
+                ndid: userDataCache.ndid || currentUser?.uid,
+                dob: dobFormatted,
+                nationality: userDataCache.nationality || 'Việt Nam 🇻🇳',
+                email: userDataCache.recoveryEmail || userDataCache.email || '—',
+                password: userDataCache.registeredPassword || '••••••••',
+                avatarUrl: userDataCache.photoURL || currentUser?.photoURL || '/assets/images/logo.png'
+            });
+        });
+
+        // Save NDID Profile
+        document.getElementById('ndid-profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser) return;
-            
-            const newNdid = document.getElementById('edit-ndid').value.trim();
+            const currentUid = userDataCache?.uid || currentUser?.uid;
+            if (!currentUid || !db) return;
+
+            const newNdid = document.getElementById('edit-ndid').value.trim().toLowerCase();
             const newName = document.getElementById('edit-name').value.trim();
+            const newNat = document.getElementById('edit-nationality').value;
             const newRecoveryEmail = document.getElementById('edit-recovery-email').value.trim();
-            const newEduRole = document.getElementById('edit-role').value;
-            const newYob = document.getElementById('edit-yob').value.trim();
-            const newGrade = document.getElementById('edit-grade').value;
-            // Find current NDID
+            const newDob = document.getElementById('edit-dob').value;
             const currentNdid = document.getElementById('ndid-display').textContent.trim();
 
             if (newNdid !== currentNdid) {
-                if (newNdid.length < 3) {
-                    return showStatus('NDID phải từ 3 ký tự trở lên.', 'error');
-                }
-                if (!/^[a-zA-Z0-9._-]+$/.test(newNdid)) {
-                    return showStatus('NDID chỉ chứa chữ cái, số và các ký tự đặc biệt . _ -', 'error');
-                }
-                if (newNdid.toLowerCase().includes('admin')) {
-                    return showStatus('NDID của bạn không được phép chứa cụm từ "admin" vì lý do bảo mật.', 'error');
-                }
+                if (newNdid.length < 3) return showStatus('NDID phải từ 3 ký tự trở lên.', 'error');
+                if (!/^[a-zA-Z0-9._-]+$/.test(newNdid)) return showStatus('NDID chỉ chứa chữ cái, số và . _ -', 'error');
+                if (newNdid.includes('admin')) return showStatus('NDID không được phép chứa từ "admin".', 'error');
             }
 
-            if (newYob && (isNaN(newYob) || newYob < 1940 || newYob > 2026)) {
-                return showStatus('Năm sinh không hợp lệ.', 'error');
+            const nameCheck = await validateFullNameAI(newName);
+            if (!nameCheck.valid) {
+                return showStatus(nameCheck.reason, 'error');
             }
 
             try {
-                // If NDID changes, check if new one is already occupied
                 if (newNdid !== currentNdid) {
                     const ndidSnap = await getDoc(doc(db, 'ndids', newNdid));
-                    if (ndidSnap.exists() && ndidSnap.data().uid !== currentUser.uid) {
-                        return showStatus('NDID này đã được sử dụng bởi người khác.', 'error');
+                    if (ndidSnap.exists() && ndidSnap.data().uid !== currentUid) {
+                        return showStatus('NDID này đã có người sử dụng.', 'error');
                     }
                 }
 
-                // Handle email list
-                const emailsList = [currentUser.email].filter(Boolean);
-                if (newRecoveryEmail) emailsList.push(newRecoveryEmail);
-
-                // Preserve local system role
-                const cachedUser = JSON.parse(localStorage.getItem('nd_user') || '{}');
-                const preserveRole = cachedUser.role || 'member';
-
-                // Update users document in Firestore
-                await updateDoc(doc(db, 'users', currentUser.uid), {
+                const updatedData = {
                     ndid: newNdid,
                     fullname: newName,
-                    eduRole: newEduRole,
-                    // Xóa trường subrole cũ nếu có để tránh dữ liệu rác
-                    subrole: null,
-                    yob: newYob ? Number(newYob) : null,
-                    grade: newGrade,
-                    emails: emailsList
-                });
+                    nationality: newNat,
+                    recoveryEmail: newRecoveryEmail,
+                    dob: newDob
+                };
 
-                // Update ndid maps
+                await updateDoc(doc(db, 'users', currentUid), updatedData);
+
                 await setDoc(doc(db, 'ndids', newNdid), {
-                    uid: currentUser.uid,
+                    uid: currentUid,
                     recoveryEmail: newRecoveryEmail
                 });
 
@@ -1241,806 +1550,245 @@
                     await deleteDoc(doc(db, 'ndids', currentNdid));
                 }
 
-                await updateProfile(currentUser, { displayName: newName });
-                document.getElementById('display-name').textContent = newName;
-                document.getElementById('ndid-display').textContent = newNdid;
-                document.getElementById('display-email').textContent = `NDID: ${newNdid}`;
+                if (currentUser && currentUser.uid === currentUid) {
+                    await updateProfile(currentUser, { displayName: newName });
+                }
 
-                const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
-                s.displayName = newName;
-                s.ndid = newNdid;
-                s.role = preserveRole;
-                s.eduRole = newEduRole;
-                s.yob = newYob ? Number(newYob) : null;
-                s.grade = newGrade;
-                localStorage.setItem('nd_user', JSON.stringify(s));
+                if (window.NDAccounts) {
+                    window.NDAccounts.saveAccount({ ...userDataCache, ...updatedData });
+                }
 
-                updateRoleBadge(preserveRole, newEduRole);
-
-                showStatus('Cập nhật thông tin thành công!', 'success');
+                showStatus('Cập nhật thông tin NDID thành công!', 'success');
                 setTimeout(() => window.location.reload(), 1000);
             } catch (err) {
                 showStatus('Lỗi cập nhật: ' + err.message, 'error');
             }
         });
 
-        // Link Google directly via Popup
+        // Save EduSpace Profile
+        document.getElementById('eduspace-profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentUid = userDataCache?.uid || currentUser?.uid;
+            if (!currentUid || !db) return;
+
+            const selectedRole = document.getElementById('edit-edu-role').value;
+            const school = document.getElementById('edit-edu-school').value.trim();
+            const studentGrade = document.getElementById('edit-edu-student-grade').value;
+            const major = document.getElementById('edit-edu-major').value.trim();
+            const lecturerSubject = document.getElementById('edit-edu-lecturer-subject').value.trim();
+
+            if (!school) return showStatus('Vui lòng nhập tên trường học.', 'error');
+
+            let teachingGrades = [];
+            let teachingSubjects = [];
+
+            if (selectedRole === 'teacher') {
+                document.querySelectorAll('input[name="teacher_grade_cb"]:checked').forEach(cb => teachingGrades.push(cb.value));
+                document.querySelectorAll('input[name="teacher_subject_cb"]:checked').forEach(cb => teachingSubjects.push(cb.value));
+
+                if (teachingGrades.length === 0) return showStatus('Giáo viên vui lòng chọn ít nhất 1 khối lớp đang dạy.', 'error');
+                if (teachingSubjects.length === 0) return showStatus('Giáo viên vui lòng chọn ít nhất 1 môn đang dạy.', 'error');
+            }
+
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth() + 1;
+            const schoolYear = currentMonth >= 9 ? `${currentYear}-${currentYear + 1}` : `${currentYear - 1}-${currentYear}`;
+
+            try {
+                const updatePayload = {
+                    eduRole: selectedRole,
+                    school: school,
+                    grade: selectedRole === 'student' ? studentGrade : (selectedRole === 'teacher' ? 'Đang dạy' : 'Khác'),
+                    major: selectedRole === 'college_student' ? major : null,
+                    subject: selectedRole === 'lecturer' ? lecturerSubject : null,
+                    teachingGrades: selectedRole === 'teacher' ? teachingGrades : null,
+                    subjects: selectedRole === 'teacher' ? teachingSubjects : null,
+                    lastSchoolYearUpdate: schoolYear
+                };
+
+                await updateDoc(doc(db, 'users', currentUid), updatePayload);
+                showStatus('🎉 Lưu thông tin EduSpace thành công!', 'success');
+            } catch (err) {
+                showStatus('Lỗi: ' + err.message, 'error');
+            }
+        });
+
+        // Save Mini World Profile
+        document.getElementById('miniworld-profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentUid = userDataCache?.uid || currentUser?.uid;
+            if (!currentUid || !db) return;
+
+            const isGlobal = mwCbGlobal.checked;
+            const isChina = mwCbChina.checked;
+
+            if (!isGlobal && !isChina) return showStatus('Vui lòng chọn ít nhất một máy chủ.', 'error');
+
+            const globalId = document.getElementById('mw-input-global-id').value.trim();
+            const chinaId = document.getElementById('mw-input-china-id').value.trim();
+
+            if (isGlobal && !globalId) return showStatus('Vui lòng nhập ID Mini World Global.', 'error');
+            if (isChina && !chinaId) return showStatus('Vui lòng nhập ID Mini World China.', 'error');
+
+            const servers = [];
+            if (isGlobal) servers.push('Global');
+            if (isChina) servers.push('China');
+
+            const mwData = {
+                servers,
+                globalId: isGlobal ? globalId : '',
+                chinaId: isChina ? chinaId : '',
+                gameId: isGlobal ? globalId : chinaId,
+                server: isGlobal ? 'Global' : 'China',
+                displayName: userDataCache?.fullname || 'Thành viên',
+                ndid: userDataCache?.ndid || currentUid,
+                updatedAt: Date.now()
+            };
+
+            try {
+                await updateDoc(doc(db, 'users', currentUid), { miniworld: mwData });
+                if (rdb) await dbSet(dbRef(rdb, `mw_user_profiles/${currentUid}`), mwData);
+                showStatus('🎉 Lưu thông tin Mini World thành công!', 'success');
+            } catch (err) {
+                showStatus('Lỗi: ' + err.message, 'error');
+            }
+        });
+
+        // Avatar upload
+        document.getElementById('avatar-upload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            const currentUid = userDataCache?.uid || currentUser?.uid;
+            if (!file || !currentUid) return;
+            try {
+                showStatus('Đang tải ảnh đại diện...', 'info');
+                const url = await window.uploadToCloudflare(file, { folder: 'avatars', uid: currentUid });
+                document.getElementById('user-avatar').src = url;
+                document.getElementById('card-widget-avatar').src = url;
+
+                if (currentUser && currentUser.uid === currentUid) {
+                    await updateProfile(currentUser, { photoURL: url });
+                }
+                await updateDoc(doc(db, 'users', currentUid), { photoURL: url });
+                
+                if (window.NDAccounts) {
+                    window.NDAccounts.saveAccount({ ...userDataCache, photoURL: url });
+                }
+                showStatus('🎉 Đổi ảnh đại diện thành công!', 'success');
+            } catch (err) {
+                showStatus('Không thể tải ảnh.', 'error');
+            }
+        });
+
+        // Link Google
         document.getElementById('link-google-btn').addEventListener('click', async () => {
             if (!currentUser) return;
-            const btn = document.getElementById('link-google-btn');
-            const origHtml = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="ph-bold ph-spinner spinner"></i> Đang liên kết...';
             try {
                 const provider = new GoogleAuthProvider();
-                provider.setCustomParameters({ prompt: 'select_account' });
                 const result = await linkWithPopup(currentUser, provider);
-                const googleEmail = result.user.providerData.find(p => p.providerId === 'google.com')?.email || result.user.email;
-                setGoogleLinked(true, googleEmail);
-                try {
-                    await updateDoc(doc(db, 'users', currentUser.uid), {
-                        googleEmail: googleEmail,
-                        emails: arrayUnion(googleEmail)
-                    });
-                } catch (_) { }
-                showStatus('🎉 Liên kết Google thành công!', 'success');
-            } catch (linkErr) {
-                if (linkErr.code === 'auth/credential-already-in-use') {
-                    const googleCred = GoogleAuthProvider.credentialFromError(linkErr);
-                    if (googleCred) {
-                        const confirmMerge = confirm(
-                            "Tài khoản Google này đã được liên kết với một tài khoản khác trên hệ thống.\n\n" +
-                            "Bạn có muốn chuyển liên kết Google này sang tài khoản hiện tại không?\n" +
-                            "(Lưu ý: Dữ liệu của tài khoản Google cũ nếu trống sẽ bị xóa tự động)."
-                        );
-                        if (confirmMerge) {
-                            try {
-                                const sAuth = await getSecondaryAuth();
-                                const result2 = await signInWithCredential(sAuth, googleCred);
-                                const user2 = result2.user;
-
-                                const snap2 = await getDoc(doc(db, 'users', user2.uid));
-                                if (snap2.exists()) {
-                                    alert(
-                                        "Tài khoản Google này có chứa dữ liệu học tập khác.\n\n" +
-                                        "Vui lòng sử dụng tính năng 'Sáp nhập tài khoản' ở mục Quản lý nâng cao để gộp dữ liệu."
-                                    );
-                                    return;
-                                }
-
-                                await deleteUser(user2);
-                                await linkWithCredential(currentUser, googleCred);
-
-                                const googleEmail = currentUser.providerData.find(p => p.providerId === 'google.com')?.email || currentUser.email;
-                                setGoogleLinked(true, googleEmail);
-                                try {
-                                    await updateDoc(doc(db, 'users', currentUser.uid), {
-                                        googleEmail: googleEmail,
-                                        emails: arrayUnion(googleEmail)
-                                    });
-                                } catch (_) { }
-                                showStatus('🎉 Chuyển và liên kết Google thành công!', 'success');
-                                return;
-                            } catch (e) {
-                                showStatus('Lỗi chuyển liên kết: ' + e.message, 'error');
-                                return;
-                            }
-                        }
-                    }
-                } else if (linkErr.code !== 'auth/popup-closed-by-user') {
-                    showStatus('Liên kết thất bại: ' + linkErr.message, 'error');
-                }
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = origHtml;
-            }
-        });
-
-        // Unlink Google → show reauth modal
-        document.getElementById('unlink-google-btn').addEventListener('click', () => {
-            if (!currentUser) return;
-            const hasPassword = currentUser.providerData.some(p => p.providerId === 'password');
-            if (!hasPassword) {
-                alert('Tài khoản của bạn hiện chỉ đang đăng nhập bằng Google và chưa thiết lập mật khẩu.\nVui lòng thêm mật khẩu trước khi hủy liên kết Google.');
-                return;
-            }
-            reauthAction = 'unlink';
-            document.getElementById('reauth-desc').textContent = 'Nhập lại mật khẩu để xác nhận hủy liên kết Google.';
-            document.getElementById('reauth-password').value = '';
-            document.getElementById('reauth-modal').classList.remove('hidden');
-        });
-
-        document.getElementById('cancel-reauth').addEventListener('click', () => {
-            document.getElementById('reauth-modal').classList.add('hidden');
-        });
-
-        document.getElementById('confirm-reauth').addEventListener('click', async () => {
-            const password = document.getElementById('reauth-password').value;
-            if (!password || !currentUser) return;
-            const btn = document.getElementById('confirm-reauth');
-            const originalText = btn.textContent;
-            btn.disabled = true;
-            btn.textContent = 'Đang xác minh...';
-            try {
-                const credential = EmailAuthProvider.credential(currentUser.email, password);
-                await reauthenticateWithCredential(currentUser, credential);
-                document.getElementById('reauth-modal').classList.add('hidden');
-
-                await unlink(currentUser, 'google.com');
-                try {
-                    await updateDoc(doc(db, 'users', currentUser.uid), { googleEmail: null });
-                } catch (_) {}
-                setGoogleLinked(false, null);
-                showStatus('Đã hủy liên kết Google thành công.', 'success');
-            } catch (err) {
-                showStatus('Thao tác thất bại: ' + err.message, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.textContent = originalText;
-            }
-        });
-
-        // Logout
-        document.getElementById('logout-btn').addEventListener('click', async () => {
-            await signOut(auth);
-            localStorage.removeItem('nd_user');
-            window.location.href = '/';
-        });
-
-        // ==========================================
-        // ADVANCED: DELETE ACCOUNT LOGIC
-        // ==========================================
-        const deleteModal = document.getElementById('delete-modal');
-        const deletePasswordInput = document.getElementById('delete-password');
-
-        document.getElementById('delete-acc-btn').addEventListener('click', () => {
-            deletePasswordInput.value = '';
-            deleteModal.classList.remove('hidden');
-        });
-
-        document.getElementById('cancel-delete').addEventListener('click', () => {
-            deleteModal.classList.add('hidden');
-        });
-
-        document.getElementById('confirm-delete').addEventListener('click', async () => {
-            const password = deletePasswordInput.value;
-            if (!password || !currentUser) return;
-
-            try {
-                // Step 1: Reauthenticate currentUser
-                const credential = EmailAuthProvider.credential(currentUser.email, password);
-                await reauthenticateWithCredential(currentUser, credential);
-
-                // Step 2: Fetch user profile to get NDID
-                const snap = await getDoc(doc(db, 'users', currentUser.uid));
-                let ndid = null;
-                if (snap.exists()) {
-                    ndid = snap.data().ndid;
-                }
-
-                // Step 3: Delete Firestore data
-                await deleteDoc(doc(db, 'users', currentUser.uid));
-                if (ndid) {
-                    await deleteDoc(doc(db, 'ndids', ndid));
-                }
-
-                // Step 4: Delete Auth account
-                await deleteUser(currentUser);
-
-                // Step 5: Clean local storage and redirect
-                localStorage.removeItem('nd_user');
-                alert('Tài khoản của bạn đã được xóa vĩnh viễn khỏi EduSpace.');
-                window.location.href = '/';
-            } catch (err) {
-                alert('Lỗi xác thực hoặc không thể xóa tài khoản: ' + err.message);
-            }
-        });
-
-        // ==========================================
-        // ADVANCED: MERGE ACCOUNTS LOGIC
-        // ==========================================
-        let secondaryApp = null;
-        let secondaryAuth = null;
-        let data1 = {};
-        let data2 = {};
-        let user2 = null;
-        let googleCred2 = null;
-
-        async function getSecondaryAuth() {
-            if (secondaryAuth) return secondaryAuth;
-            const keys = await window.getEduKeys();
-            const effectiveApiKey = keys.firebase || EDU_CONFIG.firebaseApiKey;
-            const effectiveAppId = keys.fbAppId || EDU_CONFIG.firebaseAppId;
-            if (!isSet(effectiveApiKey) || !isSet(effectiveAppId)) {
-                console.error('Firebase credentials missing; cannot create secondary app.');
-                throw new Error('Firebase not configured');
-            }
-            const firebaseConfig = {
-                apiKey: keys.firebase || EDU_CONFIG.firebaseApiKey,
-                authDomain: keys.fbAuthDomain || EDU_CONFIG.firebaseAuthDomain,
-                databaseURL: keys.fbDatabaseURL || EDU_CONFIG.firebaseDatabaseURL,
-                projectId: keys.fbProjectId || EDU_CONFIG.firebaseProjectId,
-                storageBucket: keys.fbStorageBucket || EDU_CONFIG.firebaseStorageBucket,
-                messagingSenderId: keys.fbMessagingSenderId || EDU_CONFIG.firebaseMessagingSenderId,
-                appId: keys.fbAppId || EDU_CONFIG.firebaseAppId,
-                measurementId: keys.fbMeasurementId || EDU_CONFIG.firebaseMeasurementId
-            };
-            secondaryApp = initializeApp(firebaseConfig, "SecondaryApp");
-            secondaryAuth = getAuth(secondaryApp);
-            return secondaryAuth;
-        }
-
-        const mergeModal = document.getElementById('merge-modal');
-        const mergeStep1 = document.getElementById('merge-step-1');
-        const mergeStep2 = document.getElementById('merge-step-2');
-        const mergeStep3 = document.getElementById('merge-step-3');
-
-        function switchMergeStep(step) {
-            mergeStep1.classList.add('hidden');
-            mergeStep2.classList.add('hidden');
-            mergeStep3.classList.add('hidden');
-            document.getElementById(`merge-step-${step}`).classList.remove('hidden');
-        }
-
-        document.getElementById('start-merge-btn').addEventListener('click', () => {
-            document.getElementById('merge-ndid2').value = '';
-            document.getElementById('merge-password2').value = '';
-            document.getElementById('merge-password1').value = '';
-            googleCred2 = null;
-            switchMergeStep(1);
-            mergeModal.classList.remove('hidden');
-        });
-
-        const closeMerge = () => mergeModal.classList.add('hidden');
-        document.getElementById('close-merge').addEventListener('click', closeMerge);
-        document.getElementById('cancel-merge-s1').addEventListener('click', closeMerge);
-
-        // Google sign-in for step 1
-        document.getElementById('btn-merge-google-login').addEventListener('click', async () => {
-            const btn = document.getElementById('btn-merge-google-login');
-            const originalText = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="ph-bold ph-spinner spinner"></i> Đang đăng nhập...';
-            try {
-                const sAuth = await getSecondaryAuth();
-                const provider = new GoogleAuthProvider();
-                provider.setCustomParameters({ prompt: 'select_account' });
-                const result = await signInWithPopup(sAuth, provider);
-                user2 = result.user;
-                googleCred2 = GoogleAuthProvider.credentialFromResult(result);
-
-                // Load profiles
-                const snap1 = await getDoc(doc(db, 'users', currentUser.uid));
-                if (!snap1.exists()) {
-                    throw new Error('Không tìm thấy tài khoản hiện tại trong Firestore.');
-                }
-                const ndidMap1Snap = await getDoc(doc(db, 'ndids', snap1.data().ndid));
-                data1 = {
-                    ...snap1.data(),
-                    recoveryEmail: ndidMap1Snap.exists() ? ndidMap1Snap.data().recoveryEmail : '',
-                    googleEmail: currentUser.providerData.find(p => p.providerId === 'google.com')?.email || null
-                };
-
-                let snap2 = await getDoc(doc(db, 'users', user2.uid));
-                let ndid2Name = '';
-                if (snap2.exists()) {
-                    ndid2Name = snap2.data().ndid || '';
-                }
-                const ndidMap2Snap = ndid2Name ? await getDoc(doc(db, 'ndids', ndid2Name)) : null;
-
-                data2 = {
-                    fullname: snap2.exists() ? (snap2.data().fullname || '') : (user2.displayName || 'Tài khoản Google'),
-                    ndid: ndid2Name || (user2.email ? user2.email.split('@')[0] : 'google_acc'),
-                    role: snap2.exists() ? (snap2.data().role || 'student') : 'student',
-                    yob: snap2.exists() ? (snap2.data().yob || null) : null,
-                    grade: snap2.exists() ? (snap2.data().grade || 'Khác') : 'Khác',
-                    recoveryEmail: (ndidMap2Snap && ndidMap2Snap.exists()) ? ndidMap2Snap.data().recoveryEmail : '',
-                    googleEmail: user2.providerData.find(p => p.providerId === 'google.com')?.email || user2.email || null
-                };
-
-                document.getElementById('merge-ndid1-display').textContent = data1.ndid;
-                switchMergeStep(2);
-            } catch (err) {
-                alert('Đăng nhập Google thất bại: ' + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }
-        });
-
-        // Step 1 -> Step 2
-        document.getElementById('btn-merge-to-step2').addEventListener('click', async () => {
-            const ndid2 = document.getElementById('merge-ndid2').value.trim().toLowerCase();
-            const password2 = document.getElementById('merge-password2').value;
-            if (!ndid2 || !password2) {
-                alert('Vui lòng điền đầy đủ NDID và mật khẩu tài khoản 2.');
-                return;
-            }
-
-            const btn = document.getElementById('btn-merge-to-step2');
-            btn.disabled = true;
-            btn.textContent = 'Đang xác thực...';
-
-            try {
-                const sAuth = await getSecondaryAuth();
-                let email2 = `${ndid2}@ndsite.web.app`;
-                let cred2;
-
-                try {
-                    cred2 = await signInWithEmailAndPassword(sAuth, email2, password2);
-                } catch (err) {
-                    if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
-                        email2 = `${ndid2}@ndlabs.com`;
-                        cred2 = await signInWithEmailAndPassword(sAuth, email2, password2);
-                    } else {
-                        throw err;
-                    }
-                }
-
-                user2 = cred2.user;
-
-                // Load profiles
-                const snap1 = await getDoc(doc(db, 'users', currentUser.uid));
-                const snap2 = await getDoc(doc(db, 'users', user2.uid));
-
-                if (!snap1.exists()) {
-                    throw new Error('Không tìm thấy tài khoản 1 trong Firestore.');
-                }
-                if (!snap2.exists()) {
-                    throw new Error('Tài khoản 2 đã xác thực thành công nhưng chưa khởi tạo hồ sơ Firestore.');
-                }
-
-                const ndidMap1Snap = await getDoc(doc(db, 'ndids', snap1.data().ndid));
-                const ndidMap2Snap = await getDoc(doc(db, 'ndids', snap2.data().ndid));
-
-                data1 = {
-                    ...snap1.data(),
-                    recoveryEmail: ndidMap1Snap.exists() ? ndidMap1Snap.data().recoveryEmail : '',
-                    googleEmail: currentUser.providerData.find(p => p.providerId === 'google.com')?.email || null
-                };
-
-                data2 = {
-                    ...snap2.data(),
-                    recoveryEmail: ndidMap2Snap.exists() ? ndidMap2Snap.data().recoveryEmail : '',
-                    googleEmail: user2.providerData.find(p => p.providerId === 'google.com')?.email || null
-                };
-
-                document.getElementById('merge-ndid1-display').textContent = data1.ndid;
-                switchMergeStep(2);
-            } catch (err) {
-                alert('Không thể xác thực tài khoản 2: ' + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Tiếp tục';
-            }
-        });
-
-        document.getElementById('btn-merge-back-step1').addEventListener('click', () => switchMergeStep(1));
-
-        // Step 2 -> Step 3
-        document.getElementById('btn-merge-to-step3').addEventListener('click', async () => {
-            const password1 = document.getElementById('merge-password1').value;
-            if (!password1) {
-                alert('Vui lòng nhập mật khẩu tài khoản hiện tại.');
-                return;
-            }
-
-            const btn = document.getElementById('btn-merge-to-step3');
-            btn.disabled = true;
-            btn.textContent = 'Xác minh...';
-
-            try {
-                const credential1 = EmailAuthProvider.credential(currentUser.email, password1);
-                await reauthenticateWithCredential(currentUser, credential1);
-
-                populateMergeTable();
-                switchMergeStep(3);
-            } catch (err) {
-                alert('Mật khẩu tài khoản hiện tại không đúng: ' + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Tiếp tục';
-            }
-        });
-
-        document.getElementById('btn-merge-back-step2').addEventListener('click', () => switchMergeStep(2));
-
-        function populateMergeTable() {
-            const fields = [
-                { key: 'fullname', label: 'Họ và tên' },
-                { key: 'ndid', label: 'NDID' },
-                { key: 'role', label: 'Vai trò' },
-                { key: 'yob', label: 'Năm sinh' },
-                { key: 'grade', label: 'Lớp học' },
-                { key: 'recoveryEmail', label: 'Email khôi phục' }
-            ];
-
-            let html = '';
-            fields.forEach(f => {
-                const val1 = data1[f.key] || '—';
-                const val2 = data2[f.key] || '—';
-                html += `
-                    <tr style="border-bottom: 1px solid #e2e8f0;">
-                        <td style="padding: 10px 12px; font-weight: 700; color: var(--text-soft);">${f.label}</td>
-                        <td style="padding: 10px 12px;">
-                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <input type="radio" name="merge_${f.key}" value="1" checked style="accent-color: var(--primary);">
-                                <span>${val1}</span>
-                            </label>
-                        </td>
-                        <td style="padding: 10px 12px;">
-                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <input type="radio" name="merge_${f.key}" value="2" style="accent-color: var(--primary);">
-                                <span>${val2}</span>
-                            </label>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            // Handle Google accounts if at least one is linked
-            if (data1.googleEmail || data2.googleEmail) {
-                html += `
-                    <tr style="border-bottom: 1px solid #e2e8f0; background: #fffbeb;">
-                        <td style="padding: 10px 12px; font-weight: 700; color: #b45309;">Giữ liên kết Google</td>
-                        <td style="padding: 10px 12px;">
-                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <input type="radio" name="merge_google" value="1" ${data1.googleEmail ? 'checked' : 'disabled'} style="accent-color: #b45309;">
-                                <span>${data1.googleEmail || 'Không có liên kết'}</span>
-                            </label>
-                        </td>
-                        <td style="padding: 10px 12px;">
-                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <input type="radio" name="merge_google" value="2" ${data2.googleEmail ? 'checked' : 'disabled'} style="accent-color: #b45309;">
-                                <span>${data2.googleEmail || 'Không có liên kết'}</span>
-                            </label>
-                        </td>
-                    </tr>
-                `;
-            }
-
-            document.getElementById('merge-options-body').innerHTML = html;
-        }
-
-        // Execute Merge
-        document.getElementById('btn-execute-merge').addEventListener('click', async () => {
-            const btn = document.getElementById('btn-execute-merge');
-            btn.disabled = true;
-            btn.textContent = 'Đang sáp nhập...';
-
-            try {
-                const getSelectedValue = (fieldName) => {
-                    const radios = document.getElementsByName(`merge_${fieldName}`);
-                    for (let r of radios) {
-                        if (r.checked) return r.value;
-                    }
-                    return "1";
-                };
-
-                const finalFullname = getSelectedValue('fullname') === "1" ? data1.fullname : data2.fullname;
-                const finalNdid = getSelectedValue('ndid') === "1" ? data1.ndid : data2.ndid;
-                const finalRole = getSelectedValue('role') === "1" ? data1.role : data2.role;
-                const finalYob = getSelectedValue('yob') === "1" ? data1.yob : data2.yob;
-                const finalGrade = getSelectedValue('grade') === "1" ? data1.grade : data2.grade;
-                const finalRecoveryEmail = getSelectedValue('recoveryEmail') === "1" ? data1.recoveryEmail : data2.recoveryEmail;
-
-                // Handle google selection
-                const keepGoogle2 = (data1.googleEmail || data2.googleEmail) && (googleCred2 || getSelectedValue('google') === "2");
-
-                // Step 1: Google processing
-                if (!googleCred2 && data2.googleEmail) {
-                    try {
-                        await unlink(user2, 'google.com');
-                    } catch (_) {}
-                }
-
-                // If Google 2 was chosen to keep, add it to current user email list.
-                const emailsList = [currentUser.email].filter(Boolean);
-                if (finalRecoveryEmail) emailsList.push(finalRecoveryEmail);
-                if ((keepGoogle2 || googleCred2) && data2.googleEmail) emailsList.push(data2.googleEmail);
-
-                // Step 2: Update Account 1 Firestore
+                const googleEmail = result.user.email;
                 await updateDoc(doc(db, 'users', currentUser.uid), {
-                    fullname: finalFullname || '',
-                    ndid: finalNdid,
-                    role: finalRole || 'student',
-                    yob: finalYob ? Number(finalYob) : null,
-                    grade: finalGrade || 'Khác',
-                    emails: emailsList
+                    googleEmail: googleEmail,
+                    emails: arrayUnion(googleEmail)
                 });
-
-                // Update Account 1 NDID map
-                await setDoc(doc(db, 'ndids', finalNdid), {
-                    uid: currentUser.uid,
-                    recoveryEmail: finalRecoveryEmail || ''
-                });
-
-                // If final NDID is different from data1.ndid, delete old NDID map
-                if (finalNdid !== data1.ndid) {
-                    await deleteDoc(doc(db, 'ndids', data1.ndid));
-                }
-
-                // Step 3: Delete Account 2 Firestore (safely check if exists)
-                const snap2Check = await getDoc(doc(db, 'users', user2.uid));
-                if (snap2Check.exists()) {
-                    await deleteDoc(doc(db, 'users', user2.uid));
-                }
-                const ndidMap2Check = await getDoc(doc(db, 'ndids', data2.ndid));
-                if (ndidMap2Check.exists()) {
-                    await deleteDoc(doc(db, 'ndids', data2.ndid));
-                }
-
-                // Step 4: Delete Account 2 Auth
-                await deleteUser(user2);
-
-                // Step 5: Link Google credential if it was a Google merge
-                if (googleCred2) {
-                    try {
-                        await linkWithCredential(currentUser, googleCred2);
-                    } catch (linkErr) {
-                        console.warn("Could not link Google account to current user:", linkErr);
-                    }
-                }
-
-                // Update UI state & LocalStorage
-                localStorage.setItem('nd_user', JSON.stringify({
-                    displayName: finalFullname,
-                    ndid: finalNdid,
-                    role: finalRole,
-                    yob: finalYob,
-                    grade: finalGrade
-                }));
-
-                alert('🎉 Sáp nhập tài khoản thành công! Trang sẽ được tải lại.');
-                window.location.reload();
+                showStatus('🎉 Liên kết Google thành công!', 'success');
+                setTimeout(() => window.location.reload(), 1000);
             } catch (err) {
-                alert('Lỗi sáp nhập dữ liệu: ' + err.message);
-                btn.disabled = false;
-                btn.textContent = 'Hoàn tất Sáp nhập';
+                showStatus('Lỗi liên kết: ' + err.message, 'error');
             }
         });
 
-        // ==========================================
-        // ADVANCED: PASSWORD MANAGEMENT LOGIC (CHANGE / ADD)
-        // ==========================================
-        let isChangeMode = true;
+        // Unlink Google
+        document.getElementById('unlink-google-btn').addEventListener('click', async () => {
+            if (!currentUser) return;
+            const targetEmail = userDataCache?.recoveryEmail || currentUser.email;
+            const verifyCode = prompt(`Nhập mật khẩu hiện tại hoặc mã OTP gửi về email (${targetEmail}):`);
+            if (!verifyCode) return;
+
+            try {
+                if (verifyCode === generated8DigitOtp || verifyCode === userDataCache?.registeredPassword) {
+                    await unlink(currentUser, 'google.com');
+                    await updateDoc(doc(db, 'users', currentUser.uid), { googleEmail: null });
+                    showStatus('Đã hủy liên kết Google.', 'success');
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    const credential = EmailAuthProvider.credential(currentUser.email, verifyCode);
+                    await reauthenticateWithCredential(currentUser, credential);
+                    await unlink(currentUser, 'google.com');
+                    await updateDoc(doc(db, 'users', currentUser.uid), { googleEmail: null });
+                    showStatus('Đã hủy liên kết Google.', 'success');
+                    setTimeout(() => window.location.reload(), 1000);
+                }
+            } catch (err) {
+                showStatus('Xác thực thất bại: ' + err.message, 'error');
+            }
+        });
+
+        // Password change modal
         const passwordModal = document.getElementById('password-modal');
         const pwdForm = document.getElementById('password-modal-form');
-        const pwdTitle = document.getElementById('password-modal-title');
-        const pwdFieldCurrent = document.getElementById('pwd-field-current');
         const pwdCurrentInput = document.getElementById('pwd-current');
         const pwdNewInput = document.getElementById('pwd-new');
         const pwdConfirmInput = document.getElementById('pwd-confirm');
-        const btnSavePassword = document.getElementById('btn-save-password');
 
-        function openPasswordModal(isChange) {
-            isChangeMode = isChange;
+        document.getElementById('pass-sec-btn').addEventListener('click', () => {
             pwdCurrentInput.value = '';
             pwdNewInput.value = '';
             pwdConfirmInput.value = '';
-
-            if (isChange) {
-                pwdTitle.textContent = 'Đổi mật khẩu';
-                pwdFieldCurrent.style.display = 'block';
-                pwdCurrentInput.required = true;
-            } else {
-                pwdTitle.textContent = 'Thêm mật khẩu cho NDID';
-                pwdFieldCurrent.style.display = 'none';
-                pwdCurrentInput.required = false;
-            }
-
             passwordModal.classList.remove('hidden');
-        }
-
-        // Bind pass-sec-btn
-        document.getElementById('pass-sec-btn').addEventListener('click', () => {
-            if (!currentUser) return;
-            const hasPassword = currentUser.providerData.some(p => p.providerId === 'password');
-            openPasswordModal(hasPassword);
         });
 
-        const closePasswordModal = () => passwordModal.classList.add('hidden');
-        document.getElementById('close-password-modal').addEventListener('click', closePasswordModal);
-        document.getElementById('cancel-password-modal').addEventListener('click', closePasswordModal);
+        document.getElementById('close-password-modal').onclick = () => passwordModal.classList.add('hidden');
+        document.getElementById('cancel-password-modal').onclick = () => passwordModal.classList.add('hidden');
 
         pwdForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser) return;
-
             const valNew = pwdNewInput.value;
             const valConfirm = pwdConfirmInput.value;
+            const verifyAuth = pwdCurrentInput.value.trim();
 
-            if (valNew !== valConfirm) {
-                alert('Mật khẩu mới và xác nhận mật khẩu không khớp.');
-                return;
-            }
-
-            if (valNew.length < 6) {
-                alert('Mật khẩu phải dài ít nhất 6 ký tự.');
-                return;
-            }
-
-            btnSavePassword.disabled = true;
-            btnSavePassword.textContent = 'Đang lưu...';
+            if (valNew !== valConfirm) return alert('Mật khẩu mới không khớp.');
+            if (valNew.length < 6) return alert('Mật khẩu phải từ 6 ký tự trở lên.');
 
             try {
-                if (isChangeMode) {
-                    // Step 1: Reauthenticate
-                    const valCurrent = pwdCurrentInput.value;
-                    const credential = EmailAuthProvider.credential(currentUser.email, valCurrent);
-                    await reauthenticateWithCredential(currentUser, credential);
-
-                    // Step 2: Update Password
-                    await updatePassword(currentUser, valNew);
+                if (verifyAuth === generated8DigitOtp || verifyAuth === userDataCache?.registeredPassword) {
+                    if (currentUser) await updatePassword(currentUser, valNew);
+                    await updateDoc(doc(db, 'users', userDataCache.uid), { registeredPassword: valNew });
                     showStatus('🎉 Đổi mật khẩu thành công!', 'success');
                 } else {
-                    // Link with password credential
-                    const credential = EmailAuthProvider.credential(currentUser.email, valNew);
-                    await linkWithCredential(currentUser, credential);
-                    showStatus('🎉 Đã thêm mật khẩu thành công!', 'success');
+                    const credential = EmailAuthProvider.credential(currentUser.email, verifyAuth);
+                    await reauthenticateWithCredential(currentUser, credential);
+                    await updatePassword(currentUser, valNew);
+                    await updateDoc(doc(db, 'users', userDataCache.uid), { registeredPassword: valNew });
+                    showStatus('🎉 Đổi mật khẩu thành công!', 'success');
                 }
-
-                closePasswordModal();
-                setTimeout(() => window.location.reload(), 1500);
+                passwordModal.classList.add('hidden');
             } catch (err) {
-                alert('Thao tác mật khẩu thất bại: ' + err.message);
-            } finally {
-                btnSavePassword.disabled = false;
-                btnSavePassword.textContent = 'Xác nhận';
+                alert('Lỗi đổi mật khẩu: ' + err.message);
             }
         });
 
-        // ===================== STUDENT CLASSROOMS LOGIC =====================
-        async function loadJoinedClassrooms(studentUid) {
-            const listEl = document.getElementById('joined-classrooms-list');
-            if (!listEl) return;
-
-            try {
-                const q = query(collection(db, 'classrooms'), where('studentUids', 'array-contains', studentUid));
-                const snap = await getDocs(q);
-                
-                let classrooms = [];
-                snap.forEach(doc => classrooms.push({ id: doc.id, ...doc.data() }));
-
-                if (classrooms.length === 0) {
-                    listEl.innerHTML = `<p class="text-14-soft">Bạn chưa tham gia lớp học nào.</p>`;
-                    return;
-                }
-
-                let html = '';
-                for (const c of classrooms) {
-                    let teacherName = 'Giáo viên';
-                    if (c.creatorUid) {
-                        try {
-                            const tSnap = await getDoc(doc(db, 'users', c.creatorUid));
-                            if (tSnap.exists()) {
-                                teacherName = tSnap.data().fullname || tSnap.data().displayName || 'Giáo viên';
-                            }
-                        } catch (e) {
-                            console.error("Error fetching teacher details:", e);
-                        }
-                    }
-
-                    // Query quizzes that target this classroom
-                    let quizListHtml = '';
-                    try {
-                        const qQuiz = query(collection(db, 'quizzes'), where('targetClassrooms', 'array-contains', c.id));
-                        const qSnap = await getDocs(qQuiz);
-                        qSnap.forEach(qd => {
-                            const qData = qd.data();
-                            quizListHtml += `
-                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: white; border: 1px solid #edf2f7; border-radius: 10px; margin-top: 6px;">
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 700; font-size: 13px; color: #1a202c;">${qData.title}</div>
-                                        <div style="font-size: 11px; color: #718096;">Mã đề: <span style="font-family: monospace; font-weight: 700; color: #3182ce;">${qd.id}</span></div>
-                                    </div>
-                                    <a href="/eduspace/exam?id=${qd.id}" target="_blank" class="btn-primary" style="padding: 6px 12px; font-size: 11px; border-radius: 8px; margin-top: 0; width: auto !important; height: auto !important; line-height: 1.4;">Làm bài</a>
-                                </div>
-                            `;
-                        });
-                    } catch (quizErr) {
-                        console.error("Error fetching quizzes for classroom:", quizErr);
-                    }
-
-                    html += `
-                        <div class="pass-sec-container" style="background: #f8fafc; border: 1.5px solid #edf2f7; gap: 12px; padding: 16px;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
-                                <div>
-                                    <h4 class="pass-sec-title-h4" style="color: #2b6cb0; display: flex; align-items: center; gap: 6px; margin: 0; font-weight: 800; font-size: 15px;">${c.className}</h4>
-                                    <p class="pass-sec-desc-p" style="margin-top: 2px; font-size: 13px; color: var(--text-soft); line-height: 1.5; margin-bottom: 0;">Giáo viên: <strong>${teacherName}</strong> · Mã lớp: <strong>${c.id}</strong></p>
-                                </div>
-                                <button type="button" class="btn-unlink" style="padding: 4px 8px; font-size: 11px; height: auto !important; width: auto !important;" onclick="window.leaveClassroom('${c.id}')">Rời lớp</button>
-                            </div>
-                            
-                            <div style="margin-top: 8px; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
-                                <div style="font-size: 12px; font-weight: 800; color: #4a5568; margin-bottom: 6px;">📋 Đề thi được giao:</div>
-                                ${quizListHtml || '<div style="font-size: 11px; color: #a0aec0; font-style: italic;">Chưa có đề thi nào được giao cho lớp này.</div>'}
-                            </div>
-                        </div>
-                    `;
-                }
-
-                listEl.innerHTML = html;
-
-            } catch(e) {
-                console.error("Error loading joined classrooms:", e);
-                listEl.innerHTML = `<p class="text-14-soft" style="color: #e53e3e;">Lỗi tải lớp học: ${e.message}</p>`;
+        // Logout Current Account vs Logout All
+        document.getElementById('logout-current-btn').addEventListener('click', async () => {
+            if (window.NDAccounts) {
+                const activeIdx = window.NDAccounts.getActiveIndexFromUrl();
+                window.NDAccounts.removeAccount(activeIdx);
+            } else {
+                if (auth) await signOut(auth);
+                localStorage.removeItem('nd_user');
+                window.location.href = '/';
             }
-        }
+        });
 
-        async function joinClassroom() {
-            const codeEl = document.getElementById('join-class-code');
-            if (!codeEl) return;
-            const code = codeEl.value.trim();
-            if (code.length !== 6 || isNaN(code)) {
-                showStatus("Mã lớp học phải gồm 6 chữ số.", "error");
-                return;
+        document.getElementById('logout-all-btn').addEventListener('click', async () => {
+            if (auth) await signOut(auth);
+            if (window.NDAccounts) {
+                window.NDAccounts.removeAllAccounts();
+            } else {
+                localStorage.removeItem('nd_user');
+                window.location.href = '/';
             }
-
-            if (!currentUser) return;
-
-            const btn = document.getElementById('btn-join-class');
-            const origText = btn.textContent;
-            btn.disabled = true;
-            btn.textContent = "...";
-
-            try {
-                const cSnap = await getDoc(doc(db, 'classrooms', code));
-                if (!cSnap.exists()) {
-                    showStatus("Lớp học không tồn tại. Vui lòng kiểm tra lại mã.", "error");
-                    return;
-                }
-
-                const cData = cSnap.data();
-                if (cData.studentUids && cData.studentUids.includes(currentUser.uid)) {
-                    showStatus("Bạn đã tham gia lớp học này rồi.", "error");
-                    return;
-                }
-
-                const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
-                const uData = uSnap.data() || {};
-
-                await updateDoc(doc(db, 'classrooms', code), {
-                    studentUids: arrayUnion(currentUser.uid),
-                    studentNdids: arrayUnion(uData.ndid || '')
-                });
-
-                showStatus("Đã tham gia lớp học thành công!", "success");
-                codeEl.value = '';
-                await loadJoinedClassrooms(currentUser.uid);
-
-            } catch(e) {
-                showStatus("Lỗi tham gia lớp: " + e.message, "error");
-            } finally {
-                btn.disabled = false;
-                btn.textContent = origText;
-            }
-        }
-
-        window.leaveClassroom = async function(classroomId) {
-            if (!confirm("Bạn có chắc chắn muốn rời lớp học này? Kết quả thi của bạn vẫn được lưu nhưng bạn sẽ không thấy đề của lớp này nữa.")) return;
-            try {
-                if (!currentUser) return;
-                
-                const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
-                const uData = uSnap.data() || {};
-                
-                await updateDoc(doc(db, 'classrooms', classroomId), {
-                    studentUids: arrayRemove(currentUser.uid),
-                    studentNdids: arrayRemove(uData.ndid || '')
-                });
-                
-                showStatus("Đã rời lớp học thành công!", "success");
-                await loadJoinedClassrooms(currentUser.uid);
-            } catch(e) {
-                showStatus("Lỗi rời lớp học: " + e.message, "error");
-            }
-        };
-
-        const btnJoin = document.getElementById('btn-join-class');
-        if (btnJoin) {
-            btnJoin.addEventListener('click', joinClassroom);
-        }
+        });
     </script>
 </body>
 
