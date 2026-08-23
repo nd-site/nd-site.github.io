@@ -490,7 +490,7 @@
                 const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
                 if (!ndidSnap.exists()) {
                     btnSendLoginOtp.disabled = false;
-                    btnSendLoginOtp.textContent = 'Gửi mã OTP 8 số về Email';
+                    btnSendLoginOtp.textContent = 'Gửi mã OTP';
                     return alert(`NDID "${ndid}" không tồn tại trên hệ thống.`);
                 }
 
@@ -503,7 +503,7 @@
 
                 if (!targetEmail) {
                     btnSendLoginOtp.disabled = false;
-                    btnSendLoginOtp.textContent = 'Gửi mã OTP 8 số về Email';
+                    btnSendLoginOtp.textContent = 'Gửi mã OTP';
                     return alert("Tài khoản này chưa thiết lập email khôi phục.");
                 }
 
