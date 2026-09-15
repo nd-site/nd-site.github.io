@@ -14,37 +14,9 @@
     <script src="/assets/js/nd-navbar.js" defer></script>
     <script src="/assets/js/config.js"></script>
     <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/assets/js/canonical-auth.js"></script>
     <script src="/font/font.js"></script>
     <style>
-        .login-tabs-row {
-            display: flex;
-            background: #f1f5f9;
-            padding: 4px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            gap: 4px;
-        }
-
-        .login-tab-btn {
-            flex: 1;
-            padding: 8px 12px;
-            border: none;
-            background: transparent;
-            font-family: inherit;
-            font-size: 12.5px;
-            font-weight: 700;
-            color: #64748b;
-            border-radius: 9px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .login-tab-btn.active {
-            background: #ffffff;
-            color: #0284c7;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-        }
-
         .forgot-link-container {
             display: flex;
             justify-content: space-between;
@@ -57,78 +29,6 @@
             color: var(--primary);
             font-weight: 700;
             text-decoration: none;
-        }
-
-        .forgot-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: rgba(15, 23, 42, 0.5);
-            -webkit-backdrop-filter: blur(8px);
-            backdrop-filter: blur(8px);
-            align-items: center;
-            justify-content: center;
-            display: none;
-            padding: 16px;
-        }
-
-        .forgot-modal-content {
-            background: white;
-            border-radius: 24px;
-            padding: 28px;
-            max-width: 420px;
-            width: 100%;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-        }
-
-        .forgot-modal-title {
-            font-weight: 800;
-            font-size: 18px;
-            color: var(--text-main);
-            margin: 0 0 6px 0;
-        }
-
-        .forgot-modal-desc {
-            font-size: 13px;
-            color: var(--text-soft);
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .otp-input-large {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: 4px;
-            text-align: center;
-            padding: 12px;
-            border-radius: 12px;
-            border: 2px solid #cbd5e1;
-            width: 100%;
-            outline: none;
-            color: #0f172a;
-            box-sizing: border-box;
-        }
-        .otp-input-large:focus {
-            border-color: #0284c7;
-        }
-
-        .btn-otp-action {
-            width: 100%;
-            padding: 10px;
-            border-radius: 12px;
-            background: #e0f2fe;
-            color: #0284c7;
-            border: 1.5px solid #bae6fd;
-            font-weight: 800;
-            font-size: 12.5px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 6px;
-        }
-        .btn-otp-action:hover {
-            background: #bae6fd;
         }
 
         .add-account-banner {
@@ -153,7 +53,7 @@
             <div class="auth-header">
                 <img src="/assets/images/logo.png" alt="ND Labs" class="auth-logo">
                 <h1>Đăng nhập NDID</h1>
-                <p>Hệ sinh thái dịch vụ số ND Labs</p>
+                <p>Nền tảng dịch vụ số ND Labs</p>
             </div>
 
             <!-- Add Account Mode Notice -->
@@ -162,23 +62,13 @@
                 <span>Đang thêm tài khoản mới (Hệ thống hỗ trợ tối đa 10 tài khoản)</span>
             </div>
 
-            <!-- Login method selector -->
-            <div class="login-tabs-row">
-                <button type="button" id="tab-btn-pwd" class="login-tab-btn active">
-                    <i class="ph-bold ph-lock"></i> Mật khẩu
-                </button>
-                <button type="button" id="tab-btn-otp" class="login-tab-btn">
-                    <i class="ph-bold ph-envelope"></i> Mã OTP
-                </button>
-            </div>
-
-            <!-- Form 1: Login via Password -->
-            <form id="login-form-pwd" class="auth-form">
+            <!-- Form: Login via Canonical Auth -->
+            <form id="login-form" class="auth-form">
                 <div class="form-group">
-                    <label for="ndid">NDID *</label>
+                    <label for="ndid">Tài khoản *</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-user-circle"></i>
-                        <input type="text" id="ndid" placeholder="Nhập NDID của bạn" autocomplete="username" required>
+                        <input type="text" id="ndid" placeholder="Nhập NDID hoặc Email" autocomplete="username" required>
                     </div>
                 </div>
 
@@ -189,7 +79,7 @@
                         <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
                     </div>
                     <div class="forgot-link-container">
-                        <a href="#" id="forgot-password-link" class="forgot-link">Quên mật khẩu?</a>
+                        <a href="/auth/recovery/" id="forgot-password-link" class="forgot-link">Quên mật khẩu?</a>
                     </div>
                 </div>
 
@@ -206,67 +96,22 @@
                 </button>
             </form>
 
-            <!-- Form 2: Login via OTP -->
-            <form id="login-form-otp" class="auth-form hidden">
-                <div class="form-group">
-                    <label for="otp-login-ndid">NDID của bạn *</label>
-                    <div class="input-container">
-                        <i class="ph-duotone ph-fingerprint"></i>
-                        <input type="text" id="otp-login-ndid" placeholder="Nhập NDID của bạn" required>
-                    </div>
-                    <button type="button" id="btn-send-login-otp" class="btn-otp-action">
-                        <i class="ph-bold ph-paper-plane-tilt"></i> Gửi mã OTP
-                    </button>
-                </div>
-
-                <div id="otp-code-group" class="form-group hidden">
-                    <label for="otp-login-code">Nhập mã OTP xác thực *</label>
-                    <input type="text" id="otp-login-code" class="otp-input-large" placeholder="••••••••" maxlength="8" autocomplete="off">
-                </div>
-
-                <button type="submit" id="submit-otp-btn" class="btn-primary hidden" style="margin-top: 10px;">
-                    <span>Xác nhận đăng nhập</span>
-                    <i class="ph-bold ph-check"></i>
-                </button>
-            </form>
-
             <div class="auth-footer">
                 <p>Chưa có tài khoản? <a href="/auth/register/">Tạo NDID ngay</a></p>
             </div>
         </div>
     </div>
 
-    <!-- Forgot Password Modal -->
-    <div id="forgot-password-modal" class="modal hidden forgot-modal">
-        <div class="forgot-modal-content">
-            <h3 class="forgot-modal-title">Khôi phục mật khẩu</h3>
-            <p class="forgot-modal-desc">Nhập NDID để nhận liên kết đặt lại mật khẩu qua email khôi phục.</p>
-            <div class="form-group" style="margin-bottom: 20px;">
-                <div class="input-container">
-                    <i class="ph-duotone ph-identification-card"></i>
-                    <input type="text" id="forgot-ndid" placeholder="Nhập NDID của bạn" required>
-                </div>
-            </div>
-            <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                <button type="button" id="cancel-forgot" style="padding: 10px 18px; border-radius: 10px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer;">Hủy</button>
-                <button type="button" id="confirm-forgot" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 20px;">Gửi liên kết</button>
-            </div>
-        </div>
-    </div>
 
     <div id="status-msg" class="status-msg"></div>
 
     <script type="module">
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, sendPasswordResetEmail }
+        import { getAuth, GoogleAuthProvider, signInWithPopup }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc }
-            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        let auth = null;
-        let db = null;
-        let currentTargetUser = null;
-        let generatedLoginOtp = null;
+        window.GoogleAuthProvider = GoogleAuthProvider;
+        window.signInWithPopup = signInWithPopup;
 
         const isAddingAccount = new URLSearchParams(window.location.search).get('addAccount') === 'true';
         if (isAddingAccount) {
@@ -280,324 +125,82 @@
             setTimeout(() => statusEl.className = 'status-msg', 4000);
         }
 
-        // Tab Switching
-        const tabBtnPwd = document.getElementById('tab-btn-pwd');
-        const tabBtnOtp = document.getElementById('tab-btn-otp');
-        const formPwd = document.getElementById('login-form-pwd');
-        const formOtp = document.getElementById('login-form-otp');
+        const loginForm = document.getElementById('login-form');
 
-        tabBtnPwd.addEventListener('click', () => {
-            tabBtnPwd.classList.add('active');
-            tabBtnOtp.classList.remove('active');
-            formPwd.classList.remove('hidden');
-            formOtp.classList.add('hidden');
-        });
-
-        tabBtnOtp.addEventListener('click', () => {
-            tabBtnOtp.classList.add('active');
-            tabBtnPwd.classList.remove('active');
-            formOtp.classList.remove('hidden');
-            formPwd.classList.add('hidden');
-        });
-
-        async function saveUserSession(user, customNdid = null) {
-            const ndid = customNdid || user.email?.split('@')[0] || user.uid;
-            let fullname = user.displayName || 'ND Member';
-            let codeId = '';
-            let dob = '';
-            let nationality = 'Việt Nam 🇻🇳';
-            let role = 'member';
-            let eduRole = 'student';
-
-            try {
-                if (db) {
-                    const snap = await getDoc(doc(db, 'users', user.uid));
-                    if (snap.exists()) {
-                        const data = snap.data();
-                        fullname = data.fullname || fullname;
-                        codeId = data.codeId || '';
-                        dob = data.dob || '';
-                        nationality = data.nationality || nationality;
-                        role = data.role || role;
-                        eduRole = data.eduRole || eduRole;
-                    }
-                }
-            } catch (_) {}
-
-            const accountData = {
-                displayName: fullname,
-                fullname: fullname,
-                email: user.email || '',
-                photoURL: user.photoURL || '/assets/images/logo.png',
-                uid: user.uid,
-                ndid: ndid,
-                codeId: codeId,
-                dob: dob,
-                nationality: nationality,
-                role: role,
-                eduRole: eduRole
-            };
-
-            let targetIdx = 0;
-            if (window.NDAccounts) {
-                targetIdx = window.NDAccounts.saveAccount(accountData, true);
-            } else {
-                localStorage.setItem('nd_user', JSON.stringify(accountData));
-            }
-            return targetIdx;
-        }
-
-        function setupFirebase() {
-            if (window.firebaseAuth && window.firebaseFirestore) {
-                auth = window.firebaseAuth;
-                db = window.firebaseFirestore;
-
-                onAuthStateChanged(auth, async (user) => {
-                    // Nếu không ở chế độ thêm tài khoản và đã có tài khoản active
-                    if (user && !isAddingAccount) {
-                        const idx = await saveUserSession(user);
-                        window.location.href = idx > 0 ? `/?u=${idx}` : '/';
-                    }
-                });
-            }
-        }
-
-        if (window.firebaseAuth && window.firebaseFirestore) {
-            setupFirebase();
-        } else {
-            window.addEventListener('firebase-ready', setupFirebase);
-        }
-
-        // 1. Password Login Submit
-        formPwd.addEventListener('submit', async (e) => {
+        // 1. Password Login Submit (Canonical Authentication)
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const rawNdid = document.getElementById('ndid').value.trim();
+            const identifier = document.getElementById('ndid').value.trim();
             const password = document.getElementById('password').value;
             const submitBtn = document.getElementById('submit-pwd-btn');
 
-            if (!auth && window.firebaseAuth) auth = window.firebaseAuth;
-            if (!db && window.firebaseFirestore) db = window.firebaseFirestore;
-
-            if (!rawNdid || !password) return;
-
-            // Chặn nhập email trực tiếp (chỉ cho phép đăng nhập bằng NDID)
-            if (rawNdid.includes('@') && rawNdid.includes('.') && !rawNdid.startsWith('@')) {
-                showStatus('Vui lòng chỉ nhập NDID (không nhập Email). Hệ thống sử dụng đăng nhập NDID độc lập của ND Labs.', 'error');
+            if (!identifier || !password) {
+                showStatus('Vui lòng nhập đầy đủ tên tài khoản và mật khẩu.', 'error');
                 return;
             }
 
-            if (!auth) {
-                showStatus('Hệ thống đang kết nối Firebase, vui lòng thử lại sau 1-2 giây.', 'error');
+            if (!window.canonicalAuth) {
+                showStatus('Hệ thống xác thực đang khởi động, vui lòng thử lại sau giây lát.', 'error');
                 return;
             }
 
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>Đang xác thực...</span>';
 
-            const ndid = rawNdid.toLowerCase();
-            const cleanNdid = ndid.startsWith('@') ? ndid.substring(1) : ndid;
+            try {
+                await window.canonicalAuth.login({
+                    identifier,
+                    password,
+                });
 
-            // Danh sách các khả năng email liên kết với NDID trong Firebase Auth
-            const candidateEmails = [
-                `${cleanNdid}@ndsite.id`,
-                `${cleanNdid}@ndsite.web.app`
-            ];
-
-            if (cleanNdid === 'nhatdang') {
-                candidateEmails.push('nhatdang10.nd@gmail.com');
-            }
-
-            console.log('🔑 [Login Form]: Bắt đầu đăng nhập NDID:', ndid, 'Emails:', candidateEmails);
-
-            let cred = null;
-            let lastError = null;
-
-            for (const email of candidateEmails) {
-                try {
-                    cred = await signInWithEmailAndPassword(auth, email, password);
-                    if (cred) {
-                        console.log('✅ [Login Form]: Đăng nhập thành công với email:', email);
-                        break;
-                    }
-                } catch (err) {
-                    lastError = err;
-                    console.warn('⚠️ [Login Form]: Thử email', email, 'thất bại:', err.code);
-                    if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-email') {
-                        continue;
-                    }
-                }
-            }
-
-            // Fallback: nếu chưa đăng nhập được, thử tìm qua Firestore ndids/{ndid}
-            if (!cred && db) {
-                try {
-                    const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
-                    const cleanSnap = !ndidSnap.exists() ? await getDoc(doc(db, 'ndids', cleanNdid)) : ndidSnap;
-                    if (cleanSnap.exists()) {
-                        const uid = cleanSnap.data().uid;
-                        const uSnap = await getDoc(doc(db, 'users', uid));
-                        if (uSnap.exists()) {
-                            const uData = uSnap.data();
-                            if (uData.recoveryEmail) {
-                                try {
-                                    cred = await signInWithEmailAndPassword(auth, uData.recoveryEmail, password);
-                                    if (cred) console.log('✅ [Login Form]: Đăng nhập qua recoveryEmail:', uData.recoveryEmail);
-                                } catch (_) {}
-                            }
-                        }
-                    }
-                } catch (_) {}
-            }
-
-            if (cred) {
-                const targetIdx = await saveUserSession(cred.user, ndid);
                 showStatus('Đăng nhập thành công!', 'success');
                 setTimeout(() => {
-                    window.location.href = targetIdx > 0 ? `/?u=${targetIdx}` : '/';
+                    const params = new URLSearchParams(window.location.search);
+                    const redirectUrl = params.get('redirect');
+                    if (redirectUrl && !redirectUrl.startsWith('http://') && !redirectUrl.startsWith('https://')) {
+                        window.location.href = decodeURIComponent(redirectUrl);
+                    } else {
+                        window.location.href = '/';
+                    }
                 }, 600);
-            } else {
-                console.error('❌ [Login Form]: Đăng nhập thất bại hoàn toàn. Lỗi cuối:', lastError?.code, lastError?.message);
-                showStatus('NDID hoặc mật khẩu không đúng.', 'error');
+            } catch (err) {
+                const message = window.canonicalAuth.mapError(err);
+                showStatus(message, 'error');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<span>Đăng nhập</span><i class="ph-bold ph-arrow-right"></i>';
             }
         });
 
-        // 2. Google Login
-        document.getElementById('google-btn').addEventListener('click', async () => {
-            if (!auth) return;
-            try {
-                const provider = new GoogleAuthProvider();
-                const result = await signInWithPopup(auth, provider);
-                const targetIdx = await saveUserSession(result.user);
-                window.location.href = targetIdx > 0 ? `/?u=${targetIdx}` : '/';
-            } catch (err) {
-                showStatus('Lỗi đăng nhập Google: ' + err.message, 'error');
+        // 2. Google Login (Canonical Identity Resolution)
+        const googleBtn = document.getElementById('google-btn');
+        googleBtn.addEventListener('click', async () => {
+            if (!window.canonicalAuth) {
+                showStatus('Hệ thống xác thực chưa sẵn sàng.', 'error');
+                return;
             }
-        });
-
-        // 3. OTP Login
-        const btnSendLoginOtp = document.getElementById('btn-send-login-otp');
-        btnSendLoginOtp.addEventListener('click', async () => {
-            const ndid = document.getElementById('otp-login-ndid').value.trim().toLowerCase();
-            if (!ndid) return alert("Vui lòng nhập NDID.");
-            if (!db) return;
-
-            btnSendLoginOtp.disabled = true;
-            btnSendLoginOtp.textContent = 'Đang tìm tài khoản...';
+            googleBtn.disabled = true;
+            const originalContent = googleBtn.innerHTML;
+            googleBtn.innerHTML = '<span>Đang xác thực Google...</span>';
 
             try {
-                const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
-                if (!ndidSnap.exists()) {
-                    btnSendLoginOtp.disabled = false;
-                    btnSendLoginOtp.textContent = 'Gửi mã OTP';
-                    return alert(`NDID "${ndid}" không tồn tại trên hệ thống.`);
-                }
-
-                const uid = ndidSnap.data().uid;
-                const uSnap = await getDoc(doc(db, 'users', uid));
-                if (!uSnap.exists()) throw new Error("Không tìm thấy dữ liệu người dùng.");
-
-                currentTargetUser = { uid, ...uSnap.data() };
-                const targetEmail = currentTargetUser.recoveryEmail || currentTargetUser.email;
-
-                if (!targetEmail) {
-                    btnSendLoginOtp.disabled = false;
-                    btnSendLoginOtp.textContent = 'Gửi mã OTP';
-                    return alert("Tài khoản này chưa thiết lập email khôi phục.");
-                }
-
-                generatedLoginOtp = Math.floor(10000000 + Math.random() * 90000000).toString();
-                console.log(`🔐 [NDID Login OTP]: Mã OTP gửi tới ${targetEmail} là: ${generatedLoginOtp}`);
-                showStatus(`📩 Mã OTP đã được gửi đến email: ${targetEmail} (Mã: ${generatedLoginOtp})`, 'info');
-
-                document.getElementById('otp-code-group').classList.remove('hidden');
-                document.getElementById('submit-otp-btn').classList.remove('hidden');
-                btnSendLoginOtp.textContent = 'Gửi lại mã OTP';
-                btnSendLoginOtp.disabled = false;
-            } catch (e) {
-                alert("Lỗi: " + e.message);
-                btnSendLoginOtp.disabled = false;
-                btnSendLoginOtp.textContent = 'Gửi mã OTP';
-            }
-        });
-
-        formOtp.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const enteredOtp = document.getElementById('otp-login-code').value.trim();
-            if (!enteredOtp || enteredOtp !== generatedLoginOtp) {
-                return alert("Mã OTP xác thực không chính xác.");
-            }
-
-            if (!currentTargetUser) return;
-
-            try {
-                const regPassword = currentTargetUser.registeredPassword || 'ndid@2026';
-                const authEmail = `${currentTargetUser.ndid}@ndsite.id`;
-                
-                let cred = null;
-                try {
-                    cred = await signInWithEmailAndPassword(auth, authEmail, regPassword);
-                } catch (_) {
-                    cred = await signInWithEmailAndPassword(auth, `${currentTargetUser.ndid}@ndsite.web.app`, regPassword);
-                }
-
-                if (cred) {
-                    const targetIdx = await saveUserSession(cred.user, currentTargetUser.ndid);
-                    showStatus('Đăng nhập thành công!', 'success');
-                    setTimeout(() => {
-                        window.location.href = targetIdx > 0 ? `/?u=${targetIdx}` : '/';
-                    }, 600);
-                }
-            } catch (err) {
-                const userSession = {
-                    displayName: currentTargetUser.fullname || 'ND Member',
-                    email: currentTargetUser.recoveryEmail || '',
-                    uid: currentTargetUser.uid,
-                    ndid: currentTargetUser.ndid,
-                    codeId: currentTargetUser.codeId || '',
-                    dob: currentTargetUser.dob || '',
-                    nationality: currentTargetUser.nationality || 'Việt Nam 🇻🇳'
-                };
-                let targetIdx = 0;
-                if (window.NDAccounts) {
-                    targetIdx = window.NDAccounts.saveAccount(userSession, true);
-                } else {
-                    localStorage.setItem('nd_user', JSON.stringify(userSession));
-                }
-                showStatus('🎉 Đăng nhập thành công!', 'success');
+                await window.canonicalAuth.loginWithGoogle();
+                showStatus('Đăng nhập thành công!', 'success');
                 setTimeout(() => {
-                    window.location.href = targetIdx > 0 ? `/?u=${targetIdx}` : '/';
+                    const params = new URLSearchParams(window.location.search);
+                    const redirectUrl = params.get('redirect');
+                    if (redirectUrl && !redirectUrl.startsWith('http://') && !redirectUrl.startsWith('https://')) {
+                        window.location.href = decodeURIComponent(redirectUrl);
+                    } else {
+                        window.location.href = '/';
+                    }
                 }, 600);
+            } catch (err) {
+                const message = window.canonicalAuth.mapError(err);
+                showStatus(message, 'error');
+                googleBtn.disabled = false;
+                googleBtn.innerHTML = originalContent;
             }
         });
-
-        // Forgot password modal
-        const forgotLink = document.getElementById('forgot-password-link');
-        const forgotModal = document.getElementById('forgot-password-modal');
-        forgotLink.onclick = (e) => {
-            e.preventDefault();
-            forgotModal.style.display = 'flex';
-        };
-        document.getElementById('cancel-forgot').onclick = () => {
-            forgotModal.style.display = 'none';
-        };
-        document.getElementById('confirm-forgot').onclick = async () => {
-            const ndid = document.getElementById('forgot-ndid').value.trim().toLowerCase();
-            if (!ndid) return alert("Vui lòng nhập NDID.");
-            try {
-                const ndidSnap = await getDoc(doc(db, 'ndids', ndid));
-                if (!ndidSnap.exists()) return alert("NDID không tồn tại.");
-                const recoveryEmail = ndidSnap.data().recoveryEmail;
-                if (!recoveryEmail) return alert("Tài khoản chưa có email khôi phục.");
-
-                await sendPasswordResetEmail(auth, recoveryEmail);
-                showStatus(`Đã gửi liên kết đặt lại mật khẩu về email: ${recoveryEmail}`, 'success');
-                forgotModal.style.display = 'none';
-            } catch (err) {
-                alert("Lỗi: " + err.message);
-            }
-        };
     </script>
 </body>
 

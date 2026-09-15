@@ -22,12 +22,7 @@ export function useFirebase() {
       if (raw) {
         const parsed = JSON.parse(raw);
         setSessionUser(parsed);
-        if (
-          parsed.role === 'admin' ||
-          parsed.ndid === 'nhatdang' ||
-          parsed.ndid === '@nhatdang' ||
-          parsed.email === 'nhatdang10.nd@gmail.com'
-        ) {
+        if (parsed.role === 'admin') {
           setIsAdmin(true);
         }
       }
@@ -38,11 +33,6 @@ export function useFirebase() {
         setIsReady(true);
         window.firebaseAuth.onAuthStateChanged((u: any) => {
           setUser(u);
-          if (u) {
-            if (u.email === 'nhatdang10.nd@gmail.com') {
-              setIsAdmin(true);
-            }
-          }
         });
       }
     };

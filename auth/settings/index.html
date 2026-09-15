@@ -13,6 +13,8 @@
     <script src="/assets/js/nd-accounts.js"></script>
     <script src="/assets/js/nd-navbar.js" defer></script>
     <script src="/assets/js/config.js"></script>
+    <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/assets/js/canonical-auth.js"></script>
     <script src="/assets/js/cloudflare-storage.js"></script>
     <script src="/font/font.js"></script>
     <style>
@@ -85,6 +87,13 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .btn-link-small img {
+            width: 18px !important;
+            height: 18px !important;
+            object-fit: contain !important;
+            flex-shrink: 0 !important;
         }
 
         .btn-link-small:hover {
@@ -202,6 +211,84 @@
             font-size: 14px;
             color: var(--text-main);
             outline: none;
+        }
+
+        /* ─── SECURITY CENTER (SESSIONS & DEVICES) ─── */
+        .session-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1.5px solid #edf2f7;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .session-card.current {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        .session-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .session-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #e0f2fe;
+            color: #0284c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .session-card.current .session-icon {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .badge-current {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #dcfce7;
+            color: #15803d;
+            padding: 3px 10px;
+            border-radius: 100px;
+            font-size: 11.5px;
+            font-weight: 700;
+        }
+
+        .security-event-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .event-icon-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            color: #0284c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+            margin-top: 2px;
         }
 
         /* ─── CARDID CITIZEN CARD WIDGET TONE SÁNG ─── */
@@ -517,6 +604,9 @@
             <a href="javascript:void(0)" onclick="window.switchSettingsTab('miniworld')" id="tab-miniworld">
                 <i class="ph-duotone ph-game-controller"></i><span>Tài khoản Mini World</span>
             </a>
+            <a href="javascript:void(0)" onclick="window.switchSettingsTab('security')" id="tab-security">
+                <i class="ph-duotone ph-shield-check"></i><span>Bảo mật & Thiết bị</span>
+            </a>
             <a href="/privacy/">
                 <i class="ph-duotone ph-shield-check"></i><span>Chính sách</span>
             </a>
@@ -582,6 +672,7 @@
                             <div style="font-size: 11px; color: #334155; font-weight: 600;"><span>CodeID: </span><strong id="card-widget-codeid" style="color: #0284c7; font-family: 'JetBrains Mono', monospace; font-weight: 800;">00000000</strong></div>
                             <div style="font-size: 11px; color: #334155; font-weight: 600;"><span>NDID: </span><strong id="card-widget-ndid" style="color: #0f172a; font-weight: 800;">NDID: ...</strong></div>
                             <div style="font-size: 11px; color: #334155; font-weight: 600;"><span>Ngày, tháng, năm sinh: </span><strong id="card-widget-dob" style="color: #0f172a; font-weight: 800;">—</strong></div>
+                            <div style="font-size: 11px; color: #334155; font-weight: 600;"><span>Giới tính: </span><strong id="card-widget-gender" style="color: #0f172a; font-weight: 800;">Nam</strong></div>
                             <div style="font-size: 11px; color: #334155; font-weight: 600; display: flex; align-items: center;">
                                 <span>Quốc tịch:&nbsp;</span>
                                 <span id="card-widget-nationality-wrapper" style="display: inline-flex; align-items: center;">
@@ -593,18 +684,18 @@
                         </div>
                     </div>
 
-                    <!-- Password Box with Protected Reveal -->
+                    <!-- Password Box with Protected Change -->
                     <div class="ndid-pwd-secure-box">
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <span style="color: #64748b; font-size: 11px; font-weight: 700;">MẬT KHẨU:</span>
                             <span id="card-widget-pwd-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 800; color: #0284c7; letter-spacing: 2px;">••••••••</span>
                         </div>
                         <div style="display: flex; gap: 6px;">
-                            <button type="button" id="btn-request-pwd-otp" class="btn-reveal-pwd">
-                                <i class="ph-bold ph-eye"></i>
-                                <span>Xem mật khẩu</span>
+                            <button type="button" id="btn-request-pwd-otp" class="btn-reveal-pwd" title="Đổi mật khẩu">
+                                <i class="ph-bold ph-key"></i>
+                                <span>Đổi mật khẩu</span>
                             </button>
-                            <button type="button" id="btn-download-card-widget" class="btn-card-download-widget hidden">
+                            <button type="button" id="btn-download-card-widget" class="btn-card-download-widget" title="Tải Thẻ Công Dân">
                                 <i class="ph-bold ph-download-simple"></i>
                                 <span>Tải Thẻ Công Dân</span>
                             </button>
@@ -630,7 +721,7 @@
                             <i class="ph-duotone ph-fingerprint"></i>
                             <input type="text" id="edit-ndid" placeholder="Nhập NDID" required>
                         </div>
-                        <p class="text-11-soft-mt4">Chỉ chứa chữ (hoa/thường), số, và ký tự <code>.</code> <code>_</code> <code>-</code>. Không được chứa từ "admin".</p>
+                        <p class="text-11-soft-mt4">Chỉ chứa chữ thường (a-z), chữ số (0-9), dấu gạch dưới (<code>_</code>) và dấu chấm (<code>.</code>). Không được chứa từ "admin".</p>
                     </div>
 
                     <div class="form-group mb-0">
@@ -642,29 +733,41 @@
                     </div>
 
                     <div class="form-group mb-0">
-                        <label>Quốc tịch *</label>
+                        <label>Giới tính *</label>
                         <div class="input-container">
-                            <i class="ph-duotone ph-globe"></i>
-                            <select id="edit-nationality" required class="select-field-custom">
-                                <option value="vn|Việt Nam">🇻🇳 Việt Nam</option>
-                                <option value="us|Hoa Kỳ">🇺🇸 Hoa Kỳ</option>
-                                <option value="jp|Nhật Bản">🇯🇵 Nhật Bản</option>
-                                <option value="kr|Hàn Quốc">🇰🇷 Hàn Quốc</option>
-                                <option value="gb|Vương quốc Anh">🇬🇧 Vương quốc Anh</option>
-                                <option value="fr|Pháp">🇫🇷 Pháp</option>
-                                <option value="de|Đức">🇩🇪 Đức</option>
-                                <option value="au|Úc">🇦🇺 Úc</option>
-                                <option value="ca|Canada">🇨🇦 Canada</option>
-                                <option value="sg|Singapore">🇸🇬 Singapore</option>
-                                <option value="th|Thái Lan">🇹🇭 Thái Lan</option>
-                                <option value="cn|Trung Quốc">🇨🇳 Trung Quốc</option>
-                                <option value="un|Quốc gia khác">🌐 Quốc gia khác</option>
+                            <i class="ph-duotone ph-gender-intersex"></i>
+                            <select id="edit-gender" required class="select-field-custom">
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Khác">Khác</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group mb-0">
-                        <label>Email khôi phục</label>
+                        <label>Quốc tịch *</label>
+                        <div class="input-container">
+                            <i class="ph-duotone ph-globe"></i>
+                            <select id="edit-nationality" required class="select-field-custom">
+                                <option value="Việt Nam 🇻🇳">🇻🇳 Việt Nam</option>
+                                <option value="Hoa Kỳ 🇺🇸">🇺🇸 Hoa Kỳ</option>
+                                <option value="Nhật Bản 🇯🇵">🇯🇵 Nhật Bản</option>
+                                <option value="Hàn Quốc 🇰🇷">🇰🇷 Hàn Quốc</option>
+                                <option value="Vương quốc Anh 🇬🇧">🇬🇧 Vương quốc Anh</option>
+                                <option value="Pháp 🇫🇷">🇫🇷 Pháp</option>
+                                <option value="Đức 🇩🇪">🇩🇪 Đức</option>
+                                <option value="Úc 🇦🇺">🇦🇺 Úc</option>
+                                <option value="Canada 🇨🇦">🇨🇦 Canada</option>
+                                <option value="Singapore 🇸🇬">🇸🇬 Singapore</option>
+                                <option value="Thái Lan 🇹🇭">🇹🇭 Thái Lan</option>
+                                <option value="Trung Quốc 🇨🇳">🇨🇳 Trung Quốc</option>
+                                <option value="Khác 🌐">🌐 Quốc gia khác</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label>Email khôi phục *</label>
                         <div class="input-container">
                             <i class="ph-duotone ph-envelope-simple"></i>
                             <input type="email" id="edit-recovery-email" placeholder="email@example.com" required>
@@ -866,6 +969,68 @@
                 </form>
             </div>
 
+            <!-- TAB PANEL 4: BẢO MẬT & THIẾT BỊ -->
+            <div id="panel-security" class="settings-tab-panel hidden">
+                <!-- Phiên đăng nhập hiện tại -->
+                <div class="card-section">
+                    <h3 class="card-section-title">
+                        <i class="ph-bold ph-laptop text-primary"></i> Phiên đăng nhập hiện tại
+                    </h3>
+                    <div id="current-session-container">
+                        <div style="display: flex; align-items: center; justify-content: center; padding: 20px; color: var(--text-soft);">
+                            Đang tải thông tin phiên...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Các phiên đăng nhập khác -->
+                <div class="card-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                        <h3 class="card-section-title" style="border-bottom: none; padding-bottom: 0;">
+                            <i class="ph-bold ph-devices text-primary"></i> Các phiên đăng nhập khác
+                        </h3>
+                        <button type="button" id="btn-revoke-other-sessions" class="btn-unlink" style="padding: 6px 14px; font-size: 12.5px; display: none;">
+                            <i class="ph-bold ph-sign-out"></i> Đăng xuất tất cả thiết bị khác
+                        </button>
+                    </div>
+                    <div id="other-sessions-list" class="flex-col-gap-16">
+                        <div style="display: flex; align-items: center; justify-content: center; padding: 20px; color: var(--text-soft);">
+                            Đang tải...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thiết bị tin cậy -->
+                <div class="card-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                        <h3 class="card-section-title" style="border-bottom: none; padding-bottom: 0;">
+                            <i class="ph-bold ph-shield-star text-primary"></i> Thiết bị tin cậy
+                        </h3>
+                        <button type="button" id="btn-trust-current-device" class="btn-link-small" style="padding: 6px 14px; font-size: 12.5px;">
+                            <i class="ph-bold ph-plus-circle text-primary"></i> Tin cậy thiết bị này
+                        </button>
+                    </div>
+                    <p class="text-11-soft-mt4 mb-0">Các thiết bị được lưu tin cậy giúp tài khoản nhận diện đăng nhập quen thuộc và bảo vệ trước truy cập bất thường.</p>
+                    <div id="trusted-devices-list" class="flex-col-gap-16">
+                        <div style="display: flex; align-items: center; justify-content: center; padding: 20px; color: var(--text-soft);">
+                            Đang tải...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hoạt động bảo mật gần đây -->
+                <div class="card-section">
+                    <h3 class="card-section-title">
+                        <i class="ph-bold ph-clock-counter-clockwise text-primary"></i> Hoạt động bảo mật gần đây
+                    </h3>
+                    <div id="security-activity-list" class="flex-col-gap-16">
+                        <div style="display: flex; align-items: center; justify-content: center; padding: 20px; color: var(--text-soft);">
+                            Đang tải...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Logout & Multi-account options -->
             <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; gap: 12px; flex-wrap: wrap;">
                 <button id="logout-current-btn" class="btn-unlink" style="padding: 12px 20px; font-size: 13.5px; border-radius: 14px;">
@@ -910,10 +1075,10 @@
 
             <form id="password-modal-form" class="space-y-4">
                 <div id="pwd-field-current" class="form-group mb-16">
-                    <label>Mật khẩu hiện tại hoặc Mã OTP</label>
+                    <label>Mật khẩu hiện tại</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-lock"></i>
-                        <input type="password" id="pwd-current" placeholder="Nhập mật khẩu hoặc mã OTP" title="Xác minh">
+                        <input type="password" id="pwd-current" placeholder="Nhập mật khẩu hiện tại" required title="Mật khẩu hiện tại">
                     </div>
                 </div>
 
@@ -963,6 +1128,10 @@
 
             if (tabBtn) tabBtn.classList.add('active');
             if (panel) panel.classList.remove('hidden');
+
+            if (tabName === 'security' && typeof window.loadSecurityCenterData === 'function') {
+                window.loadSecurityCenterData();
+            }
         };
 
         // Country flags helper
@@ -1120,6 +1289,7 @@
                     { label: 'CodeID: ', value: cardData.codeId },
                     { label: 'NDID: ', value: cardData.ndid },
                     { label: 'Ngày, tháng, năm sinh: ', value: cardData.dob },
+                    { label: 'Giới tính: ', value: cardData.gender || 'Nam' },
                     { label: 'Quốc tịch: ', value: countryInfo.name, isCountry: true },
                     { label: 'Email: ', value: cardData.email }
                 ];
@@ -1181,7 +1351,8 @@
         import {
             getAuth, onAuthStateChanged, updateProfile, signOut,
             GoogleAuthProvider, linkWithPopup, unlink,
-            reauthenticateWithCredential, EmailAuthProvider, updatePassword
+            reauthenticateWithCredential, EmailAuthProvider, updatePassword,
+            signInWithEmailAndPassword
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc, arrayUnion, deleteDoc, setDoc }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -1192,6 +1363,84 @@
         let db = null;
         let rdb = null;
 
+        async function getActiveAuthAsync() {
+            if (auth) return auth;
+            if (window.firebaseAuth) { auth = window.firebaseAuth; return auth; }
+            for (let i = 0; i < 30; i++) {
+                if (window.firebaseAuth) { auth = window.firebaseAuth; return auth; }
+                const apps = getApps();
+                if (apps.length > 0) {
+                    auth = getAuth(apps[0]);
+                    return auth;
+                }
+                await new Promise(r => setTimeout(r, 100));
+            }
+            return window.firebaseAuth || null;
+        }
+
+        async function getActiveDbAsync() {
+            if (db) return db;
+            if (window.firebaseFirestore) { db = window.firebaseFirestore; return db; }
+            for (let i = 0; i < 30; i++) {
+                if (window.firebaseFirestore) { db = window.firebaseFirestore; return db; }
+                const apps = getApps();
+                if (apps.length > 0) {
+                    db = getFirestore(apps[0]);
+                    return db;
+                }
+                await new Promise(r => setTimeout(r, 100));
+            }
+            return window.firebaseFirestore || null;
+        }
+
+        async function getActiveRdbAsync() {
+            if (rdb) return rdb;
+            if (window.firebaseDb) { rdb = window.firebaseDb; return rdb; }
+            for (let i = 0; i < 30; i++) {
+                if (window.firebaseDb) { rdb = window.firebaseDb; return rdb; }
+                const apps = getApps();
+                if (apps.length > 0) {
+                    rdb = getDatabase(apps[0]);
+                    return rdb;
+                }
+                await new Promise(r => setTimeout(r, 100));
+            }
+            return window.firebaseDb || null;
+        }
+
+        function getActiveAuth() {
+            if (auth) return auth;
+            if (window.firebaseAuth) { auth = window.firebaseAuth; return auth; }
+            const apps = getApps();
+            if (apps.length > 0) {
+                auth = getAuth(apps[0]);
+                return auth;
+            }
+            return null;
+        }
+
+        function getActiveDb() {
+            if (db) return db;
+            if (window.firebaseFirestore) { db = window.firebaseFirestore; return db; }
+            const apps = getApps();
+            if (apps.length > 0) {
+                db = getFirestore(apps[0]);
+                return db;
+            }
+            return null;
+        }
+
+        function getActiveRdb() {
+            if (rdb) return rdb;
+            if (window.firebaseDb) { rdb = window.firebaseDb; return rdb; }
+            const apps = getApps();
+            if (apps.length > 0) {
+                rdb = getDatabase(apps[0]);
+                return rdb;
+            }
+            return null;
+        }
+
         let currentUser = null;
         let userDataCache = null;
         let generated8DigitOtp = null;
@@ -1201,18 +1450,20 @@
             const activeAcc = window.NDAccounts ? window.NDAccounts.getActiveAccount() : null;
             const cached = activeAcc || JSON.parse(localStorage.getItem('nd_user') || '{}');
             if (cached && (cached.ndid || cached.displayName || cached.email)) {
+                userDataCache = { ...cached };
                 applyUserDataToUI(cached);
             }
             renderAccountPills();
         }
 
         function applyUserDataToUI(userSnapData) {
-            const ndid = userSnapData.ndid || userSnapData.email?.split('@')[0] || '...';
+            const ndid = userSnapData.ndid || 'Đang tải...';
             const fullname = userSnapData.fullname || userSnapData.displayName || 'ND Member';
             const codeId = userSnapData.codeId || '00000000';
-            const nationality = userSnapData.nationality || 'vn|Việt Nam';
+            const nationality = userSnapData.nationality || 'Việt Nam 🇻🇳';
+            const gender = (userSnapData.gender || 'Nam').replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}]/gu, '').trim() || 'Nam';
             const dob = userSnapData.dob || '';
-            const email = userSnapData.recoveryEmail || userSnapData.email || '—';
+            const email = userSnapData.recoveryEmail || (userSnapData.email && !userSnapData.email.endsWith('@ndsite.web.app') && !userSnapData.email.endsWith('@ndsite.id') ? userSnapData.email : '—');
             const avatar = userSnapData.photoURL || '/assets/images/logo.png';
 
             let dobText = '—';
@@ -1233,6 +1484,8 @@
             document.getElementById('card-widget-codeid').textContent = codeId;
             document.getElementById('card-widget-ndid').textContent = ndid;
             document.getElementById('card-widget-dob').textContent = dobText;
+            const cardGender = document.getElementById('card-widget-gender');
+            if (cardGender) cardGender.textContent = gender;
             document.getElementById('card-widget-email').textContent = email;
 
             // Country Flag
@@ -1241,18 +1494,20 @@
             document.getElementById('card-widget-flag-img').src = countryInfo.flagUrl;
 
             // Form NDID inputs
-            document.getElementById('edit-ndid').value = ndid !== '...' ? ndid : '';
+            document.getElementById('edit-ndid').value = (ndid !== '...' && ndid !== 'Đang tải...') ? ndid : '';
             document.getElementById('edit-name').value = fullname;
+            const editGenderEl = document.getElementById('edit-gender');
+            if (editGenderEl) editGenderEl.value = gender;
             
             const natSelect = document.getElementById('edit-nationality');
             for (let i = 0; i < natSelect.options.length; i++) {
-                if (natSelect.options[i].value.includes(countryInfo.code) || natSelect.options[i].text.includes(countryInfo.name)) {
+                if (natSelect.options[i].value === nationality || natSelect.options[i].value.includes(countryInfo.code) || natSelect.options[i].text.includes(countryInfo.name)) {
                     natSelect.selectedIndex = i;
                     break;
                 }
             }
 
-            document.getElementById('edit-recovery-email').value = userSnapData.recoveryEmail || userSnapData.email || '';
+            document.getElementById('edit-recovery-email').value = userSnapData.recoveryEmail || (userSnapData.email && !userSnapData.email.endsWith('@ndsite.web.app') && !userSnapData.email.endsWith('@ndsite.id') ? userSnapData.email : '');
             document.getElementById('edit-dob').value = dob;
 
             document.getElementById('edu-ndid-dob').textContent = dobText;
@@ -1338,10 +1593,10 @@
 
         // Core Load Handler
         async function initSettingsData() {
-            if (!window.firebaseAuth || !window.firebaseFirestore) return;
-            auth = window.firebaseAuth;
-            db = window.firebaseFirestore;
-            rdb = window.firebaseDb;
+            auth = getActiveAuth();
+            db = getActiveDb();
+            rdb = getActiveRdb();
+            if (!auth || !db) return;
 
             const activeAcc = window.NDAccounts ? window.NDAccounts.getActiveAccount() : null;
             const targetUid = activeAcc?.uid;
@@ -1410,17 +1665,17 @@
                     document.getElementById('mw-input-china-id').value = mwProfile.chinaId || (hasChina ? (mwProfile.gameId || '') : '');
                     updateMwIdFields();
 
-                    // Google link check
-                    let googleEmail = user?.providerData?.find(p => p.providerId === 'google.com')?.email || userDataCache.googleEmail;
-                    const isGoogleLinked = !!googleEmail;
+                    // Google link check (Phase 01-C4)
+                    let googleEmail = user?.providerData?.find(p => p.providerId === 'google.com')?.email || userDataCache.googleEmail || (userDataCache.googleSubjectId ? 'Đã liên kết' : null);
+                    const isGoogleLinked = !!(googleEmail || userDataCache.googleSubjectId);
                     document.getElementById('google-linked-badge').classList.toggle('hidden', !isGoogleLinked);
                     document.getElementById('link-google-btn').classList.toggle('hidden', isGoogleLinked);
                     document.getElementById('unlink-google-btn').classList.toggle('hidden', !isGoogleLinked);
-                    document.getElementById('google-email-sub').textContent = isGoogleLinked ? googleEmail : 'Chưa liên kết';
+                    document.getElementById('google-email-sub').textContent = isGoogleLinked ? (googleEmail || 'Đã liên kết') : 'Chưa liên kết';
 
                     if (isGoogleLinked) {
                         document.getElementById('card-widget-google-badge').classList.remove('hidden');
-                        document.getElementById('card-widget-google-email').textContent = googleEmail;
+                        document.getElementById('card-widget-google-email').textContent = googleEmail || 'Đã liên kết';
                     }
                 } catch (err) {
                     console.error("Settings load error:", err);
@@ -1436,87 +1691,77 @@
             window.addEventListener('firebase-ready', initSettingsData);
         }
 
-        // OTP Password Reveal
-        const otpModal = document.getElementById('otp-reveal-modal');
+        // Live preview listeners for Gender and Nationality
+        document.getElementById('edit-nationality').addEventListener('change', (e) => {
+            const countryInfo = parseCountryInfo(e.target.value);
+            document.getElementById('card-widget-nationality').textContent = countryInfo.name;
+            document.getElementById('card-widget-flag-img').src = countryInfo.flagUrl;
+        });
+
+        const editGenderInput = document.getElementById('edit-gender');
+        if (editGenderInput) {
+            editGenderInput.addEventListener('change', (e) => {
+                const cardG = document.getElementById('card-widget-gender');
+                if (cardG) cardG.textContent = e.target.value;
+            });
+        }
+
+        // Password Change Trigger from Citizen Card
         const btnRequestOtp = document.getElementById('btn-request-pwd-otp');
         const btnDownloadCardWidget = document.getElementById('btn-download-card-widget');
-        const otpInputCode = document.getElementById('otp-input-code');
-        const otpRevealForm = document.getElementById('otp-reveal-form');
 
-        btnRequestOtp.addEventListener('click', () => {
-            const targetEmail = userDataCache?.recoveryEmail || userDataCache?.email || 'email khôi phục';
-            document.getElementById('otp-target-email').textContent = targetEmail;
-
-            generated8DigitOtp = Math.floor(10000000 + Math.random() * 90000000).toString();
-            console.log(`🔐 [NDID Security Code]: Mã OTP gửi tới ${targetEmail} là: ${generated8DigitOtp}`);
-            showStatus(`📩 Mã OTP xác thực đã được gửi tới email: ${targetEmail} (Mã: ${generated8DigitOtp})`, 'info');
-
-            otpInputCode.value = '';
-            otpModal.classList.remove('hidden');
-        });
-
-        document.getElementById('close-otp-reveal-modal').onclick = () => otpModal.classList.add('hidden');
-        document.getElementById('cancel-otp-reveal').onclick = () => otpModal.classList.add('hidden');
-
-        otpRevealForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const inputVal = otpInputCode.value.trim();
-            if (inputVal === generated8DigitOtp) {
-                otpModal.classList.add('hidden');
-
-                const pwdDisplay = document.getElementById('card-widget-pwd-display');
-                const realPwd = userDataCache?.registeredPassword || '••••••••';
-                pwdDisplay.textContent = realPwd;
-                pwdDisplay.style.color = '#0284c7';
-                btnRequestOtp.innerHTML = '<i class="ph-bold ph-check"></i> Đã mở';
-                btnRequestOtp.disabled = true;
-
-                btnDownloadCardWidget.classList.remove('hidden');
-                showStatus('Xác thực OTP thành công!', 'success');
-            } else {
-                showStatus('Mã OTP không chính xác.', 'error');
-            }
-        });
-
-        btnDownloadCardWidget.addEventListener('click', () => {
-            if (!userDataCache) return;
-            const dob = userDataCache.dob || '';
-            let dobFormatted = '—';
-            if (dob && dob.includes('-')) {
-                const p = dob.split('-');
-                dobFormatted = `${p[2]}/${p[1]}/${p[0]}`;
-            }
-
-            downloadSettingsCardImage({
-                fullname: userDataCache.fullname || userDataCache.displayName || 'ND Member',
-                codeId: userDataCache.codeId || '00000000',
-                ndid: userDataCache.ndid || currentUser?.uid,
-                dob: dobFormatted,
-                nationality: userDataCache.nationality || 'Việt Nam 🇻🇳',
-                email: userDataCache.recoveryEmail || userDataCache.email || '—',
-                password: userDataCache.registeredPassword || '••••••••',
-                avatarUrl: userDataCache.photoURL || currentUser?.photoURL || '/assets/images/logo.png'
+        if (btnRequestOtp) {
+            btnRequestOtp.addEventListener('click', () => {
+                const pwdCurrentInput = document.getElementById('pwd-current');
+                const pwdNewInput = document.getElementById('pwd-new');
+                const pwdConfirmInput = document.getElementById('pwd-confirm');
+                if (pwdCurrentInput) pwdCurrentInput.value = '';
+                if (pwdNewInput) pwdNewInput.value = '';
+                if (pwdConfirmInput) pwdConfirmInput.value = '';
+                const passwordModal = document.getElementById('password-modal');
+                if (passwordModal) passwordModal.classList.remove('hidden');
             });
-        });
+        }
+
+        if (btnDownloadCardWidget) {
+            btnDownloadCardWidget.addEventListener('click', () => {
+                if (!userDataCache) return;
+                const dob = userDataCache.dob || '';
+                let dobFormatted = '—';
+                if (dob && dob.includes('-')) {
+                    const p = dob.split('-');
+                    dobFormatted = `${p[2]}/${p[1]}/${p[0]}`;
+                }
+
+                downloadSettingsCardImage({
+                    fullname: userDataCache.fullname || userDataCache.displayName || 'ND Member',
+                    codeId: userDataCache.codeId || currentUser?.uid || '00000000',
+                    ndid: userDataCache.ndid || currentUser?.uid || '—',
+                    dob: dobFormatted,
+                    gender: userDataCache.gender || 'Nam',
+                    nationality: userDataCache.nationality || 'Việt Nam 🇻🇳',
+                    email: userDataCache.recoveryEmail || userDataCache.email || '—',
+                    password: '••••••••',
+                    avatarUrl: userDataCache.photoURL || currentUser?.photoURL || '/assets/images/logo.png'
+                });
+            });
+        }
 
         // Save NDID Profile
         document.getElementById('ndid-profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            db = getActiveDb();
+            auth = getActiveAuth();
             const currentUid = userDataCache?.uid || currentUser?.uid;
             if (!currentUid || !db) return;
 
-            const newNdid = document.getElementById('edit-ndid').value.trim().toLowerCase();
+            const newNdid = document.getElementById('edit-ndid').value.trim();
             const newName = document.getElementById('edit-name').value.trim();
+            const newGender = document.getElementById('edit-gender')?.value || 'Nam';
             const newNat = document.getElementById('edit-nationality').value;
             const newRecoveryEmail = document.getElementById('edit-recovery-email').value.trim();
             const newDob = document.getElementById('edit-dob').value;
             const currentNdid = document.getElementById('ndid-display').textContent.trim();
-
-            if (newNdid !== currentNdid) {
-                if (newNdid.length < 3) return showStatus('NDID phải từ 3 ký tự trở lên.', 'error');
-                if (!/^[a-zA-Z0-9._-]+$/.test(newNdid)) return showStatus('NDID chỉ chứa chữ cái, số và . _ -', 'error');
-                if (newNdid.includes('admin')) return showStatus('NDID không được phép chứa từ "admin".', 'error');
-            }
 
             const nameCheck = await validateFullNameAI(newName);
             if (!nameCheck.valid) {
@@ -1524,16 +1769,26 @@
             }
 
             try {
-                if (newNdid !== currentNdid) {
-                    const ndidSnap = await getDoc(doc(db, 'ndids', newNdid));
-                    if (ndidSnap.exists() && ndidSnap.data().uid !== currentUid) {
-                        return showStatus('NDID này đã có người sử dụng.', 'error');
+                let ndidChanged = false;
+                if (newNdid && newNdid !== currentNdid && newNdid !== '...') {
+                    if (newNdid.length < 3 || newNdid.length > 30) {
+                        return showStatus('NDID phải có độ dài từ 3 đến 30 ký tự.', 'error');
+                    }
+                    if (!/^[a-z0-9_.]+$/.test(newNdid)) {
+                        return showStatus('NDID chỉ được chứa chữ thường (a-z), chữ số (0-9), dấu gạch dưới (_) và dấu chấm (.). Không được dùng chữ hoa hay ký tự khác.', 'error');
+                    }
+                    if (newNdid.toLowerCase().includes('admin')) {
+                        return showStatus('NDID không được phép chứa từ "admin".', 'error');
+                    }
+                    if (window.canonicalAuth) {
+                        await window.canonicalAuth.changeNdid({ newNdid });
+                        ndidChanged = true;
                     }
                 }
 
                 const updatedData = {
-                    ndid: newNdid,
                     fullname: newName,
+                    gender: newGender,
                     nationality: newNat,
                     recoveryEmail: newRecoveryEmail,
                     dob: newDob
@@ -1541,27 +1796,23 @@
 
                 await updateDoc(doc(db, 'users', currentUid), updatedData);
 
-                await setDoc(doc(db, 'ndids', newNdid), {
-                    uid: currentUid,
-                    recoveryEmail: newRecoveryEmail
-                });
-
-                if (newNdid !== currentNdid) {
-                    await deleteDoc(doc(db, 'ndids', currentNdid));
-                }
-
                 if (currentUser && currentUser.uid === currentUid) {
-                    await updateProfile(currentUser, { displayName: newName });
+                    try { await updateProfile(currentUser, { displayName: newName }); } catch (_) {}
                 }
 
+                userDataCache = { ...userDataCache, ...updatedData, ...(ndidChanged ? { ndid: newNdid } : {}) };
                 if (window.NDAccounts) {
-                    window.NDAccounts.saveAccount({ ...userDataCache, ...updatedData });
+                    window.NDAccounts.saveAccount(userDataCache, true);
                 }
 
-                showStatus('Cập nhật thông tin NDID thành công!', 'success');
-                setTimeout(() => window.location.reload(), 1000);
+                const successMsg = ndidChanged
+                    ? '🎉 Cập nhật thông tin NDID thành công! (NDID cũ được bảo lưu 30 ngày)'
+                    : '🎉 Cập nhật thông tin NDID thành công!';
+                showStatus(successMsg, 'success');
+                setTimeout(() => window.location.reload(), 1200);
             } catch (err) {
-                showStatus('Lỗi cập nhật: ' + err.message, 'error');
+                const mapped = window.canonicalAuth ? window.canonicalAuth.mapError(err) : err.message;
+                showStatus('Lỗi cập nhật: ' + mapped, 'error');
             }
         });
 
@@ -1662,65 +1913,85 @@
             if (!file || !currentUid) return;
             try {
                 showStatus('Đang tải ảnh đại diện...', 'info');
-                const url = await window.uploadToCloudflare(file, { folder: 'avatars', uid: currentUid });
+                let url = '';
+                if (window.uploadToCloudflare) {
+                    try {
+                        url = await window.uploadToCloudflare(file, { folder: 'avatars', uid: currentUid });
+                    } catch (_) {}
+                }
+                if (!url && window.uploadToImgBB) {
+                    try {
+                        url = await window.uploadToImgBB(file);
+                    } catch (_) {}
+                }
+                if (!url) {
+                    const reader = new FileReader();
+                    url = await new Promise((res, rej) => {
+                        reader.onload = () => res(reader.result);
+                        reader.onerror = rej;
+                        reader.readAsDataURL(file);
+                    });
+                }
+
                 document.getElementById('user-avatar').src = url;
                 document.getElementById('card-widget-avatar').src = url;
 
                 if (currentUser && currentUser.uid === currentUid) {
-                    await updateProfile(currentUser, { photoURL: url });
+                    try { await updateProfile(currentUser, { photoURL: url }); } catch (_) {}
                 }
                 await updateDoc(doc(db, 'users', currentUid), { photoURL: url });
                 
+                userDataCache = { ...userDataCache, photoURL: url };
                 if (window.NDAccounts) {
-                    window.NDAccounts.saveAccount({ ...userDataCache, photoURL: url });
+                    window.NDAccounts.saveAccount(userDataCache, true);
                 }
                 showStatus('🎉 Đổi ảnh đại diện thành công!', 'success');
             } catch (err) {
-                showStatus('Không thể tải ảnh.', 'error');
+                showStatus('Không thể tải ảnh: ' + err.message, 'error');
             }
         });
 
-        // Link Google
+        // Link Google (Phase 01-C4: Canonical Provider Linking)
         document.getElementById('link-google-btn').addEventListener('click', async () => {
             if (!currentUser) return;
             try {
+                showStatus('Đang kết nối tới Google...', 'info');
                 const provider = new GoogleAuthProvider();
                 const result = await linkWithPopup(currentUser, provider);
-                const googleEmail = result.user.email;
-                await updateDoc(doc(db, 'users', currentUser.uid), {
-                    googleEmail: googleEmail,
-                    emails: arrayUnion(googleEmail)
-                });
+                const googleProvider = (result.user.providerData || []).find(p => p.providerId === 'google.com');
+                const googleSubjectId = googleProvider?.uid || null;
+                const googleEmail = googleProvider?.email || result.user.email || null;
+
+                if (window.canonicalAuth) {
+                    await window.canonicalAuth.linkGoogle({ googleSubjectId, googleEmail });
+                } else {
+                    throw new Error('Dịch vụ xác thực chưa sẵn sàng.');
+                }
                 showStatus('🎉 Liên kết Google thành công!', 'success');
                 setTimeout(() => window.location.reload(), 1000);
             } catch (err) {
-                showStatus('Lỗi liên kết: ' + err.message, 'error');
+                const mapped = window.canonicalAuth ? window.canonicalAuth.mapError(err) : err.message;
+                showStatus('Lỗi liên kết: ' + mapped, 'error');
             }
         });
 
-        // Unlink Google
+        // Unlink Google (Phase 01-C4: Canonical Provider Unlinking)
         document.getElementById('unlink-google-btn').addEventListener('click', async () => {
             if (!currentUser) return;
-            const targetEmail = userDataCache?.recoveryEmail || currentUser.email;
-            const verifyCode = prompt(`Nhập mật khẩu hiện tại hoặc mã OTP gửi về email (${targetEmail}):`);
-            if (!verifyCode) return;
+            if (!confirm('Bạn có chắc chắn muốn hủy liên kết tài khoản Google?')) return;
 
             try {
-                if (verifyCode === generated8DigitOtp || verifyCode === userDataCache?.registeredPassword) {
-                    await unlink(currentUser, 'google.com');
-                    await updateDoc(doc(db, 'users', currentUser.uid), { googleEmail: null });
-                    showStatus('Đã hủy liên kết Google.', 'success');
-                    setTimeout(() => window.location.reload(), 1000);
+                showStatus('Đang xử lý hủy liên kết...', 'info');
+                if (window.canonicalAuth) {
+                    await window.canonicalAuth.unlinkGoogle();
                 } else {
-                    const credential = EmailAuthProvider.credential(currentUser.email, verifyCode);
-                    await reauthenticateWithCredential(currentUser, credential);
-                    await unlink(currentUser, 'google.com');
-                    await updateDoc(doc(db, 'users', currentUser.uid), { googleEmail: null });
-                    showStatus('Đã hủy liên kết Google.', 'success');
-                    setTimeout(() => window.location.reload(), 1000);
+                    throw new Error('Dịch vụ xác thực chưa sẵn sàng.');
                 }
+                showStatus('Đã hủy liên kết Google thành công.', 'success');
+                setTimeout(() => window.location.reload(), 1000);
             } catch (err) {
-                showStatus('Xác thực thất bại: ' + err.message, 'error');
+                const mapped = window.canonicalAuth ? window.canonicalAuth.mapError(err) : err.message;
+                showStatus('Lỗi hủy liên kết: ' + mapped, 'error');
             }
         });
 
@@ -1745,48 +2016,297 @@
             e.preventDefault();
             const valNew = pwdNewInput.value;
             const valConfirm = pwdConfirmInput.value;
-            const verifyAuth = pwdCurrentInput.value.trim();
+            const currentPassword = pwdCurrentInput.value;
 
-            if (valNew !== valConfirm) return alert('Mật khẩu mới không khớp.');
-            if (valNew.length < 6) return alert('Mật khẩu phải từ 6 ký tự trở lên.');
+            if (!currentPassword) {
+                alert('Vui lòng nhập mật khẩu hiện tại.');
+                return;
+            }
+            if (valNew !== valConfirm) {
+                alert('Mật khẩu mới không khớp.');
+                return;
+            }
+            if (valNew.length < 6) {
+                alert('Mật khẩu phải từ 6 ký tự trở lên.');
+                return;
+            }
 
             try {
-                if (verifyAuth === generated8DigitOtp || verifyAuth === userDataCache?.registeredPassword) {
-                    if (currentUser) await updatePassword(currentUser, valNew);
-                    await updateDoc(doc(db, 'users', userDataCache.uid), { registeredPassword: valNew });
-                    showStatus('🎉 Đổi mật khẩu thành công!', 'success');
+                if (window.canonicalAuth) {
+                    await window.canonicalAuth.changePassword({
+                        currentPassword,
+                        newPassword: valNew
+                    });
                 } else {
-                    const credential = EmailAuthProvider.credential(currentUser.email, verifyAuth);
-                    await reauthenticateWithCredential(currentUser, credential);
-                    await updatePassword(currentUser, valNew);
-                    await updateDoc(doc(db, 'users', userDataCache.uid), { registeredPassword: valNew });
-                    showStatus('🎉 Đổi mật khẩu thành công!', 'success');
+                    throw new Error("Dịch vụ xác thực chưa sẵn sàng, vui lòng thử lại.");
                 }
+
+                showStatus('🎉 Đổi mật khẩu thành công!', 'success');
                 passwordModal.classList.add('hidden');
+                pwdCurrentInput.value = '';
+                pwdNewInput.value = '';
+                pwdConfirmInput.value = '';
             } catch (err) {
-                alert('Lỗi đổi mật khẩu: ' + err.message);
+                const mapped = window.canonicalAuth ? window.canonicalAuth.mapError(err) : err.message;
+                alert('Lỗi đổi mật khẩu: ' + mapped);
             }
         });
 
+        // ─── SECURITY CENTER: SESSIONS & TRUSTED DEVICES ───
+        function escapeHtml(str) {
+            if (str == null) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        window.loadSecurityCenterData = async function() {
+            if (!window.canonicalAuth) return;
+            const currentSessionContainer = document.getElementById('current-session-container');
+            const otherSessionsList = document.getElementById('other-sessions-list');
+            const btnRevokeOthers = document.getElementById('btn-revoke-other-sessions');
+            const trustedDevicesList = document.getElementById('trusted-devices-list');
+            const securityActivityList = document.getElementById('security-activity-list');
+
+            try {
+                // 1. Fetch Sessions
+                const sessionsRes = await window.canonicalAuth.getActiveSessions();
+                if (sessionsRes && sessionsRes.sessions) {
+                    const currentSession = sessionsRes.sessions.find(s => s.isCurrent);
+                    const otherSessions = sessionsRes.sessions.filter(s => !s.isCurrent);
+
+                    if (currentSession) {
+                        currentSessionContainer.innerHTML = `
+                            <div class="session-card current">
+                                <div class="session-info">
+                                    <div class="session-icon"><i class="ph-bold ph-laptop"></i></div>
+                                    <div>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <strong style="font-size: 14px; color: #0f172a;">${escapeHtml(currentSession.deviceLabel)}</strong>
+                                            <span class="badge-current"><i class="ph-bold ph-check"></i> Thiết bị này</span>
+                                        </div>
+                                        <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+                                            ${escapeHtml(currentSession.platform)} • ${escapeHtml(currentSession.browser)} • IP: ${escapeHtml(currentSession.ipSummary)}
+                                        </div>
+                                        <div style="font-size: 11.5px; color: #16a34a; font-weight: 600; margin-top: 2px;">
+                                            Hoạt động: ${escapeHtml(currentSession.lastActiveRelative)}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        currentSessionContainer.innerHTML = `
+                            <div style="font-size: 13px; color: #64748b; padding: 10px;">Chưa xác định phiên hiện tại.</div>
+                        `;
+                    }
+
+                    if (otherSessions.length > 0) {
+                        btnRevokeOthers.style.display = 'inline-flex';
+                        let oHtml = '';
+                        otherSessions.forEach(s => {
+                            oHtml += `
+                                <div class="session-card">
+                                    <div class="session-info">
+                                        <div class="session-icon"><i class="ph-bold ph-devices"></i></div>
+                                        <div>
+                                            <div style="font-size: 14px; font-weight: 700; color: #0f172a;">${escapeHtml(s.deviceLabel)}</div>
+                                            <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+                                                ${escapeHtml(s.platform)} • ${escapeHtml(s.browser)} • IP: ${escapeHtml(s.ipSummary)}
+                                            </div>
+                                            <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
+                                                Hoạt động gần nhất: ${escapeHtml(s.lastActiveRelative)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-unlink btn-revoke-session-single" data-session-id="${escapeHtml(s.sessionId)}" style="padding: 6px 12px; font-size: 12px;">
+                                        <i class="ph-bold ph-sign-out"></i> Đăng xuất
+                                    </button>
+                                </div>
+                            `;
+                        });
+                        otherSessionsList.innerHTML = oHtml;
+
+                        otherSessionsList.querySelectorAll('.btn-revoke-session-single').forEach(btn => {
+                            btn.addEventListener('click', async () => {
+                                const sid = btn.getAttribute('data-session-id');
+                                if (!confirm('Đăng xuất phiên làm việc này?')) return;
+                                try {
+                                    btn.disabled = true;
+                                    await window.canonicalAuth.revokeSession(sid);
+                                    showStatus('Đã đăng xuất phiên làm việc.', 'success');
+                                    window.loadSecurityCenterData();
+                                } catch (err) {
+                                    btn.disabled = false;
+                                    showStatus('Lỗi: ' + window.canonicalAuth.mapError(err), 'error');
+                                }
+                            });
+                        });
+                    } else {
+                        btnRevokeOthers.style.display = 'none';
+                        otherSessionsList.innerHTML = `
+                            <div style="font-size: 13px; color: #64748b; padding: 10px;">Không có phiên đăng nhập nào khác.</div>
+                        `;
+                    }
+                }
+
+                // 2. Fetch Trusted Devices
+                const devicesRes = await window.canonicalAuth.getTrustedDevices();
+                if (devicesRes && devicesRes.devices) {
+                    if (devicesRes.devices.length > 0) {
+                        let dHtml = '';
+                        devicesRes.devices.forEach(d => {
+                            dHtml += `
+                                <div class="session-card">
+                                    <div class="session-info">
+                                        <div class="session-icon" style="background: #e0f2fe; color: #0284c7;"><i class="ph-bold ph-shield-check"></i></div>
+                                        <div>
+                                            <div style="font-size: 14px; font-weight: 700; color: #0f172a;">${escapeHtml(d.deviceName)}</div>
+                                            <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+                                                ${escapeHtml(d.platform)} • ${escapeHtml(d.browser)}
+                                            </div>
+                                            <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
+                                                Thêm: ${escapeHtml(d.createdRelative)} • Dùng gần nhất: ${escapeHtml(d.lastUsedRelative)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-unlink btn-revoke-device-single" data-device-id="${escapeHtml(d.deviceId)}" style="padding: 6px 12px; font-size: 12px;">
+                                        <i class="ph-bold ph-trash"></i> Hủy tin cậy
+                                    </button>
+                                </div>
+                            `;
+                        });
+                        trustedDevicesList.innerHTML = dHtml;
+
+                        trustedDevicesList.querySelectorAll('.btn-revoke-device-single').forEach(btn => {
+                            btn.addEventListener('click', async () => {
+                                const did = btn.getAttribute('data-device-id');
+                                if (!confirm('Hủy tin cậy thiết bị này?')) return;
+                                try {
+                                    btn.disabled = true;
+                                    await window.canonicalAuth.revokeTrustedDevice(did);
+                                    showStatus('Đã hủy tin cậy thiết bị.', 'success');
+                                    window.loadSecurityCenterData();
+                                } catch (err) {
+                                    btn.disabled = false;
+                                    showStatus('Lỗi: ' + window.canonicalAuth.mapError(err), 'error');
+                                }
+                            });
+                        });
+                    } else {
+                        trustedDevicesList.innerHTML = `
+                            <div style="font-size: 13px; color: #64748b; padding: 10px;">Chưa có thiết bị tin cậy nào.</div>
+                        `;
+                    }
+                }
+
+                // 3. Fetch Recent Security Activity
+                const activityRes = await window.canonicalAuth.getSecurityActivity({ limit: 10 });
+                if (activityRes && activityRes.events) {
+                    if (activityRes.events.length > 0) {
+                        let aHtml = '';
+                        activityRes.events.forEach(ev => {
+                            aHtml += `
+                                <div class="security-event-row">
+                                    <div class="event-icon-dot"><i class="ph-bold ph-shield"></i></div>
+                                    <div style="flex: 1; min-width: 0;">
+                                        <div style="font-size: 13.5px; font-weight: 700; color: #0f172a;">${escapeHtml(ev.description)}</div>
+                                        <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+                                            IP: ${escapeHtml(ev.ipSummary)} • ${escapeHtml(ev.relativeTime)}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        securityActivityList.innerHTML = aHtml;
+                    } else {
+                        securityActivityList.innerHTML = `
+                            <div style="font-size: 13px; color: #64748b; padding: 10px;">Chưa có hoạt động bảo mật nào.</div>
+                        `;
+                    }
+                }
+            } catch (err) {
+                console.error('Security Center fetch error:', err);
+            }
+        };
+
+        const btnRevokeOthers = document.getElementById('btn-revoke-other-sessions');
+        if (btnRevokeOthers) {
+            btnRevokeOthers.addEventListener('click', async () => {
+                if (!confirm('Bạn có chắc chắn muốn đăng xuất khỏi tất cả thiết bị khác?')) return;
+                try {
+                    btnRevokeOthers.disabled = true;
+                    const res = await window.canonicalAuth.revokeOtherSessions();
+                    showStatus(`Đã đăng xuất ${res.revokedCount || 0} thiết bị khác.`, 'success');
+                    window.loadSecurityCenterData();
+                } catch (err) {
+                    showStatus('Lỗi: ' + window.canonicalAuth.mapError(err), 'error');
+                } finally {
+                    btnRevokeOthers.disabled = false;
+                }
+            });
+        }
+
+        const btnTrustCurrentDevice = document.getElementById('btn-trust-current-device');
+        if (btnTrustCurrentDevice) {
+            btnTrustCurrentDevice.addEventListener('click', async () => {
+                const defaultLabel = navigator.userAgent.includes('Mobile') ? 'Điện thoại cá nhân' : 'Máy tính cá nhân';
+                const deviceName = prompt('Nhập tên gợi nhớ cho thiết bị này:', defaultLabel);
+                if (!deviceName || !deviceName.trim()) return;
+                try {
+                    btnTrustCurrentDevice.disabled = true;
+                    await window.canonicalAuth.registerTrustedDevice({ deviceName: deviceName.trim() });
+                    showStatus('Đã lưu thiết bị tin cậy.', 'success');
+                    window.loadSecurityCenterData();
+                } catch (err) {
+                    showStatus('Lỗi: ' + window.canonicalAuth.mapError(err), 'error');
+                } finally {
+                    btnTrustCurrentDevice.disabled = false;
+                }
+            });
+        }
+
+        // Auto-switch to security tab if hash or query param requested
+        if (window.location.hash === '#security' || window.location.search.includes('tab=security')) {
+            window.switchSettingsTab('security');
+        }
+
         // Logout Current Account vs Logout All
         document.getElementById('logout-current-btn').addEventListener('click', async () => {
+            if (window.canonicalAuth) {
+                try { await window.canonicalAuth.logout(); } catch (_) {}
+            } else if (auth) {
+                try { await signOut(auth); } catch (_) {}
+            }
             if (window.NDAccounts) {
                 const activeIdx = window.NDAccounts.getActiveIndexFromUrl();
-                window.NDAccounts.removeAccount(activeIdx);
+                await window.NDAccounts.removeAccount(activeIdx);
             } else {
-                if (auth) await signOut(auth);
                 localStorage.removeItem('nd_user');
-                window.location.href = '/';
+                localStorage.removeItem('nd_accounts');
+                localStorage.removeItem('nd_active_index');
+                try { sessionStorage.clear(); } catch (_) {}
+                window.location.href = '/auth/login/';
             }
         });
 
         document.getElementById('logout-all-btn').addEventListener('click', async () => {
-            if (auth) await signOut(auth);
+            if (window.canonicalAuth) {
+                try { await window.canonicalAuth.logout(); } catch (_) {}
+            } else if (auth) {
+                try { await signOut(auth); } catch (_) {}
+            }
             if (window.NDAccounts) {
-                window.NDAccounts.removeAllAccounts();
+                await window.NDAccounts.removeAllAccounts();
             } else {
+                localStorage.removeItem('nd_accounts');
                 localStorage.removeItem('nd_user');
-                window.location.href = '/';
+                localStorage.removeItem('nd_active_index');
+                try { sessionStorage.clear(); } catch (_) {}
+                window.location.href = '/auth/login/';
             }
         });
     </script>

@@ -110,9 +110,9 @@
             </h1>
             <p style="color: #94a3b8; font-size: 15px;">Trình tự động hóa kiểm thử tính năng Xác thực & Người dùng EduSpace</p>
             
-            <div style="margin-top: 24px; display: flex; gap: 12px;">
-                <button id="btn-create-all" class="btn-primary" style="margin: 0; width: auto; background: #3b82f6; border-color: #3b82f6;">
-                    <i class="ph-bold ph-play"></i> Bắt đầu tạo 10 tài khoản
+            <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
+                <button id="btn-create-all" class="btn-primary" style="margin: 0; width: auto; background: #64748b; border-color: #64748b; opacity: 0.6; cursor: not-allowed;" disabled title="Đã vô hiệu hóa: Canonical Auth không cho phép tạo tài khoản ảo hoặc ghi trực tiếp collection">
+                    <i class="ph-bold ph-lock-key"></i> Tạo tài khoản tự động (Đã vô hiệu hóa)
                 </button>
                 <button id="btn-logout" class="btn-sm btn-outline" style="color: white; border-color: #475569;">
                     Đăng xuất hiện tại
@@ -124,8 +124,8 @@
             <h3 style="width: 100%; font-size: 16px; font-weight: 800; margin: 0 0 8px 0;"><i class="ph-bold ph-magic-wand"></i> Test Tính năng nhanh</h3>
             <button id="test-forgot" class="btn-sm btn-outline"><i class="ph-bold ph-envelope"></i> Gửi email quên mật khẩu cho testuser01</button>
             <button id="test-avatar" class="btn-sm btn-outline"><i class="ph-bold ph-image"></i> Đổi Avatar tài khoản hiện tại</button>
-            <button id="test-delete" class="btn-sm btn-outline" style="color: #ef4444; border-color: #fecaca;"><i class="ph-bold ph-trash"></i> Xóa tài khoản hiện tại</button>
-            <button onclick="window.open('/auth/settings/', '_blank')" class="btn-sm btn-outline"><i class="ph-bold ph-git-merge"></i> Mở trang Settings (Đổi thông tin/Merge)</button>
+            <button id="test-delete" class="btn-sm btn-outline" style="color: #94a3b8; border-color: #cbd5e1; cursor: not-allowed;" disabled title="Đã vô hiệu hóa: Thao tác xóa tài khoản trực tiếp bị cấm theo chuẩn bảo mật"><i class="ph-bold ph-lock-key"></i> Xóa tài khoản (Đã vô hiệu hóa)</button>
+            <button onclick="window.open('/auth/settings/', '_blank')" class="btn-sm btn-outline"><i class="ph-bold ph-gear"></i> Mở trang Cài đặt NDID (Settings)</button>
         </div>
 
         <h2 style="font-size: 20px; font-weight: 800; margin-top: 32px; color: #1e293b;">Danh sách Tài khoản Kiểm thử</h2>
@@ -140,9 +140,9 @@
 
     <script type="module">
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } 
+        import { getAuth, signOut, updateProfile } 
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc } 
+        import { getFirestore, doc, setDoc } 
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         // Initialize
@@ -173,8 +173,6 @@
         const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
-        const COMMON_PASSWORD = "Test@12345";
 
         const testUsers = [
             { ndid: 'testuser01', fullname: 'Nguyễn Văn An', role: 'student', yob: 2008, grade: '12' },
@@ -217,39 +215,18 @@
                         Vai trò: <strong>${u.role}</strong> • Lớp: <strong>${u.grade}</strong> • Yob: ${u.yob}
                     </div>
                     <div style="margin-top: auto; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; gap: 8px;">
-                        <button class="btn-sm btn-outline login-btn" data-idx="${idx}"><i class="ph-bold ph-sign-in"></i> Test Đăng nhập</button>
+                        <button class="btn-sm btn-outline login-btn" data-idx="${idx}" style="color: #64748b; border-color: #cbd5e1; cursor: not-allowed;"><i class="ph-bold ph-lock-key"></i> Đăng nhập qua /auth/login</button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
 
             document.querySelectorAll('.login-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
+                btn.addEventListener('click', (e) => {
                     const idx = e.currentTarget.getAttribute('data-idx');
                     const u = testUsers[idx];
-                    try {
-                        const email = `${u.ndid}@ndsite.web.app`;
-                        log(`Đang thử đăng nhập vào ${u.ndid}...`, 'info');
-                        const cred = await signInWithEmailAndPassword(auth, email, COMMON_PASSWORD);
-                        
-                        localStorage.setItem('nd_user', JSON.stringify({
-                            displayName: u.fullname,
-                            email: email,
-                            photoURL: null,
-                            uid: cred.user.uid,
-                            ndid: u.ndid,
-                            role: u.role,
-                            yob: u.yob,
-                            grade: u.grade
-                        }));
-                        
-                        log(`✅ Đăng nhập ${u.ndid} thành công!`, 'success');
-                        alert(`Đăng nhập thành công với tư cách ${u.fullname}`);
-                        window.location.reload();
-                    } catch (err) {
-                        log(`❌ Lỗi đăng nhập ${u.ndid}: ${err.message}`, 'error');
-                        alert(`Lỗi: ${err.message}`);
-                    }
+                    log(`Chế độ an toàn: Vui lòng sử dụng trang /auth/login/ chính thức để đăng nhập tài khoản thực. Không hỗ trợ đăng nhập email ảo.`, 'info');
+                    alert(`Vui lòng đăng nhập tài khoản thực qua trang /auth/login/.`);
                 });
             });
         }
@@ -257,58 +234,8 @@
         renderGrid();
 
         document.getElementById('btn-create-all').addEventListener('click', async () => {
-            log('Bắt đầu quy trình tạo tài khoản...', 'info');
-            document.getElementById('btn-create-all').disabled = true;
-
-            for (let i = 0; i < testUsers.length; i++) {
-                const u = testUsers[i];
-                const badge = document.getElementById(`badge-${i}`);
-                const email = `${u.ndid}@ndsite.web.app`;
-                
-                badge.className = 'status-badge status-loading';
-                badge.textContent = 'Đang xử lý...';
-                
-                try {
-                    // Try to create
-                    log(`Đang tạo ${u.ndid}...`);
-                    const cred = await createUserWithEmailAndPassword(auth, email, COMMON_PASSWORD);
-                    const uid = cred.user.uid;
-
-                    // Update display name
-                    await updateProfile(cred.user, { displayName: u.fullname });
-
-                    // Write to Firestore
-                    await setDoc(doc(db, 'ndids', u.ndid), { uid: uid, recoveryEmail: email });
-                    await setDoc(doc(db, 'users', uid), {
-                        ndid: u.ndid,
-                        fullname: u.fullname,
-                        emails: [email],
-                        role: u.role,
-                        yob: u.yob,
-                        grade: u.grade,
-                        createdAt: new Date().toISOString()
-                    });
-
-                    log(`✅ Đã tạo thành công ${u.ndid}`);
-                    badge.className = 'status-badge status-success';
-                    badge.textContent = 'Thành công';
-
-                    // Sign out so we can create the next
-                    await signOut(auth);
-                } catch (err) {
-                    if (err.code === 'auth/email-already-in-use') {
-                        log(`⚠️ ${u.ndid} đã tồn tại, bỏ qua.`);
-                        badge.className = 'status-badge status-success';
-                        badge.textContent = 'Đã tồn tại';
-                    } else {
-                        log(`❌ Lỗi tạo ${u.ndid}: ${err.message}`, 'error');
-                        badge.className = 'status-badge status-error';
-                        badge.textContent = 'Lỗi';
-                    }
-                }
-            }
-            log('🎉 Đã hoàn tất quy trình tạo tài khoản.', 'success');
-            document.getElementById('btn-create-all').disabled = false;
+            log('⚠️ Thao tác tạo tài khoản hàng loạt bị vô hiệu hóa: Canonical Auth quy định nghiêm ngặt không được tạo tài khoản ảo hoặc ghi trực tiếp collection.', 'warning');
+            alert('Thao tác bị vô hiệu hóa để bảo đảm an toàn dữ liệu và tuân thủ chuẩn Canonical Auth.');
         });
 
         document.getElementById('btn-logout').addEventListener('click', async () => {
@@ -318,15 +245,8 @@
         });
 
         document.getElementById('test-forgot').addEventListener('click', async () => {
-            log('Đang thử gửi email khôi phục cho testuser01...', 'info');
-            try {
-                // Email format used internally in registration test
-                await sendPasswordResetEmail(auth, "testuser01@ndsite.web.app");
-                log('✅ Lệnh gửi password reset thành công (Note: ndsite.web.app là email ảo nên sẽ không nhận được thư thật).', 'success');
-                alert('Test lệnh gửi mail khôi phục thành công!');
-            } catch(e) {
-                log('❌ Lỗi: ' + e.message, 'error');
-            }
+            log('Chức năng kiểm thử email khôi phục: Vui lòng sử dụng trang /auth/recovery/ với tài khoản có email thật được đăng ký.', 'info');
+            alert('Vui lòng sử dụng quy trình chính thức tại trang /auth/recovery/.');
         });
 
         document.getElementById('test-avatar').addEventListener('click', async () => {
@@ -350,31 +270,8 @@
         });
 
         document.getElementById('test-delete').addEventListener('click', async () => {
-            const user = auth.currentUser;
-            if(!user) return alert('Chưa đăng nhập! Vui lòng đăng nhập tài khoản cần xóa trước.');
-            if(!confirm(`Bạn có chắc chắn muốn test XÓA tài khoản ${user.email}?`)) return;
-            
-            try {
-                log(`Đang tiến hành xóa user ${user.uid}...`, 'info');
-                // Get NDID before deleting to clear ndids doc
-                const s = JSON.parse(localStorage.getItem('nd_user') || '{}');
-                const ndid = s.ndid || user.email.split('@')[0];
-
-                await deleteDoc(doc(db, 'users', user.uid));
-                await deleteDoc(doc(db, 'ndids', ndid));
-                
-                await user.delete();
-                localStorage.removeItem('nd_user');
-                
-                log('✅ Đã xóa tài khoản và dữ liệu thành công!', 'success');
-                alert('Tài khoản đã bị xóa!');
-                window.location.reload();
-            } catch(e) {
-                log('❌ Lỗi xóa: ' + e.message, 'error');
-                if(e.code === 'auth/requires-recent-login') {
-                    alert('Lỗi: Cần đăng nhập lại gần đây để thực hiện tác vụ xóa.');
-                }
-            }
+            log('⚠️ Thao tác xóa tài khoản bị vô hiệu hóa trên QA Tool: Direct collection delete bị cấm theo Firestore Rules.', 'warning');
+            alert('Thao tác bị vô hiệu hóa để bảo đảm an toàn dữ liệu.');
         });
     </script>
 </body>

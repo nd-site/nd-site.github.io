@@ -22,5 +22,14 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "scan2word",
+    "live_download",
+    "android",
+    "functions",
+    "beta"
+  ]
 }

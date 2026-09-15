@@ -32,6 +32,54 @@
     accScript.src = '/assets/js/nd-accounts.js';
     document.head.appendChild(accScript);
   }
+  if (!document.querySelector('script[src*="canonical-auth.js"]')) {
+    const authScript = document.createElement('script');
+    authScript.src = '/assets/js/canonical-auth.js';
+    document.head.appendChild(authScript);
+  }
+
+  /* ─── Hệ thống Nạp & Điều Phối AI Assistant (<tên>_ai.js) ──────────── */
+  (function loadAIAssistant() {
+    // Registry cấu hình các loại AI Assistant
+    // Dễ dàng mở rộng thêm các file <ten>_ai.js mới trong tương lai
+    const AI_REGISTRY = [
+      {
+        id: 'edu_ai',
+        name: 'EduAI Assistant',
+        script: '/assets/js/edu_ai.js',
+        // Chỉ áp dụng cho các trang thuộc phân hệ EduSpace
+        matcher: (p) => p.startsWith('/eduspace') || p.includes('/admin/eduspace')
+      },
+      {
+        id: 'nd_ai',
+        name: 'NDAI Assistant',
+        script: '/assets/js/nd_ai.js',
+        // Áp dụng cho tất cả các trang còn lại của ND Labs
+        matcher: () => true
+      }
+    ];
+
+    const currentPath = window.location.pathname;
+    const target = AI_REGISTRY.find(item => item.matcher(currentPath));
+
+    if (target) {
+      // 1. Tự động nạp api-service.js nếu chưa có
+      if (!window.eduspaceAI && !document.querySelector('script[src*="api-service.js"]')) {
+        const apiScript = document.createElement('script');
+        apiScript.src = '/assets/js/api-service.js';
+        document.head.appendChild(apiScript);
+      }
+
+      // 2. Nạp script AI tương ứng
+      if (!document.querySelector(`script[src*="${target.id}.js"]`)) {
+        const aiScript = document.createElement('script');
+        aiScript.src = target.script;
+        aiScript.defer = true;
+        aiScript.setAttribute('data-ai-id', target.id);
+        document.head.appendChild(aiScript);
+      }
+    }
+  })();
 
   /* ─── Ngăn chặn lưu Cache trình duyệt (Luôn lấy mã mới nhất từ Server) ─── */
   (function enforceServerFreshness() {
@@ -292,8 +340,30 @@
         z-index: 99999;
       }
       #nd-navbar-links.open { left: 0; }
-      .nd-nav-link { width: 100%; padding: 12px 16px; margin-bottom: 8px; }
-      #nd-navbar-user { margin-left: 10px; }
+      #nd-navbar-links .nd-nav-link { width: 100%; padding: 12px 16px; margin-bottom: 8px; box-sizing: border-box; }
+      #nd-navbar-user {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+        margin-left: auto;
+      }
+      #nd-navbar-user .nd-nav-link {
+        width: auto !important;
+        padding: 4px 6px !important;
+        margin: 0 !important;
+        font-size: 0.78rem !important;
+      }
+      #nd-navbar-user .nd-admin-link .nd-lbl,
+      #nd-navbar-user #nd-admin-reload-btn .nd-lbl {
+        display: none !important;
+      }
+      #nd-navbar-user #nd-account-switcher-trigger .nd-lbl {
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
 
     /* ── Floating Tool FAB ── */
@@ -615,178 +685,224 @@
   userSection.id = 'nd-navbar-user';
   userSection.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-left: 10px; flex-shrink: 0;';
 
-  // Try to get user from localStorage
-  const storedUser = localStorage.getItem('nd_user');
-  if (storedUser) {
-    try {
-      const u = JSON.parse(storedUser);
-      
-      // Role badge config
-      const roleCfg = {
-        admin:   { cls: 'role-admin',   label: 'Admin' },
-        teacher: { cls: 'role-teacher', label: 'GV' },
-        student: { cls: 'role-student', label: 'HS' },
-        member:  { cls: 'role-other',   label: 'TV' }
-      };
-
-      let role = u.role || 'member';
-      if (u.ndid === 'nhatdang' || u.ndid === '@nhatdang' || u.email === 'nhatdang10.nd@gmail.com') {
-        role = 'admin';
+  // Render user profile or login links in navbar
+  function renderNavbarUser(userObj) {
+    let u = userObj;
+    if (u === undefined) {
+      const activeAcc = window.NDAccounts ? window.NDAccounts.getActiveAccount() : null;
+      const storedUser = localStorage.getItem('nd_user');
+      if (activeAcc) {
+        u = activeAcc;
+      } else if (storedUser) {
+        try { u = JSON.parse(storedUser); } catch (_) { u = null; }
       }
-      const eduRole = u.eduRole || '';
+    }
 
-      // Fallback for old sessions
-      let resolvedEduRole = eduRole;
-      if (!resolvedEduRole) {
-        if (role === 'admin') resolvedEduRole = u.subrole || 'student';
-        else if (role === 'teacher') resolvedEduRole = 'teacher';
-        else if (role === 'student') resolvedEduRole = 'student';
-      }
+    if (u && (u.ndid || u.displayName || u.email)) {
+      try {
+        // Role badge config
+        const roleCfg = {
+          admin:   { cls: 'role-admin',   label: 'Admin' },
+          teacher: { cls: 'role-teacher', label: 'GV' },
+          student: { cls: 'role-student', label: 'HS' },
+          member:  { cls: 'role-other',   label: 'TV' }
+        };
 
-      let badges = [];
-      if (role === 'admin') {
-        badges.push(`<span class="nd-role-badge ${roleCfg.admin.cls}">${roleCfg.admin.label}</span>`);
-      }
-      if (resolvedEduRole === 'teacher') {
-        badges.push(`<span class="nd-role-badge ${roleCfg.teacher.cls}">${roleCfg.teacher.label}</span>`);
-      } else if (resolvedEduRole === 'student') {
-        badges.push(`<span class="nd-role-badge ${roleCfg.student.cls}">${roleCfg.student.label}</span>`);
-      }
+        let role = u.role || 'member';
+        const eduRole = u.eduRole || '';
 
-      if (badges.length === 0) {
-        badges.push(`<span class="nd-role-badge ${roleCfg.member.cls}">${roleCfg.member.label}</span>`);
-      }
-      const roleBadgeHtml = badges.join('');
+        // Fallback for old sessions
+        let resolvedEduRole = eduRole;
+        if (!resolvedEduRole) {
+          if (role === 'admin') resolvedEduRole = u.subrole || 'student';
+          else if (role === 'teacher') resolvedEduRole = 'teacher';
+          else if (role === 'student') resolvedEduRole = 'student';
+        }
 
-      let adminLink = '';
-      if (role === 'admin') {
-        adminLink = `
-          <a href="/admin/" class="nd-nav-link" style="color: #0070f3;" title="Bảng quản trị Admin">
-            <i class="ph-bold ph-shield-checkered"></i><span class="nd-lbl">Admin</span>
-          </a>
-          <button id="nd-admin-reload-btn" class="nd-nav-link" style="color: #ef4444; border: none; background: transparent; cursor: pointer; padding: 5px 12px;" title="Yêu cầu tải lại trang cho tất cả">
-            <i class="ph-bold ph-arrows-clockwise"></i><span class="nd-lbl">Tải lại</span>
+        let badges = [];
+        if (role === 'admin') {
+          badges.push(`<span class="nd-role-badge ${roleCfg.admin.cls}">${roleCfg.admin.label}</span>`);
+        }
+        if (resolvedEduRole === 'teacher') {
+          badges.push(`<span class="nd-role-badge ${roleCfg.teacher.cls}">${roleCfg.teacher.label}</span>`);
+        } else if (resolvedEduRole === 'student') {
+          badges.push(`<span class="nd-role-badge ${roleCfg.student.cls}">${roleCfg.student.label}</span>`);
+        }
+
+        if (badges.length === 0) {
+          badges.push(`<span class="nd-role-badge ${roleCfg.member.cls}">${roleCfg.member.label}</span>`);
+        }
+        const roleBadgeHtml = badges.join('');
+
+        let adminLink = '';
+        if (role === 'admin') {
+          adminLink = `
+            <a href="/admin/" class="nd-nav-link nd-admin-link" style="color: #0070f3;" title="Bảng quản trị Admin">
+              <i class="ph-bold ph-shield-checkered"></i><span class="nd-lbl">Admin</span>
+            </a>
+            <button id="nd-admin-reload-btn" class="nd-nav-link nd-admin-reload" style="color: #ef4444; border: none; background: transparent; cursor: pointer; padding: 5px 8px;" title="Yêu cầu tải lại trang cho tất cả">
+              <i class="ph-bold ph-arrows-clockwise"></i><span class="nd-lbl">Tải lại</span>
+            </button>
+          `;
+        }
+
+        const activeIdx = (function() {
+          try {
+            const p = new URLSearchParams(window.location.search);
+            const uParam = p.get('u');
+            if (uParam !== null && !isNaN(parseInt(uParam, 10))) return parseInt(uParam, 10);
+          } catch (_) {}
+          return 0;
+        })();
+
+        userSection.style.position = 'relative';
+        userSection.innerHTML = `
+          ${adminLink}
+          <button type="button" id="nd-account-switcher-trigger" class="nd-nav-link" style="gap: 6px; background: transparent; border: none; cursor: pointer; padding: 4px 8px; border-radius: 12px;">
+            <img src="${u.photoURL || '/assets/images/logo.png'}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; flex-shrink:0; border: 1.5px solid #0070f3;">
+            <span class="nd-lbl" style="display:flex; align-items:center; gap:4px;">
+              ${u.ndid || 'Đang tải...'}
+              ${roleBadgeHtml}
+              <i class="ph-bold ph-caret-down" style="font-size: 11px; color: #64748b;"></i>
+            </span>
           </button>
         `;
-      }
 
-      const activeIdx = (function() {
-        try {
-          const p = new URLSearchParams(window.location.search);
-          const u = p.get('u');
-          if (u !== null && !isNaN(parseInt(u, 10))) return parseInt(u, 10);
-        } catch (_) {}
-        return 0;
-      })();
+        // Account Switcher Popover Modal
+        const popover = document.createElement('div');
+        popover.id = 'nd-account-switcher-popover';
+        popover.style.cssText = `
+          display: none;
+          position: absolute;
+          top: 48px;
+          right: 0;
+          width: 320px;
+          max-width: min(320px, 92vw);
+          background: #ffffff;
+          border-radius: 20px;
+          box-shadow: 0 20px 40px -10px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06);
+          padding: 18px;
+          z-index: 100010;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          box-sizing: border-box;
+        `;
 
-      userSection.style.position = 'relative';
-      userSection.innerHTML = `
-        ${adminLink}
-        <button type="button" id="nd-account-switcher-trigger" class="nd-nav-link" style="gap: 6px; background: transparent; border: none; cursor: pointer; padding: 4px 8px; border-radius: 12px;">
-          <img src="${u.photoURL || '/assets/images/logo.png'}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; flex-shrink:0; border: 1.5px solid #0070f3;">
-          <span class="nd-lbl" style="display:flex; align-items:center; gap:4px;">
-            ${u.ndid || 'ND Member'}
-            ${roleBadgeHtml}
-            <i class="ph-bold ph-caret-down" style="font-size: 11px; color: #64748b;"></i>
-          </span>
-        </button>
-      `;
+        function renderAccountSwitcherDropdown() {
+          const allAccounts = window.NDAccounts ? window.NDAccounts.getAllAccounts() : [u];
+          let accountsListHtml = '';
 
-      // Account Switcher Popover Modal
-      const popover = document.createElement('div');
-      popover.id = 'nd-account-switcher-popover';
-      popover.style.cssText = `
-        display: none;
-        position: absolute;
-        top: 48px;
-        right: 0;
-        width: 320px;
-        max-width: min(320px, 92vw);
-        background: #ffffff;
-        border-radius: 20px;
-        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06);
-        padding: 18px;
-        z-index: 100010;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        box-sizing: border-box;
-      `;
-
-      function renderAccountSwitcherDropdown() {
-        const allAccounts = window.NDAccounts ? window.NDAccounts.getAllAccounts() : [u];
-        let accountsListHtml = '';
-
-        allAccounts.forEach((acc, idx) => {
-          const isCurr = idx === activeIdx;
-          const targetUrl = idx === 0 ? window.location.pathname : `${window.location.pathname}?u=${idx}`;
-          accountsListHtml += `
-            <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 12px; background: ${isCurr ? '#f0f9ff' : '#ffffff'}; border: 1px solid ${isCurr ? '#bae6fd' : '#f1f5f9'}; margin-bottom: 6px;">
-              <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
-                <img src="${acc.photoURL || '/assets/images/logo.png'}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid ${isCurr ? '#0284c7' : '#cbd5e1'}; shrink: 0;">
-                <div style="min-width: 0;">
-                  <div style="font-size: 12px; font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${acc.displayName || acc.fullname || 'ND Member'}</div>
-                  <div style="font-size: 10.5px; color: #64748b; font-family: monospace;">${acc.ndid || acc.email || '—'}</div>
+          allAccounts.forEach((acc, idx) => {
+            const isCurr = idx === activeIdx;
+            const targetUrl = idx === 0 ? window.location.pathname : `${window.location.pathname}?u=${idx}`;
+            accountsListHtml += `
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 12px; background: ${isCurr ? '#f0f9ff' : '#ffffff'}; border: 1px solid ${isCurr ? '#bae6fd' : '#f1f5f9'}; margin-bottom: 6px;">
+                <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                  <img src="${acc.photoURL || '/assets/images/logo.png'}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid ${isCurr ? '#0284c7' : '#cbd5e1'}; shrink: 0;">
+                  <div style="min-width: 0;">
+                    <div style="font-size: 12px; font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${acc.displayName || acc.fullname || 'ND Member'}</div>
+                    <div style="font-size: 10.5px; color: #64748b; font-family: monospace;">${acc.ndid || '—'}</div>
+                  </div>
+                </div>
+                <div>
+                  ${isCurr ? '<span style="font-size: 10px; font-weight: 800; color: #0284c7; background: #e0f2fe; padding: 2px 8px; border-radius: 100px;">Đang dùng</span>' : `<a href="${targetUrl}" style="font-size: 11px; font-weight: 700; color: #0070f3; text-decoration: none; padding: 4px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">Chuyển</a>`}
                 </div>
               </div>
-              <div>
-                ${isCurr ? '<span style="font-size: 10px; font-weight: 800; color: #0284c7; background: #e0f2fe; padding: 2px 8px; border-radius: 100px;">Đang dùng</span>' : `<a href="${targetUrl}" style="font-size: 11px; font-weight: 700; color: #0070f3; text-decoration: none; padding: 4px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">Chuyển</a>`}
-              </div>
+            `;
+          });
+
+          popover.innerHTML = `
+            <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.5px; color: #64748b; text-transform: uppercase; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span>Tài khoản NDID (${allAccounts.length}/10)</span>
+              <button id="close-acc-popover" style="border: none; background: transparent; cursor: pointer; color: #94a3b8; font-size: 14px;">✕</button>
+            </div>
+
+            <div style="max-height: 220px; overflow-y: auto; margin-bottom: 12px;">
+              ${accountsListHtml}
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid #f1f5f9;">
+              ${allAccounts.length < 10 ? `
+                <a href="/auth/login/?addAccount=true" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #f8fafc; color: #0070f3; text-decoration: none; font-size: 12px; font-weight: 700; border: 1px dashed #93c5fd;">
+                  <i class="ph-bold ph-user-plus" style="font-size: 15px;"></i> Thêm tài khoản khác
+                </a>
+              ` : ''}
+              <a href="${activeIdx > 0 ? `/auth/settings/?u=${activeIdx}` : '/auth/settings/'}" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #ffffff; color: #334155; text-decoration: none; font-size: 12px; font-weight: 700; border: 1px solid #e2e8f0;">
+                <i class="ph-bold ph-gear" style="font-size: 15px;"></i> Cài đặt tài khoản
+              </a>
+              <button id="popover-logout-current-btn" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-size: 12px; font-weight: 700; cursor: pointer; text-align: left; width: 100%; font-family: inherit;">
+                <i class="ph-bold ph-sign-out" style="font-size: 15px;"></i> Đăng xuất tài khoản này
+              </button>
+              <button id="popover-logout-all-btn" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; font-size: 12px; font-weight: 700; cursor: pointer; text-align: left; width: 100%; font-family: inherit;">
+                <i class="ph-bold ph-power" style="font-size: 15px;"></i> Đăng xuất tất cả tài khoản
+              </button>
             </div>
           `;
-        });
-
-        popover.innerHTML = `
-          <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.5px; color: #64748b; text-transform: uppercase; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-            <span>Tài khoản NDID (${allAccounts.length}/10)</span>
-            <button id="close-acc-popover" style="border: none; background: transparent; cursor: pointer; color: #94a3b8; font-size: 14px;">✕</button>
-          </div>
-
-          <div style="max-height: 220px; overflow-y: auto; margin-bottom: 12px;">
-            ${accountsListHtml}
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid #f1f5f9;">
-            ${allAccounts.length < 10 ? `
-              <a href="/auth/login/?addAccount=true" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #f8fafc; color: #0070f3; text-decoration: none; font-size: 12px; font-weight: 700; border: 1px dashed #93c5fd;">
-                <i class="ph-bold ph-user-plus" style="font-size: 15px;"></i> Thêm tài khoản khác
-              </a>
-            ` : ''}
-            <a href="${activeIdx > 0 ? `/auth/settings/?u=${activeIdx}` : '/auth/settings/'}" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #ffffff; color: #334155; text-decoration: none; font-size: 12px; font-weight: 700; border: 1px solid #e2e8f0;">
-              <i class="ph-bold ph-gear" style="font-size: 15px;"></i> Cài đặt tài khoản
-            </a>
-            <button id="popover-logout-all-btn" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; font-size: 12px; font-weight: 700; cursor: pointer; text-align: left; width: 100%; font-family: inherit;">
-              <i class="ph-bold ph-power" style="font-size: 15px;"></i> Đăng xuất tất cả tài khoản
-            </button>
-          </div>
-        `;
-      }
-
-      userSection.appendChild(popover);
-
-      document.body.addEventListener('click', (e) => {
-        const trigger = e.target.closest('#nd-account-switcher-trigger');
-        const closeBtn = e.target.closest('#close-acc-popover');
-        const logoutAll = e.target.closest('#popover-logout-all-btn');
-
-        if (trigger) {
-          e.stopPropagation();
-          renderAccountSwitcherDropdown();
-          popover.style.display = popover.style.display === 'block' ? 'none' : 'block';
-        } else if (closeBtn) {
-          popover.style.display = 'none';
-        } else if (logoutAll) {
-          if (window.NDAccounts) window.NDAccounts.removeAllAccounts();
-          else storageClear();
-        } else if (!e.target.closest('#nd-account-switcher-popover')) {
-          popover.style.display = 'none';
         }
-      });
-    } catch (e) { storageClear(); }
-  } else {
-    userSection.innerHTML = `
-      <a href="/auth/login/" class="nd-nav-link" style="color: #0070f3;">Đăng nhập</a>
-      <a href="/auth/register/" class="nd-nav-link nd-active" style="padding: 5px 10px;">NDID</a>
-    `;
+
+        userSection.appendChild(popover);
+
+        // Click handler inside popover
+        popover.onclick = (e) => {
+          const closeBtn = e.target.closest('#close-acc-popover');
+          const logoutCurrent = e.target.closest('#popover-logout-current-btn');
+          const logoutAll = e.target.closest('#popover-logout-all-btn');
+
+          if (closeBtn) {
+            popover.style.display = 'none';
+          } else if (logoutCurrent) {
+            if (window.canonicalAuth) { try { window.canonicalAuth.logout(); } catch (_) {} }
+            if (window.NDAccounts) {
+              const activeIdx = window.NDAccounts.getActiveIndexFromUrl();
+              window.NDAccounts.removeAccount(activeIdx);
+            } else storageClear();
+          } else if (logoutAll) {
+            if (window.canonicalAuth) { try { window.canonicalAuth.logout(); } catch (_) {} }
+            if (window.NDAccounts) window.NDAccounts.removeAllAccounts();
+            else storageClear();
+          }
+        };
+
+        const trigger = userSection.querySelector('#nd-account-switcher-trigger');
+        if (trigger) {
+          trigger.onclick = (e) => {
+            e.stopPropagation();
+            renderAccountSwitcherDropdown();
+            popover.style.display = popover.style.display === 'block' ? 'none' : 'block';
+          };
+        }
+      } catch (e) {
+        storageClear();
+      }
+    } else {
+      userSection.style.position = '';
+      userSection.innerHTML = `
+        <a href="/auth/login/" class="nd-nav-link" style="color: #0070f3;">Đăng nhập</a>
+        <a href="/auth/register/" class="nd-nav-link nd-active" style="padding: 5px 10px;">NDID</a>
+      `;
+    }
   }
+
+  // Initial render
+  renderNavbarUser();
+
+  // Listen to canonical auth state changes
+  window.addEventListener('nd-auth-state-changed', (e) => {
+    if (e.detail && e.detail.profile) {
+      renderNavbarUser(e.detail.profile);
+    } else if (e.detail && e.detail.codeId === null) {
+      renderNavbarUser(null);
+    }
+  });
+
+  // Close popover when clicking anywhere else
+  document.body.addEventListener('click', (e) => {
+    const popover = document.getElementById('nd-account-switcher-popover');
+    if (popover && popover.style.display === 'block') {
+      if (!e.target.closest('#nd-account-switcher-popover') && !e.target.closest('#nd-account-switcher-trigger')) {
+        popover.style.display = 'none';
+      }
+    }
+  });
 
   /* ── Notification Bell Context ── */
   const notifyWrapper = document.createElement('div');

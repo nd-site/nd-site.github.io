@@ -97,7 +97,7 @@ window.uploadToCloudflare = async function (file, options = {}) {
         }
     } catch (_) {}
 
-    // Nếu tệp là hình ảnh, tối ưu hóa kích thước trước khi tải lên
+    // Nếu tệp là hình ảnh, nén kích thước trước khi tải lên
     let processedFile = file;
     if (file instanceof File && file.type.startsWith('image/')) {
         try {

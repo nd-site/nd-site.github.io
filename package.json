@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "vite build",
+    "build": "vite build && vite build --config vite.timetable.config.ts",
+    "build:timetable": "vite build --config vite.timetable.config.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "lint:text": "vale .",
+    "predeploy": "npm run lint:text"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.1",
@@ -19,6 +22,8 @@
     "@vitejs/plugin-react": "^5.0.4",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
+    "firebase-admin": "^12.0.0",
+    "katex": "^0.18.4",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "react": "^19.0.1",
@@ -33,6 +38,7 @@
     "esbuild": "^0.25.0",
     "mammoth": "^1.12.0",
     "pdf-parse": "^2.4.5",
+    "puppeteer": "^25.8.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

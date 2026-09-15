@@ -25,3 +25,5 @@ THANHHOA_0924.txt
 # Report files của agent
 eduspace/_agent/*.json
 eduspace/_agent/*.md
+.vercel
+.env*

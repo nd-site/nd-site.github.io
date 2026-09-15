@@ -1,15 +1,40 @@
 /**
  * ND Labs — Unified Realtime Chat Core (Bộ lõi Trò chuyện Toàn cục dùng chung)
- * Dùng chung cho ChatND (/chat/) và Mini World Game (/games/miniworld.html)
+ * Dùng chung cho ChatND (/chat/) và Mini World Game (/games/miniworld/)
  */
 
 (function () {
     // Flag check
     if (window.NDChatCore) return;
 
-    const ADMIN_CODE_ID = '00000000';
-    const ADMIN_EMAIL = 'nhatdang10.nd@gmail.com';
-    const ADMIN_NDID = 'nhatdang';
+    let cachedAdminProfile = null;
+
+    // Lấy thông tin Admin động từ cơ sở dữ liệu
+    async function getAdminProfile(db) {
+        if (cachedAdminProfile) return cachedAdminProfile;
+        try {
+            if (db) {
+                const { collection, query, where, limit, getDocs } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+                const snap = await getDocs(query(collection(db, 'users'), where('role', '==', 'admin'), limit(1)));
+                if (!snap.empty) {
+                    const data = snap.docs[0].data();
+                    cachedAdminProfile = {
+                        uid: snap.docs[0].id,
+                        ndid: data.ndid || 'admin',
+                        name: data.fullname || data.displayName || 'Admin',
+                        avatar: data.photoURL || '/assets/images/logo.png',
+                        email: data.recoveryEmail || data.email || null,
+                        codeId: data.codeId || '00000000',
+                        isAdmin: true
+                    };
+                    return cachedAdminProfile;
+                }
+            }
+        } catch (e) {
+            console.warn("Lỗi khi tải thông tin admin từ database:", e);
+        }
+        return null;
+    }
 
     // File type categorizer
     function getFileCategory(mimeType, fileName) {
@@ -30,9 +55,10 @@
     }
 
     // Forward notification to Admin email in background
-    async function notifyAdminEmail(senderInfo, messageText, fileMeta) {
+    async function notifyAdminEmail(adminEmail, senderInfo, messageText, fileMeta) {
+        if (!adminEmail) return;
         try {
-            console.log(`📩 [Realtime Notification -> ${ADMIN_EMAIL}]:`, {
+            console.log(`📩 [Realtime Notification -> ${adminEmail}]:`, {
                 sender: senderInfo,
                 text: messageText,
                 file: fileMeta,
@@ -42,7 +68,7 @@
             // Call internal endpoint or log for automated relay
             if (window.sendEmailNotification) {
                 await window.sendEmailNotification({
-                    to: ADMIN_EMAIL,
+                    to: adminEmail,
                     subject: `[ChatND] Tin nhắn mới từ ${senderInfo.name || senderInfo.ndid || 'Người dùng'}`,
                     body: `Bạn vừa nhận được tin nhắn từ ${senderInfo.name} (${senderInfo.ndid} - CodeID: ${senderInfo.codeId}):\n\n"${messageText}"\n\nXem ngay tại: https://ndsite.web.app/chat?${senderInfo.ndid}`
                 });
@@ -54,9 +80,7 @@
 
     // Core Chat API
     const NDChatCore = {
-        ADMIN_CODE_ID,
-        ADMIN_EMAIL,
-        ADMIN_NDID,
+        getAdminProfile,
 
         getFileCategory,
 
@@ -103,6 +127,12 @@
                 }
             }
 
+            if (!fileUrl && window.uploadToImgBB) {
+                try {
+                    fileUrl = await window.uploadToImgBB(file);
+                } catch (e) {}
+            }
+
             if (!fileUrl) {
                 // Fallback to data URL for small files or Firebase Storage
                 fileUrl = await new Promise((resolve) => {
@@ -134,7 +164,7 @@
             }
 
             const senderCodeId = currentSender.codeId || 'guest';
-            const targetCodeId = targetContact.codeId || (targetContact.isAdmin ? ADMIN_CODE_ID : '00000000');
+            const targetCodeId = targetContact.codeId || '00000000';
             const chatId = `chat_${[senderCodeId, targetCodeId].sort().join('_')}`;
 
             const msgPayload = {
@@ -145,6 +175,7 @@
                 senderName: currentSender.displayName || currentSender.name || 'ND Member',
                 senderAvatar: currentSender.photoURL || '/assets/images/logo.png',
                 file: fileMeta || null,
+                reactions: {},
                 createdAt: serverTimestamp()
             };
 
@@ -175,9 +206,12 @@
                 updatedAt: serverTimestamp()
             }, { merge: true });
 
-            // If recipient is Admin Nhật Đăng -> forward email notification
-            if (targetCodeId === ADMIN_CODE_ID || targetContact.ndid === ADMIN_NDID) {
-                notifyAdminEmail(currentSender, messageText, fileMeta);
+            // If recipient is Admin -> forward email notification dynamically
+            if (targetContact.isAdmin || targetContact.role === 'admin') {
+                const adminEmail = targetContact.email || targetContact.recoveryEmail;
+                if (adminEmail) {
+                    notifyAdminEmail(adminEmail, currentSender, messageText, fileMeta);
+                }
             }
 
             return { chatId, messageId: msgRef.id, payload: msgPayload };
@@ -194,7 +228,8 @@
                 fileMeta = await NDChatCore.uploadAttachment(attachmentFile, currentSender.uid);
             }
 
-            const msgRef = push(ref(rdb, `mw_messages/${scopeId}/${roomId}`));
+            const path = scopeId === 'chatnd' ? `chatnd_messages/${roomId}` : `mw_messages/${scopeId}/${roomId}`;
+            const msgRef = push(ref(rdb, path));
             const payload = {
                 text: (messageText || '').trim(),
                 senderId: currentSender.uid || 'guest',
@@ -203,14 +238,124 @@
                 senderName: currentSender.displayName || currentSender.name || 'ND Member',
                 senderAvatar: currentSender.photoURL || '/assets/images/logo.png',
                 file: fileMeta || null,
+                reactions: {},
                 timestamp: Date.now()
             };
 
             await set(msgRef, payload);
             return { messageId: msgRef.key, payload };
+        },
+
+        // Update Group Information (Owner, Deputy or Admin)
+        async updateGroupInfo(rdb, currentGroupId, newGroupId, groupData) {
+            if (!rdb) throw new Error("Chưa kết nối cơ sở dữ liệu.");
+            const { ref, get, set, remove, update } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+
+            if (newGroupId && newGroupId !== currentGroupId) {
+                // Moving group to new ID
+                const targetRef = ref(rdb, `chatnd_groups/${newGroupId}`);
+                const targetSnap = await get(targetRef);
+                if (targetSnap.exists()) {
+                    throw new Error(`ID nhóm "${newGroupId}" đã tồn tại. Vui lòng chọn ID khác.`);
+                }
+
+                // Copy existing group info and messages
+                const curGroupSnap = await get(ref(rdb, `chatnd_groups/${currentGroupId}`));
+                const curMsgSnap = await get(ref(rdb, `chatnd_messages/${currentGroupId}`));
+
+                const mergedData = { ...(curGroupSnap.val() || {}), ...groupData, groupId: newGroupId, updatedAt: Date.now() };
+                await set(ref(rdb, `chatnd_groups/${newGroupId}`), mergedData);
+                
+                if (curMsgSnap.exists()) {
+                    await set(ref(rdb, `chatnd_messages/${newGroupId}`), curMsgSnap.val());
+                }
+
+                // Remove old refs
+                await remove(ref(rdb, `chatnd_groups/${currentGroupId}`));
+                await remove(ref(rdb, `chatnd_messages/${currentGroupId}`));
+
+                return { success: true, newGroupId };
+            } else {
+                await update(ref(rdb, `chatnd_groups/${currentGroupId}`), {
+                    ...groupData,
+                    updatedAt: Date.now()
+                });
+                return { success: true, newGroupId: currentGroupId };
+            }
+        },
+
+        // Change Group Owner
+        async changeGroupOwner(rdb, groupId, newOwnerUid, currentOwnerUid) {
+            if (!rdb) throw new Error("Chưa kết nối cơ sở dữ liệu.");
+            const { ref, update } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+
+            const updates = {
+                [`chatnd_groups/${groupId}/createdBy`]: newOwnerUid,
+                [`chatnd_groups/${groupId}/members/${newOwnerUid}/role`]: 'owner',
+                [`chatnd_groups/${groupId}/members/${currentOwnerUid}/role`]: 'deputy',
+                [`chatnd_groups/${groupId}/updatedAt`]: Date.now()
+            };
+
+            await update(ref(rdb), updates);
+            return { success: true };
+        },
+
+        // Set or Remove Deputy
+        async setGroupDeputy(rdb, groupId, targetUid, isDeputy) {
+            if (!rdb) throw new Error("Chưa kết nối cơ sở dữ liệu.");
+            const { ref, update } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+
+            const newRole = isDeputy ? 'deputy' : 'member';
+            await update(ref(rdb, `chatnd_groups/${groupId}/members/${targetUid}`), {
+                role: newRole,
+                updatedAt: Date.now()
+            });
+            return { success: true, role: newRole };
+        },
+
+        // Remove Member from Group
+        async removeGroupMember(rdb, groupId, targetUid) {
+            if (!rdb) throw new Error("Chưa kết nối cơ sở dữ liệu.");
+            const { ref, remove } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+
+            await remove(ref(rdb, `chatnd_groups/${groupId}/members/${targetUid}`));
+            return { success: true };
+        },
+
+        // Delete Group Chat permanently (Owner or Admin)
+        async deleteGroup(rdb, groupId) {
+            if (!rdb) throw new Error("Chưa kết nối cơ sở dữ liệu.");
+            const { ref, remove } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+
+            await remove(ref(rdb, `chatnd_groups/${groupId}`));
+            await remove(ref(rdb, `chatnd_messages/${groupId}`));
+            return { success: true };
+        },
+
+        // Add Message Reaction
+        async setMessageReaction(rdb, db, isGroup, chatIdOrGroupId, messageId, userUid, emoji) {
+            if (isGroup) {
+                if (!rdb) return;
+                const { ref, set, remove } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+                const reactionRef = ref(rdb, `chatnd_messages/${chatIdOrGroupId}/${messageId}/reactions/${userUid}`);
+                if (!emoji) {
+                    await remove(reactionRef);
+                } else {
+                    await set(reactionRef, emoji);
+                }
+            } else {
+                if (!db) return;
+                const { doc, updateDoc, deleteField } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+                const msgDoc = doc(db, 'chats', chatIdOrGroupId, 'messages', messageId);
+                if (!emoji) {
+                    await updateDoc(msgDoc, { [`reactions.${userUid}`]: deleteField() });
+                } else {
+                    await updateDoc(msgDoc, { [`reactions.${userUid}`]: emoji });
+                }
+            }
         }
     };
 
     window.NDChatCore = NDChatCore;
-    console.log("🔥 NDChatCore Loaded Successfully");
+    console.log("🔥 NDChatCore Enhanced Loaded Successfully");
 })();

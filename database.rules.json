@@ -1,6 +1,79 @@
 {
   "rules": {
-    ".read": "true",
-    ".write": "auth != null"
+
+    ".read":  false,
+    ".write": false,
+
+    "users": {
+      "$uid": {
+
+        ".read": "auth !== null && (auth.uid === $uid || auth.token.admin === true)",
+
+        ".write": "auth !== null && (auth.uid === $uid || auth.token.admin === true)",
+
+        "ndid": {
+          ".write": "auth !== null && (auth.token.admin === true || (auth.uid === $uid && !data.exists() && newData.val().matches(/^[a-zA-Z0-9_.]+$/)))",
+          ".validate": "newData.isString() && newData.val().length >= 3 && newData.val().length <= 32"
+        },
+
+        "role": {
+          ".write": "auth !== null && auth.token.admin === true",
+          ".validate": "newData.isString() && (newData.val() === 'member' || newData.val() === 'admin' || newData.val() === 'moderator')"
+        },
+
+        "fullname":      { ".validate": "newData.isString() && newData.val().length <= 100" },
+        "photoURL":      { ".validate": "newData.isString()" },
+        "dob":           { ".validate": "newData.isString()" },
+        "gender":        { ".validate": "newData.isString() && (newData.val() === 'male' || newData.val() === 'female' || newData.val() === 'other')" },
+        "nationality":   { ".validate": "newData.isString()" },
+        "recoveryEmail": { ".validate": "newData.isString()" },
+        "codeId":        { ".validate": "newData.isString()" },
+        "createdAt":     { ".validate": "newData.isNumber()" },
+        "updatedAt":     { ".validate": "newData.isNumber()" },
+        "lastLoginAt":   { ".validate": "newData.isNumber()" },
+
+        "$other": { ".validate": false }
+      }
+    },
+
+    "ndids": {
+      ".read": "auth !== null && auth.token.admin === true",
+
+      "$ndid": {
+        ".read": "auth !== null",
+
+        ".write": "auth !== null && (auth.token.admin === true || (!data.exists() && newData.child('uid').val() === auth.uid))",
+
+        "uid":       { ".validate": "newData.isString()" },
+        "createdAt": { ".validate": "newData.isNumber()" },
+        "$other":    { ".validate": false }
+      }
+    },
+
+    "code_ids": {
+      ".read": "auth !== null && auth.token.admin === true",
+
+      "$codeId": {
+        ".read": "auth !== null",
+
+        ".write": "auth !== null && (auth.token.admin === true || (!data.exists() && newData.child('uid').val() === auth.uid))",
+
+        "uid":       { ".validate": "newData.isString()" },
+        "ndid":      { ".validate": "newData.isString()" },
+        "createdAt": { ".validate": "newData.isNumber()" },
+        "$other":    { ".validate": false }
+      }
+    },
+
+    "config": {
+      ".read":  true,
+      ".write": "auth !== null && auth.token.admin === true"
+    },
+
+    "gemini_key": {
+      ".read":  "auth !== null && auth.token.admin === true",
+      ".write": "auth !== null && auth.token.admin === true"
+    }
+
   }
 }

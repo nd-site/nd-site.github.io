@@ -127,7 +127,7 @@ export const UserSearchInput: React.FC<UserSearchInputProps> = ({
                 <div>
                   <div className="text-xs font-bold text-slate-800">{u.fullname}</div>
                   <div className="text-[10px] text-slate-400 font-mono">
-                    NDID: @{u.ndid} {u.codeId && `• Code: ${u.codeId}`}
+                    NDID: {u.ndid} {u.codeId && `• Code: ${u.codeId}`}
                   </div>
                 </div>
               </div>

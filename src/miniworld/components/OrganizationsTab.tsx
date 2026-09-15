@@ -20,6 +20,22 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
   const [joiningOrg, setJoiningOrg] = useState<any>(null);
   const [joinAnswers, setJoinAnswers] = useState<Record<string, any>>({});
 
+  // Search inside selected Org member list
+  const [memberSearchQuery, setMemberSearchQuery] = useState('');
+
+  // Editing role state
+  const [editingMemberId, setEditingMemberId] = useState<string | null>(null);
+  const [editingMemberRole, setEditingMemberRole] = useState('member');
+  const [editingCustomRoleName, setEditingCustomRoleName] = useState('');
+
+  // Edit Org Form state
+  const [editName, setEditName] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+  const [editIsPublic, setEditIsPublic] = useState(true);
+  const [editRequireApproval, setEditRequireApproval] = useState(false);
+  const [editQuestions, setEditQuestions] = useState<any[]>([]);
+  const [newEditQuestionTitle, setNewEditQuestionTitle] = useState('');
+
   // New org form
   const [orgForm, setOrgForm] = useState({
     id: '',
@@ -31,6 +47,7 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
   });
 
   // Add member form
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [newMemberId, setNewMemberId] = useState('');
   const [newMemberName, setNewMemberName] = useState('');
   const [newMemberRole, setNewMemberRole] = useState('member');
@@ -51,6 +68,16 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
 
   const displayedOrgs = orgSubTab === 'joined' ? joinedOrgs : orgs;
 
+  // Check if current user is Leader or Deputy or Admin of the selected Org
+  const isOrgLeaderOrAdmin = useMemo(() => {
+    if (isAdmin) return true;
+    if (!selectedOrg || !currentUid) return false;
+    if (selectedOrg.leader === currentUid || selectedOrg.createdBy === currentUid) return true;
+    const memberObj = selectedOrg.members ? selectedOrg.members[currentUid] : null;
+    const role = typeof memberObj === 'object' ? memberObj?.role : memberObj;
+    return role === 'leader' || role === 'co_leader' || role === 'deputy';
+  }, [selectedOrg, currentUid, isAdmin]);
+
   // Fetch Organizations
   useEffect(() => {
     if (!db || !mapId) return;
@@ -69,9 +96,15 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
           });
           setOrgs(list);
 
+          // If selectedOrg is open, update its live state
+          if (selectedOrg) {
+            const updated = list.find(o => o.id === selectedOrg.id);
+            if (updated) setSelectedOrg(updated);
+          }
+
           const params = new URLSearchParams(window.location.search);
           const orgParam = params.get('org');
-          if (orgParam) {
+          if (orgParam && !selectedOrg) {
             const matched = list.find(o => o.id === orgParam);
             if (matched) setSelectedOrg(matched);
           }
@@ -82,6 +115,20 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
     };
     fetchOrgs();
   }, [db, mapId]);
+
+  // When selectedOrg changes, populate edit form state
+  useEffect(() => {
+    if (selectedOrg) {
+      setEditName(selectedOrg.name || '');
+      setEditDescription(selectedOrg.description || '');
+      setEditIsPublic(selectedOrg.isPublic !== false);
+      setEditRequireApproval(!!selectedOrg.requireApproval);
+      setEditQuestions(selectedOrg.questions || []);
+      setIsEditingOrg(false);
+      setShowAddMemberModal(false);
+      setEditingMemberId(null);
+    }
+  }, [selectedOrg?.id]);
 
   const handleCreateOrg = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,7 +175,7 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
         members: initialMembers
       });
 
-      alert('Tạo tổ chức thành công!');
+      alert('🎉 Tạo tổ chức thành công!');
       setShowCreate(false);
       setOrgForm({
         id: '',
@@ -145,12 +192,13 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
 
   const handleDeleteOrg = async (orgIdToDelete: string) => {
     if (!db) return;
-    if (!confirm(`Bạn có chắc chắn muốn XÓA VĨNH VIỄN Tổ chức "${orgIdToDelete}"?`)) return;
+    if (!confirm(`⚠️ Bạn có chắc chắn muốn XÓA VĨNH VIỄN Tổ chức "${orgIdToDelete}" cùng toàn bộ dữ liệu chat nội bộ không?`)) return;
 
     try {
       const { ref, remove } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
       await remove(ref(db, `mw_organizations/${mapId}/${orgIdToDelete}`));
       await remove(ref(db, `mw_chats/${mapId}/org_chat_${orgIdToDelete}`));
+      await remove(ref(db, `mw_messages/${mapId}/org_chat_${orgIdToDelete}`));
       alert(`Đã xóa tổ chức ${orgIdToDelete}!`);
       setSelectedOrg(null);
     } catch (e: any) {
@@ -183,7 +231,7 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
           joinedAt: Date.now()
         });
 
-        alert(`Bạn đã tham gia tổ chức "${org.name}" thành công!`);
+        alert(`🎉 Bạn đã tham gia tổ chức "${org.name}" thành công!`);
       } catch (err: any) {
         alert("Lỗi tham gia: " + err.message);
       }
@@ -210,6 +258,7 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
     }
   };
 
+  // Add member directly (Leader / Admin)
   const handleAddMemberToOrg = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!db || !selectedOrg || !newMemberId) return;
@@ -217,7 +266,8 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
       const { ref, update } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
       const roleDisplayName = newMemberRole === 'leader' ? 'Trưởng tổ chức' :
                               newMemberRole === 'co_leader' ? 'Phó tổ chức' :
-                              newMemberRole === 'custom' ? (customRoleName || 'Tùy chỉnh') : 'Thành viên';
+                              newMemberRole === 'manager' ? 'Quản lý' :
+                              newMemberRole === 'custom' ? (customRoleName.trim() || 'Tùy chỉnh') : 'Thành viên';
 
       await update(ref(db, `mw_organizations/${mapId}/${selectedOrg.id}/members/${newMemberId}`), {
         role: newMemberRole,
@@ -232,42 +282,164 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
         joinedAt: Date.now()
       });
 
-      alert(`Đã thêm thành viên ${newMemberName || newMemberId} vào tổ chức!`);
+      alert(`🎉 Đã thêm thành viên ${newMemberName || newMemberId} vào tổ chức!`);
       setNewMemberId('');
       setNewMemberName('');
       setCustomRoleName('');
+      setNewMemberRole('member');
+      setShowAddMemberModal(false);
     } catch (e: any) {
       alert('Lỗi: ' + e.message);
     }
   };
 
-  const handleRemoveMember = async (memberKey: string) => {
-    if (!db || !selectedOrg || !confirm(`Xóa thành viên ${memberKey}?`)) return;
+  // Edit Role of Member
+  const handleSaveMemberRole = async (targetUid: string) => {
+    if (!db || !selectedOrg) return;
+    try {
+      const { ref, update } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
+      const roleDisplayName = editingMemberRole === 'leader' ? 'Trưởng tổ chức' :
+                              editingMemberRole === 'co_leader' ? 'Phó tổ chức' :
+                              editingMemberRole === 'manager' ? 'Quản lý' :
+                              editingMemberRole === 'custom' ? (editingCustomRoleName.trim() || 'Tùy chỉnh') : 'Thành viên';
+
+      const updates: any = {
+        role: editingMemberRole,
+        roleName: roleDisplayName
+      };
+
+      // If making this member Leader, update leader field
+      if (editingMemberRole === 'leader') {
+        await update(ref(db, `mw_organizations/${mapId}/${selectedOrg.id}`), {
+          leader: targetUid
+        });
+      }
+
+      await update(ref(db, `mw_organizations/${mapId}/${selectedOrg.id}/members/${targetUid}`), updates);
+      await update(ref(db, `mw_chats/${mapId}/org_chat_${selectedOrg.id}/members/${targetUid}`), {
+        role: editingMemberRole
+      });
+
+      alert('Đã cập nhật vai trò thành viên trong tổ chức!');
+      setEditingMemberId(null);
+    } catch (e: any) {
+      alert("Lỗi: " + e.message);
+    }
+  };
+
+  const handleRemoveMember = async (memberKey: string, memberName: string) => {
+    if (!db || !selectedOrg) return;
+    if (memberKey === selectedOrg.leader && !isAdmin) {
+      return alert("Không thể xóa Trưởng tổ chức. Vui lòng chuyển giao quyền trưởng tổ chức cho người khác trước.");
+    }
+    if (!confirm(`Bạn có chắc chắn muốn xóa thành viên "${memberName || memberKey}" khỏi tổ chức?`)) return;
+
     try {
       const { ref, remove } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
       await remove(ref(db, `mw_organizations/${mapId}/${selectedOrg.id}/members/${memberKey}`));
       await remove(ref(db, `mw_chats/${mapId}/org_chat_${selectedOrg.id}/members/${memberKey}`));
+      alert(`Đã xóa thành viên "${memberName || memberKey}" khỏi tổ chức.`);
     } catch (e: any) {
       alert('Lỗi: ' + e.message);
     }
   };
 
+  // Update Org details (Leader / Admin)
   const handleUpdateOrgDetails = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!db || !selectedOrg) return;
     try {
       const { ref, update } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
-      await update(ref(db, `mw_organizations/${mapId}/${selectedOrg.id}`), {
-        name: selectedOrg.name,
-        description: selectedOrg.description,
-        isPublic: selectedOrg.isPublic
-      });
+      
+      const payload = {
+        name: editName.trim() || selectedOrg.name,
+        description: editDescription.trim(),
+        isPublic: editIsPublic,
+        requireApproval: editRequireApproval,
+        questions: editRequireApproval ? editQuestions : [],
+        updatedAt: Date.now()
+      };
+
+      await update(ref(db, `mw_organizations/${mapId}/${selectedOrg.id}`), payload);
+
+      // Sync chat name
+      try {
+        await update(ref(db, `mw_chats/${mapId}/org_chat_${selectedOrg.id}`), {
+          name: `Chat Tổ Chức: ${editName.trim() || selectedOrg.name}`
+        });
+      } catch (_) {}
+
       setIsEditingOrg(false);
-      alert('Đã cập nhật thông tin tổ chức!');
+      alert('🎉 Đã lưu thông tin tổ chức thành công!');
     } catch (e: any) {
       alert('Lỗi: ' + e.message);
     }
   };
+
+  const getOrgMemberRoleBadge = (role: string, customName?: string) => {
+    if (customName && role === 'custom') {
+      return (
+        <span className="bg-purple-100 text-purple-800 border border-purple-200 text-[10px] font-bold px-2.5 py-0.5 rounded-lg flex items-center gap-1">
+          <span>⚙️</span> {customName}
+        </span>
+      );
+    }
+    switch (role) {
+      case 'leader':
+        return (
+          <span className="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-black px-2.5 py-0.5 rounded-lg flex items-center gap-1 shadow-sm">
+            <span>👑</span> Trưởng Tổ Chức
+          </span>
+        );
+      case 'co_leader':
+      case 'deputy':
+        return (
+          <span className="bg-indigo-100 text-indigo-800 border border-indigo-200 text-[10px] font-bold px-2.5 py-0.5 rounded-lg flex items-center gap-1">
+            <span>🛡️</span> Phó Tổ Chức
+          </span>
+        );
+      case 'manager':
+        return (
+          <span className="bg-emerald-100 text-emerald-800 border border-emerald-200 text-[10px] font-bold px-2.5 py-0.5 rounded-lg flex items-center gap-1">
+            <span>👔</span> Quản Lý
+          </span>
+        );
+      default:
+        return (
+          <span className="bg-slate-100 text-slate-700 border border-slate-200 text-[10px] font-bold px-2.5 py-0.5 rounded-lg flex items-center gap-1">
+            <span>👤</span> Thành Viên
+          </span>
+        );
+    }
+  };
+
+  const selectedOrgMemberList = useMemo(() => {
+    if (!selectedOrg?.members) return [];
+    return Object.entries(selectedOrg.members).map(([key, info]: [string, any]) => {
+      const role = typeof info === 'object' ? (info.role || 'member') : info;
+      const roleName = typeof info === 'object' ? (info.roleName || '') : '';
+      const name = typeof info === 'object' ? (info.name || key) : key;
+      const joinedAt = typeof info === 'object' ? (info.joinedAt || 0) : 0;
+      return {
+        uid: key,
+        name,
+        role,
+        roleName,
+        joinedAt
+      };
+    });
+  }, [selectedOrg]);
+
+  const filteredOrgMembers = useMemo(() => {
+    if (!memberSearchQuery.trim()) return selectedOrgMemberList;
+    const q = memberSearchQuery.toLowerCase().trim();
+    return selectedOrgMemberList.filter(m =>
+      m.name.toLowerCase().includes(q) ||
+      m.uid.toLowerCase().includes(q) ||
+      (m.roleName && m.roleName.toLowerCase().includes(q)) ||
+      m.role.toLowerCase().includes(q)
+    );
+  }, [selectedOrgMemberList, memberSearchQuery]);
 
   return (
     <div className="space-y-6">
@@ -333,7 +505,7 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
             </div>
 
             <div className="flex flex-wrap gap-6 pt-2">
-              <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
+              <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer font-bold">
                 <input 
                   type="checkbox" 
                   checked={orgForm.isPublic} 
@@ -342,7 +514,7 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
                 />
                 Công khai tổ chức
               </label>
-              <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
+              <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer font-bold">
                 <input 
                   type="checkbox" 
                   checked={orgForm.requireApproval} 
@@ -435,7 +607,7 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
                     onClick={() => setSelectedOrg(org)}
                     className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all"
                   >
-                    Chi tiết →
+                    Chi tiết & Thành viên →
                   </button>
                 </div>
               </div>
@@ -459,10 +631,11 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
         )}
       </div>
 
-      {/* Org Detail Modal */}
+      {/* Org Detail & Management Modal */}
       {selectedOrg && (
         <div className="fixed inset-0 z-[1000] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="glass-modal max-w-2xl w-full rounded-3xl p-6 md:p-8 border border-slate-200 shadow-2xl max-h-[90vh] flex flex-col bg-white animate-in zoom-in-95 duration-200">
+            {/* Header */}
             <div className="flex justify-between items-start pb-4 border-b border-slate-100">
               <div>
                 <h3 className="text-xl font-black text-slate-800 flex items-center gap-2">
@@ -470,6 +643,8 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
                 </h3>
                 <p className="text-xs text-slate-400 font-mono mt-0.5">
                   ID: <span className="text-indigo-600 font-bold">{selectedOrg.id}</span>
+                  {selectedOrg.isPublic ? ' • 🌐 Công khai' : ' • 🔒 Riêng tư'}
+                  {selectedOrg.requireApproval ? ' • 📋 Cần duyệt' : ''}
                 </p>
               </div>
               <button 
@@ -480,149 +655,336 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto py-5 space-y-5 custom-scrollbar pr-2 text-xs">
-              {/* Description & Edit */}
+            <div className="flex-1 overflow-y-auto py-4 space-y-4 custom-scrollbar pr-1 text-xs">
+              {/* Description & Edit Box */}
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">Mô tả tổ chức</span>
-                  {(isAdmin || selectedOrg.leader === currentUid) && (
+                  <span className="text-slate-400 block text-[10px] uppercase font-bold">Mô tả & Thông tin Tổ chức</span>
+                  {isOrgLeaderOrAdmin && (
                     <button
                       onClick={() => setIsEditingOrg(!isEditingOrg)}
                       className="text-indigo-600 hover:underline font-bold text-xs"
                     >
-                      {isEditingOrg ? 'Hủy sửa' : '✏️ Chỉnh sửa thông tin'}
+                      {isEditingOrg ? '✕ Hủy sửa' : '✏️ Chỉnh sửa thông tin tổ chức'}
                     </button>
                   )}
                 </div>
 
                 {isEditingOrg ? (
                   <form onSubmit={handleUpdateOrgDetails} className="space-y-3 pt-2">
-                    <input
-                      type="text"
-                      value={selectedOrg.name}
-                      onChange={e => setSelectedOrg({ ...selectedOrg, name: e.target.value })}
-                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800"
-                    />
-                    <textarea
-                      value={selectedOrg.description}
-                      onChange={e => setSelectedOrg({ ...selectedOrg, description: e.target.value })}
-                      className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs text-slate-800 h-16"
-                    ></textarea>
-                    <button type="submit" className="bg-indigo-600 text-white font-bold px-4 py-2 rounded-xl text-xs">
-                      Lưu thay đổi
-                    </button>
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-600 mb-1">Tên tổ chức *</label>
+                      <input
+                        type="text"
+                        required
+                        value={editName}
+                        onChange={e => setEditName(e.target.value)}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 font-bold focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-600 mb-1">Mô tả / Tôn chỉ / Quy định</label>
+                      <textarea
+                        value={editDescription}
+                        onChange={e => setEditDescription(e.target.value)}
+                        className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs text-slate-800 h-20 focus:outline-none focus:border-indigo-500"
+                      ></textarea>
+                    </div>
+
+                    <div className="flex flex-wrap gap-6 pt-1">
+                      <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+                        <input
+                          type="checkbox"
+                          checked={editIsPublic}
+                          onChange={e => setEditIsPublic(e.target.checked)}
+                          className="rounded text-indigo-600"
+                        />
+                        Công khai tổ chức
+                      </label>
+
+                      <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+                        <input
+                          type="checkbox"
+                          checked={editRequireApproval}
+                          onChange={e => setEditRequireApproval(e.target.checked)}
+                          className="rounded text-indigo-600"
+                        />
+                        Xét duyệt khi xin gia nhập
+                      </label>
+                    </div>
+
+                    {editRequireApproval && (
+                      <div className="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+                        <span className="font-bold text-slate-700 text-[11px] block">Câu hỏi xét duyệt:</span>
+                        <div className="space-y-1">
+                          {editQuestions.map((q, idx) => (
+                            <div key={q.id || idx} className="flex justify-between items-center text-[11px] bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                              <span><strong>{idx + 1}.</strong> {q.title}</span>
+                              <button
+                                type="button"
+                                onClick={() => setEditQuestions(editQuestions.filter((_, i) => i !== idx))}
+                                className="text-slate-400 hover:text-rose-600 font-bold px-1"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            placeholder="Thêm câu hỏi xét duyệt mới..."
+                            value={newEditQuestionTitle}
+                            onChange={e => setNewEditQuestionTitle(e.target.value)}
+                            className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-xs"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (!newEditQuestionTitle.trim()) return;
+                              setEditQuestions([...editQuestions, { id: 'q_' + Date.now(), title: newEditQuestionTitle.trim(), type: 'text' }]);
+                              setNewEditQuestionTitle('');
+                            }}
+                            className="bg-indigo-600 text-white font-bold px-3 py-1 rounded-lg text-xs"
+                          >
+                            + Thêm
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setIsEditingOrg(false)}
+                        className="bg-slate-100 text-slate-700 font-bold px-4 py-2 rounded-xl text-xs"
+                      >
+                        Hủy
+                      </button>
+                      <button
+                        type="submit"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2 rounded-xl text-xs shadow-md"
+                      >
+                        ✓ Lưu Thông Tin
+                      </button>
+                    </div>
                   </form>
                 ) : (
                   <p className="text-slate-700 font-medium leading-relaxed">{selectedOrg.description || 'Không có mô tả.'}</p>
                 )}
               </div>
 
-              {/* Chat of this Organization */}
-              <div className="bg-indigo-50/60 p-4 rounded-2xl border border-indigo-200 flex justify-between items-center">
+              {/* Internal Chat link */}
+              <div className="bg-indigo-50/60 p-3.5 rounded-2xl border border-indigo-200 flex justify-between items-center">
                 <div>
                   <h4 className="font-bold text-indigo-900 text-xs">Phòng Chat Nội Bộ Tổ Chức</h4>
-                  <p className="text-[11px] text-indigo-600 mt-0.5">Dành riêng cho các thành viên trong tổ chức {selectedOrg.name}</p>
+                  <p className="text-[11px] text-indigo-600">Trò chuyện riêng tư giữa các thành viên của {selectedOrg.name}</p>
                 </div>
                 <a
-                  href={`/games/miniworld.html?map=${mapId}&chat=org_chat_${selectedOrg.id}`}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-indigo-500/20"
+                  href={`/games/miniworld/?map=${mapId}&chat=org_chat_${selectedOrg.id}`}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-indigo-500/20 flex items-center gap-1.5"
                 >
-                  💬 Mở Chat Tổ Chức
+                  <span>💬</span> Mở Chat
                 </a>
               </div>
 
-              {/* Add member form (Leader / Admin) */}
-              {(isAdmin || selectedOrg.leader === currentUid) && (
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Thêm Thành Viên Trực Tiếp</h4>
-                    <button
-                      onClick={() => setApprovingOrg({ type: 'org', id: selectedOrg.id, title: selectedOrg.name, mapId })}
-                      className="text-xs text-indigo-600 hover:underline font-bold"
+              {/* Member Management Header */}
+              <div className="flex flex-wrap justify-between items-center gap-2 pt-2">
+                <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <span>👥</span> Danh Sách Thành Viên ({selectedOrgMemberList.length})
+                </h4>
+
+                <div className="flex items-center gap-2">
+                  {isOrgLeaderOrAdmin && (
+                    <>
+                      <button
+                        onClick={() => setShowAddMemberModal(!showAddMemberModal)}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow-sm transition-all"
+                      >
+                        <span>{showAddMemberModal ? '✕ Đóng' : '➕ Thêm thành viên'}</span>
+                      </button>
+
+                      {selectedOrg.requireApproval && (
+                        <button
+                          onClick={() => setApprovingOrg({ type: 'org', id: selectedOrg.id, title: selectedOrg.name, mapId })}
+                          className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1"
+                        >
+                          <span>📋</span> Duyệt đơn
+                        </button>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Add Member Form (Leader / Deputy / Admin) */}
+              {showAddMemberModal && isOrgLeaderOrAdmin && (
+                <form onSubmit={handleAddMemberToOrg} className="bg-indigo-50/70 p-4 rounded-2xl border border-indigo-200 space-y-3 animate-in slide-in-from-top-2">
+                  <h5 className="font-black text-indigo-900 uppercase tracking-wider text-[11px]">Thêm Thành Viên Vào Tổ Chức</h5>
+                  
+                  <UserSearchInput 
+                    value={newMemberId}
+                    selectedName={newMemberName}
+                    onChange={(val, name) => {
+                      setNewMemberId(val);
+                      setNewMemberName(name || '');
+                    }}
+                    placeholder="Tìm Tên, NDID hoặc CodeID người chơi..."
+                  />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <select 
+                      value={newMemberRole} 
+                      onChange={e => setNewMemberRole(e.target.value)} 
+                      className="bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-800 focus:outline-none"
                     >
-                      Duyệt thành viên xin vào →
-                    </button>
+                      <option value="leader">👑 Trưởng tổ chức</option>
+                      <option value="co_leader">🛡️ Phó tổ chức</option>
+                      <option value="manager">👔 Quản lý</option>
+                      <option value="member">👤 Thành viên</option>
+                      <option value="custom">⚙️ Tùy chỉnh vai trò</option>
+                    </select>
+
+                    {newMemberRole === 'custom' && (
+                      <input 
+                        type="text" 
+                        required
+                        placeholder="Tên chức vụ (vd: Kế toán, Đội trưởng...)" 
+                        value={customRoleName} 
+                        onChange={e => setCustomRoleName(e.target.value)} 
+                        className="bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none font-bold"
+                      />
+                    )}
                   </div>
 
-                  <form onSubmit={handleAddMemberToOrg} className="space-y-3">
-                    <UserSearchInput 
-                      value={newMemberId}
-                      selectedName={newMemberName}
-                      onChange={(val, name) => {
-                        setNewMemberId(val);
-                        setNewMemberName(name || '');
-                      }}
-                      placeholder="Tìm Tên, NDID hoặc CodeID..."
-                    />
-
-                    <div className="grid grid-cols-2 gap-2">
-                      <select 
-                        value={newMemberRole} 
-                        onChange={e => setNewMemberRole(e.target.value)} 
-                        className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:outline-none"
-                      >
-                        <option value="leader">👑 Trưởng tổ chức</option>
-                        <option value="co_leader">🛡️ Phó tổ chức</option>
-                        <option value="member">🎮 Thành viên</option>
-                        <option value="custom">⚙️ Tùy chỉnh vai trò</option>
-                      </select>
-
-                      {newMemberRole === 'custom' && (
-                        <input 
-                          type="text" 
-                          placeholder="Tên chức vụ..." 
-                          value={customRoleName} 
-                          onChange={e => setCustomRoleName(e.target.value)} 
-                          className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:outline-none"
-                        />
-                      )}
-                    </div>
-
-                    <button 
-                      type="submit" 
-                      className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm"
-                    >
-                      + Thêm vào tổ chức
-                    </button>
-                  </form>
-                </div>
+                  <button 
+                    type="submit" 
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-md"
+                  >
+                    + Hoàn Tất Thêm Thành Viên
+                  </button>
+                </form>
               )}
 
-              {/* Member list */}
-              <div>
-                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2.5">
-                  Danh Sách Thành Viên ({Object.keys(selectedOrg.members || {}).length})
-                </h4>
-                <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-1">
-                  {Object.entries(selectedOrg.members || {}).map(([key, info]: [string, any]) => (
-                    <div key={key} className="flex justify-between items-center bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                      <div>
-                        <div className="font-bold text-xs text-slate-800">{info.name || key}</div>
-                        <div className="text-[10px] text-slate-400 font-mono">NDID: @{key}</div>
+              {/* Member Search filter */}
+              <input
+                type="text"
+                placeholder="Tìm thành viên trong tổ chức..."
+                value={memberSearchQuery}
+                onChange={e => setMemberSearchQuery(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-indigo-500"
+              />
+
+              {/* Member List (Visible to all) */}
+              <div className="space-y-2 max-h-56 overflow-y-auto custom-scrollbar pr-1">
+                {filteredOrgMembers.map(member => {
+                  const isEditing = editingMemberId === member.uid;
+
+                  return (
+                    <div 
+                      key={member.uid} 
+                      className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50/80 p-3 rounded-2xl border border-slate-200 gap-2 hover:bg-white transition-all"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 text-white font-bold flex items-center justify-center text-xs shrink-0">
+                          {member.name ? member.name.charAt(0).toUpperCase() : 'M'}
+                        </div>
+                        <div>
+                          <div className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                            <span>{member.name}</span>
+                            {member.uid === currentUid && (
+                              <span className="text-[9px] bg-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded font-bold">Bạn</span>
+                            )}
+                          </div>
+                          <div className="text-[10px] text-slate-400 font-mono">NDID: {member.uid}</div>
+                        </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
-                        <span className="bg-indigo-100 text-indigo-700 border border-indigo-200 text-[10px] font-bold px-2.5 py-0.5 rounded-lg">
-                          {info.roleName || info.role || 'Thành viên'}
-                        </span>
-                        {(isAdmin || selectedOrg.leader === currentUid) && (
-                          <button 
-                            onClick={() => handleRemoveMember(key)} 
-                            className="text-slate-400 hover:text-rose-600 p-1 text-xs"
-                            title="Xóa thành viên"
-                          >
-                            ✕
-                          </button>
+                      <div className="flex items-center gap-2 self-end sm:self-center">
+                        {!isEditing ? (
+                          <>
+                            {getOrgMemberRoleBadge(member.role, member.roleName)}
+
+                            {isOrgLeaderOrAdmin && (
+                              <div className="flex items-center gap-1 ml-1">
+                                <button
+                                  onClick={() => {
+                                    setEditingMemberId(member.uid);
+                                    setEditingMemberRole(member.role === 'custom' ? 'custom' : member.role);
+                                    setEditingCustomRoleName(member.roleName || '');
+                                  }}
+                                  className="text-slate-400 hover:text-indigo-600 p-1.5 rounded-lg hover:bg-slate-100 text-xs font-bold transition-colors"
+                                  title="Chỉnh sửa vai trò thành viên"
+                                >
+                                  ✏️
+                                </button>
+
+                                <button 
+                                  onClick={() => handleRemoveMember(member.uid, member.name)} 
+                                  className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-slate-100 text-xs font-bold transition-colors"
+                                  title="Xóa khỏi tổ chức"
+                                >
+                                  🗑️
+                                </button>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <div className="flex flex-wrap items-center gap-1.5 bg-white p-2 rounded-xl border border-indigo-200 shadow-sm">
+                            <select
+                              value={editingMemberRole}
+                              onChange={e => setEditingMemberRole(e.target.value)}
+                              className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-800 focus:outline-none"
+                            >
+                              <option value="leader">👑 Trưởng tổ chức</option>
+                              <option value="co_leader">🛡️ Phó tổ chức</option>
+                              <option value="manager">👔 Quản lý</option>
+                              <option value="member">👤 Thành viên</option>
+                              <option value="custom">⚙️ Tùy chỉnh</option>
+                            </select>
+
+                            {editingMemberRole === 'custom' && (
+                              <input
+                                type="text"
+                                placeholder="Tên chức vụ..."
+                                value={editingCustomRoleName}
+                                onChange={e => setEditingCustomRoleName(e.target.value)}
+                                className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs w-28 text-slate-800"
+                              />
+                            )}
+
+                            <button
+                              onClick={() => handleSaveMemberRole(member.uid)}
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded-lg text-xs"
+                            >
+                              ✓ Lưu
+                            </button>
+
+                            <button
+                              onClick={() => setEditingMemberId(null)}
+                              className="text-slate-400 hover:text-slate-600 text-xs px-1"
+                            >
+                              ✕
+                            </button>
+                          </div>
                         )}
                       </div>
                     </div>
-                  ))}
-                </div>
+                  );
+                })}
+
+                {filteredOrgMembers.length === 0 && (
+                  <div className="text-center text-slate-400 py-8 text-xs">
+                    Không tìm thấy thành viên nào.
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex flex-wrap gap-3">
-              {(isAdmin || selectedOrg.leader === currentUid) && (
+            {/* Modal Footer */}
+            <div className="pt-4 border-t border-slate-100 flex flex-wrap justify-between items-center gap-3">
+              {isOrgLeaderOrAdmin && (
                 <button
                   onClick={() => handleDeleteOrg(selectedOrg.id)}
                   className="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-4 py-2.5 rounded-2xl text-xs transition-colors"
@@ -633,7 +995,7 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
 
               <button 
                 onClick={() => setSelectedOrg(null)} 
-                className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-2.5 rounded-2xl text-xs transition-colors"
+                className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-2.5 rounded-2xl text-xs transition-colors text-center"
               >
                 Đóng
               </button>
@@ -645,7 +1007,7 @@ export const OrganizationsTab = ({ mapId, mapData }: { mapId: string, mapData: a
       {/* Answer Questions to Join Org Modal */}
       {joiningOrg && (
         <div className="fixed inset-0 z-[1000] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="glass-modal max-w-md w-full rounded-3xl p-6 border border-slate-200 shadow-2xl bg-white">
+          <div className="glass-modal max-w-md w-full rounded-3xl p-6 border border-slate-200 shadow-2xl bg-white animate-in zoom-in-95 duration-200">
             <h3 className="text-base font-black text-slate-800 mb-1">Gia nhập: {joiningOrg.name}</h3>
             <p className="text-xs text-slate-500 mb-4">Vui lòng trả lời các câu hỏi xét duyệt của tổ chức:</p>
 

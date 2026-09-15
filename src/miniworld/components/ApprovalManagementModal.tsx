@@ -109,7 +109,7 @@ export const ApprovalManagementModal: React.FC<ApprovalProps> = ({
               <div className="flex justify-between items-start">
                 <div>
                   <h4 className="font-bold text-slate-800 text-sm">{req.name || req.userId}</h4>
-                  <div className="text-[10px] text-slate-400 font-mono">NDID: @{req.userId}</div>
+                  <div className="text-[10px] text-slate-400 font-mono">NDID: {req.userId}</div>
                 </div>
                 <span className="text-[10px] text-slate-500">
                   {new Date(req.timestamp).toLocaleString('vi-VN')}

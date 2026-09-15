@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/assets/images/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trung tâm Quản trị - ND Labs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+    <script src="/assets/js/config.js"></script>
+    <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/assets/js/canonical-auth.js"></script>
+    <script src="/assets/js/version.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .sidebar-link.active {
+            background-color: #2563eb;
+            color: #ffffff;
+        }
+        .sidebar-link.active i {
+            color: #ffffff;
+        }
+        .sidebar-link {
+            color: #4b5563;
+        }
+        .sidebar-link:hover:not(.active) {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+
+    <!-- Loading Gate -->
+    <div id="admin-loading" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+        <p class="text-sm font-semibold text-gray-600">Đang kiểm tra quyền hạn quản trị...</p>
+    </div>
+
+    <!-- Denied Screen -->
+    <div id="admin-denied" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-gray-100 p-4">
+        <div class="max-w-md w-full bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
+            <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                <i class="ph-bold ph-shield-warning"></i>
+            </div>
+            <h2 class="text-xl font-bold text-gray-900 mb-2">Truy cập bị từ chối</h2>
+            <p class="text-sm text-gray-600 mb-6" id="denied-message">Bạn không có quyền truy cập khu vực quản trị.</p>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="/" class="flex-1 py-2.5 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-xl text-center transition">Trang chủ</a>
+                <button id="btn-denied-logout" class="flex-1 py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition">Đăng xuất</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin App Shell -->
+    <div id="admin-app" class="hidden flex-1 flex flex-col min-h-screen">
+        <!-- Top Navigation Bar -->
+        <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button id="btn-toggle-sidebar" class="lg:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100" title="Menu">
+                        <i class="ph-bold ph-list text-xl"></i>
+                    </button>
+                    <a href="/admin/dashboard.html" class="flex items-center space-x-3">
+                        <img src="/assets/images/logo.png" alt="ND Labs" class="w-8 h-8 rounded-lg object-contain">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900 tracking-tight">Trung tâm Quản trị</span>
+                    </a>
+                    <span class="hidden sm:inline-block text-xs font-semibold px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full border border-gray-200">ND Labs</span>
+                </div>
+
+                <!-- Admin Profile Bar -->
+                <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-2.5 bg-gray-50 border border-gray-200 py-1.5 px-3 rounded-xl">
+                        <div class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs" id="header-avatar">A</div>
+                        <div class="flex flex-col text-left">
+                            <span class="text-xs font-bold text-gray-800 leading-tight" id="header-ndid">---</span>
+                            <span class="text-[11px] font-mono text-gray-500 leading-tight" id="header-codeid">---</span>
+                        </div>
+                        <span id="header-badge" class="text-[11px] font-bold px-2 py-0.5 rounded-full ml-1">---</span>
+                    </div>
+                    <button id="btn-logout" class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition" title="Đăng xuất">
+                        <i class="ph-bold ph-sign-out text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6">
+            <!-- Sidebar -->
+            <aside id="sidebar" class="w-full lg:w-64 flex-shrink-0">
+                <nav class="bg-white rounded-2xl border border-gray-200 p-3 shadow-sm space-y-1">
+                    <a href="#/overview" class="sidebar-link flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition" data-tab="overview">
+                        <i class="ph-bold ph-squares-four text-lg"></i>
+                        <span>Tổng quan</span>
+                    </a>
+                    <a href="#/users" class="sidebar-link flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition" data-tab="users">
+                        <i class="ph-bold ph-users text-lg"></i>
+                        <span>Người dùng</span>
+                    </a>
+                    <a href="#/logs" class="sidebar-link flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition" data-tab="logs">
+                        <i class="ph-bold ph-clock-counter-clockwise text-lg"></i>
+                        <span>Nhật ký</span>
+                    </a>
+                    <div class="pt-2 pb-1 px-3.5 text-[11px] font-bold uppercase text-gray-400 tracking-wider">Phân hệ</div>
+                    <a href="#/eduspace" class="sidebar-link flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition" data-tab="eduspace">
+                        <i class="ph-bold ph-graduation-cap text-lg"></i>
+                        <span>EduSpace</span>
+                    </a>
+                    <a href="#/lotus-bot" class="sidebar-link flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition" data-tab="lotus-bot">
+                        <i class="ph-bold ph-robot text-lg"></i>
+                        <span>Lotus Bot</span>
+                    </a>
+                    <a href="#/announcements" class="sidebar-link flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition" data-tab="announcements">
+                        <i class="ph-bold ph-megaphone text-lg"></i>
+                        <span>Thông báo</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Main Panels -->
+            <main class="flex-1 min-w-0">
+                <!-- Panel 1: Overview -->
+                <div id="panel-overview" class="tab-panel">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Tổng quan hệ thống</h1>
+                        <p class="text-sm text-gray-500 mt-0.5">Trạng thái vận hành và thông số cốt lõi.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Người dùng</span>
+                                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                                    <i class="ph-bold ph-users"></i>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-extrabold text-gray-900" id="overview-users-count">Đang tải...</div>
+                            <p class="text-xs text-gray-500 mt-1">Đã kích hoạt trên hệ thống</p>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Phiên bản</span>
+                                <div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+                                    <i class="ph-bold ph-tag"></i>
+                                </div>
+                            </div>
+                            <div class="text-lg font-bold font-mono text-purple-700" id="overview-version">ver:1.9.14</div>
+                            <p class="text-xs text-gray-500 mt-1">Bản phát hành chính thức</p>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Xác thực</span>
+                                <div class="w-9 h-9 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-xl">
+                                    <i class="ph-bold ph-shield-check"></i>
+                                </div>
+                            </div>
+                            <div class="text-base font-extrabold text-green-700">Canonical Auth</div>
+                            <p class="text-xs text-gray-500 mt-1">UID = CodeID (Bất biến)</p>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Quyền hạn</span>
+                                <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                                    <i class="ph-bold ph-crown"></i>
+                                </div>
+                            </div>
+                            <div class="text-base font-extrabold text-amber-700" id="overview-role">---</div>
+                            <p class="text-xs text-gray-500 mt-1">Cấp độ tài khoản hiện hành</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links Section -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm mb-6">
+                        <h2 class="text-base font-bold text-gray-900 mb-4">Lối tắt phân hệ</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <a href="/admin/eduspace/" class="flex items-center space-x-3 p-4 rounded-xl border border-gray-200 hover:border-blue-500 hover:shadow-sm transition bg-gray-50">
+                                <i class="ph-bold ph-book-open text-2xl text-blue-600"></i>
+                                <div>
+                                    <h3 class="text-sm font-bold text-gray-900">Soạn thảo đề thi</h3>
+                                    <p class="text-xs text-gray-500">EduSpace Exam Editor</p>
+                                </div>
+                            </a>
+                            <a href="/admin/eduspace/timetable/" class="flex items-center space-x-3 p-4 rounded-xl border border-gray-200 hover:border-indigo-500 hover:shadow-sm transition bg-gray-50">
+                                <i class="ph-bold ph-calendar text-2xl text-indigo-600"></i>
+                                <div>
+                                    <h3 class="text-sm font-bold text-gray-900">Thời khóa biểu</h3>
+                                    <p class="text-xs text-gray-500">Timetable App</p>
+                                </div>
+                            </a>
+                            <a href="/auth/settings/" class="flex items-center space-x-3 p-4 rounded-xl border border-gray-200 hover:border-green-500 hover:shadow-sm transition bg-gray-50">
+                                <i class="ph-bold ph-user-gear text-2xl text-green-600"></i>
+                                <div>
+                                    <h3 class="text-sm font-bold text-gray-900">Cài đặt tài khoản</h3>
+                                    <p class="text-xs text-gray-500">Bảo mật & Thiết bị</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 2: Users Directory -->
+                <div id="panel-users" class="tab-panel">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Danh sách người dùng</h1>
+                            <p class="text-sm text-gray-500 mt-0.5">Phân trang từ máy chủ, bảo toàn dữ liệu chuẩn.</p>
+                        </div>
+                        <button id="btn-refresh-users" class="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl text-sm font-semibold transition shadow-sm self-start">
+                            <i class="ph-bold ph-arrow-clockwise"></i>
+                            <span>Làm mới</span>
+                        </button>
+                    </div>
+
+                    <!-- Search and Filters -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm mb-4 flex flex-col sm:flex-row gap-3">
+                        <div class="flex-1 relative">
+                            <i class="ph-bold ph-magnifying-glass absolute left-3.5 top-3 text-gray-400"></i>
+                            <input type="text" id="users-search-input" placeholder="Lọc theo NDID, Mã tài khoản hoặc Tên..." class="w-full pl-10 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="users-role-filter" class="px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 text-gray-700 font-semibold">
+                                <option value="">Tất cả vai trò</option>
+                                <option value="admin">Quản trị viên</option>
+                                <option value="user">Người dùng</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Users Table -->
+                    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 text-[11px] font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                                        <th class="py-3 px-4">Mã</th>
+                                        <th class="py-3 px-4">NDID</th>
+                                        <th class="py-3 px-4">Tên hiển thị</th>
+                                        <th class="py-3 px-4">Email</th>
+                                        <th class="py-3 px-4">Vai trò</th>
+                                        <th class="py-3 px-4">Cấp quản trị</th>
+                                        <th class="py-3 px-4">Trạng thái</th>
+                                        <th class="py-3 px-4 text-right">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-tbody" class="divide-y divide-gray-100 text-sm">
+                                    <tr>
+                                        <td colspan="8" class="text-center py-8 text-gray-400">Đang tải danh sách người dùng...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Pagination Footer -->
+                        <div class="p-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
+                            <span class="text-xs text-gray-500" id="users-count-info">Hiển thị 0 tài khoản</span>
+                            <button id="btn-load-more-users" class="hidden px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow-sm">
+                                Tải thêm trang tiếp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 3: Audit Logs -->
+                <div id="panel-logs" class="tab-panel">
+                    <div class="mb-6 flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Nhật ký an ninh</h1>
+                            <p class="text-sm text-gray-500 mt-0.5">Lịch sử sự kiện bảo mật và phân quyền hệ thống.</p>
+                        </div>
+                        <button id="btn-refresh-logs" class="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl text-sm font-semibold transition shadow-sm">
+                            <i class="ph-bold ph-arrow-clockwise"></i>
+                            <span>Làm mới</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 text-[11px] font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                                        <th class="py-3 px-4">Thời gian</th>
+                                        <th class="py-3 px-4">Sự kiện</th>
+                                        <th class="py-3 px-4">Thực hiện</th>
+                                        <th class="py-3 px-4">Mục tiêu</th>
+                                        <th class="py-3 px-4">Chi tiết</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="logs-tbody" class="divide-y divide-gray-100 text-sm">
+                                    <tr>
+                                        <td colspan="5" class="text-center py-8 text-gray-400">Đang tải nhật ký kiểm toán...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 4: EduSpace -->
+                <div id="panel-eduspace" class="tab-panel">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Nội dung EduSpace</h1>
+                        <p class="text-sm text-gray-500 mt-0.5">Khảo thí, câu hỏi và thời khóa biểu.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-4">
+                                    <i class="ph-bold ph-file-doc"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">Trình soạn thảo đề thi</h3>
+                                <p class="text-sm text-gray-600 mb-6">Soạn thảo, phân loại câu hỏi trắc nghiệm, chuyển đổi file docx qua Mammoth và đồng bộ đề thi lên Firestore.</p>
+                            </div>
+                            <a href="/admin/eduspace/" class="inline-flex items-center justify-center space-x-2 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition shadow-sm">
+                                <span>Mở trình soạn thảo đề thi</span>
+                                <i class="ph-bold ph-arrow-right"></i>
+                            </a>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mb-4">
+                                    <i class="ph-bold ph-calendar-check"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">Thời khóa biểu học tập</h3>
+                                <p class="text-sm text-gray-600 mb-6">Ứng dụng thời khóa biểu học sinh và giáo viên. Phân hệ được bảo toàn bất biến theo quy chuẩn an toàn dữ liệu.</p>
+                            </div>
+                            <a href="/admin/eduspace/timetable/" class="inline-flex items-center justify-center space-x-2 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition shadow-sm">
+                                <span>Mở ứng dụng Thời khóa biểu</span>
+                                <i class="ph-bold ph-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 5: Lotus Bot -->
+                <div id="panel-lotus-bot" class="tab-panel">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Cấu hình Lotus Bot</h1>
+                            <p class="text-sm text-gray-500 mt-0.5">Đồng bộ trực tiếp qua Realtime Database.</p>
+                        </div>
+                        <a href="/admin/lotus_bot/" class="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl text-sm font-semibold transition shadow-sm self-start">
+                            <span>Mở trang chuyên dụng</span>
+                            <i class="ph-bold ph-arrow-square-out"></i>
+                        </a>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm mb-6">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-4">
+                            <div>
+                                <h3 class="text-base font-bold text-gray-900">Trạng thái Lotus Chat Bot</h3>
+                                <p class="text-xs text-gray-500 mt-0.5">Bật hoặc tắt tính năng tiếp nhận phản hồi tự động</p>
+                            </div>
+                            <span id="lotus-status-badge" class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-bold">Đang kiểm tra...</span>
+                        </div>
+                        <p class="text-xs text-gray-500">Mọi thay đổi cấu hình bot được áp dụng tự động tới tiến trình chạy ngầm qua Realtime Database.</p>
+                    </div>
+                </div>
+
+                <!-- Panel 6: Announcements -->
+                <div id="panel-announcements" class="tab-panel">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Phát thông báo hệ thống</h1>
+                        <p class="text-sm text-gray-500 mt-0.5">Đồng bộ thông báo hiển thị cho toàn bộ người dùng.</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm mb-6">
+                        <form id="form-announcement" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Tiêu đề thông báo</label>
+                                <input type="text" id="announcement-title" required placeholder="Nhập tiêu đề..." class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Nội dung</label>
+                                <textarea id="announcement-body" required rows="3" placeholder="Nhập nội dung thông báo..." class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500"></textarea>
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition shadow-sm">
+                                    Đăng thông báo
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- User Role Modal (Owner Only) -->
+    <div id="modal-role" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50 p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-gray-200">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-900">Chi tiết & Phân quyền</h3>
+                <button id="btn-close-modal" class="text-gray-400 hover:text-gray-600">
+                    <i class="ph-bold ph-x text-xl"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs">
+                <div class="flex justify-between"><span class="text-gray-500">Mã tài khoản:</span><span class="font-mono font-bold text-gray-900" id="modal-codeid">---</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">NDID:</span><span class="font-bold text-gray-900" id="modal-ndid">---</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Tên:</span><span class="font-semibold text-gray-900" id="modal-name">---</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Email:</span><span class="text-gray-900" id="modal-email">---</span></div>
+            </div>
+
+            <!-- Permission Gating Block -->
+            <div id="owner-permission-section">
+                <div class="mb-4">
+                    <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Vai trò</label>
+                    <select id="modal-select-role" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <option value="user">Người dùng (user)</option>
+                        <option value="admin">Quản trị viên (admin)</option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Cấp quản trị</label>
+                    <select id="modal-select-level" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <option value="">Không có (Dành cho user)</option>
+                        <option value="admin">Quản trị viên thường (admin)</option>
+                        <option value="owner">Chủ sở hữu hệ thống (owner)</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-3">
+                    <button id="btn-cancel-modal" class="flex-1 py-2.5 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold rounded-xl transition">Hủy</button>
+                    <button id="btn-save-role" class="flex-1 py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition shadow-sm">Lưu thay đổi</button>
+                </div>
+            </div>
+
+            <!-- Notice for Non-Owner Admins -->
+            <div id="non-owner-notice" class="hidden text-center py-4">
+                <i class="ph-bold ph-lock text-3xl text-gray-400 mb-2"></i>
+                <p class="text-xs text-gray-500">Chỉ Chủ sở hữu hệ thống (Owner) mới có quyền phân quyền hoặc thay đổi vai trò tài khoản.</p>
+                <button id="btn-close-notice" class="mt-4 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-xl transition">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Controller -->
+    <script>
+        (function () {
+            'use strict';
+
+            let currentUser = null;
+            let currentUsersList = [];
+            let nextCursor = null;
+            let currentTargetUser = null;
+
+            // DOM Elements
+            const loadingGate = document.getElementById('admin-loading');
+            const deniedScreen = document.getElementById('admin-denied');
+            const appShell = document.getElementById('admin-app');
+            const deniedMessage = document.getElementById('denied-message');
+
+            const headerAvatar = document.getElementById('header-avatar');
+            const headerNdid = document.getElementById('header-ndid');
+            const headerCodeId = document.getElementById('header-codeid');
+            const headerBadge = document.getElementById('header-badge');
+            const btnLogout = document.getElementById('btn-logout');
+            const btnDeniedLogout = document.getElementById('btn-denied-logout');
+
+            const usersTbody = document.getElementById('users-tbody');
+            const usersCountInfo = document.getElementById('users-count-info');
+            const btnLoadMore = document.getElementById('btn-load-more-users');
+            const btnRefreshUsers = document.getElementById('btn-refresh-users');
+            const searchInput = document.getElementById('users-search-input');
+            const roleFilter = document.getElementById('users-role-filter');
+
+            const logsTbody = document.getElementById('logs-tbody');
+            const btnRefreshLogs = document.getElementById('btn-refresh-logs');
+
+            const modalRole = document.getElementById('modal-role');
+            const modalCodeId = document.getElementById('modal-codeid');
+            const modalNdid = document.getElementById('modal-ndid');
+            const modalName = document.getElementById('modal-name');
+            const modalEmail = document.getElementById('modal-email');
+            const modalSelectRole = document.getElementById('modal-select-role');
+            const modalSelectLevel = document.getElementById('modal-select-level');
+            const ownerSection = document.getElementById('owner-permission-section');
+            const nonOwnerNotice = document.getElementById('non-owner-notice');
+            const btnSaveRole = document.getElementById('btn-save-role');
+            const btnCloseModal = document.getElementById('btn-close-modal');
+            const btnCancelModal = document.getElementById('btn-cancel-modal');
+            const btnCloseNotice = document.getElementById('btn-close-notice');
+
+            // Tab Switching
+            function switchTab(tabId) {
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+
+                const targetPanel = document.getElementById('panel-' + tabId);
+                const targetLink = document.querySelector(`.sidebar-link[data-tab="${tabId}"]`);
+
+                if (targetPanel) targetPanel.classList.add('active');
+                if (targetLink) targetLink.classList.add('active');
+
+                if (tabId === 'users' && currentUsersList.length === 0) {
+                    loadUsers(true);
+                } else if (tabId === 'logs') {
+                    loadAuditLogs();
+                }
+            }
+
+            function handleHashChange() {
+                const hash = window.location.hash.replace('#/', '') || 'overview';
+                switchTab(hash);
+            }
+
+            window.addEventListener('hashchange', handleHashChange);
+
+            // Auth State Listener
+            function initAuth() {
+                if (!window.canonicalAuth) {
+                    setTimeout(initAuth, 100);
+                    return;
+                }
+
+                window.canonicalAuth.onAuthStateChanged(async (authData) => {
+                    const state = typeof authData === 'string' ? authData : (authData?.state || 'unauthenticated');
+                    if (state === 'loading') return;
+
+                    if (state !== 'authenticated') {
+                        loadingGate.classList.add('hidden');
+                        deniedMessage.textContent = 'Bạn cần đăng nhập để truy cập khu vực quản trị.';
+                        deniedScreen.classList.remove('hidden');
+                        deniedScreen.classList.add('flex');
+                        return;
+                    }
+
+                    const profile = (authData && authData.profile) || window.canonicalAuth.getUserProfile() || (window.canonicalAuth.getCurrentProfile && window.canonicalAuth.getCurrentProfile());
+                    if (!profile || profile.role !== 'admin' || profile.status !== 'active') {
+                        loadingGate.classList.add('hidden');
+                        deniedMessage.textContent = 'Tài khoản của bạn không có quyền quản trị viên.';
+                        deniedScreen.classList.remove('hidden');
+                        deniedScreen.classList.add('flex');
+                        return;
+                    }
+
+                    currentUser = profile;
+                    setupHeader(profile);
+                    loadingGate.classList.add('hidden');
+                    deniedScreen.classList.add('hidden');
+                    deniedScreen.classList.remove('flex');
+                    appShell.classList.remove('hidden');
+
+                    handleHashChange();
+                });
+            }
+
+            function setupHeader(profile) {
+                const isOwner = profile.adminLevel === 'owner';
+                // Raw NDID display invariant: strictly raw string, NO '@' prefix
+                headerNdid.textContent = profile.ndid || profile.codeId || 'Admin';
+                headerCodeId.textContent = profile.codeId || '----';
+                headerAvatar.textContent = (profile.ndid || 'A').charAt(0).toUpperCase();
+
+                if (isOwner) {
+                    headerBadge.textContent = 'Chủ sở hữu';
+                    headerBadge.className = 'text-[11px] font-bold px-2 py-0.5 rounded-full ml-1 bg-purple-100 text-purple-700 border border-purple-200';
+                    document.getElementById('overview-role').textContent = 'Chủ sở hữu (Owner)';
+                } else {
+                    headerBadge.textContent = 'Quản trị viên';
+                    headerBadge.className = 'text-[11px] font-bold px-2 py-0.5 rounded-full ml-1 bg-blue-100 text-blue-700 border border-blue-200';
+                    document.getElementById('overview-role').textContent = 'Quản trị viên (Admin)';
+                }
+            }
+
+            // User Directory Loader
+            async function loadUsers(reset = false) {
+                if (reset) {
+                    nextCursor = null;
+                    currentUsersList = [];
+                    usersTbody.innerHTML = '<tr><td colspan="8" class="text-center py-8 text-gray-400">Đang tải danh sách người dùng...</td></tr>';
+                }
+
+                try {
+                    const role = roleFilter.value || null;
+                    const res = await window.canonicalAuth.adminGetUsers({
+                        pageSize: 20,
+                        cursor: nextCursor,
+                        role: role
+                    });
+
+                    if (reset) {
+                        currentUsersList = res.users || [];
+                    } else {
+                        currentUsersList = currentUsersList.concat(res.users || []);
+                    }
+                    nextCursor = res.nextCursor;
+
+                    renderUsersTable(currentUsersList);
+
+                    document.getElementById('overview-users-count').textContent = currentUsersList.length.toString();
+
+                    if (res.hasMore) {
+                        btnLoadMore.classList.remove('hidden');
+                    } else {
+                        btnLoadMore.classList.add('hidden');
+                    }
+                } catch (err) {
+                    usersTbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-red-500 font-semibold">${err.message || 'Lỗi khi tải danh sách người dùng.'}</td></tr>`;
+                }
+            }
+
+            function renderUsersTable(users) {
+                if (!users || users.length === 0) {
+                    usersTbody.innerHTML = '<tr><td colspan="8" class="text-center py-8 text-gray-400">Không tìm thấy tài khoản nào.</td></tr>';
+                    usersCountInfo.textContent = 'Hiển thị 0 tài khoản';
+                    return;
+                }
+
+                const query = (searchInput.value || '').trim().toLowerCase();
+                const filtered = users.filter(u => {
+                    if (!query) return true;
+                    const cId = (u.codeId || '').toLowerCase();
+                    const ndid = (u.ndid || '').toLowerCase();
+                    const name = (u.displayName || '').toLowerCase();
+                    const email = (u.email || '').toLowerCase();
+                    return cId.includes(query) || ndid.includes(query) || name.includes(query) || email.includes(query);
+                });
+
+                usersCountInfo.textContent = `Hiển thị ${filtered.length} tài khoản`;
+
+                usersTbody.innerHTML = filtered.map(u => {
+                    const isOwner = u.adminLevel === 'owner';
+                    const isAdmin = u.role === 'admin';
+                    const roleBadge = isAdmin
+                        ? '<span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-blue-50 text-blue-700 border border-blue-200">Admin</span>'
+                        : '<span class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-gray-100 text-gray-600">User</span>';
+                    const levelBadge = isOwner
+                        ? '<span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-purple-50 text-purple-700 border border-purple-200">Owner</span>'
+                        : (u.adminLevel ? `<span class="px-2 py-0.5 text-[11px] font-medium rounded-full bg-gray-50 text-gray-600">${u.adminLevel}</span>` : '<span class="text-gray-300">-</span>');
+                    const statusBadge = u.status === 'active'
+                        ? '<span class="inline-flex items-center text-xs text-green-700 font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span>Hoạt động</span>'
+                        : `<span class="inline-flex items-center text-xs text-red-600 font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span>${u.status}</span>`;
+
+                    // Raw NDID display: preserve RAW STRING, no '@' prefix
+                    const rawNdid = u.ndid || '-';
+
+                    return `
+                        <tr class="hover:bg-gray-50 transition border-b border-gray-100">
+                            <td class="py-3 px-4 font-mono text-xs font-bold text-gray-900">${u.codeId}</td>
+                            <td class="py-3 px-4 font-semibold text-gray-800">${rawNdid}</td>
+                            <td class="py-3 px-4 text-gray-600">${u.displayName || '-'}</td>
+                            <td class="py-3 px-4 text-xs text-gray-500 font-mono">${u.email || '-'}</td>
+                            <td class="py-3 px-4">${roleBadge}</td>
+                            <td class="py-3 px-4">${levelBadge}</td>
+                            <td class="py-3 px-4">${statusBadge}</td>
+                            <td class="py-3 px-4 text-right">
+                                <button class="btn-user-action px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-lg transition" data-codeid="${u.codeId}">
+                                    Phân quyền
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                // Attach action click listeners
+                document.querySelectorAll('.btn-user-action').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const codeId = btn.dataset.codeid;
+                        const target = currentUsersList.find(u => u.codeId === codeId);
+                        if (target) openRoleModal(target);
+                    });
+                });
+            }
+
+            // Role Modal & Permission Gating
+            function openRoleModal(user) {
+                currentTargetUser = user;
+                modalCodeId.textContent = user.codeId;
+                // Preserve raw NDID string
+                modalNdid.textContent = user.ndid || '-';
+                modalName.textContent = user.displayName || '-';
+                modalEmail.textContent = user.email || '-';
+
+                const isCallerOwner = window.canonicalAuth.isOwner();
+
+                if (isCallerOwner) {
+                    ownerSection.classList.remove('hidden');
+                    nonOwnerNotice.classList.add('hidden');
+                    modalSelectRole.value = user.role || 'user';
+                    modalSelectLevel.value = user.adminLevel || '';
+                } else {
+                    ownerSection.classList.add('hidden');
+                    nonOwnerNotice.classList.remove('hidden');
+                }
+
+                modalRole.classList.remove('hidden');
+            }
+
+            function closeModal() {
+                modalRole.classList.add('hidden');
+                currentTargetUser = null;
+            }
+
+            btnSaveRole.addEventListener('click', async () => {
+                if (!currentTargetUser) return;
+                const newRole = modalSelectRole.value;
+                const newAdminLevel = modalSelectLevel.value || null;
+
+                btnSaveRole.disabled = true;
+                btnSaveRole.textContent = 'Đang lưu...';
+
+                try {
+                    await window.canonicalAuth.updateUserRole({
+                        targetCodeId: currentTargetUser.codeId,
+                        role: newRole,
+                        adminLevel: newAdminLevel
+                    });
+                    closeModal();
+                    alert('Cập nhật quyền hạn thành công!');
+                    loadUsers(true);
+                } catch (err) {
+                    alert('Không thể cập nhật: ' + (err.message || 'Lỗi không xác định'));
+                } finally {
+                    btnSaveRole.disabled = false;
+                    btnSaveRole.textContent = 'Lưu thay đổi';
+                }
+            });
+
+            btnCloseModal.addEventListener('click', closeModal);
+            btnCancelModal.addEventListener('click', closeModal);
+            btnCloseNotice.addEventListener('click', closeModal);
+
+            // Audit Logs Loader (Read-Only)
+            async function loadAuditLogs() {
+                logsTbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-400">Đang tải nhật ký...</td></tr>';
+                try {
+                    const db = window.firebaseFirestore || (window.firebase?.firestore ? window.firebase.firestore() : null);
+                    if (db) {
+                        let docs = [];
+                        if (typeof db.collection === 'function') {
+                            const snap = await db.collection('security_events').orderBy('timestamp', 'desc').limit(25).get();
+                            docs = snap.docs;
+                        } else {
+                            const { collection, getDocs, query, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+                            const q = query(collection(db, 'security_events'), orderBy('timestamp', 'desc'), limit(25));
+                            const snap = await getDocs(q);
+                            docs = snap.docs;
+                        }
+                        if (!docs || docs.length === 0) {
+                            logsTbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-400">Chưa có nhật ký nào được ghi nhận.</td></tr>';
+                            return;
+                        }
+                        logsTbody.innerHTML = docs.map(doc => {
+                            const d = doc.data() || {};
+                            let timeStr = '-';
+                            if (d.timestamp) {
+                                timeStr = d.timestamp.toDate ? d.timestamp.toDate().toLocaleString('vi-VN') : new Date(d.timestamp).toLocaleString('vi-VN');
+                            }
+                            const evType = d.eventType || doc.id;
+                            const actor = d.actorCodeID || '-';
+                            const target = d.targetCodeID || '-';
+                            const details = JSON.stringify(d.details || {}).replace(/["{}]/g, ' ');
+                            return `
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-100 text-xs">
+                                    <td class="py-3 px-4 font-mono text-gray-500 whitespace-nowrap">${timeStr}</td>
+                                    <td class="py-3 px-4 font-bold text-gray-800">${evType}</td>
+                                    <td class="py-3 px-4 font-mono font-semibold text-blue-600">${actor}</td>
+                                    <td class="py-3 px-4 font-mono text-gray-700">${target}</td>
+                                    <td class="py-3 px-4 text-gray-500 truncate max-w-xs">${details}</td>
+                                </tr>
+                            `;
+                        }).join('');
+                    } else {
+                        logsTbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-400">Không thể kết nối cơ sở dữ liệu nhật ký.</td></tr>';
+                    }
+                } catch (err) {
+                    console.error('[Admin] Audit logs query error:', err);
+                    logsTbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400 font-semibold">Chưa có nhật ký hoặc quyền đọc bị giới hạn.</td></tr>`;
+                }
+            }
+
+            // Search & Filter listeners
+            searchInput.addEventListener('input', () => renderUsersTable(currentUsersList));
+            roleFilter.addEventListener('change', () => loadUsers(true));
+            btnRefreshUsers.addEventListener('click', () => loadUsers(true));
+            btnLoadMore.addEventListener('click', () => loadUsers(false));
+            btnRefreshLogs.addEventListener('click', loadAuditLogs);
+
+            // Logout handlers
+            btnLogout.addEventListener('click', async () => {
+                if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                    await window.canonicalAuth.logout();
+                    window.location.href = '/auth/login/';
+                }
+            });
+            btnDeniedLogout.addEventListener('click', async () => {
+                await window.canonicalAuth.logout();
+                window.location.href = '/auth/login/';
+            });
+
+            // Start initialization
+            initAuth();
+        })();
+    </script>
+</body>
+
+</html>

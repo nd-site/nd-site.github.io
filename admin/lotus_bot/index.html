@@ -138,17 +138,6 @@
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
         import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-        const AUTHORIZED_ADMIN_HASHES = [
-            "681bb2d3f8a4e4cedbb0cba5d1763427361b99629bda0357c8c1a5b950f722e0", // nhatdang
-        ];
-
-        async function hashSHA256(text) {
-            const msgUint8 = new TextEncoder().encode(text);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
         async function getFirebaseApp() {
             if (getApps().length > 0) return getApp();
             let attempts = 0;
@@ -351,9 +340,9 @@
                     }
 
                     const userData = userSnap.data();
-                    const ndid = userData.ndid || (user.email || '').split('@')[0] || user.uid;
+                    const ndid = userData.ndid || '—';
 
-                    if (userData.role !== 'admin' && ndid !== 'nhatdang' && ndid !== '@nhatdang' && user.email !== 'nhatdang10.nd@gmail.com') {
+                    if (userData.role !== 'admin') {
                         showAccessDenied("Từ chối truy cập", `Tài khoản "${ndid}" không có quyền Admin.`);
                         return;
                     }

@@ -38,16 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         progressText: document.getElementById('progress-text'),
         streakCounter: document.getElementById('streak-counter'),
 
-        // Chat
-        chatMessages: document.getElementById('chat-messages'),
-        chatInput: document.getElementById('chat-input'),
-        sendChatBtn: document.getElementById('send-chat-btn'),
-        chatImageUpload: document.getElementById('ai-image-upload'),
-        attachmentPreview: document.getElementById('attachment-preview'),
-        vocabSearch: document.getElementById('vocab-search'),
-        aiChatPopup: document.getElementById('ai-chat-popup'),
-        aiFab: document.getElementById('ai-fab'),
-        closeChatBtn: document.getElementById('close-chat-btn')
+        vocabSearch: document.getElementById('vocab-search')
     };
 
     loadData();
@@ -93,18 +84,6 @@ function setupEventListeners() {
     // AI Features (defined in ai.js)
     if (dom.fillAiBtn) dom.fillAiBtn.addEventListener('click', fillDataWithAI);
     if (dom.checkAiBtn) dom.checkAiBtn.addEventListener('click', checkVocabWithAI);
-    if (dom.sendChatBtn) dom.sendChatBtn.addEventListener('click', sendChatMessage);
-    if (dom.chatInput) {
-        dom.chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendChatMessage();
-            }
-        });
-    }
-    if (dom.chatImageUpload) dom.chatImageUpload.addEventListener('change', handleChatImageUpload);
-    if (dom.aiFab) dom.aiFab.onclick = toggleAIChat;
-    if (dom.closeChatBtn) dom.closeChatBtn.onclick = toggleAIChat;
 
     // Search
     if (dom.vocabSearch) dom.vocabSearch.addEventListener('input', () => renderTable(dom.vocabSearch.value));
@@ -374,19 +353,6 @@ function handleImport(event) {
 function toggleApiKey() {
     if (!dom.apiKeyInput) return;
     dom.apiKeyInput.type = dom.apiKeyInput.type === 'password' ? 'text' : 'password';
-}
-
-function toggleAIChat() {
-    if (!dom.aiChatPopup) return;
-    const isHidden = dom.aiChatPopup.classList.contains('hidden');
-    if (isHidden) {
-        dom.aiChatPopup.classList.remove('hidden');
-        dom.aiChatPopup.classList.add('flex');
-        if (dom.chatInput) dom.chatInput.focus();
-    } else {
-        dom.aiChatPopup.classList.add('hidden');
-        dom.aiChatPopup.classList.remove('flex');
-    }
 }
 
 // Language Configuration Helpers

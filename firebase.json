@@ -2,6 +2,9 @@
   "database": {
     "rules": "database.rules.json"
   },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
   "hosting": {
     "site": "ndsite",
     "public": ".",
@@ -40,6 +43,20 @@
       "**/*.dll",
       "**/*.so",
       "**/*.bin"
+    ],
+    "rewrites": [
+      {
+        "source": "/eduspace/timetable/**",
+        "destination": "/eduspace/timetable/index.html"
+      },
+      {
+        "source": "/eduspace/timtable/**",
+        "destination": "/eduspace/timetable/index.html"
+      },
+      {
+        "source": "/admin/eduspace/timetable/**",
+        "destination": "/eduspace/timetable/index.html"
+      }
     ]
   },
   "functions": [

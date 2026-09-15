@@ -14,6 +14,7 @@
     <script src="/assets/js/nd-navbar.js" defer></script>
     <script src="/assets/js/config.js"></script>
     <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/assets/js/canonical-auth.js"></script>
     <script src="/assets/js/cloudflare-storage.js"></script>
     <script src="/font/font.js"></script>
     <style>
@@ -484,9 +485,9 @@
                     <label for="ndid">Chọn NDID (Tên định danh) *</label>
                     <div class="input-container">
                         <i class="ph-duotone ph-fingerprint"></i>
-                        <input type="text" id="ndid" placeholder="VD: dang_2026" autocomplete="off" required>
+                        <input type="text" id="ndid" placeholder="VD: dang2026" autocomplete="off" required>
                     </div>
-                    <span class="ndid-hint">Chỉ dùng chữ (thường/hoa), số và dấu <code>.</code> <code>_</code> <code>-</code>. Không thể đổi sau khi tạo.</span>
+                    <span class="ndid-hint">Chỉ dùng chữ cái, chữ số, dấu gạch dưới và dấu chấm (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, <code>_</code>, <code>.</code>). Không thể đổi sau khi tạo.</span>
                 </div>
 
                 <!-- Fullname (AI Validated) -->
@@ -505,6 +506,19 @@
                     <div class="input-container">
                         <i class="ph-duotone ph-calendar"></i>
                         <input type="date" id="dob" required>
+                    </div>
+                </div>
+
+                <!-- Gender (Mandatory) -->
+                <div class="form-group">
+                    <label for="gender">Giới tính *</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-gender-intersex"></i>
+                        <select id="gender" required style="width: 100%; background: transparent; border: none; font-family: inherit; font-size: 13.5px; font-weight: 700; color: #0f172a; outline: none; padding: 2px 0;">
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                            <option value="Khác">Khác</option>
+                        </select>
                     </div>
                 </div>
 
@@ -810,6 +824,7 @@
                     { label: 'CodeID: ', value: cardData.codeId },
                     { label: 'NDID: ', value: cardData.ndid },
                     { label: 'Ngày, tháng, năm sinh: ', value: cardData.dob },
+                    { label: 'Giới tính: ', value: cardData.gender || 'Nam' },
                     { label: 'Quốc tịch: ', value: countryInfo.name, isCountry: true },
                     { label: 'Email: ', value: cardData.email }
                 ];
@@ -873,7 +888,7 @@
             getAuth, createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import {
-            getFirestore, doc, getDoc, setDoc, serverTimestamp
+            getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         let app = getApps().length > 0 ? getApp() : null;
@@ -948,10 +963,11 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const ndid = document.getElementById('ndid').value.trim().toLowerCase();
+            const ndid = document.getElementById('ndid').value.trim();
             const fullname = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim();
             const dob = document.getElementById('dob').value;
+            const gender = document.getElementById('gender').value;
             const nationality = document.getElementById('nationality').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
@@ -962,11 +978,14 @@
             if (password.length < 6) {
                 return alert("Mật khẩu phải từ 6 ký tự trở lên!");
             }
-            if (!/^@?[a-zA-Z0-9._-]+$/.test(ndid)) {
-                return alert("NDID chỉ được chứa chữ cái, số và ký tự . _ -");
+            if (!/^[a-zA-Z0-9_.]+$/.test(ndid)) {
+                return alert("NDID chỉ được chứa chữ cái, số, dấu gạch dưới và dấu chấm (a-z, A-Z, 0-9, _, .)");
             }
             if (!dob) {
                 return alert("Vui lòng chọn ngày, tháng, năm sinh (Bắt buộc).");
+            }
+            if (!gender) {
+                return alert("Vui lòng chọn giới tính (Bắt buộc).");
             }
 
             // AI Name Moderation Validation
@@ -975,13 +994,10 @@
                 return alert(nameCheck.reason);
             }
 
-            if (!auth && window.firebaseAuth) auth = window.firebaseAuth;
-            if (!db && window.firebaseFirestore) db = window.firebaseFirestore;
-
-            if (!auth || !db) {
+            if (!window.canonicalAuth) {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `<span>Khởi tạo NDID</span> <i class="ph-bold ph-sparkle"></i>`;
-                return alert("Hệ thống đang kết nối Firebase, vui lòng thử lại sau 1-2 giây.");
+                return alert("Hệ thống xác thực đang khởi động, vui lòng thử lại sau giây lát.");
             }
 
             try {
@@ -993,76 +1009,36 @@
                     } catch (_) {}
                 }
 
-                // 2. Create Firebase Auth user first (this authenticates the user session for Firestore rules)
-                const cleanNdid = ndid.startsWith('@') ? ndid.substring(1) : ndid;
-                const authEmail = `${cleanNdid}@ndsite.web.app`;
-                let userCred = null;
-                try {
-                    userCred = await createUserWithEmailAndPassword(auth, authEmail, password);
-                } catch (authErr) {
-                    if (authErr.code === 'auth/email-already-in-use') {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = `<span>Khởi tạo NDID</span> <i class="ph-bold ph-sparkle"></i>`;
-                        return alert(`NDID "${ndid}" đã có người đăng ký. Vui lòng chọn NDID khác.`);
-                    }
-                    throw authErr;
-                }
-
-                const uid = userCred.user.uid;
-
-                await updateProfile(userCred.user, {
+                // 2. Canonical Registration via Backend (Phase 01-C3)
+                // Allocates CodeID, hashes password with bcrypt-v1, establishes UID === CodeID
+                const regResult = await window.canonicalAuth.register({
+                    ndid,
+                    password,
+                    email: email || null,
+                    name: fullname,
                     displayName: fullname,
-                    photoURL: photoURL
                 });
 
-                // 3. Generate CodeID (Admin gets 00000000)
-                let codeId = '';
-                if (ndid === 'nhatdang' || ndid === '@nhatdang' || email === 'nhatdang10.nd@gmail.com') {
-                    codeId = '00000000';
-                } else {
-                    let attempts = 0;
-                    while (!codeId && attempts < 10) {
-                        attempts++;
-                        const candidate = Math.floor(10000000 + Math.random() * 90000000).toString();
-                        try {
-                            const cSnap = await getDoc(doc(db, 'code_ids', candidate));
-                            if (!cSnap.exists()) {
-                                codeId = candidate;
-                            }
-                        } catch (_) {
-                            codeId = candidate;
-                        }
-                    }
-                }
+                const codeId = regResult.codeId;
+                const uid = codeId;
 
                 // Format DOB for display
                 const dobParts = dob.split('-');
                 const dobFormatted = `${dobParts[2]}/${dobParts[1]}/${dobParts[0]}`;
 
-                // 4. Save Firestore Profile & NDID
-                await setDoc(doc(db, 'users', uid), {
-                    ndid: ndid,
-                    codeId: codeId,
-                    fullname: fullname,
-                    dob: dob,
-                    nationality: nationality,
-                    recoveryEmail: email,
-                    googleEmail: googleUserData?.email || null,
-                    registeredPassword: password,
-                    photoURL: photoURL,
-                    role: (ndid === 'nhatdang' || ndid === '@nhatdang') ? 'admin' : 'member',
-                    createdAt: serverTimestamp(),
-                    updatedAt: serverTimestamp()
-                });
-
+                // 3. Update optional extended profile attributes in users/{CodeID}
                 try {
-                    await setDoc(doc(db, 'ndids', ndid), { uid: uid, createdAt: serverTimestamp() });
-                } catch (_) {}
-
-                if (codeId) {
-                    try {
-                        await setDoc(doc(db, 'code_ids', codeId), { uid: uid, ndid: ndid, createdAt: serverTimestamp() });
-                    } catch (_) {}
+                    if (db) {
+                        await updateDoc(doc(db, 'users', codeId), {
+                            dob: dob,
+                            gender: gender,
+                            nationality: nationality,
+                            photoURL: photoURL,
+                            updatedAt: serverTimestamp(),
+                        });
+                    }
+                } catch (profErr) {
+                    console.warn("Could not save additional profile fields:", profErr);
                 }
 
                 // Save session in localStorage & NDAccounts
@@ -1074,9 +1050,10 @@
                     fullname: fullname,
                     photoURL: photoURL,
                     dob: dob,
+                    gender: gender,
                     nationality: nationality,
                     email: email,
-                    role: (ndid === 'nhatdang' || ndid === '@nhatdang') ? 'admin' : 'member',
+                    role: 'member',
                     eduRole: 'student'
                 };
 
@@ -1093,6 +1070,7 @@
                     codeId,
                     ndid,
                     dob: dobFormatted,
+                    gender,
                     nationality,
                     email,
                     password,
@@ -1121,7 +1099,8 @@
                 document.getElementById('cardid-modal').classList.remove('hidden');
 
             } catch (err) {
-                alert("Lỗi tạo tài khoản: " + err.message);
+                const message = window.canonicalAuth ? window.canonicalAuth.mapError(err) : err.message;
+                alert("Lỗi tạo tài khoản: " + message);
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `<span>Khởi tạo NDID</span> <i class="ph-bold ph-sparkle"></i>`;
             }

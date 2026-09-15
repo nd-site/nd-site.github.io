@@ -14,7 +14,7 @@
  */
 
 (function () {
-  // DANH SÁCH CÁC THÔNG BÁO CHẠY NGANG (Dễ dàng thêm/sửa/xóa ở đây)
+  // THÔNG BÁO CHẠY NGANG (Dễ dàng thêm/sửa/xóa ở đây)
   const ANNOUNCEMENTS = [
     "EduSpace by ND Labs vừa thêm vào hệ thống các bài thi thử TN THPT QG năm 2026. <a href='/eduspace/thptqg/2026/index.html' class='nd-ticker-link'>Trải nghiệm ngay tại đây!</a>"
   ]

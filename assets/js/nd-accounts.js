@@ -129,27 +129,57 @@
   }
 
   // Đăng xuất một tài khoản cụ thể theo index
-  function removeAccount(index) {
+  async function removeAccount(index) {
     let accounts = getAllAccounts();
     if (index >= 0 && index < accounts.length) {
       accounts.splice(index, 1);
       localStorage.setItem('nd_accounts', JSON.stringify(accounts));
+      
+      // Đăng xuất Firebase Auth để tránh tự động nhận diện lại tài khoản cũ
+      try {
+        if (window.firebaseAuth) {
+          const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+          await signOut(window.firebaseAuth);
+        }
+      } catch (_) {}
+
       if (accounts.length === 0) {
+        localStorage.removeItem('nd_accounts');
         localStorage.removeItem('nd_user');
         localStorage.removeItem('nd_active_index');
+        try { sessionStorage.clear(); } catch (_) {}
         window.location.href = '/auth/login/';
       } else {
-        const nextIdx = Math.max(0, index - 1);
-        switchAccount(nextIdx);
+        const nextIdx = Math.max(0, Math.min(index, accounts.length - 1));
+        localStorage.setItem('nd_active_index', nextIdx.toString());
+        localStorage.setItem('nd_user', JSON.stringify(accounts[nextIdx]));
+
+        const currentUrl = new URL(window.location.href);
+        if (nextIdx === 0) {
+          currentUrl.searchParams.delete('u');
+        } else {
+          currentUrl.searchParams.set('u', nextIdx.toString());
+        }
+        window.location.href = currentUrl.toString();
       }
     }
   }
 
   // Đăng xuất toàn bộ tài khoản
-  function removeAllAccounts() {
+  async function removeAllAccounts() {
     localStorage.removeItem('nd_accounts');
     localStorage.removeItem('nd_user');
     localStorage.removeItem('nd_active_index');
+    try { sessionStorage.clear(); } catch (_) {}
+
+    // Đăng xuất Firebase Auth
+    try {
+      if (window.firebaseAuth) {
+        const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+        await signOut(window.firebaseAuth);
+      }
+    } catch (_) {}
+
     window.location.href = '/auth/login/';
   }
 

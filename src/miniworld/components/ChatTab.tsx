@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useFirebase } from '../hooks/useFirebase';
 import { ApprovalManagementModal } from './ApprovalManagementModal';
 
@@ -11,6 +11,8 @@ interface Question {
 
 export const ChatTab = ({ mapId }: { mapId: string }) => {
   const { db, user, isAdmin, sessionUser } = useFirebase();
+  const currentUid = user?.uid || sessionUser?.uid || sessionUser?.ndid;
+
   const [rooms, setRooms] = useState<any[]>([]);
   const [activeRoom, setActiveRoom] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -52,38 +54,64 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
     fetchOrgs();
   }, [db, mapId]);
 
-  // Fetch Rooms
+  // Fetch Rooms & Auto-seed default chat if empty
   useEffect(() => {
     if (!db || !mapId) return;
     const fetchRooms = async () => {
-      const { ref, onValue } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
-      onValue(ref(db, `mw_chats/${mapId}`), (snap: any) => {
+      const { ref, onValue, set } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
+      onValue(ref(db, `mw_chats/${mapId}`), async (snap: any) => {
         if (snap.exists()) {
           const data = snap.val();
           const list = Object.keys(data).map(k => ({ id: k, ...data[k] }));
           setRooms(list);
 
-          // Check invite query param
+          // Check invite query param or auto-select active room
           const params = new URLSearchParams(window.location.search);
-          const joinChatId = params.get('joinChat');
+          const joinChatId = params.get('joinChat') || params.get('chat');
+          
           if (joinChatId) {
             const target = list.find(r => r.id === joinChatId);
             if (target) {
-              const isMember = isAdmin || (target.members && user?.uid && target.members[user.uid]);
-              if (!isMember) {
+              const isMember = isAdmin || (target.members && currentUid && target.members[currentUid]);
+              if (!isMember && target.requireApproval) {
                 setJoiningRoom(target);
               } else {
                 setActiveRoom(target);
               }
+            } else if (list.length > 0) {
+              setActiveRoom(prev => prev || list[0]);
             }
+          } else {
+            setActiveRoom(prev => {
+              if (prev) {
+                const refreshed = list.find(r => r.id === prev.id);
+                return refreshed || list[0];
+              }
+              return list[0];
+            });
           }
         } else {
-          setRooms([]);
+          // If no rooms exist, auto-create default map room
+          const defaultRoom = {
+            id: 'default_chat',
+            name: `Phòng Chat Bản Đồ`,
+            description: 'Phòng trò chuyện tự động dành cho toàn bộ người chơi trong bản đồ.',
+            type: 'map',
+            isPublic: true,
+            requireApproval: false,
+            createdBy: currentUid || 'system',
+            createdAt: Date.now()
+          };
+          try {
+            await set(ref(db, `mw_chats/${mapId}/default_chat`), defaultRoom);
+            setRooms([defaultRoom]);
+            setActiveRoom(defaultRoom);
+          } catch (_) {}
         }
       });
     };
     fetchRooms();
-  }, [db, mapId, user, isAdmin]);
+  }, [db, mapId, currentUid, isAdmin]);
 
   // Fetch Messages for active room
   useEffect(() => {
@@ -105,12 +133,12 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
 
   const isRoomLeader = useMemo(() => {
     if (isAdmin) return true;
-    if (!activeRoom || !user) return false;
-    if (activeRoom.createdBy === user.uid) return true;
-    const memberObj = activeRoom.members ? activeRoom.members[user.uid] : null;
+    if (!activeRoom || !currentUid) return false;
+    if (activeRoom.createdBy === currentUid) return true;
+    const memberObj = activeRoom.members ? activeRoom.members[currentUid] : null;
     if (memberObj && (memberObj.role === 'owner' || memberObj.role === 'leader' || memberObj.role === 'co_owner' || memberObj.role === 'co_leader')) return true;
     return false;
-  }, [activeRoom, user, isAdmin]);
+  }, [activeRoom, currentUid, isAdmin]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -165,7 +193,7 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
       
       const payload: any = {
         text: newMessage.trim(),
-        senderId: user?.uid || 'guest',
+        senderId: currentUid || 'guest',
         senderName: sessionUser?.displayName || user?.displayName || user?.email?.split('@')[0] || 'ND Member',
         isLeader: isRoomLeader,
         timestamp: Date.now()
@@ -183,22 +211,6 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
     }
   };
 
-  const handleAddQuestion = () => {
-    const qId = Date.now().toString();
-    setRoomForm({
-      ...roomForm,
-      questions: [
-        ...roomForm.questions,
-        {
-          id: qId,
-          type: 'single',
-          title: '',
-          options: ['Lựa chọn 1', 'Lựa chọn 2']
-        }
-      ]
-    });
-  };
-
   const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!roomForm.name || !db) return;
@@ -211,10 +223,10 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
       const payload = {
         ...roomForm,
         id: roomId,
-        createdBy: user?.uid || 'anonymous',
+        createdBy: currentUid || 'anonymous',
         createdAt: Date.now(),
         members: {
-          [user?.uid || 'anonymous']: {
+          [currentUid || 'anonymous']: {
             role: 'owner',
             name: sessionUser?.displayName || user?.displayName || 'Chủ phòng',
             joinedAt: Date.now()
@@ -240,66 +252,32 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
     }
   };
 
-  const handleSubmitJoinRequest = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!db || !joiningRoom) return;
-
-    try {
-      const { ref, set } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
-      const uid = user?.uid || 'anonymous';
-
-      if (joiningRoom.requireApproval) {
-        const reqRef = ref(db, `mw_chats/${mapId}/${joiningRoom.id}/requests/${uid}`);
-        await set(reqRef, {
-          userId: uid,
-          name: sessionUser?.displayName || user?.displayName || 'Người dùng',
-          answers: userAnswers,
-          timestamp: Date.now(),
-          status: 'pending'
-        });
-        alert('Đã gửi yêu cầu tham gia kèm câu trả lời! Vui lòng chờ chủ phòng duyệt.');
-      } else {
-        const memberRef = ref(db, `mw_chats/${mapId}/${joiningRoom.id}/members/${uid}`);
-        await set(memberRef, {
-          role: 'member',
-          name: sessionUser?.displayName || user?.displayName || 'Thành viên',
-          joinedAt: Date.now()
-        });
-        alert('Đã tham gia phòng chat thành công!');
-        setActiveRoom(joiningRoom);
-      }
-      setJoiningRoom(null);
-    } catch (e: any) {
-      alert('Lỗi: ' + e.message);
-    }
-  };
-
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-180px)] gap-6">
+    <div className="flex flex-col lg:flex-row h-full min-h-[500px] gap-4 lg:gap-6 overflow-hidden">
       {/* Sidebar - Room List */}
-      <div className="w-full lg:w-1/3 glass rounded-3xl p-5 flex flex-col border border-slate-200/90 shadow-md bg-white">
-        <div className="flex justify-between items-center mb-4 px-2">
+      <div className="w-full lg:w-1/3 glass rounded-3xl p-4 md:p-5 flex flex-col border border-slate-200/90 shadow-md bg-white min-h-[220px] lg:min-h-0">
+        <div className="flex justify-between items-center mb-3 px-1">
           <div>
-            <h2 className="text-base font-black text-slate-800 flex items-center gap-2">
+            <h2 className="text-sm md:text-base font-black text-slate-800 flex items-center gap-1.5">
               <span>💬</span> Phòng Trò Chuyện
             </h2>
-            <p className="text-[11px] text-slate-400 font-medium">Phòng Map, Tổ chức & Nhóm riêng</p>
+            <p className="text-[10px] text-slate-400 font-medium">Bản đồ, Tổ chức & Nhóm</p>
           </div>
           
           <button 
             onClick={() => setShowCreateModal(true)} 
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-md shadow-blue-500/20 active:scale-95 flex items-center gap-1 uppercase tracking-wider"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] px-3 py-1.5 rounded-xl transition-all shadow-md shadow-blue-500/20 active:scale-95 flex items-center gap-1 uppercase tracking-wider"
           >
             <span>+</span> Tạo phòng
           </button>
         </div>
         
-        <div className="flex-1 overflow-y-auto space-y-2.5 custom-scrollbar pr-1">
+        <div className="flex-1 overflow-y-auto space-y-2 custom-scrollbar pr-1">
           {rooms.map(room => (
             <div 
               key={room.id} 
               onClick={() => setActiveRoom(room)}
-              className={`p-3.5 rounded-2xl cursor-pointer transition-all border ${activeRoom?.id === room.id ? 'bg-blue-50 border-blue-400 text-blue-900 shadow-md scale-[1.01]' : 'bg-slate-50/70 hover:bg-slate-50 border-slate-200 text-slate-700'}`}
+              className={`p-3 rounded-2xl cursor-pointer transition-all border ${activeRoom?.id === room.id ? 'bg-blue-50 border-blue-400 text-blue-900 shadow-md scale-[1.01]' : 'bg-slate-50/70 hover:bg-slate-50 border-slate-200 text-slate-700'}`}
             >
               <div className="flex justify-between items-start">
                 <h3 className="font-bold text-xs truncate max-w-[70%]">{room.name}</h3>
@@ -319,38 +297,27 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
             </div>
           ))}
           {rooms.length === 0 && (
-            <div className="text-slate-400 text-center text-xs py-12">
-              Chưa có phòng chat nào. Hãy tạo phòng mới!
+            <div className="text-slate-400 text-center text-xs py-8">
+              Đang tải danh sách phòng trò chuyện...
             </div>
           )}
         </div>
       </div>
 
       {/* Main Chat Area */}
-      <div className="w-full lg:w-2/3 glass rounded-3xl flex flex-col overflow-hidden border border-slate-200/90 shadow-md bg-white">
+      <div className="w-full lg:w-2/3 glass rounded-3xl flex flex-col overflow-hidden border border-slate-200/90 shadow-md bg-white flex-1 min-h-[350px] lg:min-h-0">
         {activeRoom ? (
           <>
             {/* Header */}
-            <div className="p-4 border-b border-slate-100 flex flex-wrap justify-between items-center bg-slate-50/80 gap-2">
+            <div className="p-3.5 border-b border-slate-100 flex flex-wrap justify-between items-center bg-slate-50/80 gap-2">
               <div>
-                <h3 className="text-base font-black text-slate-800 flex items-center gap-2">
+                <h3 className="text-sm md:text-base font-black text-slate-800 flex items-center gap-1.5">
                   <span>💬</span> {activeRoom.name}
                 </h3>
-                <div className="text-[11px] text-slate-500 mt-0.5 flex flex-wrap items-center gap-2">
-                  <span>{Object.keys(activeRoom.members || {}).length} thành viên</span>
+                <div className="text-[10px] text-slate-500 mt-0.5 flex flex-wrap items-center gap-2">
+                  <span>👥 {Object.keys(activeRoom.members || {}).length} thành viên</span>
                   <span>•</span>
-                  <span>Link mời:</span>
-                  <span 
-                    onClick={() => {
-                      const url = `${window.location.origin}/games/miniworld.html?map=${mapId}&joinChat=${activeRoom.id}`;
-                      navigator.clipboard.writeText(url);
-                      alert('Đã copy link mời vào clipboard!');
-                    }}
-                    title="Click để copy link"
-                    className="text-blue-600 hover:underline select-all cursor-pointer font-mono bg-blue-100/70 px-2 py-0.5 rounded-lg border border-blue-200 text-[10px]"
-                  >
-                    /games/miniworld.html?map={mapId}&joinChat={activeRoom.id}
-                  </span>
+                  <span>Mã: <strong className="font-mono text-blue-600">{activeRoom.id}</strong></span>
                 </div>
               </div>
 
@@ -371,9 +338,9 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
             </div>
             
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3.5 custom-scrollbar bg-slate-50/40">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar bg-slate-50/30">
               {messages.map(msg => {
-                const isMine = msg.senderId === user?.uid;
+                const isMine = msg.senderId === currentUid;
                 return (
                   <div key={msg.id} className={`flex flex-col ${isMine ? 'items-end' : 'items-start'}`}>
                     <span className="text-[10px] text-slate-400 mb-1 font-semibold flex items-center gap-1.5">
@@ -383,7 +350,7 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
                         {new Date(msg.timestamp).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </span>
-                    <div className={`px-4 py-2.5 rounded-2xl max-w-[80%] text-xs leading-relaxed break-words shadow-sm ${isMine ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-tr-sm' : 'bg-white border border-slate-200 text-slate-800 rounded-tl-sm'}`}>
+                    <div className={`px-4 py-2.5 rounded-2xl max-w-[85%] text-xs leading-relaxed break-words shadow-sm ${isMine ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-tr-sm' : 'bg-white border border-slate-200 text-slate-800 rounded-tl-sm'}`}>
                       {msg.text && <div>{msg.text}</div>}
                       {msg.file && (
                         <div className="mt-2 pt-1">
@@ -420,14 +387,14 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
                 );
               })}
               {messages.length === 0 && (
-                <div className="text-slate-400 text-center text-xs py-24">
+                <div className="text-slate-400 text-center text-xs py-16">
                   Chưa có tin nhắn nào trong phòng này. Hãy gửi tin nhắn đầu tiên!
                 </div>
               )}
             </div>
 
             {/* Input Bar */}
-            <div className="p-3.5 bg-white border-t border-slate-100">
+            <div className="p-3 bg-white border-t border-slate-100">
               {attachedFile && (
                 <div className="mb-2 p-2 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2 truncate">
@@ -446,7 +413,7 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
               )}
 
               <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-                <label className="p-2.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl cursor-pointer transition-colors" title="Đính kèm tệp tin">
+                <label className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl cursor-pointer transition-colors" title="Đính kèm tệp tin">
                   <span>📎</span>
                   <input
                     type="file"
@@ -462,26 +429,26 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
                   onChange={e => setNewMessage(e.target.value)}
                   placeholder={activeRoom.onlyLeadersCanChat && !isRoomLeader ? "Phòng đang ở chế độ chỉ Trưởng / Phó phòng nhắn tin..." : "Nhập tin nhắn của bạn..."} 
                   disabled={activeRoom.onlyLeadersCanChat && !isRoomLeader}
-                  className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white transition-all shadow-inner disabled:opacity-50"
+                  className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white transition-all disabled:opacity-50"
                 />
                 <button 
                   type="submit" 
                   disabled={(activeRoom.onlyLeadersCanChat && !isRoomLeader) || isUploadingFile}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-2.5 rounded-2xl transition-all shadow-md shadow-blue-500/20 active:scale-95 text-xs uppercase tracking-wider disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-black px-5 py-2 rounded-2xl transition-all shadow-md shadow-blue-500/20 active:scale-95 text-xs uppercase tracking-wider disabled:opacity-50"
                 >
-                  {isUploadingFile ? 'Đang tải...' : 'Gửi'}
+                  {isUploadingFile ? '...' : 'Gửi'}
                 </button>
               </form>
             </div>
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center text-slate-400 p-8 text-center bg-white">
-            <div className="w-16 h-16 bg-blue-50 rounded-3xl flex items-center justify-center text-3xl mb-4 border border-blue-100">
+            <div className="w-14 h-14 bg-blue-50 rounded-3xl flex items-center justify-center text-3xl mb-3 border border-blue-100">
               💬
             </div>
-            <h4 className="text-slate-800 font-bold text-sm mb-1">Chọn một phòng chat</h4>
+            <h4 className="text-slate-800 font-bold text-sm mb-1">Chọn phòng chat để bắt đầu</h4>
             <p className="text-xs text-slate-500 max-w-sm">
-              Chọn phòng từ danh sách bên trái hoặc tạo phòng mới để bắt đầu trò chuyện real-time với các người chơi.
+              Chọn một phòng trò chuyện từ danh sách bên trái hoặc khởi tạo phòng mới.
             </p>
           </div>
         )}
@@ -496,252 +463,65 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
               <button onClick={() => setShowCreateModal(false)} className="p-1 text-slate-400 hover:text-slate-700">✕</button>
             </div>
 
-            <form onSubmit={handleCreateRoom} className="space-y-4 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+            <form onSubmit={handleCreateRoom} className="space-y-4 flex-1 overflow-y-auto pr-1 custom-scrollbar text-xs">
               <div>
-                <label className="block text-xs font-bold text-slate-600 mb-1">Tên phòng chat *</label>
-                <input 
-                  required 
-                  type="text" 
-                  value={roomForm.name} 
-                  onChange={e => setRoomForm({...roomForm, name: e.target.value})} 
-                  placeholder="vd: Phòng Thảo Luận Map, Bang Hội..." 
-                  className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-blue-500" 
+                <label className="block font-bold text-slate-700 mb-1">Tên phòng chat *</label>
+                <input
+                  type="text"
+                  required
+                  value={roomForm.name}
+                  onChange={e => setRoomForm({ ...roomForm, name: e.target.value })}
+                  placeholder="vd: Phòng Thảo Luận Xây Thành Phố"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none focus:border-blue-500 font-bold"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-600 mb-1">Mô tả phòng chat</label>
-                <input 
-                  type="text" 
-                  value={roomForm.description} 
-                  onChange={e => setRoomForm({...roomForm, description: e.target.value})} 
-                  placeholder="Giới thiệu về mục đích trò chuyện..." 
-                  className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-blue-500" 
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Cấp độ phòng</label>
-                  <select 
-                    value={roomForm.type} 
-                    onChange={e => setRoomForm({...roomForm, type: e.target.value as any})} 
-                    className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:outline-none"
-                  >
-                    <option value="map">🗺️ Toàn Map</option>
-                    <option value="org">🏢 Tổ chức</option>
-                    <option value="custom">👥 Nhóm nhỏ riêng</option>
-                  </select>
-                </div>
-
-                {roomForm.type === 'org' && (
-                  <div>
-                    <label className="block text-xs font-bold text-slate-600 mb-1">Chọn tổ chức</label>
-                    <select 
-                      value={roomForm.orgId} 
-                      onChange={e => setRoomForm({...roomForm, orgId: e.target.value})} 
-                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:outline-none"
-                    >
-                      <option value="">-- Chọn tổ chức --</option>
-                      {orgs.map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
-                    </select>
-                  </div>
-                )}
+                <label className="block font-bold text-slate-700 mb-1">Mô tả phòng</label>
+                <textarea
+                  value={roomForm.description}
+                  onChange={e => setRoomForm({ ...roomForm, description: e.target.value })}
+                  placeholder="Mục đích phòng trò chuyện..."
+                  rows={2}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 focus:outline-none focus:border-blue-500"
+                ></textarea>
               </div>
 
               <div className="flex flex-wrap gap-4 pt-1">
-                <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    checked={roomForm.isPublic} 
-                    onChange={e => setRoomForm({...roomForm, isPublic: e.target.checked})} 
-                    className="rounded text-blue-600" 
+                <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={roomForm.isPublic}
+                    onChange={e => setRoomForm({ ...roomForm, isPublic: e.target.checked })}
+                    className="rounded text-blue-600"
                   />
-                  Phòng công khai
+                  Công khai phòng
                 </label>
 
-                <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    checked={roomForm.requireApproval} 
-                    onChange={e => setRoomForm({...roomForm, requireApproval: e.target.checked})} 
-                    className="rounded text-blue-600" 
-                  />
-                  Cần duyệt câu hỏi khi vào
-                </label>
-
-                <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    checked={roomForm.onlyLeadersCanChat} 
-                    onChange={e => setRoomForm({...roomForm, onlyLeadersCanChat: e.target.checked})} 
-                    className="rounded text-blue-600" 
+                <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={roomForm.onlyLeadersCanChat}
+                    onChange={e => setRoomForm({ ...roomForm, onlyLeadersCanChat: e.target.checked })}
+                    className="rounded text-blue-600"
                   />
                   Chỉ Trưởng / Phó được nhắn tin
                 </label>
               </div>
 
-              {/* Questions Setup if Require Approval */}
-              {roomForm.requireApproval && (
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold text-slate-800">Bộ câu hỏi duyệt thành viên</span>
-                    <button 
-                      type="button" 
-                      onClick={handleAddQuestion} 
-                      className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-xl font-bold hover:bg-blue-200"
-                    >
-                      + Thêm câu hỏi
-                    </button>
-                  </div>
-
-                  {roomForm.questions.map((q, qIdx) => (
-                    <div key={q.id} className="bg-white p-3.5 rounded-2xl border border-slate-200 space-y-2">
-                      <div className="flex gap-2">
-                        <input 
-                          type="text" 
-                          placeholder={`Câu hỏi ${qIdx + 1}...`} 
-                          value={q.title} 
-                          onChange={e => {
-                            const newQ = [...roomForm.questions];
-                            newQ[qIdx].title = e.target.value;
-                            setRoomForm({ ...roomForm, questions: newQ });
-                          }}
-                          className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800"
-                        />
-                        <select 
-                          value={q.type} 
-                          onChange={e => {
-                            const newQ = [...roomForm.questions];
-                            newQ[qIdx].type = e.target.value as any;
-                            setRoomForm({ ...roomForm, questions: newQ });
-                          }}
-                          className="bg-slate-50 border border-slate-200 rounded-xl px-2 py-1.5 text-[11px] text-slate-800"
-                        >
-                          <option value="single">1 Lựa chọn</option>
-                          <option value="multiple">Nhiều lựa chọn</option>
-                          <option value="text">Tự trả lời</option>
-                        </select>
-                      </div>
-
-                      {q.type !== 'text' && (
-                        <div className="space-y-1.5 pl-2">
-                          {q.options?.map((opt, oIdx) => (
-                            <input 
-                              key={oIdx} 
-                              type="text" 
-                              value={opt} 
-                              onChange={e => {
-                                const newQ = [...roomForm.questions];
-                                newQ[qIdx].options![oIdx] = e.target.value;
-                                setRoomForm({ ...roomForm, questions: newQ });
-                              }}
-                              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-[11px] text-slate-700"
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              <button 
-                type="submit" 
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider shadow-lg shadow-blue-500/20"
-              >
-                Xác Nhận Tạo Phòng
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Answer Questions to Join Modal */}
-      {joiningRoom && (
-        <div className="fixed inset-0 z-[1000] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="glass-modal max-w-md w-full rounded-3xl p-6 border border-slate-200 shadow-2xl bg-white">
-            <h3 className="text-base font-black text-slate-800 mb-1">Tham gia phòng: {joiningRoom.name}</h3>
-            <p className="text-xs text-slate-500 mb-4">
-              {joiningRoom.requireApproval ? 'Phòng này yêu cầu trả lời câu hỏi xét duyệt:' : 'Nhấn xác nhận để tham gia ngay.'}
-            </p>
-
-            <form onSubmit={handleSubmitJoinRequest} className="space-y-4">
-              {joiningRoom.questions?.map((q: Question, idx: number) => (
-                <div key={q.id} className="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2">
-                  <label className="block text-xs font-bold text-slate-800">
-                    {idx + 1}. {q.title}
-                  </label>
-
-                  {q.type === 'text' && (
-                    <textarea 
-                      required 
-                      value={userAnswers[q.id] || ''} 
-                      onChange={e => setUserAnswers({ ...userAnswers, [q.id]: e.target.value })}
-                      placeholder="Nhập câu trả lời của bạn..." 
-                      className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs text-slate-800 h-16 focus:outline-none focus:border-blue-500"
-                    ></textarea>
-                  )}
-
-                  {q.type === 'single' && (
-                    <div className="space-y-1.5">
-                      {q.options?.map((opt, optIdx) => (
-                        <label key={optIdx} className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
-                          <input 
-                            type="radio" 
-                            name={`q_${q.id}`} 
-                            value={opt} 
-                            checked={userAnswers[q.id] === opt} 
-                            onChange={() => setUserAnswers({ ...userAnswers, [q.id]: opt })}
-                            required
-                            className="text-blue-600" 
-                          />
-                          {opt}
-                        </label>
-                      ))}
-                    </div>
-                  )}
-
-                  {q.type === 'multiple' && (
-                    <div className="space-y-1.5">
-                      {q.options?.map((opt, optIdx) => {
-                        const currentArr: string[] = userAnswers[q.id] || [];
-                        return (
-                          <label key={optIdx} className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
-                            <input 
-                              type="checkbox" 
-                              checked={currentArr.includes(opt)} 
-                              onChange={e => {
-                                if (e.target.checked) {
-                                  setUserAnswers({ ...userAnswers, [q.id]: [...currentArr, opt] });
-                                } else {
-                                  setUserAnswers({ ...userAnswers, [q.id]: currentArr.filter(x => x !== opt) });
-                                }
-                              }}
-                              className="text-blue-600 rounded" 
-                            />
-                            {opt}
-                          </label>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              <div className="flex gap-2 pt-2">
-                <button 
-                  type="button" 
-                  onClick={() => setJoiningRoom(null)} 
-                  className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs"
+              <div className="pt-3 border-t border-slate-100 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateModal(false)}
+                  className="flex-1 bg-slate-100 text-slate-700 font-bold py-2.5 rounded-xl"
                 >
                   Hủy
                 </button>
-                <button 
-                  type="submit" 
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-black py-2.5 rounded-xl text-xs shadow-md"
+                <button
+                  type="submit"
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl shadow-md"
                 >
-                  Xác Nhận Tham Gia
+                  Tạo Phòng
                 </button>
               </div>
             </form>
@@ -749,7 +529,7 @@ export const ChatTab = ({ mapId }: { mapId: string }) => {
         </div>
       )}
 
-      {/* Approvals Modal for Chat */}
+      {/* Approval Modal */}
       {approvingChat && (
         <ApprovalManagementModal
           type="chat"

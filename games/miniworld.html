@@ -2,28 +2,13 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini World Management – ND Labs</title>
-    <link rel="icon" href="/assets/images/logo.png" type="image/png">
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- EduSpace Configuration & Firebase & Utilities -->
-    <script src="/assets/js/config.js"></script>
-    <script type="module" src="/assets/js/firebase-init.js"></script>
-    <script src="/assets/js/api-service.js"></script>
-    <script src="/assets/js/data_modal.js"></script>
-    <script src="/assets/js/ai.js" defer></script>
-    <script src="/assets/js/contact-admin.js" defer></script>
-    <script src="/assets/js/notify.js" defer></script>
-    <script src="/assets/js/announcements.js" defer></script>
-    <script src="/assets/js/version.js" defer></script>
+    <title>Chuyển hướng...</title>
+    <script>
+        // Tự động chuyển hướng từ games/miniworld.html sang /games/miniworld/
+        window.location.replace('/games/miniworld/' + window.location.search + window.location.hash);
+    </script>
 </head>
-<body class="relative min-h-screen">
-    <!-- Navbar placeholder -->
-    <script src="/assets/js/nd-navbar.js" defer></script>
-    <div id="root"></div>
-    <!-- Load Production React Bundle -->
-    <link rel="stylesheet" href="/assets/mw-dist/style.css">
-    <script type="module" src="/assets/mw-dist/bundle.js"></script>
+<body>
+    <p>Đang chuyển hướng đến <a href="/games/miniworld/">Mini World</a>...</p>
 </body>
 </html>

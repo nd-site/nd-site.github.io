@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useFirebase } from '../hooks/useFirebase';
 
 // Tab Components
@@ -6,12 +6,18 @@ import { TransactionsTab } from './TransactionsTab';
 import { OrganizationsTab } from './OrganizationsTab';
 import { ChatTab } from './ChatTab';
 import { MiniWorldProfileModal } from './MiniWorldProfileModal';
+import { MapPlayersModal } from './MapPlayersModal';
+import { MapSettingsModal } from './MapSettingsModal';
 
 export const MapDashboard = () => {
-  const { isReady, db } = useFirebase();
+  const { isReady, db, user, isAdmin, sessionUser } = useFirebase();
+  const currentUid = user?.uid || sessionUser?.uid || sessionUser?.ndid;
+
   const [mapId, setMapId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'transactions' | 'organizations'>('transactions');
   const [showMapChatModal, setShowMapChatModal] = useState(false);
+  const [showPlayersModal, setShowPlayersModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [mapData, setMapData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,6 +30,8 @@ export const MapDashboard = () => {
       setActiveTab('organizations');
     } else if (params.get('chat') || params.get('joinChat')) {
       setShowMapChatModal(true);
+    } else if (params.get('players')) {
+      setShowPlayersModal(true);
     }
   }, []);
 
@@ -45,13 +53,24 @@ export const MapDashboard = () => {
     fetchMap();
   }, [db, mapId]);
 
+  const isMapOwner = useMemo(() => {
+    if (isAdmin) return true;
+    if (!mapData?.players || !currentUid) return false;
+    const playerObj = mapData.players[currentUid];
+    return playerObj?.role === 'owner' || playerObj === 'owner';
+  }, [mapData, currentUid, isAdmin]);
+
+  const playerCount = useMemo(() => {
+    return Object.keys(mapData?.players || {}).length;
+  }, [mapData]);
+
   if (!mapId) {
     return (
       <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center justify-center p-6 text-center">
         <div className="text-4xl mb-3">⚠️</div>
         <h2 className="text-lg font-bold mb-2">Không tìm thấy mã Bản đồ trong đường dẫn</h2>
         <p className="text-xs text-slate-500 mb-6">Vui lòng quay lại danh sách để chọn bản đồ bạn muốn truy cập.</p>
-        <a href="/games/miniworld.html" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-2xl text-xs uppercase tracking-wider shadow-sm">
+        <a href="/games/miniworld/" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-2xl text-xs uppercase tracking-wider shadow-sm">
           ← Về Trung Tâm Bản Đồ
         </a>
       </div>
@@ -73,7 +92,7 @@ export const MapDashboard = () => {
         <div className="text-4xl mb-3">🔍</div>
         <h2 className="text-lg font-bold mb-2">Bản đồ "{mapId}" chưa tồn tại</h2>
         <p className="text-xs text-slate-500 mb-6">Bản đồ này chưa được khởi tạo trong hệ thống.</p>
-        <a href="/games/miniworld.html" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-2xl text-xs uppercase tracking-wider shadow-sm">
+        <a href="/games/miniworld/" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-2xl text-xs uppercase tracking-wider shadow-sm">
           + Khởi Tạo Bản Đồ Mới
         </a>
       </div>
@@ -92,7 +111,7 @@ export const MapDashboard = () => {
       <header className="glass sticky top-14 z-40 px-6 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200/90 bg-white/90">
         <div className="flex items-center gap-4">
           <a 
-            href="/games/miniworld.html" 
+            href="/games/miniworld/" 
             className="p-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl border border-slate-200 text-slate-700 transition-all text-xs font-bold flex items-center gap-1.5"
             title="Quay lại Trung tâm"
           >
@@ -105,12 +124,13 @@ export const MapDashboard = () => {
             <p className="text-[11px] text-slate-500 mt-0.5">
               ID: <span className="text-blue-600 font-mono font-bold">{mapId}</span>
               {mapData.code && ` | Mã Bản Đồ: ${mapData.code}`}
+              {` | Tiền tệ: `}<strong className="text-emerald-600 uppercase">{mapData.baseUnitName || 'đồng'}</strong>
             </p>
           </div>
         </div>
         
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          {/* Main 2 Tabs: Giao dịch & Tổ chức */}
+        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+          {/* Main Tabs Switcher */}
           <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200 flex-1 md:flex-none">
             {[
               { id: 'transactions', label: 'Giao dịch & Thuế', icon: '💰' },
@@ -119,14 +139,36 @@ export const MapDashboard = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex-1 md:flex-none px-5 py-2 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all ${activeTab === tab.id ? 'bg-white text-blue-600 shadow-md' : 'text-slate-600 hover:text-slate-900'}`}
+                className={`flex-1 md:flex-none px-4 py-2 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${activeTab === tab.id ? 'bg-white text-blue-600 shadow-md' : 'text-slate-600 hover:text-slate-900'}`}
               >
                 <span>{tab.icon}</span> {tab.label}
               </button>
             ))}
           </div>
 
-          {/* Separate Map Chat Button */}
+          {/* View / Manage Players Button */}
+          <button
+            onClick={() => setShowPlayersModal(true)}
+            className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold px-3.5 py-2.5 rounded-2xl text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+            title="Xem danh sách người chơi & vai trò trong bản đồ"
+          >
+            <span>👥</span>
+            <span>Thành Viên ({playerCount})</span>
+          </button>
+
+          {/* Map Settings Button (For Owner / Admin) */}
+          {isMapOwner && (
+            <button
+              onClick={() => setShowSettingsModal(true)}
+              className="bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 font-bold px-3.5 py-2.5 rounded-2xl text-xs flex items-center gap-1.5 transition-all active:scale-95"
+              title="Chỉnh sửa thông tin bản đồ"
+            >
+              <span>⚙️</span>
+              <span>Cài Đặt Map</span>
+            </button>
+          )}
+
+          {/* Map Chat Button */}
           <button
             onClick={() => setShowMapChatModal(true)}
             className="bg-blue-600 hover:bg-blue-700 text-white font-black px-4 py-2.5 rounded-2xl text-xs flex items-center gap-2 shadow-md shadow-blue-500/20 active:scale-95 uppercase tracking-wider"
@@ -141,6 +183,24 @@ export const MapDashboard = () => {
         {activeTab === 'transactions' && <TransactionsTab mapId={mapId} mapData={mapData} />}
         {activeTab === 'organizations' && <OrganizationsTab mapId={mapId} mapData={mapData} />}
       </main>
+
+      {/* Map Players & Roles Modal */}
+      {showPlayersModal && (
+        <MapPlayersModal
+          mapId={mapId}
+          mapData={mapData}
+          onClose={() => setShowPlayersModal(false)}
+        />
+      )}
+
+      {/* Map Settings Modal */}
+      {showSettingsModal && isMapOwner && (
+        <MapSettingsModal
+          mapId={mapId}
+          mapData={mapData}
+          onClose={() => setShowSettingsModal(false)}
+        />
+      )}
 
       {/* Separate Map Chat Modal */}
       {showMapChatModal && (

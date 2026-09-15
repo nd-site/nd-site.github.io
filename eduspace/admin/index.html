@@ -295,22 +295,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Security settings
-        // SHA-256 băm của NDID được cấp quyền quản trị
-        const AUTHORIZED_ADMIN_HASHES = [
-            "681bb2d3f8a4e4cedbb0cba5d1763427361b99629bda0357c8c1a5b950f722e0", // nhatdang
-            "30fe8a3f9ebe1ce7556a7364c9fabb0edab5d6524deb608c40e76c6cfbeeb74b"  // @nhatdang
-        ];
-
-        // Helper to hash SHA-256
-        async function hashSHA256(text) {
-            const msgUint8 = new TextEncoder().encode(text);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
-        }
-
         // Global UI state
         let allUsers = [];
 
@@ -330,11 +314,9 @@
                 }
 
                 const userData = userSnap.data();
-                const ndid = userData.ndid || (user.email || '').split('@')[0] || user.uid;
+                const ndid = userData.ndid || '—';
 
-                // Compute hash and check authorization (Must have role: 'admin' and NDID hash must match)
-                const ndidHash = await hashSHA256(ndid);
-                const isAuthorized = AUTHORIZED_ADMIN_HASHES.includes(ndidHash) && userData.role === 'admin';
+                const isAuthorized = userData.role === 'admin';
 
                 if (!isAuthorized) {
                     showAccessDenied("Từ chối truy cập", "Tài khoản của bạn không được cấp quyền quản trị viên (Admin).");

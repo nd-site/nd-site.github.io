@@ -129,6 +129,141 @@
             color: #0284c7;
             box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
+
+        /* Message Reactions & Actions */
+        .msg-bubble-wrapper {
+            position: relative;
+            display: inline-flex;
+            flex-direction: column;
+            max-width: 80%;
+        }
+
+        .msg-row.sent .msg-bubble-wrapper {
+            align-items: flex-end;
+        }
+
+        .msg-row.received .msg-bubble-wrapper {
+            align-items: flex-start;
+        }
+
+        .msg-actions-trigger {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+            align-items: center;
+            gap: 2px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 3px 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            z-index: 10;
+        }
+
+        .msg-row.sent .msg-actions-trigger {
+            left: -48px;
+        }
+
+        .msg-row.received .msg-actions-trigger {
+            right: -48px;
+        }
+
+        .msg-bubble-wrapper:hover .msg-actions-trigger {
+            display: flex;
+        }
+
+        .msg-reaction-bar {
+            position: absolute;
+            top: -42px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            padding: 4px 8px;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            z-index: 20;
+        }
+
+        .msg-row.sent .msg-reaction-bar { right: 0; }
+        .msg-row.received .msg-reaction-bar { left: 0; }
+
+        .msg-actions-trigger:hover .msg-reaction-bar,
+        .msg-reaction-bar:hover {
+            display: flex;
+        }
+
+        .react-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 6px;
+            transition: transform 0.15s;
+        }
+
+        .react-btn:hover {
+            transform: scale(1.3);
+        }
+
+        .msg-reaction-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .reaction-chip {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.15s;
+        }
+
+        .reaction-chip:hover {
+            background: #e2e8f0;
+        }
+
+        .reaction-chip.my-react {
+            background: #e0f2fe;
+            border-color: #bae6fd;
+            color: #0369a1;
+        }
+
+        /* Member Card Item */
+        .member-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            gap: 10px;
+        }
+
+        .role-pill {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .role-pill.owner { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .role-pill.deputy { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        .role-pill.member { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
     </style>
 </head>
 
@@ -194,7 +329,7 @@
                     <i class="ph-duotone ph-chat-circle-dots"></i>
                 </div>
                 <h3>Chào mừng đến với ChatND by ND Labs</h3>
-                <p>Nhắn tin trực tiếp với <strong>Admin @nhatdang</strong>, tham gia <strong>Nhóm chat</strong> hoặc gửi tệp tin đa phương tiện chất lượng cao.</p>
+                <p>Nhắn tin trực tiếp với <strong>Admin</strong>, tham gia <strong>Nhóm chat</strong> hoặc gửi tệp tin đa phương tiện chất lượng cao.</p>
             </div>
 
             <!-- Active Chat Interface -->
@@ -210,9 +345,14 @@
                             <div id="active-contact-ndid" class="chat-header-sub">ndid</div>
                         </div>
                     </div>
-                    <button id="delete-conv-btn" class="delete-conv-btn" title="Xóa đoạn chat này">
-                        <i class="ph-bold ph-trash"></i>
-                    </button>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <button type="button" id="group-info-btn" class="header-action-btn hidden" title="Thông tin & Quản trị nhóm" style="background: rgba(2, 132, 199, 0.08); color: #0284c7; border: none; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.2s;">
+                            <i class="ph-bold ph-users-three"></i>
+                        </button>
+                        <button type="button" id="delete-conv-btn" class="delete-conv-btn" title="Xóa đoạn chat này">
+                            <i class="ph-bold ph-trash"></i>
+                        </button>
+                    </div>
                 </header>
 
                 <!-- Messages Container -->
@@ -245,8 +385,100 @@
         </main>
     </div>
 
+    <!-- Group Info & Management Modal (Messenger/Zalo Style) -->
+    <div id="group-info-modal" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 10000; align-items: center; justify-content: center; padding: 16px;">
+        <div style="background: #fff; max-width: 520px; width: 100%; border-radius: 24px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
+                    <img id="ginfo-header-avatar" src="/assets/images/logo.png" style="width: 46px; height: 46px; border-radius: 14px; object-fit: cover; border: 1.5px solid #0284c7; flex-shrink: 0;" onerror="this.src='/assets/images/logo.png'">
+                    <div style="min-width: 0;">
+                        <h3 id="ginfo-header-title" style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Tên nhóm</h3>
+                        <p id="ginfo-header-sub" style="font-size: 11.5px; color: #64748b; margin: 2px 0 0 0;">ID: group_id • 0 thành viên</p>
+                    </div>
+                </div>
+                <button type="button" id="close-group-info-modal" style="border: none; background: none; font-size: 20px; cursor: pointer; color: #94a3b8; padding: 4px;">✕</button>
+            </div>
+
+            <!-- Tabs: Thông tin, Thành viên, Cài đặt -->
+            <div style="display: flex; background: #f1f5f9; padding: 4px; border-radius: 12px; gap: 4px; margin-bottom: 14px;">
+                <button type="button" id="ginfo-tab-btn-info" class="sidebar-tab-btn active"><i class="ph-bold ph-info"></i> Thông tin</button>
+                <button type="button" id="ginfo-tab-btn-members" class="sidebar-tab-btn"><i class="ph-bold ph-users-three"></i> Thành viên</button>
+                <button type="button" id="ginfo-tab-btn-settings" class="sidebar-tab-btn"><i class="ph-bold ph-gear-six"></i> Cài đặt</button>
+            </div>
+
+            <!-- Tab Content 1: Thông tin nhóm & Chỉnh sửa -->
+            <div id="ginfo-tab-content-info" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 4px;">
+                <form id="edit-group-info-form" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div>
+                        <label style="font-size: 12px; font-weight: 700; color: #334155;">Tên nhóm chat *</label>
+                        <input type="text" id="ginfo-edit-name" required style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: 13px; margin-top: 4px; box-sizing: border-box;">
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; font-weight: 700; color: #334155;">ID nhóm chat (Đường dẫn URL)</label>
+                        <input type="text" id="ginfo-edit-id" required style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: 13px; margin-top: 4px; box-sizing: border-box;">
+                        <div style="font-size: 11px; color: #64748b; margin: 4px 0 0 0; display: flex; align-items: center; justify-content: space-between;">
+                            <span>Link nhóm: <strong id="ginfo-link-preview" style="color: #0284c7;">chat/group?...</strong></span>
+                            <button type="button" id="btn-copy-group-link" style="border: none; background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 6px; font-size: 10.5px; font-weight: 800; cursor: pointer;">Sao chép</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; font-weight: 700; color: #334155;">Ảnh logo nhóm</label>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+                            <img id="ginfo-edit-avatar-preview" src="/assets/images/logo.png" style="width: 44px; height: 44px; border-radius: 12px; object-fit: cover; border: 1px solid #cbd5e1;" onerror="this.src='/assets/images/logo.png'">
+                            <label style="padding: 8px 14px; background: #f8fafc; border: 1.5px dashed #94a3b8; border-radius: 10px; cursor: pointer; font-size: 12px; font-weight: 700; color: #0284c7;">
+                                <i class="ph-bold ph-upload-simple"></i> Chọn ảnh logo mới
+                                <input type="file" id="ginfo-edit-avatar-file" accept="image/*" class="hidden">
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; font-weight: 700; color: #334155;">Mô tả nhóm</label>
+                        <textarea id="ginfo-edit-desc" rows="2" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: 13px; margin-top: 4px; box-sizing: border-box; resize: vertical;"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 14px;">
+                        <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #334155; cursor: pointer;">
+                            <input type="checkbox" id="ginfo-edit-public" style="accent-color: #0284c7;">
+                            <span>Công khai</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #334155; cursor: pointer;">
+                            <input type="checkbox" id="ginfo-edit-approval" style="accent-color: #0284c7;">
+                            <span>Cần duyệt khi vào</span>
+                        </label>
+                    </div>
+                    <button type="submit" id="btn-save-group-info" style="background: #0284c7; color: #fff; border: none; padding: 11px; border-radius: 12px; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 4px;">
+                        Lưu Thay Đổi Thông Tin
+                    </button>
+                </form>
+            </div>
+
+            <!-- Tab Content 2: Thành viên & Bầu Phó nhóm / Chuyển quyền Trưởng nhóm -->
+            <div id="ginfo-tab-content-members" class="hidden" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px;">
+                <div id="ginfo-members-list-container" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+
+            <!-- Tab Content 3: Cài đặt & Thao tác nhóm -->
+            <div id="ginfo-tab-content-settings" class="hidden" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 4px;">
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px;">
+                    <h4 style="font-size: 13px; font-weight: 800; color: #0f172a; margin: 0 0 6px 0;">Rời khỏi nhóm</h4>
+                    <p style="font-size: 12px; color: #64748b; margin: 0 0 10px 0;">Bạn sẽ không còn nhận được thông báo hay tin nhắn từ nhóm này nữa.</p>
+                    <button type="button" id="btn-leave-group" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; padding: 8px 14px; border-radius: 10px; font-weight: 800; font-size: 12px; cursor: pointer;">
+                        <i class="ph-bold ph-sign-out"></i> Rời Nhóm
+                    </button>
+                </div>
+
+                <div id="ginfo-danger-zone" class="hidden" style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 14px; padding: 14px;">
+                    <h4 style="font-size: 13px; font-weight: 800; color: #9f1239; margin: 0 0 6px 0;">Xóa nhóm chat vĩnh viễn</h4>
+                    <p style="font-size: 12px; color: #881337; margin: 0 0 10px 0;">Hành động này sẽ giải tán nhóm và xóa toàn bộ dữ liệu tin nhắn. Không thể hoàn tác!</p>
+                    <button type="button" id="btn-delete-group" style="background: #e11d48; color: #fff; border: none; padding: 9px 16px; border-radius: 10px; font-weight: 800; font-size: 12px; cursor: pointer;">
+                        <i class="ph-bold ph-trash"></i> Xóa Nhóm Chat Vĩnh Viễn
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Create Group Modal -->
-    <div id="create-group-modal" class="modal hidden" style="position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 16px;">
+    <div id="create-group-modal" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 10000; align-items: center; justify-content: center; padding: 16px;">
         <div style="background: #fff; max-width: 440px; width: 100%; border-radius: 24px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                 <h3 style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0;">Tạo Nhóm Trò Chuyện Mới</h3>
@@ -256,6 +488,21 @@
                 <div>
                     <label style="font-size: 12px; font-weight: 700; color: #334155;">Tên nhóm chat *</label>
                     <input type="text" id="new-group-name" required placeholder="Ví dụ: Hội Học Tập Toán 10" style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-family: inherit; font-size: 13px; margin-top: 4px; box-sizing: border-box;">
+                </div>
+                <div>
+                    <label style="font-size: 12px; font-weight: 700; color: #334155;">ID nhóm chat (Tùy chọn)</label>
+                    <input type="text" id="new-group-id" placeholder="Bỏ trống để tự tạo 8 ký tự (VD: aB3k9Xz1)..." style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-family: inherit; font-size: 13px; margin-top: 4px; box-sizing: border-box;">
+                    <p style="font-size: 11px; color: #64748b; margin: 4px 0 0 0;">Đường link truy cập nhóm sẽ là: <code>chat/group?&lt;id&gt;</code></p>
+                </div>
+                <div>
+                    <label style="font-size: 12px; font-weight: 700; color: #334155;">Logo nhóm (Tùy chọn)</label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+                        <img id="new-group-avatar-preview" src="/assets/images/logo.png" style="width: 40px; height: 40px; border-radius: 10px; object-fit: cover; border: 1px solid #cbd5e1;">
+                        <label style="padding: 6px 12px; background: #f8fafc; border: 1.5px dashed #94a3b8; border-radius: 10px; cursor: pointer; font-size: 11.5px; font-weight: 700; color: #0284c7;">
+                            <i class="ph-bold ph-upload-simple"></i> Chọn ảnh logo
+                            <input type="file" id="new-group-avatar-file" accept="image/*" class="hidden">
+                        </label>
+                    </div>
                 </div>
                 <div>
                     <label style="font-size: 12px; font-weight: 700; color: #334155;">Mô tả nhóm</label>
@@ -366,30 +613,104 @@
         });
 
         // Check direct URL param: /chat?<NDID> or /chat?u=<NDID>
+        // Helper random group id
+        function generateRandomGroupId(len = 8) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let res = '';
+            for (let i = 0; i < len; i++) {
+                res += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return res;
+        }
+
+        let adminUser = {
+            codeId: '00000000',
+            ndid: 'admin',
+            name: 'Admin',
+            avatar: '/assets/images/logo.png',
+            isAdmin: true
+        };
+        let adminAvatar = '/assets/images/logo.png';
+        let isAiActiveMode = false;
+
+        async function fetchAdminInfo() {
+            if (!db) return;
+            try {
+                const snap = await getDocs(query(collection(db, 'users'), where('role', '==', 'admin'), limit(1)));
+                if (!snap.empty) {
+                    const u = snap.docs[0].data();
+                    adminUser = {
+                        uid: snap.docs[0].id,
+                        codeId: u.codeId || '00000000',
+                        ndid: u.ndid || 'admin',
+                        name: u.fullname || u.displayName || 'Admin',
+                        avatar: u.photoURL || '/assets/images/logo.png',
+                        email: u.recoveryEmail || u.email || null,
+                        isAdmin: true
+                    };
+                    adminAvatar = adminUser.avatar;
+                    document.querySelectorAll('.admin-pinned').forEach(el => {
+                        el.dataset.codeid = adminUser.codeId;
+                        el.dataset.ndid = adminUser.ndid;
+                        el.dataset.name = adminUser.name;
+                        el.dataset.avatar = adminUser.avatar;
+                    });
+                    document.querySelectorAll('.admin-pinned img').forEach(img => img.src = adminAvatar);
+                    document.querySelectorAll('.admin-pinned .conv-name').forEach(el => {
+                        el.innerHTML = `${adminUser.name} <span class="pinned-tag admin-badge">🛡️ Admin</span>`;
+                    });
+                    document.querySelectorAll('.admin-pinned .conv-last-msg').forEach(el => {
+                        el.textContent = `Nhắn tin trực tiếp tới Admin (${adminUser.ndid})`;
+                    });
+                    if (activeContact && activeContact.isAdmin) {
+                        activeAvatar.src = adminAvatar;
+                        activeName.textContent = adminUser.name;
+                        activeNdid.textContent = adminUser.ndid;
+                    }
+                }
+            } catch (_) {}
+        }
+
+        // Check direct URL param: /chat?admin or /chat/group?<id> or /chat?group=<id>
         function checkDirectUrlRouting() {
+            const path = window.location.pathname;
             const search = window.location.search;
+
+            if (path.includes('/group') || search.startsWith('?group=')) {
+                let gId = '';
+                if (search.startsWith('?group=')) {
+                    gId = new URLSearchParams(search).get('group');
+                } else if (search.startsWith('?')) {
+                    gId = search.substring(1);
+                }
+                if (gId && rdb) {
+                    tabBtnGroups.click();
+                    rOnValue(rRef(rdb, `chatnd_groups/${gId}`), (snap) => {
+                        if (snap.exists()) {
+                            selectGroupConversation(gId, snap.val());
+                        }
+                    }, { onlyOnce: true });
+                }
+                return;
+            }
+
             if (!search || search === '?') return;
 
             let targetNdid = '';
             if (search.includes('=')) {
                 const params = new URLSearchParams(search);
-                targetNdid = params.get('u') || params.get('id') || params.get('ndid') || '';
+                targetNdid = params.get('ndid') || params.get('u') || params.get('id') || '';
             } else {
-                targetNdid = search.substring(1);
+                targetNdid = decodeURIComponent(search.substring(1));
             }
 
             if (targetNdid) {
-                targetNdid = targetNdid.replace(/^@/, '').toLowerCase();
-                if (targetNdid === 'nhatdang' || targetNdid === 'admin') {
-                    selectConversation({
-                        codeId: '00000000',
-                        ndid: 'nhatdang',
-                        name: 'Nhật Đăng (Admin)',
-                        avatar: '/assets/images/logo.png',
-                        isAdmin: true
-                    });
+                if (targetNdid.toLowerCase() === 'admin' || (adminUser && targetNdid === adminUser.ndid)) {
+                    selectConversation(adminUser);
+                } else if (targetNdid.toLowerCase() === 'ai' || targetNdid.toLowerCase() === 'dna_ai') {
+                    selectAiConversation();
                 } else {
-                    // Find user in Firestore
+                    // Query exact NDID without stripping special characters
                     getDocs(query(collection(db, 'users'), where('ndid', '==', targetNdid))).then(snap => {
                         if (!snap.empty) {
                             const u = snap.docs[0].data();
@@ -439,6 +760,7 @@
                         }
                     } catch (_) {}
 
+                    fetchAdminInfo();
                     loadDirectConversations();
                     checkDirectUrlRouting();
                 });
@@ -461,21 +783,39 @@
 
                 let html = '';
 
-                // Admin Nhật Đăng Pinned item
-                const adminChatId = `chat_${[currentUserCodeId, '00000000'].sort().join('_')}`;
-                const isAdminActive = activeChatId === adminChatId;
-
+                // NDAI Pinned item
+                const isAiActive = isAiActiveMode;
                 html += `
-                    <div class="conv-item pinned admin-pinned ${isAdminActive ? 'active' : ''}" data-codeid="00000000" data-ndid="nhatdang" data-name="Nhật Đăng (Admin)" data-avatar="/assets/images/logo.png">
-                        <div class="conv-avatar-rel">
-                            <img src="/assets/images/logo.png" alt="Admin">
+                    <div class="conv-item pinned ai-pinned ${isAiActive ? 'active' : ''}" data-ai="true" style="border-left: 3px solid #8b5cf6;">
+                        <div class="conv-avatar-rel" style="background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 12px; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex-shrink: 0;">
+                            <i class="ph-bold ph-sparkle" style="color: #fff; font-size: 22px;"></i>
                         </div>
                         <div class="conv-details">
                             <div class="conv-top-row">
-                                <span class="conv-name">Nhật Đăng <span class="pinned-tag admin-badge">🛡️ Admin</span></span>
+                                <span class="conv-name" style="font-weight: 800; color: #6d28d9;">NDAI <span class="pinned-tag" style="background: #ede9fe; color: #7c3aed;">✨ Trợ Lý</span></span>
+                                <span class="conv-time">📌 AI</span>
+                            </div>
+                            <div class="conv-last-msg">Trợ lý trí tuệ nhân tạo ND Labs (Gemini 3.1)</div>
+                        </div>
+                    </div>
+                `;
+
+                // Admin Pinned item
+                const adminCode = adminUser.codeId || '00000000';
+                const adminChatId = `chat_${[currentUserCodeId, adminCode].sort().join('_')}`;
+                const isAdminActive = activeChatId === adminChatId;
+
+                html += `
+                    <div class="conv-item pinned admin-pinned ${isAdminActive ? 'active' : ''}" data-codeid="${adminCode}" data-ndid="${adminUser.ndid}" data-name="${adminUser.name}" data-avatar="${adminAvatar}">
+                        <div class="conv-avatar-rel">
+                            <img src="${adminAvatar}" alt="Admin" style="width: 44px; height: 44px; border-radius: 12px; object-fit: cover; border: 1.5px solid #0284c7;" onerror="this.src='/assets/images/logo.png'">
+                        </div>
+                        <div class="conv-details">
+                            <div class="conv-top-row">
+                                <span class="conv-name">${adminUser.name} <span class="pinned-tag admin-badge">🛡️ Admin</span></span>
                                 <span class="conv-time">📌 Ghim</span>
                             </div>
-                            <div class="conv-last-msg">Nhắn tin trực tiếp tới Admin ND Labs</div>
+                            <div class="conv-last-msg">Nhắn tin trực tiếp tới Admin (${adminUser.ndid})</div>
                         </div>
                     </div>
                 `;
@@ -491,7 +831,7 @@
                     html += `
                         <div class="conv-item ${isSel ? 'active' : ''}" data-chat-id="${conv.id}" data-codeid="${otherCodeId}" data-ndid="${d.ndid || 'ndid'}" data-name="${d.name || 'Thành viên'}" data-avatar="${d.avatar || '/assets/images/logo.png'}">
                             <div class="conv-avatar-rel">
-                                <img src="${d.avatar || '/assets/images/logo.png'}" alt="">
+                                <img src="${d.avatar || '/assets/images/logo.png'}" alt="" style="width: 44px; height: 44px; border-radius: 12px; object-fit: cover;" onerror="this.src='/assets/images/logo.png'">
                             </div>
                             <div class="conv-details">
                                 <div class="conv-top-row">
@@ -507,13 +847,17 @@
 
                 convsListEl.querySelectorAll('.conv-item').forEach(item => {
                     item.addEventListener('click', () => {
-                        selectConversation({
-                            codeId: item.dataset.codeid,
-                            ndid: item.dataset.ndid,
-                            name: item.dataset.name,
-                            avatar: item.dataset.avatar,
-                            isAdmin: item.dataset.codeid === '00000000'
-                        });
+                        if (item.dataset.ai === 'true') {
+                            selectAiConversation();
+                        } else {
+                            selectConversation({
+                                codeId: item.dataset.codeid,
+                                ndid: item.dataset.ndid,
+                                name: item.dataset.name,
+                                avatar: item.dataset.avatar || adminAvatar,
+                                isAdmin: item.dataset.codeid === '00000000'
+                            });
+                        }
                     });
                 });
             });
@@ -532,17 +876,18 @@
                 Object.keys(data).forEach(gId => {
                     const g = data[gId];
                     const isMember = g.members && currentUser && g.members[currentUser.uid];
+                    const gAvatar = g.avatar || '/assets/images/logo.png';
                     html += `
-                        <div class="conv-item" data-group-id="${gId}">
+                        <div class="conv-item ${activeGroupRoom && activeGroupRoom.id === gId ? 'active' : ''}" data-group-id="${gId}">
                             <div class="conv-avatar-rel">
-                                <div style="width: 44px; height: 44px; border-radius: 12px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 20px;">👥</div>
+                                <img src="${gAvatar}" style="width: 44px; height: 44px; border-radius: 12px; object-fit: cover; border: 1px solid #cbd5e1;" onerror="this.src='/assets/images/logo.png'">
                             </div>
                             <div class="conv-details">
                                 <div class="conv-top-row">
                                     <span class="conv-name">${g.name}</span>
                                     <span style="font-size: 10px; color: ${isMember ? '#16a34a' : '#64748b'}; font-weight: 700;">${isMember ? 'Đã vào' : (g.isPublic ? 'Công khai' : 'Riêng tư')}</span>
                                 </div>
-                                <div class="conv-last-msg">${g.description || 'Nhóm trò chuyện cộng đồng'}</div>
+                                <div class="conv-last-msg">${g.description || 'Nhóm trò chuyện cộng đồng'} • ID: ${gId}</div>
                             </div>
                         </div>
                     `;
@@ -559,7 +904,10 @@
             });
         }
 
+        const groupInfoBtn = document.getElementById('group-info-btn');
+
         function selectConversation(contact) {
+            isAiActiveMode = false;
             activeContact = contact;
             activeGroupRoom = null;
 
@@ -567,8 +915,9 @@
 
             activeName.textContent = contact.name;
             activeNdid.textContent = `NDID: ${contact.ndid} (CodeID: ${contact.codeId})`;
-            activeAvatar.src = contact.avatar;
+            activeAvatar.src = contact.avatar || adminAvatar;
 
+            if (groupInfoBtn) groupInfoBtn.classList.add('hidden');
             chatEmptyState.style.display = 'none';
             activeChatWrapper.classList.remove('hidden');
             document.getElementById('chat-app').classList.add('mobile-active-chat');
@@ -577,19 +926,171 @@
         }
 
         function selectGroupConversation(groupId, groupData) {
+            isAiActiveMode = false;
             activeGroupRoom = { id: groupId, ...groupData };
             activeContact = null;
             activeChatId = null;
 
             activeName.textContent = groupData.name;
-            activeNdid.textContent = `Nhóm chat • ${Object.keys(groupData.members || {}).length} thành viên`;
-            activeAvatar.src = '/assets/images/logo.png';
+            activeNdid.textContent = `Nhóm chat • ID: ${groupId} • ${Object.keys(groupData.members || {}).length} thành viên`;
+            activeAvatar.src = groupData.avatar || '/assets/images/logo.png';
 
+            if (groupInfoBtn) groupInfoBtn.classList.remove('hidden');
             chatEmptyState.style.display = 'none';
             activeChatWrapper.classList.remove('hidden');
             document.getElementById('chat-app').classList.add('mobile-active-chat');
 
+            // Auto add user to group if public
+            if (currentUser && (!groupData.members || !groupData.members[currentUser.uid])) {
+                if (groupData.isPublic && !groupData.requireApproval) {
+                    const memberPayload = {
+                        role: 'member',
+                        name: currentUser.displayName || 'ND Member',
+                        avatar: currentUser.photoURL || '/assets/images/logo.png',
+                        ndid: currentUserNdid || '',
+                        joinedAt: Date.now()
+                    };
+                    rSet(rRef(rdb, `chatnd_groups/${groupId}/members/${currentUser.uid}`), memberPayload);
+                    if (!activeGroupRoom.members) activeGroupRoom.members = {};
+                    activeGroupRoom.members[currentUser.uid] = memberPayload;
+                }
+            }
+
             subscribeGroupMessages(groupId);
+        }
+
+        // AI Assistant Conversation Logic
+        function getAiHistory() {
+            try {
+                return JSON.parse(localStorage.getItem('chatnd_ai_history') || '[]');
+            } catch (_) { return []; }
+        }
+
+        function saveAiHistory(history) {
+            localStorage.setItem('chatnd_ai_history', JSON.stringify(history.slice(-50)));
+        }
+
+        function selectAiConversation() {
+            isAiActiveMode = true;
+            activeContact = null;
+            activeGroupRoom = null;
+            activeChatId = null;
+
+            activeName.textContent = 'NDAI Trợ Lý Thông Minh';
+            activeNdid.textContent = 'Trợ lý AI ND Labs • Mô hình Gemini 3.1 Flash Lite';
+            activeAvatar.src = '/assets/images/logo.png';
+
+            if (groupInfoBtn) groupInfoBtn.classList.add('hidden');
+            chatEmptyState.style.display = 'none';
+            activeChatWrapper.classList.remove('hidden');
+            document.getElementById('chat-app').classList.add('mobile-active-chat');
+
+            renderAiChatMessages();
+        }
+
+        function renderAiChatMessages() {
+            if (unsubscribeMessages) unsubscribeMessages();
+            const history = getAiHistory();
+            if (history.length === 0) {
+                messagesContainer.innerHTML = `
+                    <div style="padding: 30px 20px; text-align: center;">
+                        <div style="width: 56px; height: 56px; margin: 0 auto 12px; border-radius: 16px; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 26px; color: #fff;">
+                            <i class="ph-bold ph-sparkle"></i>
+                        </div>
+                        <h4 style="font-weight: 800; font-size: 16px; margin-bottom: 6px;">Xin chào! Tôi là NDAI</h4>
+                        <p style="font-size: 13px; color: #64748b; max-width: 380px; margin: 0 auto;">Tôi có thể giúp bạn giải bài tập, viết code, trả lời kiến thức và hướng dẫn sử dụng hệ sinh thái ND Labs. Hãy đặt câu hỏi bất kỳ!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            history.forEach(m => {
+                const isSent = m.role === 'user';
+                const formattedContent = isSent ? m.content : (window.marked ? marked.parse(m.content) : m.content);
+                html += `
+                    <div class="msg-row ${isSent ? 'sent' : 'received'}">
+                        <div class="msg-bubble-wrapper">
+                            <div class="msg-bubble ${isSent ? 'msg-bubble-sent' : 'msg-bubble-received'}" style="${!isSent ? 'background:#f8fafc; border:1px solid #e2e8f0; line-height:1.6;' : ''}">
+                                <div>${formattedContent}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            messagesContainer.innerHTML = html;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            if (window.renderMathInElement) {
+                renderMathInElement(messagesContainer, {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '$', right: '$', display: false },
+                        { left: '\\(', right: '\\)', display: false },
+                        { left: '\\[', right: '\\]', display: true }
+                    ]
+                });
+            }
+        }
+
+        async function sendAiMessage(userText) {
+            const history = getAiHistory();
+            history.push({ role: 'user', content: userText, timestamp: Date.now() });
+            saveAiHistory(history);
+            renderAiChatMessages();
+
+            // Typing placeholder
+            const typingId = 'ai-typing-' + Date.now();
+            const typingRow = document.createElement('div');
+            typingRow.id = typingId;
+            typingRow.className = 'msg-row received';
+            typingRow.innerHTML = `
+                <div class="msg-bubble msg-bubble-received" style="background:#f8fafc; border:1px solid #e2e8f0; display:flex; align-items:center; gap:8px; color:#6d28d9; font-weight:700;">
+                    <i class="ph-bold ph-sparkle" style="animation: pulse 1s infinite;"></i>
+                    <span>NDAI đang suy nghĩ...</span>
+                </div>
+            `;
+            messagesContainer.appendChild(typingRow);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            try {
+                let apiKey = '';
+                if (window.getGeminiApiKey) apiKey = await window.getGeminiApiKey();
+                if (!apiKey && typeof EDU_CONFIG !== 'undefined') apiKey = EDU_CONFIG.geminiApiKey;
+
+                let responseText = '';
+                if (apiKey && !apiKey.includes('PLACEHOLDER')) {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: history.map(h => ({
+                                role: h.role === 'user' ? 'user' : 'model',
+                                parts: [{ text: h.content }]
+                            })),
+                            systemInstruction: {
+                                parts: [{ text: "Bạn là NDAI, trợ lý học tập và công nghệ thông minh của ND Labs. Hãy trả lời thân thiện, chính xác, súc tích bằng tiếng Việt, hỗ trợ công thức Toán/Lý/Hóa theo định dạng LaTeX KaTeX và Markdown chuẩn đẹp." }]
+                            }
+                        })
+                    });
+                    const data = await res.json();
+                    responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Xin lỗi, hiện tại tôi chưa nhận được phản hồi từ máy chủ AI.";
+                } else {
+                    responseText = "Xin chào! API Key AI chưa được cấu hình. Bạn có thể trò chuyện trực tiếp với Admin qua ChatND để được hỗ trợ giải đáp nhé!";
+                }
+
+                history.push({ role: 'assistant', content: responseText, timestamp: Date.now() });
+                saveAiHistory(history);
+                const el = document.getElementById(typingId);
+                if (el) el.remove();
+                renderAiChatMessages();
+            } catch (err) {
+                const el = document.getElementById(typingId);
+                if (el) el.remove();
+                history.push({ role: 'assistant', content: 'Lỗi kết nối AI: ' + err.message, timestamp: Date.now() });
+                saveAiHistory(history);
+                renderAiChatMessages();
+            }
         }
 
         // Mobile back button event
@@ -627,6 +1128,59 @@
             `;
         }
 
+        function renderReactionsHtml(reactionsObj, msgId, isGroup) {
+            if (!reactionsObj || Object.keys(reactionsObj).length === 0) return '';
+            const counts = {};
+            let myReact = null;
+
+            Object.entries(reactionsObj).forEach(([uid, emoji]) => {
+                if (!emoji) return;
+                counts[emoji] = (counts[emoji] || 0) + 1;
+                if (currentUser && uid === currentUser.uid) {
+                    myReact = emoji;
+                }
+            });
+
+            const keys = Object.keys(counts);
+            if (keys.length === 0) return '';
+
+            let chips = '';
+            keys.forEach(emoji => {
+                const isMine = myReact === emoji;
+                chips += `
+                    <span class="reaction-chip ${isMine ? 'my-react' : ''}" data-emoji="${emoji}" data-msg-id="${msgId}" data-is-group="${isGroup}">
+                        <span>${emoji}</span>
+                        <span>${counts[emoji]}</span>
+                    </span>
+                `;
+            });
+
+            return `<div class="msg-reaction-chips">${chips}</div>`;
+        }
+
+        function bindReactionEvents(container, isGroup, contextId) {
+            container.querySelectorAll('.react-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const emoji = btn.dataset.emoji;
+                    const msgId = btn.dataset.msgId;
+                    if (!currentUser || !msgId) return;
+                    await window.NDChatCore.setMessageReaction(rdb, db, isGroup, contextId, msgId, currentUser.uid, emoji);
+                });
+            });
+
+            container.querySelectorAll('.reaction-chip').forEach(chip => {
+                chip.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const emoji = chip.dataset.emoji;
+                    const msgId = chip.dataset.msgId;
+                    if (!currentUser || !msgId) return;
+                    const isMine = chip.classList.contains('my-react');
+                    await window.NDChatCore.setMessageReaction(rdb, db, isGroup, contextId, msgId, currentUser.uid, isMine ? null : emoji);
+                });
+            });
+        }
+
         function subscribeDirectMessages(chatId) {
             if (unsubscribeMessages) unsubscribeMessages();
             messagesContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">Đang tải tin nhắn...</div>';
@@ -640,19 +1194,31 @@
 
                 let html = '';
                 snap.forEach(docSnap => {
-                    const m = docSnap.data();
+                    const m = { id: docSnap.id, ...docSnap.data() };
                     const isSent = m.senderUid === currentUser.uid;
                     html += `
                         <div class="msg-row ${isSent ? 'sent' : 'received'}">
-                            <div class="msg-bubble ${isSent ? 'msg-bubble-sent' : 'msg-bubble-received'}">
-                                ${m.text ? `<div>${m.text}</div>` : ''}
-                                ${renderFileInMessage(m.file)}
+                            <div class="msg-bubble-wrapper">
+                                <div class="msg-bubble ${isSent ? 'msg-bubble-sent' : 'msg-bubble-received'}">
+                                    ${m.text ? `<div>${m.text}</div>` : ''}
+                                    ${renderFileInMessage(m.file)}
+                                </div>
+                                ${renderReactionsHtml(m.reactions, m.id, false)}
+                                <div class="msg-actions-trigger">
+                                    <i class="ph-bold ph-smiley" style="color: #64748b; font-size: 14px;"></i>
+                                    <div class="msg-reaction-bar">
+                                        ${['👍', '❤️', '😂', '😮', '😢', '😡'].map(emoji => `
+                                            <button type="button" class="react-btn" data-emoji="${emoji}" data-msg-id="${m.id}">${emoji}</button>
+                                        `).join('')}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     `;
                 });
                 messagesContainer.innerHTML = html;
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                bindReactionEvents(messagesContainer, false, chatId);
             });
         }
 
@@ -668,20 +1234,32 @@
                 const data = snap.val();
                 let html = '';
                 Object.keys(data).forEach(mId => {
-                    const m = data[mId];
+                    const m = { id: mId, ...data[mId] };
                     const isSent = m.senderId === currentUser?.uid;
                     html += `
                         <div class="msg-row ${isSent ? 'sent' : 'received'}">
-                            <div style="font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 2px;">${m.senderName || 'Thành viên'}</div>
-                            <div class="msg-bubble ${isSent ? 'msg-bubble-sent' : 'msg-bubble-received'}">
-                                ${m.text ? `<div>${m.text}</div>` : ''}
-                                ${renderFileInMessage(m.file)}
+                            <div class="msg-bubble-wrapper">
+                                <div style="font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 2px;">${m.senderName || 'Thành viên'}</div>
+                                <div class="msg-bubble ${isSent ? 'msg-bubble-sent' : 'msg-bubble-received'}">
+                                    ${m.text ? `<div>${m.text}</div>` : ''}
+                                    ${renderFileInMessage(m.file)}
+                                </div>
+                                ${renderReactionsHtml(m.reactions, m.id, true)}
+                                <div class="msg-actions-trigger">
+                                    <i class="ph-bold ph-smiley" style="color: #64748b; font-size: 14px;"></i>
+                                    <div class="msg-reaction-bar">
+                                        ${['👍', '❤️', '😂', '😮', '😢', '😡'].map(emoji => `
+                                            <button type="button" class="react-btn" data-emoji="${emoji}" data-msg-id="${m.id}">${emoji}</button>
+                                        `).join('')}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     `;
                 });
                 messagesContainer.innerHTML = html;
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                bindReactionEvents(messagesContainer, true, groupId);
             });
         }
 
@@ -695,6 +1273,11 @@
             messageInput.value = '';
             selectedAttachmentFile = null;
             attachmentPreviewBar.classList.add('hidden');
+
+            if (isAiActiveMode) {
+                await sendAiMessage(text);
+                return;
+            }
 
             const senderInfo = {
                 uid: currentUser.uid,
@@ -715,46 +1298,357 @@
             }
         });
 
+        // Group Creation Avatar Upload Handler
+        let newGroupAvatarUrl = '/assets/images/logo.png';
+        const newGroupAvatarFileInput = document.getElementById('new-group-avatar-file');
+        if (newGroupAvatarFileInput) {
+            newGroupAvatarFileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file || !currentUser) return;
+                try {
+                    const meta = await window.NDChatCore.uploadAttachment(file, currentUser.uid);
+                    if (meta && meta.url) {
+                        newGroupAvatarUrl = meta.url;
+                        document.getElementById('new-group-avatar-preview').src = meta.url;
+                    }
+                } catch (_) {}
+            });
+        }
+
         // Group creation modal
         const createGroupModal = document.getElementById('create-group-modal');
         document.getElementById('btn-create-group').onclick = () => {
-            createGroupModal.classList.remove('hidden');
+            createGroupModal.style.display = 'flex';
         };
         document.getElementById('close-create-group-modal').onclick = () => {
-            createGroupModal.classList.add('hidden');
+            createGroupModal.style.display = 'none';
         };
 
         document.getElementById('create-group-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('new-group-name').value.trim();
+            const customId = document.getElementById('new-group-id')?.value.trim() || generateRandomGroupId(8);
+            const groupId = customId.replace(/[^a-zA-Z0-9_-]/g, '');
             const desc = document.getElementById('new-group-desc').value.trim();
             const isPublic = document.getElementById('new-group-public').checked;
             const requireApproval = document.getElementById('new-group-approval').checked;
 
-            if (!name || !rdb || !currentUser) return;
+            if (!name || !groupId || !rdb || !currentUser) return;
 
-            const newGroupRef = rPush(rRef(rdb, 'chatnd_groups'));
+            const groupRef = rRef(rdb, `chatnd_groups/${groupId}`);
             const payload = {
-                name,
+                groupId: groupId,
+                name: name,
                 description: desc,
-                isPublic,
-                requireApproval,
+                avatar: newGroupAvatarUrl,
+                isPublic: isPublic,
+                requireApproval: requireApproval,
                 createdBy: currentUser.uid,
                 createdAt: Date.now(),
                 members: {
                     [currentUser.uid]: {
                         role: 'owner',
                         name: currentUser.displayName || 'Chủ nhóm',
+                        avatar: currentUser.photoURL || '/assets/images/logo.png',
+                        ndid: currentUserNdid || '',
                         joinedAt: Date.now()
                     }
                 }
             };
 
-            await rSet(newGroupRef, payload);
-            createGroupModal.classList.add('hidden');
+            await rSet(groupRef, payload);
+            createGroupModal.style.display = 'none';
+            document.getElementById('create-group-form').reset();
             loadGroupsList();
+            selectGroupConversation(groupId, payload);
         });
+
+        // ════════════════════════════════════════════════════════════════════════
+        // Group Info & Management Modal Logic (Messenger/Zalo Style)
+        // ════════════════════════════════════════════════════════════════════════
+        const groupInfoModal = document.getElementById('group-info-modal');
+        const closeGroupInfoModal = document.getElementById('close-group-info-modal');
+        const ginfoTabBtnInfo = document.getElementById('ginfo-tab-btn-info');
+        const ginfoTabBtnMembers = document.getElementById('ginfo-tab-btn-members');
+        const ginfoTabBtnSettings = document.getElementById('ginfo-tab-btn-settings');
+        const ginfoTabContentInfo = document.getElementById('ginfo-tab-content-info');
+        const ginfoTabContentMembers = document.getElementById('ginfo-tab-content-members');
+        const ginfoTabContentSettings = document.getElementById('ginfo-tab-content-settings');
+        const editGroupInfoForm = document.getElementById('edit-group-info-form');
+        const ginfoDangerZone = document.getElementById('ginfo-danger-zone');
+        const ginfoEditAvatarFile = document.getElementById('ginfo-edit-avatar-file');
+        const ginfoEditAvatarPreview = document.getElementById('ginfo-edit-avatar-preview');
+        let editGroupAvatarUrl = '';
+
+        // Tab Switching in Group Info Modal
+        function setGroupInfoTab(tab) {
+            ginfoTabBtnInfo.classList.toggle('active', tab === 'info');
+            ginfoTabBtnMembers.classList.toggle('active', tab === 'members');
+            ginfoTabBtnSettings.classList.toggle('active', tab === 'settings');
+
+            ginfoTabContentInfo.classList.toggle('hidden', tab !== 'info');
+            ginfoTabContentMembers.classList.toggle('hidden', tab !== 'members');
+            ginfoTabContentSettings.classList.toggle('hidden', tab !== 'settings');
+        }
+
+        ginfoTabBtnInfo.onclick = () => setGroupInfoTab('info');
+        ginfoTabBtnMembers.onclick = () => { setGroupInfoTab('members'); renderGroupMembersList(); };
+        ginfoTabBtnSettings.onclick = () => setGroupInfoTab('settings');
+
+        if (groupInfoBtn) {
+            groupInfoBtn.onclick = () => {
+                if (!activeGroupRoom) return;
+                populateGroupInfoModal();
+                setGroupInfoTab('info');
+                groupInfoModal.style.display = 'flex';
+            };
+        }
+
+        if (closeGroupInfoModal) {
+            closeGroupInfoModal.onclick = () => {
+                groupInfoModal.style.display = 'none';
+            };
+        }
+
+        function populateGroupInfoModal() {
+            if (!activeGroupRoom) return;
+            const g = activeGroupRoom;
+            const gAvatar = g.avatar || '/assets/images/logo.png';
+            editGroupAvatarUrl = gAvatar;
+
+            document.getElementById('ginfo-header-avatar').src = gAvatar;
+            document.getElementById('ginfo-header-title').textContent = g.name;
+            document.getElementById('ginfo-header-sub').textContent = `ID: ${g.id} • ${Object.keys(g.members || {}).length} thành viên`;
+
+            document.getElementById('ginfo-edit-name').value = g.name || '';
+            document.getElementById('ginfo-edit-id').value = g.id || '';
+            ginfoEditAvatarPreview.src = gAvatar;
+            document.getElementById('ginfo-edit-desc').value = g.description || '';
+            document.getElementById('ginfo-edit-public').checked = !!g.isPublic;
+            document.getElementById('ginfo-edit-approval').checked = !!g.requireApproval;
+
+            const groupLink = `${window.location.origin}/chat/group?${g.id}`;
+            const linkPreview = document.getElementById('ginfo-link-preview');
+            linkPreview.textContent = `chat/group?${g.id}`;
+            linkPreview.href = groupLink;
+
+            // Permissions
+            const sessionData = window.NDAccounts ? window.NDAccounts.getActiveAccount() : JSON.parse(localStorage.getItem('nd_user') || '{}');
+            const isSysAdmin = sessionData?.role === 'admin';
+            const userRole = g.members?.[currentUser.uid]?.role || (isSysAdmin ? 'owner' : 'member');
+            const isOwnerOrAdmin = userRole === 'owner' || isSysAdmin;
+            const isDeputyOrHigher = isOwnerOrAdmin || userRole === 'deputy';
+
+            // Show/hide Danger Zone
+            ginfoDangerZone.classList.toggle('hidden', !isOwnerOrAdmin);
+
+            // Enable/disable form inputs
+            const inputs = editGroupInfoForm.querySelectorAll('input, textarea, button[type="submit"]');
+            inputs.forEach(inp => {
+                if (!isDeputyOrHigher) {
+                    inp.disabled = true;
+                } else {
+                    inp.disabled = false;
+                }
+            });
+            // Only owner/admin can change group ID
+            document.getElementById('ginfo-edit-id').disabled = !isOwnerOrAdmin;
+        }
+
+        // Avatar change in group info
+        if (ginfoEditAvatarFile) {
+            ginfoEditAvatarFile.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file || !currentUser) return;
+                try {
+                    const meta = await window.NDChatCore.uploadAttachment(file, currentUser.uid);
+                    if (meta && meta.url) {
+                        editGroupAvatarUrl = meta.url;
+                        ginfoEditAvatarPreview.src = meta.url;
+                    }
+                } catch (_) {}
+            });
+        }
+
+        // Copy group link button
+        document.getElementById('btn-copy-group-link').onclick = () => {
+            if (!activeGroupRoom) return;
+            const groupLink = `${window.location.origin}/chat/group?${activeGroupRoom.id}`;
+            navigator.clipboard.writeText(groupLink);
+            alert("📋 Đã sao chép link nhóm chat!");
+        };
+
+        // Save Group Info Form Submit
+        editGroupInfoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!activeGroupRoom || !rdb || !currentUser) return;
+
+            const newName = document.getElementById('ginfo-edit-name').value.trim();
+            const newId = document.getElementById('ginfo-edit-id').value.trim().replace(/[^a-zA-Z0-9_-]/g, '');
+            const newDesc = document.getElementById('ginfo-edit-desc').value.trim();
+            const isPublic = document.getElementById('ginfo-edit-public').checked;
+            const requireApproval = document.getElementById('ginfo-edit-approval').checked;
+
+            if (!newName || !newId) return alert("Vui lòng nhập tên và ID nhóm.");
+
+            try {
+                const updatePayload = {
+                    name: newName,
+                    description: newDesc,
+                    avatar: editGroupAvatarUrl || activeGroupRoom.avatar || '/assets/images/logo.png',
+                    isPublic,
+                    requireApproval
+                };
+
+                const res = await window.NDChatCore.updateGroupInfo(rdb, activeGroupRoom.id, newId, updatePayload);
+                activeGroupRoom = { ...activeGroupRoom, ...updatePayload, id: res.newGroupId };
+                
+                // Update UI
+                activeName.textContent = newName;
+                activeAvatar.src = updatePayload.avatar;
+                activeNdid.textContent = `Nhóm chat • ID: ${res.newGroupId} • ${Object.keys(activeGroupRoom.members || {}).length} thành viên`;
+
+                alert("🎉 Đã cập nhật thông tin nhóm chat!");
+                groupInfoModal.style.display = 'none';
+                loadGroupsList();
+            } catch (err) {
+                alert("Lỗi cập nhật: " + err.message);
+            }
+        });
+
+        // Render Group Members List
+        function renderGroupMembersList() {
+            if (!activeGroupRoom) return;
+            const container = document.getElementById('ginfo-members-list-container');
+            const members = activeGroupRoom.members || {};
+            const sessionData = window.NDAccounts ? window.NDAccounts.getActiveAccount() : JSON.parse(localStorage.getItem('nd_user') || '{}');
+            const isSysAdmin = sessionData?.role === 'admin';
+            const userRole = members[currentUser.uid]?.role || (isSysAdmin ? 'owner' : 'member');
+            const isOwnerOrAdmin = userRole === 'owner' || isSysAdmin;
+
+            let html = '';
+            Object.entries(members).forEach(([uid, m]) => {
+                const isSelf = uid === currentUser.uid;
+                const mRole = m.role || 'member';
+                const roleLabel = mRole === 'owner' ? '👑 Trưởng nhóm' : (mRole === 'deputy' ? '🛡️ Phó nhóm' : 'Thành viên');
+                const roleCls = mRole === 'owner' ? 'owner' : (mRole === 'deputy' ? 'deputy' : 'member');
+
+                html += `
+                    <div class="member-item-row">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                            <img src="${m.avatar || '/assets/images/logo.png'}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid #cbd5e1;" onerror="this.src='/assets/images/logo.png'">
+                            <div style="min-width: 0;">
+                                <div style="font-size: 12.5px; font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${m.name || 'Thành viên'} ${isSelf ? '<span style="color:#0284c7;">(Bạn)</span>' : ''}</div>
+                                <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                                    <span class="role-pill ${roleCls}">${roleLabel}</span>
+                                    <span style="font-size: 10.5px; color: #94a3b8;">${m.ndid || ''}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${isOwnerOrAdmin && !isSelf ? `
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <button type="button" class="btn-make-owner" data-uid="${uid}" title="Chuyển quyền Trưởng nhóm cho thành viên này" style="padding: 4px 8px; font-size: 11px; font-weight: 700; border-radius: 8px; border: 1px solid #fde68a; background: #fef3c7; color: #b45309; cursor: pointer;">
+                                    👑 Trưởng nhóm
+                                </button>
+                                <button type="button" class="btn-toggle-deputy" data-uid="${uid}" data-is-deputy="${mRole === 'deputy' ? 'true' : 'false'}" title="${mRole === 'deputy' ? 'Hủy quyền phó nhóm' : 'Bổ nhiệm làm phó nhóm'}" style="padding: 4px 8px; font-size: 11px; font-weight: 700; border-radius: 8px; border: 1px solid #c7d2fe; background: #e0e7ff; color: #4338ca; cursor: pointer;">
+                                    ${mRole === 'deputy' ? '🛡️ Hủy phó' : '🛡️ Phó nhóm'}
+                                </button>
+                                <button type="button" class="btn-kick-member" data-uid="${uid}" title="Mời ra khỏi nhóm" style="padding: 4px 8px; font-size: 11px; font-weight: 700; border-radius: 8px; border: 1px solid #fecaca; background: #fee2e2; color: #dc2626; cursor: pointer;">
+                                    ✕
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+
+            // Bind Actions for Members List
+            container.querySelectorAll('.btn-make-owner').forEach(btn => {
+                btn.onclick = async () => {
+                    const targetUid = btn.dataset.uid;
+                    if (!confirm("👑 Bạn có chắc chắn muốn chuyển quyền Trưởng nhóm cho thành viên này? Bạn sẽ trở thành Phó nhóm.")) return;
+                    try {
+                        await window.NDChatCore.changeGroupOwner(rdb, activeGroupRoom.id, targetUid, currentUser.uid);
+                        if (activeGroupRoom.members[targetUid]) activeGroupRoom.members[targetUid].role = 'owner';
+                        if (activeGroupRoom.members[currentUser.uid]) activeGroupRoom.members[currentUser.uid].role = 'deputy';
+                        alert("🎉 Đã chuyển giao quyền Trưởng nhóm thành công!");
+                        renderGroupMembersList();
+                    } catch (err) {
+                        alert("Lỗi: " + err.message);
+                    }
+                };
+            });
+
+            container.querySelectorAll('.btn-toggle-deputy').forEach(btn => {
+                btn.onclick = async () => {
+                    const targetUid = btn.dataset.uid;
+                    const isCurrentlyDeputy = btn.dataset.isDeputy === 'true';
+                    const newRoleDeputy = !isCurrentlyDeputy;
+                    try {
+                        await window.NDChatCore.setGroupDeputy(rdb, activeGroupRoom.id, targetUid, newRoleDeputy);
+                        if (activeGroupRoom.members[targetUid]) activeGroupRoom.members[targetUid].role = newRoleDeputy ? 'deputy' : 'member';
+                        alert(newRoleDeputy ? "🛡️ Đã bổ nhiệm Phó nhóm!" : "🛡️ Đã thu hồi quyền Phó nhóm!");
+                        renderGroupMembersList();
+                    } catch (err) {
+                        alert("Lỗi: " + err.message);
+                    }
+                };
+            });
+
+            container.querySelectorAll('.btn-kick-member').forEach(btn => {
+                btn.onclick = async () => {
+                    const targetUid = btn.dataset.uid;
+                    if (!confirm("Bạn có chắc chắn muốn mời thành viên này ra khỏi nhóm?")) return;
+                    try {
+                        await window.NDChatCore.removeGroupMember(rdb, activeGroupRoom.id, targetUid);
+                        delete activeGroupRoom.members[targetUid];
+                        alert("Đã xóa thành viên khỏi nhóm.");
+                        renderGroupMembersList();
+                    } catch (err) {
+                        alert("Lỗi: " + err.message);
+                    }
+                };
+            });
+        }
+
+        // Leave Group Button
+        document.getElementById('btn-leave-group').onclick = async () => {
+            if (!activeGroupRoom || !currentUser || !rdb) return;
+            if (!confirm("Bạn có chắc chắn muốn rời khỏi nhóm này?")) return;
+            try {
+                await window.NDChatCore.removeGroupMember(rdb, activeGroupRoom.id, currentUser.uid);
+                alert("🚪 Bạn đã rời khỏi nhóm.");
+                groupInfoModal.style.display = 'none';
+                activeGroupRoom = null;
+                activeChatWrapper.classList.add('hidden');
+                chatEmptyState.style.display = 'flex';
+                loadGroupsList();
+            } catch (err) {
+                alert("Lỗi rời nhóm: " + err.message);
+            }
+        };
+
+        // Delete Group Button (Permanent)
+        document.getElementById('btn-delete-group').onclick = async () => {
+            if (!activeGroupRoom || !currentUser || !rdb) return;
+            if (!confirm("⚠️ CẢNH BÁO: Bạn có chắc chắn muốn xóa nhóm chat này vĩnh viễn? Mọi dữ liệu và tin nhắn sẽ bị xóa sạch!")) return;
+            try {
+                await window.NDChatCore.deleteGroup(rdb, activeGroupRoom.id);
+                alert("🗑️ Đã xóa nhóm chat vĩnh viễn.");
+                groupInfoModal.style.display = 'none';
+                activeGroupRoom = null;
+                activeChatWrapper.classList.add('hidden');
+                chatEmptyState.style.display = 'flex';
+                loadGroupsList();
+            } catch (err) {
+                alert("Lỗi xóa nhóm: " + err.message);
+            }
+        };
     </script>
+    <script src="/assets/js/contact-admin.js"></script>
 </body>
 
 </html>

@@ -231,9 +231,38 @@ export const MapCreation = () => {
         members: defaultOrgMembers
       });
 
+      // Default Transaction Types (Bao gồm loại mặc định: Đóng thuế)
+      const { push } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
+      const defaultTxTypes = [
+        { name: 'Đóng thuế', rate: 100, isTaxDirect: true, isSystem: true, createdAt: Date.now() },
+        { name: 'Mua bán hàng hóa / vật phẩm', rate: 5, isSystem: true, createdAt: Date.now() + 1 },
+        { name: 'Chuyển tiền / Tặng quà', rate: 0, isSystem: true, createdAt: Date.now() + 2 },
+        { name: 'Trả lương / Thù lao', rate: 0, isSystem: true, createdAt: Date.now() + 3 },
+        { name: 'Góp vốn / Đầu tư', rate: 0, isSystem: true, createdAt: Date.now() + 4 }
+      ];
+      for (const dt of defaultTxTypes) {
+        const dtRef = push(ref(db, `mw_transaction_types/${cleanMapId}`));
+        await set(dtRef, dt);
+      }
+
+      // Default Currencies
+      const cleanBase = baseUnitName.trim() || 'đồng';
+      const initialCurrencies = {
+        'sắt': 5,
+        'nhôm': 10,
+        'titan': 20,
+        'lửa rực (khối)': 50,
+        'đồng Horas': 100,
+        'coban': 200,
+        'vàng đen': 500,
+        'đồng tiền vàng': 10000,
+        [cleanBase]: 1
+      };
+      await set(ref(db, `mw_maps/${cleanMapId}/currencies`), initialCurrencies);
+
       alert("🎉 Khởi tạo bản đồ thành công!");
       setShowCreateMapModal(false);
-      window.location.href = `/games/miniworld.html?map=${cleanMapId}`;
+      window.location.href = `/games/miniworld/?map=${cleanMapId}`;
     } catch (err: any) {
       alert("Lỗi tạo bản đồ: " + err.message);
     } finally {
@@ -245,14 +274,25 @@ export const MapCreation = () => {
     e.preventDefault();
     if (!db || !selectedMapDetail) return;
     try {
-      const { ref, update } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
+      const { ref, update, get, set } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js' as any);
+      const cleanBase = selectedMapDetail.baseUnitName?.trim() || 'đồng';
+      
       await update(ref(db, `mw_maps/${selectedMapDetail.id}`), {
         name: selectedMapDetail.name,
         code: selectedMapDetail.code,
         isPublic: selectedMapDetail.isPublic,
         requireApproval: selectedMapDetail.requireApproval,
-        baseUnitName: selectedMapDetail.baseUnitName || 'đồng'
+        baseUnitName: cleanBase
       });
+
+      // Update currencies base unit if needed
+      const currSnap = await get(ref(db, `mw_maps/${selectedMapDetail.id}/currencies`));
+      if (currSnap.exists()) {
+        const currs = currSnap.val();
+        currs[cleanBase] = 1;
+        await set(ref(db, `mw_maps/${selectedMapDetail.id}/currencies`), currs);
+      }
+
       setIsEditingMap(false);
       alert('Đã cập nhật thông tin bản đồ!');
     } catch (e: any) {
@@ -316,7 +356,7 @@ export const MapCreation = () => {
       } catch (_) {}
 
       alert(`🎉 Đã tham gia bản đồ "${map.name || map.id}" thành công!`);
-      window.location.href = `/games/miniworld.html?map=${map.id}`;
+      window.location.href = `/games/miniworld/?map=${map.id}`;
     } catch (e: any) {
       alert("Lỗi tham gia bản đồ: " + e.message);
     }
@@ -504,7 +544,7 @@ export const MapCreation = () => {
             {joinedMaps.map(map => {
               const playerCount = map.players ? Object.keys(map.players).length : 0;
               const ownerInfo = map.players ? Object.entries(map.players).find(([k, v]: [string, any]) => (typeof v === 'object' ? v.role === 'owner' : v === 'owner')) : null;
-              const ownerDisplay = ownerInfo ? (typeof ownerInfo[1] === 'object' ? (ownerInfo[1].name || ownerInfo[0]) : ownerInfo[0]) : (map.createdBy || 'Chưa rõ');
+              const ownerDisplay = ownerInfo ? (typeof ownerInfo[1] === 'object' ? ((ownerInfo[1] as any)?.name || ownerInfo[0]) : ownerInfo[0]) : (map.createdBy || 'Chưa rõ');
 
               return (
                 <div
@@ -537,7 +577,7 @@ export const MapCreation = () => {
                       👥 Thành viên: <strong className="text-slate-800">{playerCount}</strong>
                     </span>
                     <a
-                      href={`/games/miniworld.html?map=${map.id}`}
+                      href={`/games/miniworld/?map=${map.id}`}
                       onClick={e => e.stopPropagation()}
                       className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow-sm transition-all"
                     >
@@ -570,7 +610,7 @@ export const MapCreation = () => {
             {filteredMaps.map(map => {
               const playerCount = map.players ? Object.keys(map.players).length : 0;
               const ownerInfo = map.players ? Object.entries(map.players).find(([k, v]: [string, any]) => (typeof v === 'object' ? v.role === 'owner' : v === 'owner')) : null;
-              const ownerDisplay = ownerInfo ? (typeof ownerInfo[1] === 'object' ? (ownerInfo[1].name || ownerInfo[0]) : ownerInfo[0]) : (map.createdBy || 'Chưa rõ');
+              const ownerDisplay = ownerInfo ? (typeof ownerInfo[1] === 'object' ? ((ownerInfo[1] as any)?.name || ownerInfo[0]) : ownerInfo[0]) : (map.createdBy || 'Chưa rõ');
               const joined = isMapJoined(map);
 
               return (
@@ -606,7 +646,7 @@ export const MapCreation = () => {
 
                     {joined ? (
                       <a
-                        href={`/games/miniworld.html?map=${map.id}`}
+                        href={`/games/miniworld/?map=${map.id}`}
                         onClick={e => e.stopPropagation()}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow-sm transition-all"
                       >
@@ -865,7 +905,7 @@ export const MapCreation = () => {
 
               {isMapJoined(selectedMapDetail) ? (
                 <a
-                  href={`/games/miniworld.html?map=${selectedMapDetail.id}`}
+                  href={`/games/miniworld/?map=${selectedMapDetail.id}`}
                   className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black py-3 rounded-2xl text-xs text-center uppercase tracking-wider shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-1.5"
                 >
                   <span>🚀</span> Truy cập Bảng Điều Khiển
@@ -947,16 +987,17 @@ export const MapCreation = () => {
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
-                    Tên đơn vị tiền tệ gốc của Map *
+                    Đơn vị tiền tệ gốc của Map *
                   </label>
                   <input
                     type="text"
                     required
                     value={baseUnitName}
                     onChange={e => setBaseUnitName(e.target.value)}
-                    placeholder="Mặc định: đồng (hoặc xu, vàng, coin...)"
+                    placeholder="Tự do đặt tên (vd: xu, gem, coin, đồng, vàng, credits...)"
                     className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 font-bold focus:outline-none focus:border-blue-500"
                   />
+                  <p className="text-[10px] text-slate-400 mt-1">Không bắt buộc là 'đồng'. Bạn có thể tự do đặt tên và đổi bất cứ lúc nào trong Bảng Tiền Tệ.</p>
                 </div>
               </div>
 

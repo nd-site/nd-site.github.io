@@ -388,17 +388,25 @@
                 myQuizzes = [];
                 quizSnap.forEach(d => myQuizzes.push({ quizId: d.id, ...d.data() }));
 
-                // 3. Load Attempts
-                // Since attempts are general, we filter client-side for now or we query attempts matching our quizzes
-                const attemptSnap = await getDocs(collection(db, 'attempts'));
+                // 3. Load Attempts safely: query only attempts belonging to quizzes owned/managed by the current teacher
+                // Batch/chunk by up to 30 quiz IDs per 'in' query to respect Firestore constraints
+                // Deduplicate attempts using Map to avoid duplicates across batches or retries
                 myAttempts = [];
-                attemptSnap.forEach(d => {
-                    const data = d.data();
-                    // filter to only attempts on quizzes created by this teacher
-                    if (myQuizzes.some(q => q.quizId === data.quizId)) {
-                        myAttempts.push({ attemptId: d.id, ...data });
+                const teacherQuizIds = Array.from(new Set(myQuizzes.map(q => q.quizId).filter(Boolean)));
+                if (teacherQuizIds.length > 0) {
+                    const CHUNK_SIZE = 30;
+                    const attemptsMap = new Map();
+                    for (let i = 0; i < teacherQuizIds.length; i += CHUNK_SIZE) {
+                        const chunk = teacherQuizIds.slice(i, i + CHUNK_SIZE);
+                        const attemptSnap = await getDocs(query(collection(db, 'attempts'), where('quizId', 'in', chunk)));
+                        attemptSnap.forEach(d => {
+                            if (!attemptsMap.has(d.id)) {
+                                attemptsMap.set(d.id, { attemptId: d.id, ...d.data() });
+                            }
+                        });
                     }
-                });
+                    myAttempts = Array.from(attemptsMap.values());
+                }
 
                 // Render UI stats
                 document.getElementById('stat-classrooms').textContent = myClassrooms.length;

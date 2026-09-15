@@ -3,11 +3,18 @@
  * 
  * Tác dụng:
  *   • Cung cấp nút hỗ trợ khách hàng nổi (Floating Action Button - FAB) ở góc dưới bên trái màn hình.
- *   • Khi nhấn sẽ bung mở danh sách các kênh liên hệ của Admin và ND Labs (Facebook, Messenger, Telegram).
- *   • Tự động thu gọn nhãn văn bản sau 3 giây để tối ưu không gian hiển thị trên màn hình.
+ *   • Khi nhấn sẽ bung mở các kênh liên hệ của Admin và ND Labs (Facebook, Messenger, Telegram).
+ *   • Tự động thu gọn nhãn văn bản sau 3 giây để tiết kiệm không gian hiển thị trên màn hình.
  */
 
 const contactData = [
+    {
+        name: "ChatND với Admin",
+        url: "/chat?admin",
+        icon: "message-square",
+        logo: "/assets/images/logo.png",
+        color: "#0284c7"
+    },
     {
         name: "Facebook ND Labs",
         url: "https://facebook.com/ndlabs.nd",
@@ -21,27 +28,6 @@ const contactData = [
         icon: "message-circle",
         logo: "https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg",
         color: "#0084FF"
-    },
-    {
-        name: "Facebook Admin Nhật Đăng",
-        url: "https://facebook.com/nhatdang10.nd",
-        icon: "facebook",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg",
-        color: "#1877F2"
-    },
-    {
-        name: "Messenger Admin Nhật Đăng",
-        url: "https://m.me/nhatdang10.nd",
-        icon: "message-circle",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg",
-        color: "#0084FF"
-    },
-    {
-        name: "Telegram Admin Nhật Đăng",
-        url: "https://t.me/nhatdang10",
-        icon: "send",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg",
-        color: "#26A5E4"
     }
 ];
 
@@ -226,27 +212,50 @@ const contactAdminUI = (function () {
         `;
         document.body.insertAdjacentHTML('beforeend', html);
 
+        renderItems(contactData);
+        loadDynamicContacts();
+        window.addEventListener('firebase-ready', loadDynamicContacts);
+    }
+
+    function renderItems(items) {
         const menu = document.getElementById('contactMenu');
-        if (typeof contactData !== 'undefined') {
-            contactData.forEach(contact => {
-                const item = document.createElement('a');
-                item.href = contact.url;
-                item.target = "_blank";
-                item.className = "contact-item group";
+        if (!menu || !Array.isArray(items)) return;
+        menu.innerHTML = '';
+        items.forEach(contact => {
+            const item = document.createElement('a');
+            item.href = contact.url;
+            item.target = contact.url.startsWith('/') ? '_self' : '_blank';
+            item.className = "contact-item group";
 
-                const iconHTML = contact.logo
-                    ? `<img src="${contact.logo}" class="w-6 h-6 object-contain" alt="${contact.name}">`
-                    : `<i data-lucide="${contact.icon}" class="w-5 h-5" style="color: ${contact.color}"></i>`;
+            const iconHTML = contact.logo
+                ? `<img src="${contact.logo}" class="w-6 h-6 object-contain" alt="${contact.name}">`
+                : `<i data-lucide="${contact.icon || 'message-square'}" class="w-5 h-5" style="color: ${contact.color || '#0284c7'}"></i>`;
 
-                item.innerHTML = `
-                    ${iconHTML}
-                    <span class="contact-tooltip">${contact.name}</span>
-                `;
-                menu.appendChild(item);
-            });
-        }
-
+            item.innerHTML = `
+                ${iconHTML}
+                <span class="contact-tooltip">${contact.name}</span>
+            `;
+            menu.appendChild(item);
+        });
         if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    async function loadDynamicContacts() {
+        try {
+            if (window.firebaseFirestore) {
+                const { getDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+                const snap = await getDoc(doc(window.firebaseFirestore, 'config', 'contacts'));
+                if (snap.exists() && Array.isArray(snap.data()?.list)) {
+                    renderItems(snap.data().list);
+                }
+            } else if (window.firebaseDb) {
+                const { ref, get } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+                const snap = await get(ref(window.firebaseDb, 'config/contacts'));
+                if (snap.exists() && Array.isArray(snap.val())) {
+                    renderItems(snap.val());
+                }
+            }
+        } catch (_) {}
     }
 
     function toggle() {

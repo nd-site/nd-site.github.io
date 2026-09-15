@@ -5,7 +5,7 @@
  *   • Chịu trách nhiệm thực hiện tất cả kết nối từ phía Client tới Gemini AI API.
  *   • Tự động định vị và giải mã khóa API bảo mật từ Firebase Realtime Database nếu không tìm thấy khóa tĩnh.
  *   • Thiết lập cơ chế bảo mật 3 tầng cực kỳ an toàn cho hệ thống.
- *   • Tự động phát hiện và chuyển đổi dự phòng (failover) giữa danh sách các model AI ưu tiên.
+ *   • Tự động phát hiện và chuyển đổi dự phòng (failover) giữa các model AI ưu tiên.
  */
 
 window.eduspaceAI = (function () {
@@ -283,5 +283,7 @@ window.eduspaceAI = (function () {
         throw lastErr || new Error('Không thể kết nối AI. Vui lòng thử lại sau.');
     }
 
-    return { call: callGeminiAPI };
+    const apiInstance = { call: callGeminiAPI };
+    window.ndAI_API = apiInstance;
+    return apiInstance;
 })();
