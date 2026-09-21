@@ -1,0 +1,57 @@
+extends: existence
+message: "Phát hiện từ ngữ/cụm từ mang văn phong AI hoặc ghi chú thừa: '%s'. Hãy đổi sang từ ngữ tự nhiên hoặc xóa bỏ phần giải thích trong ngoặc!"
+level: warning
+ignorecase: true
+tokens:
+  # --- 1. Lỗi bê nguyên giải thích / Chú thích thừa vào UI ---
+  - "\\(thỏi trong game\\)"
+  - "\\(trong game\\)"
+  - "\\(mặc định\\)"
+  - "\\(lưu ý:"
+  - "\\(chú thích:"
+  - "\\(ví dụ:"
+  - "đây là"
+  - "dưới đây là"
+  - "danh sách các"
+  - "bạn có thể"
+  - "vui lòng lưu ý"
+  - "vui lòng chọn"
+  - "nhấp vào đây để"
+
+  # --- 2. Từ ngữ phô trương / Rập khuôn AI (AI Buzzwords) ---
+  - minh chứng cho
+  - giải pháp toàn diện
+  - đóng vai trò quan trọng
+  - đóng vai trò then chốt
+  - hệ sinh thái
+  - tối ưu hóa
+  - tiềm năng
+  - trải nghiệm liền mạch
+  - thúc đẩy
+  - không thể phủ nhận
+  - đột phá
+  - chìa khóa cho
+  - trong thời đại kỹ thuật số
+  - kiến tạo
+  - dẫn đầu xu hướng
+  - vượt trội
+  - nâng tầm
+  - tiên phong
+  - hỗ trợ đắc lực
+  - đa dạng hóa
+  - gắn kết
+  - định hình
+  - lan tỏa
+  - toàn diện và hiệu quả
+
+  # --- 3. Cụm từ nối rườm rà / Văn viết AI ---
+  - tóm lại
+  - nhìn chung
+  - nói cách khác
+  - đáng chú ý là
+  - không chỉ dừng lại ở đó
+  - có thể thấy rằng
+  - một cách nhanh chóng và dễ dàng
+  - một cách hiệu quả
+  - mang lại giá trị
+  - đáp ứng mọi nhu cầu

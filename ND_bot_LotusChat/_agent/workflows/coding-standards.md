@@ -53,7 +53,7 @@ Hệ thống hỗ trợ cấu hình linh hoạt trong `data.js` -> `config.examL
 ## 9. Quy chuẩn Hệ thống Đăng nhập NDID & Tên miền
 - **TUYỆT ĐỐI KHÔNG** sử dụng bất kỳ tên miền giả lập nào như `@ndid.local`, `@ndid.internal` hoặc tên miền bên ngoài khác.
 - Đuôi email nội bộ phục vụ cho Firebase Auth bắt buộc phải là **`@ndsite.web.app`**.
-- **TUYỆT ĐỐI KHÔNG** hiển thị hậu tố tên miền `@ndsite.web.app` lên giao diện người dùng (ví dụ: trên trang cài đặt, trang quản trị, hoặc thanh điều hướng). Chỉ hiển thị tiền tố NDID thuần túy (ví dụ: `nhatdang`).
+- **TUYỆT ĐỐI KHÔNG** hiển thị hậu tố tên miền `@ndsite.web.app` lên giao diện người dùng (ví dụ: trên trang cài đặt, trang quản trị, hoặc thanh điều hướng). Chỉ hiển thị tiền tố NDID thuần túy (ví dụ: `example_user`).
 - Hỗ trợ fallback tương thích ngược tự động cho tài khoản cũ (đuôi `@ndlabs.com`) tại màn hình đăng nhập, không yêu cầu người dùng nhập hậu tố email khi đăng nhập bằng NDID.
 
 ---

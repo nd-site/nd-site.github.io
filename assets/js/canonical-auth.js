@@ -19,15 +19,8 @@
 (function (window) {
   'use strict';
 
-  // Base API configuration (Supports local emulators, development, and Vercel production)
-  const CLOUD_FUNCTIONS_BASE = (function () {
-    const host = window.location.hostname;
-    if (host === 'localhost' || host === '127.0.0.1') {
-      return 'http://localhost:3000/api';
-    }
-    // Production Vercel Serverless Functions API
-    return 'https://nd-puce.vercel.app/api';
-  })();
+  // Base API configuration (Production Vercel Serverless Functions API with CORS for localhost)
+  const CLOUD_FUNCTIONS_BASE = 'https://nd-puce.vercel.app/api';
 
   const ENDPOINTS = {
     register: `${CLOUD_FUNCTIONS_BASE}/registerUser`,

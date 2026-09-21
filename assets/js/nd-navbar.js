@@ -48,7 +48,7 @@
         name: 'EduAI Assistant',
         script: '/assets/js/edu_ai.js',
         // Chỉ áp dụng cho các trang thuộc phân hệ EduSpace
-        matcher: (p) => p.startsWith('/eduspace') || p.includes('/admin/eduspace')
+        matcher: (p) => p.startsWith('/eduspace') || p.includes('/admin/eduspace') || p.includes('/admin/edu')
       },
       {
         id: 'nd_ai',
@@ -120,11 +120,11 @@
   const NAV_LINKS = [
     { href: '/', label: 'Trang Chủ', icon: 'ph-house-simple' },
     { href: '/chat/', label: 'ChatND', icon: 'ph-chat-circle-dots' },
-    { href: '/eduspace', label: 'EduSpace', icon: 'ph-graduation-cap' },
-    { href: '/games', label: 'Game', icon: 'ph-game-controller' },
-    { href: '/media', label: 'Media', icon: 'ph-film-strip' },
-    { href: '/utils', label: 'Tiện Ích', icon: 'ph-wrench' },
-    { href: '/psychology', label: 'Psychology', icon: 'ph-brain' },
+    { href: '/eduspace/', label: 'EduSpace', icon: 'ph-graduation-cap' },
+    { href: '/games/', label: 'Game', icon: 'ph-game-controller' },
+    { href: '/media/', label: 'Media', icon: 'ph-film-strip' },
+    { href: '/utils/', label: 'Tiện Ích', icon: 'ph-wrench' },
+    { href: '/psychology/', label: 'Psychology Demo', icon: 'ph-brain' },
   ];
 
   const path = window.location.pathname;

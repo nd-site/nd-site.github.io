@@ -1,0 +1,19 @@
+{"users": [
+{
+  "localId": "i8QHVzpNgPfh6YxdjRdP75YXyvA3",
+  "email": "nhatdang10.nd@gmail.com",
+  "emailVerified": true,
+  "displayName": "Nhật Đăng",
+  "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocL7XwZFTchVEPQNvWacdkw6vCEuZC9j8Zd2puWUI8ZIUygN_wI=s96-c",
+  "lastSignedInAt": "1788690676112",
+  "createdAt": "1788690676112",
+  "providerUserInfo": [
+    {
+      "providerId": "google.com",
+      "rawId": "108933079180629290016",
+      "email": "nhatdang10.nd@gmail.com",
+      "displayName": "Nhật Đăng",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocL7XwZFTchVEPQNvWacdkw6vCEuZC9j8Zd2puWUI8ZIUygN_wI=s96-c"
+    }
+  ]
+}]}

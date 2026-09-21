@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "redirects": [
+    {
+      "source": "/psychology/(.*)",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/utils/(.*)",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/media/(.*)",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/games/(.*)",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/chat/(.*)",
+      "destination": "/",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/v3/(.*)",
+      "destination": "/api/v3?endpoint=$1"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/auth?action=$1"
+    }
+  ]
+}

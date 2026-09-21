@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cộng Đồng Chia Sẻ - Psychology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #8b5cf6;
+            --bg-main: #f5f3ff;
+        }
+
+        html,
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: #1e293b;
+        }
+
+        .bg-blob {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+            animation: blob-bounce 10s infinite ease-in-out;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px -12px rgba(139, 92, 246, 0.1);
+            border-radius: 24px;
+        }
+
+        @keyframes blob-bounce {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(20px, -20px);
+            }
+        }
+    </style>
+    <script src="/assets/js/nd-navbar.js" defer></script>    <script src="/font/font.js"></script>
+</head>
+
+<body class="min-h-screen flex flex-col items-center p-4 relative overflow-hidden">
+    <div class="bg-blob" style="top: -100px; left: -100px;"></div>
+    <div class="bg-blob"
+        style="bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, rgba(255, 255, 255, 0) 70%);">
+    </div>
+
+    <div class="w-full max-w-4xl z-10">
+        <header class="flex items-center justify-between mb-12 mt-4">
+            <a href="../index.html"
+                class="flex items-center gap-2 text-slate-500 hover:text-violet-600 transition-colors font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Quay lại
+            </a>
+            <div class="text-violet-600 font-extrabold text-xl tracking-tight">Psychology • Cộng Đồng</div>
+        </header>
+
+        <main>
+            <h1
+                class="text-4xl font-extrabold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600">
+                Cộng Đồng Chia Sẻ</h1>
+            <p class="text-slate-500 text-center mb-12">Nơi bạn có thể chia sẻ câu chuyện của mình ẩn danh và nhận sự
+                đồng cảm.</p>
+
+            <div class="space-y-6">
+                <!-- Post 1 -->
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-10 h-10 bg-violet-100 rounded-full flex items-center justify-center text-violet-600 font-bold">
+                            A1</div>
+                        <div>
+                            <div class="font-bold text-sm">Người dùng ẩn danh</div>
+                            <div class="text-xs text-slate-400">2 giờ trước</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed mb-4">Hôm nay mình cảm thấy rất áp lực về việc học tập. Đôi
+                        khi mình tự hỏi liệu mình có đang đi đúng hướng không...</p>
+                    <div class="flex items-center gap-4 text-xs font-bold text-slate-400">
+                        <button class="hover:text-violet-600 flex items-center gap-1">❤️ 12 Thích</button>
+                        <button class="hover:text-violet-600 flex items-center gap-1">💬 5 Bình luận</button>
+                    </div>
+                </div>
+
+                <!-- Post 2 -->
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold">
+                            A2</div>
+                        <div>
+                            <div class="font-bold text-sm">Người dùng ẩn danh</div>
+                            <div class="text-xs text-slate-400">5 giờ trước</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed mb-4">Mình vừa hoàn thành một bài thi quan trọng. Cảm thấy
+                        nhẹ lòng hơn rất nhiều. Cảm ơn Psychology đã đồng hành cùng mình những ngày qua!</p>
+                    <div class="flex items-center gap-4 text-xs font-bold text-slate-400">
+                        <button class="hover:text-violet-600 flex items-center gap-1">❤️ 24 Thích</button>
+                        <button class="hover:text-violet-600 flex items-center gap-1">💬 8 Bình luận</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button
+                    class="bg-violet-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-violet-700 transition-colors">Viết
+                    câu chuyện của bạn</button>
+            </div>
+        </main>
+
+        <footer class="mt-16 py-8 text-center text-slate-400 text-sm">
+            <p>© 2026 ND Labs. Psychology • Chia sẻ để vơi bớt nỗi lòng.</p>
+        </footer>
+    </div>
+</body>
+
+</html>

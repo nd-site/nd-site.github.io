@@ -1,0 +1,182 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function getUserDoc(userId) {
+      return get(/databases/$(database)/documents/users/$(userId)).data;
+    }
+
+    function isCallerAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        (
+          getUserDoc(request.auth.uid).role == 'admin' ||
+          getUserDoc(request.auth.uid).role == 'ADMIN' ||
+          getUserDoc(request.auth.uid).role == 'SUPER_ADMIN' ||
+          getUserDoc(request.auth.uid).adminLevel == 'owner'
+        );
+    }
+
+    // Users Collection (Phase 01-C7 Hardened):
+    // - Creation & Deletion: SERVER-ONLY via Cloud Functions (Client Deny)
+    // - Self-update: Permitted for profile attributes; tampering with codeId/role/adminLevel/status is strictly BLOCKED
+    // - Admin-update: Permitted on non-owner users for profile fields; role/adminLevel/codeId changes MUST go through Cloud Functions
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if false;
+      allow update: if isSignedIn() && (
+        (isSelf(userId) &&
+          request.resource.data.codeId == resource.data.codeId &&
+          (!('role' in request.resource.data) || request.resource.data.role == resource.data.role) &&
+          (!('adminLevel' in request.resource.data) || request.resource.data.adminLevel == resource.data.adminLevel) &&
+          (!('status' in request.resource.data) || request.resource.data.status == resource.data.status)
+        )
+        ||
+        (isCallerAdmin() &&
+          resource.data.adminLevel != 'owner' &&
+          request.resource.data.codeId == resource.data.codeId &&
+          (!('role' in request.resource.data) || request.resource.data.role == resource.data.role) &&
+          (!('adminLevel' in request.resource.data) || request.resource.data.adminLevel == resource.data.adminLevel)
+        )
+      );
+      allow delete: if false;
+
+      // Private credentials & security subcollection: NEVER client-accessible
+      match /private/{document=**} {
+        allow read, write: if false;
+      }
+
+      // Active sessions: Server-only (never client readable/writable directly)
+      match /sessions/{document=**} {
+        allow read, write: if false;
+      }
+
+      // Trusted devices: Server-only (never client readable/writable directly)
+      match /devices/{document=**} {
+        allow read, write: if false;
+      }
+    }
+
+    // Atomic sequential CodeID allocation counters: SERVER ONLY
+    match /counters/{counterId} {
+      allow read, write: if false;
+    }
+
+    // Uniqueness resolution mappings: SERVER ONLY (Anti-Enumeration)
+    match /ndids/{ndid} {
+      allow read, write: if false;
+    }
+
+    match /emails/{email} {
+      allow read, write: if false;
+    }
+
+    match /google_identities/{googleSubjectId} {
+      allow read, write: if false;
+    }
+
+    // Email verification tokens: SERVER ONLY (Phase 01-C9)
+    match /email_verifications/{tokenHash} {
+      allow read, write: if false;
+    }
+
+    // Security audit log: Admin read-only, client write forbidden
+    match /security_events/{eventId} {
+      allow read: if isCallerAdmin();
+      allow write: if false;
+    }
+
+    // Admin audit log: Admin read-only, client write forbidden (backend writes only)
+    match /admin_logs/{logId} {
+      allow read: if isCallerAdmin();
+      allow write: if false;
+    }
+
+    // Academic entities: Public read for students & teachers, write restricted to Admins
+    match /schools/{schoolId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
+    match /grades/{gradeId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
+    match /classes/{classId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
+    match /periods/{periodId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
+    match /subjects/{subjectId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
+    match /teachers/{teacherId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
+    match /rooms/{roomId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
+    // TimeTable entities (0 mutations): Preserved exactly as-is
+    match /timetables/{timetableId} {
+      allow read, write: if true;
+
+      match /comments/{commentId} {
+        allow read, write: if true;
+      }
+
+      match /presence/{presenceId} {
+        allow read, write: if true;
+      }
+    }
+
+    match /extraLessons/{lessonId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    match /notifications/{notifId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
+    // EduSpace Quizzes, Lessons & Exam Sessions
+    match /quizzes/{quizId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
+    match /eduspace_lessons/{lessonId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
+    match /exam_sessions/{sessionId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // Fallback safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

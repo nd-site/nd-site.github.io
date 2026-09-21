@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/assets/images/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khôi phục tài khoản - ND Labs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+    <link rel="stylesheet" href="/auth/auth.css">
+    <script src="/assets/js/nd-accounts.js"></script>
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/assets/js/config.js"></script>
+    <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/assets/js/canonical-auth.js"></script>
+    <script src="/font/font.js"></script>
+    <style>
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .step-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: #0284c7;
+            color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.2);
+        }
+
+        .step-dot.completed {
+            background: #10b981;
+            color: #ffffff;
+        }
+
+        .step-line {
+            width: 30px;
+            height: 3px;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        .step-line.completed {
+            background: #10b981;
+        }
+
+        .otp-input-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 26px !important;
+            letter-spacing: 10px;
+            text-align: center;
+            font-weight: 800;
+            padding: 12px 16px !important;
+        }
+
+        .recovery-instruction {
+            font-size: 13.5px;
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .resend-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .resend-btn {
+            background: none;
+            border: none;
+            color: #0284c7;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0;
+            font-family: inherit;
+        }
+
+        .resend-btn:disabled {
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .success-box {
+            text-align: center;
+            padding: 24px 10px;
+        }
+
+        .success-icon {
+            font-size: 54px;
+            color: #10b981;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Header -->
+            <div class="auth-header">
+                <img src="/assets/images/logo.png" alt="ND Labs Logo" class="auth-logo">
+                <h1>Khôi phục tài khoản</h1>
+                <p>Lấy lại quyền truy cập an toàn vào NDID của bạn</p>
+            </div>
+
+            <!-- Step Indicators -->
+            <div class="step-indicator">
+                <div id="dot-step-1" class="step-dot active">1</div>
+                <div id="line-step-1" class="step-line"></div>
+                <div id="dot-step-2" class="step-dot">2</div>
+                <div id="line-step-2" class="step-line"></div>
+                <div id="dot-step-3" class="step-dot">3</div>
+            </div>
+
+            <!-- Step 1: Request Recovery Code -->
+            <form id="step-1-form" class="auth-form">
+                <p class="recovery-instruction">
+                    Nhập <strong>NDID</strong> hoặc <strong>Email</strong> liên kết với tài khoản của bạn để nhận mã xác thực một lần.
+                </p>
+                <div class="form-group">
+                    <label for="recovery-identifier">NDID hoặc Email *</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-user"></i>
+                        <input type="text" id="recovery-identifier" placeholder="Ví dụ: nhatdang hoặc name@example.com" autocomplete="username" required>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-request-code" class="btn-primary">
+                    <span>Gửi mã xác thực</span>
+                    <i class="ph-bold ph-paper-plane-tilt"></i>
+                </button>
+            </form>
+
+            <!-- Step 2: Verify Recovery Code -->
+            <form id="step-2-form" class="auth-form hidden">
+                <p class="recovery-instruction">
+                    Nhập mã xác thực gồm <strong>6 chữ số</strong> được gửi tới email của bạn. Mã có hiệu lực trong 15 phút.
+                </p>
+                <div class="form-group">
+                    <label for="recovery-code">Mã xác thực 6 chữ số *</label>
+                    <div class="input-container">
+                        <input type="text" id="recovery-code" class="otp-input-code" placeholder="••••••" maxlength="6" pattern="\d{6}" autocomplete="one-time-code" required>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-verify-code" class="btn-primary">
+                    <span>Xác thực mã</span>
+                    <i class="ph-bold ph-check"></i>
+                </button>
+
+                <div class="resend-row">
+                    <span>Chưa nhận được mã?</span>
+                    <button type="button" id="btn-resend-code" class="resend-btn" disabled>Gửi lại (<span id="resend-timer">60</span>s)</button>
+                </div>
+            </form>
+
+            <!-- Step 3: Set New Password -->
+            <form id="step-3-form" class="auth-form hidden">
+                <p class="recovery-instruction">
+                    Thiết lập mật khẩu mới cho tài khoản. Mật khẩu phải từ <strong>8 ký tự trở lên</strong>.
+                </p>
+                <div class="form-group">
+                    <label for="new-password">Mật khẩu mới *</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-lock-key"></i>
+                        <input type="password" id="new-password" placeholder="Tối thiểu 8 ký tự" autocomplete="new-password" minlength="8" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Xác nhận mật khẩu mới *</label>
+                    <div class="input-container">
+                        <i class="ph-duotone ph-check-circle"></i>
+                        <input type="password" id="confirm-password" placeholder="Nhập lại mật khẩu mới" autocomplete="new-password" minlength="8" required>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-reset-password" class="btn-primary">
+                    <span>Cập nhật mật khẩu & Mở khóa</span>
+                    <i class="ph-bold ph-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- Step 4: Success View -->
+            <div id="step-4-success" class="success-box hidden">
+                <i class="ph-duotone ph-check-circle success-icon"></i>
+                <h3 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Khôi phục thành công!</h3>
+                <p style="font-size: 14px; color: #64748b; margin-bottom: 24px;">
+                    Mật khẩu của bạn đã được cập nhật an toàn. Tài khoản đã được kích hoạt mở khóa.
+                </p>
+                <a href="/auth/login/" class="btn-primary" style="display: flex; text-decoration: none; justify-content: center; align-items: center; gap: 8px;">
+                    <span>Đăng nhập ngay</span>
+                    <i class="ph-bold ph-sign-in"></i>
+                </a>
+            </div>
+
+            <div class="auth-footer" style="margin-top: 24px;">
+                <p><a href="/auth/login/">← Quay lại trang đăng nhập</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Message Notification -->
+    <div id="status-msg" class="status-msg"></div>
+
+    <script>
+        (function () {
+            'use strict';
+
+            let currentIdentifier = '';
+            let verifiedResetToken = '';
+            let resendInterval = null;
+
+            const statusEl = document.getElementById('status-msg');
+            function showStatus(text, type = 'info') {
+                statusEl.textContent = text;
+                statusEl.className = `status-msg show ${type}`;
+                setTimeout(() => statusEl.className = 'status-msg', 5000);
+            }
+
+            // Step Navigation Helpers
+            const dot1 = document.getElementById('dot-step-1');
+            const dot2 = document.getElementById('dot-step-2');
+            const dot3 = document.getElementById('dot-step-3');
+            const line1 = document.getElementById('line-step-1');
+            const line2 = document.getElementById('line-step-2');
+
+            const form1 = document.getElementById('step-1-form');
+            const form2 = document.getElementById('step-2-form');
+            const form3 = document.getElementById('step-3-form');
+            const successView = document.getElementById('step-4-success');
+
+            function goToStep(step) {
+                form1.classList.add('hidden');
+                form2.classList.add('hidden');
+                form3.classList.add('hidden');
+                successView.classList.add('hidden');
+
+                if (step === 1) {
+                    form1.classList.remove('hidden');
+                    dot1.className = 'step-dot active';
+                    dot2.className = 'step-dot';
+                    dot3.className = 'step-dot';
+                    line1.className = 'step-line';
+                    line2.className = 'step-line';
+                } else if (step === 2) {
+                    form2.classList.remove('hidden');
+                    dot1.className = 'step-dot completed';
+                    line1.className = 'step-line completed';
+                    dot2.className = 'step-dot active';
+                    dot3.className = 'step-dot';
+                    line2.className = 'step-line';
+                    document.getElementById('recovery-code').focus();
+                    startResendTimer(60);
+                } else if (step === 3) {
+                    form3.classList.remove('hidden');
+                    dot1.className = 'step-dot completed';
+                    line1.className = 'step-line completed';
+                    dot2.className = 'step-dot completed';
+                    line2.className = 'step-line completed';
+                    dot3.className = 'step-dot active';
+                    document.getElementById('new-password').focus();
+                } else if (step === 4) {
+                    successView.classList.remove('hidden');
+                    dot1.className = 'step-dot completed';
+                    line1.className = 'step-line completed';
+                    dot2.className = 'step-dot completed';
+                    line2.className = 'step-line completed';
+                    dot3.className = 'step-dot completed';
+                }
+            }
+
+            function startResendTimer(seconds) {
+                const resendBtn = document.getElementById('btn-resend-code');
+                const timerSpan = document.getElementById('resend-timer');
+                let remaining = seconds;
+                resendBtn.disabled = true;
+
+                if (resendInterval) clearInterval(resendInterval);
+                resendInterval = setInterval(() => {
+                    remaining--;
+                    timerSpan.textContent = remaining;
+                    if (remaining <= 0) {
+                        clearInterval(resendInterval);
+                        resendBtn.disabled = false;
+                        resendBtn.textContent = 'Gửi lại mã';
+                    }
+                }, 1000);
+            }
+
+            // Step 1: Submit Identifier
+            form1.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const identifierInput = document.getElementById('recovery-identifier');
+                const val = identifierInput.value.trim();
+                if (!val) return;
+
+                const submitBtn = document.getElementById('btn-request-code');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Đang gửi mã...</span> <i class="ph-bold ph-spinner ph-spin"></i>';
+
+                try {
+                    currentIdentifier = val;
+                    if (!window.canonicalAuth) {
+                        throw new Error('Hệ thống xác thực chưa sẵn sàng.');
+                    }
+                    const res = await window.canonicalAuth.requestRecoveryCode({ identifier: currentIdentifier });
+                    showStatus(res.message || 'Mã xác thực đã được gửi!', 'success');
+                    goToStep(2);
+                } catch (err) {
+                    const mapped = window.canonicalAuth ? window.canonicalAuth.mapError(err) : err.message;
+                    showStatus(mapped, 'error');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>Gửi mã xác thực</span> <i class="ph-bold ph-paper-plane-tilt"></i>';
+                }
+            });
+
+            // Resend Code Button
+            document.getElementById('btn-resend-code').addEventListener('click', async () => {
+                if (!currentIdentifier) return;
+                try {
+                    showStatus('Đang gửi lại mã xác thực...', 'info');
+                    const res = await window.canonicalAuth.requestRecoveryCode({ identifier: currentIdentifier });
+                    showStatus(res.message || 'Đã gửi mã mới!', 'success');
+                    startResendTimer(60);
+                } catch (err) {
+                    const mapped = window.canonicalAuth ? window.canonicalAuth.mapError(err) : err.message;
+                    showStatus(mapped, 'error');
+                }
+            });
+
+            // Step 2: Verify Code
+            form2.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const codeInput = document.getElementById('recovery-code');
+                const codeVal = codeInput.value.trim();
+                if (!codeVal || codeVal.length !== 6) {
+                    return showStatus('Vui lòng nhập đúng 6 chữ số.', 'error');
+                }
+
+                const submitBtn = document.getElementById('btn-verify-code');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Đang xác thực...</span> <i class="ph-bold ph-spinner ph-spin"></i>';
+
+                try {
+                    const res = await window.canonicalAuth.verifyRecoveryCode({
+                        identifier: currentIdentifier,
+                        code: codeVal,
+                    });
+                    verifiedResetToken = res.resetToken;
+                    showStatus(res.message || 'Xác thực mã thành công!', 'success');
+                    goToStep(3);
+                } catch (err) {
+                    const mapped = window.canonicalAuth ? window.canonicalAuth.mapError(err) : err.message;
+                    showStatus(mapped, 'error');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>Xác thực mã</span> <i class="ph-bold ph-check"></i>';
+                }
+            });
+
+            // Step 3: Reset Password
+            form3.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newPwd = document.getElementById('new-password').value;
+                const confirmPwd = document.getElementById('confirm-password').value;
+
+                if (!newPwd || newPwd.length < 8) {
+                    return showStatus('Mật khẩu mới phải từ 8 ký tự trở lên.', 'error');
+                }
+                if (newPwd !== confirmPwd) {
+                    return showStatus('Mật khẩu xác nhận không khớp.', 'error');
+                }
+
+                const submitBtn = document.getElementById('btn-reset-password');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Đang cập nhật...</span> <i class="ph-bold ph-spinner ph-spin"></i>';
+
+                try {
+                    const res = await window.canonicalAuth.resetPasswordWithRecovery({
+                        identifier: currentIdentifier,
+                        resetToken: verifiedResetToken,
+                        newPassword: newPwd,
+                    });
+                    showStatus(res.message || 'Đặt lại mật khẩu thành công!', 'success');
+                    goToStep(4);
+                } catch (err) {
+                    const mapped = window.canonicalAuth ? window.canonicalAuth.mapError(err) : err.message;
+                    showStatus(mapped, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>Cập nhật mật khẩu & Mở khóa</span> <i class="ph-bold ph-arrow-right"></i>';
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+extends: existence
+message: "Phát hiện từ dễ sai chính tả: '%s'."
+level: error
+ignorecase: true
+tokens:
+  - xử lí
+  - xuất xắc
+  - xơ xuất
+  - chuẩn đoán
+  - cọ xát

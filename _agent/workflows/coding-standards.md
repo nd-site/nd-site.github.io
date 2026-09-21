@@ -50,11 +50,13 @@ Hệ thống hỗ trợ cấu hình linh hoạt trong `data.js` -> `config.examL
 - Định dạng phiên bản bắt buộc: `ver:<năm (2025=0, 2026=1, 2027=2, ...)>.<tháng>.<ngày>.<giờ><phút>`.
     - Ví dụ: Thời gian hiện tại là 18:30 ngày 19/05/2026 -> Version sẽ là `ver:1.5.19.1830`.
 
-## 9. Quy chuẩn Hệ thống Đăng nhập NDID & Tên miền
-- **TUYỆT ĐỐI KHÔNG** sử dụng bất kỳ tên miền giả lập nào như `@ndid.local`, `@ndid.internal` hoặc tên miền bên ngoài khác.
-- Đuôi email nội bộ phục vụ cho Firebase Auth bắt buộc phải là **`@ndsite.web.app`**.
-- **TUYỆT ĐỐI KHÔNG** hiển thị hậu tố tên miền `@ndsite.web.app` lên giao diện người dùng (ví dụ: trên trang cài đặt, trang quản trị, hoặc thanh điều hướng). Chỉ hiển thị tiền tố NDID thuần túy (ví dụ: `nhatdang`).
-- Hỗ trợ fallback tương thích ngược tự động cho tài khoản cũ (đuôi `@ndlabs.com`) tại màn hình đăng nhập, không yêu cầu người dùng nhập hậu tố email khi đăng nhập bằng NDID.
+## 9. Quy chuẩn Hệ thống Đăng nhập NDID (CẬP NHẬT 2026-08-30)
+- **TUYỆT ĐỐI KHÔNG** chuyển đổi NDID thành fake email (ví dụ: `${ndid}@ndsite.web.app`, `${ndid}@ndsite.id`, `${ndid}@ndlabs.com` hoặc bất kỳ domain nào khác).
+- **TUYỆT ĐỐI KHÔNG** sử dụng `signInWithEmailAndPassword()` với email được tạo từ NDID.
+- NDID là username, KHÔNG phải email. Xác thực phải qua **Firebase Custom Token** từ trusted backend.
+- Kiến trúc đăng nhập: Frontend gửi {identifier, password} → Cloud Function xác minh → tạo Custom Token → Frontend gọi `signInWithCustomToken()`.
+- Xem chi tiết tại `/docs/AUTH_RULES.md` và `/docs/AUTH_ARCHITECTURE.md`.
+- **Lưu ý legacy:** Hệ thống cũ (auth/login, auth/register) vẫn dùng fake email `@ndsite.web.app`. Các trang cũ này sẽ được thay thế bằng React components trong quá trình migration. KHÔNG viết code mới sử dụng pattern fake email.
 
 ## 10. Quy chuẩn Metadata đề thi & Hệ thống định tuyến mã đề (Mới)
 - **BẮT BUỘC** khai báo đầy đủ các thuộc tính metadata trong `window.quizData` khi tạo/cập nhật đề:

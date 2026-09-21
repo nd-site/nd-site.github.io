@@ -1,0 +1,2705 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Trị &amp; Khảo Thí – EduSpace Central Admin | ND Labs</title>
+    <link rel="icon" href="/assets/images/logo.png" type="image/png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- KaTeX & Markdown -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            min-height: 100vh;
+        }
+
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .drop-zone.active {
+            border-color: #2563eb;
+            background: #eff6ff;
+            transform: scale(1.01);
+        }
+
+        .loader {
+            border-top-color: #2563eb;
+            animation: spinner 1.5s linear infinite;
+        }
+
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .section-card {
+            background: #fff;
+            border-radius: 1.5rem;
+            border: 2px solid #e2e8f0;
+            transition: box-shadow 0.2s;
+        }
+
+        .section-card:hover {
+            box-shadow: 0 8px 32px -8px rgba(59, 130, 246, .12);
+        }
+
+        .q-card {
+            background: #f8fafc;
+            border-radius: 1rem;
+            border: 1.5px solid #e2e8f0;
+            position: relative;
+        }
+
+        .opt-row,
+        .tf-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: #fff;
+            border-radius: 0.75rem;
+            border: 1.5px solid #e2e8f0;
+            margin-bottom: 0.4rem;
+        }
+
+        .tf-row {
+            align-items: flex-start;
+        }
+
+        .tab-nav-btn {
+            padding: 0.75rem 1.25rem;
+            font-weight: 700;
+            font-size: 0.875rem;
+            border-bottom: 2px solid transparent;
+            color: #64748b;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        .tab-nav-btn.active {
+            border-bottom-color: #2563eb;
+            color: #2563eb;
+        }
+        .tab-nav-btn:hover:not(.active) {
+            color: #1e293b;
+            border-bottom-color: #cbd5e1;
+        }
+
+        .lesson-card {
+            background: #fff;
+            border-radius: 1.25rem;
+            border: 1.5px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+        .lesson-card:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 8px 24px -6px rgba(59, 130, 246, 0.12);
+        }
+
+        .runner-option {
+            transition: all 0.18s;
+            cursor: pointer;
+            border: 2px solid #f1f5f9;
+            background: #ffffff;
+            border-radius: 1rem;
+        }
+        .runner-option:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+        .runner-option.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+        .runner-option.correct-reveal {
+            border-color: #10b981 !important;
+            background: #ecfdf5 !important;
+        }
+        .runner-option.wrong-reveal {
+            border-color: #ef4444 !important;
+            background: #fef2f2 !important;
+        }
+
+        .q-map-btn {
+            width: 2.25rem;
+            height: 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.65rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+            transition: all 0.15s;
+            border: 1.5px solid #e2e8f0;
+            background: #fff;
+            color: #475569;
+        }
+        .q-map-btn.current {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+        }
+        .q-map-btn.answered {
+            background: #2563eb;
+            color: #fff;
+            border-color: #2563eb;
+        }
+        .q-map-btn.flagged {
+            border-color: #f59e0b;
+            background: #fffbeb;
+            color: #b45309;
+        }
+
+        #lock-screen.hidden {
+            display: none !important;
+        }
+    </style>
+
+    <!-- Base Scripts -->
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/font/font.js"></script>
+    <script src="/assets/js/config.js"></script>
+    <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/assets/js/api-service.js"></script>
+    <script src="/assets/js/data_modal.js"></script>
+    <script src="/assets/js/ai.js" defer></script>
+    <script src="/assets/js/contact-admin.js" defer></script>
+    <script src="/assets/js/version.js" defer></script>
+</head>
+
+<body class="pb-36 bg-slate-50 text-slate-800">
+
+    <!-- Lock / Auth Screen -->
+    <div id="lock-screen" class="fixed inset-0 z-[99999] flex items-center justify-center bg-slate-900 text-white">
+        <div class="text-center max-w-sm w-full mx-4 bg-white/95 backdrop-blur-xl p-8 rounded-3xl border border-slate-200 shadow-2xl text-slate-900">
+            <div id="lock-icon" class="mx-auto w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-5 shadow-sm">
+                <i class="ph-bold ph-lock-keyhole animate-pulse"></i>
+            </div>
+            <h3 id="lock-title" class="text-xl font-extrabold mb-2 tracking-tight text-slate-900">Đang xác thực Admin...</h3>
+            <p id="lock-desc" class="text-sm text-slate-500 mb-6">Hệ thống đang kiểm tra quyền quản trị viên của bạn qua Firebase.</p>
+            <div id="lock-action" class="hidden">
+                <a href="/admin" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md">
+                    <i class="ph-bold ph-arrow-left"></i> Về trang Admin Hub
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div id="main-dashboard" class="hidden max-w-6xl mx-auto px-4 py-6 md:p-8">
+
+        <!-- Top Header Navigation -->
+        <header class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider mb-1">
+                    <i class="ph-bold ph-graduation-cap"></i>
+                    <span>EduSpace Central Admin &amp; Exam</span>
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-950">Quản trị &amp; Khảo thí EduSpace</h1>
+            </div>
+            <div class="flex items-center gap-3 flex-wrap">
+                <button onclick="window.openGenerateAIModal()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-sm font-bold rounded-2xl shadow-lg shadow-purple-500/20 transition-all active:scale-95">
+                    <i class="ph-bold ph-sparkle text-base"></i> AI Tạo câu hỏi
+                </button>
+                <button id="btn-use-my-api" onclick="window.setupMyAPIKey()" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-2 rounded-xl transition-all">
+                    🔑 Cài đặt Gemini API
+                </button>
+                <a href="/admin" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-bold rounded-2xl shadow-sm transition-all active:scale-95">
+                    <i class="ph-bold ph-arrow-left text-blue-600"></i> Admin Hub
+                </a>
+                <a href="/eduspace" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-bold rounded-2xl shadow-sm transition-all active:scale-95">
+                    <i class="ph-bold ph-arrow-square-out text-emerald-600"></i> Xem Trang Chủ
+                </a>
+            </div>
+        </header>
+
+        <!-- Tabs Navigation -->
+        <div class="flex border-b border-slate-200 mb-8 overflow-x-auto gap-2 pb-px">
+            <button onclick="switchAdminTab('editor')" id="tab-btn-editor" class="tab-nav-btn active">
+                <i class="ph-bold ph-pencil-simple text-base"></i> Soạn &amp; Đăng đề thi
+            </button>
+            <button onclick="switchAdminTab('posts')" id="tab-btn-posts" class="tab-nav-btn">
+                <i class="ph-bold ph-list-bullets text-base"></i> Danh sách bài đã đăng
+                <span id="posts-count-badge" class="ml-1.5 bg-blue-100 text-blue-700 text-xs font-black px-2 py-0.5 rounded-full">0</span>
+            </button>
+            <button onclick="switchAdminTab('runner')" id="tab-btn-runner" class="tab-nav-btn">
+                <i class="ph-bold ph-exam text-base"></i> Làm bài kiểm tra
+            </button>
+        </div>
+
+        <!-- ==================== TAB 1: EDITOR ==================== -->
+        <div id="tab-content-editor" class="space-y-8">
+
+            <!-- Meta Publish Info Card -->
+            <div class="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100">
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-600 p-6 md:p-8 text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
+                            <span>📡</span> Thông tin đồng bộ Firebase
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Cấu hình bài đăng EduSpace</h2>
+                        <p class="text-blue-100 text-xs md:text-sm font-medium opacity-90 mt-1">Dữ liệu được lưu trực tiếp vào Firestore và dùng chung với hệ sinh thái EduSpace.</p>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Mã ID bài (Slug duy nhất)</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="pub-id" placeholder="vd: toan12, ly11a" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl font-mono text-sm font-bold text-slate-800 focus:bg-white transition-all">
+                                <button onclick="window.genRandomId()" title="Tạo mã ngẫu nhiên" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-sm font-bold transition-all">
+                                    <i class="ph-bold ph-arrows-clockwise text-base"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Tiêu đề bài kiểm tra <span class="text-rose-500">*</span></label>
+                            <input type="text" id="pub-title" placeholder="vd: Đề thi Giữa kì 1 Toán 12 - THPT Chuyên" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:bg-white transition-all">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Khối lớp</label>
+                            <input type="text" id="pub-class" placeholder="10, 11, 12..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Môn học</label>
+                            <input type="text" id="pub-subject" placeholder="Toán, Lý, Hóa..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Thời gian (phút)</label>
+                            <input type="number" id="meta-duration" value="45" min="1" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Thẻ phân loại (Tag)</label>
+                            <input type="text" id="pub-tag" placeholder="Giữa kì, Khảo sát..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:bg-white">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Tác giả biên soạn</label>
+                            <input type="text" id="meta-author" placeholder="Tên giáo viên..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Trường học / Sở</label>
+                            <input type="text" id="meta-school" placeholder="THPT Chuyên..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Bộ sách giáo khoa</label>
+                            <input type="text" id="meta-book" placeholder="KNTT, Cánh diều..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Mô tả tóm tắt</label>
+                        <textarea id="pub-desc" rows="2" placeholder="Ghi chú thêm về nội dung, cấu trúc hoặc phạm vi kiến thức..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:bg-white"></textarea>
+                    </div>
+
+                    <div class="flex items-center gap-6 pt-2">
+                        <label class="flex items-center gap-2 cursor-pointer select-none">
+                            <input type="checkbox" id="pub-hot" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500">
+                            <span class="text-sm font-bold text-slate-700">🔥 Đề thi Hot</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer select-none">
+                            <input type="checkbox" id="pub-coming-soon" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500">
+                            <span class="text-sm font-bold text-slate-700">⏳ Sắp ra mắt</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Import & AI Tools Card -->
+            <div class="section-card p-6 md:p-8 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="ph-bold ph-cpu text-blue-600"></i> Công cụ AI &amp; Nhập đề thi
+                        </h2>
+                        <p class="text-slate-500 text-xs mt-1">Hỗ trợ nhận dạng tự động 4 dạng câu: Trắc nghiệm 4 lựa chọn, Đúng/Sai 4 ý (chuẩn GDPT 2018), Trả lời ngắn và Tự luận.</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="window.openGenerateAIModal()" class="px-3.5 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-purple-200 shadow-sm">
+                            <i class="ph-bold ph-magic-wand"></i> AI Tạo đề (Gemini Notebook)
+                        </button>
+                        <button onclick="window.openExplanationAIModal()" class="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-amber-200 shadow-sm">
+                            <i class="ph-bold ph-lightbulb"></i> AI Viết giải thích (Gemini Notebook)
+                        </button>
+                        <button onclick="window.openReviewAIModal()" class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-indigo-200 shadow-sm">
+                            <i class="ph-bold ph-shield-check"></i> AI Thẩm định đề (Gemini Notebook)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- File Drop Zone -->
+                <div id="dropZone" class="drop-zone p-8 rounded-2xl text-center cursor-pointer">
+                    <input type="file" id="docxInput" accept=".docx" class="hidden">
+                    <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-3 shadow-sm">
+                        <i class="ph-bold ph-file-doc"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-800 text-base mb-1">Chọn hoặc kéo thả tệp Word (.docx) vào đây</h3>
+                    <p class="text-slate-400 text-xs">Hệ thống sẽ đọc nội dung và áp dụng AI để trích xuất các câu hỏi một cách chuẩn xác.</p>
+                </div>
+
+                <!-- Text Area Input for Manual Paste -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-2">Hoặc dán nội dung văn bản đề thi thô vào đây:</label>
+                    <textarea id="rawTextInput" rows="5" placeholder="Dán nội dung đề thi vào đây rồi bấm nút 'Sao chép Prompt bóc tách cho Gemini' hoặc 'Trích xuất đề thi bằng AI' bên dưới..." class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono text-slate-800 focus:bg-white"></textarea>
+                    <div class="mt-3 flex items-center justify-between flex-wrap gap-3">
+                        <span id="rawTextCounter" class="text-xs text-slate-400 font-medium">0 ký tự</span>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button onclick="window.copyExtractPromptForGemini()" class="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-blue-200">
+                                <i class="ph-bold ph-copy"></i> Sao chép Prompt bóc tách cho Gemini
+                            </button>
+                            <button onclick="window.openGeminiNotebook()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
+                                <i class="ph-bold ph-arrow-square-out text-purple-600"></i> Mở Gemini
+                            </button>
+                            <button onclick="window.openJsonImportModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition-all shadow-sm flex items-center gap-1.5 active:scale-95">
+                                <i class="ph-bold ph-plus-circle"></i> Nạp JSON vào đề
+                            </button>
+                            <button onclick="window.parseSimpleTextRegex()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
+                                Trích xuất Regex
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading / Status Message -->
+                <div id="aiLoadingStatus" class="hidden p-4 rounded-2xl bg-blue-50 border border-blue-200 flex items-center gap-3">
+                    <div class="loader border-2 border-blue-600 h-5 w-5 rounded-full"></div>
+                    <div>
+                        <div id="aiLoadingTitle" class="text-sm font-bold text-blue-900">Đang xử lý đề thi...</div>
+                        <div id="aiLoadingDesc" class="text-xs text-blue-700">Vui lòng đợi giây lát.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Question Builder Area -->
+            <div class="section-card p-6 md:p-8 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-black">
+                            <i class="ph-bold ph-list-numbers"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-extrabold text-slate-900">Danh sách câu hỏi đề thi</h2>
+                            <p class="text-slate-500 text-xs">Tổng số câu hiện có: <span id="questionsCountBadge" class="font-extrabold text-blue-600">0</span> câu</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="window.addNewQuestion('multiple')" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-blue-200">
+                            <i class="ph-bold ph-plus"></i> Thêm trắc nghiệm
+                        </button>
+                        <button onclick="window.addNewQuestion('truefalse')" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-emerald-200">
+                            <i class="ph-bold ph-plus"></i> Thêm Đúng/Sai
+                        </button>
+                        <button onclick="window.addNewQuestion('short')" class="px-3.5 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-purple-200">
+                            <i class="ph-bold ph-plus"></i> Thêm Trả lời ngắn
+                        </button>
+                        <button onclick="window.clearAllQuestions()" class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-all">
+                            Xóa hết
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Questions Container -->
+                <div id="questionsContainer" class="space-y-4">
+                    <div id="emptyQuestionsPlaceholder" class="p-12 text-center text-slate-400">
+                        <i class="ph-bold ph-tray text-4xl mb-2"></i>
+                        <p class="text-sm font-semibold">Chưa có câu hỏi nào. Tải tệp Word, dán văn bản hoặc bấm "Thêm trắc nghiệm" để bắt đầu.</p>
+                    </div>
+                </div>
+
+                <!-- Action Bar at Bottom of Editor -->
+                <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="window.testCurrentExamInRunner()" class="px-5 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-2xl text-sm transition-all shadow-md shadow-emerald-500/20 active:scale-95 flex items-center gap-2">
+                            <i class="ph-bold ph-play-circle text-lg"></i> Làm thử đề này ngay
+                        </button>
+                        <button onclick="window.exportToDataJs()" class="px-4 py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-2xl text-xs transition-all flex items-center gap-1.5">
+                            <i class="ph-bold ph-download-simple text-sm"></i> Tải file JSON
+                        </button>
+                    </div>
+
+                    <button id="btnPublishDirect" onclick="window.publishDirectToFirebase()" class="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl text-sm transition-all shadow-xl shadow-blue-500/30 active:scale-95 flex items-center justify-center gap-2">
+                        <i class="ph-bold ph-cloud-arrow-up text-lg"></i> Đăng bài lên Firebase
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== TAB 2: POSTS LIST ==================== -->
+        <div id="tab-content-posts" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-black text-slate-900">Danh mục đề thi trên Firebase</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Các đề thi này được lưu trữ tập trung tại collection <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">quizzes</code> và <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">eduspace_lessons</code>.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="text" id="postsSearchInput" oninput="window.filterAdminPosts(this.value)" placeholder="Tìm mã ID, môn, lớp..." class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white w-60">
+                    <button onclick="window.loadAdminPosts()" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm transition-all" title="Làm mới danh sách">
+                        <i class="ph-bold ph-arrows-clockwise"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Posts State -->
+            <div id="postsListLoading" class="p-16 text-center">
+                <div class="loader border-4 border-blue-600 h-10 w-10 rounded-full mx-auto mb-4"></div>
+                <p class="text-slate-500 text-sm font-bold">Đang tải danh sách bài từ Firebase...</p>
+            </div>
+
+            <!-- Empty Posts State -->
+            <div id="postsListEmpty" class="hidden p-16 text-center bg-white rounded-3xl border border-slate-200">
+                <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-3xl mx-auto mb-3">
+                    <i class="ph-bold ph-files"></i>
+                </div>
+                <h3 class="text-base font-extrabold text-slate-700">Chưa có bài đăng nào</h3>
+                <p class="text-slate-400 text-xs mt-1">Hãy chuyển sang tab "Soạn &amp; Đăng đề thi" để xuất bản bài đầu tiên.</p>
+            </div>
+
+            <!-- Posts Grid -->
+            <div id="postsGridContainer" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- ==================== TAB 3: RUNNER ==================== -->
+        <div id="tab-content-runner" class="hidden space-y-6">
+
+            <!-- Runner Control Bar -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-wider mb-1">
+                        <span>🧪</span> Trình làm bài kiểm tra trực tuyến
+                    </div>
+                    <h2 id="runner-active-title" class="text-xl font-black text-slate-900">Chọn đề thi để bắt đầu</h2>
+                </div>
+                <div class="flex items-center gap-3 flex-wrap">
+                    <select id="runnerExamSelector" onchange="window.selectExamToRun(this.value)" class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:bg-white">
+                        <option value="">-- Chọn đề từ cơ sở dữ liệu --</option>
+                    </select>
+                    <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+                        <button onclick="window.setRunnerMode('practice')" id="runner-mode-practice-btn" class="px-3 py-1.5 rounded-lg text-xs font-black transition-all bg-white text-blue-600 shadow-sm">
+                            Luyện tập
+                        </button>
+                        <button onclick="window.setRunnerMode('exam')" id="runner-mode-exam-btn" class="px-3 py-1.5 rounded-lg text-xs font-black transition-all text-slate-500 hover:text-slate-800">
+                            Thi thử
+                        </button>
+                    </div>
+                    <div id="runnerTimerBox" class="bg-slate-900 text-white font-mono font-black text-sm px-3.5 py-2 rounded-xl shadow-sm">
+                        00:00
+                    </div>
+                    <button onclick="window.submitRunnerQuiz()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs rounded-xl shadow-md transition-all active:scale-95">
+                        Nộp bài
+                    </button>
+                </div>
+            </div>
+
+            <!-- Runner Core Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-[1fr,320px] gap-6">
+
+                <!-- Left Column: Question Area -->
+                <div class="space-y-6">
+                    <div id="runnerQuestionCard" class="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm min-h-[360px] flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span id="runnerQuestionBadge" class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-black uppercase tracking-wider">
+                                    Câu 1
+                                </span>
+                                <span id="runnerQuestionTypeBadge" class="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                                    Trắc nghiệm 4 lựa chọn
+                                </span>
+                            </div>
+
+                            <div id="runnerQuestionText" class="text-base md:text-lg text-slate-900 leading-relaxed font-semibold mb-6">
+                                Đang chuẩn bị câu hỏi...
+                            </div>
+
+                            <div id="runnerOptionsContainer" class="space-y-2.5"></div>
+
+                            <!-- Explanation Box (revealed in practice mode or after submit) -->
+                            <div id="runnerExplanationBox" class="hidden mt-6 p-5 rounded-2xl border text-sm leading-relaxed">
+                                <div id="runnerExplanationHeader" class="font-extrabold mb-2 flex items-center gap-2"></div>
+                                <div id="runnerExplanationText" class="text-slate-700"></div>
+                                <div class="mt-4 pt-3 border-t border-slate-200/60 flex items-center justify-between">
+                                    <span class="text-xs text-slate-500 font-medium">Cần hỗ trợ kiến thức bài này?</span>
+                                    <button onclick="window.askEduAIAboutCurrentQuestion()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-all flex items-center gap-1.5">
+                                        ✨ Hỏi EduAI Assistant
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Controls -->
+                        <div class="mt-8 pt-5 border-t border-slate-100 flex items-center justify-between gap-3">
+                            <button onclick="window.runnerPrevQuestion()" id="runnerPrevBtn" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all disabled:opacity-40">
+                                ← Câu trước
+                            </button>
+                            <button onclick="window.runnerCheckPractice()" id="runnerCheckBtn" class="hidden px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-black transition-all shadow-md">
+                                Kiểm tra đáp án
+                            </button>
+                            <button onclick="window.runnerNextQuestion()" id="runnerNextBtn" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">
+                                Câu tiếp theo →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Sidebar Map & Summary -->
+                <div class="space-y-6">
+                    <!-- Progress Card -->
+                    <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-black text-slate-500 uppercase tracking-wider">Tiến độ làm bài</span>
+                            <span id="runnerProgressText" class="text-xs font-bold text-blue-600">0/0</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-6">
+                            <div id="runnerProgressBar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+
+                        <!-- Question Map Grid -->
+                        <div class="mb-2 flex items-center justify-between">
+                            <span class="text-xs font-black text-slate-500 uppercase tracking-wider">Bản đồ câu hỏi</span>
+                            <button onclick="window.toggleRunnerFlag()" class="text-[11px] font-bold text-amber-600 hover:text-amber-700 flex items-center gap-1">
+                                <i class="ph-bold ph-flag"></i> Đặt cờ
+                            </button>
+                        </div>
+                        <div id="runnerQuestionMap" class="grid grid-cols-5 gap-2 max-h-64 overflow-y-auto p-1"></div>
+
+                        <!-- Legend -->
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[10px] font-bold text-slate-400">
+                            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-blue-600"></span> Đã làm</div>
+                            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded border border-slate-300"></span> Chưa làm</div>
+                            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-400"></span> Có cờ</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- AI Generator Modal (Gemini Notebook Bridge) -->
+    <div id="aiGenModal" class="hidden fixed inset-0 z-[10000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl border border-slate-100 max-h-[90vh] flex flex-col space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2 text-purple-600">
+                    <i class="ph-bold ph-sparkle text-2xl"></i>
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900">AI Tạo đề thi (Gemini Notebook Bridge)</h3>
+                        <p class="text-xs text-slate-500 font-medium">Không cần API cá nhân. Tạo prompt chuẩn GDPT 2018 → Gửi sang Gemini Notebook → Nạp JSON vào đề.</p>
+                    </div>
+                </div>
+                <button onclick="window.closeGenerateAIModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+            </div>
+
+            <div class="overflow-y-auto space-y-4 pr-1 text-sm text-slate-700 flex-1">
+                <!-- Bước 1: Cấu hình yêu cầu đề -->
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3">
+                    <div class="font-extrabold text-xs text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px]">1</span>
+                        Thiết lập yêu cầu đề thi
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Chủ đề / Yêu cầu kiến thức <span class="text-rose-500">*</span></label>
+                        <textarea id="aiGenPrompt" rows="2" placeholder="vd: Khảo sát sự biến thiên và vẽ đồ thị hàm số lớp 12, phân bổ 3 câu nhận biết, 2 câu thông hiểu, có bài toán thực tế..." class="w-full p-3 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white"></textarea>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Môn học</label>
+                            <input type="text" id="aiGenSubject" value="Toán học" placeholder="Toán học, Vật lí..." class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Khối lớp</label>
+                            <input type="text" id="aiGenClass" value="12" placeholder="10, 11, 12..." class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Số lượng câu</label>
+                            <input type="number" id="aiGenCount" value="5" min="1" max="40" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Dạng câu hỏi mong muốn</label>
+                        <div class="flex items-center gap-4 text-xs font-bold text-slate-700">
+                            <label class="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" id="aiGenTypeMultiple" checked> Trắc nghiệm 4 lựa chọn</label>
+                            <label class="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" id="aiGenTypeTF" checked> Đúng / Sai 4 ý (GDPT 2018)</label>
+                            <label class="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" id="aiGenTypeShort"> Trả lời ngắn</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bước 2: Tạo Prompt & Chuyển sang Gemini Notebook -->
+                <div class="p-4 bg-purple-50/60 rounded-2xl border border-purple-100 space-y-3">
+                    <div class="font-extrabold text-xs text-purple-700 uppercase tracking-wider flex items-center justify-between">
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px]">2</span>
+                            Chuyển tiếp Prompt sang Gemini Notebook
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-600">Bấm <b>Sao chép Prompt</b>, sau đó mở Gemini Notebook / Web để dán prompt yêu cầu AI soạn đề chuẩn JSON.</p>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="window.copyGenAIPrompt()" class="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 active:scale-95">
+                            <i class="ph-bold ph-copy"></i> Sao chép Prompt cho Gemini
+                        </button>
+                        <button onclick="window.openGeminiNotebook()" class="px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5">
+                            <i class="ph-bold ph-arrow-square-out text-purple-600"></i> Mở Gemini Web
+                        </button>
+                        <button onclick="window.openNotebookLM()" class="px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5">
+                            <i class="ph-bold ph-notebook text-indigo-600"></i> Mở NotebookLM
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bước 3: Dán JSON kết quả từ Gemini -->
+                <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 space-y-2">
+                    <div class="font-extrabold text-xs text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">3</span>
+                        Dán kết quả JSON từ Gemini vào đây
+                    </div>
+                    <textarea id="aiGenJsonInput" rows="5" placeholder="Dán toàn bộ kết quả mà Gemini trả về vào đây (chấp nhận cả khối ```json [ ... ]``` hoặc [ ... ])..." class="w-full p-3 bg-white border border-slate-200 rounded-xl font-mono text-xs text-slate-800 focus:bg-white"></textarea>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                <button onclick="window.closeGenerateAIModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all">
+                    Đóng
+                </button>
+                <button onclick="window.importQuestionsFromGenAI()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl shadow-md transition-all active:scale-95 flex items-center gap-2">
+                    <i class="ph-bold ph-plus-circle text-base"></i> Nạp câu hỏi vào đề thi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Review Modal (Gemini Notebook Bridge) -->
+    <div id="aiReviewModal" class="hidden fixed inset-0 z-[10000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl border border-slate-100 max-h-[90vh] flex flex-col space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2 text-indigo-600">
+                    <i class="ph-bold ph-shield-check text-2xl"></i>
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900">AI Thẩm định Đề thi (Gemini Notebook Bridge)</h3>
+                        <p class="text-xs text-slate-500 font-medium">Đánh giá tính đúng đắn khoa học, chuẩn LaTeX, barem điểm và ma trận nhận thức GDPT 2018.</p>
+                    </div>
+                </div>
+                <button onclick="window.closeReviewAIModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+            </div>
+
+            <div class="overflow-y-auto space-y-4 pr-1 text-sm text-slate-700 flex-1">
+                <!-- Bước 1: Sao chép Prompt thẩm định -->
+                <div class="p-4 bg-indigo-50/60 rounded-2xl border border-indigo-100 space-y-3">
+                    <div class="font-extrabold text-xs text-indigo-800 uppercase tracking-wider flex items-center justify-between">
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">1</span>
+                            Đề thi hiện tại: <span id="aiReviewCurrentCount" class="text-indigo-600 font-black">0</span> câu hỏi
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-600">Bấm <b>Sao chép Prompt Thẩm định</b> để tạo prompt kèm toàn bộ câu hỏi hiện có, sau đó gửi sang Gemini để AI kiểm tra chi tiết.</p>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="window.copyReviewPromptForGemini()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 active:scale-95">
+                            <i class="ph-bold ph-copy"></i> Sao chép Prompt Thẩm định
+                        </button>
+                        <button onclick="window.openGeminiNotebook()" class="px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5">
+                            <i class="ph-bold ph-arrow-square-out text-indigo-600"></i> Mở Gemini Web
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bước 2: Dán JSON kết quả thẩm định -->
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                    <div class="font-extrabold text-xs text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-5 h-5 rounded-full bg-slate-600 text-white flex items-center justify-center text-[10px]">2</span>
+                        Dán kết quả JSON thẩm định từ Gemini vào đây
+                    </div>
+                    <textarea id="aiReviewJsonInput" rows="4" placeholder="Dán kết quả JSON báo cáo thẩm định từ Gemini vào đây..." class="w-full p-3 bg-white border border-slate-200 rounded-xl font-mono text-xs text-slate-800 focus:bg-white"></textarea>
+                    <div class="flex justify-end">
+                        <button onclick="window.importReviewFromJson()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-1.5 active:scale-95">
+                            <i class="ph-bold ph-chart-bar"></i> Hiển thị Báo cáo Thẩm định
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Báo cáo hiển thị -->
+                <div id="aiReviewContent" class="space-y-4"></div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex justify-end">
+                <button onclick="window.closeReviewAIModal()" class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Explanation Modal (Gemini Notebook Bridge) -->
+    <div id="aiExplanationModal" class="hidden fixed inset-0 z-[10000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl border border-slate-100 max-h-[90vh] flex flex-col space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2 text-amber-600">
+                    <i class="ph-bold ph-lightbulb text-2xl"></i>
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900">AI Hỗ trợ Viết lời giải chi tiết (Gemini Bridge)</h3>
+                        <p class="text-xs text-slate-500 font-medium">Tự động soạn lời giải sư phạm từng bước có công thức KaTeX cho từng câu hỏi.</p>
+                    </div>
+                </div>
+                <button onclick="window.closeExplanationAIModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+            </div>
+
+            <div class="overflow-y-auto space-y-4 pr-1 text-sm text-slate-700 flex-1">
+                <!-- Bước 1: Chọn phạm vi & Sao chép Prompt -->
+                <div class="p-4 bg-amber-50/60 rounded-2xl border border-amber-100 space-y-3">
+                    <div class="font-extrabold text-xs text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px]">1</span>
+                        Phạm vi câu hỏi cần viết giải thích
+                    </div>
+                    <div class="space-y-2 text-xs font-bold text-slate-700">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="aiExpScope" value="missing" checked class="text-amber-600">
+                            <span>Chỉ viết cho các câu chưa có lời giải (<span id="aiExpMissingCount" class="text-amber-700 font-black">0</span> câu)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="aiExpScope" value="all" class="text-amber-600">
+                            <span>Viết lại lời giải cho tất cả câu hỏi trong đề (<span id="aiExpTotalCount" class="text-amber-700 font-black">0</span> câu)</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap pt-1">
+                        <button onclick="window.copyExplanationPromptForGemini()" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 active:scale-95">
+                            <i class="ph-bold ph-copy"></i> Sao chép Prompt Viết Giải Thích
+                        </button>
+                        <button onclick="window.openGeminiNotebook()" class="px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5">
+                            <i class="ph-bold ph-arrow-square-out text-amber-600"></i> Mở Gemini Web
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bước 2: Dán JSON kết quả giải thích -->
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                    <div class="font-extrabold text-xs text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-5 h-5 rounded-full bg-slate-600 text-white flex items-center justify-center text-[10px]">2</span>
+                        Dán kết quả JSON mảng lời giải từ Gemini vào đây
+                    </div>
+                    <textarea id="aiExpJsonInput" rows="5" placeholder='Dán mảng JSON từ Gemini vào đây (vd: [{"index": 1, "explanation": "Bước 1: Tính đạo hàm..."}, ...])...' class="w-full p-3 bg-white border border-slate-200 rounded-xl font-mono text-xs text-slate-800 focus:bg-white"></textarea>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                <button onclick="window.closeExplanationAIModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all">
+                    Đóng
+                </button>
+                <button onclick="window.importExplanationsFromJson()" class="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-black rounded-xl shadow-md transition-all active:scale-95 flex items-center gap-2">
+                    <i class="ph-bold ph-check-circle text-base"></i> Áp dụng lời giải vào đề thi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JSON Direct Import Modal -->
+    <div id="jsonImportModal" class="hidden fixed inset-0 z-[10000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl border border-slate-100 max-h-[90vh] flex flex-col space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2 text-emerald-600">
+                    <i class="ph-bold ph-code text-2xl"></i>
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900">Nạp dữ liệu câu hỏi từ JSON</h3>
+                        <p class="text-xs text-slate-500 font-medium">Dán JSON từ Gemini hoặc tệp xuất đề thi để nạp trực tiếp vào Visual Editor.</p>
+                    </div>
+                </div>
+                <button onclick="window.closeJsonImportModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+            </div>
+
+            <div class="overflow-y-auto space-y-3 pr-1 text-sm text-slate-700 flex-1">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">Nội dung JSON (mảng câu hỏi hoặc đối tượng đề thi):</label>
+                    <textarea id="jsonDirectInput" rows="10" placeholder='Dán JSON vào đây, ví dụ: [{"type":"multiple","question":"...","options":["..."],"correct":0}]...' class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-xs text-slate-800 focus:bg-white"></textarea>
+                </div>
+                <div class="flex items-center gap-4 text-xs font-bold text-slate-700">
+                    <label class="flex items-center gap-1.5 cursor-pointer">
+                        <input type="radio" name="jsonImportMode" value="append" checked class="text-emerald-600">
+                        <span>Thêm nối tiếp vào cuối đề hiện tại</span>
+                    </label>
+                    <label class="flex items-center gap-1.5 cursor-pointer">
+                        <input type="radio" name="jsonImportMode" value="replace" class="text-emerald-600">
+                        <span>Ghi đè thay thế toàn bộ đề đang soạn</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                <button onclick="window.closeJsonImportModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all">
+                    Hủy
+                </button>
+                <button onclick="window.executeJsonImport()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl shadow-md transition-all active:scale-95 flex items-center gap-2">
+                    <i class="ph-bold ph-arrow-down-left text-base"></i> Nạp vào trình soạn thảo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Runner Result Summary Modal -->
+    <div id="runnerResultModal" class="hidden fixed inset-0 z-[10000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-slate-100 text-center space-y-5">
+            <div class="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-3xl mx-auto shadow-sm">
+                🎉
+            </div>
+            <h3 class="text-2xl font-black text-slate-900">Kết quả bài kiểm tra</h3>
+            
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/80">
+                <div class="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Điểm số đạt được</div>
+                <div id="runnerFinalScore" class="text-5xl font-black text-blue-600 font-mono">0.0</div>
+                <div class="text-xs font-bold text-slate-500 mt-2">Thang điểm 10.0 (chuẩn GDPT 2018)</div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-xs font-bold">
+                <div class="bg-emerald-50 text-emerald-800 p-2.5 rounded-xl border border-emerald-100">
+                    <div id="runnerCountCorrect" class="text-lg font-black">0</div>
+                    <div>Đúng</div>
+                </div>
+                <div class="bg-rose-50 text-rose-800 p-2.5 rounded-xl border border-rose-100">
+                    <div id="runnerCountWrong" class="text-lg font-black">0</div>
+                    <div>Sai</div>
+                </div>
+                <div class="bg-slate-100 text-slate-700 p-2.5 rounded-xl border border-slate-200">
+                    <div id="runnerTimeSpent" class="text-lg font-black">00:00</div>
+                    <div>Thời gian</div>
+                </div>
+            </div>
+
+            <div class="pt-2 flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                <button onclick="window.enterRunnerReviewMode()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs rounded-xl shadow-md transition-all">
+                    Xem lại bài thi &amp; Lời giải
+                </button>
+                <button onclick="window.restartRunnerExam()" class="px-4 py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1 border border-emerald-200">
+                    <i class="ph-bold ph-arrows-clockwise text-sm"></i> Làm lại
+                </button>
+                <button onclick="document.getElementById('runnerResultModal').classList.add('hidden')" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-[99999] hidden bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl text-xs font-bold items-center gap-3 border border-slate-700">
+        <span id="toastIcon">🔔</span>
+        <span id="toastMessage">Thông báo</span>
+    </div>
+
+    <!-- ==================== APPLICATION SCRIPT ==================== -->
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import {
+            getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, query, orderBy, serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        // Global state
+        let auth, db, currentUser = null;
+        let questions = [];
+        let allAdminPosts = [];
+
+        // Exam Runner State
+        let runnerQuizData = null;
+        let runnerMode = 'practice';
+        let runnerCurrentIndex = 0;
+        let runnerUserAnswers = [];
+        let runnerTimerInterval = null;
+        let runnerSecondsRemaining = 0;
+        let runnerFlagged = [];
+        let runnerChecked = [];
+        let runnerIsSubmitted = false;
+
+        // --- TOAST HELPER ---
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            if (!toast) return;
+            toastMsg.innerText = msg;
+            toastIcon.innerText = isError ? '⚠️' : '🎉';
+            toast.className = `fixed bottom-6 right-6 z-[99999] flex ${isError ? 'bg-rose-900 border-rose-700' : 'bg-slate-900 border-slate-700'} text-white px-5 py-3.5 rounded-2xl shadow-2xl text-xs font-bold items-center gap-3 border transition-all`;
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3500);
+        }
+        window.showToast = showToast;
+
+        // --- TAB SWITCHING ---
+        window.switchAdminTab = function(tabName) {
+            ['editor', 'posts', 'runner'].forEach(t => {
+                const btn = document.getElementById(`tab-btn-${t}`);
+                const content = document.getElementById(`tab-content-${t}`);
+                if (btn) btn.classList.toggle('active', t === tabName);
+                if (content) content.classList.toggle('hidden', t !== tabName);
+            });
+
+            if (tabName === 'posts') {
+                window.loadAdminPosts();
+            } else if (tabName === 'runner') {
+                window.populateRunnerExamDropdown();
+            }
+        };
+
+        // --- AUTHENTICATION & LOCK SCREEN ---
+        function initApp() {
+            function bindServices() {
+                if (window.firebaseFirestore && window.firebaseAuth) {
+                    db = window.firebaseFirestore;
+                    auth = window.firebaseAuth;
+                    attachAuthListener();
+                    return true;
+                } else if (getApps().length > 0) {
+                    const app = getApp();
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    attachAuthListener();
+                    return true;
+                }
+                return false;
+            }
+
+            if (!bindServices()) {
+                window.addEventListener('firebase-ready', () => {
+                    bindServices();
+                }, { once: true });
+                const timer = setInterval(() => {
+                    if (bindServices()) clearInterval(timer);
+                }, 250);
+            }
+        }
+
+        function attachAuthListener() {
+            if (!auth || attachAuthListener._attached) return;
+            attachAuthListener._attached = true;
+
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    showLockError("Yêu cầu đăng nhập", "Vui lòng đăng nhập tài khoản quản trị để truy cập trang này.");
+                    return;
+                }
+
+                try {
+                    let isAuthorized = false;
+
+                    // 1. Kiểm tra qua Canonical Auth profile nếu có
+                    if (window.canonicalAuth && typeof window.canonicalAuth.getUserProfile === 'function') {
+                        const prof = window.canonicalAuth.getUserProfile();
+                        if (prof && (prof.role === 'admin' || prof.adminLevel === 'owner') && prof.status === 'active') {
+                            isAuthorized = true;
+                        }
+                    }
+
+                    // 2. Kiểm tra vai trò thực tế từ Firestore users/{uid}
+                    if (!isAuthorized) {
+                        const userSnap = await getDoc(doc(db, 'users', user.uid));
+                        if (userSnap.exists()) {
+                            const uData = userSnap.data();
+                            const hasAdminRole = (uData.role === 'admin' || uData.role === 'ADMIN' || uData.role === 'SUPER_ADMIN' || uData.adminLevel === 'owner');
+                            const isActive = (uData.status === 'active' || !uData.status);
+                            if (hasAdminRole && isActive) {
+                                isAuthorized = true;
+                            }
+                        }
+                    }
+
+                    if (!isAuthorized) {
+                        showLockError("Từ chối quyền truy cập", "Tài khoản của bạn không có vai trò Quản trị viên (Admin).");
+                        return;
+                    }
+
+                    currentUser = user;
+                    document.getElementById('lock-screen')?.classList.add('hidden');
+                    document.getElementById('main-dashboard')?.classList.remove('hidden');
+                    showToast("Xác thực quản trị viên thành công!");
+                    window.loadAdminPosts();
+                } catch (e) {
+                    console.error("Auth verify error:", e);
+                    showLockError("Lỗi xác thực vai trò", "Không thể kiểm tra vai trò tài khoản: " + e.message);
+                }
+            });
+        }
+
+        function showLockError(title, desc) {
+            const t = document.getElementById('lock-title');
+            const d = document.getElementById('lock-desc');
+            const a = document.getElementById('lock-action');
+            if (t) t.innerText = title;
+            if (d) d.innerText = desc;
+            if (a) a.classList.remove('hidden');
+        }
+
+        window.setupMyAPIKey = async function() {
+            if (!currentUser) return;
+            let currentKey = '';
+            try {
+                const snap = await getDoc(doc(db, 'users', currentUser.uid));
+                if (snap.exists()) currentKey = snap.data().customGeminiKey || '';
+            } catch (_) {}
+
+            const newKey = prompt('Nhập Gemini API Key của bạn (khóa lưu bảo mật trên tài khoản):', currentKey);
+            if (newKey === null) return;
+
+            try {
+                await updateDoc(doc(db, 'users', currentUser.uid), { customGeminiKey: newKey.trim() });
+                showToast("Đã lưu khóa API Gemini thành công!");
+            } catch (err) {
+                showToast("Lỗi lưu khóa API: " + err.message, true);
+            }
+        };
+
+        // --- QUESTION BUILDER / EDITOR LOGIC ---
+        window.genRandomId = function() {
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let res = '';
+            for (let i = 0; i < 6; i++) res += chars[Math.floor(Math.random() * chars.length)];
+            const el = document.getElementById('pub-id');
+            if (el) el.value = res;
+        };
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            const countBadge = document.getElementById('questionsCountBadge');
+            if (countBadge) countBadge.innerText = questions.length;
+            if (!container) return;
+
+            if (questions.length === 0) {
+                container.innerHTML = `
+                    <div class="p-12 text-center text-slate-400 border-2 border-dashed border-slate-200 rounded-2xl">
+                        <i class="ph-bold ph-tray text-4xl mb-2"></i>
+                        <p class="text-sm font-semibold">Chưa có câu hỏi nào. Tải tệp Word, dán văn bản hoặc bấm "Thêm trắc nghiệm" để bắt đầu.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = questions.map((q, idx) => {
+                const qType = q.type || 'multiple';
+                return `
+                    <div class="q-card p-5 space-y-4 border border-slate-200 bg-white shadow-sm" data-idx="${idx}">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs font-black">
+                                    Câu ${idx + 1}
+                                </span>
+                                <select onchange="window.changeQuestionType(${idx}, this.value)" class="text-xs font-bold px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-lg text-slate-700">
+                                    <option value="multiple" ${qType === 'multiple' ? 'selected' : ''}>Trắc nghiệm 4 lựa chọn</option>
+                                    <option value="truefalse" ${qType === 'truefalse' ? 'selected' : ''}>Đúng / Sai 4 ý</option>
+                                    <option value="short" ${qType === 'short' ? 'selected' : ''}>Trả lời ngắn / Điền số</option>
+                                    <option value="essay" ${qType === 'essay' ? 'selected' : ''}>Tự luận</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <button onclick="window.moveQuestion(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} class="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 disabled:opacity-30">
+                                    <i class="ph-bold ph-arrow-up"></i>
+                                </button>
+                                <button onclick="window.moveQuestion(${idx}, 1)" ${idx === questions.length - 1 ? 'disabled' : ''} class="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 disabled:opacity-30">
+                                    <i class="ph-bold ph-arrow-down"></i>
+                                </button>
+                                <button onclick="window.duplicateQuestion(${idx})" class="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500" title="Nhân bản câu này">
+                                    <i class="ph-bold ph-copy"></i>
+                                </button>
+                                <button onclick="window.removeQuestion(${idx})" class="p-1.5 hover:bg-rose-50 text-rose-600 rounded-lg" title="Xóa câu">
+                                    <i class="ph-bold ph-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Question Text Area -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Nội dung câu hỏi (hỗ trợ KaTeX $...$)</label>
+                            <textarea oninput="window.updateQuestionText(${idx}, this.value)" rows="2" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white">${q.question || ''}</textarea>
+                        </div>
+
+                        <!-- Options by Type -->
+                        ${renderEditorOptions(q, idx)}
+
+                        <!-- Explanation Area -->
+                        <div class="pt-2 border-t border-slate-100">
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Lời giải thích chi tiết</label>
+                            <textarea oninput="window.updateExplanation(${idx}, this.value)" rows="2" placeholder="Giải thích các bước giải hoặc kiến thức liên quan..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:bg-white">${q.explanation || ''}</textarea>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Render math formulas
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(container, {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '$', right: '$', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function renderEditorOptions(q, idx) {
+            const qType = q.type || 'multiple';
+
+            if (qType === 'multiple') {
+                const opts = q.options || ['', '', '', ''];
+                const correct = q.correct !== undefined ? q.correct : 0;
+                return `
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-slate-500">Các phương án (Chọn nút tròn cho đáp án đúng):</label>
+                        ${opts.map((opt, oIdx) => `
+                            <div class="opt-row">
+                                <input type="radio" name="q_correct_${idx}" onchange="window.setMultipleCorrect(${idx}, ${oIdx})" ${correct === oIdx ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-bold text-xs text-slate-400 w-4">${String.fromCharCode(65 + oIdx)}.</span>
+                                <input type="text" value="${opt || ''}" oninput="window.updateMultipleOption(${idx}, ${oIdx}, this.value)" class="flex-1 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium focus:bg-white">
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (qType === 'truefalse') {
+                const opts = q.options || ['', '', '', ''];
+                const correctAnswers = q.correctAnswers || [true, false, false, false];
+                return `
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-slate-500">Các mệnh đề Đúng / Sai (Quy chuẩn điểm GDPT 2018):</label>
+                        ${opts.map((opt, oIdx) => `
+                            <div class="tf-row">
+                                <span class="font-bold text-xs text-slate-500 w-4 pt-1.5">${String.fromCharCode(97 + oIdx)})</span>
+                                <textarea rows="1" oninput="window.updateTFOption(${idx}, ${oIdx}, this.value)" class="flex-1 p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium focus:bg-white">${opt || ''}</textarea>
+                                <div class="flex items-center gap-1 pt-1">
+                                    <button type="button" onclick="window.setTFCorrect(${idx}, ${oIdx}, true)" class="px-2.5 py-1 rounded-md text-[10px] font-black ${correctAnswers[oIdx] === true ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-500'}">ĐÚNG</button>
+                                    <button type="button" onclick="window.setTFCorrect(${idx}, ${oIdx}, false)" class="px-2.5 py-1 rounded-md text-[10px] font-black ${correctAnswers[oIdx] === false ? 'bg-rose-600 text-white' : 'bg-slate-100 text-slate-500'}">SAI</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (qType === 'short') {
+                return `
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Đáp án chuẩn (nhập số hoặc chuỗi ngắn):</label>
+                        <input type="text" value="${q.correct !== undefined ? q.correct : ''}" oninput="window.updateShortCorrect(${idx}, this.value)" placeholder="vd: 4, -1.5, pi/2..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-blue-700 focus:bg-white">
+                    </div>
+                `;
+            } else {
+                return `
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Gợi ý đáp án / Barem chấm tự luận:</label>
+                        <textarea rows="2" oninput="window.updateShortCorrect(${idx}, this.value)" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:bg-white">${q.correct !== undefined ? q.correct : ''}</textarea>
+                    </div>
+                `;
+            }
+        }
+
+        // Editor mutation handlers
+        window.addNewQuestion = function(type = 'multiple') {
+            if (type === 'multiple') {
+                questions.push({ type: 'multiple', question: 'Nội dung câu hỏi mới...', options: ['', '', '', ''], correct: 0, explanation: '' });
+            } else if (type === 'truefalse') {
+                questions.push({ type: 'truefalse', question: 'Các mệnh đề sau đúng hay sai?', options: ['', '', '', ''], correctAnswers: [true, false, false, false], explanation: '' });
+            } else if (type === 'short') {
+                questions.push({ type: 'short', question: 'Câu hỏi trả lời ngắn...', correct: '', explanation: '' });
+            }
+            renderQuestions();
+        };
+
+        window.removeQuestion = function(idx) {
+            questions.splice(idx, 1);
+            renderQuestions();
+        };
+
+        window.duplicateQuestion = function(idx) {
+            const clone = JSON.parse(JSON.stringify(questions[idx]));
+            questions.splice(idx + 1, 0, clone);
+            renderQuestions();
+        };
+
+        window.moveQuestion = function(idx, dir) {
+            const target = idx + dir;
+            if (target < 0 || target >= questions.length) return;
+            const temp = questions[idx];
+            questions[idx] = questions[target];
+            questions[target] = temp;
+            renderQuestions();
+        };
+
+        window.changeQuestionType = function(idx, newType) {
+            const q = questions[idx];
+            q.type = newType;
+            if (newType === 'multiple' && (!q.options || q.options.length < 4)) {
+                q.options = ['', '', '', ''];
+                q.correct = 0;
+            } else if (newType === 'truefalse') {
+                q.options = ['', '', '', ''];
+                q.correctAnswers = [true, false, false, false];
+            }
+            renderQuestions();
+        };
+
+        window.updateQuestionText = function(idx, val) { questions[idx].question = val; };
+        window.updateMultipleOption = function(idx, oIdx, val) { questions[idx].options[oIdx] = val; };
+        window.setMultipleCorrect = function(idx, oIdx) { questions[idx].correct = oIdx; };
+        window.updateTFOption = function(idx, oIdx, val) { questions[idx].options[oIdx] = val; };
+        window.setTFCorrect = function(idx, oIdx, val) {
+            if (!questions[idx].correctAnswers) questions[idx].correctAnswers = [false, false, false, false];
+            questions[idx].correctAnswers[oIdx] = val;
+            renderQuestions();
+        };
+        window.updateShortCorrect = function(idx, val) { questions[idx].correct = val; };
+        window.updateExplanation = function(idx, val) { questions[idx].explanation = val; };
+        window.clearAllQuestions = function() {
+            if (confirm("Bạn có chắc chắn muốn xóa toàn bộ danh sách câu hỏi đang soạn?")) {
+                questions = [];
+                renderQuestions();
+            }
+        };
+
+        // --- WORD DOCX & TEXT IMPORT WITH MAMMOTH ---
+        const dropZone = document.getElementById('dropZone');
+        const docxInput = document.getElementById('docxInput');
+
+        if (dropZone && docxInput) {
+            dropZone.addEventListener('click', () => docxInput.click());
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('active'); });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('active'));
+            dropZone.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('active');
+                if (e.dataTransfer.files.length > 0) {
+                    await handleDocxFile(e.dataTransfer.files[0]);
+                }
+            });
+            docxInput.addEventListener('change', async (e) => {
+                if (e.target.files.length > 0) {
+                    await handleDocxFile(e.target.files[0]);
+                }
+            });
+        }
+
+        async function handleDocxFile(file) {
+            if (!file.name.endsWith('.docx')) {
+                showToast("Vui lòng chọn tệp định dạng .docx", true);
+                return;
+            }
+
+            try {
+                showToast("Đang đọc tệp Word qua Mammoth...", false);
+                const arrayBuffer = await file.arrayBuffer();
+                const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+                const text = result.value || '';
+                document.getElementById('rawTextInput').value = text;
+                document.getElementById('rawTextCounter').innerText = `${text.length} ký tự`;
+                
+                showToast("Đã đọc tệp thành công! Đang kích hoạt AI trích xuất...", false);
+                await processTextWithAI(text);
+            } catch (err) {
+                console.error("Lỗi đọc file docx:", err);
+                showToast("Lỗi đọc file Word: " + err.message, true);
+            }
+        }
+
+        // --- AI EXTRACTION & PROCESSING ---
+        async function callGeminiRaw(prompt, mimeType = 'application/json') {
+            const aiCaller = window.eduspaceAI || window.ndAI_API;
+            if (!aiCaller || typeof aiCaller.call !== 'function') {
+                throw new Error("Hệ thống kết nối AI chưa sẵn sàng. Vui lòng kiểm tra lại dịch vụ.");
+            }
+
+            return await aiCaller.call({
+                model: 'gemini-3.1-flash-lite',
+                generationConfig: {
+                    temperature: 0.1,
+                    responseMimeType: mimeType
+                },
+                contents: [{ role: 'user', parts: [{ text: prompt }] }]
+            });
+        }
+
+        window.processRawTextWithAI = async function() {
+            const text = document.getElementById('rawTextInput')?.value || '';
+            if (!text.trim()) {
+                showToast("Vui lòng dán nội dung văn bản đề thi!", true);
+                return;
+            }
+            await processTextWithAI(text);
+        };
+
+        async function processTextWithAI(text) {
+            const loadingBox = document.getElementById('aiLoadingStatus');
+            const loadingTitle = document.getElementById('aiLoadingTitle');
+            const loadingDesc = document.getElementById('aiLoadingDesc');
+            if (loadingBox) loadingBox.classList.remove('hidden');
+
+            try {
+                // 1. Trích xuất metadata
+                if (loadingTitle) loadingTitle.innerText = "Đang trích xuất thông tin tiêu đề đề thi...";
+                const metaPrompt = `
+Bạn là chuyên gia phân tích đề thi. Đọc 1500 ký tự đầu tiên dưới đây và trích xuất JSON:
+- title: Tên bài kiểm tra
+- duration: Thời gian làm bài tính bằng phút (số nguyên)
+- author: Tác giả (nếu có)
+- school: Trường học / Sở
+- class: Khối lớp (10, 11, 12)
+- book: Bộ sách giáo khoa
+- subject: Môn học
+Trả về duy nhất 1 JSON object hợp lệ.
+Nội dung:
+${text.slice(0, 1500)}
+                `;
+
+                try {
+                    const metaRes = await callGeminiRaw(metaPrompt);
+                    const meta = JSON.parse(metaRes);
+                    if (meta.title) document.getElementById('pub-title').value = meta.title;
+                    if (meta.duration) document.getElementById('meta-duration').value = meta.duration;
+                    if (meta.class) document.getElementById('pub-class').value = meta.class;
+                    if (meta.subject) document.getElementById('pub-subject').value = meta.subject;
+                    if (meta.author) document.getElementById('meta-author').value = meta.author;
+                    if (meta.school) document.getElementById('meta-school').value = meta.school;
+                    if (meta.book) document.getElementById('meta-book').value = meta.book;
+                } catch (_) {}
+
+                // 2. Trích xuất câu hỏi
+                if (loadingTitle) loadingTitle.innerText = "AI đang nhận diện và bóc tách câu hỏi...";
+                if (loadingDesc) loadingDesc.innerText = "Tách 4 dạng câu hỏi: Trắc nghiệm, Đúng/Sai, Trả lời ngắn, Tự luận.";
+
+                const extractPrompt = `
+Bạn là bộ trích xuất câu hỏi đề thi sang JSON mảng các object.
+QUY TẮC:
+1. Nhận diện chính xác 4 dạng câu:
+   - "multiple": trắc nghiệm 4 lựa chọn (options chứa 4 phần tử A,B,C,D không kèm nhãn, correct là index 0-3).
+   - "truefalse": đúng/sai 4 ý (options chứa 4 mệnh đề a,b,c,d, correctAnswers là mảng 4 boolean [true/false]).
+   - "short": trả lời ngắn / điền số (correct là chuỗi đáp án số hoặc từ ngắn).
+   - "essay": tự luận.
+2. Công thức toán/lý/hóa viết dưới dạng LaTeX chuẩn $...$ hoặc $$...$$.
+3. Giữ nguyên câu từ, dữ kiện, giải thích (nếu có).
+Schema JSON mỗi object:
+{"type":"multiple|truefalse|short|essay","question":"...","options":["..."],"correct":0,"correctAnswers":[true,false,false,true],"explanation":"..."}
+Trả về JSON array thuần.
+
+Nội dung đề thi:
+${text}
+                `;
+
+                const extractRes = await callGeminiRaw(extractPrompt);
+                let parsed = [];
+                try {
+                    parsed = JSON.parse(extractRes);
+                    if (!Array.isArray(parsed) && Array.isArray(parsed.questions)) parsed = parsed.questions;
+                } catch (pe) {
+                    console.error("JSON parse error from AI:", pe);
+                }
+
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    questions = parsed;
+                    renderQuestions();
+                    showToast(`🎉 AI đã bóc tách thành công ${parsed.length} câu hỏi!`);
+                } else {
+                    showToast("Không bóc tách được câu hỏi từ AI. Vui lòng thử lại.", true);
+                }
+
+            } catch (err) {
+                console.error("Lỗi xử lý AI:", err);
+                showToast("Lỗi xử lý AI: " + err.message, true);
+            } finally {
+                if (loadingBox) loadingBox.classList.add('hidden');
+            }
+        }
+
+        // --- REGEX FALLBACK EXTRACTION ---
+        window.parseSimpleTextRegex = function() {
+            const raw = document.getElementById('rawTextInput')?.value || '';
+            if (!raw.trim()) return;
+
+            const qBlocks = raw.split(/(?:Câu\s+\d+[:.]|Bài\s+\d+[:.])/i).filter(b => b.trim().length > 0);
+            const extracted = [];
+
+            qBlocks.forEach(b => {
+                const optMatches = b.match(/([A-D]\.\s*[^A-D\n]+)/g);
+                if (optMatches && optMatches.length >= 2) {
+                    const qText = b.split(/A\./)[0].trim();
+                    const opts = optMatches.slice(0, 4).map(o => o.replace(/^[A-D]\.\s*/, '').trim());
+                    extracted.push({
+                        type: 'multiple',
+                        question: qText || 'Câu hỏi',
+                        options: opts,
+                        correct: 0,
+                        explanation: ''
+                    });
+                } else {
+                    extracted.push({
+                        type: 'short',
+                        question: b.trim(),
+                        correct: '',
+                        explanation: ''
+                    });
+                }
+            });
+
+            if (extracted.length > 0) {
+                questions = extracted;
+                renderQuestions();
+                showToast(`Đã trích xuất ${extracted.length} câu bằng Regex!`);
+            }
+        };
+
+        // --- GEMINI NOTEBOOK BRIDGE & CLIPBOARD UTILS ---
+        window.copyTextToClipboard = function(text, successMsg = "Đã sao chép vào bộ nhớ tạm!") {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(successMsg);
+                }).catch(() => {
+                    prompt("Sao chép nội dung bên dưới:", text);
+                });
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    showToast(successMsg);
+                } catch (_) {
+                    prompt("Sao chép nội dung bên dưới:", text);
+                }
+                document.body.removeChild(ta);
+            }
+        };
+
+        window.extractJsonFromText = function(rawText) {
+            if (!rawText || !rawText.trim()) return null;
+            let clean = rawText.trim();
+            // Loại bỏ markdown code blocks ```json ... ``` hoặc ``` ... ```
+            if (clean.includes('```')) {
+                const matches = clean.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+                if (matches && matches[1]) {
+                    clean = matches[1].trim();
+                }
+            }
+            try {
+                return JSON.parse(clean);
+            } catch (e1) {
+                // Thử tìm mảng [ ... ]
+                const startArr = clean.indexOf('[');
+                const endArr = clean.lastIndexOf(']');
+                if (startArr !== -1 && endArr !== -1 && endArr > startArr) {
+                    try {
+                        return JSON.parse(clean.substring(startArr, endArr + 1));
+                    } catch (e2) {}
+                }
+                // Thử tìm object { ... }
+                const startObj = clean.indexOf('{');
+                const endObj = clean.lastIndexOf('}');
+                if (startObj !== -1 && endObj !== -1 && endObj > startObj) {
+                    try {
+                        return JSON.parse(clean.substring(startObj, endObj + 1));
+                    } catch (e3) {}
+                }
+                throw new Error("Không thể đọc định dạng JSON. Vui lòng kiểm tra lại nội dung dán vào!");
+            }
+        };
+
+        window.openGeminiNotebook = function() {
+            window.open('https://gemini.google.com/app', '_blank');
+        };
+
+        window.openNotebookLM = function() {
+            window.open('https://notebooklm.google.com/', '_blank');
+        };
+
+        // --- 1. AI TẠO ĐỀ (GEMINI NOTEBOOK BRIDGE) ---
+        window.openGenerateAIModal = function() {
+            document.getElementById('aiGenModal')?.classList.remove('hidden');
+        };
+        window.closeGenerateAIModal = function() {
+            document.getElementById('aiGenModal')?.classList.add('hidden');
+        };
+
+        window.copyGenAIPrompt = function() {
+            const promptText = (document.getElementById('aiGenPrompt')?.value || '').trim();
+            const subject = (document.getElementById('aiGenSubject')?.value || 'Toán học').trim();
+            const grade = (document.getElementById('aiGenClass')?.value || '12').trim();
+            const count = parseInt(document.getElementById('aiGenCount')?.value, 10) || 5;
+            const incMultiple = document.getElementById('aiGenTypeMultiple')?.checked;
+            const incTF = document.getElementById('aiGenTypeTF')?.checked;
+            const incShort = document.getElementById('aiGenTypeShort')?.checked;
+
+            if (!promptText) {
+                showToast("Vui lòng nhập chủ đề / nội dung kiến thức cần tạo đề!", true);
+                document.getElementById('aiGenPrompt')?.focus();
+                return;
+            }
+
+            const allowedTypes = [];
+            if (incMultiple) allowedTypes.push('Trắc nghiệm 4 lựa chọn (type: "multiple")');
+            if (incTF) allowedTypes.push('Đúng / Sai 4 ý chuẩn GDPT 2018 (type: "truefalse")');
+            if (incShort) allowedTypes.push('Trả lời ngắn / điền số (type: "short")');
+
+            const fullPrompt = [
+                `Bạn là chuyên gia ra đề thi chuẩn chương trình GDPT 2018 của Bộ Giáo dục & Đào tạo.`,
+                `Nhiệm vụ: Hãy tạo bộ đề thi gồm ${count} câu hỏi môn ${subject} khối ${grade}.`,
+                `Chủ đề & Yêu cầu: "${promptText}"`,
+                `Các dạng câu hỏi yêu cầu sử dụng: ${allowedTypes.join(', ')}.`,
+                ``,
+                `QUY TẮC ĐỊNH DẠNG BẮT BUỘC:`,
+                `1. CÔNG THỨC TOÁN / KHOA HỌC: Bắt buộc viết dưới dạng KaTeX/LaTeX: $...$ cho công thức inline và $$...$$ cho công thức dòng riêng (ví dụ: $f'(x) = 3x^2 - 6x$, $\\int_0^1 x dx$, $[a; b]$).`,
+                `2. CẤU TRÚC TỪNG DẠNG CÂU HỎI:`,
+                `   - "multiple": options gồm 4 chuỗi phương án không kèm nhãn A, B, C, D; correct là chỉ số 0, 1, 2 hoặc 3.`,
+                `   - "truefalse": options gồm 4 mệnh đề a, b, c, d; correctAnswers là mảng 4 boolean [true/false].`,
+                `   - "short": correct là chuỗi đáp án số hoặc từ ngắn gọn.`,
+                `3. LỜI GIẢI THÍCH (explanation): Mỗi câu BẮT BUỘC có lời giải chi tiết, rõ ràng từng bước bằng tiếng Việt.`,
+                `4. ĐẦU RA: Bắt buộc trả về DUY NHẤT một mảng JSON thuần (JSON array), không kèm theo văn bản giải thích ngoài khối JSON.`,
+                ``,
+                `CẤU TRÚC JSON MẪU:`,
+                `[`,
+                `  {`,
+                `    "type": "multiple",`,
+                `    "question": "Cho hàm số $y = f(x)$... Mệnh đề nào sau đây đúng?",`,
+                `    "options": ["Phương án A", "Phương án B", "Phương án C", "Phương án D"],`,
+                `    "correct": 0,`,
+                `    "explanation": "Lời giải chi tiết từng bước..."`,
+                `  },`,
+                `  {`,
+                `    "type": "truefalse",`,
+                `    "question": "Cho hình chóp $S.ABCD$... Xét tính đúng sai của các mệnh đề:",`,
+                `    "options": ["Mệnh đề a", "Mệnh đề b", "Mệnh đề c", "Mệnh đề d"],`,
+                `    "correctAnswers": [true, false, true, false],`,
+                `    "explanation": "a) Đúng vì... b) Sai vì..."`,
+                `  }`,
+                `]`
+            ].join('\n');
+
+            window.copyTextToClipboard(fullPrompt, "📋 Đã sao chép Prompt tạo đề cho Gemini! Hãy mở Gemini để dán vào.");
+        };
+
+        window.importQuestionsFromGenAI = function() {
+            const raw = document.getElementById('aiGenJsonInput')?.value || '';
+            if (!raw.trim()) {
+                showToast("Vui lòng dán kết quả JSON từ Gemini vào ô nhập liệu!", true);
+                return;
+            }
+
+            try {
+                let parsed = window.extractJsonFromText(raw);
+                if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.questions)) {
+                    parsed = parsed.questions;
+                }
+
+                if (!Array.isArray(parsed) || parsed.length === 0) {
+                    showToast("Dữ liệu JSON không hợp lệ hoặc không có câu hỏi nào!", true);
+                    return;
+                }
+
+                // Chuẩn hóa và xác thực từng câu hỏi
+                const validated = [];
+                parsed.forEach((q, i) => {
+                    if (!q.question) return;
+                    const type = q.type || 'multiple';
+                    if (type === 'multiple') {
+                        validated.push({
+                            type: 'multiple',
+                            question: q.question,
+                            options: Array.isArray(q.options) ? q.options.slice(0, 4) : ['', '', '', ''],
+                            correct: typeof q.correct === 'number' ? q.correct : 0,
+                            explanation: q.explanation || ''
+                        });
+                    } else if (type === 'truefalse') {
+                        validated.push({
+                            type: 'truefalse',
+                            question: q.question,
+                            options: Array.isArray(q.options) ? q.options.slice(0, 4) : ['', '', '', ''],
+                            correctAnswers: Array.isArray(q.correctAnswers) ? q.correctAnswers.slice(0, 4) : [true, false, false, false],
+                            explanation: q.explanation || ''
+                        });
+                    } else if (type === 'short') {
+                        validated.push({
+                            type: 'short',
+                            question: q.question,
+                            correct: q.correct !== undefined ? String(q.correct) : '',
+                            explanation: q.explanation || ''
+                        });
+                    } else {
+                        validated.push({
+                            type: 'essay',
+                            question: q.question,
+                            correct: q.correct !== undefined ? String(q.correct) : '',
+                            explanation: q.explanation || ''
+                        });
+                    }
+                });
+
+                if (validated.length === 0) {
+                    showToast("Không tìm thấy câu hỏi hợp lệ trong JSON!", true);
+                    return;
+                }
+
+                questions.push(...validated);
+                renderQuestions();
+                document.getElementById('aiGenJsonInput').value = '';
+                window.closeGenerateAIModal();
+                showToast(`🎉 Đã nạp thành công ${validated.length} câu hỏi mới vào đề thi!`);
+            } catch (err) {
+                console.error("Import JSON error:", err);
+                showToast("Lỗi đọc JSON: " + err.message, true);
+            }
+        };
+
+        // --- 2. AI THẨM ĐỊNH ĐỀ (GEMINI NOTEBOOK BRIDGE) ---
+        window.openReviewAIModal = function() {
+            if (questions.length === 0) {
+                showToast("Đề thi chưa có câu hỏi nào để thẩm định!", true);
+                return;
+            }
+            const countEl = document.getElementById('aiReviewCurrentCount');
+            if (countEl) countEl.innerText = questions.length;
+            document.getElementById('aiReviewModal')?.classList.remove('hidden');
+        };
+
+        window.closeReviewAIModal = function() {
+            document.getElementById('aiReviewModal')?.classList.add('hidden');
+        };
+
+        window.copyReviewPromptForGemini = function() {
+            if (questions.length === 0) {
+                showToast("Đề thi chưa có câu hỏi nào!", true);
+                return;
+            }
+
+            const promptData = questions.map((q, idx) => ({
+                index: idx + 1,
+                type: q.type || 'multiple',
+                question: q.question,
+                options: q.options || [],
+                correct: q.correct !== undefined ? q.correct : q.correctAnswers,
+                explanation: q.explanation || ''
+            }));
+
+            const fullPrompt = [
+                `Bạn là Hội đồng Thẩm định Đề thi Quốc gia theo chương trình GDPT 2018.`,
+                `Hãy thẩm định CỰC KỲ KHẮT KHE bộ đề thi gồm ${questions.length} câu hỏi sau:`,
+                JSON.stringify(promptData, null, 2),
+                ``,
+                `NHIỆM VỤ THẨM ĐỊNH:`,
+                `1. Tính đúng đắn khoa học: Giải chi tiết từng câu, đối chiếu đề bài với đáp án xem có câu nào sai kiến thức, sai đáp án hay thiếu dữ kiện không.`,
+                `2. Chuẩn LaTeX / KaTeX: Kiểm tra công thức toán học/khoa học có được bao bọc đúng cú pháp $...$ và $$...$$ chưa.`,
+                `3. Ma trận phân hóa GDPT 2018: Đếm số câu thuộc 4 mức độ: Nhận biết, Thông hiểu, Vận dụng, Vận dụng cao.`,
+                `4. Chấm điểm chất lượng tổng thể trên thang 100 điểm.`,
+                `5. Nhận xét chi tiết từng câu: Đánh dấu rõ [Đạt chuẩn] hoặc [Cần sửa].`,
+                ``,
+                `YÊU CẦU ĐẦU RA: Trả về DUY NHẤT một JSON object thuần (không kèm văn bản giải thích ngoài):`,
+                `{`,
+                `  "score": 90,`,
+                `  "levels": { "Nhận biết": 4, "Thông hiểu": 3, "Vận dụng": 2, "Vận dụng cao": 1 },`,
+                `  "remarks": "Nhận xét tổng thể chất lượng đề...",`,
+                `  "feedback": [`,
+                `    "Câu 1: [Đạt chuẩn] Đề bài và công thức chuẩn.",`,
+                `    "Câu 2: [Cần sửa] Đạo hàm tính sai dấu ở phương án C."`,
+                `  ]`,
+                `}`
+            ].join('\n');
+
+            window.copyTextToClipboard(fullPrompt, "📋 Đã sao chép Prompt thẩm định cho Gemini! Hãy mở Gemini để dán vào.");
+        };
+
+        window.importReviewFromJson = function() {
+            const raw = document.getElementById('aiReviewJsonInput')?.value || '';
+            if (!raw.trim()) {
+                showToast("Vui lòng dán kết quả JSON thẩm định từ Gemini vào ô nhập liệu!", true);
+                return;
+            }
+
+            try {
+                const data = window.extractJsonFromText(raw);
+                if (!data || typeof data !== 'object') {
+                    showToast("Định dạng JSON thẩm định không hợp lệ!", true);
+                    return;
+                }
+
+                const score = typeof data.score === 'number' ? data.score : 85;
+                let scoreColor = 'text-emerald-700 bg-emerald-50 border-emerald-200';
+                if (score < 65) scoreColor = 'text-rose-700 bg-rose-50 border-rose-200';
+                else if (score < 80) scoreColor = 'text-amber-700 bg-amber-50 border-amber-200';
+
+                document.getElementById('aiReviewContent').innerHTML = `
+                    <div class="p-5 rounded-2xl border flex items-center justify-between gap-4 flex-wrap ${scoreColor}">
+                        <div>
+                            <div class="text-xs font-black uppercase tracking-wider opacity-80">Điểm chất lượng đề thi</div>
+                            <div class="text-4xl font-black font-mono mt-0.5">${score}/100</div>
+                        </div>
+                        <div class="text-right text-xs font-bold space-y-1">
+                            <div>Nhận biết: ${data.levels?.['Nhận biết'] || 0} câu</div>
+                            <div>Thông hiểu: ${data.levels?.['Thông hiểu'] || 0} câu</div>
+                            <div>Vận dụng: ${data.levels?.['Vận dụng'] || 0} câu</div>
+                            <div>Vận dụng cao: ${data.levels?.['Vận dụng cao'] || 0} câu</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 pt-1">
+                        <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider">Nhận xét tổng thể:</h4>
+                        <p class="text-slate-700 text-xs leading-relaxed bg-slate-50 p-3.5 rounded-xl border border-slate-200">${data.remarks || 'Đề thi đạt yêu cầu chuẩn kiến thức kỹ năng.'}</p>
+                    </div>
+
+                    <div class="space-y-2 pt-1">
+                        <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider">Góp ý chi tiết từng câu:</h4>
+                        <ul class="space-y-1.5 text-xs text-slate-700 max-h-56 overflow-y-auto pr-1">
+                            ${(data.feedback || []).map(f => {
+                                const isWarning = f.includes('[Cần sửa]') || f.includes('sai') || f.includes('lỗi');
+                                return `<li class="p-2.5 rounded-xl border ${isWarning ? 'bg-rose-50/70 border-rose-200 text-rose-900' : 'bg-slate-50 border-slate-200'}">• ${f}</li>`;
+                            }).join('')}
+                        </ul>
+                    </div>
+                `;
+
+                showToast("🎉 Đã hiển thị báo cáo thẩm định đề thi thành công!");
+            } catch (err) {
+                showToast("Lỗi đọc JSON báo cáo: " + err.message, true);
+            }
+        };
+
+        // --- 3. AI VIẾT GIẢI THÍCH (GEMINI NOTEBOOK BRIDGE) ---
+        window.openExplanationAIModal = function() {
+            if (questions.length === 0) {
+                showToast("Đề thi chưa có câu hỏi nào để viết lời giải!", true);
+                return;
+            }
+            const missing = questions.filter(q => !q.explanation || q.explanation.trim() === '');
+            const missingEl = document.getElementById('aiExpMissingCount');
+            const totalEl = document.getElementById('aiExpTotalCount');
+            if (missingEl) missingEl.innerText = missing.length;
+            if (totalEl) totalEl.innerText = questions.length;
+            document.getElementById('aiExplanationModal')?.classList.remove('hidden');
+        };
+
+        window.closeExplanationAIModal = function() {
+            document.getElementById('aiExplanationModal')?.classList.add('hidden');
+        };
+
+        window.copyExplanationPromptForGemini = function() {
+            if (questions.length === 0) {
+                showToast("Chưa có câu hỏi nào!", true);
+                return;
+            }
+
+            const scopeRadio = document.querySelector('input[name="aiExpScope"]:checked');
+            const scope = scopeRadio ? scopeRadio.value : 'missing';
+
+            let targets = [];
+            questions.forEach((q, idx) => {
+                if (scope === 'all' || !q.explanation || q.explanation.trim() === '') {
+                    targets.push({
+                        index: idx + 1,
+                        type: q.type || 'multiple',
+                        question: q.question,
+                        options: q.options || [],
+                        correct: q.correct !== undefined ? q.correct : q.correctAnswers
+                    });
+                }
+            });
+
+            if (targets.length === 0) {
+                showToast("Tất cả câu hỏi trong đề đều đã có lời giải chi tiết!");
+                return;
+            }
+
+            const fullPrompt = [
+                `Bạn là giáo viên giàu kinh nghiệm sư phạm chương trình GDPT 2018.`,
+                `Nhiệm vụ: Hãy viết lời giải thích chi tiết từng bước cho ${targets.length} câu hỏi sau:`,
+                JSON.stringify(targets, null, 2),
+                ``,
+                `YÊU CẦU ĐỊNH DẠNG:`,
+                `1. Trình bày rõ ràng, dễ hiểu, sư phạm, chỉ rõ phương pháp giải và kết luận.`,
+                `2. Tất cả công thức toán học/khoa học PHẢI dùng KaTeX/LaTeX chuẩn ($...$).`,
+                `3. Trả về DUY NHẤT một mảng JSON (JSON array) khớp chính xác với chỉ số "index":`,
+                `[`,
+                `  {`,
+                `    "index": 1,`,
+                `    "explanation": "Bước 1: Ta có...\\nBước 2: Suy ra...\\nVậy đáp án đúng là..."`,
+                `  }`,
+                `]`
+            ].join('\n');
+
+            window.copyTextToClipboard(fullPrompt, `📋 Đã sao chép Prompt viết lời giải cho ${targets.length} câu hỏi! Hãy mở Gemini để dán vào.`);
+        };
+
+        window.importExplanationsFromJson = function() {
+            const raw = document.getElementById('aiExpJsonInput')?.value || '';
+            if (!raw.trim()) {
+                showToast("Vui lòng dán kết quả JSON lời giải từ Gemini vào ô nhập liệu!", true);
+                return;
+            }
+
+            try {
+                let parsed = window.extractJsonFromText(raw);
+                if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.explanations)) {
+                    parsed = parsed.explanations;
+                }
+
+                if (!Array.isArray(parsed) || parsed.length === 0) {
+                    showToast("Định dạng JSON mảng lời giải không hợp lệ!", true);
+                    return;
+                }
+
+                let updatedCount = 0;
+                parsed.forEach(item => {
+                    const idx = (item.index || item.id) - 1;
+                    const exp = item.explanation || item.exp || '';
+                    if (idx >= 0 && idx < questions.length && exp) {
+                        questions[idx].explanation = exp;
+                        updatedCount++;
+                    }
+                });
+
+                if (updatedCount > 0) {
+                    renderQuestions();
+                    document.getElementById('aiExpJsonInput').value = '';
+                    window.closeExplanationAIModal();
+                    showToast(`🎉 Đã cập nhật thành công lời giải chi tiết cho ${updatedCount} câu hỏi!`);
+                } else {
+                    showToast("Không tìm thấy câu hỏi phù hợp để áp dụng lời giải!", true);
+                }
+            } catch (err) {
+                showToast("Lỗi đọc JSON lời giải: " + err.message, true);
+            }
+        };
+
+        // --- 4. TRÍCH XUẤT ĐỀ TỪ WORD / TEXT (GEMINI BRIDGE) ---
+        window.copyExtractPromptForGemini = function() {
+            const raw = (document.getElementById('rawTextInput')?.value || '').trim();
+            if (!raw) {
+                showToast("Vui lòng dán nội dung văn bản đề thi vào khung trước khi sao chép!", true);
+                document.getElementById('rawTextInput')?.focus();
+                return;
+            }
+
+            const fullPrompt = [
+                `Bạn là công cụ bóc tách câu hỏi đề thi chuyên nghiệp theo chuẩn GDPT 2018.`,
+                `Hãy đọc toàn bộ văn bản đề thi sau và trích xuất thành mảng JSON:`,
+                ``,
+                `VĂN BẢN ĐỀ THI:`,
+                raw,
+                ``,
+                `QUY TẮC BÓC TÁCH:`,
+                `1. Nhận diện chuẩn 4 dạng câu:`,
+                `   - "multiple": Trắc nghiệm 4 lựa chọn (options gồm 4 phương án, correct là chỉ số 0-3).`,
+                `   - "truefalse": Đúng / Sai 4 ý (options gồm 4 mệnh đề, correctAnswers là [true, false, true, false]).`,
+                `   - "short": Trả lời ngắn / điền số (correct là chuỗi đáp án ngắn).`,
+                `   - "essay": Tự luận.`,
+                `2. Công thức toán/lý/hóa bắt buộc dùng LaTeX ($...$).`,
+                `3. Trả về DUY NHẤT một mảng JSON thuần (JSON array):`,
+                `[`,
+                `  { "type": "multiple", "question": "...", "options": ["..."], "correct": 0, "explanation": "..." },`,
+                `  { "type": "truefalse", "question": "...", "options": ["..."], "correctAnswers": [true, false, false, true], "explanation": "..." }`,
+                `]`
+            ].join('\n');
+
+            window.copyTextToClipboard(fullPrompt, "📋 Đã sao chép Prompt bóc tách đề cho Gemini! Mở Gemini để nhận JSON câu hỏi.");
+        };
+
+        // --- 5. JSON DIRECT IMPORT MODAL ---
+        window.openJsonImportModal = function() {
+            document.getElementById('jsonImportModal')?.classList.remove('hidden');
+        };
+        window.closeJsonImportModal = function() {
+            document.getElementById('jsonImportModal')?.classList.add('hidden');
+        };
+
+        window.executeJsonImport = function() {
+            const raw = document.getElementById('jsonDirectInput')?.value || '';
+            if (!raw.trim()) {
+                showToast("Vui lòng dán dữ liệu JSON vào ô nhập liệu!", true);
+                return;
+            }
+
+            const modeRadio = document.querySelector('input[name="jsonImportMode"]:checked');
+            const mode = modeRadio ? modeRadio.value : 'append';
+
+            try {
+                let parsed = window.extractJsonFromText(raw);
+                let qList = [];
+
+                if (Array.isArray(parsed)) {
+                    qList = parsed;
+                } else if (parsed && typeof parsed === 'object') {
+                    if (Array.isArray(parsed.questions)) {
+                        qList = parsed.questions;
+                    } else if (parsed.quizData && Array.isArray(parsed.quizData.questions)) {
+                        qList = parsed.quizData.questions;
+                    }
+                    if (parsed.title && !document.getElementById('pub-title').value) {
+                        document.getElementById('pub-title').value = parsed.title;
+                    }
+                    if (parsed.subject && !document.getElementById('pub-subject').value) {
+                        document.getElementById('pub-subject').value = parsed.subject;
+                    }
+                }
+
+                if (!Array.isArray(qList) || qList.length === 0) {
+                    showToast("Không tìm thấy danh sách câu hỏi hợp lệ trong JSON!", true);
+                    return;
+                }
+
+                if (mode === 'replace') {
+                    questions = qList;
+                } else {
+                    questions.push(...qList);
+                }
+
+                renderQuestions();
+                document.getElementById('jsonDirectInput').value = '';
+                window.closeJsonImportModal();
+                showToast(`🎉 Đã nạp thành công ${qList.length} câu hỏi vào trình soạn thảo!`);
+            } catch (err) {
+                showToast("Lỗi đọc JSON: " + err.message, true);
+            }
+        };
+
+        // --- 6. PUBLISH TO FIREBASE FIRESTORE (ROBUST & PERMISSION-VERIFIED) ---
+        window.publishDirectToFirebase = async function() {
+            const activeUser = auth?.currentUser || currentUser;
+            if (!activeUser) {
+                showToast("Bạn cần đăng nhập tài khoản Quản trị viên để đăng bài!", true);
+                return;
+            }
+
+            let id = (document.getElementById('pub-id')?.value || '').trim().toLowerCase();
+            const title = (document.getElementById('pub-title')?.value || '').trim();
+            const cls = (document.getElementById('pub-class')?.value || '').trim();
+            const subject = (document.getElementById('pub-subject')?.value || '').trim();
+            const duration = Math.max(1, parseInt(document.getElementById('meta-duration')?.value, 10) || 45);
+            const desc = (document.getElementById('pub-desc')?.value || '').trim();
+            const tag = (document.getElementById('pub-tag')?.value || '').trim();
+            const author = (document.getElementById('meta-author')?.value || '').trim();
+            const school = (document.getElementById('meta-school')?.value || '').trim();
+            const book = (document.getElementById('meta-book')?.value || '').trim();
+            const isHot = document.getElementById('pub-hot')?.checked || false;
+            const isComingSoon = document.getElementById('pub-coming-soon')?.checked || false;
+
+            if (!id) {
+                window.genRandomId();
+                id = document.getElementById('pub-id').value.trim().toLowerCase();
+            }
+
+            if (!title) {
+                showToast("Vui lòng nhập Tiêu đề đề thi!", true);
+                document.getElementById('pub-title')?.focus();
+                return;
+            }
+
+            if (questions.length === 0) {
+                showToast("Đề thi phải có ít nhất 1 câu hỏi!", true);
+                return;
+            }
+
+            const btn = document.getElementById('btnPublishDirect');
+            const origHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loader border-2 border-white h-4 w-4 rounded-full"></span> Đang đăng...';
+
+            try {
+                showToast("Đang đồng bộ dữ liệu lên Firestore...", false);
+
+                const quizDataObj = {
+                    title: title,
+                    class: cls,
+                    grade: cls,
+                    subject: subject,
+                    duration: duration,
+                    author: author,
+                    school: school,
+                    book: book,
+                    config: { testDuration: duration * 60 },
+                    questions: questions
+                };
+
+                const activeUid = activeUser.uid;
+
+                // 1. Lưu vào collection quizzes (ID chữ hoa)
+                await setDoc(doc(db, 'quizzes', id.toUpperCase()), {
+                    creatorUid: activeUid,
+                    title: title,
+                    grade: cls,
+                    subject: subject,
+                    duration: duration,
+                    visibility: 'public',
+                    quizData: quizDataObj,
+                    createdAt: serverTimestamp()
+                });
+
+                // 2. Lưu vào collection eduspace_lessons (dành cho portal)
+                await setDoc(doc(db, 'eduspace_lessons', id), {
+                    id: id,
+                    title: title,
+                    type: 'quiz',
+                    url: `/eduspace/exam?${id}`,
+                    tag: tag,
+                    class: cls,
+                    subject: subject,
+                    description: desc,
+                    isHot: isHot,
+                    isComingSoon: isComingSoon,
+                    createdAt: serverTimestamp(),
+                    creatorUid: activeUid
+                });
+
+                showToast(`🎉 Đã đăng bài "${title}" lên Firebase thành công!`);
+                await window.loadAdminPosts();
+                window.switchAdminTab('posts');
+            } catch (err) {
+                console.error("Publish error:", err);
+                showToast("Lỗi khi đăng bài: " + err.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origHtml;
+            }
+        };
+
+        // --- POSTS LIST MANAGER ---
+        window.loadAdminPosts = async function() {
+            const loading = document.getElementById('postsListLoading');
+            const empty = document.getElementById('postsListEmpty');
+            const container = document.getElementById('postsGridContainer');
+
+            if (loading) loading.classList.remove('hidden');
+            if (empty) empty.classList.add('hidden');
+            if (container) container.classList.add('hidden');
+
+            try {
+                if (!currentUser) {
+                    if (loading) loading.classList.add('hidden');
+                    return;
+                }
+                const fsMap = {};
+                const qSnap = await getDocs(query(collection(db, 'eduspace_lessons'), orderBy('createdAt', 'desc')));
+                qSnap.forEach(d => {
+                    const data = d.data();
+                    const key = (data.id || d.id).toLowerCase();
+                    fsMap[key] = { _docId: d.id, ...data };
+                });
+
+                allAdminPosts = Object.values(fsMap);
+                document.getElementById('posts-count-badge').innerText = allAdminPosts.length;
+                renderAdminPosts(allAdminPosts);
+            } catch (err) {
+                console.warn("Chưa thể tải bài đăng:", err.message);
+                if (currentUser && !err.message.includes('permission')) {
+                    showToast("Lỗi nạp bài: " + err.message, true);
+                }
+            } finally {
+                if (loading) loading.classList.add('hidden');
+            }
+        };
+
+        function renderAdminPosts(posts) {
+            const empty = document.getElementById('postsListEmpty');
+            const container = document.getElementById('postsGridContainer');
+            if (!posts || posts.length === 0) {
+                if (empty) empty.classList.remove('hidden');
+                if (container) container.classList.add('hidden');
+                return;
+            }
+
+            if (empty) empty.classList.add('hidden');
+            if (container) container.classList.remove('hidden');
+
+            container.innerHTML = posts.map(p => {
+                const id = p.id || p._docId;
+                const viewUrl = `/eduspace/exam?${id}`;
+                return `
+                    <div class="lesson-card p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-2 flex-wrap">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-0.5 rounded-full text-xs font-black">🧪 ĐỀ THI</span>
+                                    <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full text-[10px] font-black">☁️ Firebase</span>
+                                    ${p.isHot ? '<span class="bg-orange-50 text-orange-600 px-2 py-0.5 rounded-full text-[10px] font-black">🔥 HOT</span>' : ''}
+                                </div>
+                                <span class="bg-slate-100 text-slate-600 font-mono text-xs px-2 py-0.5 rounded-md font-bold">${id}</span>
+                            </div>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-snug mb-1">${p.title || '(Không tên)'}</h3>
+                            <p class="text-slate-500 text-xs line-clamp-2 mb-3">${p.description || '(Không có mô tả)'}</p>
+                            <div class="flex flex-wrap gap-1.5 text-[11px] font-bold text-slate-500 mb-4">
+                                ${p.class ? `<span class="bg-slate-100 px-2 py-0.5 rounded-md">Lớp ${p.class}</span>` : ''}
+                                ${p.subject ? `<span class="bg-slate-100 px-2 py-0.5 rounded-md">${p.subject}</span>` : ''}
+                                ${p.tag ? `<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md">${p.tag}</span>` : ''}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 pt-3 border-t border-slate-100 flex-wrap">
+                            <button onclick="window.runExamFromPost('${id}')" class="flex-1 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1">
+                                <i class="ph-bold ph-play"></i> Làm bài
+                            </button>
+                            <button onclick="window.loadPostToEditor('${id}')" class="flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1">
+                                <i class="ph-bold ph-pencil"></i> Sửa
+                            </button>
+                            <button onclick="window.copyExamShareLink('${id}')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all" title="Sao chép link làm bài">
+                                <i class="ph-bold ph-link text-sm"></i>
+                            </button>
+                            <a href="${viewUrl}" target="_blank" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all" title="Mở trang thi bên ngoài">
+                                <i class="ph-bold ph-arrow-square-out text-sm"></i>
+                            </a>
+                            <button onclick="window.deleteAdminPost('${id}')" class="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-all" title="Xóa đề">
+                                <i class="ph-bold ph-trash text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.filterAdminPosts = function(q) {
+            const queryStr = (q || '').toLowerCase().trim();
+            if (!queryStr) {
+                renderAdminPosts(allAdminPosts);
+                return;
+            }
+            const filtered = allAdminPosts.filter(p => {
+                return (p.title || '').toLowerCase().includes(queryStr) ||
+                       (p.id || '').toLowerCase().includes(queryStr) ||
+                       (p.subject || '').toLowerCase().includes(queryStr) ||
+                       (p.class || '').toLowerCase().includes(queryStr);
+            });
+            renderAdminPosts(filtered);
+        };
+
+        window.loadPostToEditor = async function(id) {
+            try {
+                showToast("Đang nạp đề vào editor...", false);
+                const qDoc = await getDoc(doc(db, 'quizzes', id.toUpperCase()));
+                if (qDoc.exists()) {
+                    const qData = qDoc.data().quizData || qDoc.data();
+                    document.getElementById('pub-id').value = id;
+                    document.getElementById('pub-title').value = qData.title || '';
+                    document.getElementById('pub-class').value = qData.class || qData.grade || '';
+                    document.getElementById('pub-subject').value = qData.subject || '';
+                    document.getElementById('meta-duration').value = qData.duration || 45;
+                    document.getElementById('meta-author').value = qData.author || '';
+                    document.getElementById('meta-school').value = qData.school || '';
+                    document.getElementById('meta-book').value = qData.book || '';
+                    questions = qData.questions || [];
+                    renderQuestions();
+                    window.switchAdminTab('editor');
+                    showToast("Đã nạp đề thi vào editor thành công!");
+                } else {
+                    showToast("Không tìm thấy dữ liệu đề thi trên Firestore!", true);
+                }
+            } catch (err) {
+                showToast("Lỗi nạp bài: " + err.message, true);
+            }
+        };
+
+        window.deleteAdminPost = async function(id) {
+            if (!confirm(`Bạn có chắc chắn muốn xóa đề thi mã "${id}" khỏi hệ thống?`)) return;
+
+            try {
+                showToast("Đang xóa đề thi...", false);
+                await deleteDoc(doc(db, 'quizzes', id.toUpperCase()));
+                await deleteDoc(doc(db, 'eduspace_lessons', id.toLowerCase()));
+                showToast("Đã xóa đề thi thành công!");
+                await window.loadAdminPosts();
+            } catch (err) {
+                showToast("Lỗi khi xóa đề: " + err.message, true);
+            }
+        };
+
+        // --- EXAM RUNNER LOGIC (FULL EDUSPACE EXAM FIDELITY) ---
+        window.populateRunnerExamDropdown = function() {
+            const sel = document.getElementById('runnerExamSelector');
+            if (!sel) return;
+            sel.innerHTML = '<option value="">-- Chọn đề từ cơ sở dữ liệu --</option>' +
+                allAdminPosts.map(p => `<option value="${p.id}">${p.title} (${p.id})</option>`).join('');
+        };
+
+        window.runExamFromPost = async function(id) {
+            window.switchAdminTab('runner');
+            const sel = document.getElementById('runnerExamSelector');
+            if (sel) sel.value = id;
+            await window.selectExamToRun(id);
+        };
+
+        window.testCurrentExamInRunner = function() {
+            if (questions.length === 0) {
+                showToast("Chưa có câu hỏi nào để làm bài kiểm tra!", true);
+                return;
+            }
+
+            const mockTitle = document.getElementById('pub-title')?.value || "Đề thi soạn thảo trực tiếp";
+            const mockDuration = parseInt(document.getElementById('meta-duration')?.value, 10) || 45;
+
+            runnerQuizData = {
+                title: mockTitle,
+                config: { testDuration: mockDuration * 60 },
+                questions: JSON.parse(JSON.stringify(questions))
+            };
+
+            window.switchAdminTab('runner');
+            initExamRunnerSession();
+        };
+
+        window.selectExamToRun = async function(id) {
+            if (!id) return;
+            try {
+                showToast("Đang tải dữ liệu đề thi từ Firestore...", false);
+                const snap = await getDoc(doc(db, 'quizzes', id.toUpperCase()));
+                if (!snap.exists()) {
+                    showToast("Không tìm thấy đề thi trên Firestore!", true);
+                    return;
+                }
+                const data = snap.data();
+                runnerQuizData = data.quizData || data;
+                initExamRunnerSession();
+            } catch (err) {
+                showToast("Lỗi nạp đề thi: " + err.message, true);
+            }
+        };
+
+        function initExamRunnerSession() {
+            if (!runnerQuizData || !runnerQuizData.questions) return;
+            document.getElementById('runner-active-title').innerText = runnerQuizData.title || "Bài kiểm tra EduSpace";
+
+            runnerCurrentIndex = 0;
+            runnerUserAnswers = new Array(runnerQuizData.questions.length).fill(null);
+            runnerFlagged = new Array(runnerQuizData.questions.length).fill(false);
+            runnerChecked = new Array(runnerQuizData.questions.length).fill(false);
+            runnerIsSubmitted = false;
+
+            const durationSecs = runnerQuizData.config?.testDuration || (runnerQuizData.duration ? runnerQuizData.duration * 60 : 2700);
+            runnerSecondsRemaining = durationSecs;
+
+            clearInterval(runnerTimerInterval);
+            if (runnerMode === 'exam') {
+                startRunnerTimer();
+            } else {
+                updateTimerDisplay();
+            }
+
+            renderRunnerQuestion();
+            updateRunnerMap();
+            updateRunnerProgress();
+            showToast("Bắt đầu phiên làm bài kiểm tra!");
+        }
+
+        window.setRunnerMode = function(mode) {
+            runnerMode = mode;
+            document.getElementById('runner-mode-practice-btn')?.classList.toggle('bg-white', mode === 'practice');
+            document.getElementById('runner-mode-practice-btn')?.classList.toggle('text-blue-600', mode === 'practice');
+            document.getElementById('runner-mode-practice-btn')?.classList.toggle('shadow-sm', mode === 'practice');
+
+            document.getElementById('runner-mode-exam-btn')?.classList.toggle('bg-white', mode === 'exam');
+            document.getElementById('runner-mode-exam-btn')?.classList.toggle('text-blue-600', mode === 'exam');
+            document.getElementById('runner-mode-exam-btn')?.classList.toggle('shadow-sm', mode === 'exam');
+
+            if (mode === 'exam') {
+                startRunnerTimer();
+            } else {
+                clearInterval(runnerTimerInterval);
+                updateTimerDisplay();
+            }
+
+            renderRunnerQuestion();
+        };
+
+        function startRunnerTimer() {
+            clearInterval(runnerTimerInterval);
+            updateTimerDisplay();
+            runnerTimerInterval = setInterval(() => {
+                if (runnerSecondsRemaining > 0) {
+                    runnerSecondsRemaining--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(runnerTimerInterval);
+                    window.submitRunnerQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const box = document.getElementById('runnerTimerBox');
+            if (!box) return;
+            const mins = Math.floor(runnerSecondsRemaining / 60);
+            const secs = runnerSecondsRemaining % 60;
+            box.innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            if (runnerSecondsRemaining < 300 && runnerMode === 'exam') {
+                box.className = "bg-rose-600 text-white font-mono font-black text-sm px-3.5 py-2 rounded-xl shadow-sm animate-pulse";
+            } else {
+                box.className = "bg-slate-900 text-white font-mono font-black text-sm px-3.5 py-2 rounded-xl shadow-sm";
+            }
+        }
+
+        function renderRunnerQuestion() {
+            if (!runnerQuizData || !runnerQuizData.questions || runnerQuizData.questions.length === 0) return;
+
+            const q = runnerQuizData.questions[runnerCurrentIndex];
+            const qType = q.type || 'multiple';
+            const badge = document.getElementById('runnerQuestionBadge');
+            const typeBadge = document.getElementById('runnerQuestionTypeBadge');
+            const textEl = document.getElementById('runnerQuestionText');
+            const optsContainer = document.getElementById('runnerOptionsContainer');
+            const expBox = document.getElementById('runnerExplanationBox');
+
+            if (badge) badge.innerText = `Câu ${runnerCurrentIndex + 1}`;
+            if (typeBadge) {
+                const map = { multiple: 'Trắc nghiệm 4 lựa chọn', truefalse: 'Đúng / Sai 4 ý', short: 'Trả lời ngắn', essay: 'Tự luận' };
+                typeBadge.innerText = map[qType] || 'Trắc nghiệm';
+            }
+            if (textEl) textEl.innerText = q.question || '';
+
+            optsContainer.innerHTML = '';
+
+            // Render options based on type
+            if (qType === 'multiple') {
+                const userAns = runnerUserAnswers[runnerCurrentIndex];
+                (q.options || []).forEach((opt, oIdx) => {
+                    const isSelected = userAns === oIdx;
+                    let extraClass = '';
+                    if ((runnerMode === 'practice' && runnerChecked[runnerCurrentIndex]) || runnerIsSubmitted) {
+                        if (oIdx === q.correct) extraClass = 'correct-reveal font-black';
+                        else if (isSelected && oIdx !== q.correct) extraClass = 'wrong-reveal';
+                    }
+
+                    const optDiv = document.createElement('div');
+                    optDiv.className = `runner-option p-4 flex items-center gap-3 ${isSelected ? 'selected' : ''} ${extraClass}`;
+                    optDiv.onclick = () => {
+                        if (runnerIsSubmitted || (runnerMode === 'practice' && runnerChecked[runnerCurrentIndex])) return;
+                        runnerUserAnswers[runnerCurrentIndex] = oIdx;
+                        renderRunnerQuestion();
+                        updateRunnerMap();
+                        updateRunnerProgress();
+                    };
+                    optDiv.innerHTML = `
+                        <div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'}">
+                            ${String.fromCharCode(65 + oIdx)}
+                        </div>
+                        <div class="flex-1 text-sm font-medium text-slate-800">${opt}</div>
+                    `;
+                    optsContainer.appendChild(optDiv);
+                });
+            } else if (qType === 'truefalse') {
+                const ua = runnerUserAnswers[runnerCurrentIndex] || {};
+                const cArr = q.correctAnswers || [true, false, false, false];
+
+                (q.options || []).forEach((opt, oIdx) => {
+                    const chosen = ua[oIdx];
+                    const isChecked = (runnerMode === 'practice' && runnerChecked[runnerCurrentIndex]) || runnerIsSubmitted;
+
+                    const row = document.createElement('div');
+                    row.className = "p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between gap-3";
+                    row.innerHTML = `
+                        <div class="flex items-start gap-2 flex-1">
+                            <span class="font-bold text-xs text-slate-500 pt-0.5">${String.fromCharCode(97 + oIdx)})</span>
+                            <span class="text-sm font-medium text-slate-800">${opt}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="window.selectRunnerTF(${oIdx}, true)" ${isChecked ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg text-xs font-black transition-all ${chosen === true ? 'bg-emerald-600 text-white' : 'bg-white text-slate-500 border border-slate-200'}">ĐÚNG</button>
+                            <button onclick="window.selectRunnerTF(${oIdx}, false)" ${isChecked ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg text-xs font-black transition-all ${chosen === false ? 'bg-rose-600 text-white' : 'bg-white text-slate-500 border border-slate-200'}">SAI</button>
+                        </div>
+                    `;
+                    optsContainer.appendChild(row);
+                });
+            } else if (qType === 'short') {
+                const val = runnerUserAnswers[runnerCurrentIndex] || '';
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = val;
+                input.placeholder = "Nhập kết quả hoặc đáp án...";
+                input.className = "w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-base text-slate-900 focus:bg-white";
+                input.oninput = (e) => {
+                    runnerUserAnswers[runnerCurrentIndex] = e.target.value.trim();
+                    updateRunnerMap();
+                    updateRunnerProgress();
+                };
+                optsContainer.appendChild(input);
+            }
+
+            // Explanation box handling
+            const shouldShowExp = (runnerMode === 'practice' && runnerChecked[runnerCurrentIndex]) || runnerIsSubmitted;
+            if (shouldShowExp) {
+                expBox.classList.remove('hidden');
+                const header = document.getElementById('runnerExplanationHeader');
+                const expText = document.getElementById('runnerExplanationText');
+                
+                let isCorrect = checkCurrentQuestionCorrectness();
+                if (isCorrect) {
+                    expBox.className = "mt-6 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900";
+                    header.innerHTML = "<span>✅</span> Chính xác!";
+                } else {
+                    expBox.className = "mt-6 p-5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900";
+                    header.innerHTML = "<span>❌</span> Chưa chính xác!";
+                }
+                expText.innerHTML = (q.explanation || "Không có giải thích chi tiết.").replace(/\n/g, '<br>');
+            } else {
+                expBox.classList.add('hidden');
+            }
+
+            // Navigation buttons
+            document.getElementById('runnerPrevBtn').disabled = runnerCurrentIndex === 0;
+            const hasAns = runnerUserAnswers[runnerCurrentIndex] !== null && runnerUserAnswers[runnerCurrentIndex] !== undefined;
+            if (runnerMode === 'practice' && hasAns && !runnerChecked[runnerCurrentIndex]) {
+                document.getElementById('runnerCheckBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('runnerCheckBtn').classList.add('hidden');
+            }
+
+            // Render math formulas
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.getElementById('runnerQuestionCard'), {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '$', right: '$', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function checkCurrentQuestionCorrectness() {
+            const q = runnerQuizData.questions[runnerCurrentIndex];
+            const ua = runnerUserAnswers[runnerCurrentIndex];
+            if (q.type === 'multiple') return ua === q.correct;
+            if (q.type === 'short') return String(ua).trim().toLowerCase() === String(q.correct).trim().toLowerCase();
+            if (q.type === 'truefalse') {
+                const cArr = q.correctAnswers || [];
+                const uObj = ua || {};
+                let cnt = 0;
+                (q.options || []).forEach((_, i) => { if (uObj[i] === cArr[i]) cnt++; });
+                return cnt === (q.options || []).length;
+            }
+            return true;
+        }
+
+        window.selectRunnerTF = function(oIdx, val) {
+            if (!runnerUserAnswers[runnerCurrentIndex]) runnerUserAnswers[runnerCurrentIndex] = {};
+            runnerUserAnswers[runnerCurrentIndex][oIdx] = val;
+            renderRunnerQuestion();
+            updateRunnerMap();
+            updateRunnerProgress();
+        };
+
+        window.runnerCheckPractice = function() {
+            runnerChecked[runnerCurrentIndex] = true;
+            renderRunnerQuestion();
+        };
+
+        window.runnerPrevQuestion = function() {
+            if (runnerCurrentIndex > 0) {
+                runnerCurrentIndex--;
+                renderRunnerQuestion();
+                updateRunnerMap();
+            }
+        };
+
+        window.runnerNextQuestion = function() {
+            if (runnerCurrentIndex < runnerQuizData.questions.length - 1) {
+                runnerCurrentIndex++;
+                renderRunnerQuestion();
+                updateRunnerMap();
+            } else {
+                window.submitRunnerQuiz();
+            }
+        };
+
+        window.jumpRunnerQuestion = function(idx) {
+            runnerCurrentIndex = idx;
+            renderRunnerQuestion();
+            updateRunnerMap();
+        };
+
+        window.toggleRunnerFlag = function() {
+            runnerFlagged[runnerCurrentIndex] = !runnerFlagged[runnerCurrentIndex];
+            updateRunnerMap();
+        };
+
+        function updateRunnerMap() {
+            const mapContainer = document.getElementById('runnerQuestionMap');
+            if (!mapContainer || !runnerQuizData || !runnerQuizData.questions) return;
+
+            mapContainer.innerHTML = runnerQuizData.questions.map((_, idx) => {
+                const isCurrent = idx === runnerCurrentIndex;
+                const isAnswered = runnerUserAnswers[idx] !== null && runnerUserAnswers[idx] !== undefined;
+                const isFlagged = runnerFlagged[idx];
+
+                let classes = 'q-map-btn';
+                if (isAnswered) classes += ' answered';
+                if (isCurrent) classes += ' current';
+                if (isFlagged) classes += ' flagged';
+
+                return `<button onclick="window.jumpRunnerQuestion(${idx})" class="${classes}">${idx + 1}</button>`;
+            }).join('');
+        }
+
+        function updateRunnerProgress() {
+            if (!runnerQuizData || !runnerQuizData.questions) return;
+            const total = runnerQuizData.questions.length;
+            const answered = runnerUserAnswers.filter(a => a !== null && a !== undefined).length;
+            document.getElementById('runnerProgressText').innerText = `${answered}/${total}`;
+            document.getElementById('runnerProgressBar').style.width = `${(answered / total) * 100}%`;
+        }
+
+        // --- SUBMIT EXAM & GDPT 2018 SCORING ---
+        window.submitRunnerQuiz = function(isTimeout = false) {
+            if (!runnerQuizData || !runnerQuizData.questions) return;
+
+            if (!isTimeout) {
+                const total = runnerQuizData.questions.length;
+                const answered = runnerUserAnswers.filter(a => {
+                    if (a === null || a === undefined) return false;
+                    if (typeof a === 'object' && Object.keys(a).length === 0) return false;
+                    if (typeof a === 'string' && a.trim() === '') return false;
+                    return true;
+                }).length;
+
+                if (answered < total) {
+                    if (!confirm(`Bạn còn ${total - answered}/${total} câu hỏi chưa trả lời. Bạn có chắc chắn muốn nộp bài không?`)) {
+                        return;
+                    }
+                }
+            }
+
+            clearInterval(runnerTimerInterval);
+            runnerIsSubmitted = true;
+
+            let totalPoints = 0;
+            let countCorrect = 0;
+            let countWrong = 0;
+
+            runnerQuizData.questions.forEach((q, idx) => {
+                const ua = runnerUserAnswers[idx];
+                const qType = q.type || 'multiple';
+
+                if (qType === 'multiple') {
+                    if (ua === q.correct) {
+                        totalPoints += 1.0;
+                        countCorrect++;
+                    } else if (ua !== null) {
+                        countWrong++;
+                    }
+                } else if (qType === 'truefalse') {
+                    const cArr = q.correctAnswers || [];
+                    const uObj = ua || {};
+                    let subCorrectCount = 0;
+                    (q.options || []).forEach((_, oIdx) => {
+                        if (uObj[oIdx] === cArr[oIdx]) subCorrectCount++;
+                    });
+
+                    // Quy chuẩn chấm điểm GDPT 2018 chính xác:
+                    // 1 ý đúng: 0.1đ | 2 ý: 0.25đ | 3 ý: 0.5đ | 4 ý: 1.0đ
+                    let tfPoint = 0;
+                    if (subCorrectCount === 1) tfPoint = 0.1;
+                    else if (subCorrectCount === 2) tfPoint = 0.25;
+                    else if (subCorrectCount === 3) tfPoint = 0.5;
+                    else if (subCorrectCount === 4) tfPoint = 1.0;
+
+                    totalPoints += tfPoint;
+                    if (subCorrectCount === (q.options || []).length) countCorrect++;
+                    else countWrong++;
+                } else if (qType === 'short') {
+                    if (String(ua).trim().toLowerCase() === String(q.correct).trim().toLowerCase()) {
+                        totalPoints += 1.0;
+                        countCorrect++;
+                    } else if (ua) {
+                        countWrong++;
+                    }
+                }
+            });
+
+            // Quy đổi sang thang điểm 10 chuẩn
+            const maxPossible = runnerQuizData.questions.length;
+            const finalScore10 = ((totalPoints / maxPossible) * 10).toFixed(2);
+
+            document.getElementById('runnerFinalScore').innerText = finalScore10;
+            document.getElementById('runnerCountCorrect').innerText = countCorrect;
+            document.getElementById('runnerCountWrong').innerText = countWrong;
+            document.getElementById('runnerTimeSpent').innerText = document.getElementById('runnerTimerBox').innerText;
+
+            document.getElementById('runnerResultModal').classList.remove('hidden');
+            renderRunnerQuestion();
+            updateRunnerMap();
+        };
+
+        window.enterRunnerReviewMode = function() {
+            document.getElementById('runnerResultModal').classList.add('hidden');
+            runnerCurrentIndex = 0;
+            renderRunnerQuestion();
+            showToast("Đang ở chế độ xem lại bài làm và đáp án.");
+        };
+
+        window.restartRunnerExam = function() {
+            document.getElementById('runnerResultModal')?.classList.add('hidden');
+            initExamRunnerSession();
+            showToast("Đã khởi động lại bài kiểm tra!");
+        };
+
+        window.copyExamShareLink = function(id) {
+            const url = `${window.location.origin}/eduspace/exam?${id}`;
+            navigator.clipboard.writeText(url).then(() => {
+                showToast("Đã sao chép liên kết làm bài vào bộ nhớ tạm!");
+            }).catch(() => {
+                prompt("Sao chép liên kết làm bài thi:", url);
+            });
+        };
+
+        window.askEduAIAboutCurrentQuestion = function() {
+            if (!runnerQuizData || !runnerQuizData.questions) return;
+            const q = runnerQuizData.questions[runnerCurrentIndex];
+            const contextText = `Câu hỏi: ${q.question}\nCác phương án: ${JSON.stringify(q.options || [])}\nĐáp án chuẩn: ${JSON.stringify(q.correct || q.correctAnswers)}`;
+            window.eduAIContext = contextText;
+
+            if (typeof window.EduAI_Assistant !== 'undefined' && window.EduAI_Assistant.ask) {
+                window.EduAI_Assistant.ask(`Hãy hướng dẫn cách giải bài tập này: ${q.question}`);
+            } else {
+                showToast("Mở khung chat EduAI Assistant để trao đổi...", false);
+            }
+        };
+
+        // --- JSON EXPORT ---
+        window.exportToDataJs = function() {
+            if (questions.length === 0) {
+                showToast("Chưa có câu hỏi nào để xuất!", true);
+                return;
+            }
+            const data = {
+                title: document.getElementById('pub-title')?.value || "EduSpace Quiz",
+                questions: questions
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `quiz_${document.getElementById('pub-id')?.value || 'data'}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("Đã tải tệp JSON về máy!");
+        };
+
+        // Boot
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+
+</html>

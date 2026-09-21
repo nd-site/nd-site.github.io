@@ -11,6 +11,33 @@
     "cleanUrls": true,
     "trailingSlash": true,
     "retainedBackups": 1,
+    "redirects": [
+      {
+        "source": "/psychology/**",
+        "destination": "/",
+        "type": 302
+      },
+      {
+        "source": "/utils/**",
+        "destination": "/",
+        "type": 302
+      },
+      {
+        "source": "/media/**",
+        "destination": "/",
+        "type": 302
+      },
+      {
+        "source": "/games/**",
+        "destination": "/",
+        "type": 302
+      },
+      {
+        "source": "/chat/**",
+        "destination": "/",
+        "type": 302
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",
