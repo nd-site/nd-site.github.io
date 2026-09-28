@@ -312,6 +312,10 @@ export class ExamSessionService {
     // Engine validates state & timer, updates session.autosaveState
     const envelope = this.engine.autosave(session, rawAnswers, payload.answerVersion || 1, nowStr);
 
+    if (Array.isArray(payload.selectedChoiceQuestionIds) && session.autosaveState) {
+      session.autosaveState.selectedChoiceQuestionIds = payload.selectedChoiceQuestionIds;
+    }
+
     // Persist session update
     await this.sessionRepo.updateSession(session);
 
@@ -320,7 +324,8 @@ export class ExamSessionService {
       sessionId: session.id,
       savedAt: envelope.savedAt,
       savedAnswersCount: session.autosaveState?.savedAnswersCount || 0,
-      answerVersion: envelope.answerVersion
+      answerVersion: envelope.answerVersion,
+      selectedChoiceQuestionIds: session.autosaveState?.selectedChoiceQuestionIds
     };
   }
 
@@ -399,6 +404,7 @@ export class ExamSessionService {
 
     // 1. Submit through Engine (validates questions, versions, strips client scores, transitions state)
     const { submission } = this.engine.submit(session, request.answers || [], versionsMap, nowStr);
+    submission.selectedChoiceQuestionIds = request.selectedChoiceQuestionIds || session.autosaveState?.selectedChoiceQuestionIds;
 
     // Save Submission record
     await this.submissionRepo.createSubmission(submission);

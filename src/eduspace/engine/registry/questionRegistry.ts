@@ -44,6 +44,15 @@ export const singleChoicePlugin: QuestionTypeDefinition = {
   },
 
   evaluate(response: any, content: any, gradingConfig: any, allocatedPoints: number): QuestionEvaluation {
+    if (response === undefined || response === null) {
+      return {
+        maxPoints: allocatedPoints,
+        awardedPoints: 0,
+        isCorrect: false,
+        explanation: gradingConfig?.explanation,
+        gradingMethod: 'automatic'
+      };
+    }
     const selected = typeof response === 'object' ? response.selectedOptionId : response;
     const correct = gradingConfig?.payload?.correctOptionId || gradingConfig?.correctOptionId;
     const isCorrect = selected === correct;
@@ -165,7 +174,8 @@ export const trueFalsePlugin: QuestionTypeDefinition = {
   },
 
   evaluate(response: any, content: any, gradingConfig: any, allocatedPoints: number): QuestionEvaluation {
-    const studentMap: Record<string, boolean> = response?.answers || response?.tfAnswers || response || {};
+    const studentMap: Record<string, boolean> =
+      (response && typeof response === 'object' ? (response.answers || response.tfAnswers || response) : {}) || {};
     const correctMap: Record<string, boolean> = gradingConfig?.payload?.correctAnswers || gradingConfig?.correctAnswers || {};
     const items: Array<{ id: string }> = content?.items || [];
     const ladder: number[] = gradingConfig?.payload?.partialScoreLadder || gradingConfig?.partialScoreLadder || [0.1, 0.25, 0.5, 1.0];
@@ -223,10 +233,19 @@ export const shortAnswerPlugin: QuestionTypeDefinition = {
   },
 
   evaluate(response: any, content: any, gradingConfig: any, allocatedPoints: number): QuestionEvaluation {
+    if (response === undefined || response === null) {
+      return {
+        maxPoints: allocatedPoints,
+        awardedPoints: 0,
+        isCorrect: false,
+        explanation: gradingConfig?.explanation,
+        gradingMethod: 'automatic'
+      };
+    }
     let studentText = typeof response === 'object' ? String(response.text ?? '') : String(response ?? '');
-    const acceptable: string[] = gradingConfig?.payload?.acceptableAnswers || [];
-    const caseSensitive = !!gradingConfig?.payload?.caseSensitive;
-    const trimWhitespace = gradingConfig?.payload?.trimWhitespace !== false;
+    const acceptable: string[] = gradingConfig?.payload?.acceptableAnswers || gradingConfig?.acceptableAnswers || [];
+    const caseSensitive = !!(gradingConfig?.payload?.caseSensitive ?? gradingConfig?.caseSensitive);
+    const trimWhitespace = (gradingConfig?.payload?.trimWhitespace ?? gradingConfig?.trimWhitespace) !== false;
 
     if (trimWhitespace) studentText = studentText.trim();
     if (!caseSensitive) studentText = studentText.toLowerCase();
@@ -257,7 +276,7 @@ export const numericPlugin: QuestionTypeDefinition = {
   supportsAutomaticGrading: true,
 
   validateDefinition(content: any, gradingConfig: any): void {
-    const exact = gradingConfig?.payload?.exactValue;
+    const exact = gradingConfig?.payload?.exactValue ?? gradingConfig?.exactValue;
     if (typeof exact !== 'number' || isNaN(exact)) {
       throw EduSpaceError.validationError('Numeric question must define a numeric exactValue');
     }
@@ -275,10 +294,19 @@ export const numericPlugin: QuestionTypeDefinition = {
   },
 
   evaluate(response: any, content: any, gradingConfig: any, allocatedPoints: number): QuestionEvaluation {
+    if (response === undefined || response === null) {
+      return {
+        maxPoints: allocatedPoints,
+        awardedPoints: 0,
+        isCorrect: false,
+        explanation: gradingConfig?.explanation,
+        gradingMethod: 'automatic'
+      };
+    }
     const rawVal = typeof response === 'object' ? response.value : response;
     const submittedNum = typeof rawVal === 'number' ? rawVal : parseFloat(String(rawVal || '').replace(',', '.'));
-    const exactValue = Number(gradingConfig?.payload?.exactValue ?? 0);
-    const tolerance = Number(gradingConfig?.payload?.tolerance ?? 0);
+    const exactValue = Number(gradingConfig?.payload?.exactValue ?? gradingConfig?.exactValue ?? 0);
+    const tolerance = Number(gradingConfig?.payload?.tolerance ?? gradingConfig?.tolerance ?? 0);
 
     const isCorrect = !isNaN(submittedNum) && Math.abs(submittedNum - exactValue) <= tolerance;
 
@@ -350,6 +378,15 @@ export const matchingPlugin: QuestionTypeDefinition = {
   },
 
   evaluate(response: any, content: any, gradingConfig: any, allocatedPoints: number): QuestionEvaluation {
+    if (response === undefined || response === null) {
+      return {
+        maxPoints: allocatedPoints,
+        awardedPoints: 0,
+        isCorrect: false,
+        explanation: gradingConfig?.explanation,
+        gradingMethod: 'automatic'
+      };
+    }
     const studentPairs: Record<string, string> = response?.pairs || response || {};
     const correctPairs: Record<string, string> = gradingConfig?.payload?.pairs || {};
     const leftItems: Array<{ id: string }> = content?.leftItems || [];
@@ -475,6 +512,67 @@ export const fillBlankPlugin: QuestionTypeDefinition = {
 };
 
 // ----------------------------------------------------------------------
+// 10. Multi-Part Plugin (Parent question with sub-parts 1a, 1b...)
+// ----------------------------------------------------------------------
+export const multiPartPlugin: QuestionTypeDefinition = {
+  type: 'multi_part' as any,
+  defaultGradingMethod: 'automatic',
+  supportsAutomaticGrading: true,
+
+  validateDefinition(content: any, gradingConfig: any): void {
+    if (!content || !Array.isArray(content.parts) || content.parts.length === 0) {
+      throw EduSpaceError.validationError('Multi-part question must define at least one part');
+    }
+  },
+
+  validateResponse(response: any): void {
+    // Accepts object mapping partId -> response
+    if (response === undefined || response === null) {
+      throw EduSpaceError.validationError('Multi-part response cannot be empty');
+    }
+  },
+
+  evaluate(response: any, content: any, gradingConfig: any, allocatedPoints: number): QuestionEvaluation {
+    const parts: any[] = content?.parts || [];
+    let awardedTotal = 0;
+    let allCorrect = true;
+    let needsManual = false;
+    const partialBreakdown: Record<string, number> = {};
+
+    const studentMap = (response && typeof response === 'object') ? response : {};
+
+    for (const part of parts) {
+      const partAllocated = typeof part.allocatedPoints === 'number' ? part.allocatedPoints : (allocatedPoints / (parts.length || 1));
+      const partResponse = studentMap[part.partId] ?? studentMap[part.id];
+      const partType = part.type || 'single_choice';
+      const partPlugin = defaultQuestionRegistry.has(partType) ? defaultQuestionRegistry.get(partType) : singleChoicePlugin;
+      
+      const partEval = partPlugin.evaluate(
+        partResponse,
+        part.contentPayload || {},
+        part.gradingPayload || {},
+        partAllocated
+      );
+
+      awardedTotal += partEval.awardedPoints;
+      partialBreakdown[part.partId || part.id] = partEval.awardedPoints;
+      if (!partEval.isCorrect) allCorrect = false;
+      if (partEval.needsManualReview) needsManual = true;
+    }
+
+    return {
+      maxPoints: allocatedPoints,
+      awardedPoints: Number(awardedTotal.toFixed(3)),
+      isCorrect: allCorrect,
+      partialBreakdown,
+      explanation: gradingConfig?.explanation,
+      gradingMethod: needsManual ? 'manual' : 'automatic',
+      needsManualReview: needsManual
+    };
+  }
+};
+
+// ----------------------------------------------------------------------
 // Question Registry Manager
 // ----------------------------------------------------------------------
 export class QuestionRegistry {
@@ -497,6 +595,9 @@ export class QuestionRegistry {
   }
 
   get(type: QuestionType): QuestionTypeDefinition {
+    if (type === ('multi_part' as any)) {
+      return multiPartPlugin;
+    }
     const plugin = this.plugins.get(type);
     if (!plugin) {
       throw EduSpaceError.validationError(`Unsupported question type: '${type}'`);
@@ -505,6 +606,7 @@ export class QuestionRegistry {
   }
 
   has(type: QuestionType): boolean {
+    if (type === ('multi_part' as any)) return true;
     return this.plugins.has(type);
   }
 

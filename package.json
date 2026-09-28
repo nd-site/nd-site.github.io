@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "esbuild src/eduspace/index.ts --bundle --platform=node --format=esm --outfile=api/dist/eduspace.mjs && vite build && vite build --config vite.timetable.config.ts",
+    "build": "esbuild src/eduspace/index.ts --bundle --platform=node --format=esm --outfile=api/dist/eduspace.mjs && vite build && vite build --config vite.timetable.config.ts && vite build --config vite.v3.config.ts",
     "build:eduspace": "esbuild src/eduspace/index.ts --bundle --platform=node --format=esm --outfile=api/dist/eduspace.mjs",
     "build:timetable": "vite build --config vite.timetable.config.ts",
+    "build:v3": "vite build --config vite.v3.config.ts",
+    "test": "tsx --test tests/**/*.test.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",

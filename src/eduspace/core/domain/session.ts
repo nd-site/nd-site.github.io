@@ -11,6 +11,8 @@ export interface SessionQuestionRef {
   assignedSectionId: string;
   allocatedPoints: number;
   orderIndex: number;
+  choiceGroupId?: string;
+  groupId?: string;
 }
 
 export interface SessionSecurityContext {
@@ -41,6 +43,7 @@ export interface ExamSession {
     lastSavedAt: string;
     savedAnswersCount: number;
     answersPayload: Record<string, any>;
+    selectedChoiceQuestionIds?: string[];
   };
 
   securityContext: SessionSecurityContext;
@@ -66,6 +69,7 @@ export interface Submission {
   studentCodeId: string;
   submittedAt: string;
   clientReportedTime?: string;
+  selectedChoiceQuestionIds?: string[];
   answers: SubmittedAnswerItem[];
   createdAt: string;
 }

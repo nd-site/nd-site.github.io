@@ -4,6 +4,7 @@
  */
 
 import type { CognitiveLevel, QuestionType } from '../constants/index.ts';
+import type { ContentBlock, MultiPartQuestionPart } from './assessmentStructure.ts';
 
 export interface QuestionMediaAsset {
   type: 'image' | 'audio' | 'video';
@@ -157,6 +158,10 @@ export interface QuestionVersion {
   content: {
     prompt: string;
     mediaAssets?: QuestionMediaAsset[];
+    blocks?: ContentBlock[];
+    sourceSetId?: string;
+    groupId?: string;
+    parts?: MultiPartQuestionPart[];
     payload: QuestionContentPayload;
   };
   gradingConfig: {
@@ -175,6 +180,8 @@ export interface Question {
   questionBankId?: string;
   authorCodeId: string;
   type: QuestionType;
+  sourceSetId?: string;
+  groupId?: string;
   
   // GDPT 2018 Academic Metadata
   subjectId: string;

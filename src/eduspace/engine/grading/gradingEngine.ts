@@ -43,7 +43,39 @@ export class GradingEngine {
     let hasManual = false;
     let hasAutomatic = false;
 
+    // Identify selected choice questions if any choice groups exist
+    const selectedChoiceIds = submission.selectedChoiceQuestionIds || session.autosaveState?.selectedChoiceQuestionIds;
+    const choiceIdSet = selectedChoiceIds ? new Set(selectedChoiceIds) : null;
+
     for (const qRef of session.questionVersionReferences) {
+      // Check if this question belongs to a choiceGroup
+      const isChoiceQuestion = !!qRef.choiceGroupId;
+      let isQuestionSelected = true;
+
+      if (isChoiceQuestion) {
+        if (choiceIdSet) {
+          isQuestionSelected = choiceIdSet.has(qRef.questionId);
+        } else {
+          // Fallback: If student answered this question, consider it selected; otherwise unselected
+          const resp = answerMap.get(qRef.questionId);
+          isQuestionSelected = resp !== undefined && resp !== null && resp !== '';
+        }
+      }
+
+      // If question was not chosen in an optional group, it does not count towards total points
+      if (!isQuestionSelected) {
+        detailedQuestions.push({
+          questionId: qRef.questionId,
+          questionVersionId: qRef.questionVersionId,
+          maxPoints: 0,
+          awardedPoints: 0,
+          isCorrect: false,
+          teacherFeedback: 'Không chọn (câu hỏi tự chọn)',
+          gradingMethod: 'automatic'
+        });
+        continue;
+      }
+
       const version = vMap.get(qRef.questionVersionId);
       if (!version) {
         throw EduSpaceError.validationError(
@@ -51,9 +83,11 @@ export class GradingEngine {
         );
       }
 
-      // Determine question type from Question entity or Version content
+      // Determine question type from Version parts, Question entity or Version content
       let qType: QuestionType = 'single_choice';
-      if (qMap && qMap.has(qRef.questionId)) {
+      if (Array.isArray(version.content?.parts) && version.content.parts.length > 0) {
+        qType = 'multi_part' as QuestionType;
+      } else if (qMap && qMap.has(qRef.questionId)) {
         qType = qMap.get(qRef.questionId)!.type;
       } else if ((version as any).type) {
         qType = (version as any).type;
@@ -66,7 +100,7 @@ export class GradingEngine {
 
       const evalResult = plugin.evaluate(
         studentResponse,
-        version.content.payload,
+        version.content.payload || version.content,
         version.gradingConfig,
         qRef.allocatedPoints
       );

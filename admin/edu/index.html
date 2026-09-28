@@ -401,27 +401,153 @@
                 </div>
             </div>
 
+            <!-- Exam Structure & Sampling Config Card -->
+            <div class="section-card p-6 md:p-8 space-y-5 bg-white border border-slate-200 rounded-3xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="ph-bold ph-sliders text-blue-600"></i> Cấu trúc đề thi &amp; Số câu khi kiểm tra
+                        </h2>
+                        <p class="text-slate-500 text-xs mt-0.5">Cấu hình số lượng câu hỏi trích xuất theo từng loại câu khi học sinh vào làm bài kiểm tra.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer select-none bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 transition-all">
+                            <input type="checkbox" id="structureEnableToggle" onchange="window.toggleStructureMode(this.checked)" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500">
+                            <span class="text-xs font-black text-slate-800">Cấu hình rút câu theo loại</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Summary Stats of Current Bank -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                    <div class="p-3 bg-blue-50/60 rounded-2xl border border-blue-100">
+                        <div class="text-slate-500 font-bold mb-1 flex items-center justify-between">
+                            <span>Dạng 1: Trắc nghiệm</span>
+                            <span class="text-[10px] text-blue-600 font-black">Phần I</span>
+                        </div>
+                        <div class="flex items-baseline justify-between">
+                            <span id="bankCountMultiple" class="text-lg font-black text-blue-700">0</span>
+                            <span class="text-[11px] text-slate-400 font-semibold">câu trong đề</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-emerald-50/60 rounded-2xl border border-emerald-100">
+                        <div class="text-slate-500 font-bold mb-1 flex items-center justify-between">
+                            <span>Dạng 2: Đúng / Sai</span>
+                            <span class="text-[10px] text-emerald-600 font-black">Phần II</span>
+                        </div>
+                        <div class="flex items-baseline justify-between">
+                            <span id="bankCountTF" class="text-lg font-black text-emerald-700">0</span>
+                            <span class="text-[11px] text-slate-400 font-semibold">câu trong đề</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-purple-50/60 rounded-2xl border border-purple-100">
+                        <div class="text-slate-500 font-bold mb-1 flex items-center justify-between">
+                            <span>Dạng 3: Trả lời ngắn</span>
+                            <span class="text-[10px] text-purple-600 font-black">Phần III</span>
+                        </div>
+                        <div class="flex items-baseline justify-between">
+                            <span id="bankCountShort" class="text-lg font-black text-purple-700">0</span>
+                            <span class="text-[11px] text-slate-400 font-semibold">câu trong đề</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-amber-50/60 rounded-2xl border border-amber-100">
+                        <div class="text-slate-500 font-bold mb-1 flex items-center justify-between">
+                            <span>Dạng 4: Tự luận</span>
+                            <span class="text-[10px] text-amber-600 font-black">Phần IV</span>
+                        </div>
+                        <div class="flex items-baseline justify-between">
+                            <span id="bankCountEssay" class="text-lg font-black text-amber-700">0</span>
+                            <span class="text-[11px] text-slate-400 font-semibold">câu trong đề</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Inputs for Structure Counts (shown when toggle is on) -->
+                <div id="structureInputsContainer" class="hidden space-y-4 pt-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Số câu Trắc nghiệm lấy:</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" id="structCountMultiple" min="0" value="0" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black text-blue-700 focus:outline-none focus:border-blue-500">
+                                <span class="text-xs text-slate-400 font-bold whitespace-nowrap">/ <span id="maxAvailMultiple">0</span></span>
+                            </div>
+                        </div>
+                        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Số câu Đúng/Sai lấy:</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" id="structCountTF" min="0" value="0" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black text-emerald-700 focus:outline-none focus:border-emerald-500">
+                                <span class="text-xs text-slate-400 font-bold whitespace-nowrap">/ <span id="maxAvailTF">0</span></span>
+                            </div>
+                        </div>
+                        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Số câu Trả lời ngắn lấy:</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" id="structCountShort" min="0" value="0" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black text-purple-700 focus:outline-none focus:border-purple-500">
+                                <span class="text-xs text-slate-400 font-bold whitespace-nowrap">/ <span id="maxAvailShort">0</span></span>
+                            </div>
+                        </div>
+                        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Số câu Tự luận lấy:</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" id="structCountEssay" min="0" value="0" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black text-amber-700 focus:outline-none focus:border-amber-500">
+                                <span class="text-xs text-slate-400 font-bold whitespace-nowrap">/ <span id="maxAvailEssay">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
+                        <label class="flex items-center gap-2 cursor-pointer select-none">
+                            <input type="checkbox" id="structShuffleWithinType" checked class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500">
+                            <span class="text-xs font-bold text-slate-700">Xáo trộn câu hỏi nội bộ trong từng dạng (bảo toàn thứ tự Phần I → Phần II → Phần III, không lẫn dạng)</span>
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="window.applyMaxStructureCounts()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
+                                Lấy tối đa
+                            </button>
+                            <button type="button" onclick="window.applyGDPTStandardStructure()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold transition-all">
+                                Chuẩn GDPT (12-4-6)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Visual Question Builder Area -->
             <div class="section-card p-6 md:p-8 space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-black">
                             <i class="ph-bold ph-list-numbers"></i>
                         </div>
                         <div>
                             <h2 class="text-xl font-extrabold text-slate-900">Danh sách câu hỏi đề thi</h2>
-                            <p class="text-slate-500 text-xs">Tổng số câu hiện có: <span id="questionsCountBadge" class="font-extrabold text-blue-600">0</span> câu</p>
+                            <div class="flex items-center gap-2 mt-0.5 flex-wrap">
+                                <p class="text-slate-500 text-xs">Tổng số: <span id="questionsCountBadge" class="font-black text-blue-600">0</span> câu</p>
+                                <span class="text-slate-300">•</span>
+                                <p class="text-slate-500 text-xs flex items-center gap-1">
+                                    Tổng điểm: <span id="questionsTotalPointsBadge" class="px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 font-black border border-emerald-200">0.0 đ</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 flex-wrap">
-                        <button onclick="window.addNewQuestion('multiple')" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-blue-200">
-                            <i class="ph-bold ph-plus"></i> Thêm trắc nghiệm
+                        <button onclick="window.addNewQuestion('multiple')" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1 border border-blue-200">
+                            <i class="ph-bold ph-plus"></i> Trắc nghiệm
                         </button>
-                        <button onclick="window.addNewQuestion('truefalse')" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-emerald-200">
-                            <i class="ph-bold ph-plus"></i> Thêm Đúng/Sai
+                        <button onclick="window.addNewQuestion('truefalse')" class="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1 border border-emerald-200">
+                            <i class="ph-bold ph-plus"></i> Đúng / Sai
                         </button>
-                        <button onclick="window.addNewQuestion('short')" class="px-3.5 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-purple-200">
-                            <i class="ph-bold ph-plus"></i> Thêm Trả lời ngắn
+                        <button onclick="window.addNewQuestion('short')" class="px-3 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1 border border-purple-200">
+                            <i class="ph-bold ph-plus"></i> Trả lời ngắn
+                        </button>
+                        <button onclick="window.sortQuestionsByType()" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1 border border-indigo-200" title="Sắp xếp toàn bộ câu hỏi theo thứ tự Dạng 1 -> Dạng 2 -> Dạng 3 -> Dạng 4">
+                            <i class="ph-bold ph-sort-ascending"></i> Sắp xếp Dạng 1→4
+                        </button>
+                        <button onclick="window.autoDistributePoints()" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-xl text-xs font-bold transition-all border border-amber-200" title="Tự động tính điểm từng câu để tổng là 10.0 điểm">
+                            <i class="ph-bold ph-calculator"></i> Chia đều 10đ
+                        </button>
+                        <button onclick="window.setStandardGDPTPoints()" class="px-3 py-2 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-xl text-xs font-bold transition-all border border-teal-200" title="Điểm chuẩn: TN 0.25đ, Đ/S 1.0đ, TLN 0.5đ">
+                            <i class="ph-bold ph-check-square"></i> Điểm GDPT
                         </button>
                         <button onclick="window.clearAllQuestions()" class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-all">
                             Xóa hết
@@ -529,10 +655,26 @@
                 <div class="space-y-6">
                     <div id="runnerQuestionCard" class="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm min-h-[360px] flex flex-col justify-between">
                         <div>
-                            <div class="flex items-center justify-between mb-4">
-                                <span id="runnerQuestionBadge" class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-black uppercase tracking-wider">
-                                    Câu 1
+                            <!-- Section Header Banner -->
+                            <div id="runnerSectionBanner" class="mb-4 px-4 py-2 rounded-2xl bg-indigo-50/70 border border-indigo-100 flex items-center justify-between text-xs font-extrabold text-indigo-900">
+                                <span id="runnerSectionTitle" class="flex items-center gap-2">
+                                    <i class="ph-bold ph-bookmark-simple text-indigo-600"></i>
+                                    PHẦN I: CÂU HỎI TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN
                                 </span>
+                                <span id="runnerSectionMeta" class="text-[11px] font-bold text-indigo-600">
+                                    Dạng 1
+                                </span>
+                            </div>
+
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-2">
+                                    <span id="runnerQuestionBadge" class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-black uppercase tracking-wider">
+                                        Câu 1
+                                    </span>
+                                    <span id="runnerQuestionPointsBadge" class="px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-full text-xs font-black">
+                                        0.25 điểm
+                                    </span>
+                                </div>
                                 <span id="runnerQuestionTypeBadge" class="text-xs font-bold text-slate-400 uppercase tracking-wider">
                                     Trắc nghiệm 4 lựa chọn
                                 </span>
@@ -874,10 +1016,13 @@
             </div>
             <h3 class="text-2xl font-black text-slate-900">Kết quả bài kiểm tra</h3>
             
-            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/80">
-                <div class="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Điểm số đạt được</div>
+            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80">
+                <div class="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Điểm số quy đổi (Hệ 10)</div>
                 <div id="runnerFinalScore" class="text-5xl font-black text-blue-600 font-mono">0.0</div>
-                <div class="text-xs font-bold text-slate-500 mt-2">Thang điểm 10.0 (chuẩn GDPT 2018)</div>
+                <div class="text-xs font-bold text-slate-600 mt-2 flex items-center justify-center gap-1.5">
+                    <span>Điểm thực tế:</span>
+                    <span id="runnerRawPoints" class="font-black text-amber-700 font-mono">0.0 / 10.0</span>
+                </div>
             </div>
 
             <div class="grid grid-cols-3 gap-2 text-xs font-bold">
@@ -938,6 +1083,13 @@
         let runnerFlagged = [];
         let runnerChecked = [];
         let runnerIsSubmitted = false;
+
+        // Runner state exposure for automated testing & integration
+        window.getRunnerUserAnswers = function() { return runnerUserAnswers; };
+        window.setRunnerUserAnswer = function(idx, val) { runnerUserAnswers[idx] = val; };
+        window.getRunnerQuizData = function() { return runnerQuizData; };
+        window.setRunnerQuizData = function(data) { runnerQuizData = data; };
+        window.initExamRunnerSession = function() { initExamRunnerSession(); };
 
         // --- TOAST HELPER ---
         function showToast(msg, isError = false) {
@@ -1087,10 +1239,170 @@
             if (el) el.value = res;
         };
 
+        function getDefaultPoints(type) {
+            if (type === 'multiple') return 0.25;
+            if (type === 'truefalse') return 1.0;
+            if (type === 'short') return 0.5;
+            if (type === 'essay') return 2.0;
+            return 0.25;
+        }
+
+        window.updateQuestionPoints = function(idx, val) {
+            if (!questions[idx]) return;
+            questions[idx].points = Math.max(0, parseFloat(val) || 0);
+            updateQuestionsHeaderStats();
+        };
+
+        function updateQuestionsHeaderStats() {
+            const countBadge = document.getElementById('questionsCountBadge');
+            const totalPointsBadge = document.getElementById('questionsTotalPointsBadge');
+            if (countBadge) countBadge.innerText = questions.length;
+
+            let totalPoints = 0;
+            let mCount = 0, tfCount = 0, sCount = 0, eCount = 0;
+
+            questions.forEach(q => {
+                const t = q.type || 'multiple';
+                const p = Number(q.points !== undefined ? q.points : getDefaultPoints(t));
+                totalPoints += p;
+                if (t === 'multiple') mCount++;
+                else if (t === 'truefalse') tfCount++;
+                else if (t === 'short') sCount++;
+                else if (t === 'essay') eCount++;
+            });
+
+            if (totalPointsBadge) {
+                totalPointsBadge.innerText = `${totalPoints.toFixed(2)} đ`;
+                if (Math.abs(totalPoints - 10.0) < 0.001) {
+                    totalPointsBadge.className = "px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 font-black border border-emerald-200";
+                } else {
+                    totalPointsBadge.className = "px-2 py-0.5 rounded-lg bg-amber-50 text-amber-800 font-black border border-amber-200";
+                }
+            }
+
+            // Update bank counts
+            const elM = document.getElementById('bankCountMultiple');
+            const elTF = document.getElementById('bankCountTF');
+            const elS = document.getElementById('bankCountShort');
+            const elE = document.getElementById('bankCountEssay');
+            if (elM) elM.innerText = mCount;
+            if (elTF) elTF.innerText = tfCount;
+            if (elS) elS.innerText = sCount;
+            if (elE) elE.innerText = eCount;
+
+            // Update max counts
+            const maxM = document.getElementById('maxAvailMultiple');
+            const maxTF = document.getElementById('maxAvailTF');
+            const maxS = document.getElementById('maxAvailShort');
+            const maxE = document.getElementById('maxAvailEssay');
+            if (maxM) maxM.innerText = mCount;
+            if (maxTF) maxTF.innerText = tfCount;
+            if (maxS) maxS.innerText = sCount;
+            if (maxE) maxE.innerText = eCount;
+        }
+
+        window.sortQuestionsByType = function() {
+            if (questions.length === 0) return;
+            const typeOrder = { 'multiple': 1, 'truefalse': 2, 'short': 3, 'essay': 4 };
+            questions.sort((a, b) => {
+                const orderA = typeOrder[a.type || 'multiple'] || 1;
+                const orderB = typeOrder[b.type || 'multiple'] || 1;
+                return orderA - orderB;
+            });
+            renderQuestions();
+            showToast("Đã sắp xếp toàn bộ câu hỏi theo đúng trình tự phân loại (Dạng 1 → Dạng 2 → Dạng 3 → Dạng 4)!");
+        };
+
+        window.autoDistributePoints = function() {
+            if (questions.length === 0) {
+                showToast("Chưa có câu hỏi nào để tính điểm!", true);
+                return;
+            }
+            const mCount = questions.filter(q => (q.type || 'multiple') === 'multiple').length;
+            const tfCount = questions.filter(q => q.type === 'truefalse').length;
+            const sCount = questions.filter(q => q.type === 'short').length;
+            const eCount = questions.filter(q => q.type === 'essay').length;
+
+            if (mCount === 12 && tfCount === 4 && sCount === 6 && eCount === 0) {
+                questions.forEach(q => {
+                    if ((q.type || 'multiple') === 'multiple') q.points = 0.25;
+                    else if (q.type === 'truefalse') q.points = 1.0;
+                    else if (q.type === 'short') q.points = 0.5;
+                });
+                showToast("Đã chia điểm chuẩn GDPT 2018 tròn 10.0 điểm (TN: 0.25đ, Đ/S: 1.0đ, TLN: 0.5đ)!");
+            } else {
+                const perQ = Math.round((10.0 / questions.length) * 100) / 100;
+                questions.forEach(q => { q.points = perQ; });
+                showToast(`Đã chia đều mỗi câu ${perQ} điểm cho tổng ${questions.length} câu hỏi!`);
+            }
+            renderQuestions();
+        };
+
+        window.setStandardGDPTPoints = function() {
+            if (questions.length === 0) return;
+            questions.forEach(q => {
+                const qType = q.type || 'multiple';
+                q.points = getDefaultPoints(qType);
+            });
+            renderQuestions();
+            showToast("Đã áp dụng định mức điểm chuẩn GDPT (TN: 0.25đ, Đ/S: 1.0đ, TLN: 0.5đ, Tự luận: 2.0đ)!");
+        };
+
+        window.toggleStructureMode = function(enabled) {
+            const container = document.getElementById('structureInputsContainer');
+            if (container) {
+                container.classList.toggle('hidden', !enabled);
+            }
+            if (enabled) {
+                const mCount = questions.filter(q => (q.type || 'multiple') === 'multiple').length;
+                const tfCount = questions.filter(q => q.type === 'truefalse').length;
+                const sCount = questions.filter(q => q.type === 'short').length;
+                const eCount = questions.filter(q => q.type === 'essay').length;
+
+                const elM = document.getElementById('structCountMultiple');
+                const elTF = document.getElementById('structCountTF');
+                const elS = document.getElementById('structCountShort');
+                const elE = document.getElementById('structCountEssay');
+
+                if (elM && (!elM.value || elM.value === '0')) elM.value = mCount;
+                if (elTF && (!elTF.value || elTF.value === '0')) elTF.value = tfCount;
+                if (elS && (!elS.value || elS.value === '0')) elS.value = sCount;
+                if (elE && (!elE.value || elE.value === '0')) elE.value = eCount;
+            }
+        };
+
+        window.applyMaxStructureCounts = function() {
+            const mCount = questions.filter(q => (q.type || 'multiple') === 'multiple').length;
+            const tfCount = questions.filter(q => q.type === 'truefalse').length;
+            const sCount = questions.filter(q => q.type === 'short').length;
+            const eCount = questions.filter(q => q.type === 'essay').length;
+
+            const elM = document.getElementById('structCountMultiple');
+            const elTF = document.getElementById('structCountTF');
+            const elS = document.getElementById('structCountShort');
+            const elE = document.getElementById('structCountEssay');
+            if (elM) elM.value = mCount;
+            if (elTF) elTF.value = tfCount;
+            if (elS) elS.value = sCount;
+            if (elE) elE.value = eCount;
+            showToast("Đã đặt số câu lấy tối đa theo ngân hàng hiện có!");
+        };
+
+        window.applyGDPTStandardStructure = function() {
+            const elM = document.getElementById('structCountMultiple');
+            const elTF = document.getElementById('structCountTF');
+            const elS = document.getElementById('structCountShort');
+            const elE = document.getElementById('structCountEssay');
+            if (elM) elM.value = 12;
+            if (elTF) elTF.value = 4;
+            if (elS) elS.value = 6;
+            if (elE) elE.value = 0;
+            showToast("Đã thiết lập cấu trúc chuẩn GDPT 2018: 12 TN - 4 Đ/S - 6 TLN!");
+        };
+
         function renderQuestions() {
             const container = document.getElementById('questionsContainer');
-            const countBadge = document.getElementById('questionsCountBadge');
-            if (countBadge) countBadge.innerText = questions.length;
+            updateQuestionsHeaderStats();
             if (!container) return;
 
             if (questions.length === 0) {
@@ -1105,10 +1417,12 @@
 
             container.innerHTML = questions.map((q, idx) => {
                 const qType = q.type || 'multiple';
+                const qPoints = Number(q.points !== undefined ? q.points : getDefaultPoints(qType));
+
                 return `
                     <div class="q-card p-5 space-y-4 border border-slate-200 bg-white shadow-sm" data-idx="${idx}">
                         <div class="flex items-center justify-between flex-wrap gap-2">
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-2 flex-wrap">
                                 <span class="px-2.5 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs font-black">
                                     Câu ${idx + 1}
                                 </span>
@@ -1118,6 +1432,11 @@
                                     <option value="short" ${qType === 'short' ? 'selected' : ''}>Trả lời ngắn / Điền số</option>
                                     <option value="essay" ${qType === 'essay' ? 'selected' : ''}>Tự luận</option>
                                 </select>
+                                <div class="flex items-center gap-1.5 bg-amber-50/80 px-2.5 py-1 rounded-xl border border-amber-200" title="Tùy chỉnh số điểm cho câu hỏi này">
+                                    <i class="ph-bold ph-coins text-amber-600 text-xs"></i>
+                                    <span class="text-xs font-bold text-amber-800">Điểm:</span>
+                                    <input type="number" step="0.05" min="0" value="${qPoints}" onchange="window.updateQuestionPoints(${idx}, this.value)" class="w-16 px-1.5 py-0.5 bg-white border border-amber-300 rounded-lg font-black text-xs text-amber-900 text-center focus:outline-none focus:ring-1 focus:ring-amber-500">
+                                </div>
                             </div>
                             <div class="flex items-center gap-1">
                                 <button onclick="window.moveQuestion(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} class="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 disabled:opacity-30">
@@ -1221,11 +1540,13 @@
         // Editor mutation handlers
         window.addNewQuestion = function(type = 'multiple') {
             if (type === 'multiple') {
-                questions.push({ type: 'multiple', question: 'Nội dung câu hỏi mới...', options: ['', '', '', ''], correct: 0, explanation: '' });
+                questions.push({ type: 'multiple', question: 'Nội dung câu hỏi mới...', options: ['', '', '', ''], correct: 0, points: 0.25, explanation: '' });
             } else if (type === 'truefalse') {
-                questions.push({ type: 'truefalse', question: 'Các mệnh đề sau đúng hay sai?', options: ['', '', '', ''], correctAnswers: [true, false, false, false], explanation: '' });
+                questions.push({ type: 'truefalse', question: 'Các mệnh đề sau đúng hay sai?', options: ['', '', '', ''], correctAnswers: [true, false, false, false], points: 1.0, explanation: '' });
             } else if (type === 'short') {
-                questions.push({ type: 'short', question: 'Câu hỏi trả lời ngắn...', correct: '', explanation: '' });
+                questions.push({ type: 'short', question: 'Câu hỏi trả lời ngắn...', correct: '', points: 0.5, explanation: '' });
+            } else if (type === 'essay') {
+                questions.push({ type: 'essay', question: 'Câu hỏi tự luận...', correct: '', points: 2.0, explanation: '' });
             }
             renderQuestions();
         };
@@ -1451,6 +1772,7 @@ ${text}
                         question: qText || 'Câu hỏi',
                         options: opts,
                         correct: 0,
+                        points: 0.25,
                         explanation: ''
                     });
                 } else {
@@ -1458,6 +1780,7 @@ ${text}
                         type: 'short',
                         question: b.trim(),
                         correct: '',
+                        points: 0.5,
                         explanation: ''
                     });
                 }
@@ -1622,12 +1945,14 @@ ${text}
                 parsed.forEach((q, i) => {
                     if (!q.question) return;
                     const type = q.type || 'multiple';
+                    const qPoints = q.points !== undefined ? Number(q.points) : getDefaultPoints(type);
                     if (type === 'multiple') {
                         validated.push({
                             type: 'multiple',
                             question: q.question,
                             options: Array.isArray(q.options) ? q.options.slice(0, 4) : ['', '', '', ''],
                             correct: typeof q.correct === 'number' ? q.correct : 0,
+                            points: qPoints,
                             explanation: q.explanation || ''
                         });
                     } else if (type === 'truefalse') {
@@ -1636,6 +1961,7 @@ ${text}
                             question: q.question,
                             options: Array.isArray(q.options) ? q.options.slice(0, 4) : ['', '', '', ''],
                             correctAnswers: Array.isArray(q.correctAnswers) ? q.correctAnswers.slice(0, 4) : [true, false, false, false],
+                            points: qPoints,
                             explanation: q.explanation || ''
                         });
                     } else if (type === 'short') {
@@ -1643,6 +1969,7 @@ ${text}
                             type: 'short',
                             question: q.question,
                             correct: q.correct !== undefined ? String(q.correct) : '',
+                            points: qPoints,
                             explanation: q.explanation || ''
                         });
                     } else {
@@ -1650,6 +1977,7 @@ ${text}
                             type: 'essay',
                             question: q.question,
                             correct: q.correct !== undefined ? String(q.correct) : '',
+                            points: qPoints,
                             explanation: q.explanation || ''
                         });
                     }
@@ -1965,6 +2293,40 @@ ${text}
                     return;
                 }
 
+                // Chuẩn hóa điểm từng câu
+                qList = qList.map(q => {
+                    const t = q.type || 'multiple';
+                    return {
+                        ...q,
+                        type: t,
+                        points: q.points !== undefined ? Number(q.points) : getDefaultPoints(t)
+                    };
+                });
+
+                // Nếu có cấu hình cấu trúc đề trong JSON
+                const struct = (parsed && (parsed.examStructure || (parsed.quizData && parsed.quizData.examStructure)));
+                if (struct && typeof struct === 'object') {
+                    const toggleEl = document.getElementById('structureEnableToggle');
+                    if (toggleEl) {
+                        toggleEl.checked = !!struct.enabled;
+                        window.toggleStructureMode(!!struct.enabled);
+                    }
+                    if (struct.counts) {
+                        const elM = document.getElementById('structCountMultiple');
+                        const elTF = document.getElementById('structCountTF');
+                        const elS = document.getElementById('structCountShort');
+                        const elE = document.getElementById('structCountEssay');
+                        if (elM && struct.counts.multiple !== undefined) elM.value = struct.counts.multiple;
+                        if (elTF && struct.counts.truefalse !== undefined) elTF.value = struct.counts.truefalse;
+                        if (elS && struct.counts.short !== undefined) elS.value = struct.counts.short;
+                        if (elE && struct.counts.essay !== undefined) elE.value = struct.counts.essay;
+                    }
+                    const shuffleEl = document.getElementById('structShuffleWithinType');
+                    if (shuffleEl && struct.shuffleWithinType !== undefined) {
+                        shuffleEl.checked = !!struct.shuffleWithinType;
+                    }
+                }
+
                 if (mode === 'replace') {
                     questions = qList;
                 } else {
@@ -2025,6 +2387,28 @@ ${text}
             try {
                 showToast("Đang đồng bộ dữ liệu lên Firestore...", false);
 
+                // Thu thập cấu hình cấu trúc đề thi và điểm
+                const structEnabled = document.getElementById('structureEnableToggle')?.checked || false;
+                const structCounts = {
+                    multiple: Math.max(0, parseInt(document.getElementById('structCountMultiple')?.value, 10) || 0),
+                    truefalse: Math.max(0, parseInt(document.getElementById('structCountTF')?.value, 10) || 0),
+                    short: Math.max(0, parseInt(document.getElementById('structCountShort')?.value, 10) || 0),
+                    essay: Math.max(0, parseInt(document.getElementById('structCountEssay')?.value, 10) || 0)
+                };
+                const structShuffle = document.getElementById('structShuffleWithinType')?.checked || false;
+
+                const examStructure = {
+                    enabled: structEnabled,
+                    counts: structCounts,
+                    shuffleWithinType: structShuffle
+                };
+
+                let calculatedTotalPoints = questions.reduce((sum, q) => {
+                    const p = q.points !== undefined ? Number(q.points) : getDefaultPoints(q.type || 'multiple');
+                    return sum + (isNaN(p) ? 0 : p);
+                }, 0);
+                calculatedTotalPoints = Math.round(calculatedTotalPoints * 100) / 100;
+
                 const quizDataObj = {
                     title: title,
                     class: cls,
@@ -2034,6 +2418,8 @@ ${text}
                     author: author,
                     school: school,
                     book: book,
+                    totalPoints: calculatedTotalPoints,
+                    examStructure: examStructure,
                     config: { testDuration: duration * 60 },
                     questions: questions
                 };
@@ -2202,6 +2588,36 @@ ${text}
                     document.getElementById('meta-author').value = qData.author || '';
                     document.getElementById('meta-school').value = qData.school || '';
                     document.getElementById('meta-book').value = qData.book || '';
+
+                    // Phục hồi cấu hình Cấu trúc đề thi
+                    const struct = qData.examStructure;
+                    const toggleEl = document.getElementById('structureEnableToggle');
+                    if (struct && typeof struct === 'object') {
+                        if (toggleEl) {
+                            toggleEl.checked = !!struct.enabled;
+                            window.toggleStructureMode(!!struct.enabled);
+                        }
+                        if (struct.counts) {
+                            const elM = document.getElementById('structCountMultiple');
+                            const elTF = document.getElementById('structCountTF');
+                            const elS = document.getElementById('structCountShort');
+                            const elE = document.getElementById('structCountEssay');
+                            if (elM && struct.counts.multiple !== undefined) elM.value = struct.counts.multiple;
+                            if (elTF && struct.counts.truefalse !== undefined) elTF.value = struct.counts.truefalse;
+                            if (elS && struct.counts.short !== undefined) elS.value = struct.counts.short;
+                            if (elE && struct.counts.essay !== undefined) elE.value = struct.counts.essay;
+                        }
+                        const shuffleEl = document.getElementById('structShuffleWithinType');
+                        if (shuffleEl && struct.shuffleWithinType !== undefined) {
+                            shuffleEl.checked = !!struct.shuffleWithinType;
+                        }
+                    } else {
+                        if (toggleEl) {
+                            toggleEl.checked = false;
+                            window.toggleStructureMode(false);
+                        }
+                    }
+
                     questions = qData.questions || [];
                     renderQuestions();
                     window.switchAdminTab('editor');
@@ -2243,6 +2659,99 @@ ${text}
             await window.selectExamToRun(id);
         };
 
+        /**
+         * Chuẩn bị danh sách câu hỏi cho phòng thi:
+         * 1. Phân loại câu hỏi thành 4 dạng độc lập: multiple, truefalse, short, essay.
+         * 2. Nếu bật cấu hình cấu trúc đề (examStructure):
+         *    - Xáo trộn nội bộ trong từng dạng (nếu shuffleWithinType = true).
+         *    - Rút đúng số câu theo cấu hình counts của từng dạng.
+         * 3. Gán thông tin Phần (Phần I, II, III, IV), barem điểm từng câu (points).
+         * 4. GHÉP NỐI NGHIÊM NGẶT THEO TRÌNH TỰ (Dạng 1 -> Dạng 2 -> Dạng 3 -> Dạng 4),
+         *    đảm bảo tuyệt đối KHÔNG BAO GIỜ bị trộn lẫn giữa các dạng câu hỏi!
+         */
+        window.prepareExamQuestions = function(rawQuestions, examStructure = null) {
+            if (!Array.isArray(rawQuestions) || rawQuestions.length === 0) return [];
+
+            let mList = [];
+            let tfList = [];
+            let sList = [];
+            let eList = [];
+
+            rawQuestions.forEach(q => {
+                const clone = JSON.parse(JSON.stringify(q));
+                const t = clone.type || 'multiple';
+                clone.type = t;
+                clone.points = clone.points !== undefined ? Number(clone.points) : getDefaultPoints(t);
+
+                if (t === 'multiple') mList.push(clone);
+                else if (t === 'truefalse') tfList.push(clone);
+                else if (t === 'short') sList.push(clone);
+                else eList.push(clone);
+            });
+
+            // Fisher-Yates shuffle helper
+            const shuffleArray = (arr) => {
+                const copy = [...arr];
+                for (let i = copy.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [copy[i], copy[j]] = [copy[j], copy[i]];
+                }
+                return copy;
+            };
+
+            // Nếu bật cấu hình cấu trúc rút câu
+            if (examStructure && examStructure.enabled) {
+                if (examStructure.shuffleWithinType) {
+                    mList = shuffleArray(mList);
+                    tfList = shuffleArray(tfList);
+                    sList = shuffleArray(sList);
+                    eList = shuffleArray(eList);
+                }
+
+                const c = examStructure.counts || {};
+                if (c.multiple !== undefined && c.multiple >= 0) mList = mList.slice(0, c.multiple);
+                if (c.truefalse !== undefined && c.truefalse >= 0) tfList = tfList.slice(0, c.truefalse);
+                if (c.short !== undefined && c.short >= 0) sList = sList.slice(0, c.short);
+                if (c.essay !== undefined && c.essay >= 0) eList = eList.slice(0, c.essay);
+            }
+
+            // Gán thông tin Phần thi theo chuẩn GDPT 2018
+            mList.forEach((q, idx) => {
+                q._sectionId = 1;
+                q._sectionTitle = 'PHẦN I: TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN';
+                q._sectionDesc = 'Mỗi câu hỏi thí sinh chỉ chọn một phương án duy nhất';
+                q._indexInSection = idx + 1;
+                q._totalInSection = mList.length;
+            });
+
+            tfList.forEach((q, idx) => {
+                q._sectionId = 2;
+                q._sectionTitle = 'PHẦN II: TRẮC NGHIỆM ĐÚNG SAI';
+                q._sectionDesc = 'Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai';
+                q._indexInSection = idx + 1;
+                q._totalInSection = tfList.length;
+            });
+
+            sList.forEach((q, idx) => {
+                q._sectionId = 3;
+                q._sectionTitle = 'PHẦN III: CÂU HỎI TRẢ LỜI NGẮN';
+                q._sectionDesc = 'Thí sinh điền kết quả ngắn hoặc số vào ô trả lời';
+                q._indexInSection = idx + 1;
+                q._totalInSection = sList.length;
+            });
+
+            eList.forEach((q, idx) => {
+                q._sectionId = 4;
+                q._sectionTitle = 'PHẦN IV: CÂU HỎI TỰ LUẬN';
+                q._sectionDesc = 'Thí sinh trình bày chi tiết lời giải';
+                q._indexInSection = idx + 1;
+                q._totalInSection = eList.length;
+            });
+
+            // Ghép nối nghiêm ngặt theo thứ tự dạng: Phần 1 -> Phần 2 -> Phần 3 -> Phần 4
+            return [...mList, ...tfList, ...sList, ...eList];
+        };
+
         window.testCurrentExamInRunner = function() {
             if (questions.length === 0) {
                 showToast("Chưa có câu hỏi nào để làm bài kiểm tra!", true);
@@ -2252,10 +2761,34 @@ ${text}
             const mockTitle = document.getElementById('pub-title')?.value || "Đề thi soạn thảo trực tiếp";
             const mockDuration = parseInt(document.getElementById('meta-duration')?.value, 10) || 45;
 
+            // Đọc cấu hình cấu trúc đề hiện tại từ giao diện editor
+            const structEnabled = document.getElementById('structureEnableToggle')?.checked || false;
+            const structCounts = {
+                multiple: Math.max(0, parseInt(document.getElementById('structCountMultiple')?.value, 10) || 0),
+                truefalse: Math.max(0, parseInt(document.getElementById('structCountTF')?.value, 10) || 0),
+                short: Math.max(0, parseInt(document.getElementById('structCountShort')?.value, 10) || 0),
+                essay: Math.max(0, parseInt(document.getElementById('structCountEssay')?.value, 10) || 0)
+            };
+            const structShuffle = document.getElementById('structShuffleWithinType')?.checked || false;
+
+            const examStructure = {
+                enabled: structEnabled,
+                counts: structCounts,
+                shuffleWithinType: structShuffle
+            };
+
+            const prepared = window.prepareExamQuestions(questions, examStructure);
+            if (prepared.length === 0) {
+                showToast("Cấu trúc đề hiện tại không có câu hỏi nào để thi!", true);
+                return;
+            }
+
             runnerQuizData = {
                 title: mockTitle,
                 config: { testDuration: mockDuration * 60 },
-                questions: JSON.parse(JSON.stringify(questions))
+                examStructure: examStructure,
+                _rawQuestions: JSON.parse(JSON.stringify(questions)),
+                questions: prepared
             };
 
             window.switchAdminTab('runner');
@@ -2272,7 +2805,17 @@ ${text}
                     return;
                 }
                 const data = snap.data();
-                runnerQuizData = data.quizData || data;
+                const qData = data.quizData || data;
+                const rawQs = qData.questions || [];
+                const struct = qData.examStructure || null;
+
+                const prepared = window.prepareExamQuestions(rawQs, struct);
+                runnerQuizData = {
+                    ...qData,
+                    examStructure: struct,
+                    _rawQuestions: rawQs,
+                    questions: prepared
+                };
                 initExamRunnerSession();
             } catch (err) {
                 showToast("Lỗi nạp đề thi: " + err.message, true);
@@ -2359,9 +2902,34 @@ ${text}
             const qType = q.type || 'multiple';
             const badge = document.getElementById('runnerQuestionBadge');
             const typeBadge = document.getElementById('runnerQuestionTypeBadge');
+            const pointsBadge = document.getElementById('runnerQuestionPointsBadge');
+            const secBanner = document.getElementById('runnerSectionBanner');
+            const secTitle = document.getElementById('runnerSectionTitle');
+            const secMeta = document.getElementById('runnerSectionMeta');
             const textEl = document.getElementById('runnerQuestionText');
             const optsContainer = document.getElementById('runnerOptionsContainer');
             const expBox = document.getElementById('runnerExplanationBox');
+
+            // Section Banner
+            if (secBanner && secTitle) {
+                if (q._sectionTitle) {
+                    secBanner.classList.remove('hidden');
+                    secTitle.innerHTML = `<i class="ph-bold ph-bookmark-simple text-indigo-600"></i> ${q._sectionTitle}`;
+                    if (secMeta) {
+                        secMeta.innerText = q._indexInSection && q._totalInSection 
+                            ? `Câu ${q._indexInSection}/${q._totalInSection}` 
+                            : (q._sectionDesc || '');
+                    }
+                } else {
+                    secBanner.classList.add('hidden');
+                }
+            }
+
+            // Question Points Badge
+            const qPoints = Number(q.points !== undefined ? q.points : getDefaultPoints(qType));
+            if (pointsBadge) {
+                pointsBadge.innerText = `${qPoints} điểm`;
+            }
 
             if (badge) badge.innerText = `Câu ${runnerCurrentIndex + 1}`;
             if (typeBadge) {
@@ -2539,29 +3107,80 @@ ${text}
             const mapContainer = document.getElementById('runnerQuestionMap');
             if (!mapContainer || !runnerQuizData || !runnerQuizData.questions) return;
 
-            mapContainer.innerHTML = runnerQuizData.questions.map((_, idx) => {
-                const isCurrent = idx === runnerCurrentIndex;
-                const isAnswered = runnerUserAnswers[idx] !== null && runnerUserAnswers[idx] !== undefined;
-                const isFlagged = runnerFlagged[idx];
+            // Phân nhóm câu hỏi theo từng Phần (Dạng câu hỏi)
+            const sections = [];
+            runnerQuizData.questions.forEach((q, idx) => {
+                const sId = q._sectionId || 1;
+                let sec = sections.find(s => s.id === sId);
+                if (!sec) {
+                    sec = {
+                        id: sId,
+                        title: q._sectionTitle || `Phần ${sId}`,
+                        items: []
+                    };
+                    sections.push(sec);
+                }
+                sec.items.push({ q, idx });
+            });
 
-                let classes = 'q-map-btn';
-                if (isAnswered) classes += ' answered';
-                if (isCurrent) classes += ' current';
-                if (isFlagged) classes += ' flagged';
+            mapContainer.innerHTML = sections.map(sec => {
+                const answeredInSec = sec.items.filter(({ idx }) => {
+                    const a = runnerUserAnswers[idx];
+                    if (a === null || a === undefined) return false;
+                    if (typeof a === 'object' && Object.keys(a).length === 0) return false;
+                    if (typeof a === 'string' && a.trim() === '') return false;
+                    return true;
+                }).length;
 
-                return `<button onclick="window.jumpRunnerQuestion(${idx})" class="${classes}">${idx + 1}</button>`;
+                const shortTitle = sec.id === 1 ? 'Phần I: Trắc nghiệm' :
+                                   sec.id === 2 ? 'Phần II: Đúng / Sai' :
+                                   sec.id === 3 ? 'Phần III: Trả lời ngắn' :
+                                   'Phần IV: Tự luận';
+
+                const buttonsHtml = sec.items.map(({ q, idx }) => {
+                    const isCurrent = idx === runnerCurrentIndex;
+                    const isAnswered = runnerUserAnswers[idx] !== null && runnerUserAnswers[idx] !== undefined &&
+                                      (typeof runnerUserAnswers[idx] !== 'object' || Object.keys(runnerUserAnswers[idx]).length > 0) &&
+                                      (typeof runnerUserAnswers[idx] !== 'string' || runnerUserAnswers[idx].trim() !== '');
+                    const isFlagged = runnerFlagged[idx];
+
+                    let classes = 'q-map-btn';
+                    if (isAnswered) classes += ' answered';
+                    if (isCurrent) classes += ' current';
+                    if (isFlagged) classes += ' flagged';
+
+                    const qPts = q.points !== undefined ? Number(q.points) : getDefaultPoints(q.type || 'multiple');
+                    return `<button onclick="window.jumpRunnerQuestion(${idx})" class="${classes}" title="Câu ${idx + 1} (${qPts}đ)">${idx + 1}</button>`;
+                }).join('');
+
+                return `
+                    <div class="mb-3.5 last:mb-0">
+                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-wider mb-2 flex items-center justify-between border-b border-slate-100 pb-1">
+                            <span class="truncate">${shortTitle}</span>
+                            <span class="text-[10px] text-slate-400 font-mono font-bold">${answeredInSec}/${sec.items.length}</span>
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                            ${buttonsHtml}
+                        </div>
+                    </div>
+                `;
             }).join('');
         }
 
         function updateRunnerProgress() {
             if (!runnerQuizData || !runnerQuizData.questions) return;
             const total = runnerQuizData.questions.length;
-            const answered = runnerUserAnswers.filter(a => a !== null && a !== undefined).length;
+            const answered = runnerUserAnswers.filter(a => {
+                if (a === null || a === undefined) return false;
+                if (typeof a === 'object' && Object.keys(a).length === 0) return false;
+                if (typeof a === 'string' && a.trim() === '') return false;
+                return true;
+            }).length;
             document.getElementById('runnerProgressText').innerText = `${answered}/${total}`;
             document.getElementById('runnerProgressBar').style.width = `${(answered / total) * 100}%`;
         }
 
-        // --- SUBMIT EXAM & GDPT 2018 SCORING ---
+        // --- SUBMIT EXAM & GDPT 2018 SCORING (CUSTOM POINTS PER QUESTION) ---
         window.submitRunnerQuiz = function(isTimeout = false) {
             if (!runnerQuizData || !runnerQuizData.questions) return;
 
@@ -2584,19 +3203,22 @@ ${text}
             clearInterval(runnerTimerInterval);
             runnerIsSubmitted = true;
 
-            let totalPoints = 0;
+            let totalAchieved = 0;
+            let totalPossible = 0;
             let countCorrect = 0;
             let countWrong = 0;
 
             runnerQuizData.questions.forEach((q, idx) => {
                 const ua = runnerUserAnswers[idx];
                 const qType = q.type || 'multiple';
+                const qPoints = q.points !== undefined ? Number(q.points) : getDefaultPoints(qType);
+                totalPossible += qPoints;
 
                 if (qType === 'multiple') {
                     if (ua === q.correct) {
-                        totalPoints += 1.0;
+                        totalAchieved += qPoints;
                         countCorrect++;
-                    } else if (ua !== null) {
+                    } else if (ua !== null && ua !== undefined) {
                         countWrong++;
                     }
                 } else if (qType === 'truefalse') {
@@ -2607,32 +3229,40 @@ ${text}
                         if (uObj[oIdx] === cArr[oIdx]) subCorrectCount++;
                     });
 
-                    // Quy chuẩn chấm điểm GDPT 2018 chính xác:
-                    // 1 ý đúng: 0.1đ | 2 ý: 0.25đ | 3 ý: 0.5đ | 4 ý: 1.0đ
-                    let tfPoint = 0;
-                    if (subCorrectCount === 1) tfPoint = 0.1;
-                    else if (subCorrectCount === 2) tfPoint = 0.25;
-                    else if (subCorrectCount === 3) tfPoint = 0.5;
-                    else if (subCorrectCount === 4) tfPoint = 1.0;
+                    // Quy chuẩn chấm điểm GDPT 2018:
+                    // 1 ý đúng: 10% điểm câu | 2 ý: 25% | 3 ý: 50% | 4 ý: 100%
+                    let tfRatio = 0;
+                    if (subCorrectCount === 1) tfRatio = 0.1;
+                    else if (subCorrectCount === 2) tfRatio = 0.25;
+                    else if (subCorrectCount === 3) tfRatio = 0.5;
+                    else if (subCorrectCount === 4) tfRatio = 1.0;
 
-                    totalPoints += tfPoint;
+                    totalAchieved += tfRatio * qPoints;
                     if (subCorrectCount === (q.options || []).length) countCorrect++;
-                    else countWrong++;
+                    else if (Object.keys(uObj).length > 0) countWrong++;
                 } else if (qType === 'short') {
-                    if (String(ua).trim().toLowerCase() === String(q.correct).trim().toLowerCase()) {
-                        totalPoints += 1.0;
+                    if (ua && String(ua).trim().toLowerCase() === String(q.correct).trim().toLowerCase()) {
+                        totalAchieved += qPoints;
                         countCorrect++;
-                    } else if (ua) {
+                    } else if (ua && String(ua).trim() !== '') {
                         countWrong++;
                     }
+                } else if (qType === 'essay') {
+                    // Tự luận: thí sinh trình bày, giáo viên chấm sau
                 }
             });
 
+            totalAchieved = Math.round(totalAchieved * 100) / 100;
+            totalPossible = Math.round(totalPossible * 100) / 100;
+
             // Quy đổi sang thang điểm 10 chuẩn
-            const maxPossible = runnerQuizData.questions.length;
-            const finalScore10 = ((totalPoints / maxPossible) * 10).toFixed(2);
+            const finalScore10 = totalPossible > 0 ? ((totalAchieved / totalPossible) * 10).toFixed(2) : '0.00';
 
             document.getElementById('runnerFinalScore').innerText = finalScore10;
+            const rawPointsEl = document.getElementById('runnerRawPoints');
+            if (rawPointsEl) {
+                rawPointsEl.innerText = `${totalAchieved} / ${totalPossible} điểm`;
+            }
             document.getElementById('runnerCountCorrect').innerText = countCorrect;
             document.getElementById('runnerCountWrong').innerText = countWrong;
             document.getElementById('runnerTimeSpent').innerText = document.getElementById('runnerTimerBox').innerText;
@@ -2651,6 +3281,9 @@ ${text}
 
         window.restartRunnerExam = function() {
             document.getElementById('runnerResultModal')?.classList.add('hidden');
+            if (runnerQuizData && runnerQuizData._rawQuestions) {
+                runnerQuizData.questions = window.prepareExamQuestions(runnerQuizData._rawQuestions, runnerQuizData.examStructure);
+            }
             initExamRunnerSession();
             showToast("Đã khởi động lại bài kiểm tra!");
         };

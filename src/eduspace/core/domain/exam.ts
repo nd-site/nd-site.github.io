@@ -40,11 +40,22 @@ export interface ExamBlueprint {
   updatedAt: string;
 }
 
+import type {
+  ChoiceGroup,
+  ExamBlueprintSpecification,
+  ExamStructureMode,
+  QuestionGroup,
+  QuestionPool,
+  SourceSet
+} from './assessmentStructure.ts';
+
 export interface ExamSectionQuestionRef {
   questionId: string;
   questionVersionId: string;
   allocatedPoints: number;
   orderIndex: number;
+  choiceGroupId?: string;     // If this question belongs to a ChoiceGroup
+  groupId?: string;           // If this question belongs to a QuestionGroup
 }
 
 export interface ExamSection {
@@ -54,6 +65,9 @@ export interface ExamSection {
   sectionOrder: number;
   questionType: QuestionType;
   questions: ExamSectionQuestionRef[];
+  sourceSetIds?: string[];
+  choiceGroups?: ChoiceGroup[];
+  required?: boolean;
 }
 
 export interface ExamPolicy {
@@ -71,6 +85,7 @@ export interface ExamPolicy {
 export interface Exam {
   id: string;
   schemaVersion: 1;
+  versionNumber?: number;     // e.g. 1, 2...
   title: string;
   description?: string;
   subjectId: string;
@@ -78,11 +93,19 @@ export interface Exam {
   curriculumId?: string;
   textbookSetId?: string;
   blueprintId?: string;
+  blueprint?: ExamBlueprintSpecification;
+  mode?: ExamStructureMode;   // 'full' | 'structured'
   examType: ExamType;
   durationMinutes: number;
   totalPoints: number;
   passPoints?: number;
   sections: ExamSection[];
+
+  // Modular Assessment Sets
+  sourceSets?: SourceSet[];
+  questionGroups?: QuestionGroup[];
+  choiceGroups?: ChoiceGroup[];
+  questionPools?: QuestionPool[];
 
   visibility: ExamVisibility;
   moderationStatus: ModerationStatus;

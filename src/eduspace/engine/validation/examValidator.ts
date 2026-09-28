@@ -42,8 +42,52 @@ export class ExamValidator {
       throw EduSpaceError.validationError(`Exam '${exam.id}' must have at least one section`);
     }
 
-    let calculatedSumPoints = 0;
+    // Collect choice groups across exam and sections
+    const choiceGroups = [
+      ...(Array.isArray(exam.choiceGroups) ? exam.choiceGroups : []),
+      ...exam.sections.flatMap(s => Array.isArray(s.choiceGroups) ? s.choiceGroups : [])
+    ];
+
+    const choiceQuestionToGroupMap = new Map<string, typeof choiceGroups[0]>();
+    for (const cg of choiceGroups) {
+      if (!cg.id || typeof cg.requiredCount !== 'number' || cg.requiredCount <= 0) {
+        throw EduSpaceError.validationError(`ChoiceGroup '${cg.id || 'unnamed'}' must have positive requiredCount`);
+      }
+      if (!Array.isArray(cg.questionIds) || cg.questionIds.length < cg.requiredCount) {
+        throw EduSpaceError.validationError(
+          `ChoiceGroup '${cg.id}' questionIds count must be >= requiredCount (${cg.requiredCount})`
+        );
+      }
+      for (const qid of cg.questionIds) {
+        choiceQuestionToGroupMap.set(qid, cg);
+      }
+    }
+
+    // Validate SourceSets if present
+    const sourceSetIds = new Set<string>();
+    if (Array.isArray(exam.sourceSets)) {
+      for (const ss of exam.sourceSets) {
+        if (!ss.id || !ss.title?.trim()) {
+          throw EduSpaceError.validationError('SourceSet must define a valid id and title');
+        }
+        sourceSetIds.add(ss.id);
+      }
+    }
+
+    // Validate QuestionGroups if present
+    if (Array.isArray(exam.questionGroups)) {
+      for (const qg of exam.questionGroups) {
+        if (!qg.id) {
+          throw EduSpaceError.validationError('QuestionGroup must define a valid id');
+        }
+        if (qg.sourceSetId && !sourceSetIds.has(qg.sourceSetId)) {
+          throw EduSpaceError.validationError(`QuestionGroup '${qg.id}' references non-existent sourceSetId '${qg.sourceSetId}'`);
+        }
+      }
+    }
+
     const seenQuestionIds = new Set<string>();
+    const questionPointsMap = new Map<string, number>();
 
     for (const section of exam.sections) {
       if (!section.id || !section.title?.trim()) {
@@ -73,7 +117,7 @@ export class ExamValidator {
           );
         }
         seenQuestionIds.add(qRef.questionId);
-        calculatedSumPoints += qRef.allocatedPoints;
+        questionPointsMap.set(qRef.questionId, qRef.allocatedPoints);
 
         // If context provided, validate the resolved question and version
         if (context) {
@@ -98,8 +142,13 @@ export class ExamValidator {
             );
           }
 
-          // Section question type restriction check
-          if (section.questionType && question.type !== section.questionType) {
+          // Section question type restriction check (allow multi_part questions)
+          if (
+            section.questionType &&
+            question.type !== section.questionType &&
+            question.type !== ('multi_part' as any) &&
+            !Array.isArray(version.content?.parts)
+          ) {
             throw EduSpaceError.validationError(
               `Question '${qRef.questionId}' type '${question.type}' does not match section '${section.id}' type restriction '${section.questionType}'`
             );
@@ -110,10 +159,34 @@ export class ExamValidator {
       }
     }
 
+    // Calculate effective points:
+    // If choiceGroups exist, sum requiredCount of each group + non-choice questions
+    let calculatedEffectivePoints = 0;
+    const handledChoiceGroupIds = new Set<string>();
+
+    for (const [qid, pts] of questionPointsMap.entries()) {
+      const cg = choiceQuestionToGroupMap.get(qid);
+      if (!cg) {
+        calculatedEffectivePoints += pts;
+      } else {
+        if (!handledChoiceGroupIds.has(cg.id)) {
+          handledChoiceGroupIds.add(cg.id);
+          // Calculate group average question points * requiredCount
+          const groupQuestionPoints = cg.questionIds
+            .map(id => questionPointsMap.get(id) || 0)
+            .filter(p => p > 0);
+          const avgPts = groupQuestionPoints.length > 0
+            ? groupQuestionPoints.reduce((a, b) => a + b, 0) / groupQuestionPoints.length
+            : 0;
+          calculatedEffectivePoints += avgPts * cg.requiredCount;
+        }
+      }
+    }
+
     // Points sum validation (with standard float epsilon 0.01)
-    if (Math.abs(calculatedSumPoints - exam.totalPoints) > 0.01) {
+    if (Math.abs(calculatedEffectivePoints - exam.totalPoints) > 0.01) {
       throw EduSpaceError.validationError(
-        `Sum of question allocatedPoints (${calculatedSumPoints.toFixed(2)}) does not match exam totalPoints (${exam.totalPoints.toFixed(2)})`
+        `Effective exam points (${calculatedEffectivePoints.toFixed(2)}) does not match exam totalPoints (${exam.totalPoints.toFixed(2)})`
       );
     }
   }

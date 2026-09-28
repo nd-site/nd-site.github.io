@@ -5,6 +5,13 @@
 
 import type { QuestionType, SessionStatus } from '../core/constants/index.ts';
 import type { Result } from '../core/domain/session.ts';
+import type {
+  ContentBlock,
+  SourceSet,
+  QuestionGroup,
+  ChoiceGroup,
+  ExamStructureMode,
+} from '../core/domain/assessmentStructure.ts';
 
 // ----------------------------------------------------------------------
 // Security & Authentication Context
@@ -59,6 +66,16 @@ export interface SanitizedOption {
   mediaAsset?: any;
 }
 
+export interface SanitizedMultiPartQuestionPart {
+  partId: string;
+  label: string;
+  prompt: string;
+  type: QuestionType;
+  allocatedPoints: number;
+  blocks?: ContentBlock[];
+  contentPayload: any;
+}
+
 export interface SanitizedPlanQuestion {
   questionId: string;
   questionVersionId: string;
@@ -67,6 +84,11 @@ export interface SanitizedPlanQuestion {
   allocatedPoints: number;
   orderIndex: number;
   mediaAssets?: any[];
+  blocks?: ContentBlock[];
+  sourceSetId?: string;
+  groupId?: string;
+  parts?: SanitizedMultiPartQuestionPart[];
+  choiceGroupId?: string;
   options?: SanitizedOption[];
   items?: any[];
   matchingOptions?: string[];
@@ -76,6 +98,9 @@ export interface SanitizedPlanQuestion {
 export interface SanitizedPlanSection {
   id: string;
   title: string;
+  sourceSetIds?: string[];
+  choiceGroups?: ChoiceGroup[];
+  required?: boolean;
   questions: SanitizedPlanQuestion[];
 }
 
@@ -84,6 +109,10 @@ export interface SanitizedExam {
   title: string;
   durationMinutes: number;
   totalPoints: number;
+  mode?: ExamStructureMode;
+  sourceSets?: SourceSet[];
+  questionGroups?: QuestionGroup[];
+  choiceGroups?: ChoiceGroup[];
   sections: SanitizedPlanSection[];
 }
 
@@ -119,11 +148,13 @@ export interface ResumeSessionResponse {
     lastSavedAt: string;
     savedAnswersCount: number;
     answersPayload: Record<string, any>;
+    selectedChoiceQuestionIds?: string[];
   };
 }
 
 export interface AutosaveRequest {
   answersPayload: Record<string, any>;
+  selectedChoiceQuestionIds?: string[];
   answerVersion?: number;
 }
 
@@ -133,6 +164,7 @@ export interface AutosaveResponse {
   savedAt: string;
   savedAnswersCount: number;
   answerVersion: number;
+  selectedChoiceQuestionIds?: string[];
 }
 
 export interface SubmittedAnswerDto {
@@ -149,6 +181,7 @@ export interface SubmittedAnswerDto {
 
 export interface SubmitSessionRequest {
   answers: SubmittedAnswerDto[];
+  selectedChoiceQuestionIds?: string[];
   clientReportedTime?: string;
 }
 

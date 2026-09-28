@@ -62,6 +62,24 @@ export function sanitizePlanQuestion(q: PlanQuestion): SanitizedPlanQuestion {
   if (q.mediaAssets && q.mediaAssets.length > 0) {
     sanitized.mediaAssets = JSON.parse(JSON.stringify(q.mediaAssets));
   }
+  if (q.blocks && q.blocks.length > 0) {
+    sanitized.blocks = removeForbiddenKeys(JSON.parse(JSON.stringify(q.blocks)));
+  }
+  if (q.sourceSetId) sanitized.sourceSetId = q.sourceSetId;
+  if (q.groupId) sanitized.groupId = q.groupId;
+  if (q.choiceGroupId) sanitized.choiceGroupId = q.choiceGroupId;
+
+  if (Array.isArray(q.parts) && q.parts.length > 0) {
+    sanitized.parts = q.parts.map(p => ({
+      partId: p.partId,
+      label: p.label,
+      prompt: p.prompt,
+      type: p.type,
+      allocatedPoints: p.allocatedPoints,
+      blocks: p.blocks ? removeForbiddenKeys(JSON.parse(JSON.stringify(p.blocks))) : undefined,
+      contentPayload: removeForbiddenKeys(JSON.parse(JSON.stringify(p.contentPayload || {})))
+    }));
+  }
 
   const payload = q.contentPayload ? JSON.parse(JSON.stringify(q.contentPayload)) : {};
 
@@ -147,6 +165,9 @@ export function sanitizeExecutionPlan(plan: ExamExecutionPlan): SanitizedExam {
   const sections: SanitizedPlanSection[] = plan.sections.map(section => ({
     id: section.id,
     title: section.title,
+    sourceSetIds: section.sourceSetIds ? [...section.sourceSetIds] : undefined,
+    choiceGroups: section.choiceGroups ? removeForbiddenKeys(JSON.parse(JSON.stringify(section.choiceGroups))) : undefined,
+    required: section.required,
     questions: section.questions.map(q => sanitizePlanQuestion(q))
   }));
 
@@ -155,6 +176,10 @@ export function sanitizeExecutionPlan(plan: ExamExecutionPlan): SanitizedExam {
     title: plan.title,
     durationMinutes: plan.durationMinutes,
     totalPoints: plan.totalPoints,
+    mode: plan.mode,
+    sourceSets: plan.sourceSets ? removeForbiddenKeys(JSON.parse(JSON.stringify(plan.sourceSets))) : undefined,
+    questionGroups: plan.questionGroups ? removeForbiddenKeys(JSON.parse(JSON.stringify(plan.questionGroups))) : undefined,
+    choiceGroups: plan.choiceGroups ? removeForbiddenKeys(JSON.parse(JSON.stringify(plan.choiceGroups))) : undefined,
     sections
   };
 }

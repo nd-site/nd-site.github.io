@@ -10,6 +10,28 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       {
+        name: 'v3-api-middleware',
+        configureServer(server) {
+          server.middlewares.use(async (req, res, next) => {
+            const rawUrl = req.url || '';
+            const urlPath = rawUrl.split('?')[0];
+            if (urlPath === '/api/v3' || urlPath.startsWith('/api/v3/')) {
+              try {
+                const { default: handleV3Assessment } = await import('./api/v3.js');
+                await handleV3Assessment(req, res);
+              } catch (err: any) {
+                console.error('[Vite /api/v3 middleware error]:', err);
+                res.statusCode = 500;
+                res.setHeader('Content-Type', 'application/json; charset=utf-8');
+                res.end(JSON.stringify({ error: err?.message || 'V3 assessment handler error' }));
+              }
+              return;
+            }
+            next();
+          });
+        }
+      },
+      {
         name: 'trailing-slash-redirect',
         configureServer(server) {
           server.middlewares.use((req, res, next) => {
@@ -36,6 +58,7 @@ export default defineConfig(({mode}) => {
             // Only redirect recognized directory-based routes
             const KNOWN_DIRECTORIES = [
               '/eduspace',
+              '/eduspace/v3',
               '/psychology',
               '/admin',
               '/auth',

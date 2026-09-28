@@ -40,10 +40,29 @@ export class ExamPlanner {
       this.examValidator.validate(exam);
     }
 
-    // 2. Initialize PRNG for deterministic permutation
+    // 2. Build fast lookup for question choiceGroupId from choiceGroups
+    const choiceGroupMap = new Map<string, string>();
+    if (Array.isArray(exam.choiceGroups)) {
+      for (const cg of exam.choiceGroups) {
+        for (const qid of cg.questionIds || []) {
+          choiceGroupMap.set(qid, cg.id);
+        }
+      }
+    }
+    for (const sec of exam.sections) {
+      if (Array.isArray(sec.choiceGroups)) {
+        for (const cg of sec.choiceGroups) {
+          for (const qid of cg.questionIds || []) {
+            choiceGroupMap.set(qid, cg.id);
+          }
+        }
+      }
+    }
+
+    // 3. Initialize PRNG for deterministic permutation
     const rng = createDeterministicRng(attemptSeed);
 
-    // 3. Process sections
+    // 4. Process sections
     const planSections: PlanSection[] = [];
 
     for (const section of exam.sections) {
@@ -79,14 +98,33 @@ export class ExamPlanner {
           }
         }
 
+        // Determine question type (support multi_part if parts exist)
+        let resolvedType = section.questionType;
+        if (Array.isArray(version.content.parts) && version.content.parts.length > 0) {
+          resolvedType = 'multi_part' as any;
+        } else if (qMap && qMap.has(qRef.questionId)) {
+          resolvedType = qMap.get(qRef.questionId)!.type;
+        }
+
+        const choiceGroupId = qRef.choiceGroupId || choiceGroupMap.get(qRef.questionId);
+
         // Student-facing PlanQuestion: NO gradingConfig!
         const planQ: PlanQuestion = {
           questionId: qRef.questionId,
           questionVersionId: qRef.questionVersionId, // Pinned immutable version ID
-          type: section.questionType,
+          type: resolvedType,
           prompt: version.content.prompt,
           mediaAssets: version.content.mediaAssets
             ? JSON.parse(JSON.stringify(version.content.mediaAssets))
+            : undefined,
+          blocks: version.content.blocks
+            ? JSON.parse(JSON.stringify(version.content.blocks))
+            : undefined,
+          sourceSetId: version.content.sourceSetId || qRef.sourceSetId || (qMap ? qMap.get(qRef.questionId)?.sourceSetId : undefined),
+          groupId: version.content.groupId || qRef.groupId || (qMap ? qMap.get(qRef.questionId)?.groupId : undefined),
+          choiceGroupId,
+          parts: version.content.parts
+            ? JSON.parse(JSON.stringify(version.content.parts))
             : undefined,
           contentPayload: contentPayloadClone,
           allocatedPoints: qRef.allocatedPoints,
@@ -103,6 +141,9 @@ export class ExamPlanner {
         description: section.description,
         sectionOrder: section.sectionOrder,
         questionType: section.questionType,
+        sourceSetIds: section.sourceSetIds ? [...section.sourceSetIds] : undefined,
+        choiceGroups: section.choiceGroups ? JSON.parse(JSON.stringify(section.choiceGroups)) : undefined,
+        required: section.required,
         questions: planQuestions
       });
     }
@@ -116,7 +157,13 @@ export class ExamPlanner {
       grade: exam.grade,
       durationMinutes: exam.durationMinutes,
       totalPoints: exam.totalPoints,
+      mode: exam.mode || 'full',
       sections: planSections,
+      sourceSets: exam.sourceSets ? JSON.parse(JSON.stringify(exam.sourceSets)) : undefined,
+      questionGroups: exam.questionGroups ? JSON.parse(JSON.stringify(exam.questionGroups)) : undefined,
+      choiceGroups: exam.choiceGroups ? JSON.parse(JSON.stringify(exam.choiceGroups)) : undefined,
+      questionPools: exam.questionPools ? JSON.parse(JSON.stringify(exam.questionPools)) : undefined,
+      blueprint: exam.blueprint ? JSON.parse(JSON.stringify(exam.blueprint)) : undefined,
       policy: JSON.parse(JSON.stringify(exam.policy || {})),
       generatedAt: new Date().toISOString()
     };

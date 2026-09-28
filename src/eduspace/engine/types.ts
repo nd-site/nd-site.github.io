@@ -10,6 +10,16 @@ import type { GradingMethod, QuestionType } from '../core/constants/index.ts';
 import type { ExamPolicy } from '../core/domain/exam.ts';
 import type { QuestionContentPayload } from '../core/domain/question.ts';
 import type { SubmittedAnswerItem } from '../core/domain/session.ts';
+import type {
+  ContentBlock,
+  SourceSet,
+  QuestionGroup,
+  MultiPartQuestionPart,
+  ChoiceGroup,
+  QuestionPool,
+  ExamBlueprintSpecification,
+  ExamStructureMode,
+} from '../core/domain/assessmentStructure.ts';
 
 // ----------------------------------------------------------------------
 // 1. Session State Machine Types
@@ -37,6 +47,11 @@ export interface PlanQuestion {
   type: QuestionType;
   prompt: string;
   mediaAssets?: Array<{ type: 'image' | 'audio' | 'video'; url: string; caption?: string }>;
+  blocks?: ContentBlock[];
+  sourceSetId?: string;
+  groupId?: string;
+  parts?: MultiPartQuestionPart[];
+  choiceGroupId?: string;
   contentPayload: QuestionContentPayload;
   allocatedPoints: number;
   orderIndex: number;
@@ -49,6 +64,9 @@ export interface PlanSection {
   description?: string;
   sectionOrder: number;
   questionType: QuestionType;
+  sourceSetIds?: string[];
+  choiceGroups?: ChoiceGroup[];
+  required?: boolean;
   questions: PlanQuestion[];
 }
 
@@ -61,7 +79,13 @@ export interface ExamExecutionPlan {
   grade: number;
   durationMinutes: number;
   totalPoints: number;
+  mode?: ExamStructureMode;
   sections: PlanSection[];
+  sourceSets?: SourceSet[];
+  questionGroups?: QuestionGroup[];
+  choiceGroups?: ChoiceGroup[];
+  questionPools?: QuestionPool[];
+  blueprint?: ExamBlueprintSpecification;
   policy: ExamPolicy;
   generatedAt: string;
 }
