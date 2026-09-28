@@ -587,7 +587,7 @@
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-black text-slate-900">Danh mục đề thi trên Firebase</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Các đề thi này được lưu trữ tập trung tại collection <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">quizzes</code> và <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">eduspace_lessons</code>.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Kho đề dùng chung cho EduSpace V2, EduSpace V3 và trang quản trị: <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">quizzes</code> và <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">eduspace_lessons</code>.</p>
                 </div>
                 <div class="flex items-center gap-3">
                     <input type="text" id="postsSearchInput" oninput="window.filterAdminPosts(this.value)" placeholder="Tìm mã ID, môn, lớp..." class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white w-60">
@@ -2517,6 +2517,7 @@ ${text}
             container.innerHTML = posts.map(p => {
                 const id = p.id || p._docId;
                 const viewUrl = `/eduspace/exam?${id}`;
+                const v3ViewUrl = `/eduspace/v3/exam/?id=${encodeURIComponent(id)}`;
                 return `
                     <div class="lesson-card p-5 flex flex-col justify-between">
                         <div>
@@ -2541,6 +2542,9 @@ ${text}
                             <button onclick="window.runExamFromPost('${id}')" class="flex-1 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1">
                                 <i class="ph-bold ph-play"></i> Làm bài
                             </button>
+                            <a href="${v3ViewUrl}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 bg-violet-50 hover:bg-violet-100 text-violet-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1" title="Mở cùng đề bằng EduSpace V3">
+                                <i class="ph-bold ph-rocket-launch"></i> Mở V3
+                            </a>
                             <button onclick="window.loadPostToEditor('${id}')" class="flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1">
                                 <i class="ph-bold ph-pencil"></i> Sửa
                             </button>

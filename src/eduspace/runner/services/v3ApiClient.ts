@@ -5,6 +5,16 @@
 
 import type { OfficialResult, SessionData, SubmittedAnswerDto } from '../types.ts';
 
+// Static pages are served from Firebase Hosting while the server-authoritative
+// assessment API is deployed on Vercel. Keep requests same-origin in local
+// development so the Vite middleware can provide the isolated test backend.
+const IS_LOCAL_DEVELOPMENT = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const V3_API_BASE_URL = IS_LOCAL_DEVELOPMENT
+  ? ''
+  : (import.meta.env.VITE_V3_API_BASE_URL || 'https://nd-puce.vercel.app');
+
+const apiUrl = (path: string) => `${V3_API_BASE_URL}${path}`;
+
 export async function getAuthToken(): Promise<string> {
   // 1. Firebase modular / compat Auth on window
   try {
@@ -21,8 +31,10 @@ export async function getAuthToken(): Promise<string> {
   const stored = localStorage.getItem('nd_auth_token') || sessionStorage.getItem('nd_auth_token');
   if (stored) return stored;
 
-  // 3. Fallback dev token for testing
-  return 'dev_token_0000';
+  // 3. The mock identity is strictly local. A deployed runner must authenticate
+  // with Firebase instead of sending a token that a production backend could
+  // accidentally accept.
+  return IS_LOCAL_DEVELOPMENT ? 'dev_token_0000' : '';
 }
 
 async function requestJson<T>(url: string, options: RequestInit = {}): Promise<T> {
@@ -51,7 +63,7 @@ async function requestJson<T>(url: string, options: RequestInit = {}): Promise<T
 
 export const v3ApiClient = {
   async startSession(examId: string): Promise<SessionData> {
-    const res = await requestJson<any>('/api/v3/exam-sessions', {
+    const res = await requestJson<any>(apiUrl('/api/v3/exam-sessions'), {
       method: 'POST',
       body: JSON.stringify({ examId })
     });
@@ -59,7 +71,7 @@ export const v3ApiClient = {
   },
 
   async resumeSession(sessionId: string): Promise<{ session: SessionData; savedAnswers?: Record<string, any>; selectedChoiceQuestionIds?: string[] }> {
-    const res = await requestJson<any>(`/api/v3/exam-sessions/${sessionId}/resume`, {
+    const res = await requestJson<any>(apiUrl(`/api/v3/exam-sessions/${sessionId}/resume`), {
       method: 'GET'
     });
     return {
@@ -70,14 +82,14 @@ export const v3ApiClient = {
   },
 
   async autosave(sessionId: string, answersPayload: Record<string, any>, selectedChoiceQuestionIds?: string[]): Promise<any> {
-    return requestJson(`/api/v3/exam-sessions/${sessionId}/autosave`, {
+    return requestJson(apiUrl(`/api/v3/exam-sessions/${sessionId}/autosave`), {
       method: 'POST',
       body: JSON.stringify({ answersPayload, selectedChoiceQuestionIds })
     });
   },
 
   async submitSession(sessionId: string, answers: SubmittedAnswerDto[], selectedChoiceQuestionIds?: string[]): Promise<{ resultId: string; status: string }> {
-    const res = await requestJson<any>(`/api/v3/exam-sessions/${sessionId}/submit`, {
+    const res = await requestJson<any>(apiUrl(`/api/v3/exam-sessions/${sessionId}/submit`), {
       method: 'POST',
       body: JSON.stringify({
         answers,
@@ -92,7 +104,7 @@ export const v3ApiClient = {
   },
 
   async getResult(resultId: string): Promise<OfficialResult> {
-    const res = await requestJson<any>(`/api/v3/results/${resultId}`, {
+    const res = await requestJson<any>(apiUrl(`/api/v3/results/${resultId}`), {
       method: 'GET'
     });
     return res.result as OfficialResult;
@@ -100,20 +112,20 @@ export const v3ApiClient = {
 
   // Authoring API methods
   async saveAuthorExam(exam: any, questions?: any[]): Promise<{ success: boolean; examId: string; message: string }> {
-    return requestJson('/api/v3/author/exams', {
+    return requestJson(apiUrl('/api/v3/author/exams'), {
       method: 'POST',
       body: JSON.stringify({ exam, questions })
     });
   },
 
   async getAuthorExam(examId: string): Promise<{ success: boolean; exam: any; questions: any[] }> {
-    return requestJson(`/api/v3/author/exams/${examId}`, {
+    return requestJson(apiUrl(`/api/v3/author/exams/${examId}`), {
       method: 'GET'
     });
   },
 
   async validateAuthorExam(exam: any): Promise<{ success: boolean; valid: boolean; errors: string[]; warnings: string[]; summary: any }> {
-    return requestJson('/api/v3/author/validate', {
+    return requestJson(apiUrl('/api/v3/author/validate'), {
       method: 'POST',
       body: JSON.stringify({ exam })
     });
@@ -127,7 +139,7 @@ export const v3ApiClient = {
     cognitiveLevel?: string;
     prompt?: string;
   }): Promise<{ success: boolean; aiGeneratedDraft: any; disclaimer: string }> {
-    return requestJson('/api/v3/author/ai-assist', {
+    return requestJson(apiUrl('/api/v3/author/ai-assist'), {
       method: 'POST',
       body: JSON.stringify(params)
     });
