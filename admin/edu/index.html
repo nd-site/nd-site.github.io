@@ -121,6 +121,18 @@
             box-shadow: 0 8px 24px -6px rgba(59, 130, 246, 0.12);
         }
 
+        @keyframes admin-shimmer {
+            to { background-position-x: -200%; }
+        }
+        .admin-skeleton {
+            background: linear-gradient(100deg, #e2e8f0 35%, #f8fafc 50%, #e2e8f0 65%);
+            background-size: 200% 100%;
+            animation: admin-shimmer 1.25s linear infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .admin-skeleton { animation: none; }
+        }
+
         .runner-option {
             transition: all 0.18s;
             cursor: pointer;
@@ -583,27 +595,39 @@
         </div>
 
         <!-- ==================== TAB 2: POSTS LIST ==================== -->
-        <div id="tab-content-posts" class="hidden space-y-6">
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-xl font-black text-slate-900">Danh mục đề thi trên Firebase</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Kho đề chung của EduSpace V2, V3 và trang quản trị: <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">quizzes</code>.</p>
+        <div id="tab-content-posts" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-3">
+                    <div>
+                        <h2 class="text-lg font-black text-slate-900">Kho đề dùng chung</h2>
+                        <p id="postsCatalogStatus" class="text-xs text-slate-500 mt-0.5">Đang chuẩn bị bộ chọn lớp...</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="window.migrateOldV3ExamsToSharedBank()" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 rounded-xl text-xs font-bold transition-all" title="Chuyển các đề V3 cũ vào kho quizzes">Chuyển đề V3 cũ</button>
+                        <button onclick="window.loadAdminPosts({ refresh: true })" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm transition-all" title="Làm mới danh sách"><i class="ph-bold ph-arrows-clockwise"></i></button>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <button onclick="window.migrateOldV3ExamsToSharedBank()" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 rounded-xl text-xs font-bold transition-all" title="Chuyển các đề V3 cũ vào kho quizzes">
-                        Chuyển đề V3 cũ
-                    </button>
-                    <input type="text" id="postsSearchInput" oninput="window.filterAdminPosts(this.value)" placeholder="Tìm mã ID, môn, lớp..." class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white w-60">
-                    <button onclick="window.loadAdminPosts()" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm transition-all" title="Làm mới danh sách">
-                        <i class="ph-bold ph-arrows-clockwise"></i>
-                    </button>
+                <div class="grid grid-cols-1 md:grid-cols-[1.1fr,0.85fr,1.05fr] gap-2.5">
+                    <div class="border border-slate-200 rounded-xl p-2.5">
+                        <p class="text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1.5">1. Chọn lớp</p>
+                        <div id="adminGradeOptions" class="flex min-h-[30px] flex-wrap gap-1.5"><span class="admin-skeleton h-7 w-14 rounded-lg"></span><span class="admin-skeleton h-7 w-14 rounded-lg"></span><span class="admin-skeleton h-7 w-14 rounded-lg"></span></div>
+                    </div>
+                    <label class="border border-slate-200 rounded-xl p-2.5">
+                        <span class="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1.5">2. Chọn môn</span>
+                        <select id="adminSubjectSelect" disabled onchange="window.selectAdminSubject(this.value)" class="w-full h-7 px-2 bg-slate-100 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 disabled:cursor-not-allowed"><option>Chọn lớp trước</option></select>
+                    </label>
+                    <label class="border border-slate-200 rounded-xl p-2.5">
+                        <span class="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1.5">Hoặc tìm đề</span>
+                        <input type="search" id="postsSearchInput" oninput="window.filterAdminPosts(this.value)" placeholder="Mã đề, tên đề..." class="w-full h-7 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800 focus:bg-white">
+                    </label>
                 </div>
             </div>
 
             <!-- Loading Posts State -->
-            <div id="postsListLoading" class="p-16 text-center">
-                <div class="loader border-4 border-blue-600 h-10 w-10 rounded-full mx-auto mb-4"></div>
-                <p class="text-slate-500 text-sm font-bold">Đang tải danh sách bài từ Firebase...</p>
+            <div id="postsListLoading" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3" aria-label="Đang tải đề" aria-busy="true">
+                <div class="bg-white rounded-2xl border border-slate-200 p-3 space-y-3"><div class="admin-skeleton h-4 w-2/5 rounded"></div><div class="admin-skeleton h-5 w-4/5 rounded"></div><div class="admin-skeleton h-3 w-full rounded"></div><div class="admin-skeleton h-8 w-full rounded-lg"></div></div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-3 space-y-3"><div class="admin-skeleton h-4 w-2/5 rounded"></div><div class="admin-skeleton h-5 w-4/5 rounded"></div><div class="admin-skeleton h-3 w-full rounded"></div><div class="admin-skeleton h-8 w-full rounded-lg"></div></div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-3 space-y-3"><div class="admin-skeleton h-4 w-2/5 rounded"></div><div class="admin-skeleton h-5 w-4/5 rounded"></div><div class="admin-skeleton h-3 w-full rounded"></div><div class="admin-skeleton h-8 w-full rounded-lg"></div></div>
             </div>
 
             <!-- Empty Posts State -->
@@ -616,7 +640,8 @@
             </div>
 
             <!-- Posts Grid -->
-            <div id="postsGridContainer" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div id="postsGridContainer" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3"></div>
+            <div class="flex justify-center"><button id="adminLoadMore" onclick="window.loadAdminPosts({ append: true })" class="hidden px-4 py-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-xl text-xs font-bold transition-all">Tải thêm đề</button></div>
         </div>
 
         <!-- ==================== TAB 3: RUNNER ==================== -->
@@ -2478,128 +2503,152 @@ ${text}
         };
 
         // --- POSTS LIST MANAGER ---
-        window.loadAdminPosts = async function() {
-            const loading = document.getElementById('postsListLoading');
-            const empty = document.getElementById('postsListEmpty');
-            const container = document.getElementById('postsGridContainer');
-
-            if (loading) loading.classList.remove('hidden');
-            if (empty) empty.classList.add('hidden');
-            if (container) container.classList.add('hidden');
-
-            try {
-                if (!currentUser) {
-                    if (loading) loading.classList.add('hidden');
-                    return;
-                }
-                const fsMap = {};
-                const qSnap = await getDocs(query(collection(db, 'quizzes'), orderBy('createdAt', 'desc')));
-                qSnap.forEach(d => {
-                    const data = d.data();
-                    const quizData = data.quizData || data;
-                    const id = data.id || d.id;
-                    const key = String(id).toLowerCase();
-                    fsMap[key] = {
-                        _docId: d.id,
-                        ...data,
-                        id,
-                        title: data.title || quizData.title || id,
-                        description: data.description || quizData.description || '',
-                        class: data.class || data.grade || quizData.class || quizData.grade || '',
-                        subject: data.subject || quizData.subject || '',
-                        tag: data.tag || '',
-                        isHot: !!data.isHot,
-                        isComingSoon: !!data.isComingSoon
-                    };
-                });
-
-                allAdminPosts = Object.values(fsMap);
-                document.getElementById('posts-count-badge').innerText = allAdminPosts.length;
-                renderAdminPosts(allAdminPosts);
-            } catch (err) {
-                console.warn("Chưa thể tải bài đăng:", err.message);
-                if (currentUser && !err.message.includes('permission')) {
-                    showToast("Lỗi nạp bài: " + err.message, true);
-                }
-            } finally {
-                if (loading) loading.classList.add('hidden');
-            }
+        // The admin is a client of the same paginated catalogue used by V2/V3.
+        // Editing and deleting still read one exact Firestore document on demand.
+        const SHARED_CATALOG_API = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+            ? 'http://localhost:3000/api/v3'
+            : 'https://nd-puce.vercel.app/api/v3';
+        const adminCatalog = { ready: false, grades: [], grade: '', subject: '', query: '', nextCursor: null, total: 0, loading: false, searchTimer: null };
+        const escapeAdminHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
+        const escapeAdminJs = (value) => JSON.stringify(String(value ?? '')).replace(/</g, '\\u003c');
+        const adminCatalogUrl = (path, params = {}) => {
+            const url = new URL(`${SHARED_CATALOG_API}${path}`);
+            Object.entries(params).forEach(([key, value]) => { if (value !== '' && value !== null && value !== undefined) url.searchParams.set(key, value); });
+            return url.toString();
         };
-
+        async function getAdminCatalogJson(path, params) {
+            const response = await fetch(adminCatalogUrl(path, params), { headers: { Accept: 'application/json' } });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || result.success !== true) throw new Error(result.error?.message || 'Không thể tải kho đề.');
+            return result;
+        }
+        function setAdminEmpty(title, description) {
+            const empty = document.getElementById('postsListEmpty');
+            if (!empty) return;
+            empty.querySelector('h3').textContent = title;
+            empty.querySelector('p').textContent = description;
+            empty.classList.remove('hidden');
+        }
+        function renderAdminGrades() {
+            const node = document.getElementById('adminGradeOptions');
+            if (!node) return;
+            node.innerHTML = adminCatalog.grades.map(grade => `<button type="button" onclick="window.selectAdminGrade(${escapeAdminJs(grade.value)})" class="px-2 py-1 rounded-lg border text-[11px] font-black transition ${adminCatalog.grade === grade.value ? 'bg-blue-600 border-blue-600 text-white' : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-blue-300'}">${escapeAdminHtml(grade.label)} <span class="opacity-70">${grade.count}</span></button>`).join('') || '<span class="text-xs text-slate-500">Chưa có lớp nào.</span>';
+        }
+        async function loadAdminFacets(refresh = false) {
+            if (adminCatalog.ready && !refresh) return;
+            const result = await getAdminCatalogJson('/exam-facets');
+            adminCatalog.ready = true;
+            adminCatalog.grades = result.grades || [];
+            renderAdminGrades();
+            const badge = document.getElementById('posts-count-badge');
+            if (badge) badge.innerText = result.total || 0;
+            const status = document.getElementById('postsCatalogStatus');
+            if (status) status.textContent = `${result.total || 0} đề trong kho chung. Chọn lớp để chỉ tải môn phù hợp.`;
+        }
         function renderAdminPosts(posts) {
             const empty = document.getElementById('postsListEmpty');
             const container = document.getElementById('postsGridContainer');
             if (!posts || posts.length === 0) {
-                if (empty) empty.classList.remove('hidden');
-                if (container) container.classList.add('hidden');
+                if (container) { container.innerHTML = ''; container.classList.add('hidden'); }
+                setAdminEmpty('Không tìm thấy đề phù hợp', 'Hãy đổi lớp, môn hoặc từ khóa tìm kiếm.');
                 return;
             }
-
             if (empty) empty.classList.add('hidden');
             if (container) container.classList.remove('hidden');
-
             container.innerHTML = posts.map(p => {
                 const id = p.id || p._docId;
-                const viewUrl = `/eduspace/exam?${id}`;
+                const idForAction = escapeAdminJs(id);
+                const viewUrl = `/eduspace/exam?${encodeURIComponent(id)}`;
                 const v3ViewUrl = `/eduspace/v3/exam/?id=${encodeURIComponent(id)}`;
-                return `
-                    <div class="lesson-card p-5 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between gap-2 mb-2 flex-wrap">
-                                <div class="flex items-center gap-1.5 flex-wrap">
-                                    <span class="bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-0.5 rounded-full text-xs font-black">🧪 ĐỀ THI</span>
-                                    <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full text-[10px] font-black">☁️ Firebase</span>
-                                    ${p.isHot ? '<span class="bg-orange-50 text-orange-600 px-2 py-0.5 rounded-full text-[10px] font-black">🔥 HOT</span>' : ''}
-                                </div>
-                                <span class="bg-slate-100 text-slate-600 font-mono text-xs px-2 py-0.5 rounded-md font-bold">${id}</span>
-                            </div>
-                            <h3 class="font-extrabold text-slate-900 text-base leading-snug mb-1">${p.title || '(Không tên)'}</h3>
-                            <p class="text-slate-500 text-xs line-clamp-2 mb-3">${p.description || '(Không có mô tả)'}</p>
-                            <div class="flex flex-wrap gap-1.5 text-[11px] font-bold text-slate-500 mb-4">
-                                ${p.class ? `<span class="bg-slate-100 px-2 py-0.5 rounded-md">Lớp ${p.class}</span>` : ''}
-                                ${p.subject ? `<span class="bg-slate-100 px-2 py-0.5 rounded-md">${p.subject}</span>` : ''}
-                                ${p.tag ? `<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md">${p.tag}</span>` : ''}
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2 pt-3 border-t border-slate-100 flex-wrap">
-                            <button onclick="window.runExamFromPost('${id}')" class="flex-1 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1">
-                                <i class="ph-bold ph-play"></i> Làm bài
-                            </button>
-                            <a href="${v3ViewUrl}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 bg-violet-50 hover:bg-violet-100 text-violet-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1" title="Mở cùng đề bằng EduSpace V3">
-                                <i class="ph-bold ph-rocket-launch"></i> Mở V3
-                            </a>
-                            <button onclick="window.loadPostToEditor('${id}')" class="flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1">
-                                <i class="ph-bold ph-pencil"></i> Sửa
-                            </button>
-                            <button onclick="window.copyExamShareLink('${id}')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all" title="Sao chép link làm bài">
-                                <i class="ph-bold ph-link text-sm"></i>
-                            </button>
-                            <a href="${viewUrl}" target="_blank" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all" title="Mở trang thi bên ngoài">
-                                <i class="ph-bold ph-arrow-square-out text-sm"></i>
-                            </a>
-                            <button onclick="window.deleteAdminPost('${id}')" class="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-all" title="Xóa đề">
-                                <i class="ph-bold ph-trash text-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
+                return `<div class="lesson-card p-3 flex flex-col justify-between min-h-[220px]">
+                    <div><div class="flex items-center justify-between gap-2 mb-2"><span class="bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full text-[10px] font-black">ĐỀ THI</span><span class="bg-slate-100 text-slate-600 font-mono text-[11px] px-2 py-0.5 rounded-md font-bold">${escapeAdminHtml(id)}</span></div>
+                    <h3 class="font-extrabold text-slate-900 text-sm leading-snug line-clamp-2">${escapeAdminHtml(p.title || '(Không tên)')}</h3><p class="text-slate-500 text-[11px] line-clamp-2 mt-1.5">${escapeAdminHtml(p.description || '(Không có mô tả)')}</p>
+                    <div class="flex flex-wrap gap-1.5 text-[10px] font-bold text-slate-500 mt-3">${p.class ? `<span class="bg-slate-100 px-2 py-0.5 rounded-md">Lớp ${escapeAdminHtml(p.class)}</span>` : ''}${p.subject ? `<span class="bg-slate-100 px-2 py-0.5 rounded-md">${escapeAdminHtml(p.subject)}</span>` : ''}${p.tag ? `<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md">${escapeAdminHtml(p.tag)}</span>` : ''}</div></div>
+                    <div class="grid grid-cols-3 gap-1.5 pt-3 mt-3 border-t border-slate-100"><button onclick="window.runExamFromPost(${idForAction})" class="py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-[11px] font-bold transition-all">Làm bài</button><a href="${v3ViewUrl}" target="_blank" rel="noopener noreferrer" class="py-2 bg-violet-50 hover:bg-violet-100 text-violet-700 rounded-lg text-[11px] font-bold text-center transition-all">Mở V3</a><button onclick="window.loadPostToEditor(${idForAction})" class="py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-[11px] font-bold transition-all">Sửa</button></div>
+                    <div class="flex justify-end gap-1 mt-1.5"><button onclick="window.copyExamShareLink(${idForAction})" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs" title="Sao chép link"><i class="ph-bold ph-link"></i></button><a href="${viewUrl}" target="_blank" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs" title="Mở V2"><i class="ph-bold ph-arrow-square-out"></i></a><button onclick="window.deleteAdminPost(${idForAction})" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs" title="Xóa đề"><i class="ph-bold ph-trash"></i></button></div>
+                </div>`;
             }).join('');
         }
-
-        window.filterAdminPosts = function(q) {
-            const queryStr = (q || '').toLowerCase().trim();
-            if (!queryStr) {
+        window.loadAdminPosts = async function({ append = false, refresh = false } = {}) {
+            const loading = document.getElementById('postsListLoading');
+            const empty = document.getElementById('postsListEmpty');
+            const container = document.getElementById('postsGridContainer');
+            const more = document.getElementById('adminLoadMore');
+            const status = document.getElementById('postsCatalogStatus');
+            if (!currentUser || adminCatalog.loading) return;
+            try {
+                await loadAdminFacets(refresh);
+                const requestedQuery = document.getElementById('postsSearchInput')?.value.trim() || '';
+                adminCatalog.query = requestedQuery;
+                if (!requestedQuery && !(adminCatalog.grade && adminCatalog.subject)) {
+                    if (container) { container.innerHTML = ''; container.classList.add('hidden'); }
+                    if (loading) loading.classList.add('hidden');
+                    if (more) more.classList.add('hidden');
+                    setAdminEmpty('Chọn lớp và môn để xem đề', 'Hoặc nhập ít nhất 2 ký tự để tìm trực tiếp theo mã hoặc tên đề.');
+                    return;
+                }
+                adminCatalog.loading = true;
+                if (!append) {
+                    if (container) { container.innerHTML = ''; container.classList.add('hidden'); }
+                    if (loading) loading.classList.remove('hidden');
+                }
+                if (!append && empty) empty.classList.add('hidden');
+                const result = await getAdminCatalogJson('/exams', { grade: adminCatalog.grade, subject: adminCatalog.subject, q: requestedQuery, limit: 12, cursor: append ? adminCatalog.nextCursor : '' });
+                const incoming = (result.quizzes || []).map(item => ({ ...item, _docId: item.id, class: item.grade || '' }));
+                allAdminPosts = append ? [...allAdminPosts, ...incoming.filter(item => !allAdminPosts.some(saved => saved.id === item.id))] : incoming;
+                adminCatalog.nextCursor = result.nextCursor || null;
+                adminCatalog.total = Number(result.total) || 0;
+                if (status) status.textContent = adminCatalog.total ? `Đang hiển thị ${allAdminPosts.length}/${adminCatalog.total} đề phù hợp.` : 'Chưa có đề phù hợp.';
                 renderAdminPosts(allAdminPosts);
-                return;
+                if (more) more.classList.toggle('hidden', !adminCatalog.nextCursor);
+            } catch (err) {
+                console.warn('Chưa thể tải bài đăng:', err.message);
+                if (status) status.textContent = 'Có lỗi khi tải kho đề.';
+                setAdminEmpty('Không thể tải kho đề', err.message || 'Hãy kiểm tra kết nối và thử lại.');
+            } finally {
+                adminCatalog.loading = false;
+                if (loading) loading.classList.add('hidden');
+                if (more) more.disabled = false;
             }
-            const filtered = allAdminPosts.filter(p => {
-                return (p.title || '').toLowerCase().includes(queryStr) ||
-                       (p.id || '').toLowerCase().includes(queryStr) ||
-                       (p.subject || '').toLowerCase().includes(queryStr) ||
-                       (p.class || '').toLowerCase().includes(queryStr);
-            });
-            renderAdminPosts(filtered);
+        };
+        window.selectAdminGrade = async function(grade) {
+            if (!grade || adminCatalog.loading) return;
+            adminCatalog.grade = grade;
+            adminCatalog.subject = '';
+            adminCatalog.nextCursor = null;
+            allAdminPosts = [];
+            renderAdminGrades();
+            const subjectSelect = document.getElementById('adminSubjectSelect');
+            const status = document.getElementById('postsCatalogStatus');
+            const container = document.getElementById('postsGridContainer');
+            if (container) { container.innerHTML = ''; container.classList.add('hidden'); }
+            subjectSelect.disabled = true;
+            subjectSelect.innerHTML = '<option>Đang tải môn...</option>';
+            try {
+                const result = await getAdminCatalogJson('/exam-facets', { grade });
+                subjectSelect.innerHTML = '<option value="">Chọn môn học</option>' + (result.subjects || []).map(subject => `<option value="${escapeAdminHtml(subject.value)}">${escapeAdminHtml(subject.label)} (${subject.count})</option>`).join('');
+                subjectSelect.disabled = false;
+                if (status) status.textContent = `Lớp ${grade}: chọn môn để chỉ tải đề phù hợp.`;
+                setAdminEmpty('Chọn môn học để xem đề', 'Danh sách đề chỉ được tải sau khi bạn hoàn thành bước 2.');
+            } catch (err) {
+                subjectSelect.innerHTML = '<option>Không tải được môn</option>';
+                if (status) status.textContent = err.message || 'Không tải được danh sách môn.';
+            }
+        };
+        window.selectAdminSubject = function(subject) {
+            adminCatalog.subject = subject || '';
+            adminCatalog.nextCursor = null;
+            allAdminPosts = [];
+            window.loadAdminPosts();
+        };
+        window.filterAdminPosts = function(queryText) {
+            clearTimeout(adminCatalog.searchTimer);
+            adminCatalog.searchTimer = setTimeout(() => {
+                adminCatalog.query = (queryText || '').trim();
+                adminCatalog.nextCursor = null;
+                allAdminPosts = [];
+                window.loadAdminPosts();
+            }, 280);
         };
 
         window.migrateOldV3ExamsToSharedBank = async function() {

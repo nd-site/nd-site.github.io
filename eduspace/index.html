@@ -107,6 +107,18 @@
             box-shadow: 0 0 0 2px #3b82f6, 0 12px 30px -10px rgba(0, 0, 0, 0.15);
         }
 
+        @keyframes v2-shimmer {
+            to { background-position-x: -200%; }
+        }
+        .v2-skeleton {
+            background: linear-gradient(100deg, #e2e8f0 35%, #f8fafc 50%, #e2e8f0 65%);
+            background-size: 200% 100%;
+            animation: v2-shimmer 1.25s linear infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .v2-skeleton { animation: none; }
+        }
+
         .status-hot:hover {
             box-shadow: 0 0 0 2px #ef4444, 0 12px 30px -10px rgba(239, 68, 68, 0.2);
             border-color: transparent;
@@ -238,7 +250,7 @@
             background: rgba(255, 255, 255, 0.8);
             border: 1px solid #e2e8f0;
             border-radius: 1rem;
-            padding: 1rem 1.25rem;
+            padding: 0.7rem 0.85rem;
             color: #334155;
             font-weight: 700;
             cursor: pointer;
@@ -311,6 +323,13 @@
             background: #eff6ff;
             color: #2563eb;
         }
+        .custom-dropdown-container.is-disabled .custom-dropdown-trigger {
+            cursor: not-allowed;
+            background: #f8fafc;
+            color: #94a3b8;
+            border-color: #e2e8f0;
+            box-shadow: none;
+        }
 
         /* Horizontal Section Header */
         .section-header {
@@ -350,8 +369,8 @@
         <div id="edu-announcement-container"></div>
 
         <!-- Hero Section -->
-        <div class="grid md:grid-cols-[1fr,300px] gap-6 items-center mb-6">
-            <div class="flex flex-col gap-4">
+        <div class="grid md:grid-cols-[1fr,260px] gap-4 items-center mb-4">
+            <div class="flex flex-col gap-3">
                 <div
                     class="inline-flex items-center gap-3 bg-white/60 backdrop-blur-md px-4 py-2 rounded-full border border-slate-200 w-fit">
                     <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
@@ -361,7 +380,7 @@
                             Labs.</span></span>
                 </div>
 
-                <h1 class="text-4xl md:text-5xl font-display font-bold leading-[1.1] tracking-tight">
+                <h1 class="text-3xl md:text-4xl font-display font-bold leading-[1.1] tracking-tight">
                     Nâng tầm kiến thức <br />
                     <span
                         class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-500 to-emerald-500">
@@ -369,8 +388,8 @@
                     </span>
                 </h1>
 
-                <p class="text-base text-slate-500 font-medium max-w-xl">
-                    Nền tảng học tập toàn diện với hàng trăm bài giảng, đề thi và công cụ hỗ trợ AI thông minh.
+                <p class="text-sm text-slate-500 font-medium max-w-xl">
+                    Chọn lớp, chọn môn rồi tải từng trang đề từ kho chung EduSpace.
                 </p>
 
                 <div class="flex flex-wrap gap-3">
@@ -404,15 +423,15 @@
             </div>
 
             <!-- Stats/Featured Card -->
-            <div class="glass-panel p-5 rounded-[2rem] relative overflow-hidden">
+            <div class="glass-panel p-4 rounded-2xl relative overflow-hidden">
                 <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl"></div>
 
-                <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Thống kê nền tảng</h3>
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Kho đề dùng chung</h3>
 
                 <div class="flex items-center justify-between mb-4">
                     <div>
                         <p class="text-3xl font-display font-bold text-slate-800" id="stat-total">0</p>
-                        <p class="text-[11px] font-bold text-slate-500">Tài liệu & Đề thi</p>
+                        <p class="text-[11px] font-bold text-slate-500">Đề trong kho</p>
                     </div>
                     <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
                         <i data-lucide="library" class="w-6 h-6"></i>
@@ -422,7 +441,7 @@
                 <div class="space-y-2">
                     <div class="bg-white/50 p-3 rounded-xl border border-white">
                         <div class="flex items-center justify-between mb-1.5">
-                            <span class="text-xs font-bold text-slate-700">Bài học</span>
+                            <span class="text-xs font-bold text-slate-700">Đã tải trang này</span>
                             <span class="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-lg"
                                 id="stat-lesson">0</span>
                         </div>
@@ -433,7 +452,7 @@
 
                     <div class="bg-white/50 p-3 rounded-xl border border-white">
                         <div class="flex items-center justify-between mb-1.5">
-                            <span class="text-xs font-bold text-slate-700">Đề kiểm tra</span>
+                            <span class="text-xs font-bold text-slate-700">Đề phù hợp</span>
                             <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-lg"
                                 id="stat-quiz">0</span>
                         </div>
@@ -446,7 +465,7 @@
         </div>
 
         <!-- Featured Sections -->
-        <div id="featuredSections" class="mb-6 space-y-6">
+        <div id="featuredSections" class="hidden mb-4 space-y-4">
             <!-- Hot Section -->
             <section id="hotSection" class="hidden">
                 <div class="section-header">
@@ -491,61 +510,62 @@
 
         <!-- Controls Section -->
         <div
-            class="glass-panel p-3 md:p-4 rounded-3xl mb-6 flex flex-col md:flex-row gap-3 items-center sticky top-[80px] z-40">
+            class="glass-panel p-2.5 rounded-2xl mb-4 flex flex-col md:flex-row gap-2.5 items-center sticky top-[80px] z-40">
             <!-- Search -->
             <div class="relative w-full md:flex-1">
                 <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
                 <input type="text" id="searchInput" placeholder="Tìm kiếm bài tập, đề thi, môn học..."
-                    class="w-full bg-white/80 border border-slate-200 rounded-xl py-3 pl-11 pr-5 text-sm text-slate-700 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                    class="w-full bg-white/80 border border-slate-200 rounded-xl py-2.5 pl-11 pr-5 text-sm text-slate-700 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
             </div>
 
             <!-- Code Access -->
             <div class="relative w-full md:w-56 shrink-0">
                 <i data-lucide="key-round" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
                 <input type="text" id="toolbarCodeInput" placeholder="Vào đề bằng mã (VD: t111)..." maxlength="10"
-                    class="w-full bg-white/80 border border-slate-200 rounded-xl py-3 pl-11 pr-5 text-sm text-slate-700 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all uppercase">
+                    class="w-full bg-white/80 border border-slate-200 rounded-xl py-2.5 pl-11 pr-5 text-sm text-slate-700 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all uppercase">
             </div>
 
             <!-- Filters -->
             <div class="flex w-full md:w-auto gap-4">
                 <div class="custom-dropdown-container w-full md:w-40" id="dropdown-class">
                     <div class="custom-dropdown-trigger">
-                        <span id="dropdown-class-label">Tất cả lớp</span>
+                        <span id="dropdown-class-label">1. Chọn lớp</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 custom-dropdown-icon"></i>
                     </div>
                     <div class="custom-dropdown-menu" id="dropdown-class-menu">
-                        <div class="custom-dropdown-item selected" data-value="">Tất cả lớp</div>
+                        <div class="custom-dropdown-item selected" data-value="">Chọn lớp</div>
                     </div>
                 </div>
 
                 <div class="custom-dropdown-container w-full md:w-48" id="dropdown-subject">
                     <div class="custom-dropdown-trigger">
-                        <span id="dropdown-subject-label">Tất cả môn học</span>
+                        <span id="dropdown-subject-label">2. Chọn môn</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 custom-dropdown-icon"></i>
                     </div>
                     <div class="custom-dropdown-menu" id="dropdown-subject-menu">
-                        <div class="custom-dropdown-item selected" data-value="">Tất cả môn học</div>
+                        <div class="custom-dropdown-item selected" data-value="">Chọn lớp trước</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Content Area -->
-        <div id="contentArea" class="space-y-8">
+        <div id="contentArea" class="space-y-4">
             <!-- Subject Sections Injected via JS -->
         </div>
+        <div class="flex justify-center mt-4"><button id="v2LoadMore" type="button" class="hidden px-4 py-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-xl text-xs font-bold transition-all">Tải thêm đề</button></div>
 
         <!-- Empty State (Hidden by default) -->
-        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
-            <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-                <i data-lucide="search-x" class="w-10 h-10 text-slate-400"></i>
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-10 text-center">
+            <div class="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mb-3">
+                <i data-lucide="search-x" class="w-6 h-6 text-slate-400"></i>
             </div>
             <h3 class="text-xl font-bold text-slate-800 mb-2">Không tìm thấy kết quả</h3>
             <p class="text-slate-500">Thử thay đổi từ khóa hoặc bộ lọc xem sao nhé.</p>
         </div>
 
         <footer
-            class="mt-20 border-t border-slate-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            class="mt-10 border-t border-slate-200 pt-5 flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-2">
                 <img src="/assets/images/logo.png" alt="Logo" class="w-6 h-6 object-contain grayscale opacity-50">
                 <span class="font-display font-bold text-slate-400">ND Labs</span>
@@ -722,24 +742,76 @@
         // State
         let currentFilters = { search: '', class: '', subject: '' };
         window.quizList = [];
+        const V2_CATALOG_API = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+            ? 'http://localhost:3000/api/v3'
+            : 'https://nd-puce.vercel.app/api/v3';
+        const v2Catalog = { grades: [], grade: '', subject: '', query: '', nextCursor: null, total: 0, loading: false };
+        const v2LoadMore = document.getElementById('v2LoadMore');
+        const escapeV2Html = (value) => String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
+
+        const v2CatalogUrl = (path, params = {}) => {
+            const url = new URL(`${V2_CATALOG_API}${path}`);
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== '' && value !== null && value !== undefined) url.searchParams.set(key, value);
+            });
+            return url.toString();
+        };
+
+        async function getV2CatalogJson(path, params) {
+            const response = await fetch(v2CatalogUrl(path, params), { headers: { Accept: 'application/json' } });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || result.success !== true) throw new Error(result.error?.message || 'Không thể tải kho đề.');
+            return result;
+        }
+
+        async function findV2QuizByCode(code) {
+            const normalizedCode = String(code || '').trim().toLocaleLowerCase('vi-VN');
+            const local = quizList.find(item => String(item.id || '').toLocaleLowerCase('vi-VN') === normalizedCode);
+            if (local) return local;
+            const result = await getV2CatalogJson('/exams', { q: code, limit: 5 });
+            return (result.quizzes || []).find(item => String(item.id || '').toLocaleLowerCase('vi-VN') === normalizedCode) || null;
+        }
+
+        function setV2Empty(title, description) {
+            const titleNode = emptyState.querySelector('h3');
+            const descriptionNode = emptyState.querySelector('p');
+            if (titleNode) titleNode.textContent = title;
+            if (descriptionNode) descriptionNode.textContent = description;
+            contentArea.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            emptyState.classList.add('flex');
+        }
+
+        function showV2Skeleton() {
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+            contentArea.classList.remove('hidden');
+            contentArea.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3" aria-busy="true" aria-label="Đang tải đề">
+                ${Array.from({ length: 3 }, () => `<div class="glass-card rounded-2xl p-4 space-y-3 min-h-[210px]"><div class="v2-skeleton h-8 w-8 rounded-lg"></div><div class="v2-skeleton h-5 w-4/5 rounded"></div><div class="v2-skeleton h-3 w-full rounded"></div><div class="v2-skeleton h-3 w-3/5 rounded"></div><div class="v2-skeleton h-9 w-full rounded-lg mt-5"></div></div>`).join('')}
+            </div>`;
+        }
+
+        function showV2Prompt() {
+            quizList = [];
+            if (v2LoadMore) v2LoadMore.classList.add('hidden');
+            setV2Empty('Chọn lớp và môn để xem đề', 'Kho đề được tải theo từng cấp để trang mở nhanh hơn. Bạn cũng có thể tìm trực tiếp bằng mã hoặc tên đề.');
+        }
 
         // Initialize
         async function init() {
-            if (!window.firebaseFirestore) {
-                await new Promise(resolve => {
-                    window.addEventListener('firebase-ready', resolve, { once: true });
-                });
-            }
-
-            if (window.loadDynamicLessons && window.firebaseFirestore) {
-                await window.loadDynamicLessons(window.firebaseFirestore);
-            }
-
-            updateStats();
-            buildFilterOptions();
-            renderFeatured();
-            renderContent(quizList);
             setupEventListeners();
+            showV2Skeleton();
+            try {
+                const result = await getV2CatalogJson('/exam-facets');
+                v2Catalog.grades = result.grades || [];
+                v2Catalog.total = Number(result.total) || 0;
+                buildFilterOptions(v2Catalog.grades, []);
+                updateStats();
+                showV2Prompt();
+            } catch (error) {
+                console.error('[EduSpace V2] Cannot load grade facets:', error);
+                setV2Empty('Không thể tải kho đề', error.message || 'Hãy kiểm tra kết nối và thử lại.');
+            }
         }
 
         // Logic
@@ -748,33 +820,64 @@
             const lesson = document.getElementById('stat-lesson');
             const quiz = document.getElementById('stat-quiz');
 
-            if (total) total.innerText = quizList.length;
-            if (lesson) lesson.innerText = quizList.filter(i => i.type === 'lesson').length;
-            if (quiz) quiz.innerText = quizList.filter(i => i.type === 'quiz').length;
+            if (total) total.innerText = v2Catalog.total || 0;
+            if (lesson) lesson.innerText = quizList.length;
+            if (quiz) quiz.innerText = v2Catalog.total || 0;
         }
 
-        function buildFilterOptions() {
-            const classes = [...new Set(quizList.map(item => item.class).filter(Boolean))].sort((a, b) => a - b);
-            const subjects = [...new Set(quizList.map(item => item.subject).filter(Boolean))].sort();
-
+        function buildFilterOptions(grades = [], subjects = []) {
             const classMenu = document.getElementById('dropdown-class-menu');
             const subjectMenu = document.getElementById('dropdown-subject-menu');
+            const subjectBox = document.getElementById('dropdown-subject');
+            classMenu.innerHTML = '<div class="custom-dropdown-item' + (!v2Catalog.grade ? ' selected' : '') + '" data-value="">Chọn lớp</div>' +
+                grades.map(grade => `<div class="custom-dropdown-item${v2Catalog.grade === grade.value ? ' selected' : ''}" data-value="${escapeV2Html(grade.value)}">${escapeV2Html(grade.label)} <span class="text-[10px] text-slate-400">${grade.count}</span></div>`).join('');
+            subjectMenu.innerHTML = subjects.length
+                ? '<div class="custom-dropdown-item' + (!v2Catalog.subject ? ' selected' : '') + '" data-value="">Chọn môn</div>' + subjects.map(subject => `<div class="custom-dropdown-item${v2Catalog.subject === subject.value ? ' selected' : ''}" data-value="${escapeV2Html(subject.value)}">${escapeV2Html(subject.label)} <span class="text-[10px] text-slate-400">${subject.count}</span></div>`).join('')
+                : '<div class="custom-dropdown-item selected" data-value="">Chọn lớp trước</div>';
+            subjectBox.classList.toggle('is-disabled', !v2Catalog.grade);
+        }
 
-            classes.forEach(c => {
-                const item = document.createElement('div');
-                item.className = 'custom-dropdown-item';
-                item.setAttribute('data-value', c);
-                item.innerText = `Lớp ${c}`;
-                classMenu.appendChild(item);
-            });
+        async function loadV2Subjects(grade) {
+            const result = await getV2CatalogJson('/exam-facets', { grade });
+            buildFilterOptions(v2Catalog.grades, result.subjects || []);
+        }
 
-            subjects.forEach(s => {
-                const item = document.createElement('div');
-                item.className = 'custom-dropdown-item';
-                item.setAttribute('data-value', s);
-                item.innerText = s;
-                subjectMenu.appendChild(item);
-            });
+        async function loadV2Catalog({ append = false } = {}) {
+            const query = v2Catalog.query.trim();
+            if (!query && !(v2Catalog.grade && v2Catalog.subject)) {
+                showV2Prompt();
+                return;
+            }
+            if (v2Catalog.loading) return;
+            v2Catalog.loading = true;
+            if (!append) showV2Skeleton();
+            if (v2LoadMore) { v2LoadMore.disabled = true; v2LoadMore.textContent = 'Đang tải...'; }
+            try {
+                const result = await getV2CatalogJson('/exams', { grade: v2Catalog.grade, subject: v2Catalog.subject, q: query, limit: 12, cursor: append ? v2Catalog.nextCursor : '' });
+                const incoming = (result.quizzes || []).map(item => ({
+                    ...item,
+                    class: item.grade || '',
+                    type: 'quiz',
+                    url: `/eduspace/exam?${encodeURIComponent(item.id)}`,
+                    buttonText: 'Làm bài ngay'
+                }));
+                quizList = append ? [...quizList, ...incoming.filter(item => !quizList.some(saved => saved.id === item.id))] : incoming;
+                v2Catalog.nextCursor = result.nextCursor || null;
+                v2Catalog.total = Number(result.total) || 0;
+                updateStats();
+                if (!quizList.length) {
+                    setV2Empty('Không tìm thấy đề phù hợp', 'Hãy đổi lớp, môn hoặc từ khóa tìm kiếm.');
+                } else {
+                    renderContent(quizList);
+                }
+                if (v2LoadMore) v2LoadMore.classList.toggle('hidden', !v2Catalog.nextCursor);
+            } catch (error) {
+                console.error('[EduSpace V2] Cannot load paged catalogue:', error);
+                setV2Empty('Không thể tải kho đề', error.message || 'Hãy kiểm tra kết nối và thử lại.');
+            } finally {
+                v2Catalog.loading = false;
+                if (v2LoadMore) { v2LoadMore.disabled = false; v2LoadMore.textContent = 'Tải thêm đề'; }
+            }
         }
 
         function renderFeatured() {
@@ -882,22 +985,12 @@
         }
 
         function applyFilters() {
-            const filtered = quizList.filter(item => {
-                const matchSearch = item.title.toLowerCase().includes(currentFilters.search) ||
-                    (item.description && item.description.toLowerCase().includes(currentFilters.search));
-                const matchClass = !currentFilters.class || String(item.class) === currentFilters.class;
-                const matchSubject = !currentFilters.subject || item.subject === currentFilters.subject;
-
-                return matchSearch && matchClass && matchSubject;
-            });
-
-            if (currentFilters.search || currentFilters.class || currentFilters.subject) {
-                featuredSections.classList.add('hidden');
-            } else {
-                featuredSections.classList.remove('hidden');
-            }
-
-            renderContent(filtered);
+            v2Catalog.query = currentFilters.search || '';
+            v2Catalog.grade = currentFilters.class || '';
+            v2Catalog.subject = currentFilters.subject || '';
+            v2Catalog.nextCursor = null;
+            quizList = [];
+            loadV2Catalog();
         }
 
         function getSubjectColor(subject) {
@@ -1080,7 +1173,7 @@
 
                 const contentId = `content-${subject.replace(/[^\w]/g, '-')}`;
                 const totalItems = Object.values(grouped[subject]).reduce((sum, list) => sum + list.length, 0);
-                const isExpanded = subject === 'Công Cụ';
+                const isExpanded = true;
                 const subjectColor = getSubjectColor(subject);
 
                 const quote = getSubjectQuote(subject);
@@ -1115,7 +1208,7 @@
                     }
 
                     const grid = document.createElement('div');
-                    grid.className = 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8 mt-2';
+                    grid.className = 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 mb-4 mt-2';
 
                     grouped[subject][sub].forEach((item, index) => {
                         const cardWrapper = document.createElement('div');
@@ -1209,7 +1302,11 @@
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     currentFilters.search = e.target.value.toLowerCase().trim();
-                    applyFilters();
+                    if (currentFilters.search.length >= 2 || (currentFilters.class && currentFilters.subject)) {
+                        applyFilters();
+                    } else {
+                        showV2Prompt();
+                    }
                 }, 300);
             });
 
@@ -1223,21 +1320,48 @@
 
                 trigger.addEventListener('click', (e) => {
                     e.stopPropagation();
+                    if (filterKey === 'subject' && !currentFilters.class) {
+                        showV2Prompt();
+                        return;
+                    }
                     document.querySelectorAll('.custom-dropdown-container').forEach(c => {
                         if (c !== container) c.classList.remove('open');
                     });
                     container.classList.toggle('open');
                 });
 
-                menu.addEventListener('click', (e) => {
+                menu.addEventListener('click', async (e) => {
                     const item = e.target.closest('.custom-dropdown-item');
                     if (item) {
                         menu.querySelectorAll('.custom-dropdown-item').forEach(i => i.classList.remove('selected'));
                         item.classList.add('selected');
                         label.innerText = item.innerText;
                         currentFilters[filterKey] = item.getAttribute('data-value');
-                        applyFilters();
                         container.classList.remove('open');
+                        if (filterKey === 'class') {
+                            currentFilters.subject = '';
+                            v2Catalog.grade = currentFilters.class;
+                            v2Catalog.subject = '';
+                            v2Catalog.nextCursor = null;
+                            quizList = [];
+                            document.getElementById('dropdown-subject-label').innerText = currentFilters.class ? 'Đang tải môn...' : '2. Chọn môn';
+                            if (!currentFilters.class) {
+                                buildFilterOptions(v2Catalog.grades, []);
+                                showV2Prompt();
+                                return;
+                            }
+                            showV2Skeleton();
+                            try {
+                                await loadV2Subjects(currentFilters.class);
+                                document.getElementById('dropdown-subject-label').innerText = '2. Chọn môn';
+                                showV2Prompt();
+                            } catch (error) {
+                                console.error('[EduSpace V2] Cannot load subject facets:', error);
+                                setV2Empty('Không thể tải môn học', error.message || 'Hãy chọn lại lớp hoặc thử lại.');
+                            }
+                        } else {
+                            applyFilters();
+                        }
                     }
                 });
             };
@@ -1249,19 +1373,28 @@
                 document.querySelectorAll('.custom-dropdown-container').forEach(c => c.classList.remove('open'));
             });
 
+            if (v2LoadMore) {
+                v2LoadMore.addEventListener('click', () => loadV2Catalog({ append: true }));
+            }
+
             // Toolbar Code Input Logic
             const toolbarInput = document.getElementById('toolbarCodeInput');
             if (toolbarInput) {
-                toolbarInput.addEventListener('keydown', (e) => {
+                toolbarInput.addEventListener('keydown', async (e) => {
                     if (e.key === 'Enter') {
+                        e.preventDefault();
                         const code = toolbarInput.value.trim().toLowerCase();
-                        // Local quizList lookup
-                        const quizInfo = (typeof quizList !== 'undefined') ? quizList.find(i => (i.id || '').toLowerCase() === code) : null;
-                        if (quizInfo) {
-                            window.location.href = `/eduspace/exam?${code}`;
-                        } else {
+                        if (!code) return;
+                        toolbarInput.disabled = true;
+                        try {
+                            const quizInfo = await findV2QuizByCode(code);
+                            if (!quizInfo) throw new Error('not-found');
+                            window.location.href = `/eduspace/exam?${encodeURIComponent(quizInfo.id)}`;
+                        } catch (_) {
                             toolbarInput.classList.add('border-rose-300', 'focus:border-rose-500', 'focus:ring-rose-500/20');
                             alert(`Mã đề thi "${code.toUpperCase()}" không tồn tại trong hệ thống.`);
+                        } finally {
+                            toolbarInput.disabled = false;
                         }
                     }
                 });
@@ -1486,20 +1619,14 @@
                 return;
             }
 
-            // Try Firestore for newly published quizzes
+            // Query one metadata page by code instead of scanning the shared bank.
             errorMsg.innerText = 'Đang kiểm tra...';
             errorMsg.classList.remove('hidden');
             try {
-                if (window.firebaseFirestore) {
-                    const { doc: fsDoc, getDoc: fsGetDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-                    let snap = await fsGetDoc(fsDoc(window.firebaseFirestore, 'quizzes', code.toUpperCase()));
-                    if (!snap.exists()) {
-                        snap = await fsGetDoc(fsDoc(window.firebaseFirestore, 'quizzes', code));
-                    }
-                    if (snap.exists()) {
-                        window.location.href = `/eduspace/exam?${code}`;
-                        return;
-                    }
+                const remoteQuiz = await findV2QuizByCode(code);
+                if (remoteQuiz) {
+                    window.location.href = `/eduspace/exam?${encodeURIComponent(remoteQuiz.id)}`;
+                    return;
                 }
             } catch (_) {}
 

@@ -101,6 +101,57 @@ function sendJson(res: NodeHttpResponse, statusCode: number, data: any): void {
   res.end(JSON.stringify(data));
 }
 
+/**
+ * The public catalogue deliberately contains only display metadata.  Keeping this
+ * normalization at the API boundary lets V2, V3 and Edu Admin use one light,
+ * consistent reader instead of each browser downloading the entire `quizzes`
+ * collection and attempting to interpret old document shapes on its own.
+ */
+function normalizeCatalogText(value: unknown): string {
+  return String(value ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLocaleLowerCase('vi-VN')
+    .trim();
+}
+
+function normalizeCatalogGrade(value: unknown): string {
+  const raw = String(value ?? '').trim();
+  const match = raw.match(/(?:lop|lớp|khoi|khối)?\s*(\d{1,2})/i);
+  return match ? match[1] : raw;
+}
+
+function publicQuizMetadata(doc: any): any {
+  const data = doc.data() || {};
+  const v3Exam = data.eduspaceV3?.exam || {};
+  const legacyData = data.quizData || data;
+  const grade = normalizeCatalogGrade(data.grade || data.class || v3Exam.grade || legacyData.grade || legacyData.class || '');
+  const duration = Number(data.duration || v3Exam.durationMinutes || legacyData.duration || 45);
+
+  return {
+    id: String(data.id || doc.id),
+    title: data.title || v3Exam.title || legacyData.title || `Đề ${doc.id}`,
+    description: data.description || v3Exam.description || legacyData.description || '',
+    subject: String(data.subject || v3Exam.subjectId || legacyData.subject || '').trim(),
+    grade,
+    duration: Number.isFinite(duration) && duration > 0 ? Math.round(duration) : 45,
+    visibility: data.visibility || v3Exam.visibility || 'public',
+    tag: data.tag || legacyData.tag || '',
+    isHot: Boolean(data.isHot || legacyData.isHot),
+    isComingSoon: Boolean(data.isComingSoon || legacyData.isComingSoon)
+  };
+}
+
+async function readPublicQuizCatalog(db: any): Promise<any[]> {
+  const quizSnapshot = await db.collection('quizzes').limit(5000).get();
+  const quizzes = (quizSnapshot.docs || []).map((doc: any) => publicQuizMetadata(doc));
+  return quizzes.sort((left, right) => {
+    const gradeOrder = Number(left.grade) - Number(right.grade);
+    if (Number.isFinite(gradeOrder) && gradeOrder !== 0) return gradeOrder;
+    return `${left.title} ${left.id}`.localeCompare(`${right.title} ${right.id}`, 'vi');
+  });
+}
+
 async function parseRequestBody(req: NodeHttpRequest): Promise<any> {
   const method = (req.method || 'GET').toUpperCase();
   if (method === 'GET' || method === 'HEAD' || method === 'OPTIONS') {
@@ -283,28 +334,69 @@ export async function handleAssessmentApi(
       return;
     }
 
-    // Public exam catalog: expose searchable metadata without sending question
-    // content or answer keys to the browser.
+    // Public catalogue facets.  Level 1 returns grades only; subjects are read
+    // only after a grade is selected.  This is intentionally separate from the
+    // exam endpoint so landing pages do not transfer a full quiz list upfront.
+    if (method === 'GET' && pathname === '/api/v3/exam-facets') {
+      const db = options.db;
+      if (!db) throw EduSpaceError.internal('Backend database is not initialized');
+      const quizzes = await readPublicQuizCatalog(db);
+      const requestedGrade = normalizeCatalogGrade(urlObj.searchParams.get('grade') || '');
+
+      if (!requestedGrade) {
+        const gradeCounts = new Map<string, number>();
+        quizzes.forEach(quiz => {
+          if (!quiz.grade) return;
+          gradeCounts.set(quiz.grade, (gradeCounts.get(quiz.grade) || 0) + 1);
+        });
+        const grades = [...gradeCounts.entries()]
+          .sort(([left], [right]) => Number(left) - Number(right) || left.localeCompare(right, 'vi'))
+          .map(([value, count]) => ({ value, label: /^\d+$/.test(value) ? `Lớp ${value}` : value, count }));
+        sendJson(res, 200, { success: true, grades, total: quizzes.length });
+        return;
+      }
+
+      const subjectCounts = new Map<string, number>();
+      quizzes
+        .filter(quiz => normalizeCatalogGrade(quiz.grade) === requestedGrade)
+        .forEach(quiz => {
+          if (!quiz.subject) return;
+          subjectCounts.set(quiz.subject, (subjectCounts.get(quiz.subject) || 0) + 1);
+        });
+      const subjects = [...subjectCounts.entries()]
+        .sort(([left], [right]) => left.localeCompare(right, 'vi'))
+        .map(([value, count]) => ({ value, label: value, count }));
+      sendJson(res, 200, { success: true, grade: requestedGrade, subjects });
+      return;
+    }
+
+    // Public exam catalogue: metadata only, filtered and paginated on the
+    // server.  Full question content and answer keys never leave through here.
     if (method === 'GET' && pathname === '/api/v3/exams') {
       const db = options.db;
       if (!db) throw EduSpaceError.internal('Backend database is not initialized');
-      const quizSnapshot = await db.collection('quizzes').limit(5000).get();
-      const quizzes: any[] = [];
-      quizSnapshot.forEach((doc: any) => {
-        const data = doc.data() || {};
-        const v3Exam = data.eduspaceV3?.exam;
-        const legacyData = data.quizData || data;
-        quizzes.push({
-          id: doc.id,
-          title: data.title || v3Exam?.title || legacyData.title || `Đề ${doc.id}`,
-          description: data.description || v3Exam?.description || legacyData.description || '',
-          subject: data.subject || v3Exam?.subjectId || legacyData.subject || '',
-          grade: data.grade || v3Exam?.grade || legacyData.grade || legacyData.class || '',
-          duration: data.duration || v3Exam?.durationMinutes || legacyData.duration || 45,
-          visibility: data.visibility || v3Exam?.visibility || 'public'
-        });
+      const grade = normalizeCatalogGrade(urlObj.searchParams.get('grade') || '');
+      const subject = String(urlObj.searchParams.get('subject') || '').trim();
+      const queryText = normalizeCatalogText(urlObj.searchParams.get('q') || urlObj.searchParams.get('query') || '');
+      const requestedLimit = Number(urlObj.searchParams.get('limit') || 12);
+      const limit = Math.max(1, Math.min(Number.isFinite(requestedLimit) ? Math.floor(requestedLimit) : 12, 24));
+      const requestedCursor = Number(urlObj.searchParams.get('cursor') || 0);
+      const offset = Math.max(0, Number.isFinite(requestedCursor) ? Math.floor(requestedCursor) : 0);
+      const catalog = await readPublicQuizCatalog(db);
+      const quizzes = catalog.filter(quiz => {
+        const matchesGrade = !grade || normalizeCatalogGrade(quiz.grade) === grade;
+        const matchesSubject = !subject || normalizeCatalogText(quiz.subject) === normalizeCatalogText(subject);
+        const searchable = normalizeCatalogText([quiz.id, quiz.title, quiz.description, quiz.subject, quiz.grade].join(' '));
+        return matchesGrade && matchesSubject && (!queryText || searchable.includes(queryText));
       });
-      sendJson(res, 200, { success: true, quizzes });
+      const page = quizzes.slice(offset, offset + limit);
+      const nextOffset = offset + page.length;
+      sendJson(res, 200, {
+        success: true,
+        quizzes: page,
+        total: quizzes.length,
+        nextCursor: nextOffset < quizzes.length ? String(nextOffset) : null
+      });
       return;
     }
 
