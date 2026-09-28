@@ -30,7 +30,7 @@
 
     <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-8 md:py-12">
         <!-- Hero & Beta Badge -->
-        <div className="mb-8">
+        <div class="mb-8">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 text-xs font-bold uppercase tracking-wider mb-4">
                 <span>EduSpace Exam V3 Beta — Experimental</span>
             </div>
@@ -75,42 +75,28 @@
             </div>
         </div>
 
-        <!-- Launch Sections -->
+        <!-- Shared V2 / Admin quiz bank -->
         <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-xs mb-8">
-            <h2 class="text-base md:text-lg font-bold text-slate-900 mb-4">Trải nghiệm bài thi mẫu (Demo)</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                <!-- Card A111 -->
-                <div class="border border-slate-200 hover:border-indigo-500 rounded-xl p-4 transition bg-slate-50/50 hover:bg-indigo-50/30 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-[11px] font-bold rounded-md">Mã: A111</span>
-                            <span class="text-xs text-slate-400 font-medium">45 phút</span>
-                        </div>
-                        <h4 class="text-sm font-bold text-slate-800 mb-1">Kiểm tra Tin học 11 - Giữa kỳ 1</h4>
-                        <p class="text-xs text-slate-500 mb-4">Cấu trúc đề GDPT 2018 kết hợp Trắc nghiệm nhiều lựa chọn và Đúng/Sai 4 ý.</p>
-                    </div>
-                    <a href="/eduspace/v3/exam/?id=A111" class="w-full text-center py-2 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs transition">
-                        Bắt đầu thi A111
-                    </a>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-5">
+                <div>
+                    <h2 class="text-base md:text-lg font-bold text-slate-900">Kho đề dùng chung V2 / Edu Admin</h2>
+                    <p id="v3ExamStatus" class="text-xs text-slate-500 mt-1" role="status">Đang kết nối kho đề...</p>
                 </div>
+                <a href="/admin/edu/" class="shrink-0 text-center py-2 px-4 rounded-lg bg-purple-600 hover:bg-purple-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 text-white text-xs font-bold shadow-xs transition">
+                    Tạo đề trong Edu Admin
+                </a>
+            </div>
 
-                <!-- Card A101 -->
-                <div class="border border-slate-200 hover:border-indigo-500 rounded-xl p-4 transition bg-slate-50/50 hover:bg-indigo-50/30 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-[11px] font-bold rounded-md">Mã: A101</span>
-                            <span class="text-xs text-slate-400 font-medium">45 phút</span>
-                        </div>
-                        <h4 class="text-sm font-bold text-slate-800 mb-1">Đề kiểm tra Tiếng Anh 10 - Học kỳ I</h4>
-                        <p class="text-xs text-slate-500 mb-4">Bài thi trắc nghiệm Tiếng Anh lớp 10 chương trình mới.</p>
-                    </div>
-                    <a href="/eduspace/v3/exam/?id=A101" class="w-full text-center py-2 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs transition">
-                        Bắt đầu thi A101
-                    </a>
-                </div>
+            <label for="v3ExamSearch" class="sr-only">Tìm trong kho đề</label>
+            <input id="v3ExamSearch" type="search" autocomplete="off" placeholder="Tìm theo mã đề, tên đề, môn hoặc lớp..." class="w-full px-4 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4" />
 
-                <!-- Card Authoring Builder -->
-                <div class="sm:col-span-2 border border-purple-200 hover:border-purple-500 rounded-xl p-4 transition bg-purple-50/40 hover:bg-purple-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div id="v3ExamGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4" aria-live="polite"></div>
+            <div id="v3ExamEmpty" class="hidden text-center border border-dashed border-slate-300 rounded-xl px-4 py-8 text-sm text-slate-500">
+                Không tìm thấy đề phù hợp trong kho dùng chung.
+            </div>
+
+            <div class="border-t border-slate-100 mt-6 pt-6">
+                <div class="sm:col-span-2 border border-purple-200 rounded-xl p-4 bg-purple-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
                             <span class="px-2 py-0.5 bg-purple-100 text-purple-700 text-[11px] font-bold rounded-md">Dành cho Giáo viên</span>
@@ -119,15 +105,9 @@
                         <h4 class="text-sm font-bold text-slate-900 mb-1">Soạn và quản lý kho đề</h4>
                         <p class="text-xs text-slate-600">Tạo đề trong Edu Admin. Đề được lưu vào kho <code>quizzes</code> chung và có thể mở ngay bằng EduSpace V2 hoặc V3.</p>
                     </div>
-                    <a href="/admin/edu/" class="shrink-0 text-center py-2 px-5 rounded-lg bg-purple-600 hover:bg-purple-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 text-white text-xs font-bold shadow-xs transition">
-                        Mở Edu Admin
-                    </a>
                 </div>
-            </div>
 
-            <!-- Custom Quiz ID Input -->
-            <div class="border-t border-slate-100 pt-6">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Chạy đề thi bất kỳ từ kho V2</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 mt-6 mb-2">Mở đề bằng mã</h3>
                 <form id="customExamForm" class="flex flex-col sm:flex-row gap-2.5">
                     <input
                         type="text"
@@ -138,11 +118,13 @@
                     />
                     <button
                         type="submit"
+                        id="customExamSubmit"
                         class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-xl shadow-xs transition"
                     >
                         Mở đề thi V3
                     </button>
                 </form>
+                <p id="customExamMessage" class="hidden mt-2 text-xs" role="alert"></p>
             </div>
         </div>
 
@@ -158,14 +140,111 @@
         </div>
     </main>
 
-    <script>
-        document.getElementById('customExamForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const id = document.getElementById('customExamId').value.trim();
-            if (id) {
-                window.location.href = '/eduspace/v3/exam/?id=' + encodeURIComponent(id);
+    <script type="module">
+        // This uses the same public Firestore source as EduSpace V2: collection `quizzes`.
+        // Do not copy data into V3; V2, V3 and Edu Admin share each record by its document ID.
+        const FIRESTORE_MODULE = 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+        const status = document.getElementById('v3ExamStatus');
+        const grid = document.getElementById('v3ExamGrid');
+        const empty = document.getElementById('v3ExamEmpty');
+        const search = document.getElementById('v3ExamSearch');
+        const form = document.getElementById('customExamForm');
+        const codeInput = document.getElementById('customExamId');
+        const submitButton = document.getElementById('customExamSubmit');
+        const message = document.getElementById('customExamMessage');
+        let quizzes = [];
+
+        const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
+        const quizInfo = (id, data) => {
+            const detail = data.quizData || data;
+            const duration = Number(data.duration || detail.duration || detail.config?.testDuration / 60 || 45);
+            return {
+                id: String(id),
+                title: data.title || detail.title || detail.examInfo?.examName || `Đề ${id}`,
+                description: data.description || detail.description || detail.examInfo?.description || 'Đề trong kho dùng chung EduSpace.',
+                subject: data.subject || detail.subject || detail.examInfo?.subject || '',
+                grade: data.grade || detail.grade || detail.examInfo?.grade || '',
+                duration: Number.isFinite(duration) && duration > 0 ? Math.round(duration) : 45
+            };
+        };
+
+        function renderCatalog() {
+            const needle = search.value.trim().toLocaleLowerCase('vi-VN');
+            const visible = quizzes.filter((quiz) => [quiz.id, quiz.title, quiz.description, quiz.subject, quiz.grade].join(' ').toLocaleLowerCase('vi-VN').includes(needle));
+            grid.innerHTML = visible.map((quiz) => `
+                <article class="border border-slate-200 hover:border-indigo-500 rounded-xl p-4 transition bg-slate-50/50 hover:bg-indigo-50/30 flex flex-col justify-between gap-4">
+                    <div>
+                        <div class="flex items-center justify-between gap-3 mb-2">
+                            <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-[11px] font-bold rounded-md font-mono">Mã: ${escapeHtml(quiz.id)}</span>
+                            <span class="text-xs text-slate-400 font-medium whitespace-nowrap">${quiz.duration} phút</span>
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-800 mb-1">${escapeHtml(quiz.title)}</h3>
+                        <p class="text-xs text-slate-500 line-clamp-2">${escapeHtml(quiz.description)}</p>
+                        ${(quiz.subject || quiz.grade) ? `<p class="text-[11px] text-slate-400 mt-3">${escapeHtml([quiz.subject, quiz.grade ? `Lớp ${quiz.grade}` : ''].filter(Boolean).join(' • '))}</p>` : ''}
+                    </div>
+                    <a href="/eduspace/v3/exam/?id=${encodeURIComponent(quiz.id)}" class="w-full text-center py-2 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 text-white text-xs font-semibold shadow-xs transition">Làm đề</a>
+                </article>`).join('');
+            empty.classList.toggle('hidden', visible.length !== 0);
+        }
+
+        async function waitForFirestore() {
+            if (window.firebaseFirestore) return window.firebaseFirestore;
+            await new Promise((resolve) => {
+                window.addEventListener('firebase-ready', resolve, { once: true });
+                window.setTimeout(resolve, 5000);
+            });
+            if (!window.firebaseFirestore) throw new Error('Không thể kết nối kho đề. Vui lòng tải lại trang.');
+            return window.firebaseFirestore;
+        }
+
+        async function findQuizByCode(rawCode) {
+            const code = rawCode.trim();
+            if (!code) return null;
+            const db = await waitForFirestore();
+            const { doc, getDoc } = await import(FIRESTORE_MODULE);
+            let snapshot = await getDoc(doc(db, 'quizzes', code.toUpperCase()));
+            if (!snapshot.exists()) snapshot = await getDoc(doc(db, 'quizzes', code));
+            return snapshot.exists() ? { id: snapshot.id, data: snapshot.data() } : null;
+        }
+
+        async function loadCatalog() {
+            try {
+                const db = await waitForFirestore();
+                const { collection, getDocs } = await import(FIRESTORE_MODULE);
+                const snapshot = await getDocs(collection(db, 'quizzes'));
+                quizzes = snapshot.docs.map((item) => quizInfo(item.id, item.data())).sort((a, b) => a.title.localeCompare(b.title, 'vi'));
+                status.textContent = `${quizzes.length} đề đang dùng chung với EduSpace V2 và Edu Admin.`;
+                renderCatalog();
+            } catch (error) {
+                console.error('[EduSpace V3] Cannot load shared quiz bank:', error);
+                status.textContent = error.message || 'Không thể tải kho đề.';
+                empty.textContent = 'Kho đề chưa tải được. Hãy kiểm tra kết nối rồi tải lại trang.';
+                empty.classList.remove('hidden');
+            }
+        }
+
+        search.addEventListener('input', renderCatalog);
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const code = codeInput.value.trim();
+            message.classList.add('hidden');
+            if (!code) return;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Đang kiểm tra...';
+            try {
+                const quiz = await findQuizByCode(code);
+                if (!quiz) throw new Error(`Không tìm thấy đề có mã “${code}”.`);
+                window.location.href = `/eduspace/v3/exam/?id=${encodeURIComponent(quiz.id)}`;
+            } catch (error) {
+                message.textContent = error.message || 'Không thể mở đề.';
+                message.className = 'mt-2 text-xs text-rose-600';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Mở đề thi V3';
             }
         });
+
+        loadCatalog();
     </script>
 </body>
 

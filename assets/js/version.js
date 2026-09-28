@@ -10,7 +10,7 @@
  * Định dạng: ver:<năm (2025=0, 2026=1)>.<tháng>.<ngày>.<giờ><phút>
  */
 (function () {
-    const VERSION = "ver:1.9.28.1928";
+    const VERSION = "ver:1.9.28.1942";
 
     function injectVersionBadge() {
         if (document.getElementById('nd-version-badge')) return;

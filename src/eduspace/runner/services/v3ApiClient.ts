@@ -15,12 +15,45 @@ const V3_API_BASE_URL = IS_LOCAL_DEVELOPMENT
 
 const apiUrl = (path: string) => `${V3_API_BASE_URL}${path}`;
 
+async function waitForFirebaseAuth(): Promise<any | null> {
+  const existing = (window as any).firebaseAuth;
+  if (existing) return existing;
+
+  await new Promise<void>((resolve) => {
+    window.addEventListener('firebase-ready', () => resolve(), { once: true });
+    window.setTimeout(resolve, 5000);
+  });
+  return (window as any).firebaseAuth || null;
+}
+
+async function getFirebaseUser(auth: any): Promise<any | null> {
+  if (auth?.currentUser) return auth.currentUser;
+  if (!auth?.onAuthStateChanged) return null;
+
+  return new Promise((resolve) => {
+    let settled = false;
+    let unsubscribe: (() => void) | undefined;
+    const finish = (user: any | null) => {
+      if (settled) return;
+      settled = true;
+      unsubscribe?.();
+      window.clearTimeout(timeout);
+      resolve(user);
+    };
+    const timeout = window.setTimeout(() => finish(auth.currentUser || null), 5000);
+    unsubscribe = auth.onAuthStateChanged((user: any) => finish(user));
+    if (settled) unsubscribe?.();
+  });
+}
+
 export async function getAuthToken(): Promise<string> {
-  // 1. Firebase modular / compat Auth on window
+  // 1. Wait for the same Firebase bootstrap used by the V2 page. The V3 React
+  // bundle can execute before firebase-init.js has restored the signed-in user.
   try {
-    const auth = (window as any).firebaseAuth;
-    if (auth?.currentUser) {
-      const token = await auth.currentUser.getIdToken();
+    const auth = await waitForFirebaseAuth();
+    const user = await getFirebaseUser(auth);
+    if (user) {
+      const token = await user.getIdToken();
       if (token) return token;
     }
   } catch (err) {
