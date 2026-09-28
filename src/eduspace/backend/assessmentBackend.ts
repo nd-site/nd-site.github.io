@@ -142,14 +142,38 @@ function publicQuizMetadata(doc: any): any {
   };
 }
 
-async function readPublicQuizCatalog(db: any): Promise<any[]> {
-  const quizSnapshot = await db.collection('quizzes').limit(5000).get();
+let publicQuizCatalogCache: { expiresAt: number; quizzes: any[] } | null = null;
+
+async function readPublicQuizCatalog(db: any, forceRefresh = false): Promise<any[]> {
+  // The three consecutive catalogue requests (grades → subjects → exams) often
+  // land on the same warm function.  A short cache avoids rereading the entire
+  // shared bank while still surfacing newly published exams promptly.
+  if (!forceRefresh && publicQuizCatalogCache && publicQuizCatalogCache.expiresAt > Date.now()) {
+    return publicQuizCatalogCache.quizzes;
+  }
+
+  const collectionRef = db.collection('quizzes');
+  // Do not transfer `quizData.questions` just to draw a card.  Legacy entries
+  // place every question beneath quizData, so a field projection is material to
+  // first-load latency even though the result has only a few hundred documents.
+  const metadataFields = [
+    'id', 'title', 'description', 'subject', 'grade', 'class', 'duration', 'visibility', 'tag', 'isHot', 'isComingSoon',
+    'eduspaceV3.exam',
+    'quizData.title', 'quizData.description', 'quizData.subject', 'quizData.grade', 'quizData.class', 'quizData.duration',
+    'quizData.tag', 'quizData.isHot', 'quizData.isComingSoon'
+  ];
+  const metadataQuery = typeof collectionRef.select === 'function'
+    ? collectionRef.select(...metadataFields)
+    : collectionRef;
+  const quizSnapshot = await metadataQuery.limit(5000).get();
   const quizzes = (quizSnapshot.docs || []).map((doc: any) => publicQuizMetadata(doc));
-  return quizzes.sort((left, right) => {
+  const sorted = quizzes.sort((left, right) => {
     const gradeOrder = Number(left.grade) - Number(right.grade);
     if (Number.isFinite(gradeOrder) && gradeOrder !== 0) return gradeOrder;
     return `${left.title} ${left.id}`.localeCompare(`${right.title} ${right.id}`, 'vi');
   });
+  publicQuizCatalogCache = { quizzes: sorted, expiresAt: Date.now() + 30_000 };
+  return sorted;
 }
 
 async function parseRequestBody(req: NodeHttpRequest): Promise<any> {
@@ -340,7 +364,7 @@ export async function handleAssessmentApi(
     if (method === 'GET' && pathname === '/api/v3/exam-facets') {
       const db = options.db;
       if (!db) throw EduSpaceError.internal('Backend database is not initialized');
-      const quizzes = await readPublicQuizCatalog(db);
+      const quizzes = await readPublicQuizCatalog(db, urlObj.searchParams.get('refresh') === '1');
       const requestedGrade = normalizeCatalogGrade(urlObj.searchParams.get('grade') || '');
 
       if (!requestedGrade) {
@@ -382,7 +406,7 @@ export async function handleAssessmentApi(
       const limit = Math.max(1, Math.min(Number.isFinite(requestedLimit) ? Math.floor(requestedLimit) : 12, 24));
       const requestedCursor = Number(urlObj.searchParams.get('cursor') || 0);
       const offset = Math.max(0, Number.isFinite(requestedCursor) ? Math.floor(requestedCursor) : 0);
-      const catalog = await readPublicQuizCatalog(db);
+      const catalog = await readPublicQuizCatalog(db, urlObj.searchParams.get('refresh') === '1');
       const quizzes = catalog.filter(quiz => {
         const matchesGrade = !grade || normalizeCatalogGrade(quiz.grade) === grade;
         const matchesSubject = !subject || normalizeCatalogText(quiz.subject) === normalizeCatalogText(subject);

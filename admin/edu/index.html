@@ -2536,7 +2536,7 @@ ${text}
         }
         async function loadAdminFacets(refresh = false) {
             if (adminCatalog.ready && !refresh) return;
-            const result = await getAdminCatalogJson('/exam-facets');
+            const result = await getAdminCatalogJson('/exam-facets', { refresh: refresh ? '1' : '' });
             adminCatalog.ready = true;
             adminCatalog.grades = result.grades || [];
             renderAdminGrades();
