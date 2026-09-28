@@ -392,6 +392,13 @@ export const AuthorApp: React.FC = () => {
 
           {/* Quick Actions */}
           <div className="flex items-center gap-2">
+            <a
+              href="/admin/edu/"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-violet-50 text-violet-700 hover:bg-violet-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-700 border border-violet-200 transition"
+            >
+              <BookOpen className="w-4 h-4" aria-hidden="true" />
+              <span>Kho đề Edu Admin</span>
+            </a>
             {/* Live Point Balance Indicator */}
             <div className={`px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 ${
               Math.abs(calculatedPoints - totalPoints) < 0.01
