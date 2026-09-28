@@ -3,8 +3,7 @@
  * Source of truth: docs/eduspace-v3-database-schema.md
  * 
  * Provides server-authoritative Firestore database access for EduSpace V3 entities:
- * - exams
- * - questions & question versions
+ * - legacy exams/questions/question versions (read-only migration fallback)
  * - exam_sessions
  * - submissions
  * - grading_records
@@ -54,14 +53,11 @@ export class FirestoreExamRepository implements ExamRepository {
   }
 
   async create(exam: Exam): Promise<void> {
-    await this.db.collection('exams').doc(exam.id).set(exam);
+    throw new Error(`Exam ${exam.id} must be saved through the shared quizzes repository`);
   }
 
   async update(id: string, updates: Partial<Exam>): Promise<void> {
-    await this.db.collection('exams').doc(id).set(
-      { ...updates, updatedAt: new Date().toISOString() },
-      { merge: true }
-    );
+    throw new Error(`Exam ${id} must be updated through the shared quizzes repository`);
   }
 
   async publish(id: string): Promise<void> {
@@ -115,26 +111,15 @@ export class FirestoreQuestionRepository implements QuestionRepository {
   }
 
   async create(question: Question, initialVersion: QuestionVersion): Promise<void> {
-    await this.db.collection('questions').doc(question.id).set(question);
-    await this.db.collection('questions').doc(question.id).collection('versions').doc(initialVersion.id).set(initialVersion);
-    await this.db.collection('question_versions').doc(initialVersion.id).set(initialVersion);
+    throw new Error(`Question ${question.id} must be saved with its parent exam in the shared quiz bank`);
   }
 
   async addVersion(questionId: string, version: QuestionVersion): Promise<void> {
-    await this.db.collection('questions').doc(questionId).collection('versions').doc(version.id).set(version);
-    await this.db.collection('question_versions').doc(version.id).set(version);
-    await this.db.collection('questions').doc(questionId).update({
-      currentVersionId: version.id,
-      currentVersionNumber: version.versionNumber,
-      updatedAt: version.createdAt
-    });
+    throw new Error(`Question ${questionId} versions must be saved with their parent exam in the shared quiz bank`);
   }
 
   async archive(id: string): Promise<void> {
-    await this.db.collection('questions').doc(id).update({
-      status: 'archived',
-      updatedAt: new Date().toISOString()
-    });
+    throw new Error(`Question ${id} must be archived through its parent exam in the shared quiz bank`);
   }
 }
 

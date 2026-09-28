@@ -8,6 +8,8 @@
 > **Runtime Environment:** Cloud Firestore (Primary) + Cloud Functions / Node.js 20+ (Admin SDK)  
 > **References:** [eduspace-v3-architecture.md](eduspace-v3-architecture.md), [DATABASE.md](DATABASE.md), [ARCHITECTURE_DECISIONS.md](ARCHITECTURE_DECISIONS.md), [AUTH_DATA_MODEL.md](AUTH_DATA_MODEL.md), [AUTH_RULES.md](AUTH_RULES.md), [PROJECT_RULES.md](PROJECT_RULES.md)
 
+> **Operational storage update (2026-09-28):** Active V2 and V3 exam definitions share the `quizzes/{quizId}` aggregate. See [eduspace-shared-quiz-bank.md](eduspace-shared-quiz-bank.md) for the deployed storage layout and migration path; the historical collection tables below describe the earlier V3 design.
+
 ---
 
 ### CÁC NGUYÊN TẮC CỐT LÕI BẮT BUỘC (MANDATORY AXIOMS)

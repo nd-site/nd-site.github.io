@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "node -e \"console.log('Using prebuilt EduSpace assessment bundle')\"",
+  "buildCommand": "npm run build:eduspace",
   "redirects": [
     {
       "source": "/psychology/(.*)",

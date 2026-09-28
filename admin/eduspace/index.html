@@ -2367,24 +2367,33 @@
             try {
                 showToast('Đang lưu bài lên Firebase...', false);
 
-                // 1. Save lesson metadata into eduspace_lessons
-                await setDoc(doc(db, 'eduspace_lessons', id), lessonDoc);
-
-                // 2. If quiz type, also collect questions and save to quizzes collection
                 if (type === 'quiz') {
+                    const existingQuiz = await getDoc(doc(db, 'quizzes', id.toUpperCase()));
+                    if (existingQuiz.exists() && existingQuiz.data().eduspaceV3) {
+                        window.location.href = `/eduspace/v3/author/?id=${encodeURIComponent(existingQuiz.id)}`;
+                        return;
+                    }
                     const quizDataObj = collectQuizData();
                     if (quizDataObj.questions.length > 0) {
                         await setDoc(doc(db, 'quizzes', id.toUpperCase()), {
+                            id: id.toUpperCase(),
                             creatorUid: currentUser.uid,
                             title: quizDataObj.title || title,
+                            description: desc,
                             subject: subject || quizDataObj.lesson || 'Chung',
                             grade: cls || quizDataObj.class || '12',
+                            class: cls || quizDataObj.class || '12',
                             duration: Math.max(1, parseInt(document.getElementById('meta-duration')?.value, 10) || 45),
+                            tag,
+                            isHot,
+                            isComingSoon,
                             quizData: quizDataObj,
                             visibility: 'public',
                             createdAt: serverTimestamp()
                         });
                     }
+                } else {
+                    await setDoc(doc(db, 'eduspace_lessons', id), lessonDoc);
                 }
 
                 showToast(`🎉 Đã đăng bài "${title}" lên Firebase thành công!`, false);
@@ -2416,11 +2425,24 @@
                 // Load from Firebase first
                 const fsMap = {};
                 try {
-                    const qSnap = await getDocs(query(collection(db, 'eduspace_lessons'), orderBy('createdAt', 'desc')));
+                    const qSnap = await getDocs(collection(db, 'quizzes'));
                     qSnap.forEach(d => {
-                        const data = d.data();
-                        const key = (data.id || d.id).toLowerCase();
-                        fsMap[key] = { _docId: d.id, _source: 'firebase', ...data };
+                        const quiz = d.data() || {};
+                        const quizData = quiz.quizData || quiz;
+                        const v3Exam = quiz.eduspaceV3?.exam;
+                        fsMap[d.id.toLowerCase()] = {
+                            _docId: d.id,
+                            _source: 'firebase',
+                            ...quiz,
+                            id: d.id,
+                            type: 'quiz',
+                            title: quiz.title || v3Exam?.title || quizData.title || d.id,
+                            description: quiz.description || v3Exam?.description || quizData.description || '',
+                            class: quiz.class || quiz.grade || v3Exam?.grade || quizData.class || quizData.grade || '',
+                            subject: quiz.subject || v3Exam?.subjectId || quizData.subject || '',
+                            quizId: d.id,
+                            url: v3Exam ? `/eduspace/v3/exam/?id=${encodeURIComponent(d.id)}` : `/eduspace/exam?${d.id}`
+                        };
                     });
                 } catch (e) { console.warn('Could not load from Firebase:', e); }
 
@@ -2531,13 +2553,15 @@
         window.loadPostToEditor = async function(docId) {
             try {
                 showToast('Đang tải dữ liệu bài vào editor...', false);
-                const docSnap = await getDoc(doc(db, 'eduspace_lessons', docId));
-                if (!docSnap.exists()) {
-                    showToast('Không tìm thấy bài học!', true);
+                let docSnap = await getDoc(doc(db, 'quizzes', docId));
+                if (!docSnap.exists()) docSnap = await getDoc(doc(db, 'quizzes', docId.toUpperCase()));
+                if (!docSnap.exists()) throw new Error('Không tìm thấy đề trong kho đề chung!');
+
+                const p = docSnap.data() || {};
+                if (p.eduspaceV3?.exam) {
+                    window.location.href = `/eduspace/v3/author/?id=${encodeURIComponent(docSnap.id)}`;
                     return;
                 }
-
-                const p = docSnap.data();
 
                 // Fill publish meta inputs
                 document.getElementById('pub-id').value = p.id || docId;
@@ -2595,11 +2619,25 @@
                 window.closeConfirmModal();
                 try {
                     showToast('Đang xoá bài...', false);
-                    await deleteDoc(doc(db, 'eduspace_lessons', docId));
-                    try {
-                        await deleteDoc(doc(db, 'quizzes', (examId || docId).toUpperCase()));
-                        await deleteDoc(doc(db, 'quizzes', examId || docId));
-                    } catch (_) {}
+                    let quizSnap = await getDoc(doc(db, 'quizzes', docId));
+                    if (!quizSnap.exists()) quizSnap = await getDoc(doc(db, 'quizzes', (examId || docId).toUpperCase()));
+                    if (quizSnap.exists() && quizSnap.data().eduspaceV3) {
+                        const signedInUser = auth?.currentUser || currentUser;
+                        if (!signedInUser) throw new Error('Vui lòng đăng nhập tài khoản quản trị.');
+                        const apiBase = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+                            ? 'http://localhost:3000'
+                            : 'https://nd-puce.vercel.app';
+                        const response = await fetch(`${apiBase}/api/v3/admin/quizzes/${encodeURIComponent(quizSnap.id)}`, {
+                            method: 'DELETE',
+                            headers: { Authorization: `Bearer ${await signedInUser.getIdToken()}` }
+                        });
+                        const result = await response.json();
+                        if (!response.ok || !result.success) throw new Error(result.error?.message || 'Không thể xóa đề V3.');
+                    } else if (quizSnap.exists()) {
+                        await deleteDoc(doc(db, 'quizzes', quizSnap.id));
+                    }
+                    try { await deleteDoc(doc(db, 'eduspace_lessons', docId)); } catch (_) {}
+                    try { await deleteDoc(doc(db, 'eduspace_lessons', (examId || docId).toLowerCase())); } catch (_) {}
 
                     showToast('🗑️ Đã xoá bài thành công!');
                     await window.loadAdminPosts();
@@ -2628,23 +2666,34 @@
                     return;
                 }
 
-                const lessonDoc = {
-                    id: item.id,
-                    title: item.title || '',
-                    type: item.type || 'quiz',
-                    description: item.description || '',
-                    url: item.url || `/eduspace/exam?${item.id}`,
-                    tag: item.tag || '',
-                    class: item.class || '',
-                    subject: item.subject || '',
-                    subSubject: item.subSubject || '',
-                    buttonText: item.buttonText || '',
-                    isHot: !!item.isHot,
-                    isComingSoon: !!item.isComingSoon,
-                    createdAt: serverTimestamp(),
-                    creatorUid: currentUser.uid
-                };
-                await setDoc(doc(db, 'eduspace_lessons', item.id), lessonDoc);
+                const lessonDoc = item.type === 'quiz'
+                    ? {
+                        id: item.id,
+                        type: 'quiz',
+                        quizId: item.id.toUpperCase(),
+                        url: item.url || `/eduspace/exam?${item.id}`,
+                        createdAt: serverTimestamp(),
+                        creatorUid: currentUser.uid
+                    }
+                    : {
+                        id: item.id,
+                        title: item.title || '',
+                        type: item.type || 'lesson',
+                        description: item.description || '',
+                        url: item.url || `/eduspace/exam?${item.id}`,
+                        tag: item.tag || '',
+                        class: item.class || '',
+                        subject: item.subject || '',
+                        subSubject: item.subSubject || '',
+                        buttonText: item.buttonText || '',
+                        isHot: !!item.isHot,
+                        isComingSoon: !!item.isComingSoon,
+                        createdAt: serverTimestamp(),
+                        creatorUid: currentUser.uid
+                    };
+                if (item.type !== 'quiz' && !item.dataPath) {
+                    await setDoc(doc(db, 'eduspace_lessons', item.id), lessonDoc);
+                }
 
                 if (item.dataPath) {
                     try {
@@ -2656,7 +2705,13 @@
                             const runner = new Function('window', norm + '; return window.quizData;');
                             const qd = runner(s);
                             if (qd && Array.isArray(qd.questions) && qd.questions.length > 0) {
-                                await setDoc(doc(db, 'quizzes', item.id.toUpperCase()), {
+                                const quizRef = doc(db, 'quizzes', item.id.toUpperCase());
+                                const existingQuiz = await getDoc(quizRef);
+                                if (existingQuiz.exists() && existingQuiz.data().eduspaceV3) {
+                                    throw new Error('Đề V3 đã tồn tại trong kho đề chung; không thể ghi đè bằng đề V2.');
+                                }
+                                await setDoc(quizRef, {
+                                    id: item.id.toUpperCase(),
                                     creatorUid: currentUser.uid,
                                     title: qd.title || item.title,
                                     subject: item.subject || 'Chung',
@@ -2724,24 +2779,35 @@
                 progDetail.textContent = `[${id}] ${item.title || ''}`;
 
                 try {
-                    // 1. Save lesson metadata to eduspace_lessons
-                    const lessonDoc = {
-                        id: id,
-                        title: item.title || '',
-                        type: item.type || 'quiz',
-                        description: item.description || '',
-                        url: item.url || `/eduspace/exam?${id}`,
-                        tag: item.tag || '',
-                        class: item.class || '',
-                        subject: item.subject || '',
-                        subSubject: item.subSubject || '',
-                        buttonText: item.buttonText || '',
-                        isHot: !!item.isHot,
-                        isComingSoon: !!item.isComingSoon,
-                        createdAt: serverTimestamp(),
-                        creatorUid: currentUser.uid
-                    };
-                    await setDoc(doc(db, 'eduspace_lessons', id), lessonDoc);
+                    // Quiz data belongs in quizzes only; lessons remain separate content.
+                    const lessonDoc = item.type === 'quiz'
+                        ? {
+                            id,
+                            type: 'quiz',
+                            quizId: id.toUpperCase(),
+                            url: item.url || `/eduspace/exam?${id}`,
+                            createdAt: serverTimestamp(),
+                            creatorUid: currentUser.uid
+                        }
+                        : {
+                            id,
+                            title: item.title || '',
+                            type: item.type || 'lesson',
+                            description: item.description || '',
+                            url: item.url || `/eduspace/exam?${id}`,
+                            tag: item.tag || '',
+                            class: item.class || '',
+                            subject: item.subject || '',
+                            subSubject: item.subSubject || '',
+                            buttonText: item.buttonText || '',
+                            isHot: !!item.isHot,
+                            isComingSoon: !!item.isComingSoon,
+                            createdAt: serverTimestamp(),
+                            creatorUid: currentUser.uid
+                        };
+                    if (item.type !== 'quiz' && !item.dataPath) {
+                        await setDoc(doc(db, 'eduspace_lessons', id), lessonDoc);
+                    }
 
                     // 2. If dataPath exists, fetch data.js and save quizData to quizzes
                     if (item.dataPath) {
@@ -2754,7 +2820,13 @@
                                 const runner = new Function('window', norm + '; return window.quizData;');
                                 const qd = runner(s);
                                 if (qd && Array.isArray(qd.questions) && qd.questions.length > 0) {
-                                    await setDoc(doc(db, 'quizzes', id.toUpperCase()), {
+                                    const quizRef = doc(db, 'quizzes', id.toUpperCase());
+                                    const existingQuiz = await getDoc(quizRef);
+                                    if (existingQuiz.exists() && existingQuiz.data().eduspaceV3) {
+                                        throw new Error('Đề V3 đã tồn tại trong kho đề chung; không thể ghi đè bằng đề V2.');
+                                    }
+                                    await setDoc(quizRef, {
+                                        id: id.toUpperCase(),
                                         creatorUid: currentUser.uid,
                                         title: qd.title || item.title,
                                         subject: item.subject || qd.lesson || 'Chung',

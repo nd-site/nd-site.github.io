@@ -2,11 +2,11 @@
  * EduSpace V3 - V2 Compatibility Repositories
  * Source of truth: docs/eduspace-v3-database-schema.md & docs/eduspace-v3-architecture.md
  * 
- * Allows EduSpace V3 to read and execute legacy V2 quizzes on-the-fly without database duplication.
- * Primary operations check V3 canonical collections first, then fallback to V2 quizzes.
- * All mutations (create, update, session, submission) target strictly canonical V3 collections.
+ * Allows EduSpace V3 to read and execute V2 quizzes directly from the shared
+ * quizzes collection without duplicating their definitions.
+ * Native V3 exam mutations are saved back into that shared quiz aggregate.
  * 
- * READ-ONLY for legacy collections: Never mutates or writes to `quizzes` or `attempts`.
+ * V2 quiz payloads remain unchanged; session and result activity stays separate.
  */
 
 import type { Exam } from '../domain/exam.ts';
@@ -85,55 +85,59 @@ export class V2CompatibleExamRepository implements ExamRepository {
   }
 
   async getById(id: string): Promise<Exam | null> {
-    // 1. Check primary V3 exams collection
-    const primary = await this.primaryRepo.getById(id);
-    if (primary) return primary;
-
-    // 2. Check in-memory cache
+    // 1. Resolve every active V2/V3 exam from the shared quizzes collection.
     const cached = this.cache.get(id);
     if (cached) return cached.exam;
 
-    // 3. Fallback: read legacy quiz from Firestore 'quizzes'
     const raw = await this.v2Reader.getQuizById(id);
-    if (!raw) return null;
+    if (raw) {
+      const bundle = adaptLegacyV2QuizBundle(id, raw);
+      this.cache.set(id, bundle);
+      return bundle.exam;
+    }
 
-    // 4. Adapt and cache
-    const bundle = adaptLegacyV2QuizBundle(id, raw);
-    this.cache.set(id, bundle);
-    return bundle.exam;
+    // Temporary read compatibility for exams saved before the shared-bank migration.
+    return this.primaryRepo.getById(id);
   }
 
   async list(filter?: ExamFilter): Promise<Exam[]> {
-    const primaryList = await this.primaryRepo.list(filter);
-    if (primaryList && primaryList.length > 0) {
-      return primaryList;
-    }
-
-    // Fallback: adapt available V2 quizzes
     const legacyList = await this.v2Reader.listQuizzes(filter?.limit || 50);
     const adaptedExams: Exam[] = [];
     for (const item of legacyList) {
       const bundle = adaptLegacyV2QuizBundle(item.id, item.data);
-      this.cache.set(item.id, bundle);
+      // List reads contain only catalog metadata for V3 docs; their protected
+      // question versions are loaded on demand by getById().
+      if (!item.data.eduspaceV3) this.cache.set(item.id, bundle);
       adaptedExams.push(bundle.exam);
     }
-    return adaptedExams;
+    if (adaptedExams.length > 0) return adaptedExams;
+
+    // Temporary read compatibility for exams saved before the shared-bank migration.
+    return this.primaryRepo.list(filter);
   }
 
   async create(exam: Exam): Promise<void> {
-    return this.primaryRepo.create(exam);
+    if (!this.v2Reader.saveV3Bundle) throw new Error('Shared quiz storage is unavailable');
+    await this.v2Reader.saveV3Bundle(exam, []);
   }
 
   async update(id: string, updates: Partial<Exam>): Promise<void> {
-    return this.primaryRepo.update(id, updates);
+    const raw = await this.v2Reader.getQuizById(id);
+    if (!raw?.eduspaceV3?.exam) {
+      throw new Error('V2 quiz records must be edited in the V2 authoring tool');
+    }
+    if (!this.v2Reader.saveV3Bundle) throw new Error('Shared quiz storage is unavailable');
+    const bundle = adaptLegacyV2QuizBundle(id, raw);
+    const currentQuestions = (raw.eduspaceV3.questions || []) as Array<{ question: Question; version: QuestionVersion }>;
+    await this.v2Reader.saveV3Bundle({ ...bundle.exam, ...updates, id }, currentQuestions);
   }
 
   async publish(id: string): Promise<void> {
-    return this.primaryRepo.publish(id);
+    return this.update(id, { moderationStatus: 'approved', status: 'active' });
   }
 
   async archive(id: string): Promise<void> {
-    return this.primaryRepo.archive(id);
+    return this.update(id, { status: 'archived' });
   }
 }
 
@@ -151,15 +155,11 @@ export class V2CompatibleQuestionRepository implements QuestionRepository {
   }
 
   async getById(id: string): Promise<Question | null> {
-    // 1. Check primary V3 questions collection
-    const primary = await this.primaryRepo.getById(id);
-    if (primary) return primary;
-
-    // 2. Check in-memory cache
+    // 1. Check the bundle cached when its shared quiz document was loaded.
     const cached = this.cache.findQuestion(id);
     if (cached) return cached;
 
-    // 3. Fallback: extract quizId and fetch from V2
+    // 2. Resolve legacy V2 question IDs from their parent quiz document.
     const quizId = this.extractQuizId(id);
     if (quizId) {
       const raw = await this.v2Reader.getQuizById(quizId);
@@ -170,19 +170,16 @@ export class V2CompatibleQuestionRepository implements QuestionRepository {
       }
     }
 
-    return null;
+    // 3. Temporary read compatibility for pre-migration V3 questions.
+    return this.primaryRepo.getById(id);
   }
 
   async getVersion(questionId: string, versionId: string): Promise<QuestionVersion | null> {
-    // 1. Check primary V3 question versions
-    const primary = await this.primaryRepo.getVersion(questionId, versionId);
-    if (primary) return primary;
-
-    // 2. Check in-memory cache
+    // 1. Check the bundle cached when its shared quiz document was loaded.
     const cached = this.cache.findVersion(versionId);
     if (cached) return cached;
 
-    // 3. Fallback: extract quizId and fetch from V2
+    // 2. Resolve legacy V2 versions from their parent quiz document.
     const quizId = this.extractQuizId(questionId) || this.extractQuizId(versionId);
     if (quizId) {
       const raw = await this.v2Reader.getQuizById(quizId);
@@ -193,7 +190,8 @@ export class V2CompatibleQuestionRepository implements QuestionRepository {
       }
     }
 
-    return null;
+    // 3. Temporary read compatibility for pre-migration V3 question versions.
+    return this.primaryRepo.getVersion(questionId, versionId);
   }
 
   async list(filter?: QuestionFilter): Promise<Question[]> {
@@ -201,14 +199,14 @@ export class V2CompatibleQuestionRepository implements QuestionRepository {
   }
 
   async create(question: Question, initialVersion: QuestionVersion): Promise<void> {
-    return this.primaryRepo.create(question, initialVersion);
+    throw new Error(`Question ${question.id} must be saved with its parent exam in the shared quiz bank`);
   }
 
   async addVersion(questionId: string, version: QuestionVersion): Promise<void> {
-    return this.primaryRepo.addVersion(questionId, version);
+    throw new Error(`Question ${questionId} versions must be saved with their parent exam in the shared quiz bank`);
   }
 
   async archive(id: string): Promise<void> {
-    return this.primaryRepo.archive(id);
+    throw new Error(`Question ${id} must be archived through its parent exam in the shared quiz bank`);
   }
 }

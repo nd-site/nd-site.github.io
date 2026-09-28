@@ -587,9 +587,12 @@
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-black text-slate-900">Danh mục đề thi trên Firebase</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Kho đề dùng chung cho EduSpace V2, EduSpace V3 và trang quản trị: <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">quizzes</code> và <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">eduspace_lessons</code>.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Kho đề chung của EduSpace V2, V3 và trang quản trị: <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600">quizzes</code>.</p>
                 </div>
                 <div class="flex items-center gap-3">
+                    <button onclick="window.migrateOldV3ExamsToSharedBank()" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 rounded-xl text-xs font-bold transition-all" title="Chuyển các đề V3 cũ vào kho quizzes">
+                        Chuyển đề V3 cũ
+                    </button>
                     <input type="text" id="postsSearchInput" oninput="window.filterAdminPosts(this.value)" placeholder="Tìm mã ID, môn, lớp..." class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white w-60">
                     <button onclick="window.loadAdminPosts()" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm transition-all" title="Làm mới danh sách">
                         <i class="ph-bold ph-arrows-clockwise"></i>
@@ -2387,6 +2390,15 @@ ${text}
             try {
                 showToast("Đang đồng bộ dữ liệu lên Firestore...", false);
 
+                const exactQuizRef = doc(db, 'quizzes', id);
+                let existingQuiz = await getDoc(exactQuizRef);
+                if (!existingQuiz.exists()) existingQuiz = await getDoc(doc(db, 'quizzes', id.toUpperCase()));
+                if (existingQuiz.exists() && existingQuiz.data().eduspaceV3) {
+                    showToast("Đề này được lưu theo chuẩn V3. Đang mở trình soạn thảo V3...", false);
+                    window.location.href = `/eduspace/v3/author/?id=${encodeURIComponent(existingQuiz.id)}`;
+                    return;
+                }
+
                 // Thu thập cấu hình cấu trúc đề thi và điểm
                 const structEnabled = document.getElementById('structureEnableToggle')?.checked || false;
                 const structCounts = {
@@ -2428,30 +2440,20 @@ ${text}
 
                 // 1. Lưu vào collection quizzes (ID chữ hoa)
                 await setDoc(doc(db, 'quizzes', id.toUpperCase()), {
+                    id: id.toUpperCase(),
                     creatorUid: activeUid,
                     title: title,
+                    description: desc,
                     grade: cls,
+                    class: cls,
                     subject: subject,
                     duration: duration,
+                    tag: tag,
+                    isHot: isHot,
+                    isComingSoon: isComingSoon,
                     visibility: 'public',
                     quizData: quizDataObj,
                     createdAt: serverTimestamp()
-                });
-
-                // 2. Lưu vào collection eduspace_lessons (dành cho portal)
-                await setDoc(doc(db, 'eduspace_lessons', id), {
-                    id: id,
-                    title: title,
-                    type: 'quiz',
-                    url: `/eduspace/exam?${id}`,
-                    tag: tag,
-                    class: cls,
-                    subject: subject,
-                    description: desc,
-                    isHot: isHot,
-                    isComingSoon: isComingSoon,
-                    createdAt: serverTimestamp(),
-                    creatorUid: activeUid
                 });
 
                 showToast(`🎉 Đã đăng bài "${title}" lên Firebase thành công!`);
@@ -2482,11 +2484,24 @@ ${text}
                     return;
                 }
                 const fsMap = {};
-                const qSnap = await getDocs(query(collection(db, 'eduspace_lessons'), orderBy('createdAt', 'desc')));
+                const qSnap = await getDocs(query(collection(db, 'quizzes'), orderBy('createdAt', 'desc')));
                 qSnap.forEach(d => {
                     const data = d.data();
-                    const key = (data.id || d.id).toLowerCase();
-                    fsMap[key] = { _docId: d.id, ...data };
+                    const quizData = data.quizData || data;
+                    const id = data.id || d.id;
+                    const key = String(id).toLowerCase();
+                    fsMap[key] = {
+                        _docId: d.id,
+                        ...data,
+                        id,
+                        title: data.title || quizData.title || id,
+                        description: data.description || quizData.description || '',
+                        class: data.class || data.grade || quizData.class || quizData.grade || '',
+                        subject: data.subject || quizData.subject || '',
+                        tag: data.tag || '',
+                        isHot: !!data.isHot,
+                        isComingSoon: !!data.isComingSoon
+                    };
                 });
 
                 allAdminPosts = Object.values(fsMap);
@@ -2578,12 +2593,56 @@ ${text}
             renderAdminPosts(filtered);
         };
 
+        window.migrateOldV3ExamsToSharedBank = async function() {
+            const signedInUser = auth?.currentUser || currentUser;
+            if (!signedInUser) {
+                showToast('Vui lòng đăng nhập tài khoản quản trị để chuyển dữ liệu.', true);
+                return;
+            }
+            try {
+                showToast('Đang chuyển các đề V3 cũ vào kho đề chung...', false);
+                const idToken = await signedInUser.getIdToken();
+                const apiBase = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+                    ? 'http://localhost:3000'
+                    : 'https://nd-puce.vercel.app';
+                const report = { scanned: 0, migrated: 0, alreadyInSharedBank: 0, conflicts: [], failed: [] };
+                let cursor = null;
+                let hasMore = true;
+                while (hasMore) {
+                    const response = await fetch(`${apiBase}/api/v3/admin/migrate-shared-quizzes`, {
+                        method: 'POST',
+                        headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ cursor, pageSize: 5 })
+                    });
+                    const result = await response.json();
+                    if (!response.ok || !result.success) throw new Error(result.error?.message || 'Không thể chuyển dữ liệu.');
+                    report.scanned += result.report.scanned;
+                    report.migrated += result.report.migrated;
+                    report.alreadyInSharedBank += result.report.alreadyInSharedBank;
+                    report.conflicts.push(...result.report.conflicts);
+                    report.failed.push(...result.report.failed);
+                    cursor = result.report.nextCursor;
+                    hasMore = result.report.hasMore;
+                }
+                showToast(`Đã chuyển ${report.migrated}/${report.scanned} đề V3; ${report.conflicts.length} mã trùng, ${report.failed.length} lỗi.`);
+                await window.loadAdminPosts();
+            } catch (err) {
+                showToast('Lỗi chuyển kho đề: ' + (err.message || err), true);
+            }
+        };
+
         window.loadPostToEditor = async function(id) {
             try {
                 showToast("Đang nạp đề vào editor...", false);
-                const qDoc = await getDoc(doc(db, 'quizzes', id.toUpperCase()));
+                let qDoc = await getDoc(doc(db, 'quizzes', id));
+                if (!qDoc.exists()) qDoc = await getDoc(doc(db, 'quizzes', id.toUpperCase()));
                 if (qDoc.exists()) {
-                    const qData = qDoc.data().quizData || qDoc.data();
+                    const record = qDoc.data();
+                    if (record.eduspaceV3) {
+                        window.location.href = `/eduspace/v3/author/?id=${encodeURIComponent(qDoc.id)}`;
+                        return;
+                    }
+                    const qData = record.quizData || record;
                     document.getElementById('pub-id').value = id;
                     document.getElementById('pub-title').value = qData.title || '';
                     document.getElementById('pub-class').value = qData.class || qData.grade || '';
@@ -2639,7 +2698,23 @@ ${text}
 
             try {
                 showToast("Đang xóa đề thi...", false);
-                await deleteDoc(doc(db, 'quizzes', id.toUpperCase()));
+                let quizSnap = await getDoc(doc(db, 'quizzes', id));
+                if (!quizSnap.exists()) quizSnap = await getDoc(doc(db, 'quizzes', id.toUpperCase()));
+                if (quizSnap.exists() && quizSnap.data().eduspaceV3) {
+                    const signedInUser = auth?.currentUser || currentUser;
+                    if (!signedInUser) throw new Error('Vui lòng đăng nhập tài khoản quản trị.');
+                    const apiBase = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+                        ? 'http://localhost:3000'
+                        : 'https://nd-puce.vercel.app';
+                    const response = await fetch(`${apiBase}/api/v3/admin/quizzes/${encodeURIComponent(quizSnap.id)}`, {
+                        method: 'DELETE',
+                        headers: { Authorization: `Bearer ${await signedInUser.getIdToken()}` }
+                    });
+                    const result = await response.json();
+                    if (!response.ok || !result.success) throw new Error(result.error?.message || 'Không thể xóa đề V3.');
+                } else if (quizSnap.exists()) {
+                    await deleteDoc(doc(db, 'quizzes', quizSnap.id));
+                }
                 await deleteDoc(doc(db, 'eduspace_lessons', id.toLowerCase()));
                 showToast("Đã xóa đề thi thành công!");
                 await window.loadAdminPosts();
@@ -2657,6 +2732,12 @@ ${text}
         };
 
         window.runExamFromPost = async function(id) {
+            let quizDoc = await getDoc(doc(db, 'quizzes', id));
+            if (!quizDoc.exists()) quizDoc = await getDoc(doc(db, 'quizzes', id.toUpperCase()));
+            if (quizDoc.exists() && quizDoc.data().eduspaceV3) {
+                window.location.href = `/eduspace/v3/exam/?id=${encodeURIComponent(quizDoc.id)}`;
+                return;
+            }
             window.switchAdminTab('runner');
             const sel = document.getElementById('runnerExamSelector');
             if (sel) sel.value = id;
@@ -2809,6 +2890,10 @@ ${text}
                     return;
                 }
                 const data = snap.data();
+                if (data.eduspaceV3) {
+                    window.location.href = `/eduspace/v3/exam/?id=${encodeURIComponent(snap.id)}`;
+                    return;
+                }
                 const qData = data.quizData || data;
                 const rawQs = qData.questions || [];
                 const struct = qData.examStructure || null;

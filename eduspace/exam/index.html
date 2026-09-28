@@ -92,6 +92,13 @@
                         }
                         if (qSnap.exists()) {
                             const qData = qSnap.data();
+
+                            // Native V3 exams live in the same shared quiz record. Route
+                            // them to the V3 runner, which starts a server-authoritative session.
+                            if (qData.eduspaceV3) {
+                                window.location.replace(`/eduspace/v3/exam/?id=${encodeURIComponent(qSnap.id)}`);
+                                return;
+                            }
                             
                             // Check visibility permissions
                             if (qData.visibility === 'private') {

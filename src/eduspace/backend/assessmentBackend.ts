@@ -26,6 +26,8 @@ import {
   FirestoreSubmissionRepository
 } from '../core/repositories/firestoreRepository.ts';
 import { FirestoreV2QuizRepository } from '../core/repositories/v2QuizRepository.ts';
+import type { V2QuizReader, V3QuizQuestionBundle } from '../core/repositories/v2QuizRepository.ts';
+import { migrateLegacyV3ExamsToSharedQuizzes } from './sharedQuizMigration.ts';
 import {
   V2CompatibleExamRepository,
   V2CompatibleQuestionRepository,
@@ -50,6 +52,7 @@ export interface AssessmentBackendOptions {
   sessionRepo?: ExamSessionRepository;
   submissionRepo?: SubmissionRepository;
   resultRepo?: ResultRepository;
+  quizRepo?: V2QuizReader;
   service?: ExamSessionService;
 }
 
@@ -87,7 +90,7 @@ function setCORSHeaders(req: NodeHttpRequest, res: NodeHttpResponse): void {
   } else {
     res.setHeader('Access-Control-Allow-Origin', 'https://ndsite.web.app');
   }
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Max-Age', '86400');
 }
@@ -280,6 +283,31 @@ export async function handleAssessmentApi(
       return;
     }
 
+    // Public exam catalog: expose searchable metadata without sending question
+    // content or answer keys to the browser.
+    if (method === 'GET' && pathname === '/api/v3/exams') {
+      const db = options.db;
+      if (!db) throw EduSpaceError.internal('Backend database is not initialized');
+      const quizSnapshot = await db.collection('quizzes').limit(5000).get();
+      const quizzes: any[] = [];
+      quizSnapshot.forEach((doc: any) => {
+        const data = doc.data() || {};
+        const v3Exam = data.eduspaceV3?.exam;
+        const legacyData = data.quizData || data;
+        quizzes.push({
+          id: doc.id,
+          title: data.title || v3Exam?.title || legacyData.title || `Đề ${doc.id}`,
+          description: data.description || v3Exam?.description || legacyData.description || '',
+          subject: data.subject || v3Exam?.subjectId || legacyData.subject || '',
+          grade: data.grade || v3Exam?.grade || legacyData.grade || legacyData.class || '',
+          duration: data.duration || v3Exam?.durationMinutes || legacyData.duration || 45,
+          visibility: data.visibility || v3Exam?.visibility || 'public'
+        });
+      });
+      sendJson(res, 200, { success: true, quizzes });
+      return;
+    }
+
     // Resolve Database and Auth
     const db = options.db;
     const auth = options.auth;
@@ -305,6 +333,42 @@ export async function handleAssessmentApi(
     );
 
     const body = await parseRequestBody(req);
+
+    if (method === 'POST' && pathname === '/api/v3/admin/migrate-shared-quizzes') {
+      if (userContext.role !== 'admin' && userContext.codeId !== '0000' && userContext.adminLevel !== 'owner') {
+        throw EduSpaceError.forbidden('Only administrators can migrate the shared quiz bank');
+      }
+      const report = await migrateLegacyV3ExamsToSharedQuizzes(db, {
+        cursor: body.cursor,
+        pageSize: body.pageSize
+      });
+      sendJson(res, 200, { success: true, report });
+      return;
+    }
+
+    const adminQuizDeleteMatch = pathname.match(/^\/api\/v3\/admin\/quizzes\/([^/]+)$/);
+    if (method === 'DELETE' && adminQuizDeleteMatch) {
+      if (userContext.role !== 'admin' && userContext.codeId !== '0000' && userContext.adminLevel !== 'owner') {
+        throw EduSpaceError.forbidden('Only administrators can delete shared quizzes');
+      }
+      const quizId = decodeURIComponent(adminQuizDeleteMatch[1]);
+      const quizRef = db.collection('quizzes').doc(quizId);
+      const quizSnapshot = await quizRef.get();
+      if (!quizSnapshot?.exists) throw EduSpaceError.notFound(`Quiz not found: ${quizId}`);
+      if (typeof db.recursiveDelete === 'function') {
+        await db.recursiveDelete(quizRef);
+      } else {
+        const questionSnapshot = await quizRef.collection('questionBank').get();
+        for (const questionDoc of questionSnapshot.docs || []) {
+          const versionSnapshot = await questionDoc.ref.collection('versions').get();
+          for (const versionDoc of versionSnapshot.docs || []) await versionDoc.ref.delete();
+          await questionDoc.ref.delete();
+        }
+        await quizRef.delete();
+      }
+      sendJson(res, 200, { success: true, quizId });
+      return;
+    }
 
     // Route 1: POST /api/v3/exam-sessions
     if (method === 'POST' && pathname === '/api/v3/exam-sessions') {
@@ -363,15 +427,17 @@ export async function handleAssessmentApi(
     }
 
     // Resolve repositories for authoring operations
+    const authorCache = new V2QuizBundleCache();
+    const sharedQuizRepo = options.quizRepo || new FirestoreV2QuizRepository(db);
     const authorExamRepo = options.examRepo || new V2CompatibleExamRepository(
       new FirestoreExamRepository(db),
-      new FirestoreV2QuizRepository(db),
-      new V2QuizBundleCache()
+      sharedQuizRepo,
+      authorCache
     );
     const authorQuestionRepo = options.questionRepo || new V2CompatibleQuestionRepository(
       new FirestoreQuestionRepository(db),
-      new FirestoreV2QuizRepository(db),
-      new V2QuizBundleCache()
+      sharedQuizRepo,
+      authorCache
     );
 
     // Route 7: POST /api/v3/author/exams (Create / Update Exam Definition)
@@ -389,7 +455,8 @@ export async function handleAssessmentApi(
       const examId = examData.id || `exam_${Date.now()}_${Math.floor(Math.random() * 1e4).toString(36)}`;
       const nowStr = new Date().toISOString();
 
-      // If embedded questions provided, persist them first
+      // Keep this V3 exam and its versioned question records in one shared-bank document.
+      const questionBundles: V3QuizQuestionBundle[] = [];
       if (Array.isArray(body.questions)) {
         for (const q of body.questions) {
           if (!q.id) continue;
@@ -433,7 +500,7 @@ export async function handleAssessmentApi(
             createdAt: nowStr,
             updatedAt: nowStr
           };
-          await authorQuestionRepo.create(questionEntity, versionData);
+          questionBundles.push({ question: questionEntity, version: versionData });
         }
       }
 
@@ -472,12 +539,10 @@ export async function handleAssessmentApi(
         updatedAt: nowStr
       };
 
-      const existing = await authorExamRepo.getById(examId);
-      if (existing) {
-        await authorExamRepo.update(examId, canonicalExam);
-      } else {
-        await authorExamRepo.create(canonicalExam);
+      if (!sharedQuizRepo.saveV3Bundle) {
+        throw EduSpaceError.internal('The shared quiz repository cannot save V3 exam bundles');
       }
+      await sharedQuizRepo.saveV3Bundle(canonicalExam, questionBundles);
 
       sendJson(res, 200, {
         success: true,
@@ -495,6 +560,9 @@ export async function handleAssessmentApi(
       if (!exam) {
         throw EduSpaceError.notFound(`Exam not found: ${examId}`);
       }
+      const canManageExam = userContext.role === 'admin' || userContext.eduRole === 'teacher' ||
+        userContext.adminLevel === 'owner' || userContext.codeId === '0000' || userContext.codeId === exam.creatorCodeId;
+      if (!canManageExam) throw EduSpaceError.forbidden('Only the exam author or an administrator can view answer keys');
 
       // Fetch referenced questions with version content for visual editor
       const questionsWithVersions: any[] = [];

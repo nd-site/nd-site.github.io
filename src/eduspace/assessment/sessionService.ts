@@ -107,6 +107,11 @@ export class ExamSessionService {
     }
 
     // 2. Check exam visibility and classroom permissions
+    if (exam.visibility === 'private') {
+      const isPrivileged = userContext.role === 'admin' || userContext.adminLevel === 'owner' ||
+        userContext.codeId === '0000' || userContext.codeId === exam.creatorCodeId;
+      if (!isPrivileged) throw EduSpaceError.forbidden('This exam is private');
+    }
     if (exam.visibility === 'classroom' && exam.targetClassroomIds && exam.targetClassroomIds.length > 0) {
       const isPrivileged = userContext.role === 'admin' || userContext.codeId === exam.creatorCodeId;
       if (!isPrivileged && this.classroomRepo) {

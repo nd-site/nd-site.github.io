@@ -332,6 +332,34 @@ export function adaptLegacyV2QuizBundle(
   id: string,
   raw: V2QuizRawData
 ): { exam: Exam; questions: Question[]; versions: QuestionVersion[] } {
+  const nativeV3Bundle = raw.eduspaceV3;
+  if (nativeV3Bundle?.exam) {
+    const questions: Question[] = [];
+    const versions: QuestionVersion[] = [];
+    for (const entry of Array.isArray(nativeV3Bundle.questions) ? nativeV3Bundle.questions : []) {
+      if (entry?.question) questions.push(entry.question as Question);
+      if (entry?.version) versions.push(entry.version as QuestionVersion);
+    }
+    const exam = {
+      ...(nativeV3Bundle.exam as Exam),
+      title: raw.title || nativeV3Bundle.exam.title,
+      description: raw.description || nativeV3Bundle.exam.description,
+      subjectId: raw.subject || nativeV3Bundle.exam.subjectId,
+      grade: Number(raw.grade || nativeV3Bundle.exam.grade),
+      durationMinutes: Number(raw.duration || nativeV3Bundle.exam.durationMinutes),
+      visibility: raw.visibility || nativeV3Bundle.exam.visibility,
+      targetClassroomIds: Array.isArray(raw.targetClassrooms)
+        ? raw.targetClassrooms
+        : nativeV3Bundle.exam.targetClassroomIds,
+      status: raw.status || nativeV3Bundle.exam.status
+    } as Exam;
+    return {
+      exam,
+      questions,
+      versions
+    };
+  }
+
   const exam = adaptLegacyV2Quiz(id, raw);
   const qd = raw.quizData || raw;
   const rawQuestions: V2QuizRawQuestion[] = Array.isArray(qd.questions) ? qd.questions : (Array.isArray(raw.questions) ? raw.questions : []);

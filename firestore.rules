@@ -163,6 +163,16 @@ service cloud.firestore {
     match /quizzes/{quizId} {
       allow read: if true;
       allow write: if isCallerAdmin();
+
+      // Native V3 question versions include answer keys. They stay server-only
+      // inside the shared quiz aggregate and are read through the Admin SDK.
+      match /questionBank/{questionId} {
+        allow read, write: if false;
+
+        match /versions/{versionId} {
+          allow read, write: if false;
+        }
+      }
     }
 
     match /eduspace_lessons/{lessonId} {

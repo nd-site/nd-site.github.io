@@ -103,7 +103,7 @@
                             <span class="text-xs text-purple-600 font-semibold">Công cụ soạn đề trực quan</span>
                         </div>
                         <h4 class="text-sm font-bold text-slate-900 mb-1">Soạn và quản lý kho đề</h4>
-                        <p class="text-xs text-slate-600">Tạo đề trong Edu Admin. Đề được lưu vào kho <code>quizzes</code> chung và có thể mở ngay bằng EduSpace V2 hoặc V3.</p>
+                        <p class="text-xs text-slate-600">Đề lưu trong kho <code>quizzes</code> chung để EduSpace V2 và V3 cùng sử dụng.</p>
                     </div>
                 </div>
 
@@ -141,9 +141,11 @@
     </main>
 
     <script type="module">
-        // This uses the same public Firestore source as EduSpace V2: collection `quizzes`.
-        // Do not copy data into V3; V2, V3 and Edu Admin share each record by its document ID.
-        const FIRESTORE_MODULE = 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+        // Catalog metadata comes from the server, which reads the shared Firestore `quizzes` bank.
+        // Full question content stays out of this public listing response.
+        const QUIZ_CATALOG_API = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+            ? 'http://localhost:3000/api/v3/exams'
+            : 'https://nd-puce.vercel.app/api/v3/exams';
         const status = document.getElementById('v3ExamStatus');
         const grid = document.getElementById('v3ExamGrid');
         const empty = document.getElementById('v3ExamEmpty');
@@ -156,14 +158,13 @@
 
         const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
         const quizInfo = (id, data) => {
-            const detail = data.quizData || data;
-            const duration = Number(data.duration || detail.duration || detail.config?.testDuration / 60 || 45);
+            const duration = Number(data.duration || 45);
             return {
                 id: String(id),
-                title: data.title || detail.title || detail.examInfo?.examName || `Đề ${id}`,
-                description: data.description || detail.description || detail.examInfo?.description || 'Đề trong kho dùng chung EduSpace.',
-                subject: data.subject || detail.subject || detail.examInfo?.subject || '',
-                grade: data.grade || detail.grade || detail.examInfo?.grade || '',
+                title: data.title || `Đề ${id}`,
+                description: data.description || 'Đề trong kho dùng chung EduSpace.',
+                subject: data.subject || '',
+                grade: data.grade || '',
                 duration: Number.isFinite(duration) && duration > 0 ? Math.round(duration) : 45
             };
         };
@@ -187,32 +188,14 @@
             empty.classList.toggle('hidden', visible.length !== 0);
         }
 
-        async function waitForFirestore() {
-            if (window.firebaseFirestore) return window.firebaseFirestore;
-            await new Promise((resolve) => {
-                window.addEventListener('firebase-ready', resolve, { once: true });
-                window.setTimeout(resolve, 5000);
-            });
-            if (!window.firebaseFirestore) throw new Error('Không thể kết nối kho đề. Vui lòng tải lại trang.');
-            return window.firebaseFirestore;
-        }
-
-        async function findQuizByCode(rawCode) {
-            const code = rawCode.trim();
-            if (!code) return null;
-            const db = await waitForFirestore();
-            const { doc, getDoc } = await import(FIRESTORE_MODULE);
-            let snapshot = await getDoc(doc(db, 'quizzes', code.toUpperCase()));
-            if (!snapshot.exists()) snapshot = await getDoc(doc(db, 'quizzes', code));
-            return snapshot.exists() ? { id: snapshot.id, data: snapshot.data() } : null;
-        }
-
         async function loadCatalog() {
             try {
-                const db = await waitForFirestore();
-                const { collection, getDocs } = await import(FIRESTORE_MODULE);
-                const snapshot = await getDocs(collection(db, 'quizzes'));
-                quizzes = snapshot.docs.map((item) => quizInfo(item.id, item.data())).sort((a, b) => a.title.localeCompare(b.title, 'vi'));
+                const response = await fetch(QUIZ_CATALOG_API, { headers: { Accept: 'application/json' } });
+                const result = await response.json();
+                if (!response.ok || result.success !== true || !Array.isArray(result.quizzes)) {
+                    throw new Error(result.error?.message || 'Không thể tải kho đề.');
+                }
+                quizzes = result.quizzes.map((item) => quizInfo(item.id, item)).sort((a, b) => a.title.localeCompare(b.title, 'vi'));
                 status.textContent = `${quizzes.length} đề đang dùng chung với EduSpace V2 và Edu Admin.`;
                 renderCatalog();
             } catch (error) {
@@ -232,7 +215,7 @@
             submitButton.disabled = true;
             submitButton.textContent = 'Đang kiểm tra...';
             try {
-                const quiz = await findQuizByCode(code);
+                const quiz = quizzes.find((item) => item.id.toLocaleLowerCase('vi-VN') === code.toLocaleLowerCase('vi-VN'));
                 if (!quiz) throw new Error(`Không tìm thấy đề có mã “${code}”.`);
                 window.location.href = `/eduspace/v3/exam/?id=${encodeURIComponent(quiz.id)}`;
             } catch (error) {

@@ -233,22 +233,41 @@ window.loadDynamicLessons = async function(firestore) {
     if (!firestore) return;
     try {
         const { collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-        const q = query(collection(firestore, 'eduspace_lessons'), orderBy('createdAt', 'desc'));
-        const snap = await getDocs(q);
-        
         if (typeof window.quizList === 'undefined') {
             window.quizList = [];
         }
 
-        snap.forEach(doc => {
-            const data = doc.data();
-            // skip if already in quizList (e.g. from static file)
-            if (!window.quizList.some(item => item.id === doc.id)) {
-                window.quizList.push({
-                    id: doc.id,
-                    ...data
-                });
-            }
+        // Exams are loaded directly from their single source-of-truth collection.
+        const quizSnapshot = await getDocs(collection(firestore, 'quizzes'));
+        quizSnapshot.forEach(quizDoc => {
+            const quiz = quizDoc.data() || {};
+            const quizData = quiz.quizData || quiz;
+            const id = quizDoc.id;
+            const catalogItem = {
+                id,
+                quizId: id,
+                type: 'quiz',
+                title: quiz.title || quiz.eduspaceV3?.exam?.title || quizData.title || id,
+                description: quiz.description || quiz.eduspaceV3?.exam?.description || quizData.description || '',
+                class: quiz.class || quiz.grade || quizData.class || quizData.grade || '',
+                subject: quiz.subject || quizData.subject || '',
+                duration: quiz.duration || quiz.eduspaceV3?.exam?.durationMinutes || quizData.duration || 45,
+                tag: quiz.tag || '',
+                isHot: !!quiz.isHot,
+                isComingSoon: !!quiz.isComingSoon
+            };
+            const existingIndex = window.quizList.findIndex(item => String(item.id).toLowerCase() === id.toLowerCase());
+            if (existingIndex === -1) window.quizList.push(catalogItem);
+            else window.quizList[existingIndex] = { ...window.quizList[existingIndex], ...catalogItem };
+        });
+
+        // Keep lesson content separate; old quiz rows in this collection are legacy pointers only.
+        const lessonSnapshot = await getDocs(query(collection(firestore, 'eduspace_lessons'), orderBy('createdAt', 'desc')));
+        lessonSnapshot.forEach(lessonDoc => {
+            const data = lessonDoc.data() || {};
+            if (data.type === 'quiz' || data.quizId) return;
+            if (window.quizList.some(item => String(item.id).toLowerCase() === String(data.id || lessonDoc.id).toLowerCase())) return;
+            window.quizList.push({ id: data.id || lessonDoc.id, ...data });
         });
         console.log("🔥 Loaded dynamic lessons from Firestore:", window.quizList.length);
     } catch(e) {
