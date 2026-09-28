@@ -10,6 +10,7 @@
 
 import { SCHEMA_VERSION_CANONICAL, type QuestionType } from '../constants/index.ts';
 import type { Exam, ExamSection, ExamSectionQuestionRef } from '../domain/exam.ts';
+import type { ExamBlueprintSpecification } from '../domain/assessmentStructure.ts';
 import type { Question, QuestionVersion } from '../domain/question.ts';
 
 export interface V2QuizRawQuestion {
@@ -37,6 +38,17 @@ export interface V2QuizRawData {
     examLayout?: Record<string, any>;
     pointsList?: number[];
   };
+  examStructure?: {
+    enabled?: boolean;
+    counts?: {
+      multiple?: number;
+      truefalse?: number;
+      short?: number;
+      essay?: number;
+      [key: string]: number | undefined;
+    };
+    shuffleWithinType?: boolean;
+  };
   questions?: V2QuizRawQuestion[];
   quizData?: {
     title?: string;
@@ -59,6 +71,74 @@ export interface V2QuizRawData {
   examInfo?: Record<string, any>;
   createdAt?: any;
   [key: string]: any;
+}
+
+const LEGACY_MATRIX_TYPES: Record<string, QuestionType> = {
+  multiple: 'single_choice',
+  truefalse: 'true_false',
+  short: 'short_answer',
+  essay: 'essay'
+};
+
+function buildLegacyMatrixBlueprint(
+  examId: string,
+  raw: V2QuizRawData,
+  quizData: V2QuizRawData,
+  sections: ExamSection[],
+  subjectId: string,
+  grade: number,
+  durationMinutes: number,
+  totalPoints: number,
+  createdAt: string
+): ExamBlueprintSpecification | undefined {
+  const structure = quizData.examStructure || raw.examStructure;
+  if (!structure?.enabled) return undefined;
+
+  const sectionsByType = new Map(sections.map(section => [section.questionType, section]));
+  const matrixSections = Object.entries(LEGACY_MATRIX_TYPES).flatMap(([legacyType, questionType]) => {
+    const section = sectionsByType.get(questionType);
+    if (!section) return [];
+    const requested = Number(structure.counts?.[legacyType]);
+    if (!Number.isFinite(requested)) return [];
+    const questionCount = Math.max(0, Math.min(section.questions.length, Math.floor(requested)));
+    const totalSectionPoints = section.questions.reduce((sum, question) => sum + question.allocatedPoints, 0);
+    const pointsPerQuestion = section.questions.length > 0
+      ? Number((totalSectionPoints / section.questions.length).toFixed(3))
+      : 0;
+    return [{
+      id: section.id,
+      title: section.title,
+      description: 'Ma trận được chuyển đổi tự động từ Edu Admin (V2).',
+      sectionOrder: section.sectionOrder,
+      required: questionCount > 0,
+      totalPoints: Number((pointsPerQuestion * questionCount).toFixed(3)),
+      questionType,
+      questionSelection: {
+        count: questionCount,
+        pointsPerQuestion,
+        strategy: structure.shuffleWithinType ? 'random' as const : 'fixed' as const,
+        questionIds: section.questions.map(question => question.questionId)
+      }
+    }];
+  });
+
+  return {
+    id: `legacy_matrix_${examId}`,
+    schemaVersion: 1,
+    title: `Ma trận đề ${examId}`,
+    description: 'Ma trận đề V2 được dùng trực tiếp bởi bộ máy V3.',
+    subjectId,
+    grade,
+    examType: 'periodic',
+    mode: 'structured',
+    durationMinutes,
+    totalPoints,
+    sections: matrixSections,
+    creatorCodeId: raw.creatorUid || '0000',
+    status: 'active',
+    createdAt,
+    updatedAt: createdAt
+  };
 }
 
 /**
@@ -295,6 +375,18 @@ export function adaptLegacyV2Quiz(id: string, raw: V2QuizRawData): Exam {
     }
   }
 
+  const blueprint = buildLegacyMatrixBlueprint(
+    id,
+    raw,
+    qd,
+    sections,
+    subjectStr,
+    gradeNum,
+    durationMinutes,
+    totalPoints,
+    createdAtStr
+  );
+
   return {
     id,
     schemaVersion: SCHEMA_VERSION_CANONICAL,
@@ -306,6 +398,8 @@ export function adaptLegacyV2Quiz(id: string, raw: V2QuizRawData): Exam {
     durationMinutes,
     totalPoints,
     sections,
+    mode: blueprint ? 'structured' : 'full',
+    blueprint,
     visibility: raw.visibility || 'public',
     moderationStatus: raw.visibility === 'public' ? 'approved' : 'draft',
     creatorCodeId: raw.creatorUid || '0000',

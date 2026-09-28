@@ -38,18 +38,36 @@ export class FirestoreV2QuizRepository implements V2QuizReader {
       const data = snap.data() as V2QuizRawData;
       if (data.eduspaceV3?.exam) {
         const exam = data.eduspaceV3.exam as Exam;
-        const questionIds = new Set<string>();
+        const referencedVersions = new Map<string, Set<string>>();
         for (const section of exam.sections || []) {
-          for (const reference of section.questions || []) questionIds.add(reference.questionId);
+          for (const reference of section.questions || []) {
+            const versionIds = referencedVersions.get(reference.questionId) || new Set<string>();
+            if (reference.questionVersionId) versionIds.add(reference.questionVersionId);
+            referencedVersions.set(reference.questionId, versionIds);
+          }
         }
-        const bundles = await Promise.all(Array.from(questionIds, async questionId => {
-          const questionSnapshot = await ref.collection('questionBank').doc(questionId).get();
-          if (!questionSnapshot?.exists) return [];
-          const questionRecord = questionSnapshot.data() || {};
+
+        // One collection read replaces N individual question reads.  Current
+        // versions are denormalized with their question records so starting a
+        // long V3 test does not make an extra network round-trip per question.
+        const questionBankSnapshot = await ref.collection('questionBank').get();
+        const questionRecords = new Map<string, any>();
+        questionBankSnapshot.forEach((questionSnapshot: any) => {
+          questionRecords.set(questionSnapshot.id, questionSnapshot.data() || {});
+        });
+
+        const bundles = await Promise.all(Array.from(referencedVersions.entries(), async ([questionId, versionIds]) => {
+          const questionRecord = questionRecords.get(questionId);
+          if (!questionRecord) return [];
           const question = (questionRecord.question || questionRecord) as Question;
-          const references = (exam.sections || []).flatMap(section => section.questions || []).filter(item => item.questionId === questionId);
-          const versionIds = Array.from(new Set(references.map(item => item.questionVersionId || question.currentVersionId)));
-          return Promise.all(versionIds.map(async versionId => {
+          const resolvedVersionIds = Array.from(versionIds.size > 0 ? versionIds : new Set([question.currentVersionId]));
+          return Promise.all(resolvedVersionIds.map(async versionId => {
+            // New shared-bank records embed their active version.  Retain the
+            // subcollection fallback for historical pinned versions and data
+            // saved before this optimization.
+            if (questionRecord.activeVersion?.id === versionId) {
+              return { question, version: questionRecord.activeVersion as QuestionVersion };
+            }
             const versionSnapshot = await ref.collection('questionBank').doc(questionId).collection('versions').doc(versionId).get();
             return versionSnapshot?.exists ? { question, version: versionSnapshot.data() as QuestionVersion } : null;
           }));
@@ -127,10 +145,20 @@ export class FirestoreV2QuizRepository implements V2QuizReader {
         versionNumber
       };
       if (batch) {
-        batch.set(questionRef, { question, currentVersionId: versionId, currentVersionNumber: versionNumber });
+        batch.set(questionRef, {
+          question,
+          activeVersion: version,
+          currentVersionId: versionId,
+          currentVersionNumber: versionNumber
+        });
         batch.set(questionRef.collection('versions').doc(versionId), version);
       } else {
-        await questionRef.set({ question, currentVersionId: versionId, currentVersionNumber: versionNumber });
+        await questionRef.set({
+          question,
+          activeVersion: version,
+          currentVersionId: versionId,
+          currentVersionNumber: versionNumber
+        });
         await questionRef.collection('versions').doc(versionId).set(version);
       }
       return { questionId: bundle.question.id, versionId };

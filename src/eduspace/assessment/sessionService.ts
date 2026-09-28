@@ -83,6 +83,44 @@ export class ExamSessionService {
   }
 
   /**
+   * Resolves a session's immutable question references concurrently.  Fetching
+   * the parent exam first also hydrates the shared V2/V3 quiz cache when this
+   * request lands on a fresh serverless instance (for example, at submit).
+   */
+  private async resolveQuestionReferences(
+    examId: string,
+    references: Array<{ questionId: string; questionVersionId: string }>,
+    strict = true
+  ): Promise<{ questions: Map<string, Question>; versions: Map<string, QuestionVersion> }> {
+    await this.examRepo.getById(examId);
+
+    const resolved = await Promise.all(references.map(async reference => {
+      const [question, version] = await Promise.all([
+        this.questionRepo.getById(reference.questionId),
+        this.questionRepo.getVersion(reference.questionId, reference.questionVersionId)
+      ]);
+      return { reference, question, version };
+    }));
+
+    const questions = new Map<string, Question>();
+    const versions = new Map<string, QuestionVersion>();
+    for (const { reference, question, version } of resolved) {
+      if (!question && strict) {
+        throw EduSpaceError.notFound(`Question not found: ${reference.questionId}`);
+      }
+      if (!version && strict) {
+        throw EduSpaceError.notFound(
+          `Question version not found: ${reference.questionId} (${reference.questionVersionId})`
+        );
+      }
+      if (question) questions.set(question.id, question);
+      if (version) versions.set(version.id, version);
+    }
+
+    return { questions, versions };
+  }
+
+  /**
    * 1. Starts a new server-authoritative exam session.
    */
   async startSession(
@@ -153,25 +191,14 @@ export class ExamSessionService {
     }
 
     // 6. Resolve pinned QuestionVersion references from repository
-    const versionsMap = new Map<string, QuestionVersion>();
-    const questionsMap = new Map<string, Question>();
-
-    for (const section of exam.sections) {
-      for (const qItem of section.questions) {
-        const question = await this.questionRepo.getById(qItem.questionId);
-        if (!question) {
-          throw EduSpaceError.notFound(`Question not found: ${qItem.questionId}`);
-        }
-        questionsMap.set(question.id, question);
-
-        const versionId = qItem.questionVersionId || question.currentVersionId;
-        const version = await this.questionRepo.getVersion(qItem.questionId, versionId);
-        if (!version) {
-          throw EduSpaceError.notFound(`Question version not found: ${qItem.questionId} (${versionId})`);
-        }
-        versionsMap.set(version.id, version);
-      }
-    }
+    const examReferences = exam.sections.flatMap(section => section.questions.map(qItem => ({
+      questionId: qItem.questionId,
+      questionVersionId: qItem.questionVersionId
+    })));
+    const { questions: questionsMap, versions: versionsMap } = await this.resolveQuestionReferences(
+      exam.id,
+      examReferences
+    );
 
     // 7. Generate server-authoritative deterministic attemptSeed
     const attemptSeed = `seed_${exam.id}_${userContext.codeId}_${Date.now()}_${Math.floor(Math.random() * 1e6).toString(36)}`;
@@ -251,15 +278,11 @@ export class ExamSessionService {
       throw EduSpaceError.notFound(`Underlying exam not found: ${session.examId}`);
     }
 
-    const versionsMap = new Map<string, QuestionVersion>();
-    const questionsMap = new Map<string, Question>();
-
-    for (const ref of session.questionVersionReferences) {
-      const q = await this.questionRepo.getById(ref.questionId);
-      if (q) questionsMap.set(q.id, q);
-      const v = await this.questionRepo.getVersion(ref.questionId, ref.questionVersionId);
-      if (v) versionsMap.set(v.id, v);
-    }
+    const { questions: questionsMap, versions: versionsMap } = await this.resolveQuestionReferences(
+      session.examId,
+      session.questionVersionReferences,
+      false
+    );
 
     const plan = this.engine.createPlan(exam, versionsMap, session.attemptSeed, questionsMap);
     const sanitizedExam = sanitizeExecutionPlan(plan);
@@ -393,19 +416,10 @@ export class ExamSessionService {
     }
 
     // Load pinned QuestionVersions
-    const versionsMap = new Map<string, QuestionVersion>();
-    const questionsMap = new Map<string, Question>();
-
-    for (const ref of session.questionVersionReferences) {
-      const q = await this.questionRepo.getById(ref.questionId);
-      if (q) questionsMap.set(q.id, q);
-
-      const v = await this.questionRepo.getVersion(ref.questionId, ref.questionVersionId);
-      if (!v) {
-        throw EduSpaceError.internal(`Authoritative question version missing: ${ref.questionVersionId}`);
-      }
-      versionsMap.set(v.id, v);
-    }
+    const { questions: questionsMap, versions: versionsMap } = await this.resolveQuestionReferences(
+      session.examId,
+      session.questionVersionReferences
+    );
 
     // 1. Submit through Engine (validates questions, versions, strips client scores, transitions state)
     const { submission } = this.engine.submit(session, request.answers || [], versionsMap, nowStr);

@@ -62,11 +62,39 @@ export class ExamPlanner {
     // 3. Initialize PRNG for deterministic permutation
     const rng = createDeterministicRng(attemptSeed);
 
+    // A structured exam keeps its complete candidate bank in `sections`, then
+    // uses the blueprint to choose the executable subset for this attempt.
+    // This is also how legacy V2 `examStructure` matrices are represented by
+    // the compatibility adapter.  Selection is deterministic for a session's
+    // attempt seed, so resume and grading always see the same pinned refs.
+    const blueprintSections = new Map(
+      exam.mode === 'structured' && Array.isArray(exam.blueprint?.sections)
+        ? exam.blueprint.sections.map(blueprintSection => [blueprintSection.id, blueprintSection])
+        : []
+    );
+
     // 4. Process sections
     const planSections: PlanSection[] = [];
 
     for (const section of exam.sections) {
       let qRefs = [...section.questions];
+
+      const blueprintSection = blueprintSections.get(section.id);
+      const requestedCount = blueprintSection?.questionSelection?.count;
+      if (typeof requestedCount === 'number' && Number.isFinite(requestedCount)) {
+        const count = Math.max(0, Math.min(qRefs.length, Math.floor(requestedCount)));
+        if (count === 0) {
+          // A matrix may intentionally omit a question type.  Do not emit an
+          // empty section into the student plan or session references.
+          continue;
+        }
+        if (count < qRefs.length) {
+          const strategy = blueprintSection.questionSelection.strategy || 'random';
+          qRefs = strategy === 'fixed'
+            ? qRefs.slice(0, count)
+            : deterministicShuffle(qRefs, rng).slice(0, count);
+        }
+      }
 
       // Shuffle questions if policy enables it
       if (exam.policy?.shuffleQuestions) {

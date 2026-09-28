@@ -1034,7 +1034,31 @@
             document.getElementById('test-mode-selector').classList.remove('hidden');
         }
 
-        function shuffleQuestionsAndOptions(questions, useMatrix) {
+        // Accept both matrix formats emitted by Edu Admin.  Newer records use
+        // `examStructure`; older records use `config.examLayout`.
+        function getExamMatrixLayout() {
+            const legacyLayout = quizData?.config?.examLayout;
+            if (legacyLayout && typeof legacyLayout === 'object') return legacyLayout;
+
+            const structure = quizData?.examStructure;
+            if (!structure?.enabled) return null;
+            const counts = structure.counts || {};
+            return {
+                multiple: { count: Math.max(0, Number(counts.multiple) || 0) },
+                truefalse: { count: Math.max(0, Number(counts.truefalse) || 0) },
+                short: { count: Math.max(0, Number(counts.short) || 0) },
+                essay: { count: Math.max(0, Number(counts.essay) || 0) }
+            };
+        }
+
+        function getExamDurationSeconds() {
+            const configured = Number(quizData?.config?.testDuration);
+            if (Number.isFinite(configured) && configured > 0) return configured;
+            const minutes = Number(quizData?.duration);
+            return Number.isFinite(minutes) && minutes > 0 ? minutes * 60 : 0;
+        }
+
+        function shuffleQuestionsAndOptions(questions, useMatrix, matrixLayout = getExamMatrixLayout()) {
             let shuffled = questions.map(q => JSON.parse(JSON.stringify(q)));
             const types = ['multiple', 'truefalse', 'short', 'essay'];
             let orderedShuffled = [];
@@ -1046,8 +1070,8 @@
                     [qsOfType[i], qsOfType[j]] = [qsOfType[j], qsOfType[i]];
                 }
                 
-                if (useMatrix && quizData.config && quizData.config.examLayout && quizData.config.examLayout[type]) {
-                    qsOfType = qsOfType.slice(0, quizData.config.examLayout[type].count);
+                if (useMatrix && matrixLayout && matrixLayout[type]) {
+                    qsOfType = qsOfType.slice(0, matrixLayout[type].count);
                 }
                 orderedShuffled = orderedShuffled.concat(qsOfType);
             });
@@ -1080,13 +1104,15 @@
         }
 
         function startQuizWithLayout(useMatrix) {
-            if (useMatrix && quizData.config && quizData.config.examLayout) {
-                quizData.activeQuestions = shuffleQuestionsAndOptions(quizData.questions || [], true);
-                timerSeconds = quizData.config.testDuration || 0;
+            const matrixLayout = getExamMatrixLayout();
+            const configuredDuration = getExamDurationSeconds();
+            if (useMatrix && matrixLayout) {
+                quizData.activeQuestions = shuffleQuestionsAndOptions(quizData.questions || [], true, matrixLayout);
+                timerSeconds = configuredDuration || (quizData.activeQuestions.length * 60);
             } else {
-                quizData.activeQuestions = shuffleQuestionsAndOptions(quizData.questions || [], false);
-                const matrixCount = quizData.config && quizData.config.examLayout ? Object.values(quizData.config.examLayout).reduce((sum, item) => sum + item.count, 0) : quizData.questions.length;
-                timerSeconds = ((quizData.config.testDuration || 0) / matrixCount) * quizData.questions.length;
+                quizData.activeQuestions = shuffleQuestionsAndOptions(quizData.questions || [], false, matrixLayout);
+                const matrixCount = matrixLayout ? Object.values(matrixLayout).reduce((sum, item) => sum + (Number(item.count) || 0), 0) : quizData.questions.length;
+                timerSeconds = (configuredDuration / Math.max(1, matrixCount)) * quizData.questions.length;
                 if(isNaN(timerSeconds) || !isFinite(timerSeconds) || timerSeconds <= 0) timerSeconds = quizData.activeQuestions.length * 60;
                 timerSeconds = Math.round(timerSeconds);
             }

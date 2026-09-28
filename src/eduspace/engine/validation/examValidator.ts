@@ -183,8 +183,20 @@ export class ExamValidator {
       }
     }
 
+    // A structured blueprint intentionally keeps a larger candidate bank in
+    // `exam.sections` than the subset executed for an attempt.  Its actual
+    // score is calculated from the server-selected, pinned questions later in
+    // the planner, so comparing the entire candidate bank here would reject a
+    // valid matrix exam before it can start.
+    const hasBlueprintSubset = exam.mode === 'structured' && Array.isArray(exam.blueprint?.sections) &&
+      exam.blueprint.sections.some(blueprintSection => {
+        const sourceSection = exam.sections.find(section => section.id === blueprintSection.id);
+        const requested = blueprintSection.questionSelection?.count;
+        return !!sourceSection && typeof requested === 'number' && requested < sourceSection.questions.length;
+      });
+
     // Points sum validation (with standard float epsilon 0.01)
-    if (Math.abs(calculatedEffectivePoints - exam.totalPoints) > 0.01) {
+    if (!hasBlueprintSubset && Math.abs(calculatedEffectivePoints - exam.totalPoints) > 0.01) {
       throw EduSpaceError.validationError(
         `Effective exam points (${calculatedEffectivePoints.toFixed(2)}) does not match exam totalPoints (${exam.totalPoints.toFixed(2)})`
       );

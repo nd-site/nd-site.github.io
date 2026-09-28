@@ -238,11 +238,24 @@ export const App: React.FC = () => {
     if (!sessionId || !session) return;
     setIsSubmitting(true);
     try {
-      const dtoArray: SubmittedAnswerDto[] = allQuestions.map((q) => ({
-        questionId: q.questionId,
-        questionVersionId: q.questionVersionId,
-        responsePayload: answers[q.questionId] ?? null
-      }));
+      // The server grades missing answers as zero.  Do not submit synthetic
+      // `null` values: type-specific validators correctly reject an empty
+      // numeric/short/essay response, which previously made a valid attempt
+      // fail to submit whenever a student left any question blank.
+      const dtoArray: SubmittedAnswerDto[] = allQuestions.flatMap((q) => {
+        const responsePayload = answers[q.questionId];
+        if (responsePayload === undefined || responsePayload === null) return [];
+        return [{
+          questionId: q.questionId,
+          questionVersionId: q.questionVersionId,
+          responsePayload
+        }];
+      });
+
+      if (autosaveTimeoutRef.current) {
+        clearTimeout(autosaveTimeoutRef.current);
+        autosaveTimeoutRef.current = null;
+      }
 
       const submitRes = await v3ApiClient.submitSession(sessionId, dtoArray, selectedChoiceQuestionIds);
       if (submitRes.resultId) {

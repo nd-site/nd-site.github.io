@@ -87,7 +87,9 @@ export class ExamEngine {
           questionVersionId: q.questionVersionId,
           assignedSectionId: section.id,
           allocatedPoints: q.allocatedPoints,
-          orderIndex: q.orderIndex
+          orderIndex: q.orderIndex,
+          choiceGroupId: q.choiceGroupId,
+          groupId: q.groupId
         });
       }
     }

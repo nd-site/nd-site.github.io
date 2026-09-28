@@ -2414,6 +2414,15 @@ ${text}
                     counts: structCounts,
                     shuffleWithinType: structShuffle
                 };
+                // Keep the historical V2 layout shape in sync with the
+                // canonical Admin matrix.  Existing runners understand both;
+                // this lets downloaded/static V2 exams read the same matrix.
+                const examLayout = {
+                    multiple: { count: structCounts.multiple },
+                    truefalse: { count: structCounts.truefalse },
+                    short: { count: structCounts.short },
+                    essay: { count: structCounts.essay }
+                };
 
                 let calculatedTotalPoints = questions.reduce((sum, q) => {
                     const p = q.points !== undefined ? Number(q.points) : getDefaultPoints(q.type || 'multiple');
@@ -2432,7 +2441,7 @@ ${text}
                     book: book,
                     totalPoints: calculatedTotalPoints,
                     examStructure: examStructure,
-                    config: { testDuration: duration * 60 },
+                    config: { testDuration: duration * 60, examLayout },
                     questions: questions
                 };
 

@@ -58,6 +58,8 @@ export const AuthorApp: React.FC = () => {
   const [durationMinutes, setDurationMinutes] = useState<number>(45);
   const [totalPoints, setTotalPoints] = useState<number>(10);
   const [mode, setMode] = useState<'full' | 'structured'>('structured');
+  const [blueprintCounts, setBlueprintCounts] = useState<Record<string, number>>({});
+  const [blueprintShuffle, setBlueprintShuffle] = useState<boolean>(true);
 
   // Core Assessment Entities
   const [sections, setSections] = useState<AuthorSection[]>([
@@ -126,6 +128,15 @@ export const AuthorApp: React.FC = () => {
         setDurationMinutes(data.exam.durationMinutes || 45);
         setTotalPoints(data.exam.totalPoints || 10);
         setMode(data.exam.mode || 'full');
+        if (Array.isArray(data.exam.blueprint?.sections)) {
+          setBlueprintCounts(Object.fromEntries(data.exam.blueprint.sections.map((section: any) => [
+            section.id,
+            Math.max(0, Number(section.questionSelection?.count) || 0)
+          ])));
+          setBlueprintShuffle(data.exam.blueprint.sections.some(
+            (section: any) => section.questionSelection?.strategy !== 'fixed'
+          ));
+        }
         if (Array.isArray(data.exam.sections)) {
           setSections(data.exam.sections);
         }
@@ -180,6 +191,50 @@ export const AuthorApp: React.FC = () => {
     }
     return Number(total.toFixed(2));
   }, [questions, choiceGroups]);
+
+  function buildBlueprint() {
+    if (mode !== 'structured') return undefined;
+    const now = new Date().toISOString();
+    return {
+      id: `blueprint_${examId}`,
+      schemaVersion: 1 as const,
+      title: `Ma trận ${title || examId}`,
+      description: 'Cấu trúc đề được tạo trong EduSpace V3.',
+      subjectId,
+      grade,
+      examType: 'custom',
+      mode: 'structured' as const,
+      durationMinutes,
+      totalPoints,
+      sections: sections.map(section => {
+        const candidates = questions.filter(question => question.sectionId === section.id);
+        const requested = blueprintCounts[section.id];
+        const count = Math.max(0, Math.min(candidates.length, Number.isFinite(requested) ? Math.floor(requested) : candidates.length));
+        const averagePoints = candidates.length > 0
+          ? candidates.reduce((sum, question) => sum + Number(question.allocatedPoints || 0), 0) / candidates.length
+          : 0;
+        return {
+          id: section.id,
+          title: section.title,
+          description: section.description,
+          sectionOrder: section.sectionOrder,
+          required: count > 0,
+          totalPoints: Number((averagePoints * count).toFixed(3)),
+          questionType: section.questionType,
+          questionSelection: {
+            count,
+            pointsPerQuestion: Number(averagePoints.toFixed(3)),
+            strategy: blueprintShuffle ? 'random' as const : 'fixed' as const,
+            questionIds: candidates.map(question => question.id)
+          }
+        };
+      }),
+      creatorCodeId: 'current-user',
+      status: 'active' as const,
+      createdAt: now,
+      updatedAt: now
+    };
+  }
 
   // Add Question
   function handleAddQuestion(sectionId: string, type: string = 'single_choice') {
@@ -244,6 +299,7 @@ export const AuthorApp: React.FC = () => {
         durationMinutes,
         totalPoints,
         mode,
+        blueprint: buildBlueprint(),
         sections: sections.map(s => ({
           ...s,
           questions: questions
@@ -297,6 +353,7 @@ export const AuthorApp: React.FC = () => {
         durationMinutes,
         totalPoints,
         mode,
+        blueprint: buildBlueprint(),
         sections: sections.map(s => ({
           ...s,
           questions: questions
@@ -1081,6 +1138,55 @@ export const AuthorApp: React.FC = () => {
                   </select>
                 </div>
               </div>
+
+              {mode === 'structured' && (
+                <div className="rounded-xl border border-indigo-200 bg-indigo-50/50 p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="text-xs font-bold text-indigo-950">Ma trận lấy câu hỏi</div>
+                      <p className="mt-0.5 text-[11px] leading-relaxed text-indigo-800">
+                        Mỗi lần làm bài chỉ dùng số câu đã cấu hình cho từng phần. Câu nguồn vẫn được giữ trong kho đề chung.
+                      </p>
+                    </div>
+                    <label className="flex shrink-0 items-center gap-1.5 text-[11px] font-semibold text-indigo-900">
+                      <input
+                        type="checkbox"
+                        checked={blueprintShuffle}
+                        onChange={e => setBlueprintShuffle(e.target.checked)}
+                        className="rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500"
+                      />
+                      Rút ngẫu nhiên
+                    </label>
+                  </div>
+
+                  <div className="space-y-2">
+                    {sections.map(section => {
+                      const available = questions.filter(question => question.sectionId === section.id).length;
+                      const configured = blueprintCounts[section.id];
+                      return (
+                        <label key={section.id} className="flex items-center justify-between gap-3 rounded-lg border border-indigo-100 bg-white px-3 py-2">
+                          <span className="min-w-0 text-xs font-semibold text-slate-700 truncate">{section.title}</span>
+                          <span className="flex items-center gap-1.5 text-[11px] text-slate-500 whitespace-nowrap">
+                            Lấy
+                            <input
+                              type="number"
+                              min="0"
+                              max={available}
+                              value={configured === undefined ? available : configured}
+                              onChange={e => setBlueprintCounts(previous => ({
+                                ...previous,
+                                [section.id]: Math.max(0, Math.min(available, parseInt(e.target.value, 10) || 0))
+                              }))}
+                              className="w-14 rounded-md border border-slate-300 px-1.5 py-1 text-center font-mono text-xs text-slate-800"
+                            />
+                            / {available} câu
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">Mô tả bài thi</label>

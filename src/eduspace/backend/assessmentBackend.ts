@@ -612,6 +612,25 @@ export async function handleAssessmentApi(
         }
       }
 
+      const blueprintSections = examToValidate.mode === 'structured' && Array.isArray(examToValidate.blueprint?.sections)
+        ? examToValidate.blueprint.sections
+        : [];
+      const hasBlueprintSubset = blueprintSections.some((blueprintSection: any) => {
+        const sourceSection = sections.find((section: any) => section.id === blueprintSection.id);
+        return sourceSection && Number(blueprintSection.questionSelection?.count) < (sourceSection.questions || []).length;
+      });
+      if (hasBlueprintSubset) {
+        questionCount = blueprintSections.reduce(
+          (sum: number, blueprintSection: any) => sum + Math.max(0, Number(blueprintSection.questionSelection?.count) || 0),
+          0
+        );
+        totalAllocated = blueprintSections.reduce(
+          (sum: number, blueprintSection: any) => sum + Math.max(0, Number(blueprintSection.totalPoints) || 0),
+          0
+        );
+        warnings.push('Đang kiểm tra điểm của tập câu hỏi được ma trận chọn, không phải toàn bộ kho câu hỏi.');
+      }
+
       const totalTarget = Number(examToValidate.totalPoints || 10);
       const choiceGroups = [
         ...(Array.isArray(examToValidate.choiceGroups) ? examToValidate.choiceGroups : []),
