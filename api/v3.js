@@ -164,6 +164,7 @@ export default async function handleV3Assessment(req, res, customOptions = {}) {
         auth = auth || canonicalFoundation.getAuth();
       } catch (err) {
         if (isProduction) {
+          console.error('[V3Assessment] Production Admin SDK initialization failed:', err.message);
           res.statusCode = 503;
           res.setHeader('Content-Type', 'application/json; charset=utf-8');
           res.end(JSON.stringify({

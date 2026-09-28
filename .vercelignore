@@ -1,0 +1,33 @@
+# Static pages are released through Firebase Hosting and GitHub Pages. Keep
+# them out of the Vercel deployment, but retain the assessment API source.
+admin/
+android/
+assets/
+auth/
+beta/
+docs/
+eduspace/
+font/
+games/
+live_download/
+ND_bot_LotusChat/
+psychology/
+scan2word/
+server/
+test/
+tests/
+utils/
+_agent/
+.agents/
+.styles/
+src/miniworld/
+src/timetable/
+!src/
+!src/eduspace/
+!src/eduspace/**
+!api/
+!api/dist/
+!api/dist/**
+!functions/
+!functions/src/
+!functions/src/**
