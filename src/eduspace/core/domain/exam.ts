@@ -56,6 +56,7 @@ export interface ExamSectionQuestionRef {
   orderIndex: number;
   choiceGroupId?: string;     // If this question belongs to a ChoiceGroup
   groupId?: string;           // If this question belongs to a QuestionGroup
+  sourceSetId?: string;       // Optional shared source material for this question
 }
 
 export interface ExamSection {
@@ -71,13 +72,18 @@ export interface ExamSection {
 }
 
 export interface ExamPolicy {
-  shuffleQuestions: boolean;
-  shuffleOptions: boolean;
-  maxAttempts: number;
-  allowReviewAfterSubmit: boolean;
-  showExplanationsImmediately: boolean;
-  requireContinuousFocus: boolean;
-  allowRetake: boolean;
+  shuffleQuestions?: boolean;
+  shuffleOptions?: boolean;
+  maxAttempts?: number;
+  allowReviewAfterSubmit?: boolean;
+  /**
+   * Backward-compatible authoring alias. New persisted exams must use
+   * `allowReviewAfterSubmit`; the normalizer maps this legacy field.
+   */
+  allowReview?: boolean;
+  showExplanationsImmediately?: boolean;
+  requireContinuousFocus?: boolean;
+  allowRetake?: boolean;
   openTime?: string;
   deadlineTime?: string;
 }

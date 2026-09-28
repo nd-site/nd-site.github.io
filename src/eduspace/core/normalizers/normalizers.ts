@@ -114,7 +114,7 @@ export function normalizeExam(id: string, raw: unknown): Exam {
       shuffleQuestions: !!rawObj.policy?.shuffleQuestions,
       shuffleOptions: !!rawObj.policy?.shuffleOptions,
       maxAttempts: Number(rawObj.policy?.maxAttempts ?? 0),
-      allowReviewAfterSubmit: rawObj.policy?.allowReviewAfterSubmit ?? true,
+      allowReviewAfterSubmit: rawObj.policy?.allowReviewAfterSubmit ?? rawObj.policy?.allowReview ?? true,
       showExplanationsImmediately: rawObj.policy?.showExplanationsImmediately ?? true,
       requireContinuousFocus: !!rawObj.policy?.requireContinuousFocus,
       allowRetake: rawObj.policy?.allowRetake ?? true

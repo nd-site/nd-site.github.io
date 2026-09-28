@@ -156,17 +156,39 @@ export default async function handleV3Assessment(req, res, customOptions = {}) {
   let auth = customOptions.auth;
 
   if (!db || !auth) {
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
     if (process.env.FIREBASE_SERVICE_ACCOUNT) {
       try {
         const canonicalFoundation = require('../functions/src/index');
         db = db || canonicalFoundation.getFirestoreDb();
         auth = auth || canonicalFoundation.getAuth();
       } catch (err) {
-        console.warn('[V3Assessment] Fallback to local dev context due to Admin SDK error:', err.message);
-        db = db || createLocalDevDb();
-        auth = auth || createLocalDevAuth();
+        if (isProduction) {
+          res.statusCode = 503;
+          res.setHeader('Content-Type', 'application/json; charset=utf-8');
+          res.end(JSON.stringify({
+            success: false,
+            error: { code: 'SERVICE_UNAVAILABLE', message: 'Dịch vụ khảo thí đang tạm thời không khả dụng.' }
+          }));
+          return;
+        }
+        console.warn('[V3Assessment] Local development fallback due to Admin SDK error:', err.message);
       }
-    } else {
+    }
+
+    // Never permit the mock identity/database outside local development.
+    // A missing production service account must fail closed rather than silently
+    // issuing a privileged development identity.
+    if (!db || !auth) {
+      if (isProduction) {
+        res.statusCode = 503;
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        res.end(JSON.stringify({
+          success: false,
+          error: { code: 'SERVICE_UNAVAILABLE', message: 'Dịch vụ khảo thí chưa được cấu hình.' }
+        }));
+        return;
+      }
       db = db || createLocalDevDb();
       auth = auth || createLocalDevAuth();
     }

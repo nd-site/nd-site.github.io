@@ -459,11 +459,13 @@ export async function handleAssessmentApi(
         questionPools: examData.questionPools || [],
         blueprint: examData.blueprint,
         policy: examData.policy || {
-          allowReview: true,
+          allowReviewAfterSubmit: true,
           shuffleQuestions: false,
           shuffleOptions: false,
           maxAttempts: 1,
-          passingThresholdPercentage: 50
+          showExplanationsImmediately: false,
+          requireContinuousFocus: false,
+          allowRetake: false
         },
         creatorCodeId: userContext.codeId,
         createdAt: examData.createdAt || nowStr,
