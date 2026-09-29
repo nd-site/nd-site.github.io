@@ -200,7 +200,7 @@
     <script src="/assets/js/data_modal.js"></script>
     <script src="/assets/js/ai.js" defer></script>
     <script src="/assets/js/contact-admin.js" defer></script>
-    <script src="/assets/js/version.js?v=1.9.28.2220" defer></script>
+    <script src="/assets/js/version.js?v=1.9.29.1239" defer></script>
 </head>
 
 <body class="pb-36 bg-slate-50 text-slate-800">
@@ -1275,6 +1275,41 @@
             return 0.25;
         }
 
+        function normalizeShortDecimalAnswer(value) {
+            const raw = String(value ?? '').trim().replace(',', '.').replace(/[^0-9.\-]/g, '');
+            const hasMinus = raw.startsWith('-');
+            const unsigned = raw.replace(/-/g, '');
+            const parts = unsigned.split('.');
+            const normalized = (hasMinus ? '-' : '') + (parts[0] || '') + (parts.length > 1 ? '.' + parts.slice(1).join('') : '');
+            return normalized.slice(0, 4);
+        }
+
+        function isValidShortDecimalAnswer(value) {
+            const normalized = normalizeShortDecimalAnswer(value);
+            return normalized === String(value ?? '').trim().replace(',', '.')
+                && /^-?(?:\d+|\d*\.\d+)$/.test(normalized);
+        }
+
+        function getInvalidShortAnswerMessage() {
+            const invalidIndex = questions.findIndex(q => q.type === 'short' && !isValidShortDecimalAnswer(q.correct));
+            return invalidIndex >= 0
+                ? `Câu ${invalidIndex + 1}: đáp án trả lời ngắn phải là số thập phân, tối đa 4 ký tự.`
+                : '';
+        }
+
+        function normalizeShortAnswersInList(items) {
+            const invalidIndex = items.findIndex(q => q?.type === 'short' && !isValidShortDecimalAnswer(q.correct));
+            if (invalidIndex >= 0) {
+                return `Câu ${invalidIndex + 1}: đáp án trả lời ngắn phải là số thập phân, tối đa 4 ký tự.`;
+            }
+            items.forEach(q => {
+                if (q?.type === 'short') q.correct = normalizeShortDecimalAnswer(q.correct);
+            });
+            return '';
+        }
+
+        window.normalizeShortDecimalAnswer = normalizeShortDecimalAnswer;
+
         window.updateQuestionPoints = function(idx, val) {
             if (!questions[idx]) return;
             questions[idx].points = Math.max(0, parseFloat(val) || 0);
@@ -1551,8 +1586,8 @@
             } else if (qType === 'short') {
                 return `
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 mb-1">Đáp án chuẩn (nhập số hoặc chuỗi ngắn):</label>
-                        <input type="text" value="${q.correct !== undefined ? q.correct : ''}" oninput="window.updateShortCorrect(${idx}, this.value)" placeholder="vd: 4, -1.5, pi/2..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-blue-700 focus:bg-white">
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Đáp án số thập phân <span class="font-medium">(tối đa 4 ký tự)</span>:</label>
+                        <input type="text" inputmode="decimal" maxlength="4" pattern="-?[0-9]*[.,]?[0-9]*" title="Chỉ nhập số thập phân, tối đa 4 ký tự." value="${q.correct !== undefined ? normalizeShortDecimalAnswer(q.correct) : ''}" oninput="this.value = window.normalizeShortDecimalAnswer(this.value); window.updateShortCorrect(${idx}, this.value)" placeholder="vd: -1.5" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-blue-700 focus:bg-white">
                     </div>
                 `;
             } else {
@@ -1621,7 +1656,10 @@
             questions[idx].correctAnswers[oIdx] = val;
             renderQuestions();
         };
-        window.updateShortCorrect = function(idx, val) { questions[idx].correct = val; };
+        window.updateShortCorrect = function(idx, val) {
+            if (!questions[idx]) return;
+            questions[idx].correct = questions[idx].type === 'short' ? normalizeShortDecimalAnswer(val) : val;
+        };
         window.updateExplanation = function(idx, val) { questions[idx].explanation = val; };
         window.clearAllQuestions = function() {
             if (confirm("Bạn có chắc chắn muốn xóa toàn bộ danh sách câu hỏi đang soạn?")) {
@@ -1745,7 +1783,7 @@ QUY TẮC:
 1. Nhận diện chính xác 4 dạng câu:
    - "multiple": trắc nghiệm 4 lựa chọn (options chứa 4 phần tử A,B,C,D không kèm nhãn, correct là index 0-3).
    - "truefalse": đúng/sai 4 ý (options chứa 4 mệnh đề a,b,c,d, correctAnswers là mảng 4 boolean [true/false]).
-   - "short": trả lời ngắn / điền số (correct là chuỗi đáp án số hoặc từ ngắn).
+   - "short": trả lời ngắn / điền số (correct BẮT BUỘC là chuỗi số thập phân dùng dấu chấm, tối đa 4 ký tự; ví dụ "4", "0.5", "-1.5"; không đơn vị, chữ, phân số hoặc biểu thức).
    - "essay": tự luận.
 2. Công thức toán/lý/hóa viết dưới dạng LaTeX chuẩn $...$ hoặc $$...$$.
 3. Giữ nguyên câu từ, dữ kiện, giải thích (nếu có).
@@ -1767,6 +1805,11 @@ ${text}
                 }
 
                 if (Array.isArray(parsed) && parsed.length > 0) {
+                    const shortAnswerError = normalizeShortAnswersInList(parsed);
+                    if (shortAnswerError) {
+                        showToast(`AI trả về dữ liệu chưa hợp lệ. ${shortAnswerError}`, true);
+                        return;
+                    }
                     questions = parsed;
                     renderQuestions();
                     showToast(`🎉 AI đã bóc tách thành công ${parsed.length} câu hỏi!`);
@@ -1924,7 +1967,7 @@ ${text}
                 `2. CẤU TRÚC TỪNG DẠNG CÂU HỎI:`,
                 `   - "multiple": options gồm 4 chuỗi phương án không kèm nhãn A, B, C, D; correct là chỉ số 0, 1, 2 hoặc 3.`,
                 `   - "truefalse": options gồm 4 mệnh đề a, b, c, d; correctAnswers là mảng 4 boolean [true/false].`,
-                `   - "short": correct là chuỗi đáp án số hoặc từ ngắn gọn.`,
+                `   - "short": correct BẮT BUỘC là chuỗi số thập phân dùng dấu chấm, tối đa 4 ký tự (ví dụ: "4", "0.5", "-1.5"); không dùng đơn vị, chữ, phân số hoặc biểu thức.`,
                 `3. LỜI GIẢI THÍCH (explanation): Mỗi câu BẮT BUỘC có lời giải chi tiết, rõ ràng từng bước bằng tiếng Việt.`,
                 `4. ĐẦU RA: Bắt buộc trả về DUY NHẤT một mảng JSON thuần (JSON array), không kèm theo văn bản giải thích ngoài khối JSON.`,
                 ``,
@@ -1993,10 +2036,14 @@ ${text}
                             explanation: q.explanation || ''
                         });
                     } else if (type === 'short') {
+                        const shortCorrect = q.correct !== undefined ? String(q.correct) : '';
+                        if (!isValidShortDecimalAnswer(shortCorrect)) {
+                            throw new Error(`Câu ${i + 1}: đáp án trả lời ngắn phải là số thập phân, tối đa 4 ký tự.`);
+                        }
                         validated.push({
                             type: 'short',
                             question: q.question,
-                            correct: q.correct !== undefined ? String(q.correct) : '',
+                            correct: normalizeShortDecimalAnswer(shortCorrect),
                             points: qPoints,
                             explanation: q.explanation || ''
                         });
@@ -2265,7 +2312,7 @@ ${text}
                 `1. Nhận diện chuẩn 4 dạng câu:`,
                 `   - "multiple": Trắc nghiệm 4 lựa chọn (options gồm 4 phương án, correct là chỉ số 0-3).`,
                 `   - "truefalse": Đúng / Sai 4 ý (options gồm 4 mệnh đề, correctAnswers là [true, false, true, false]).`,
-                `   - "short": Trả lời ngắn / điền số (correct là chuỗi đáp án ngắn).`,
+                `   - "short": Trả lời ngắn / điền số (correct BẮT BUỘC là chuỗi số thập phân dùng dấu chấm, tối đa 4 ký tự; ví dụ "4", "0.5", "-1.5"; không đơn vị, chữ, phân số hoặc biểu thức).`,
                 `   - "essay": Tự luận.`,
                 `2. Công thức toán/lý/hóa bắt buộc dùng LaTeX ($...$).`,
                 `3. Trả về DUY NHẤT một mảng JSON thuần (JSON array):`,
@@ -2330,6 +2377,12 @@ ${text}
                         points: q.points !== undefined ? Number(q.points) : getDefaultPoints(t)
                     };
                 });
+
+                const shortAnswerError = normalizeShortAnswersInList(qList);
+                if (shortAnswerError) {
+                    showToast(`Không nạp JSON. ${shortAnswerError}`, true);
+                    return;
+                }
 
                 // Nếu có cấu hình cấu trúc đề trong JSON
                 const struct = (parsed && (parsed.examStructure || (parsed.quizData && parsed.quizData.examStructure)));
@@ -2404,6 +2457,12 @@ ${text}
 
             if (questions.length === 0) {
                 showToast("Đề thi phải có ít nhất 1 câu hỏi!", true);
+                return;
+            }
+
+            const shortAnswerError = getInvalidShortAnswerMessage();
+            if (shortAnswerError) {
+                showToast(shortAnswerError, true);
                 return;
             }
 

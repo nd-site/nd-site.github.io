@@ -18,10 +18,16 @@
     <script type="module" src="/assets/js/firebase-init.js"></script>
     <script src="/assets/js/api-service.js"></script>
     <script src="/assets/js/data_modal.js"></script>
-    <script src="/assets/js/ai.js" defer></script>
+    <script>
+        // EduAI is a practice-only aid on the exam runner.  Keep it closed
+        // until the learner explicitly enters Practice mode.
+        window.eduAIExamModeGate = true;
+        window.eduAIShowOverride = false;
+    </script>
+    <script src="/assets/js/edu_ai.js?v=1.9.29.1239" defer></script>
     <script src="/assets/js/contact-admin.js" defer></script>
     <script src="/assets/js/banner_eduspace.js" defer></script>
-    <script src="/assets/js/version.js" defer></script>
+    <script src="/assets/js/version.js?v=1.9.29.1239" defer></script>
     <script src="/font/font.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
@@ -765,6 +771,64 @@
         let aiFeedbacks = []; 
 
         let questionChecked = [];
+        let practiceFeedback = [];
+
+        function normalizeShortDecimalAnswer(value) {
+            const raw = String(value ?? '').trim().replace(',', '.').replace(/[^0-9.\-]/g, '');
+            const hasMinus = raw.startsWith('-');
+            const unsigned = raw.replace(/-/g, '');
+            const parts = unsigned.split('.');
+            const normalized = (hasMinus ? '-' : '') + (parts[0] || '') + (parts.length > 1 ? '.' + parts.slice(1).join('') : '');
+            return normalized.slice(0, 4);
+        }
+
+        function isShortAnswerCorrect(answer, correct) {
+            const normalizedAnswer = normalizeShortDecimalAnswer(answer);
+            const normalizedCorrect = normalizeShortDecimalAnswer(correct);
+            const isDecimal = /^-?(?:\d+|\d*\.\d+)$/.test(normalizedAnswer)
+                && /^-?(?:\d+|\d*\.\d+)$/.test(normalizedCorrect);
+            return isDecimal
+                ? Number(normalizedAnswer) === Number(normalizedCorrect)
+                : String(answer ?? '').trim().toLowerCase() === String(correct ?? '').trim().toLowerCase();
+        }
+
+        function buildPracticeFeedbackSnapshot() {
+            practiceFeedback = (quizData?.activeQuestions || []).map((question, order) => ({
+                order,
+                type: question.type,
+                options: Array.isArray(question.options) ? [...question.options] : [],
+                correct: question.correct,
+                correctAnswers: Array.isArray(question.correctAnswers)
+                    ? [...question.correctAnswers]
+                    : (Array.isArray(question.correct) ? [...question.correct] : []),
+                suggested: question.suggested || '',
+                explanation: String(question.explanation || '').trim()
+            }));
+        }
+
+        function getPracticeFeedbackForQuestion(index = currentIndex) {
+            if (quizMode !== 'practice' || !questionChecked[index]) return null;
+            return practiceFeedback[index] || null;
+        }
+
+        function formatPracticeCorrectAnswer(feedback) {
+            if (!feedback) return 'Chưa có đáp án gợi ý.';
+            if (feedback.type === 'multiple') {
+                const letter = Number.isInteger(feedback.correct) ? String.fromCharCode(65 + feedback.correct) : '?';
+                const option = feedback.options?.[feedback.correct];
+                return option ? `${letter}. ${option}` : letter;
+            }
+            if (feedback.type === 'truefalse') {
+                return (feedback.options || []).map((_, index) =>
+                    `${String.fromCharCode(97 + index)}. ${feedback.correctAnswers?.[index] ? 'Đúng' : 'Sai'}`
+                ).join('; ');
+            }
+            const hasCorrect = feedback.correct !== undefined && feedback.correct !== null && String(feedback.correct).trim() !== '';
+            return String(hasCorrect ? feedback.correct : (feedback.suggested || 'Chưa có đáp án gợi ý.'));
+        }
+
+        // Used by EduAI only after a Practice answer has been checked.
+        window.getPracticeFeedbackForQuestion = getPracticeFeedbackForQuestion;
 
         window.addEventListener('load', async () => {
             try {
@@ -965,9 +1029,12 @@
                 if (q.type === 'short') {
                     textarea.type = 'text';
                     textarea.maxLength = 4;
-                    // Restrict input to 0-9, ., -, ,
+                    textarea.inputMode = 'decimal';
+                    textarea.pattern = '-?[0-9]*[.,]?[0-9]*';
+                    textarea.title = 'Chỉ nhập số thập phân, tối đa 4 ký tự.';
+                    // Restrict input to a normalized decimal answer.
                     textarea.oninput = (e) => { 
-                        e.target.value = e.target.value.replace(/[^0-9.,\-]/g, '');
+                        e.target.value = normalizeShortDecimalAnswer(e.target.value);
                         userAnswers[currentIndex] = e.target.value; 
                         updateMap(); saveActiveSession(); updateProgressOnly(); updateNavButtons();
                     };
@@ -983,16 +1050,21 @@
 
             const expBox = document.getElementById('explanation-box');
             if (quizMode === 'practice' && questionChecked[currentIndex]) {
+                const feedback = getPracticeFeedbackForQuestion(currentIndex);
+                if (!feedback) {
+                    expBox.classList.add('hidden');
+                    return;
+                }
                 expBox.classList.remove('hidden');
                 
                 let isCorrect = false;
                 if (q.type === 'multiple') {
-                    isCorrect = userAnswers[currentIndex] === q.correct;
+                    isCorrect = userAnswers[currentIndex] === feedback.correct;
                 } else if (q.type === 'short') {
-                    isCorrect = String(userAnswers[currentIndex]).trim().toLowerCase() === String(q.correct).trim().toLowerCase();
+                    isCorrect = isShortAnswerCorrect(userAnswers[currentIndex], feedback.correct);
                 } else if (q.type === 'truefalse') {
                     let cnt = 0;
-                    const cArr = q.correctAnswers || q.correct || [];
+                    const cArr = feedback.correctAnswers || [];
                     const ua = userAnswers[currentIndex] || {};
                     (q.options || []).forEach((_, k) => { if (ua[k] === cArr[k]) cnt++; });
                     isCorrect = cnt === (q.options || []).length;
@@ -1030,11 +1102,8 @@
                     aiLink.classList.remove('hidden');
                 }
 
-                let expText = (q.explanation || "Không có giải thích chi tiết.").trim();
-                if (q.type === 'multiple') {
-                    const correctLetter = String.fromCharCode(65 + q.correct);
-                    expText = `**Đáp án đúng là: ${correctLetter}**\n\n` + expText;
-                }
+                const explanation = feedback.explanation || "Không có giải thích chi tiết.";
+                let expText = `**Đáp án đúng: ${formatPracticeCorrectAnswer(feedback)}**\n\n${explanation}`;
                 if (typeof marked !== 'undefined') expText = marked.parse(expText);
                 expTextContainer.innerHTML = parseMedia(expText);
             } else {
@@ -1334,18 +1403,17 @@
             list.innerHTML = '';
             
             quizData.activeQuestions.forEach((q, i) => {
+                const feedback = practiceFeedback[i];
                 const ans = userAnswers[i];
                 let isCorrect = false;
                 
                 if (q.type === 'multiple') {
-                    isCorrect = ans === q.correct;
+                    isCorrect = ans === (feedback?.correct ?? q.correct);
                 } else if (q.type === 'short') {
-                    const cleanUser = String(ans || '').trim().toLowerCase();
-                    const cleanCorrect = String(q.correct).trim().toLowerCase();
-                    isCorrect = cleanUser === cleanCorrect && ans !== null && ans !== undefined;
+                    isCorrect = isShortAnswerCorrect(ans, feedback?.correct ?? q.correct) && ans !== null && ans !== undefined;
                 } else if (q.type === 'truefalse') {
                     let cnt = 0;
-                    const correctArr = q.correctAnswers || q.correct || [];
+                    const correctArr = feedback?.correctAnswers || q.correctAnswers || q.correct || [];
                     const ua = ans || {};
                     (q.options || []).forEach((_, k) => { if (ua[k] === correctArr[k]) cnt++; });
                     isCorrect = cnt === (q.options || []).length; 
@@ -1384,7 +1452,7 @@
                 let answerDetail = '';
                 if (q.type === 'multiple') {
                     const userOpt = ans !== null ? String.fromCharCode(65 + ans) : 'Chưa chọn';
-                    const correctOpt = String.fromCharCode(65 + q.correct);
+                    const correctOpt = formatPracticeCorrectAnswer(feedback || { type: q.type, correct: q.correct, options: q.options });
                     answerDetail = `
                         <div class="grid grid-cols-2 gap-2 mt-3">
                             <div class="p-3 bg-slate-50 rounded border border-slate-200">
@@ -1399,7 +1467,7 @@
                      `;
                 } else if (q.type === 'truefalse') {
                     answerDetail = `<div class="mt-3 space-y-2">`;
-                    const correctArr = q.correctAnswers || q.correct || [];
+                    const correctArr = feedback?.correctAnswers || q.correctAnswers || q.correct || [];
                     (q.options || []).forEach((st, idx) => {
                         const ua = ans ? ans[idx] : null;
                         const ca = correctArr[idx];
@@ -1426,7 +1494,7 @@
                             </div>
                             <div class="p-3 bg-emerald-50 border border-emerald-100 rounded">
                                 <p class="text-[10px] font-bold text-emerald-600 uppercase mb-1">Đáp án gợi ý</p>
-                                <div class="text-emerald-800 font-bold">${q.correct || q.suggested || 'Không có gợi ý.'}</div>
+                                <div class="text-emerald-800 font-bold">${formatPracticeCorrectAnswer(feedback || { type: q.type, correct: q.correct, suggested: q.suggested })}</div>
                             </div>
                         </div>
                      `;
@@ -1434,7 +1502,7 @@
 
                 let parsedQ = (q.question || '').trim();
                 if (typeof marked !== 'undefined') parsedQ = marked.parse(parsedQ);
-                let parsedExp = (q.explanation || 'Không có giải thích.').trim();
+                let parsedExp = (feedback?.explanation || q.explanation || 'Không có giải thích.').trim();
                 if (typeof marked !== 'undefined') parsedExp = marked.parse(parsedExp);
 
                 content.innerHTML = `
@@ -1562,6 +1630,10 @@
 
         function startQuiz(mode, resumed = false) {
             quizMode = mode;
+            // Capture answer + explanation in the final, shuffled exam order.
+            // The renderer never tries to recover feedback through raw data indexes.
+            practiceFeedback = [];
+            if (mode === 'practice') buildPracticeFeedbackSnapshot();
             document.body.classList.add('quiz-active');
             document.getElementById('test-mode-selector').classList.add('hidden');
             document.getElementById('start-screen').classList.add('hidden');
@@ -1687,9 +1759,7 @@
                 } else if (q.type === 'short') {
                     const maxPts = q.points !== undefined ? q.points : (layout.short?.pointsPerQ || 0.5);
                     if (ans !== null && ans !== undefined && ans !== '') {
-                        let formattedAns = ans.toString().trim().replace(/,/g, '.');
-                        let formattedCorrect = (q.correct || '').toString().trim().replace(/,/g, '.');
-                        if (formattedAns === formattedCorrect) {
+                        if (isShortAnswerCorrect(ans, q.correct)) {
                             points = maxPts;
                         }
                     }
@@ -1832,20 +1902,26 @@
         }
 
         async function askEduAI() {
+            if (quizMode !== 'practice' || !questionChecked[currentIndex]) {
+                showModal("EduAI chỉ dùng khi luyện tập", "Hãy hoàn thành và kiểm tra câu hiện tại trước khi hỏi EduAI.", "info");
+                return;
+            }
             const q = quizData.activeQuestions[currentIndex];
+            const feedback = getPracticeFeedbackForQuestion(currentIndex);
+            if (!q || !feedback) return;
             if (window.eduAI_ask) {
                 let prompt = "";
                 if (q.type === 'multiple') {
                     const userOpt = (userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== undefined) 
                         ? String.fromCharCode(65 + userAnswers[currentIndex]) 
                         : 'Chưa chọn';
-                    prompt = `Hãy giải thích chi tiết câu hỏi trắc nghiệm này: "${q.question}". Đáp án đúng là ${String.fromCharCode(65 + q.correct)}, tôi đã chọn ${userOpt}.`;
+                    prompt = `Hãy giải thích chi tiết câu ${currentIndex + 1} trong đề đang luyện tập: "${q.question}". Đáp án đúng là ${formatPracticeCorrectAnswer(feedback)}, tôi đã chọn ${userOpt}. Lời giải của đúng câu này là: ${feedback.explanation || 'Chưa có lời giải.'}`;
                 } else if (q.type === 'truefalse') {
-                    prompt = `Hãy giải thích chi tiết câu hỏi Đúng/Sai này: "${q.question}".`;
+                    prompt = `Hãy giải thích chi tiết câu ${currentIndex + 1} Đúng/Sai trong đề đang luyện tập: "${q.question}". Đáp án của đúng câu này là ${formatPracticeCorrectAnswer(feedback)}. Lời giải là: ${feedback.explanation || 'Chưa có lời giải.'}`;
                 } else if (q.type === 'short') {
-                    prompt = `Hãy giải thích chi tiết câu hỏi trả lời ngắn này: "${q.question}". Đáp án đúng là "${q.correct}", tôi nhập "${userAnswers[currentIndex] || ''}".`;
+                    prompt = `Hãy giải thích chi tiết câu ${currentIndex + 1} trả lời ngắn trong đề đang luyện tập: "${q.question}". Đáp án đúng của đúng câu này là "${feedback.correct}", tôi nhập "${userAnswers[currentIndex] || ''}". Lời giải là: ${feedback.explanation || 'Chưa có lời giải.'}`;
                 } else {
-                    prompt = `Hãy hướng dẫn giải chi tiết câu hỏi này: "${q.question}".`;
+                    prompt = `Hãy hướng dẫn giải chi tiết câu ${currentIndex + 1} trong đề đang luyện tập: "${q.question}". Đáp án gợi ý là "${formatPracticeCorrectAnswer(feedback)}". Lời giải là: ${feedback.explanation || 'Chưa có lời giải.'}`;
                 }
                 window.eduAI_ask(prompt);
             } else {
@@ -1853,6 +1929,8 @@
             }
         }
     </script>
+    <div id="eduai-root" aria-hidden="true"></div>
+
     <!-- CSS Variables Layout Manager Script -->
     <script>
         // Tự động đo đạc chiều cao thực tế của thanh Quiz Top Bar để canh lề hoàn hảo cho Sidebar

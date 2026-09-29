@@ -1234,6 +1234,7 @@
                     '     + Với truefalse: options chứa danh sách các phát biểu a, b, c, d.',
                     '   - correct: Index đáp án đúng (0-based) cho multiple (ví dụ: 0 cho A, 1 cho B). Với truefalse, correct là mảng boolean tương ứng với correctAnswers.',
                     '   - correctAnswers: Mảng boolean (true/false) tương ứng với độ đúng/sai của các phát biểu trong truefalse.',
+                    '   - Với type "short": correct BẮT BUỘC là chuỗi số thập phân dùng dấu chấm, tối đa 4 ký tự (ví dụ: "4", "0.5", "-1.5"). Không dùng đơn vị, chữ, phân số hoặc biểu thức.',
                     '   - explanation: Lời giải chi tiết hoặc hướng dẫn chấm (nếu có trong đề, hoặc bạn tự giải thích ngắn gọn).',
                     '',
                     'Nội dung văn bản đề thi:',
@@ -1257,7 +1258,7 @@
                     '3. Không gộp câu, không bỏ mệnh đề, không tóm tắt làm mất ý.',
                     '4. Với câu Đúng/Sai: mỗi ý a/b/c/d là một phần tử options, correctAnswers là mảng boolean nếu có đáp án. Nếu chưa có đáp án trong nguồn, dùng false nhưng giữ đủ phát biểu.',
                     '5. Với trắc nghiệm: options chỉ chứa nội dung phương án, không kèm A/B/C/D. correct là index 0-based nếu có đáp án; nếu không có đáp án, dùng 0.',
-                    '6. Với trả lời ngắn/tự luận: giữ nguyên yêu cầu đề bài, correct lấy từ đáp án nếu có, nếu không có thì chuỗi rỗng.',
+                    '6. Với trả lời ngắn: correct BẮT BUỘC là chuỗi số thập phân dùng dấu chấm, tối đa 4 ký tự (ví dụ: "4", "0.5", "-1.5"); không dùng đơn vị, chữ, phân số hoặc biểu thức. Với tự luận: correct lấy từ đáp án nếu có, nếu không có thì chuỗi rỗng.',
                     '7. Giữ nguyên công thức, số liệu, tên riêng, bảng, điều kiện và các cụm phủ định.',
                     '8. Nếu block nguồn không phải là câu hỏi thi (ví dụ: chỉ là lời dặn dò, tiêu đề phần, hướng dẫn làm bài), hãy trả về câu hỏi đó với trường `question` là chuỗi rỗng "".',
                     '',
@@ -1440,7 +1441,7 @@
                     const correctAnswers = Array.isArray(q.correctAnswers) ? q.correctAnswers : (Array.isArray(q.correct) ? q.correct : [true, false]);
                     options.forEach(function (optText, idx) { doAddTFStatementToContainer(qid, tfContainer, idx, optText, correctAnswers[idx]); });
                 } else if (type === 'short') {
-                    if (qCard.querySelector('.correct-short')) qCard.querySelector('.correct-short').value = q.correct || '';
+                    if (qCard.querySelector('.correct-short')) qCard.querySelector('.correct-short').value = normalizeShortDecimalAnswer(q.correct || '');
                 } else if (type === 'essay') {
                     if (qCard.querySelector('.correct-essay')) qCard.querySelector('.correct-essay').value = q.correct || '';
                 }
@@ -1493,6 +1494,21 @@
             updateEmptyState();
         }
 
+        function normalizeShortDecimalAnswer(value) {
+            const raw = String(value ?? '').trim().replace(',', '.').replace(/[^0-9.\-]/g, '');
+            const hasMinus = raw.startsWith('-');
+            const unsigned = raw.replace(/-/g, '');
+            const parts = unsigned.split('.');
+            const normalized = (hasMinus ? '-' : '') + (parts[0] || '') + (parts.length > 1 ? '.' + parts.slice(1).join('') : '');
+            return normalized.slice(0, 4);
+        }
+
+        function isValidShortDecimalAnswer(value) {
+            const normalized = normalizeShortDecimalAnswer(value);
+            return normalized === String(value ?? '').trim().replace(',', '.')
+                && /^-?(?:\d+|\d*\.\d+)$/.test(normalized);
+        }
+
         function doAddQuestion(type, fromJSON) {
             qCounter++;
             const qid = 'q_' + qCounter;
@@ -1508,7 +1524,7 @@
 
             if (type === 'multiple') innerHtml += '<div class="options-list ml-11 mb-2 space-y-1"></div><button onclick="addOptionUI(\'' + qid + '\')" class="ml-11 text-blue-600 text-xs font-bold">＋ Thêm lựa chọn</button>';
             else if (type === 'truefalse') innerHtml += '<div class="tf-list ml-11 mb-2 space-y-1"></div><button onclick="addTFStatementUI(\'' + qid + '\')" class="ml-11 text-emerald-600 text-xs font-bold">＋ Thêm phát biểu</button>';
-            else if (type === 'short') innerHtml += '<div class="ml-11 mb-4"><input type="text" placeholder="Đáp án..." class="correct-short w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm"></div>';
+            else if (type === 'short') innerHtml += '<div class="ml-11 mb-4"><label class="block text-xs font-bold text-amber-700 mb-1">Đáp án số thập phân <span class="font-medium text-slate-500">(tối đa 4 ký tự)</span></label><input type="text" inputmode="decimal" maxlength="4" pattern="-?[0-9]*[.,]?[0-9]*" title="Chỉ nhập số thập phân, tối đa 4 ký tự." placeholder="vd: -1.5" oninput="this.value = normalizeShortDecimalAnswer(this.value)" class="correct-short w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm"></div>';
             else if (type === 'essay') innerHtml += '<div class="ml-11 mb-4"><textarea rows="3" placeholder="Đáp án mẫu..." class="correct-essay w-full px-4 py-3 rounded-xl border border-slate-200 text-sm"></textarea></div>';
 
             innerHtml += '<div class="ml-11 border-t border-slate-100 pt-3"><textarea rows="2" placeholder="Giải thích..." class="q-explain w-full px-3 py-2 rounded-lg border border-slate-100 text-xs text-slate-600"></textarea></div>';
@@ -1665,7 +1681,7 @@
                         });
                         q.correct = q.correctAnswers;
                     } else if (type === 'short') {
-                        q.correct = (card.querySelector('.correct-short')?.value || '').trim();
+                        q.correct = normalizeShortDecimalAnswer(card.querySelector('.correct-short')?.value || '');
                     } else if (type === 'essay') {
                         q.correct = (card.querySelector('.correct-essay')?.value || '').trim();
                     }
@@ -1695,7 +1711,7 @@
                     if (!Array.isArray(q.correctAnswers) || q.correctAnswers.length !== q.options.length) issues.push(label + ': số đáp án Đúng/Sai chưa khớp số phát biểu.');
                 } else if (q.type === 'short') {
                     if (!q.correct) issues.push(label + ': câu trả lời ngắn chưa có đáp án.');
-                    if (String(q.correct).length > 4) issues.push(label + ': đáp án trả lời ngắn nên tối đa 4 ký tự.');
+                    if (!isValidShortDecimalAnswer(q.correct)) issues.push(label + ': đáp án trả lời ngắn phải là số thập phân, tối đa 4 ký tự.');
                 } else if (q.type === 'essay') {
                     if (!q.correct && !q.explanation) issues.push(label + ': tự luận nên có đáp án mẫu hoặc giải thích.');
                 }
@@ -1807,7 +1823,8 @@
                             '1. Sửa lại câu hỏi, phương án lựa chọn, đáp án đúng (correct/correctAnswers) hoặc giải thích (explanation) sao cho hoàn toàn chính xác về mặt kiến thức/khoa học.',
                             '2. BẮT BUỘC bọc toàn bộ các ký hiệu toán học, biến số (như x, y, a, b...), các phương trình, công thức trong định dạng LaTeX bằng dấu $ (cho inline) hoặc $$ (cho block).',
                             '3. Viết phần giải thích (explanation) chi tiết, rõ ràng từng bước giải bằng tiếng Việt.',
-                            '4. Trả về duy nhất đối tượng JSON chứa câu hỏi đã được sửa hoàn chỉnh theo đúng cấu trúc (schema) ban đầu của nó, không kèm bất kỳ giải thích nào khác ngoài JSON.',
+                            '4. Nếu type là "short", correct BẮT BUỘC là chuỗi số thập phân dùng dấu chấm, tối đa 4 ký tự (ví dụ: "4", "0.5", "-1.5"), không đơn vị/chữ/phân số.',
+                            '5. Trả về duy nhất đối tượng JSON chứa câu hỏi đã được sửa hoàn chỉnh theo đúng cấu trúc (schema) ban đầu của nó, không kèm bất kỳ giải thích nào khác ngoài JSON.',
                             '',
                             'Yêu cầu schema của đối tượng trả về tùy theo loại câu hỏi (type):',
                             '- type = "multiple": {"type":"multiple","question":"...","options":["...","..."],"correct":0,"explanation":"..."}',
@@ -1909,7 +1926,7 @@
                     return checked ? checked.value === 'true' : true;
                 });
             } else if (type === 'short') {
-                q.correct = card.querySelector('.correct-short')?.value.trim() || '';
+                q.correct = normalizeShortDecimalAnswer(card.querySelector('.correct-short')?.value || '');
             } else if (type === 'essay') {
                 q.correct = card.querySelector('.correct-essay')?.value.trim() || '';
             }
@@ -1974,7 +1991,7 @@
                     doAddTFStatementToContainer(qid, tfContainer, idx, optText, answers[idx] !== false);
                 });
             } else if (type === 'short') {
-                qCard.querySelector('.correct-short').value = q.correct || '';
+                qCard.querySelector('.correct-short').value = normalizeShortDecimalAnswer(q.correct || '');
             } else if (type === 'essay') {
                 qCard.querySelector('.correct-essay').value = q.correct || '';
             }

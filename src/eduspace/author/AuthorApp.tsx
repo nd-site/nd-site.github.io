@@ -45,6 +45,21 @@ interface AuthorSection {
   required?: boolean;
 }
 
+function normalizeShortDecimalAnswer(value: unknown): string {
+  const raw = String(value ?? '').trim().replace(',', '.').replace(/[^0-9.\-]/g, '');
+  const hasMinus = raw.startsWith('-');
+  const unsigned = raw.replace(/-/g, '');
+  const parts = unsigned.split('.');
+  const normalized = `${hasMinus ? '-' : ''}${parts[0] || ''}${parts.length > 1 ? `.${parts.slice(1).join('')}` : ''}`;
+  return normalized.slice(0, 4);
+}
+
+function isValidShortDecimalAnswer(value: unknown): boolean {
+  const normalized = normalizeShortDecimalAnswer(value);
+  return normalized === String(value ?? '').trim().replace(',', '.')
+    && /^-?(?:\d+|\d*\.\d+)$/.test(normalized);
+}
+
 export const AuthorApp: React.FC = () => {
   // Navigation & Tabs
   const [activeTab, setActiveTab] = useState<'questions' | 'sources' | 'choices' | 'settings'>('questions');
@@ -264,7 +279,11 @@ export const AuthorApp: React.FC = () => {
         type === 'true_false' ? {
           correctAnswers: { a: true, b: false, c: true, d: false },
           partialScoreLadder: [0.1, 0.25, 0.5, 1.0]
-        } : {}
+        } : (type === 'short_answer' ? {
+          acceptableAnswers: ['0'],
+          caseSensitive: false,
+          trimWhitespace: true
+        } : {})
       )
     };
     setQuestions([...questions, newQ]);
@@ -287,6 +306,14 @@ export const AuthorApp: React.FC = () => {
 
   // Save Exam
   async function handleSaveExam() {
+    const invalidShortQuestionIndex = questions.findIndex(question =>
+      question.type === 'short_answer'
+      && !isValidShortDecimalAnswer(question.gradingPayload?.acceptableAnswers?.[0])
+    );
+    if (invalidShortQuestionIndex >= 0) {
+      alert(`Câu ${invalidShortQuestionIndex + 1}: đáp án trả lời ngắn phải là số thập phân, tối đa 4 ký tự.`);
+      return;
+    }
     setIsSaving(true);
     setSaveSuccessMsg(null);
     try {
@@ -836,6 +863,38 @@ export const AuthorApp: React.FC = () => {
                                   </div>
                                 );
                               })}
+                            </div>
+                          )}
+
+                          {/* Short-answer key: numeric decimal, maximum four characters */}
+                          {q.type === 'short_answer' && (
+                            <div>
+                              <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                                Đáp án số thập phân <span className="font-normal text-slate-400">(tối đa 4 ký tự)</span>
+                              </label>
+                              <input
+                                type="text"
+                                inputMode="decimal"
+                                maxLength={4}
+                                pattern="-?[0-9]*[.,]?[0-9]*"
+                                title="Chỉ nhập số thập phân, tối đa 4 ký tự."
+                                value={normalizeShortDecimalAnswer(q.gradingPayload?.acceptableAnswers?.[0] || '')}
+                                onChange={e => {
+                                  const updated = [...questions];
+                                  const targetQ = updated.find(x => x.id === q.id);
+                                  if (targetQ) {
+                                    targetQ.gradingPayload = {
+                                      ...targetQ.gradingPayload,
+                                      acceptableAnswers: [normalizeShortDecimalAnswer(e.target.value)],
+                                      caseSensitive: false,
+                                      trimWhitespace: true
+                                    };
+                                  }
+                                  setQuestions(updated);
+                                }}
+                                placeholder="vd: -1.5"
+                                className="w-full sm:w-72 px-3 py-2 text-xs border border-amber-300 rounded-lg bg-amber-50/40 text-amber-900 font-mono focus:ring-2 focus:ring-amber-500"
+                              />
                             </div>
                           )}
 

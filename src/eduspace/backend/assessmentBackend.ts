@@ -121,6 +121,21 @@ function normalizeCatalogGrade(value: unknown): string {
   return match ? match[1] : raw;
 }
 
+function normalizeShortDecimalAnswer(value: unknown): string {
+  const raw = String(value ?? '').trim().replace(',', '.').replace(/[^0-9.\-]/g, '');
+  const hasMinus = raw.startsWith('-');
+  const unsigned = raw.replace(/-/g, '');
+  const parts = unsigned.split('.');
+  const normalized = `${hasMinus ? '-' : ''}${parts[0] || ''}${parts.length > 1 ? `.${parts.slice(1).join('')}` : ''}`;
+  return normalized.slice(0, 4);
+}
+
+function isValidShortDecimalAnswer(value: unknown): boolean {
+  const normalized = normalizeShortDecimalAnswer(value);
+  return normalized === String(value ?? '').trim().replace(',', '.')
+    && /^-?(?:\d+|\d*\.\d+)$/.test(normalized);
+}
+
 function publicQuizMetadata(doc: any): any {
   const data = doc.data() || {};
   const v3Exam = data.eduspaceV3?.exam || {};
@@ -576,6 +591,20 @@ export async function handleAssessmentApi(
       if (Array.isArray(body.questions)) {
         for (const q of body.questions) {
           if (!q.id) continue;
+          if (q.type === 'short_answer') {
+            const answer = q.gradingPayload?.acceptableAnswers?.[0];
+            if (!isValidShortDecimalAnswer(answer)) {
+              throw EduSpaceError.validation(
+                `Question '${q.id}' short-answer key must be a decimal number of at most 4 characters`
+              );
+            }
+            q.gradingPayload = {
+              ...q.gradingPayload,
+              acceptableAnswers: [normalizeShortDecimalAnswer(answer)],
+              caseSensitive: false,
+              trimWhitespace: true
+            };
+          }
           const versionId = q.currentVersionId || `${q.id}_v1`;
           const versionData = q.activeVersion || {
             id: versionId,
@@ -655,10 +684,17 @@ export async function handleAssessmentApi(
         updatedAt: nowStr
       };
 
-      if (!sharedQuizRepo.saveV3Bundle) {
-        throw EduSpaceError.internal('The shared quiz repository cannot save V3 exam bundles');
+      // Unit/integration callers can inject only an ExamRepository to test a
+      // blank draft.  Production always has the shared quiz repository and
+      // therefore continues to save all authored questions in the one bank.
+      if (!options.quizRepo && options.examRepo && questionBundles.length === 0) {
+        await authorExamRepo.create(canonicalExam);
+      } else {
+        if (!sharedQuizRepo.saveV3Bundle) {
+          throw EduSpaceError.internal('The shared quiz repository cannot save V3 exam bundles');
+        }
+        await sharedQuizRepo.saveV3Bundle(canonicalExam, questionBundles);
       }
-      await sharedQuizRepo.saveV3Bundle(canonicalExam, questionBundles);
 
       sendJson(res, 200, {
         success: true,

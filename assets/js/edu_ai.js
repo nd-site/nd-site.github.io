@@ -233,6 +233,10 @@ const EduAI_Assistant = (function () {
     function toggle() {
         const widget = document.getElementById('edu-ai-widget');
         if (!widget) return;
+        if (window.eduAIExamModeGate && window.eduAIShowOverride !== true) {
+            widget.style.display = 'none';
+            return;
+        }
         const isOpen = widget.style.display === 'flex';
         widget.style.display = isOpen ? 'none' : 'flex';
         if (!isOpen) {
@@ -366,15 +370,20 @@ const EduAI_Assistant = (function () {
 
     function updateVisibility() {
         const toggleBtn = document.getElementById('ai-toggle');
+        const widget = document.getElementById('edu-ai-widget');
         if (!toggleBtn) return;
 
         if (window.location.pathname.includes('/eduspace/assistant/')) {
             toggleBtn.style.display = 'none';
+            if (widget) widget.style.display = 'none';
             return;
         }
 
         if (window.eduAIShowOverride !== undefined) {
             toggleBtn.style.display = window.eduAIShowOverride ? 'flex' : 'none';
+            // A learner can switch from practice to a protected exam in the
+            // same page.  Hide an already-open panel as well as the trigger.
+            if (!window.eduAIShowOverride && widget) widget.style.display = 'none';
             return;
         }
 
@@ -391,6 +400,10 @@ const EduAI_Assistant = (function () {
     }
 
     function eduAI_ask(text) {
+        // The legacy runners opt into this hard gate.  It prevents both the
+        // floating button and the inline "Hỏi EduAI" action from opening an
+        // assistant while the learner is in exam mode.
+        if (window.eduAIExamModeGate && window.eduAIShowOverride !== true) return;
         const widget = document.getElementById('edu-ai-widget');
         if (widget && widget.style.display !== 'flex') {
             widget.style.display = 'flex';
@@ -410,6 +423,12 @@ const EduAI_Assistant = (function () {
         try {
             const q = quizData.activeQuestions[currentIndex];
             if (!q) return "";
+            // Practice runners create this snapshot after their question
+            // order has been finalized.  It keeps answer/explanation context
+            // tied to the visible question instead of a raw source index.
+            const practiceFeedback = typeof window.getPracticeFeedbackForQuestion === 'function'
+                ? window.getPracticeFeedbackForQuestion(currentIndex)
+                : null;
 
             let context = `Thông tin câu hỏi hiện tại trên màn hình:\n`;
             context += `- Loại câu hỏi: ${q.type}\n`;
@@ -425,12 +444,14 @@ const EduAI_Assistant = (function () {
                 const hasAnswered = typeof userAnswers !== 'undefined' && userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== undefined;
                 
                 if (isChecked) {
-                    context += `- Đáp án đúng theo đề bài: ${String.fromCharCode(65 + q.correct)}\n`;
+                    const correctIndex = practiceFeedback?.correct ?? q.correct;
+                    context += `- Đáp án đúng theo đề bài: ${String.fromCharCode(65 + correctIndex)}\n`;
                     if (hasAnswered) {
                         context += `- Học sinh đã chọn phương án: ${String.fromCharCode(65 + userAnswers[currentIndex])}\n`;
                     }
-                    if (q.explanation) {
-                        context += `- Giải thích chi tiết sẵn có: ${q.explanation}\n`;
+                    const explanation = practiceFeedback?.explanation ?? q.explanation;
+                    if (explanation) {
+                        context += `- Giải thích chi tiết sẵn có: ${explanation}\n`;
                     }
                 } else {
                     if (hasAnswered) {
@@ -447,7 +468,7 @@ const EduAI_Assistant = (function () {
                 const hasAnswered = typeof userAnswers !== 'undefined' && userAnswers[currentIndex];
                 
                 if (isChecked) {
-                    const correctArr = q.correctAnswers || q.correct || [];
+                    const correctArr = practiceFeedback?.correctAnswers || q.correctAnswers || q.correct || [];
                     context += `- Đáp án đúng cho từng phát biểu:\n`;
                     q.options.forEach((opt, idx) => {
                         context += `  + ${String.fromCharCode(65 + idx)}: ${correctArr[idx] ? 'Đúng' : 'Sai'}\n`;
@@ -459,8 +480,9 @@ const EduAI_Assistant = (function () {
                             context += `  + ${String.fromCharCode(65 + idx)}: ${choice}\n`;
                         });
                     }
-                    if (q.explanation) {
-                        context += `- Giải thích chi tiết sẵn có: ${q.explanation}\n`;
+                    const explanation = practiceFeedback?.explanation ?? q.explanation;
+                    if (explanation) {
+                        context += `- Giải thích chi tiết sẵn có: ${explanation}\n`;
                     }
                 } else {
                     if (hasAnswered) {
@@ -476,12 +498,14 @@ const EduAI_Assistant = (function () {
                 const hasAnswered = typeof userAnswers !== 'undefined' && userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== undefined;
                 
                 if (isChecked) {
-                    context += `- Đáp án chính xác/gợi ý: ${q.correct || q.suggested || ''}\n`;
+                    const correctAnswer = practiceFeedback?.correct ?? practiceFeedback?.suggested ?? q.correct ?? q.suggested ?? '';
+                    context += `- Đáp án chính xác/gợi ý: ${correctAnswer}\n`;
                     if (hasAnswered) {
                         context += `- Học sinh đã nhập: ${userAnswers[currentIndex]}\n`;
                     }
-                    if (q.explanation) {
-                        context += `- Giải thích chi tiết sẵn có: ${q.explanation}\n`;
+                    const explanation = practiceFeedback?.explanation ?? q.explanation;
+                    if (explanation) {
+                        context += `- Giải thích chi tiết sẵn có: ${explanation}\n`;
                     }
                 } else {
                     if (hasAnswered) {
