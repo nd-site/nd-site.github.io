@@ -11,6 +11,13 @@
     <script src="/assets/js/config.js"></script>
     <script type="module" src="/assets/js/firebase-init.js"></script>
     <script src="/assets/js/nd-navbar.js" defer></script>
+    <script>
+        // This shell replaces its body with template.html. Keep EduAI locked
+        // until that runner explicitly starts a Practice session.
+        window.eduAIExamModeGate = true;
+        window.eduAIShowOverride = false;
+    </script>
+    <script src="/assets/js/edu_ai.js?v=1.9.29.1258" defer></script>
 </head>
 
 <body class="bg-blue-50">
@@ -234,6 +241,12 @@
                         document.body.appendChild(newScript);
                     }
                 }
+
+                // template.html's head is not copied above. Recreate the V2
+                // EduAI widget after replacing the loading shell; its hard
+                // gate keeps it hidden until Practice mode is chosen.
+                window.eduspaceAI_UI?.init?.();
+                window.eduspaceAI_UI?.updateVisibility?.();
 
                 setTimeout(() => {
                     const finalTitle = document.getElementById('quiz-title-display');

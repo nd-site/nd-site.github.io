@@ -200,7 +200,7 @@
     <script src="/assets/js/data_modal.js"></script>
     <script src="/assets/js/ai.js" defer></script>
     <script src="/assets/js/contact-admin.js" defer></script>
-    <script src="/assets/js/version.js?v=1.9.29.1239" defer></script>
+    <script src="/assets/js/version.js?v=1.9.29.1258" defer></script>
 </head>
 
 <body class="pb-36 bg-slate-50 text-slate-800">
@@ -2591,7 +2591,15 @@ ${text}
         function renderAdminGrades() {
             const node = document.getElementById('adminGradeOptions');
             if (!node) return;
-            node.innerHTML = adminCatalog.grades.map(grade => `<button type="button" onclick="window.selectAdminGrade(${escapeAdminJs(grade.value)})" class="px-2 py-1 rounded-lg border text-[11px] font-black transition ${adminCatalog.grade === grade.value ? 'bg-blue-600 border-blue-600 text-white' : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-blue-300'}">${escapeAdminHtml(grade.label)} <span class="opacity-70">${grade.count}</span></button>`).join('') || '<span class="text-xs text-slate-500">Chưa có lớp nào.</span>';
+            // Do not interpolate JSON strings into an inline onclick attribute:
+            // a value such as "10" closes the HTML attribute and makes every
+            // grade button inert. The handler below reads the data attribute.
+            node.innerHTML = adminCatalog.grades.map(grade => `<button type="button" data-admin-grade="${escapeAdminHtml(grade.value)}" aria-pressed="${adminCatalog.grade === grade.value}" class="px-2 py-1 rounded-lg border text-[11px] font-black transition ${adminCatalog.grade === grade.value ? 'bg-blue-600 border-blue-600 text-white' : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-blue-300'}">${escapeAdminHtml(grade.label)} <span class="opacity-70">${grade.count}</span></button>`).join('') || '<span class="text-xs text-slate-500">Chưa có lớp nào.</span>';
+            node.onclick = (event) => {
+                const target = event.target instanceof Element ? event.target.closest('[data-admin-grade]') : null;
+                const grade = target?.getAttribute('data-admin-grade');
+                if (grade) window.selectAdminGrade(grade);
+            };
         }
         async function loadAdminFacets(refresh = false) {
             if (adminCatalog.ready && !refresh) return;
@@ -2671,7 +2679,7 @@ ${text}
             }
         };
         window.selectAdminGrade = async function(grade) {
-            if (!grade || adminCatalog.loading) return;
+            if (!grade) return;
             adminCatalog.grade = grade;
             adminCatalog.subject = '';
             adminCatalog.nextCursor = null;

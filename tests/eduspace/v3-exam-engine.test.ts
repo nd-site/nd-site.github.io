@@ -638,6 +638,12 @@ describe('Full Assessment Engine Lifecycle & Idempotency', () => {
     // 2. Start session
     const session = engine.startSession(plan, 'student_10042', { serverNow: '2026-09-16T12:00:00.000Z' });
     assert.equal(session.status, 'in_progress');
+    // Optional grouping metadata must be omitted, not serialised as
+    // `undefined`, because Firestore rejects undefined values in array items.
+    assert.ok(!('choiceGroupId' in session.questionVersionReferences[0]));
+    assert.ok(!('groupId' in session.questionVersionReferences[0]));
+    assert.ok(!('clientIp' in session.securityContext));
+    assert.ok(!('userAgent' in session.securityContext));
 
     // 3. Autosave
     const autosave = engine.autosave(session, { q1: 'opt_a' }, 1, '2026-09-16T12:10:00.000Z');

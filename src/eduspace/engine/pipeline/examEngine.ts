@@ -82,15 +82,20 @@ export class ExamEngine {
     const qRefs: SessionQuestionRef[] = [];
     for (const section of plan.sections) {
       for (const q of section.questions) {
-        qRefs.push({
+        // Firestore does not accept an `undefined` value anywhere in a
+        // document (including inside an array item). Most V2-compatible
+        // questions do not belong to a choice/group, so optional IDs must be
+        // omitted rather than written as `undefined`.
+        const questionReference: SessionQuestionRef = {
           questionId: q.questionId,
           questionVersionId: q.questionVersionId,
           assignedSectionId: section.id,
           allocatedPoints: q.allocatedPoints,
-          orderIndex: q.orderIndex,
-          choiceGroupId: q.choiceGroupId,
-          groupId: q.groupId
-        });
+          orderIndex: q.orderIndex
+        };
+        if (q.choiceGroupId !== undefined) questionReference.choiceGroupId = q.choiceGroupId;
+        if (q.groupId !== undefined) questionReference.groupId = q.groupId;
+        qRefs.push(questionReference);
       }
     }
 
@@ -110,9 +115,9 @@ export class ExamEngine {
       attemptSeed: plan.attemptSeed,
       questionVersionReferences: qRefs,
       securityContext: {
-        clientIp: options.clientIp,
-        userAgent: options.userAgent,
-        tabSwitchCount: 0
+        tabSwitchCount: 0,
+        ...(options.clientIp !== undefined ? { clientIp: options.clientIp } : {}),
+        ...(options.userAgent !== undefined ? { userAgent: options.userAgent } : {})
       },
       createdAt: startedAt,
       updatedAt: startedAt
