@@ -1,5 +1,5 @@
 /**
- * EduSpace — AI Data Modal Wrapper (Bộ bọc trung gian kết nối AI)
+ * EduND — AI Data Modal Wrapper (Bộ bọc trung gian kết nối AI)
  * 
  * Tác dụng:
  *   • Đóng vai trò là Wrapper trung gian để duy trì khả năng tương thích ngược (backward compatibility) cho lệnh gọi `eduspaceAI.call`.

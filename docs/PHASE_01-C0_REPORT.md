@@ -75,7 +75,7 @@ In Phase 01-C0, a clean, permanent canonical architecture was established:
 - `src/timetable/aiTimetableService.ts` (AI prompt & OCR extraction service)
 - `src/timetable/index.css` (Tailwind CSS v4 root)
 - `eduspace/timetable/index.html` (Public wrapper page)
-- `admin/eduspace/timetable/index.html` (Admin wrapper page)
+- `admin/edu/timetable/index.html` (Admin wrapper page)
 - `vite.timetable.config.ts` (Vite build configuration)
 
 ### EduSpace & Sub-App Code Inspected:
@@ -83,7 +83,7 @@ In Phase 01-C0, a clean, permanent canonical architecture was established:
 - `eduspace/taode/index.html` (Quiz creation & publishing)
 - `eduspace/exam/index.html` (Student exam taking & attempt submission)
 - `admin/index.html` (Admin dashboard user queries)
-- `admin/eduspace/index.html` (EduSpace lesson management)
+- `admin/edu/index.html` (EduSpace lesson management)
 - `chat/index.html` (ND Chat UI, participant queries)
 - `src/miniworld/hooks/useFirebase.ts` (MiniWorld sub-app user references)
 
@@ -138,7 +138,7 @@ Every database document referencing a user MUST use `CodeID` as the foreign key:
 - Documents reside at `timetables/{timetableId}`.
 - Current records bind ownership via `ownerUid` and `ownerNdid`, with denormalized `ownerName` and `ownerPhotoURL`.
 - Collaborators and comments store `ndid` and `uid`.
-- URL routing supports `/eduspace/timetable/:id` and query/hash formats.
+- URL routing supports `/edu/timetable/:id` and query/hash formats.
 
 ### Target Canonical Binding:
 - Target ownership field: `ownerCodeID`.

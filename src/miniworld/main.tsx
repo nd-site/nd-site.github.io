@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import Navbar from '../components/Navbar';
 import { MapCreation } from './components/MapCreation';
 import { MapDashboard } from './components/MapDashboard';
 
@@ -12,11 +13,12 @@ const App = () => {
     setHasMapParam(!!params.get('map'));
   }, []);
 
-  if (hasMapParam) {
-    return <MapDashboard />;
-  }
-
-  return <MapCreation />;
+  return (
+    <>
+      <Navbar />
+      {hasMapParam ? <MapDashboard /> : <MapCreation />}
+    </>
+  );
 };
 
 const container = document.getElementById('root');

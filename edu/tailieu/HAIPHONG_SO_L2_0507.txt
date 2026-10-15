@@ -1,0 +1,308 @@
+Trang 1/6. Mã đề 0507
+SỞ GIÁO DỤC VÀ ĐÀO TẠO
+HẢI PHÒNG
+ĐỀ CHÍNH THỨC
+(Đề thi có 06 trang)
+ĐỀ KHẢO SÁT KỲ THI TỐT NGHIỆP THPT
+Năm học 2025-2026
+Môn: TIN HỌC
+Thời gian làm bài: 50 phút (không tính thời gian phát đề)
+Họ tên thí sinh:………………………………………. Số báo danh:………. Mã đề thi: 0507
+Phần I. Câu trắc nghiệm nhiều phương án lựa chọn (6,0 điểm).
+(Thí sinh trả lời từ câu 1 đến câu 24. Mỗi câu hỏi thí sinh chỉ chọn một phương án.)
+Câu 1. Phát biểu nào sau đây mô tả chính xác nhất về giao thức IP?
+A. Cho phép gửi một yêu cầu đến một máy tính, một thiết bị mạng hoặc một ứng dụng trên mạng
+để lấy thông tin phản hồi.
+B. Giao thức IP thay đổi liên tục, không có khả năng định tuyến và có thể hoạt động không cần
+môi trường mạng.
+C. Quy định cách thiết lập địa chỉ cho các thiết bị tham gia mạng và cách dẫn đường các gói dữ
+liệu theo địa chỉ từ thiết bị gửi đến thiết bị nhận.
+D. Đảm bảo việc truyền dữ liệu, chia nhỏ gói dữ liệu theo từng ứng dụng một cách chính xác,
+tin cậy và hiệu quả.
+Câu 2. Em muốn trở thành người sửa chữa và bảo trì máy tính, nên lựa chọn ngành học nào sau
+đây ở bậc học tiếp theo?
+A. Mạng máy tính và truyền thông. B. Bảo mật hệ thống thông tin.
+C. Thiết kế đồ họa. D. Công nghệ kỹ thuật phần cứng.
+Câu 3. CSS là viết tắt của cụm từ nào dưới đây?
+A. Creative Style Sheets. B. Cascading Style Sheets.
+C. Computer Style Sheets. D. Colorful Style Sheets.
+Câu 4. Khi hệ thống máy tính bị tấn công DdoS (Distributed Denial of Service – tấn công từ chối
+dịch vụ phân tán), một quản trị viên mạng sẽ phải làm gì sau đây?
+A. Tắt toàn bộ hệ thống để ngăn chặn các cuộc tấn công từ DdoS.
+B. Triển khai các biện pháp bảo mật và khôi phục dịch vụ của hệ thống.
+C. Thay đổi mật khẩu của tất cả người dùng trong hệ thống máy tính.
+D. Cập nhật thường xuyên trạng thái hoạt động cá nhân trên mạng xã hội.
+Câu 5. Trong HTML, thẻ nào dùng để tạo một liên kết đến trang web khác?
+A. <ul> B. <a> C. <img> D. <link>
+Câu 6. Trong HTML, khi thiết lập bảng thẻ nào dưới đây dùng để khai báo hàng?
+A. <td></td> B. <table></table> C. <tr></tr> D. <th></th>
+Câu 7. Cho câu lệnh HTML:
+<p style= “color: red”> <em> Chuc em dat ket qua cao. </em></p>
+Sau khi thực hiện câu lệnh cho kết quả nào dưới đây?
+A. Chữ màu đỏ và in đậm cho văn bản: Chuc em dat ket qua cao.
+B. Chữ màu đỏ và gạch chân cho văn bản: Chuc em dat ket qua cao.
+C. Chữ có bóng đổ và màu đỏ cho văn bản: Chuc em dat ket qua cao.
+D. Chữ màu đỏ và in nghiêng cho văn bản: Chuc em dat ket qua cao.
+
+-- 1 of 6 --
+
+Trang 2/6. Mã đề 0507
+Câu 8. Thẻ nào dưới đây là định dạng tiêu đề bé nhất trong một trang html?
+A. head B. h1 C. html D. h6
+Câu 9. Viết một trang web có tệp iframe.html để chèn vào đó một khung nội tuyến có kích thước
+600 × 400 pixel. Trong khung nội tuyến ta hiển thị nội dung của trang web CLB.html.
+Đoạn mã để thực hiện việc này trong tệp iframe.html là:
+A. <iframe src="CLB.html" width="400" height="600"></iframe>
+B. <iframe src="CLB.html" width="600" height="400"></iframe>
+C. <iframe url="CLB.html" width="600" height="400"></iframe>
+D. <iframe src="iframe.html" width="600" height="400"></iframe>
+Câu 10. Chọn một trong hai ngôn ngữ Python hoặc C++ và cho biết kết quả của đoạn chương trình
+sau:
+Dòng Đoạn chương trình viết bằng ngôn ngữ
+Python
+Đoạn chương trình viết bằng ngôn ngữ
+C++
+1
+2
+3
+4
+5
+6
+7
+n = 4
+y = 1
+for i in range (1, n+1):
+y*=i
+print (y)
+int n=4, y=1;
+for (int i=1; i <= n; ++i)
+{
+y*=i;
+}
+std::cout << y;
+A. 16 B. 4 C. 24 D. 12
+Câu 11. Thẻ <br> được sử dụng để làm gì?
+A. Gạch chân văn bản. B. In đậm văn bản.
+C. Ngắt dòng trong văn bản. D. In nghiêng văn bản.
+Câu 12. Chương trình đào tạo ngành CNTT thường gồm những môn học nào sau đây?
+A. Văn học, Lịch sử, Địa lí, Phân tích dữ liệu.
+B. Lập trình, Cấu trúc dữ liệu, Hệ thống thông tin.
+C. Tin học văn phòng, Thiết kế chế bản, Quản lí dự án.
+D. Kế toán, Quản trị doanh nghiệp, Quảng cáo trực tuyến.
+Câu 13. Phát biểu nào sau đây nêu đúng khái niệm trí tuệ nhân tạo?
+A. Khả năng của máy tính có thể làm những công việc mang tính trí tuệ của con người.
+B. AI có thể suy nghĩ, cảm nhận, có đạo đức hoặc tự nhận thức như con người.
+C. Hoạt động máy tính giao tiếp được với con người bằng ngôn ngữ tự nhiên.
+D. Trí tuệ nhân tạo luôn chính xác và có thể thay thế hoàn toàn con người.
+Câu 14. Đoạn mã HTML nào tạo liên kết đến website https://www.google.com với văn bản hiển
+thị là "Google"?
+A. <a href="https://www.google.com">Google</a>
+B. <a url="https://www.google.com">Google</a>
+C. <a name="https://www.google.com">Google</a>
+D. <link href="https://www.google.com">Google</link>
+
+-- 2 of 6 --
+
+Trang 3/6. Mã đề 0507
+Câu 15. “Hệ thống chẩn đoán y tế dựa trên AI có thể dựa vào tri thức về các triệu chứng và bệnh
+lí để đưa ra chẩn đoán về tình trạng sức khỏe của người bệnh” thuộc khả năng nào dưới đây của
+AI?
+A. Khả năng nhận thức. B. Khả năng giải quyết vấn đề.
+C. Khả năng học. D. Khả năng suy luận.
+Câu 16. Phương án nào dưới đây nêu đúng kết quả của đoạn lệnh HTML sau:
+<ol type = “1”>
+<li> Toán </li>
+<li> Lý </li>
+<li> Tin </li>
+</ol>
+A. 1. Toán
+2. Lý
+3. Tin
+B. 1. Toán
+2. Lí
+3. Tin
+C. a. Toán
+b. Lý
+c. Tin
+D. I. Toán
+II. Lý
+III. Tin
+Câu 17. Trường hợp nào dưới đây không thể hiện việc ứng xử nhân văn trong không gian mạng?
+A. Không gửi các nội dung thư rác không liên quan đển nội dung chính của cuộc trò chuyện.
+B. Sử dụng ngôn từ khiếm nhã khi tham gia bình luận, phê phán bạn trên mạng xã hội.
+C. Không phát tán thông tin riêng tư của người khác mà không có sự cho phép của họ.
+D. Chia sẻ thông tin chính xác và đáng tin cậy, tránh lan truyền thông tin sai lệch.
+Câu 18. Thiết bị nào dưới đây có chức năng chuyển đổi tín hiệu số thành tín hiệu tương tự và ngược
+lại?
+A. Router. B. Modem. C. Hub. D. Switch.
+Câu 19. Ngành học nào sau đây không liên quan tới nhóm nghề quản trị trong lĩnh vực công nghệ
+thông tin?
+A. Hệ thống thông tin. B. An ninh mạng.
+C. Công nghệ phần mềm. D. Mạng máy tính.
+Câu 20. Địa chỉ URL nào dưới đây là đúng?
+A. https://hust.edu.vn B. htp://hust.edu.vn
+C. htt://hust.edu.vn D. Html://hust.edu.vn
+Câu 21. Tính năng nào dưới đây không phải của Trợ lí ảo?
+A. Học hỏi từ người dùng thiết bị.
+B. Hỗ trợ nhiều tính năng thông minh.
+C. Tư duy độc lập, sáng tạo ý tưởng mới lạ.
+D. Khả năng nhận diện giọng nói.
+Câu 22. Thuộc tính nào dưới đây được sử dụng để chỉ định URL của nguồn nội dung sẽ được
+nhúng trong một <iframe>?
+A. href B. url C. link D. src
+Câu 23. Hoạt động nào dưới đây không có sự tác động của AI?
+A. Trợ lý ảo và quản lý thông minh. B. Sắp xếp các sản phẩm theo mức giá.
+C. An ninh và nhận diện khuôn mặt. D. Dự đoán nhu cầu tiêu dùng sản phẩm.
+
+-- 3 of 6 --
+
+Trang 4/6. Mã đề 0507
+Câu 24. Bạn An lên thiết kế phòng mạng có 50 máy tính, muốn kết nối các máy tính đó thành mạng
+LAN, An nên dùng thiết bị nào sau đây?
+A. Accsess point. B. Router. C. Modem. D. Switch.
+Phần II. Câu trắc nghiệm đúng sai (4,0 điểm).
+(Thí sinh trả lời các câu hỏi theo yêu cầu. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.)
+A. Phần chung dành cho tất cả các thí sinh
+Câu 1. Để giúp học sinh tham gia khảo sát diện rộng của Bộ giáo dục tại một trường THPT XYZ
+nhà trường có trang bị cho phòng Tin học gồm một số máy tính bàn, Modem, router và switch để
+học sinh kết nối mạng internet tham gia khảo sát có thể bằng máy tính bàn của trường hoặc có thể
+dùng máy tính laptop cá nhân mang đến.
+a) Học sinh tham gia khảo sát kết nối máy tính qua switch để dùng chung Internet, mạng trên
+được gọi là mạng LAN.
+b) Bạn An dùng máy tính cá nhân cắm cáp Ethernet vào modem và truy cập Internet ổn định,
+máy của An đang thuộc mạng LAN.
+c) Một số học sinh phát hiện máy tính (laptop) của mình khi kết nối vào Internet ở trường có địa
+MAC không trùng (khác) với địa chỉ MAC khi kết nối vào Internet ở nhà.
+d) Máy tính trong mạng LAN có IP khác nhau nhưng vẫn cùng mạng nếu chúng thuộc cùng dải
+mạng (phù hợp subnet mask).
+Câu 2. Để phục vụ công tác tuyển sinh vào lớp 10, Sở Giáo dục và Đào tạo quản lý dữ liệu thông
+qua hệ thống đăng ký nguyện vọng trực tuyến. Cơ sở dữ liệu của hệ thống được tổ chức gồm 3
+bảng như sau:
+• TRUONG (maTruong, tenTruong, chiTieu): Lưu thông tin các trường THPT và chỉ tiêu tuyển
+sinh.
+• HOC SINH (maHS, hoTen, ngaySinh): Lưu thông tin cơ bản của thí sinh dự thi.
+• DANG KY (maHS, maTruong, thuTuNV): Lưu danh sách nguyện vọng (NV1, NV2...) của học
+sinh vào các trường.
+Sau khi tìm hiểu cấu trúc trên, một số học sinh đưa ra các nhận định sau:
+a) Trường maTruong là khóa chính của bảng TRUONG, đồng thời đóng vai trò là khóa ngoài trong
+bảng DANG KY để tạo liên kết giữa hai bảng này.
+b) Để đảm bảo mỗi học sinh có thể đăng ký nhiều nguyện vọng vào các trường khác nhau, bảng
+DANG KY chỉ cần thiết lập duy nhất trường maHS làm khóa chính.
+c) Để thống kê tổng số nguyện vọng đã đăng ký vào từng trường, người quản trị chỉ cần khai
+thác dữ liệu duy nhất từ bảng TRUONG là đủ thông tin.
+d) Để kết xuất báo cáo gồm tenTruong, chiTieu và số lượng nguyện vọng 1 của trường đó, cần
+thực hiện các bước sau:
+• Các bảng và trường được chọn: TRUONG.tenTruong, TRUONG.chiTieu, DANG KY.thuTuNV.
+• Liên kết dữ liệu: Liên kết bảng TRUONG với bảng DANG KY qua trường chung là maTruong.
+• Điều kiện lọc: Chọn các bản ghi có trường DANG KY.thuTuNV = 1.
+B. Phần riêng
+Thí sinh chỉ chọn một trong hai phần. Thí sinh theo định hướng khoa học máy tính làm câu 3 và
+câu 4. Thí sinh theo định hướng Tin học ứng dụng làm câu 5 và câu 6.
+
+-- 4 of 6 --
+
+Trang 5/6. Mã đề 0507
+Câu 3. Trong lịch sử máy tính Deep Blue của IBM đánh bại đại kiện tướng cờ vua Garry Kasparov.
+Đây là lần đầu tiên một chương trình đánh bại một nhà vô địch thế giới về cờ vua. Một số bạn học
+sinh đưa ra các ý kiến sau.
+a) AI làm cho máy tính có khả năng thực hiện những công việc cần có trí tuệ như của con người
+ở một số công việc cụ thể.
+b) Máy tính hoạt động dựa trên các thuật toán do con người lập trình, vì thế cách thức đánh cờ
+của con người và máy tính là giống nhau.
+c) Mạng nơ ron là thuật toán duy nhất của mô hình học máy thể hiện khả năng máy móc thực
+hiện nhiệm vụ đòi hỏi trí thông minh cao.
+d) Trận đấu là cuộc đụng độ giữa một bên là trực giác kỳ diệu của con người với bên kia là tốc
+độ tính toán siêu phàm của máy tính.
+Câu 4. Cho đoạn chương trình sau viết bằng Python và ngôn ngữ C++ dùng để sắp xếp cho danh
+sách a (dãy a):
+Dòng Đoạn chương trình viết bằng ngôn ngữ Python Đoạn chương trình viết bằng ngôn ngữ
+C++
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+def sort(a):
+n = len(a)
+for i in range(n - 1):
+min_idx = i
+for j in range(i + 1, n):
+if a[j] < a[min_idx]:
+min_idx = j
+a[i], a[min_idx] = a[min_idx], a[i]
+return a
+void sort(int a[], int n) {
+for (int i = 0; i < n - 1; i++) {
+int min_idx = i;
+for (int j = i + 1; j < n;
+j++) {
+if (a[j] < a[min_idx]) {
+min_idx = j;
+}
+}
+int temp = a[i];
+a[i] = a[min_idx];
+a[min_idx] = temp;
+}
+}
+a) Đoạn chương trình thể hiện thuật toán chọn sắp xếp dãy theo cách: mỗi lần chọn phần tử lớn
+nhất trong đoạn chưa sắp xếp để đưa về vị trí đầu đoạn.
+b) Ở vòng lặp i của sort, phần tử tại vị trí i sau khi kết thúc vòng lặp sẽ luôn đúng vị trí trong
+dãy tăng dần.
+c) Trong hàm, nếu cho biến chỉ số j chạy từ i thay vì i+1 thì thuật toán sẽ không còn đúng.
+d) Nếu điều kiện là a[j] <= a[min_idx] thì thuật toán vẫn đúng để sắp xếp dãy tăng dần.
+Câu 5. Trong dự án xây dựng một hệ thống website "Hướng nghiệp 4.0" dành cho học sinh cuối
+cấp, một nhóm học sinh sử dụng phần mềm tạo website để thiết kế. Website bao gồm các trang:
+Danh mục nghề nghiệp được thiết kế dưới dạng các khối nội dung đa phương tiện, phân loại theo
+các lĩnh vực kinh tế - xã hội; Bản đồ số các trường đại học tích hợp đối tượng bản đồ tương tác;
+Tư vấn trực tuyến thiết lập hệ thống biểu mẫu thu thập dữ liệu và khung trò chuyện trực tiếp. Trong
+giai đoạn kiểm thử và hoàn thiện, một số bạn học sinh thảo luận về các thao tác kỹ thuật và đưa ra
+ý kiến sau:
+a) Phần mềm tạo trang web cung cấp sẵn các mẫu bố cục giúp người dùng nhanh chóng thiết lập
+cấu trúc khung cho các trang thành phần trong hệ thống website.
+b) Để thay đổi nội dung hình ảnh trên trang "Danh mục nghề nghiệp", người dùng bắt buộc phải
+xóa bỏ trang cũ và tạo lại một trang mới hoàn toàn để cập nhật ảnh.
+
+-- 5 of 6 --
+
+Trang 6/6. Mã đề 0507
+c) Tại trang "Bản đồ số các trường đại học", việc sử dụng mã nhúng từ dịch vụ bản đồ trực tuyến
+giúp trang web có khả năng tương tác thời gian thực mà không cần lưu trữ toàn bộ dữ liệu bản đồ
+trên máy chủ của website.
+d) Khi thực hiện kiểm thử trên các giao diện thiết bị khác nhau, nếu nội dung văn bản bị tràn
+khỏi khung hình trên điện thoại di động, người dùng chỉ cần điều chỉnh phông chữ ở chế độ xem
+máy tính là nội dung trên điện thoại sẽ tự động cân đối mà không cần kiểm tra lại.
+Câu 6. Trong nỗ lực hiện thực hóa chuyển đổi số an sinh xã hội, chính quyền địa phương xây dựng
+hệ thống quản lý việc cấp phát các gói hỗ trợ (vốn vay, bảo hiểm, vật tư...) cho người dân. Cơ sở
+dữ liệu được thiết lập gồm 3 bảng sau:
+• CONG DAN (maDD, hoTen, ngaySinh, gioiTinh, diaChi): Lưu thông tin mã định danh, họ tên,
+ngày sinh, giới tính và địa chỉ của mỗi công dân.
+• GOI HO TRO (maGoi, tenGoi, giaTri): Lưu danh mục các gói hỗ trợ và giá trị hiện hành.
+• CAP PHAT (maDD, maGoi, ngayCap): Lưu lịch sử các ngày cấp người dân đã nhận các gói hỗ
+trợ.
+Trong giai đoạn xây dựng và chuẩn hóa dữ liệu, nhóm phụ trách kỹ thuật đưa ra các ý kiến sau:
+a) Việc sử dụng trường maDD làm khóa chính cho bảng CONG DAN giúp hệ thống liên thông
+dữ liệu dễ dàng với các cơ sở dữ liệu quốc gia về dân cư mà không sợ bị trùng lặp.
+b) Để tối ưu dung lượng lưu trữ, trong bảng CAP PHAT chỉ nên lưu trường maDD và maGoi
+làm các khóa ngoài, không cần thiết phải lưu thêm trường hoTen hay tenGoi.
+c) Trong bảng CAP PHAT, nếu chỉ thiết lập một mình trường maDD làm khóa chính thì hệ
+thống vẫn cho phép một người dân có thể nhận được nhiều gói hỗ trợ khác nhau tại các thời điểm
+khác nhau.
+d) Để đưa ra thông tin gồm họ tên công dân, tên gói hỗ trợ và giá trị gói mà người đó đã nhận,
+có thể thực hiện truy vấn sau:
+SELECT CONG DAN.hoTen, GOI HO TRO.tenGoi, GOI HO TRO.giaTri
+FROM (CONG DAN INNER JOIN CAP PHAT ON CONG DAN.maDD = CAP PHAT.maDD)
+INNER JOIN GOI HO TRO ON CONG DAN.maDD = GOI HO TRO.maGoi
+--------------HẾT-------------
+
+-- 6 of 6 --
+

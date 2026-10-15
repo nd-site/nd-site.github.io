@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Vercel Serverless Function Adapter for ND Labs Canonical Auth
  *
  * Implements a standard Node.js HTTP request listener for Vercel Functions:
@@ -124,7 +124,7 @@ async function handleCanonicalAuth(req, res) {
   }
 
   if (req.method !== 'POST') {
-    sendJson(res, 405, { success: false, error: { code: 'METHOD_NOT_ALLOWED', message: 'Chỉ hỗ trợ phương thức POST' } });
+    sendJson(res, 405, { success: false, error: { code: 'METHOD_NOT_ALLOWED', message: 'Chá»‰ há»— trá»£ phÆ°Æ¡ng thá»©c POST' } });
     return;
   }
 
@@ -170,7 +170,7 @@ async function handleCanonicalAuth(req, res) {
       case 'changePassword': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.changePassword({
@@ -188,7 +188,7 @@ async function handleCanonicalAuth(req, res) {
       case 'changeNdid': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.changeNdid({
@@ -205,7 +205,7 @@ async function handleCanonicalAuth(req, res) {
       case 'linkGoogleIdentity': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.linkGoogleIdentity({
@@ -224,7 +224,7 @@ async function handleCanonicalAuth(req, res) {
       case 'unlinkGoogleIdentity': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.unlinkGoogleIdentity({
@@ -278,7 +278,7 @@ async function handleCanonicalAuth(req, res) {
       case 'registerSession': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.registerSession({
@@ -297,7 +297,7 @@ async function handleCanonicalAuth(req, res) {
       case 'getActiveSessions': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const currentSessionId = urlObj.searchParams.get('currentSessionId') || body.currentSessionId || null;
@@ -313,7 +313,7 @@ async function handleCanonicalAuth(req, res) {
       case 'revokeSession': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.revokeUserSession({
@@ -332,7 +332,7 @@ async function handleCanonicalAuth(req, res) {
       case 'revokeOtherSessions': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.revokeOtherUserSessions({
@@ -350,7 +350,7 @@ async function handleCanonicalAuth(req, res) {
       case 'registerTrustedDevice': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.registerTrustedDeviceForUser({
@@ -369,7 +369,7 @@ async function handleCanonicalAuth(req, res) {
       case 'getTrustedDevices': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const currentDeviceId = urlObj.searchParams.get('currentDeviceId') || body.currentDeviceId || null;
@@ -385,7 +385,7 @@ async function handleCanonicalAuth(req, res) {
       case 'revokeTrustedDevice': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.revokeTrustedDeviceForUser({
@@ -402,7 +402,7 @@ async function handleCanonicalAuth(req, res) {
       case 'getSecurityActivity': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const limitParam = urlObj.searchParams.get('limit') || body.limit || '20';
@@ -416,10 +416,48 @@ async function handleCanonicalAuth(req, res) {
         return;
       }
 
-      case 'updateUserRole': {
+      case 'updateUserStatus': {
         const callerCodeId = await getAuthenticatedCodeId(req, auth);
         if (!callerCodeId) {
           sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          return;
+        }
+        await canonicalFoundation.assertAdmin(db, callerCodeId);
+        if (body.targetCodeId === callerCodeId) {
+           throw new canonicalFoundation.ForbiddenError('Không thể tự đổi trạng thái của chính mình.');
+        }
+        await db.collection('users').doc(body.targetCodeId).update({
+           status: body.status,
+           updatedAt: canonicalFoundation.admin.firestore.FieldValue.serverTimestamp()
+        });
+        sendJson(res, 200, { success: true, message: 'Cập nhật trạng thái thành công' });
+        return;
+      }
+
+      case 'deleteUser': {
+        const callerCodeId = await getAuthenticatedCodeId(req, auth);
+        if (!callerCodeId) {
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          return;
+        }
+        await canonicalFoundation.assertOwner(db, callerCodeId);
+        if (body.targetCodeId === callerCodeId) {
+           throw new canonicalFoundation.ForbiddenError('Không thể tự xóa chính mình.');
+        }
+        try {
+           await canonicalFoundation.admin.auth().deleteUser(body.targetCodeId);
+        } catch (e) {
+           // ignore if user not found in auth
+        }
+        await db.collection('users').doc(body.targetCodeId).delete();
+        sendJson(res, 200, { success: true, message: 'Xóa người dùng thành công' });
+        return;
+      }
+
+      case 'updateUserRole': {
+        const callerCodeId = await getAuthenticatedCodeId(req, auth);
+        if (!callerCodeId) {
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.updateUserRoleAndLevel({
@@ -438,7 +476,7 @@ async function handleCanonicalAuth(req, res) {
       case 'adminGetUsers': {
         const callerCodeId = await getAuthenticatedCodeId(req, auth);
         if (!callerCodeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const callerContext = await canonicalFoundation.getUserAuthorizationContext(db, callerCodeId);
@@ -497,34 +535,34 @@ async function handleCanonicalAuth(req, res) {
 
       case 'loginWithGoogle': {
         // Expected fields:
-        // - googleSubjectId (string) – always present
-        // - googleEmail (optional) – may be sent for email verification
+        // - googleSubjectId (string) â€“ always present
+        // - googleEmail (optional) â€“ may be sent for email verification
         // - googleDisplayName (optional)
-        // - ndid (optional) – present when client is provisioning a new account
-        // - pendingSessionId (optional) – present when provisioning request follows a pending session
+        // - ndid (optional) â€“ present when client is provisioning a new account
+        // - pendingSessionId (optional) â€“ present when provisioning request follows a pending session
         const { googleSubjectId, googleEmail = null, googleDisplayName = null, ndid, pendingSessionId } = body;
         if (!googleSubjectId || typeof googleSubjectId !== 'string') {
-          sendJson(res, 400, { success: false, error: { code: 'VALIDATION_ERROR', message: 'Google Subject ID không hợp lệ.' } });
+          sendJson(res, 400, { success: false, error: { code: 'VALIDATION_ERROR', message: 'Google Subject ID khĂ´ng há»£p lá»‡.' } });
           return;
         }
         const cleanSubjectId = googleSubjectId.trim();
         // Try to resolve an existing linked Google identity
         const mapping = await canonicalFoundation.resolveGoogleSubjectToCodeId(db, cleanSubjectId);
         if (mapping && mapping.codeId) {
-          // Existing linked account – issue custom token (same as original flow)
+          // Existing linked account â€“ issue custom token (same as original flow)
           const codeId = mapping.codeId;
           const userDoc = await db.collection(canonicalFoundation.USERS_COLLECTION).doc(codeId).get();
           if (!userDoc.exists) {
-            sendJson(res, 401, { success: false, error: { code: 'AUTH_CREDENTIALS_INVALID', message: 'Thông tin đăng nhập không hợp lệ.' } });
+            sendJson(res, 401, { success: false, error: { code: 'AUTH_CREDENTIALS_INVALID', message: 'ThĂ´ng tin Ä‘Äƒng nháº­p khĂ´ng há»£p lá»‡.' } });
             return;
           }
           const userData = userDoc.data();
           if (userData.status === 'locked') {
-            sendJson(res, 403, { success: false, error: { code: 'ACCOUNT_LOCKED', message: 'Tài khoản đã bị khóa do đăng nhập sai nhiều lần. Vui lòng khôi phục tài khoản.' } });
+            sendJson(res, 403, { success: false, error: { code: 'ACCOUNT_LOCKED', message: 'TĂ i khoáº£n Ä‘Ă£ bá»‹ khĂ³a do Ä‘Äƒng nháº­p sai nhiá»u láº§n. Vui lĂ²ng khĂ´i phá»¥c tĂ i khoáº£n.' } });
             return;
           }
           if (userData.status === 'disabled' || userData.status === 'banned') {
-            sendJson(res, 403, { success: false, error: { code: 'ACCOUNT_DISABLED', message: 'Tài khoản này đã bị vô hiệu hóa hoặc tạm khóa.' } });
+            sendJson(res, 403, { success: false, error: { code: 'ACCOUNT_DISABLED', message: 'TĂ i khoáº£n nĂ y Ä‘Ă£ bá»‹ vĂ´ hiá»‡u hĂ³a hoáº·c táº¡m khĂ³a.' } });
             return;
           }
           const customToken = await auth.createCustomToken(codeId);
@@ -553,7 +591,7 @@ async function handleCanonicalAuth(req, res) {
           });
           return;
         }
-        // No existing mapping – this is a first‑time Google login
+        // No existing mapping â€“ this is a firstâ€‘time Google login
         if (ndid && pendingSessionId) {
           // Client is provisioning a new account using the pending session
           const provisionResult = await canonicalFoundation.provisionGoogleAccount({
@@ -586,7 +624,7 @@ async function handleCanonicalAuth(req, res) {
       case 'sendVerificationEmail': {
         const codeId = await getAuthenticatedCodeId(req, auth);
         if (!codeId) {
-          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ.' } });
+          sendJson(res, 401, { success: false, error: { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.generateEmailVerification({
@@ -603,7 +641,7 @@ async function handleCanonicalAuth(req, res) {
       case 'verifyEmail': {
         const token = body.token || urlObj.searchParams.get('token');
         if (!token || typeof token !== 'string') {
-          sendJson(res, 400, { success: false, error: { code: 'INVALID_ARGUMENT', message: 'Vui lòng cung cấp mã xác thực email hợp lệ.' } });
+          sendJson(res, 400, { success: false, error: { code: 'INVALID_ARGUMENT', message: 'Vui lĂ²ng cung cáº¥p mĂ£ xĂ¡c thá»±c email há»£p lá»‡.' } });
           return;
         }
         const result = await canonicalFoundation.verifyEmailToken({
@@ -618,7 +656,7 @@ async function handleCanonicalAuth(req, res) {
       }
 
       default: {
-        sendJson(res, 404, { success: false, error: { code: 'NOT_FOUND', message: `Endpoint '${action}' không tồn tại trên hệ thống xác thực.` } });
+        sendJson(res, 404, { success: false, error: { code: 'NOT_FOUND', message: `Endpoint '${action}' khĂ´ng tá»“n táº¡i trĂªn há»‡ thá»‘ng xĂ¡c thá»±c.` } });
         return;
       }
     }
@@ -628,7 +666,7 @@ async function handleCanonicalAuth(req, res) {
       success: false,
       error: {
         code: err.code || 'INTERNAL_ERROR',
-        message: err.message || 'Đã xảy ra lỗi máy chủ nội bộ',
+        message: err.message || 'ÄĂ£ xáº£y ra lá»—i mĂ¡y chá»§ ná»™i bá»™',
       },
     });
   }
@@ -636,3 +674,4 @@ async function handleCanonicalAuth(req, res) {
 
 export default handleCanonicalAuth;
 export { handleCanonicalAuth };
+

@@ -469,7 +469,11 @@ test('Phase 01-C7: TimeTable Safety Contract (0 Mutations)', async () => {
 });
 
 test('Audit Remediation: Teacher Attempts Query Safety Contract', async () => {
-  const teacherHtmlPath = path.resolve('eduspace/teacher/index.html');
+  const teacherHtmlPath = fs.existsSync(path.resolve('edu/teacher/legacy_index.html'))
+    ? path.resolve('edu/teacher/legacy_index.html')
+    : fs.existsSync(path.resolve('edu/teacher/index.html'))
+    ? path.resolve('edu/teacher/index.html')
+    : path.resolve('eduspace/teacher/index.html');
   const teacherHtml = fs.readFileSync(teacherHtmlPath, 'utf8');
 
   // 1. Invariant: NEVER load entire attempts collection without filter

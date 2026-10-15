@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Trị Bài Học &amp; Đề Thi – EduSpace Central Admin | ND Labs</title>
+    <title>Quản Trị Bài Học &amp; Đề Thi – EduND Central Admin | ND Labs</title>
     <link rel="icon" href="/assets/images/logo.png" type="image/png">
     
     <!-- Tailwind CSS -->
@@ -164,7 +164,7 @@
     <script src="/assets/js/config.js"></script>
     <script type="module" src="/assets/js/firebase-init.js"></script>
     <!-- TẠM KHÓA list_data.js
-    <script src="/eduspace/list_data.js"></script>
+    <script src="/edu/list_data.js"></script>
     -->
 
     <!-- EduAI Dependencies -->
@@ -205,7 +205,7 @@
             <div>
                 <div class="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider mb-1">
                     <i class="ph-bold ph-graduation-cap"></i>
-                    <span>EduSpace Central Admin</span>
+                    <span>EduND Central Admin</span>
                 </div>
                 <h1 class="text-3xl font-extrabold tracking-tight text-slate-950">Quản lý Bài học &amp; Đề thi</h1>
             </div>
@@ -219,7 +219,7 @@
                 <a href="/admin" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-bold rounded-2xl shadow-sm transition-all active:scale-95">
                     <i class="ph-bold ph-arrow-left text-blue-600"></i> Admin Hub
                 </a>
-                <a href="/eduspace" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-bold rounded-2xl shadow-sm transition-all active:scale-95">
+                <a href="/edu" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-bold rounded-2xl shadow-sm transition-all active:scale-95">
                     <i class="ph-bold ph-arrow-square-out text-emerald-600"></i> Xem Trang Chủ
                 </a>
             </div>
@@ -246,7 +246,7 @@
                         <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
                             <span>📡</span> Thông tin đồng bộ Firebase
                         </div>
-                        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Cấu hình bài đăng EduSpace</h2>
+                        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Cấu hình bài đăng EduND</h2>
                         <p class="text-blue-100 text-xs md:text-sm font-medium opacity-90 mt-1">Dữ liệu này sẽ xuất hiện trên trang chủ, bộ lọc môn và hệ thống đề thi trực tuyến.</p>
                     </div>
                 </div>
@@ -262,7 +262,7 @@
                                     🎲 Random
                                 </button>
                             </div>
-                            <p class="text-[11px] text-slate-400 mt-1 ml-1">ID viết liền không dấu, duy nhất. URL mở đề: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-600">/eduspace/exam?{id}</code></p>
+                            <p class="text-[11px] text-slate-400 mt-1 ml-1">ID viết liền không dấu, duy nhất. URL mở đề: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-600">/edu/exam?{id}</code></p>
                         </div>
                         <div class="md:col-span-2">
                             <label class="text-xs font-black text-slate-500 uppercase tracking-widest block mb-1.5 ml-1">Tiêu đề bài học / đề thi <span class="text-red-500">*</span></label>
@@ -277,11 +277,11 @@
                         <div>
                             <label class="text-xs font-black text-slate-500 uppercase tracking-widest block mb-1.5 ml-1">Mã bài trong URL tùy biến <span class="text-[11px] font-normal normal-case text-slate-400">(để trống = dùng ID ở trên)</span></label>
                             <div class="flex items-center rounded-2xl border-2 border-slate-100 bg-slate-50 overflow-hidden focus-within:border-blue-400 focus-within:bg-white transition-colors">
-                                <span class="px-3 text-slate-400 font-mono text-sm font-bold select-none whitespace-nowrap">/eduspace/exam?</span>
+                                <span class="px-3 text-slate-400 font-mono text-sm font-bold select-none whitespace-nowrap">/edu/exam?</span>
                                 <input id="pub-url-suffix" type="text" placeholder="{id tùy biến}" maxlength="60"
                                     class="flex-1 py-3 pr-4 bg-transparent text-slate-800 font-bold text-sm outline-none">
                             </div>
-                            <p class="text-[11px] text-slate-400 mt-1 ml-1">Nhập ID tùy biến để tạo URL dạng <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-600">/eduspace/exam?{id}</code>. Truy cập URL này sẽ tự điều hướng đến đề thi.</p>
+                            <p class="text-[11px] text-slate-400 mt-1 ml-1">Nhập ID tùy biến để tạo URL dạng <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-600">/edu/exam?{id}</code>. Truy cập URL này sẽ tự điều hướng đến đề thi.</p>
                         </div>
                         <div>
                             <label class="text-xs font-black text-slate-500 uppercase tracking-widest block mb-1.5 ml-1">Tag / Thẻ phân loại</label>
@@ -390,7 +390,7 @@
                                         </div>
                                         <div>
                                             <p class="text-sm font-bold text-slate-800">Kéo thả hoặc bấm để mở file data.js</p>
-                                            <p class="text-slate-400 text-xs mt-1 font-medium">Nhập file data.js của EduSpace để xem và chỉnh sửa trực quan.</p>
+                                            <p class="text-slate-400 text-xs mt-1 font-medium">Nhập file data.js của EduND để xem và chỉnh sửa trực quan.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -811,7 +811,7 @@
 
             try {
                 if (tabType === 'js' || name.endsWith('.js')) {
-                    if (!name.endsWith('.js')) throw new Error("Vui lòng chọn file .js đúng định dạng EduSpace.");
+                    if (!name.endsWith('.js')) throw new Error("Vui lòng chọn file .js đúng định dạng EduND.");
                     const code = await file.text();
                     const data = parseDataJS(code);
                     loadQuizDataIntoEditor(data);
@@ -860,7 +860,7 @@
                 </div>
                 <div>
                     <p class="text-sm font-bold text-slate-800">Kéo thả hoặc bấm để mở file data.js</p>
-                    <p class="text-slate-400 text-xs mt-1 font-medium">Nhập file data.js của EduSpace để xem và chỉnh sửa trực quan.</p>
+                    <p class="text-slate-400 text-xs mt-1 font-medium">Nhập file data.js của EduND để xem và chỉnh sửa trực quan.</p>
                 </div>
             `;
             document.getElementById('fileInfoDoc').innerHTML = `
@@ -2348,7 +2348,7 @@
 
             const desc = (document.getElementById('pub-desc')?.value || '').trim();
             const urlSuffix = (document.getElementById('pub-url-suffix')?.value || '').trim();
-            const url = urlSuffix ? `/eduspace/exam?${urlSuffix}` : `/eduspace/exam?${id}`;
+            const url = urlSuffix ? `/edu/exam?${urlSuffix}` : `/edu/exam?${id}`;
             const tag = (document.getElementById('pub-tag')?.value || '').trim();
             const cls = (document.getElementById('pub-class')?.value || '').trim();
             const subject = (document.getElementById('pub-subject')?.value || '').trim();
@@ -2385,11 +2385,6 @@
                 showToast('Đang lưu bài lên Firebase...', false);
 
                 if (type === 'quiz') {
-                    const existingQuiz = await getDoc(doc(db, 'quizzes', id.toUpperCase()));
-                    if (existingQuiz.exists() && existingQuiz.data().eduspaceV3) {
-                        window.location.href = `/eduspace/v3/author/?id=${encodeURIComponent(existingQuiz.id)}`;
-                        return;
-                    }
                     const quizDataObj = collectQuizData();
                     if (quizDataObj.questions.length > 0) {
                         await setDoc(doc(db, 'quizzes', id.toUpperCase()), {
@@ -2458,7 +2453,7 @@
                             class: quiz.class || quiz.grade || v3Exam?.grade || quizData.class || quizData.grade || '',
                             subject: quiz.subject || v3Exam?.subjectId || quizData.subject || '',
                             quizId: d.id,
-                            url: v3Exam ? `/eduspace/v3/exam/?id=${encodeURIComponent(d.id)}` : `/eduspace/exam?${d.id}`
+                            url: `/edu/exam?${d.id}`
                         };
                     });
                 } catch (e) { console.warn('Could not load from Firebase:', e); }
@@ -2505,7 +2500,7 @@
 
             container.innerHTML = posts.map(p => {
                 const id = p.id || p._docId;
-                const viewUrl = p.url || ('/eduspace/exam?' + id);
+                const viewUrl = p.url || ('/edu/exam?' + id);
                 const titleSafe = (p.title || '(Không tên)').replace(/"/g, '&quot;');
                 const isStatic = p._source === 'static';
                 const syncBadge = isStatic 
@@ -2575,21 +2570,17 @@
                 if (!docSnap.exists()) throw new Error('Không tìm thấy đề trong kho đề chung!');
 
                 const p = docSnap.data() || {};
-                if (p.eduspaceV3?.exam) {
-                    window.location.href = `/eduspace/v3/author/?id=${encodeURIComponent(docSnap.id)}`;
-                    return;
-                }
 
                 // Fill publish meta inputs
                 document.getElementById('pub-id').value = p.id || docId;
                 document.getElementById('pub-title').value = p.title || '';
                 document.getElementById('pub-desc').value = p.description || '';
-                // Extract the suffix from url if it starts with /eduspace/exam?
+                // Extract the suffix from url if it starts with /edu/exam?
                 const urlVal = p.url || '';
                 const urlSuffixEl = document.getElementById('pub-url-suffix');
                 if (urlSuffixEl) {
-                    if (urlVal.startsWith('/eduspace/exam?')) {
-                        urlSuffixEl.value = urlVal.replace('/eduspace/exam?', '');
+                    if (urlVal.startsWith('/edu/exam?')) {
+                        urlSuffixEl.value = urlVal.replace('/edu/exam?', '');
                     } else {
                         urlSuffixEl.value = '';
                     }
@@ -2641,9 +2632,7 @@
                     if (quizSnap.exists() && quizSnap.data().eduspaceV3) {
                         const signedInUser = auth?.currentUser || currentUser;
                         if (!signedInUser) throw new Error('Vui lòng đăng nhập tài khoản quản trị.');
-                        const apiBase = ['localhost', '127.0.0.1'].includes(window.location.hostname)
-                            ? 'http://localhost:3000'
-                            : 'https://nd-puce.vercel.app';
+                        const apiBase = '';
                         const response = await fetch(`${apiBase}/api/v3/admin/quizzes/${encodeURIComponent(quizSnap.id)}`, {
                             method: 'DELETE',
                             headers: { Authorization: `Bearer ${await signedInUser.getIdToken()}` }
@@ -2688,7 +2677,7 @@
                         id: item.id,
                         type: 'quiz',
                         quizId: item.id.toUpperCase(),
-                        url: item.url || `/eduspace/exam?${item.id}`,
+                        url: item.url || `/edu/exam?${item.id}`,
                         createdAt: serverTimestamp(),
                         creatorUid: currentUser.uid
                     }
@@ -2697,7 +2686,7 @@
                         title: item.title || '',
                         type: item.type || 'lesson',
                         description: item.description || '',
-                        url: item.url || `/eduspace/exam?${item.id}`,
+                        url: item.url || `/edu/exam?${item.id}`,
                         tag: item.tag || '',
                         class: item.class || '',
                         subject: item.subject || '',
@@ -2802,7 +2791,7 @@
                             id,
                             type: 'quiz',
                             quizId: id.toUpperCase(),
-                            url: item.url || `/eduspace/exam?${id}`,
+                            url: item.url || `/edu/exam?${id}`,
                             createdAt: serverTimestamp(),
                             creatorUid: currentUser.uid
                         }
@@ -2811,7 +2800,7 @@
                             title: item.title || '',
                             type: item.type || 'lesson',
                             description: item.description || '',
-                            url: item.url || `/eduspace/exam?${id}`,
+                            url: item.url || `/edu/exam?${id}`,
                             tag: item.tag || '',
                             class: item.class || '',
                             subject: item.subject || '',

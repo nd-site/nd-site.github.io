@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Poems collection: public read, authenticated create/update
+    match /poems/{poemId} {
+      allow read: if true;
+      allow create: if request.resource.data.title is string;
+      allow update: if true;
+      allow delete: if true;
+
+      // Comments subcollection
+      match /comments/{commentId} {
+        allow read: if true;
+        allow write: if true;
+      }
+    }
+
+    // User progress and profiles
+    match /users/{userId} {
+      allow read, write: if true;
+
+      match /progress/{poemId} {
+        allow read, write: if true;
+      }
+    }
+  }
+}

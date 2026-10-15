@@ -1,0 +1,1452 @@
+[
+  {
+    "file": "congnghe/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "congnghe/10/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "congnghe/10/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "congnghe/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "congnghe/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "congnghe/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "congnghe/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "congnghe/12/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "congnghe/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "diali/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "diali/10/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "diali/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "diali/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "diali/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "diali/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "diali/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "hoahoc/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "hoahoc/10/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "hoahoc/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "hoahoc/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "hoahoc/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "hoahoc/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "hoahoc/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "ktpl/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "ktpl/10/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "ktpl/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "ktpl/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "ktpl/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "ktpl/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "ktpl/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "lichsu/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "lichsu/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "lichsu/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "lichsu/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "lichsu/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "lichsu/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "nguvan/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 2,
+    "issues": [
+      "So cau qua it (2)"
+    ]
+  },
+  {
+    "file": "nguvan/10/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "nguvan/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "nguvan/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "nguvan/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "nguvan/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "nguvan/12/thptqg-2026-v1/data.js",
+    "severity": "error",
+    "questionCount": 2,
+    "issues": [
+      "So cau qua it (2)"
+    ]
+  },
+  {
+    "file": "nguvan/12/thptqg-2026-v2/data.js",
+    "severity": "error",
+    "questionCount": 2,
+    "issues": [
+      "So cau qua it (2)"
+    ]
+  },
+  {
+    "file": "nguvan/12/thptqg-2026-v3/data.js",
+    "severity": "error",
+    "questionCount": 2,
+    "issues": [
+      "So cau qua it (2)"
+    ]
+  },
+  {
+    "file": "nguvan/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "sinhhoc/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "sinhhoc/10/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "sinhhoc/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "sinhhoc/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "sinhhoc/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "sinhhoc/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "sinhhoc/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tienganh/10/de-viet-doan-van-hk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)"
+    ]
+  },
+  {
+    "file": "tienganh/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)"
+    ]
+  },
+  {
+    "file": "tienganh/10/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tienganh/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tienganh/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tienganh/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tienganh/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tienganh/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tinhoc/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tinhoc/10/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tinhoc/10/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tinhoc/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tinhoc/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tinhoc/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tinhoc/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tinhoc/12/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "tinhoc/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "toan/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 2,
+    "issues": [
+      "So cau qua it (2)"
+    ]
+  },
+  {
+    "file": "toan/10/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "toan/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "toan/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "toan/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "toan/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "toan/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "vatly/10/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "vatly/10/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "vatly/11/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "vatly/11/tx1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "vatly/11/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "vatly/12/gk1-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "vatly/12/tx2-2526-v1/data.js",
+    "severity": "error",
+    "questionCount": 1,
+    "issues": [
+      "Noi dung co ve la placeholder/demo, khong phai de that",
+      "So cau qua it (1)",
+      "Cau 1: co phuong an rong/placeholder"
+    ]
+  },
+  {
+    "file": "congnghe-congnghiep/10/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "congnghe-congnghiep/11/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "congnghe-congnghiep/12/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "congnghe-nongnghiep/10/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "congnghe-nongnghiep/11/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "congnghe-nongnghiep/12/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "congnghe-nongnghiep/12/thptqg-2026-v1/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "congnghe-nongnghiep/12/thptqg-2026-v2/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "congnghe-nongnghiep/12/thptqg-2026-v3/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "congnghe/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "congnghe/10/on-tap-gk2-2526-cncn-v1/data.js",
+    "severity": "ok",
+    "questionCount": 55,
+    "issues": []
+  },
+  {
+    "file": "congnghe/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "congnghe/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "diali/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "diali/10/on-tap-hk1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "diali/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "diali/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "diali/12/thptqg-2026-v1/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "diali/12/thptqg-2026-v2/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "diali/12/thptqg-2026-v3/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "gdqp/10/on-tap-hk1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 20,
+    "issues": []
+  },
+  {
+    "file": "hoahoc/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "hoahoc/10/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 23,
+    "issues": []
+  },
+  {
+    "file": "hoahoc/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "hoahoc/11/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 23,
+    "issues": []
+  },
+  {
+    "file": "hoahoc/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "hoahoc/12/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 23,
+    "issues": []
+  },
+  {
+    "file": "hoahoc/12/thptqg-2026-v1/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "hoahoc/12/thptqg-2026-v2/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "hoahoc/12/thptqg-2026-v3/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "ktpl/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "ktpl/10/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "ktpl/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "ktpl/11/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "ktpl/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "ktpl/12/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "ktpl/12/thptqg-2026-v1/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "ktpl/12/thptqg-2026-v2/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "ktpl/12/thptqg-2026-v3/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "lichsu/10/bai7-kntt/data.js",
+    "severity": "ok",
+    "questionCount": 26,
+    "issues": []
+  },
+  {
+    "file": "lichsu/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "lichsu/10/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "lichsu/10/on-tap-gk2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 60,
+    "issues": []
+  },
+  {
+    "file": "lichsu/10/on-tap-hk1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 20,
+    "issues": []
+  },
+  {
+    "file": "lichsu/10/on-tap-hk2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 51,
+    "issues": []
+  },
+  {
+    "file": "lichsu/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "lichsu/11/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "lichsu/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "lichsu/12/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "lichsu/12/thptqg-2026-v1/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "lichsu/12/thptqg-2026-v2/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "lichsu/12/thptqg-2026-v3/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "lichsu/9/on-tap-gk2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 32,
+    "issues": []
+  },
+  {
+    "file": "nguvan/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 11,
+    "issues": []
+  },
+  {
+    "file": "nguvan/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 11,
+    "issues": []
+  },
+  {
+    "file": "nguvan/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 11,
+    "issues": []
+  },
+  {
+    "file": "sinhhoc/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "sinhhoc/10/on-tap-hk1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 23,
+    "issues": []
+  },
+  {
+    "file": "sinhhoc/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "sinhhoc/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "sinhhoc/12/thptqg-2026-v1/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "sinhhoc/12/thptqg-2026-v2/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "sinhhoc/12/thptqg-2026-v3/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "tienganh/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "tienganh/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "tienganh/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "tienganh/12/thptqg-2026-v1/data.js",
+    "severity": "ok",
+    "questionCount": 40,
+    "issues": []
+  },
+  {
+    "file": "tienganh/12/thptqg-2026-v2/data.js",
+    "severity": "ok",
+    "questionCount": 40,
+    "issues": []
+  },
+  {
+    "file": "tienganh/12/thptqg-2026-v3/data.js",
+    "severity": "ok",
+    "questionCount": 40,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/10/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/11/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 19,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/daklak-cum8-2026/data.js",
+    "severity": "ok",
+    "questionCount": 30,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/danang-cum-2026/data.js",
+    "severity": "ok",
+    "questionCount": 30,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/dongnai-lan1-2026/data.js",
+    "severity": "ok",
+    "questionCount": 30,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/haiphong-cum7-lan2-2026/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/haiphong-lan2-2026/data.js",
+    "severity": "ok",
+    "questionCount": 30,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/nghean-lan2-2026/data.js",
+    "severity": "ok",
+    "questionCount": 30,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/ninhbinh-cum5-lan1-2026/data.js",
+    "severity": "ok",
+    "questionCount": 29,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/thptqg-2026-v1/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/thptqg-2026-v2/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/thptqg-2026-v3/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/thptqg-nghean-lan1-2026-de2/data.js",
+    "severity": "ok",
+    "questionCount": 30,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/thptqg-nghean-lan1-2026/data.js",
+    "severity": "ok",
+    "questionCount": 30,
+    "issues": []
+  },
+  {
+    "file": "tinhoc/12/tuyenquang-lan2-2026/data.js",
+    "severity": "ok",
+    "questionCount": 30,
+    "issues": []
+  },
+  {
+    "file": "toan/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "toan/10/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 23,
+    "issues": []
+  },
+  {
+    "file": "toan/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "toan/11/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 23,
+    "issues": []
+  },
+  {
+    "file": "toan/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "toan/12/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 23,
+    "issues": []
+  },
+  {
+    "file": "toan/12/thptqg-2026-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "toan/12/thptqg-2026-v2/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "toan/12/thptqg-2026-v3/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "vatly/10/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "vatly/10/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 23,
+    "issues": []
+  },
+  {
+    "file": "vatly/10/moment-luc/data.js",
+    "severity": "ok",
+    "questionCount": 25,
+    "issues": []
+  },
+  {
+    "file": "vatly/10/on-tap-gk2-v1/data.js",
+    "severity": "ok",
+    "questionCount": 26,
+    "issues": []
+  },
+  {
+    "file": "vatly/10/on-tap-hk1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 20,
+    "issues": []
+  },
+  {
+    "file": "vatly/11/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "vatly/11/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 23,
+    "issues": []
+  },
+  {
+    "file": "vatly/12/ck1-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 22,
+    "issues": []
+  },
+  {
+    "file": "vatly/12/ck2-2526-v1/data.js",
+    "severity": "ok",
+    "questionCount": 23,
+    "issues": []
+  },
+  {
+    "file": "vatly/12/thptqg-2026-v1/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "vatly/12/thptqg-2026-v2/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  },
+  {
+    "file": "vatly/12/thptqg-2026-v3/data.js",
+    "severity": "ok",
+    "questionCount": 28,
+    "issues": []
+  }
+]

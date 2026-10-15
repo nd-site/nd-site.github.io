@@ -1,5 +1,5 @@
 /**
- * ND Labs & EduSpace — Global Notification Ticker System
+ * ND Labs & EduND — Global Notification Ticker System
  * 
  * Tác dụng:
  *   • Tự động hiển thị thanh thông báo màu đỏ (red ticker) chạy chữ ngang từ phải qua trái.
@@ -16,7 +16,7 @@
 (function () {
   // THÔNG BÁO CHẠY NGANG (Dễ dàng thêm/sửa/xóa ở đây)
   const ANNOUNCEMENTS = [
-    "EduSpace by ND Labs vừa thêm vào hệ thống các bài thi thử TN THPT QG năm 2026. <a href='/eduspace/thptqg/2026/index.html' class='nd-ticker-link'>Trải nghiệm ngay tại đây!</a>"
+    "EduND by ND Labs vừa thêm vào hệ thống các bài thi thử TN THPT QG năm 2026. <a href='/edu/thptqg/2026/index.html' class='nd-ticker-link'>Trải nghiệm ngay tại đây!</a>"
   ]
   // Lọc lấy các thông báo thực tế hợp lệ (không rỗng)
   const validAnnouncements = (ANNOUNCEMENTS || []).map(a => a.trim()).filter(a => a.length > 0);

@@ -1,8 +1,8 @@
 /**
- * EduSpace — EduAI Assistant (Trợ lý Học tập EduAI)
+ * EduND — EduAI Assistant (Trợ lý Học tập EduAI)
  * 
  * Tác dụng:
- *   • Cung cấp Widget khung chat EduAI Assistant dành riêng cho toàn bộ phân hệ EduSpace.
+ *   • Cung cấp Widget khung chat EduAI Assistant dành riêng cho toàn bộ phân hệ EduND.
  *   • Hỗ trợ hiển thị công thức Toán học đẹp mắt thông qua KaTeX và văn bản định dạng Markdown bằng Marked.js.
  *   • Có khả năng đọc ngữ cảnh câu hỏi thi của trang hiện tại để trả lời chuẩn xác.
  *   • Tự động hiển thị ở chế độ Luyện tập và ẩn đi ở chế độ Thi thử để tránh gian lận.
@@ -298,7 +298,7 @@ const EduAI_Assistant = (function () {
                 ? 'Không chào hỏi, không dẫn nhập — trả lời thẳng vào câu hỏi.'
                 : 'Chào người dùng ngắn gọn một câu rồi trả lời ngay.';
 
-            const systemPrompt = `Bạn là EduAI Assistant — trợ lý học tập thông minh, ngắn gọn, súc tích của EduSpace (ND Labs). ${greetInstruction} Trả lời tối đa 3-5 câu, mỗi câu là một ý độc lập. Hãy sử dụng định dạng Markdown (in đậm, in nghiêng) và công thức Toán/Lý/Hóa bằng LaTeX (sử dụng dấu đô-la: $...$ cho công thức nội dòng và $$...$$ cho công thức dạng khối).${context ? ' Ngữ cảnh bài tập hiện tại trên màn hình: ' + context : ''}`;
+            const systemPrompt = `Bạn là EduAI Assistant — trợ lý học tập thông minh, ngắn gọn, súc tích của EduND (ND Labs). ${greetInstruction} Trả lời tối đa 3-5 câu, mỗi câu là một ý độc lập. Hãy sử dụng định dạng Markdown (in đậm, in nghiêng) và công thức Toán/Lý/Hóa bằng LaTeX (sử dụng dấu đô-la: $...$ cho công thức nội dòng và $$...$$ cho công thức dạng khối).${context ? ' Ngữ cảnh bài tập hiện tại trên màn hình: ' + context : ''}`;
 
             const aiCaller = window.eduspaceAI || window.ndAI_API;
             if (!aiCaller || typeof aiCaller.call !== 'function') {
@@ -373,7 +373,7 @@ const EduAI_Assistant = (function () {
         const widget = document.getElementById('edu-ai-widget');
         if (!toggleBtn) return;
 
-        if (window.location.pathname.includes('/eduspace/assistant/')) {
+        if (window.location.pathname.includes('/edu/assistant/')) {
             toggleBtn.style.display = 'none';
             if (widget) widget.style.display = 'none';
             return;

@@ -30,6 +30,7 @@
     "live_download",
     "android",
     "functions",
-    "beta"
+    "beta",
+    "*.cjs"
   ]
 }

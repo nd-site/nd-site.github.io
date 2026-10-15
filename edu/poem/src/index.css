@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-amber-50/70 text-stone-800 antialiased;
+    background-image: 
+      radial-gradient(at 10% 10%, rgba(251, 146, 60, 0.08) 0px, transparent 50%),
+      radial-gradient(at 90% 90%, rgba(245, 158, 11, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(254, 243, 199, 0.4) 0px, transparent 100%);
+    background-attachment: fixed;
+  }
+}
+
+/* Custom scrollbar in warm autumn tone */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fef3c7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f97316;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ea580c;
+}
+
+/* Paper textured styling for poem cards */
+.paper-card {
+  background: linear-gradient(135deg, #ffffff 0%, #fffcf7 100%);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  box-shadow: 0 4px 20px -2px rgba(180, 83, 9, 0.06), 0 2px 6px -1px rgba(180, 83, 9, 0.03);
+}
+
+.poem-line {
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+.font-greatvibes {
+  font-family: 'Great Vibes', cursive !important;
+}
+
+.font-script {
+  font-family: 'Great Vibes', 'Dancing Script', 'Pacifico', cursive !important;
+}
+
+.font-poem {
+  font-family: 'Lora', Georgia, serif !important;
+}
+

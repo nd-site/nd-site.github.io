@@ -13,15 +13,15 @@ Phân hệ quản trị hiện tại của hệ thống ND Labs được hình t
 
 Qua kiểm toán thực tế mã nguồn, hệ thống có 5 điểm truy cập quản trị chính:
 1. `/admin/index.html` (ND Labs Central Admin Console)
-2. `/admin/eduspace/index.html` (EduSpace Lesson & Exam Manager)
-3. `/admin/eduspace/timetable/index.html` (EduSpace Timetable App Container)
+2. `/admin/edu/index.html` (EduSpace Lesson & Exam Manager)
+3. `/admin/edu/timetable/index.html` (EduSpace Timetable App Container)
 4. `/admin/lotus_bot/index.html` (Lotus Bot Standalone Configurator)
-5. `/eduspace/admin/index.html` (Legacy EduSpace User Admin Console)
+5. `/edu/admin/index.html` (Legacy EduSpace User Admin Console)
 
 ### Các phát hiện cốt lõi:
 - **Xung đột quyền hạn & thiếu phân cấp Owner**: Client-side chỉ kiểm tra lỏng lẻo `userData.role === 'admin'`. Không có bất kỳ cơ chế nào phân biệt giữa `admin` thông thường và `owner` trên giao diện hoặc client code, trong khi Firestore Security Rules và Cloud Functions đã phân định rõ ràng quyền tối cao của Owner (`adminLevel == 'owner'`).
-- **Lỗ hổng thao tác trực tiếp Client-SDK**: Các file `/admin/index.html` và `/eduspace/admin/index.html` vẫn chứa các hàm gọi trực tiếp client Firestore SDK (`updateDoc`, `deleteDoc`, sửa `code_ids`, sửa `ndids`) để cập nhật tài khoản, xóa người dùng, xóa hàng loạt dữ liệu chat. Các thao tác này vừa xung đột trực tiếp với Firestore Rules (`allow delete: if false; allow create: if false;`), vừa vi phạm quy chuẩn bảo mật (bypass audit log, không qua server-side).
-- **Trùng lặp mã nguồn nghiêm trọng**: Tính năng quản lý người dùng tồn tại song song ở cả `/admin/index.html` và `/eduspace/admin/index.html`. Tính năng quản lý Lotus Bot tồn tại ở cả `/admin/index.html` (tab Lotus Bot) và `/admin/lotus_bot/index.html`.
+- **Lỗ hổng thao tác trực tiếp Client-SDK**: Các file `/admin/index.html` và `/edu/admin/index.html` vẫn chứa các hàm gọi trực tiếp client Firestore SDK (`updateDoc`, `deleteDoc`, sửa `code_ids`, sửa `ndids`) để cập nhật tài khoản, xóa người dùng, xóa hàng loạt dữ liệu chat. Các thao tác này vừa xung đột trực tiếp với Firestore Rules (`allow delete: if false; allow create: if false;`), vừa vi phạm quy chuẩn bảo mật (bypass audit log, không qua server-side).
+- **Trùng lặp mã nguồn nghiêm trọng**: Tính năng quản lý người dùng tồn tại song song ở cả `/admin/index.html` và `/edu/admin/index.html`. Tính năng quản lý Lotus Bot tồn tại ở cả `/admin/index.html` (tab Lotus Bot) và `/admin/lotus_bot/index.html`.
 - **Rủi ro phá vỡ dữ liệu chuẩn (Canonical Data)**: `/admin/index.html` vẫn giữ code cũ sinh CodeID 8 số ngẫu nhiên ghi vào collection `code_ids`, hoàn toàn mâu thuẫn với quy chuẩn hiện tại (CodeID 4 số dạng chuỗi `0000`, Auth UID = CodeID).
 
 ---
@@ -51,10 +51,10 @@ d:\Project\WebSite\ND Labs\
 | Route / Entry Point | File Path | Trọng lượng / Dòng | Mục đích chức năng | Trạng thái hiện tại |
 | :--- | :--- | :--- | :--- | :--- |
 | `/admin/` hoặc `/admin/index.html` | `admin/index.html` | 134.5 KB / 2,459 dòng | Dashboard tổng quan, Quản lý tài khoản ND Labs, Bảng thông báo RTDB, Lotus Bot RTDB, Dữ liệu EduSpace & Xóa Chat | Đang hoạt động, chứa nhiều logic cũ/lỗi |
-| `/admin/eduspace/` | `admin/eduspace/index.html` | 167.1 KB / 2,792 dòng | Trình soạn thảo đề thi, bài giảng, mammoth docx parser, đồng bộ câu hỏi lên Firestore | Đang hoạt động, độc lập, file nguyên khối lớn |
-| `/admin/eduspace/timetable/` | `admin/eduspace/timetable/index.html` | 1.1 KB / 32 dòng | Vỏ bọc nhúng React Timetable App bundle (`/assets/timetable-dist/bundle.js`) | **Bất biến (Frozen)** - Tuyệt đối không can thiệp |
+| `/admin/edu/` | `admin/edu/index.html` | 167.1 KB / 2,792 dòng | Trình soạn thảo đề thi, bài giảng, mammoth docx parser, đồng bộ câu hỏi lên Firestore | Đang hoạt động, độc lập, file nguyên khối lớn |
+| `/admin/edu/timetable/` | `admin/edu/timetable/index.html` | 1.1 KB / 32 dòng | Vỏ bọc nhúng React Timetable App bundle (`/assets/timetable-dist/bundle.js`) | **Bất biến (Frozen)** - Tuyệt đối không can thiệp |
 | `/admin/lotus_bot/` | `admin/lotus_bot/index.html` | 20.3 KB / 371 dòng | Quản lý cấu hình Lotus Bot (trạng thái, whitelist NDID) trên Realtime Database | Dư thừa (Duplicate với tab trong `/admin/`) |
-| `/eduspace/admin/` | `eduspace/admin/index.html` | 32.9 KB / 616 dòng | Quản trị người dùng riêng của phân hệ EduSpace | Rất cũ, trùng lặp, logic sửa DB trực tiếp lỗi thời |
+| `/edu/admin/` | `eduspace/admin/index.html` | 32.9 KB / 616 dòng | Quản trị người dùng riêng của phân hệ EduSpace | Rất cũ, trùng lặp, logic sửa DB trực tiếp lỗi thời |
 
 ---
 
@@ -86,12 +86,12 @@ Hầu hết các trang quản trị hiện tại được viết dưới dạng 
   - Form phát thông báo toàn hệ thống (Tiêu đề, Nội dung, Loại thông báo, Thời hạn). Ghi vào RTDB `/announcements`.
   - Danh sách các thông báo đang hoạt động.
 - **Tab EduSpace**:
-  - Liên kết điều hướng sang `/admin/eduspace/` và `/admin/eduspace/timetable/`.
+  - Liên kết điều hướng sang `/admin/edu/` và `/admin/edu/timetable/`.
   - Trình duyệt/tìm kiếm hồ sơ học tập EduSpace (`users/{id}/eduspace_profile`).
 - **Tab Danger Zone**:
   - Nút "Wipe All ChatND Data" (Xóa sạch tin nhắn trong collection `chats`).
 
-### 4.2. Khối giao diện tại `/admin/eduspace/index.html`:
+### 4.2. Khối giao diện tại `/admin/edu/index.html`:
 - Header thanh điều hướng, trạng thái kết nối Firebase.
 - Sidebar danh mục đề thi / môn học (`math`, `physics`, `chemistry`, `biology`, `history`, `geography`, `civic`, v.v.).
 - Bộ chuyển đổi tệp Word (.docx) sang đề thi sử dụng thư viện **Mammoth.js**.
@@ -99,7 +99,7 @@ Hầu hết các trang quản trị hiện tại được viết dưới dạng 
 - Trình hiển thị công thức Toán học / Hóa học qua **KaTeX**.
 - Trình quản lý xuất/nhập tệp JSON cấu trúc đề thi EduSpace.
 
-### 4.3. Khối giao diện tại `/admin/eduspace/timetable/index.html`:
+### 4.3. Khối giao diện tại `/admin/edu/timetable/index.html`:
 - Cực kỳ tối giản, đóng vai trò host DOM: `<div id="root"></div>`.
 - Nạp thư viện: React, ReactDOM (hoặc bundle biên dịch sẵn) từ `/assets/timetable-dist/bundle.js`.
 
@@ -107,7 +107,7 @@ Hầu hết các trang quản trị hiện tại được viết dưới dạng 
 - Form cấu hình độc lập cho Lotus Bot trên Realtime Database: `bot_status`, `allowed_users`.
 - Trực tiếp thao tác đường dẫn RTDB: `ref(rtdb, 'lotus_bots')`.
 
-### 4.5. Khối giao diện tại `/eduspace/admin/index.html`:
+### 4.5. Khối giao diện tại `/edu/admin/index.html`:
 - Bảng danh sách thành viên EduSpace.
 - Modal cấp quyền và gán lớp học / khối học.
 
@@ -183,8 +183,8 @@ Dưới đây là ma trận phân quyền chuẩn (Canonical Matrix) cần đư�
 | **Xóa User** | `admin/index.html` | `deleteDoc(doc(db, 'users', uid))` | **HỎNG** (Bị Rules chặn `allow delete: if false`) | Cần xóa qua Cloud Function an toàn |
 | **Cấu hình Lotus Bot** | `admin/index.html` + `admin/lotus_bot/` | RTDB `/lotus_bots` | Hoạt động | Trùng lặp mã ở 2 trang khác nhau |
 | **Gửi Thông báo** | `admin/index.html` | RTDB `/announcements` | Hoạt động | Tốt, giao diện cơ bản |
-| **Quản lý Đề thi EduSpace** | `admin/eduspace/index.html` | Mammoth docx, KaTeX, Firestore `exams` | Hoạt động tốt | Công cụ mạnh, cần giữ nguyên tính năng nhưng làm sạch UI |
-| **Quản lý Thời khóa biểu** | `admin/eduspace/timetable/` | React bundle (`/assets/timetable-dist/`) | Hoạt động tốt | **Khu vực bất biến** - Bảo tồn nguyên vẹn |
+| **Quản lý Đề thi EduSpace** | `admin/edu/index.html` | Mammoth docx, KaTeX, Firestore `exams` | Hoạt động tốt | Công cụ mạnh, cần giữ nguyên tính năng nhưng làm sạch UI |
+| **Quản lý Thời khóa biểu** | `admin/edu/timetable/` | React bundle (`/assets/timetable-dist/`) | Hoạt động tốt | **Khu vực bất biến** - Bảo tồn nguyên vẹn |
 | **Xóa dữ liệu ChatND** | `admin/index.html` | Vòng lặp xóa `chats` từ client | **RẤT NGUY HIỂM** | Thiếu xác thực Owner, dễ gây treo trình duyệt |
 
 ---
@@ -217,9 +217,9 @@ Dưới đây là ma trận phân quyền chuẩn (Canonical Matrix) cần đư�
 ## 11. Broken / Risky / Dead / Duplicated Areas
 
 ### 11.1. Các phần bị hỏng (Broken):
-- Nút Xóa tài khoản trong `/admin/index.html` và `/eduspace/admin/index.html`: Gây lỗi `FirebaseError: Missing or insufficient permissions` do quy tắc bảo mật Firestore cấm xóa trực tiếp.
+- Nút Xóa tài khoản trong `/admin/index.html` và `/edu/admin/index.html`: Gây lỗi `FirebaseError: Missing or insufficient permissions` do quy tắc bảo mật Firestore cấm xóa trực tiếp.
 - Nút Thêm người dùng mới trong `/admin/index.html`: Sinh CodeID 8 số vào collection `code_ids`, phá vỡ toàn bộ cấu trúc CodeID 4 số và liên kết Auth UID.
-- Cập nhật collection `ndids` từ client trong `/eduspace/admin/index.html`: Luôn thất bại do rules `allow read, write: if false`.
+- Cập nhật collection `ndids` từ client trong `/edu/admin/index.html`: Luôn thất bại do rules `allow read, write: if false`.
 
 ### 11.2. Các phần rủi ro cao (Risky):
 - Xóa đệ quy collection `chats` từ trình duyệt máy khách (dễ đứt mạng giữa chừng, để lại dữ liệu rác mồ côi).
@@ -230,7 +230,7 @@ Dưới đây là ma trận phân quyền chuẩn (Canonical Matrix) cần đư�
 - Tệp `eduspace/admin/index.html` gần như bị bỏ quên sau khi `admin/index.html` ra đời.
 
 ### 11.4. Các phần trùng lặp (Duplicated):
-- Quản lý người dùng: Tồn tại cả ở `/admin/` và `/eduspace/admin/`.
+- Quản lý người dùng: Tồn tại cả ở `/admin/` và `/edu/admin/`.
 - Quản lý Lotus Bot: Tồn tại cả ở `/admin/` (tab) và `/admin/lotus_bot/` (file riêng).
 
 ---
@@ -238,11 +238,11 @@ Dưới đây là ma trận phân quyền chuẩn (Canonical Matrix) cần đư�
 ## 12. Existing Features to Preserve
 
 Những tính năng lõi đang vận hành ổn định và **bắt buộc phải bảo tồn 100%**:
-1. **Toàn bộ phân hệ Quản lý Đề thi EduSpace (`/admin/eduspace/index.html`)**:
+1. **Toàn bộ phân hệ Quản lý Đề thi EduSpace (`/admin/edu/index.html`)**:
    - Trình phân tích tài liệu Word (.docx) sang câu hỏi tự động (Mammoth parser).
    - Trình soạn thảo câu hỏi trắc nghiệm, điền khuyết, KaTeX preview.
    - Cơ chế xuất/nhập tệp JSON cấu trúc đề thi EduSpace.
-2. **Toàn bộ ứng dụng Thời khóa biểu EduSpace (`/admin/eduspace/timetable/`)**:
+2. **Toàn bộ ứng dụng Thời khóa biểu EduSpace (`/admin/edu/timetable/`)**:
    - Gói bundle React (`/assets/timetable-dist/bundle.js`) và route chứa nó.
    - Toàn bộ cơ chế dữ liệu và lưu trữ của Timetable.
 3. **Tính năng Phát thông báo toàn hệ thống (Announcements)**:
@@ -255,7 +255,7 @@ Những tính năng lõi đang vận hành ổn định và **bắt buộc phả
 ## 13. Features to Consolidate
 
 Gộp các phân hệ phân tán về một bảng điều khiển duy nhất (`/admin/` Unified Hub):
-1. **Gộp Quản lý Người dùng**: Hủy bỏ giao diện cũ tại `/eduspace/admin/`, tập trung toàn bộ nghiệp vụ người dùng vào tab hoặc phân trang của `/admin/`.
+1. **Gộp Quản lý Người dùng**: Hủy bỏ giao diện cũ tại `/edu/admin/`, tập trung toàn bộ nghiệp vụ người dùng vào tab hoặc phân trang của `/admin/`.
 2. **Gộp Lotus Bot Manager**: Chuyển toàn bộ cấu hình từ `/admin/lotus_bot/index.html` vào phân khu chuyên trách trong `/admin/`, biến route `/admin/lotus_bot/` thành redirect hoặc loại bỏ độc lập.
 3. **Hợp nhất thanh điều hướng (Unified Navbar & Breadcrumbs)**: Một thanh điều hướng quản trị chung cho phép di chuyển liền mạch giữa Central Admin, EduSpace Content Manager, và Timetable.
 
@@ -277,7 +277,7 @@ Gộp các phân hệ phân tán về một bảng điều khiển duy nhất (`
 
 1. **Loại bỏ form tự tạo tài khoản thủ công với CodeID 8 số ngẫu nhiên** trên client-side.
 2. **Loại bỏ tính năng xóa trực tiếp từ client-side Firestore SDK** (`deleteDoc`).
-3. **Loại bỏ trang quản trị mồ côi `/eduspace/admin/index.html`** (sau khi đã hợp nhất toàn bộ dữ liệu hiển thị về trung tâm).
+3. **Loại bỏ trang quản trị mồ côi `/edu/admin/index.html`** (sau khi đã hợp nhất toàn bộ dữ liệu hiển thị về trung tâm).
 4. **Loại bỏ script quét fix NDID cũ** trực tiếp từ trình duyệt gây rủi ro hỏng index.
 
 ---
@@ -312,8 +312,8 @@ Gộp các phân hệ phân tán về một bảng điều khiển duy nhất (`
 │   └── [Owner Only] Thao tác định danh (Sửa NDID/CodeID ngoại lệ)
 │
 ├── 3. EduSpace Manager (Nội dung Học tập & Khảo thí)
-│   ├── Liên kết trực tiếp sang Trình soạn thảo Đề thi (/admin/eduspace/)
-│   ├── Liên kết trực tiếp sang Thời khóa biểu (/admin/eduspace/timetable/)
+│   ├── Liên kết trực tiếp sang Trình soạn thảo Đề thi (/admin/edu/)
+│   ├── Liên kết trực tiếp sang Thời khóa biểu (/admin/edu/timetable/)
 │   └── Quản lý kết quả thi & thống kê học viên
 │
 ├── 4. System Services (Dịch vụ & Tiện ích)
@@ -347,8 +347,8 @@ Gộp các phân hệ phân tán về một bảng điều khiển duy nhất (`
 | :--- | :--- | :--- |
 | `/admin/` (Dashboard & Core Hub) | Điều phối trung tâm, thống kê tổng quát, quản lý user, thông báo, bot | Admin, Owner |
 | `/admin/users` | Tra cứu danh sách, xem chi tiết tài khoản, khóa/mở tài khoản | Admin, Owner (Thao tác nâng cao chỉ Owner) |
-| `/admin/eduspace/` | Soạn thảo, nhập docx, chỉnh sửa công thức KaTeX, lưu đề thi lên Firestore | Admin, Owner |
-| `/admin/eduspace/timetable/` | Chạy ứng dụng Thời khóa biểu chuyên biệt | Giáo viên/Admin được cấp quyền, Owner |
+| `/admin/edu/` | Soạn thảo, nhập docx, chỉnh sửa công thức KaTeX, lưu đề thi lên Firestore | Admin, Owner |
+| `/admin/edu/timetable/` | Chạy ứng dụng Thời khóa biểu chuyên biệt | Giáo viên/Admin được cấp quyền, Owner |
 | Cloud Functions / API Quản trị | Xử lý logic nghiệp vụ an toàn, kiểm toán, thay đổi role, xóa dữ liệu | Server-side execution only |
 
 ---
@@ -365,12 +365,12 @@ Gộp các phân hệ phân tán về một bảng điều khiển duy nhất (`
    - Dữ liệu từ DB/Admin: Bảo toàn 100% RAW STRING, không sanitize, không cắt xén.
    - Tuyệt đối KHÔNG tự ý chèn tiền tố `@` vào đầu chuỗi NDID trên giao diện.
 3. **Bảo tồn Phân hệ Thời khóa biểu (Timetable)**:
-   - Giữ nguyên vẹn thư mục `admin/eduspace/timetable/` và `eduspace/timetable/`.
+   - Giữ nguyên vẹn thư mục `admin/edu/timetable/` và `eduspace/timetable/`.
    - Không đụng chạm mã nguồn hoặc cấu trúc dữ liệu của Timetable.
 4. **Bảo tồn Dữ liệu Bài thi (Quiz & Exams)**:
    - Giữ nguyên cấu trúc lưu trữ đề thi và lịch sử làm bài thi hiện có trong Firestore.
 5. **Duy trì Khả năng Tương thích Ngược**:
-   - Nếu điều chuyển đường dẫn của `/eduspace/admin/` hoặc `/admin/lotus_bot/`, phải thiết lập redirect 301/client-side redirect an toàn để không làm gãy bookmark hoặc liên kết cũ.
+   - Nếu điều chuyển đường dẫn của `/edu/admin/` hoặc `/admin/lotus_bot/`, phải thiết lập redirect 301/client-side redirect an toàn để không làm gãy bookmark hoặc liên kết cũ.
 
 ---
 
@@ -393,8 +393,8 @@ Khi bước vào giai đoạn thực thi thiết kế lại (Redesign Execution 
 - **Bước 3: Tái thiết kế giao diện vỏ `/admin/` (Admin Shell & Navigation)**: Tạo khung layout chuẩn (Sidebar, Header, Breadcrumb, Auth Guard 2 cấp).
 - **Bước 4: Chuyển đổi và nâng cấp User Directory**: Thay thế bảng dữ liệu cũ bằng bảng quản trị mới gọi qua Cloud Functions/Phân trang an toàn.
 - **Bước 5: Tích hợp và làm sạch các phân khu dịch vụ**: Đưa cấu hình Lotus Bot và Announcements vào giao diện chuẩn hóa.
-- **Bước 6: Tinh chỉnh liên kết với `/admin/eduspace/` và bảo toàn `/admin/eduspace/timetable/`**.
-- **Bước 7: Thiết lập Redirect dọn dẹp các trang cũ (`/eduspace/admin/`, `/admin/lotus_bot/`)**.
+- **Bước 6: Tinh chỉnh liên kết với `/admin/edu/` và bảo toàn `/admin/edu/timetable/`**.
+- **Bước 7: Thiết lập Redirect dọn dẹp các trang cũ (`/edu/admin/`, `/admin/lotus_bot/`)**.
 
 ---
 

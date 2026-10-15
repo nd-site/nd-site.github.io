@@ -1,6 +1,6 @@
 /**
  * Deprecated: ai.js has been refactored into:
- *   - /assets/js/edu_ai.js (EduAI Assistant for EduSpace)
+ *   - /assets/js/edu_ai.js (EduAI Assistant for EduND)
  *   - /assets/js/nd_ai.js (NDAI Assistant for ND Labs)
  * 
  * This file is maintained for backward compatibility.

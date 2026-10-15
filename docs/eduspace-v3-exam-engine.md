@@ -164,7 +164,7 @@ Toàn bộ 56 bài kiểm tra đơn vị trên 21 test suites đã thực thi th
 
 ```
 # Lệnh chạy:
-npx tsx --test tests/eduspace/v3-domain-foundation.test.ts tests/eduspace/v3-exam-engine.test.ts
+npx tsx --test tests/edu/v3-domain-foundation.test.ts tests/edu/v3-exam-engine.test.ts
 
 ▶ EduSpace V3 Constants & Enums (3/3 passed)
 ▶ Schema Version Detection & Isolation (3/3 passed)

@@ -11,7 +11,7 @@
 
 ### TỔNG QUAN KIẾN TRÚC PHIÊN THI (EXECUTIVE SUMMARY)
 
-Module Khảo thí Máy chủ Bảo chứng (`src/eduspace/assessment/`) chịu trách nhiệm thiết lập và bảo vệ ranh giới bảo mật nghiêm ngặt giữa máy khách (Browser/Client Runner) và cơ sở dữ liệu EduSpace V3.
+Module Khảo thí Máy chủ Bảo chứng (`src/edu/assessment/`) chịu trách nhiệm thiết lập và bảo vệ ranh giới bảo mật nghiêm ngặt giữa máy khách (Browser/Client Runner) và cơ sở dữ liệu EduSpace V3.
 
 Mọi hành động của thí sinh — từ lúc mở đề, lưu bài tạm (autosave), đến khi bấm nộp bài chính thức — đều phải tuân thủ các tiên đề bảo mật:
 
@@ -213,26 +213,26 @@ Tất cả các ngoại lệ trong quá trình thao tác phiên thi đều trả
           │
           ▼
 [Tầng B: Server / Backend Adapter]
-   • src/eduspace/backend/assessmentBackend.ts (handleAssessmentApi)
+   • src/edu/backend/assessmentBackend.ts (handleAssessmentApi)
    • Xác thực Token: Firebase Admin Auth verifyIdToken(token) ──> decoded.uid === CodeID
    • Nhận diện Danh tính Chuẩn tắc: users/{CodeID} ──> canonical NDID (Raw String, không @)
    • Chống tràn luồng request: parseRequestBody non-blocking, timeout protection
           │
           ▼
 [Tầng A: Lõi Khảo thí V3 Độc lập Framework (Assessment Core)]
-   • src/eduspace/assessment/sessionService.ts (ExamSessionService)
-   • src/eduspace/engine/pipeline/examEngine.ts (ExamEngine, PRNG Mulberry32)
+   • src/edu/assessment/sessionService.ts (ExamSessionService)
+   • src/edu/engine/pipeline/examEngine.ts (ExamEngine, PRNG Mulberry32)
    • Điều phối: StateMachine, ServerTimer, GDPT 2018 True/False Ladder, ResultBuilder
           │
           ▼
 [Tầng D: Tầng Cơ sở Dữ liệu Tin cậy & Repositories]
-   • src/eduspace/core/repositories/firestoreRepository.ts
+   • src/edu/core/repositories/firestoreRepository.ts
    • Firestore Admin SDK: Ghi nhận độc quyền vào exam_sessions, submissions, grading_records, results
    • firestore.rules: Client Deny tuyệt đối (match /{document=**} { allow read, write: if false; })
           │
           ▼
 [Tầng E: Client-Facing Sanitized DTOs]
-   • src/eduspace/assessment/sanitizer.ts (sanitizeExecutionPlan)
+   • src/edu/assessment/sanitizer.ts (sanitizeExecutionPlan)
    • Loại bỏ 100% answer keys trước khi gửi về client
 ```
 

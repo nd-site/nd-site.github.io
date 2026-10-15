@@ -1,6 +1,6 @@
 # Hướng Dẫn Soạn Thảo Đề Thi V3 & Công Cụ Trợ Lý Soạn Đề (EduSpace V3 Beta)
 
-Tài liệu hướng dẫn nghiệp vụ và kỹ thuật dành cho giáo viên và quản trị viên sử dụng hệ thống soạn đề trực quan **EduSpace Visual Exam Builder V3** (`/eduspace/v3/author/`).
+Tài liệu hướng dẫn nghiệp vụ và kỹ thuật dành cho giáo viên và quản trị viên sử dụng hệ thống soạn đề trực quan **EduSpace Visual Exam Builder V3** (`/edu/v3/author/`).
 
 ---
 

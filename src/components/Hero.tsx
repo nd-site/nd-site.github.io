@@ -9,7 +9,7 @@ export default function Hero() {
             <div className="w-8 h-8 bg-blue-600/10 rounded-full flex items-center justify-center">
               <span className="text-blue-600 font-bold text-xs">AID</span>
             </div>
-            <span className="text-slate-500 font-medium">EduSpace <span className="text-slate-400">by ND Labs.</span></span>
+            <span className="text-slate-500 font-medium">EduND <span className="text-slate-400">by ND Labs.</span></span>
           </div>
 
           <h1 className="text-5xl md:text-6xl font-display font-bold text-slate-900 leading-tight">

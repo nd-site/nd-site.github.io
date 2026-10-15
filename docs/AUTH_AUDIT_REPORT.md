@@ -2,7 +2,7 @@
 
 > **Project:** TimeTable – EduSpace by ND Labs
 > **Repository:** https://github.com/nd-site/nd-site.github.io
-> **Production:** https://ndsite.web.app/eduspace/timetable
+> **Production:** https://ndsite.web.app/edu/timetable
 > **Audit Date:** 2026-08-30
 > **Scope:** Read-only audit — NO source code was modified
 
@@ -404,7 +404,7 @@ Separate from Firestore. Rules exist in `database.rules.json` but usage in code 
 ### Admin Page Access
 
 - `/admin/index.html` — admin dashboard
-- `/admin/eduspace/index.html` — EduSpace admin
+- `/admin/edu/index.html` — EduSpace admin
 - `/admin/lotus_bot/index.html` — Lotus Bot admin
 - Access control: reads `role` from `localStorage.nd_user` — **client-only, easily bypassed**.
 

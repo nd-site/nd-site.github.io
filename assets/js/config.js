@@ -3,7 +3,7 @@ if (window.location.hostname === '127.0.0.1') {
 }
 
 /**
- * EduSpace — Configuration & Keys Management (Quản lý Cấu hình & Khóa bảo mật)
+ * EduND — Configuration & Keys Management (Quản lý Cấu hình & Khóa bảo mật)
  * 
  * Tác dụng:
  *   • Chứa toàn bộ thông tin cấu hình cho Firebase (AppId, DatabaseURL, API Key) và cài đặt cho Gemini AI.
@@ -12,24 +12,19 @@ if (window.location.hostname === '127.0.0.1') {
  */
 
 const EDU_CONFIG = {
-    // These placeholders are replaced by GitHub Actions during deployment for each repo
-    geminiApiKey: "__GEMINI_API_KEY_PLACEHOLDER__",
-    firebaseApiKey: "__FIREBASE_API_KEY_PLACEHOLDER__",
-    firebaseAuthDomain: "__FIREBASE_AUTH_DOMAIN_PLACEHOLDER__",
-    firebaseDatabaseURL: "__FIREBASE_DATABASE_URL_PLACEHOLDER__",
-    firebaseProjectId: "__FIREBASE_PROJECT_ID_PLACEHOLDER__",
-    firebaseStorageBucket: "__FIREBASE_STORAGE_BUCKET_PLACEHOLDER__",
-    firebaseMessagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID_PLACEHOLDER__",
-    firebaseAppId: "__FIREBASE_APP_ID_PLACEHOLDER__",
-    firebaseMeasurementId: "__FIREBASE_MEASUREMENT_ID_PLACEHOLDER__",
-    // URL của Firebase Cloud Function geminiProxy (inject bởi GitHub Actions)
+    // Default config values with fallback for direct web/Firebase Hosting deployment
+    geminiApiKey: "AIzaSyCKqYRA44WIka-dTOwH234LOrcXSUQd04A",
+    firebaseApiKey: "AIzaSyC6h0Uqg34PiT0p9l_cQOT7p7pt6kVHCHk",
+    firebaseAuthDomain: "ndlabs-0.firebaseapp.com",
+    firebaseDatabaseURL: "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app",
+    firebaseProjectId: "ndlabs-0",
+    firebaseStorageBucket: "ndlabs-0.firebasestorage.app",
+    firebaseMessagingSenderId: "600040258053",
+    firebaseAppId: "1:600040258053:web:617a19f62aafeb35d13a6c",
+    firebaseMeasurementId: "G-20W5SZ0BKB",
     geminiFunctionUrl: "__GEMINI_FUNCTION_URL_PLACEHOLDER__",
-
-    // URL của Cloudflare Worker lưu trữ tệp (inject bởi GitHub Actions hoặc env)
     cloudflareWorkerUrl: "__CLOUDFLARE_WORKER_URL_PLACEHOLDER__",
-
-    // ImgBB API Key (Lưu trữ ảnh miễn phí)
-    imgbbApiKey: "__IMGBB_API_KEY_PLACEHOLDER__",
+    imgbbApiKey: "aa2dd4b8c1d79c0f7535f6dd536dc237",
 
     // AI Settings
     stableModel: "gemini-3.1-flash-lite",
@@ -100,7 +95,7 @@ async function getEduKeys() {
     if (!_cachedKeys.gemini || !_cachedKeys.fbAppId) {
         const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         if (isLocalhost) {
-            const paths = ['/.env', '/eduspace/.env'];
+            const paths = ['/.env', '/edu/.env'];
             for (const path of paths) {
                 try {
                     const res = await fetch(path, { cache: 'no-store' });

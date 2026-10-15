@@ -1,5 +1,5 @@
 /**
- * EduSpace — Media & File Storage Service
+ * EduND — Media & File Storage Service
  * 
  * Tác dụng:
  *   • Quản lý việc tải hình ảnh người dùng (avatar), tài liệu và tệp thông tin lên đám mây.

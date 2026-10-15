@@ -1,10 +1,10 @@
-/**
- * EduSpace — Firebase SDK Initializer (Khởi tạo dịch vụ đám mây Firebase)
+﻿/**
+ * EduND â€” Firebase SDK Initializer (Khá»Ÿi táº¡o dá»‹ch vá»¥ Ä‘Ă¡m mĂ¢y Firebase)
  * 
- * Tác dụng:
- *   • Sử dụng Firebase Modular SDK để kết nối với cơ sở dữ liệu và xác thực người dùng toàn trang.
- *   • Đọc cấu hình bảo mật động từ `config.js` để tự động khởi tạo Firebase App, Auth và Realtime Database.
- *   • Theo dõi trạng thái đăng nhập của thành viên để đồng bộ ảnh đại diện và biệt danh hiển thị trên thanh navbar (`nd-navbar`).
+ * TĂ¡c dá»¥ng:
+ *   â€¢ Sá»­ dá»¥ng Firebase Modular SDK Ä‘á»ƒ káº¿t ná»‘i vá»›i cÆ¡ sá»Ÿ dá»¯ liá»‡u vĂ  xĂ¡c thá»±c ngÆ°á»i dĂ¹ng toĂ n trang.
+ *   â€¢ Äá»c cáº¥u hĂ¬nh báº£o máº­t Ä‘á»™ng tá»« `config.js` Ä‘á»ƒ tá»± Ä‘á»™ng khá»Ÿi táº¡o Firebase App, Auth vĂ  Realtime Database.
+ *   â€¢ Theo dĂµi tráº¡ng thĂ¡i Ä‘Äƒng nháº­p cá»§a thĂ nh viĂªn Ä‘á»ƒ Ä‘á»“ng bá»™ áº£nh Ä‘áº¡i diá»‡n vĂ  biá»‡t danh hiá»ƒn thá»‹ trĂªn thanh navbar (`nd-navbar`).
  */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -18,7 +18,7 @@ async function initEduFirebase() {
         return;
     }
 
-    // Tải khóa động từ getEduKeys() để hỗ trợ cả biến môi trường .env trên localhost
+    // Táº£i khĂ³a Ä‘á»™ng tá»« getEduKeys() Ä‘á»ƒ há»— trá»£ cáº£ biáº¿n mĂ´i trÆ°á»ng .env trĂªn localhost
     const keys = await getEduKeys();
 
     const firebaseConfig = {
@@ -70,10 +70,10 @@ async function initEduFirebase() {
         }
 
         // Auto sync user role & profile with nd-navbar on every page load
-        // Luôn fetch role mới nhất từ Firestore để tránh dữ liệu localStorage cũ
+        // LuĂ´n fetch role má»›i nháº¥t tá»« Firestore Ä‘á»ƒ trĂ¡nh dá»¯ liá»‡u localStorage cÅ©
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Nếu cả nd_user, nd_accounts và canonical session đều không tồn tại -> người dùng đã chủ động đăng xuất
+                // Náº¿u cáº£ nd_user, nd_accounts vĂ  canonical session Ä‘á»u khĂ´ng tá»“n táº¡i -> ngÆ°á»i dĂ¹ng Ä‘Ă£ chá»§ Ä‘á»™ng Ä‘Äƒng xuáº¥t
                 const localUser = localStorage.getItem('nd_user');
                 const localAccounts = localStorage.getItem('nd_accounts');
                 const canonicalSession = sessionStorage.getItem('nd_canonical_session_id');
@@ -85,8 +85,8 @@ async function initEduFirebase() {
                     return;
                 }
 
-                // ─── Lấy role thật từ Firestore /users/{uid} ───────────────────────
-                let role = 'member', eduRole = '', ndid = '', fullname = '', photoURL = '', grade = 'Khác', yob = null, codeId = '', customGeminiKey = '';
+                // â”€â”€â”€ Láº¥y role tháº­t tá»« Firestore /users/{uid} â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                let role = 'member', eduRole = '', ndid = '', fullname = '', photoURL = '', grade = 'KhĂ¡c', yob = null, codeId = '', customGeminiKey = '';
                 try {
                     const snap = await getDoc(doc(firestore, 'users', user.uid));
                     if (snap.exists()) {
@@ -101,7 +101,7 @@ async function initEduFirebase() {
                             role = 'member';
                         }
 
-                        // Parse EduSpace Role (học tập)
+                        // Parse EduND Role (há»c táº­p)
                         eduRole = data.eduRole || '';
                         if (!eduRole) {
                             if (rawRole === 'admin') {
@@ -116,13 +116,13 @@ async function initEduFirebase() {
                         ndid     = data.ndid     || '';
                         fullname = data.fullname || '';
                         photoURL = data.photoURL || user.photoURL || '';
-                        grade    = data.grade    || 'Khác';
+                        grade    = data.grade    || 'KhĂ¡c';
                         yob      = data.yob      || null;
                         codeId   = data.codeId   || user.uid;
                         customGeminiKey = data.customGeminiKey || '';
                     }
                 } catch (e) {
-                    // Nếu offline/lỗi mạng → dùng dữ liệu cũ từ localStorage
+                    // Náº¿u offline/lá»—i máº¡ng â†’ dĂ¹ng dá»¯ liá»‡u cÅ© tá»« localStorage
                     try {
                         const raw = localStorage.getItem('nd_user');
                         if (raw) {
@@ -132,7 +132,7 @@ async function initEduFirebase() {
                             ndid     = old.ndid     || '';
                             fullname = old.displayName || old.fullname || '';
                             photoURL = old.photoURL || user.photoURL || '';
-                            grade    = old.grade    || 'Khác';
+                            grade    = old.grade    || 'KhĂ¡c';
                             yob      = old.yob      || null;
                             codeId   = old.codeId   || '';
                             customGeminiKey = old.customGeminiKey || '';
@@ -140,12 +140,12 @@ async function initEduFirebase() {
                     } catch (_) {}
                 }
 
-                // If ndid not loaded yet, show loading state – do NOT fallback to displayName or email
-                if (!ndid) ndid = 'Đang tải...';
+                // If ndid not loaded yet, show loading state â€“ do NOT fallback to displayName or email
+                if (!ndid) ndid = 'Äang táº£i...';
                 if (!fullname) fullname = user.displayName || 'ND Member';
                 if (!photoURL) photoURL = user.photoURL || '/assets/images/logo.png';
 
-                // ─── Lưu session đầy đủ vào localStorage ───────────────────────────
+                // â”€â”€â”€ LÆ°u session Ä‘áº§y Ä‘á»§ vĂ o localStorage â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                 const sessionData = {
                     uid:         user.uid,
                     ndid:        ndid,
@@ -161,67 +161,16 @@ async function initEduFirebase() {
                 };
                 localStorage.setItem('nd_user', JSON.stringify(sessionData));
 
-                // ─── Re-render #nd-navbar-user với đúng role ────────────────────────
-                const userSection = document.getElementById('nd-navbar-user');
-                if (userSection) {
-                    const roleCfg = {
-                        admin:   { cls: 'role-admin',   label: 'Admin' },
-                        teacher: { cls: 'role-teacher', label: 'GV' },
-                        student: { cls: 'role-student', label: 'HS' },
-                        member:  { cls: 'role-other',   label: 'TV' }
-                    };
-
-                    let badges = [];
-                    if (role === 'admin') {
-                        badges.push(`<span class="nd-role-badge ${roleCfg.admin.cls}">${roleCfg.admin.label}</span>`);
-                    }
-                    if (eduRole === 'teacher') {
-                        badges.push(`<span class="nd-role-badge ${roleCfg.teacher.cls}">${roleCfg.teacher.label}</span>`);
-                    } else if (eduRole === 'student') {
-                        badges.push(`<span class="nd-role-badge ${roleCfg.student.cls}">${roleCfg.student.label}</span>`);
-                    }
-                    if (badges.length === 0) {
-                        badges.push(`<span class="nd-role-badge ${roleCfg.member.cls}">${roleCfg.member.label}</span>`);
-                    }
-                    const roleBadgeHtml = badges.join('');
-
-                    const adminLink = role === 'admin'
-                        ? `<a href="/admin/" class="nd-nav-link" style="color: #0070f3;" title="Bảng quản trị Admin">
-                               <i class="ph-bold ph-shield-checkered"></i><span class="nd-lbl">Admin</span>
-                           </a>
-                           <button id="nd-admin-reload-btn" class="nd-nav-link" style="color: #ef4444; border: none; background: transparent; cursor: pointer; padding: 5px 12px;" title="Yêu cầu tải lại trang cho tất cả">
-                               <i class="ph-bold ph-arrows-clockwise"></i><span class="nd-lbl">Tải lại</span>
-                           </button>`
-                        : '';
-
-                    userSection.innerHTML = `
-                        ${adminLink}
-                        <a href="/auth/settings/" class="nd-nav-link" title="Cài đặt tài khoản" style="gap: 6px;">
-                          <img src="${sessionData.photoURL}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">
-                          <span class="nd-lbl" style="display:flex; align-items:center; gap:4px;">
-                            ${ndid}
-                            ${roleBadgeHtml}
-                          </span>
-                        </a>
-                    `;
-                }
             } else {
                 const localAccounts = localStorage.getItem('nd_accounts');
                 if (!localAccounts) {
                     localStorage.removeItem('nd_user');
                     localStorage.removeItem('nd_active_index');
-                    const userSection = document.getElementById('nd-navbar-user');
-                    if (userSection) {
-                        userSection.innerHTML = `
-                            <a href="/auth/login/" class="nd-nav-link" style="color: #0070f3;">Đăng nhập</a>
-                            <a href="/auth/register/" class="nd-nav-link nd-active" style="padding: 5px 10px;">NDID</a>
-                        `;
-                    }
-                }
             }
+                }
         });
 
-        console.log("🔥 Firebase Modular SDK Initialized");
+        console.log("đŸ”¥ Firebase Modular SDK Initialized");
         window.dispatchEvent(new Event('firebase-ready'));
     } catch (err) {
         console.error("Firebase init error", err);
@@ -269,11 +218,12 @@ window.loadDynamicLessons = async function(firestore) {
             if (window.quizList.some(item => String(item.id).toLowerCase() === String(data.id || lessonDoc.id).toLowerCase())) return;
             window.quizList.push({ id: data.id || lessonDoc.id, ...data });
         });
-        console.log("🔥 Loaded dynamic lessons from Firestore:", window.quizList.length);
+        console.log("đŸ”¥ Loaded dynamic lessons from Firestore:", window.quizList.length);
     } catch(e) {
-        console.error("Lỗi khi tải bài học động từ Firebase:", e);
+        console.error("Lá»—i khi táº£i bĂ i há»c Ä‘á»™ng tá»« Firebase:", e);
     }
 };
 
-// Chạy luôn vì module defer mặc định
+// Cháº¡y luĂ´n vĂ¬ module defer máº·c Ä‘á»‹nh
 initEduFirebase();
+

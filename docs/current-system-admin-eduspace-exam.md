@@ -17,7 +17,7 @@ The ND Labs platform is a multi-tier web application built on static HTML fronte
 │                                     CLIENT LAYER                                       │
 │  ┌───────────────────────┐  ┌─────────────────────────────┐  ┌──────────────────────┐  │
 │  │     Admin Portal      │  │  EduSpace V2 Exam Runner    │  │ Vite/React Apps      │  │
-│  │ (/admin/dashboard.html│  │ (/eduspace/exam/index.html  │  │ (Timetable, Beta,    │  │
+│  │ (/admin/dashboard.html│  │ (/edu/exam/index.html  │  │ (Timetable, Beta,    │  │
 │  │  /admin/edu/index.html│  │  + eduspace/template.html)  │  │  MiniWorld, Main)    │  │
 │  └───────────┬───────────┘  └──────────────┬──────────────┘  └──────────┬───────────┘  │
 └──────────────┼─────────────────────────────┼────────────────────────────┼──────────────┘
@@ -54,12 +54,12 @@ The ND Labs platform is a multi-tier web application built on static HTML fronte
 | **Canonical Auth System** | `IMPLEMENTED` | `/api/auth.js`, `/assets/js/canonical-auth.js`, `firestore.rules`. UID = CodeID, sequential allocation (`0001`, `0002`...), Owner `0000` invariant. |
 | **`/admin` Portal Shell** | `IMPLEMENTED` | `/admin/dashboard.html`. User directory, audit logs, role modification modal (Owner gated), system announcements. |
 | **EduSpace Authoring Admin** | `IMPLEMENTED` | `/admin/edu/index.html`. Single-page editor for Word/Text import, Gemini AI question extraction, visual editor, test runner, and direct Firebase sync. |
-| **EduSpace V2 Exam Runner** | `LEGACY` | `/eduspace/exam/index.html` loading `/eduspace/template.html`. Client-side quiz loading, timer, answer state, and direct client Firestore submission to `attempts`. |
-| **EduSpace V3 Domain Foundation** | `IMPLEMENTED` | `src/eduspace/core/domain/` (`exam.ts`, `question.ts`, `session.ts`). 9 question types, canonical schema V1. |
-| **EduSpace V3 Exam Engine** | `IMPLEMENTED` | `src/eduspace/engine/` (`examEngine.ts`, `gradingEngine.ts`, `examPlanner.ts`, `prng.ts`). Server-side planning, PRNG attempt seed, GDPT 2018 grading ladder. |
-| **EduSpace V3 Server Authority** | `IMPLEMENTED` | `src/eduspace/assessment/sessionService.ts`, `src/eduspace/backend/assessmentBackend.ts`, `api/v3.js`. HTTP `/api/v3/exam-sessions`, 0% answer key leakage, server clock timer, 15s grace buffer, idempotent submission. |
-| **V2 → V3 Read-Only Adapters** | `IMPLEMENTED` | `src/eduspace/core/normalizers/` (`v2QuizAdapter.ts`, `v2AttemptAdapter.ts`, `v2ClassroomAdapter.ts`). Normalizes V2 documents at runtime without mutating legacy data. |
-| **Teacher V3 Dashboard UI** | `PARTIAL` | Backend APIs (`/api/v3/...`) are fully built and tested; Teacher UI pages (`/eduspace/teacher/`, `/eduspace/taode/`) currently still interface with V2 collections (`quizzes`, `classrooms`, `attempts`). |
+| **EduSpace V2 Exam Runner** | `LEGACY` | `/edu/exam/index.html` loading `/edu/template.html`. Client-side quiz loading, timer, answer state, and direct client Firestore submission to `attempts`. |
+| **EduSpace V3 Domain Foundation** | `IMPLEMENTED` | `src/edu/core/domain/` (`exam.ts`, `question.ts`, `session.ts`). 9 question types, canonical schema V1. |
+| **EduSpace V3 Exam Engine** | `IMPLEMENTED` | `src/edu/engine/` (`examEngine.ts`, `gradingEngine.ts`, `examPlanner.ts`, `prng.ts`). Server-side planning, PRNG attempt seed, GDPT 2018 grading ladder. |
+| **EduSpace V3 Server Authority** | `IMPLEMENTED` | `src/edu/assessment/sessionService.ts`, `src/edu/backend/assessmentBackend.ts`, `api/v3.js`. HTTP `/api/v3/exam-sessions`, 0% answer key leakage, server clock timer, 15s grace buffer, idempotent submission. |
+| **V2 → V3 Read-Only Adapters** | `IMPLEMENTED` | `src/edu/core/normalizers/` (`v2QuizAdapter.ts`, `v2AttemptAdapter.ts`, `v2ClassroomAdapter.ts`). Normalizes V2 documents at runtime without mutating legacy data. |
+| **Teacher V3 Dashboard UI** | `PARTIAL` | Backend APIs (`/api/v3/...`) are fully built and tested; Teacher UI pages (`/edu/teacher/`, `/edu/taode/`) currently still interface with V2 collections (`quizzes`, `classrooms`, `attempts`). |
 | **Student V3 UI Runner Integration** | `PLANNED` | React/TS Student Exam Runner consuming `/api/v3/exam-sessions` directly instead of legacy V2 client-side runner. |
 
 ---
@@ -89,7 +89,7 @@ The ND Labs platform is a multi-tier web application built on static HTML fronte
 
 5. **User Determination in Admin & EduSpace**
    - **Client-Side:** Managed by `window.canonicalAuth` (`/assets/js/canonical-auth.js`). Subscribes to Firebase Auth `onAuthStateChanged`, fetches profile from `users/{CodeID}`, and caches in `localStorage`.
-   - **Backend API:** Managed by `authenticateServerRequest` in `src/eduspace/backend/assessmentBackend.ts`. Extracts `Authorization: Bearer <idToken>`, verifies token using Firebase Admin Auth, resolves `codeId = decoded.uid`, and reads profile from `users/{codeId}`.
+   - **Backend API:** Managed by `authenticateServerRequest` in `src/edu/backend/assessmentBackend.ts`. Extracts `Authorization: Bearer <idToken>`, verifies token using Firebase Admin Auth, resolves `codeId = decoded.uid`, and reads profile from `users/{codeId}`.
 
 ---
 
@@ -102,10 +102,10 @@ The ND Labs platform is a multi-tier web application built on static HTML fronte
 | `/admin` | `admin/index.html` | Redirects to `/admin/dashboard.html` | None | None | `ACTIVE` |
 | `/admin/dashboard.html` | `admin/dashboard.html` | Central Admin Dashboard (Metrics, Users, Audit Logs, EduSpace links, Lotus Bot, Announcements) | Firebase Auth | `role === 'admin'` | `ACTIVE` |
 | `/admin/edu/` | `admin/edu/index.html` | Central Admin & EduSpace Exam Authoring (Docx/Text import, AI question extraction, Test Runner, Firebase sync) | Firebase Auth | `role === 'admin'` | `ACTIVE` |
-| `/admin/eduspace/` | `admin/eduspace/index.html` | Legacy EduSpace Lesson & Quiz Admin page | Firebase Auth | `role === 'admin'` | `ACTIVE` |
-| `/admin/eduspace/timetable/` | `admin/eduspace/timetable/index.html` | Timetable Management App | Firebase Auth | `role === 'admin'` | `ACTIVE` |
+| `/admin/edu/` | `admin/edu/index.html` | Legacy EduSpace Lesson & Quiz Admin page | Firebase Auth | `role === 'admin'` | `ACTIVE` |
+| `/admin/edu/timetable/` | `admin/edu/timetable/index.html` | Timetable Management App | Firebase Auth | `role === 'admin'` | `ACTIVE` |
 | `/admin/lotus_bot/` | `admin/lotus_bot/index.html` | Lotus Bot Realtime Configuration | Firebase Auth | `role === 'admin'` | `ACTIVE` |
-| `/eduspace/admin/` | `eduspace/admin/index.html` | Alternative entry to EduSpace Admin | Firebase Auth | `role === 'admin'` | `ACTIVE` |
+| `/edu/admin/` | `eduspace/admin/index.html` | Alternative entry to EduSpace Admin | Firebase Auth | `role === 'admin'` | `ACTIVE` |
 
 ### Dashboard UI Audit (`admin/dashboard.html`)
 
@@ -116,7 +116,7 @@ The ND Labs platform is a multi-tier web application built on static HTML fronte
   1. `overview`: Total active user count, current release version (`ver:1.9.21.1929`), canonical auth status, active role level, quick shortcut links.
   2. `users`: Paginated server-side user directory with search filter (CodeID, NDID, name, email) and role filter. Includes "Phân quyền" action button.
   3. `logs`: Security audit log table rendering recent events from Firestore `security_events` collection.
-  4. `eduspace`: Navigation cards for EduSpace Central Admin (`/admin/edu/`) and Timetable (`/admin/eduspace/timetable/`).
+  4. `eduspace`: Navigation cards for EduSpace Central Admin (`/admin/edu/`) and Timetable (`/admin/edu/timetable/`).
   5. `lotus-bot`: Realtime Database bot status badge and configuration link.
   6. `announcements`: Broadcast system-wide notification form.
 - **User Role Modal (`#modal-role`):** Displays target user profile details. Shows dropdowns for `role` and `adminLevel` if caller is Owner; shows lock notice if caller is non-owner Admin.
@@ -170,16 +170,16 @@ Admin Browser UI
 
 ### V2 Architecture & Data Flow
 
-The legacy V2 examination runner resides in `/eduspace/exam/index.html` and `/eduspace/template.html`.
+The legacy V2 examination runner resides in `/edu/exam/index.html` and `/edu/template.html`.
 
 ```
-Student Browser (/eduspace/exam/?t111)
+Student Browser (/edu/exam/?t111)
   │
   ├─► 1. Parse examId ('T111') from location query
   ├─► 2. Query Firestore: db.collection('quizzes').doc('T111')
   │       ├─► Check visibility ('public', 'private', 'classroom')
   │       └─► Load quizData object
-  ├─► 3. Fetch /eduspace/template.html via HTTP
+  ├─► 3. Fetch /edu/template.html via HTTP
   ├─► 4. Inject template DOM into document.body and execute scripts
   │       ├─► Render activeQuestions array
   │       ├─► Initialize local timer (setInterval)
@@ -192,7 +192,7 @@ Student Browser (/eduspace/exam/?t111)
 
 ### V2 Component Inspection
 
-- **Quiz Loading:** `loadExam()` in `/eduspace/exam/index.html` reads `quizzes/{EXAM_ID}` from Firestore. Falls back to static `quizList` if Firestore doc is not found.
+- **Quiz Loading:** `loadExam()` in `/edu/exam/index.html` reads `quizzes/{EXAM_ID}` from Firestore. Falls back to static `quizList` if Firestore doc is not found.
 - **Visibility & Access Checks:** Evaluated client-side in `loadExam()`. Checks `qData.visibility === 'private'` (compares `auth.currentUser.uid === qData.creatorUid`) and `qData.visibility === 'classroom'` (queries `classrooms` collection to check if student UID is in `studentUids`).
 - **Question Types Supported:**
   1. `multiple`: Trắc nghiệm 4 lựa chọn (choice index 0..3).
@@ -228,14 +228,14 @@ Student Browser (/eduspace/exam/?t111)
 
 ### V3 Domain Models & Schemas
 
-The V3 Assessment Core is implemented in TypeScript under `src/eduspace/` and defined by `schemaVersion: 1`.
+The V3 Assessment Core is implemented in TypeScript under `src/edu/` and defined by `schemaVersion: 1`.
 
-- **`Exam` (`src/eduspace/core/domain/exam.ts`):** Canonical exam entity containing metadata, policy (`maxAttempts`, `openTime`, `deadlineTime`, `timeLimitMinutes`), and array of `ExamSection`s referencing `QuestionVersion` IDs.
-- **`Question` & `QuestionVersion` (`src/eduspace/core/domain/question.ts`):** Questions are immutable entities versioned via `QuestionVersion` (content payload separated from grading payload).
-- **`ExamSession` (`src/eduspace/core/domain/session.ts`):** Immutable session entity storing `studentCodeId`, `startedAt`, `expiresAt`, `attemptSeed`, `questionVersionReferences`, and state.
-- **`Submission` (`src/eduspace/core/domain/session.ts`):** Student answer payload submitted to the server.
-- **`GradingRecord` (`src/eduspace/core/domain/session.ts`):** Server-generated detailed breakdown of points awarded per question.
-- **`Result` (`src/eduspace/core/domain/session.ts`):** Final official score record containing student raw NDID, total score, percentage, and status.
+- **`Exam` (`src/edu/core/domain/exam.ts`):** Canonical exam entity containing metadata, policy (`maxAttempts`, `openTime`, `deadlineTime`, `timeLimitMinutes`), and array of `ExamSection`s referencing `QuestionVersion` IDs.
+- **`Question` & `QuestionVersion` (`src/edu/core/domain/question.ts`):** Questions are immutable entities versioned via `QuestionVersion` (content payload separated from grading payload).
+- **`ExamSession` (`src/edu/core/domain/session.ts`):** Immutable session entity storing `studentCodeId`, `startedAt`, `expiresAt`, `attemptSeed`, `questionVersionReferences`, and state.
+- **`Submission` (`src/edu/core/domain/session.ts`):** Student answer payload submitted to the server.
+- **`GradingRecord` (`src/edu/core/domain/session.ts`):** Server-generated detailed breakdown of points awarded per question.
+- **`Result` (`src/edu/core/domain/session.ts`):** Final official score record containing student raw NDID, total score, percentage, and status.
 
 ### V3 Question Types & Capabilities
 
@@ -253,7 +253,7 @@ V3 defines 9 canonical question types in domain schemas:
 | **Ordering** | `ordering` | `items`, `correctOrderIds` | ✅ Executable | Native V3 schema |
 | **Fill in Blank** | `fill_blank` | `textWithTokens`, `blanks` | ✅ Executable | Native V3 schema |
 
-### Exam Engine Pipeline (`src/eduspace/engine/pipeline/examEngine.ts`)
+### Exam Engine Pipeline (`src/edu/engine/pipeline/examEngine.ts`)
 
 1. **Validation (`examValidator.ts`):** Validates exam sections, total points, and question version existence.
 2. **Deterministic Planning (`examPlanner.ts` & `prng.ts`):** Uses Mulberry32 PRNG seeded by `attemptSeed` to produce deterministic question order and option shuffling across reloads without exposing seeds to client.
@@ -261,7 +261,7 @@ V3 defines 9 canonical question types in domain schemas:
 4. **Grading Engine (`gradingEngine.ts`):** Evaluates `Submission` against authoritative `QuestionVersion.gradingConfig`. Applies GDPT 2018 partial ladder (`[0.1, 0.25, 0.5, 1.0]`) for True/False questions.
 5. **Result Builder (`resultBuilder.ts`):** Assembles canonical `Result` document preserving 100% RAW NDID string.
 
-### Session Engine Lifecycle (`src/eduspace/assessment/sessionService.ts`)
+### Session Engine Lifecycle (`src/edu/assessment/sessionService.ts`)
 
 ```
    ┌───────────────┐        startSession()         ┌───────────────┐
@@ -304,7 +304,7 @@ Student Browser (HTTP Request)
   ├─► 2. api/v3.js (Vercel Serverless Function)
   │      └─► Calls handleAssessmentApi() in api/dist/eduspace.mjs
   │
-  ├─► 3. authenticateServerRequest(req, db, auth) (src/eduspace/backend/assessmentBackend.ts)
+  ├─► 3. authenticateServerRequest(req, db, auth) (src/edu/backend/assessmentBackend.ts)
   │      ├─► auth.verifyIdToken(idToken) -> resolves decoded.uid
   │      ├─► codeId = decoded.uid (ignores client-supplied studentCodeId)
   │      ├─► Reads db.collection('users').doc(codeId)
@@ -327,14 +327,14 @@ Student Browser (HTTP Request)
 
 | Vulnerability / Attack Vector | Authority Classification | Server Enforcement Mechanism | Source Reference File |
 | :--- | :--- | :--- | :--- |
-| **Client Score Tampering** | `SERVER-AUTHORITATIVE` | Client-supplied score fields are stripped and discarded. Score is computed 100% on server by `GradingEngine`. | [sessionService.ts](file:///d:/Project/WebSite/ND%20Labs/src/eduspace/assessment/sessionService.ts#L400-L415) |
-| **Answer Key Exposure** | `SERVER-AUTHORITATIVE` | `sanitizeExecutionPlan()` strips all correct options, acceptable answers, and grading configs before delivering payloads. | [sanitizer.ts](file:///d:/Project/WebSite/ND%20Labs/src/eduspace/assessment/sanitizer.ts#L14-L47) |
-| **maxPoints Tampering** | `SERVER-AUTHORITATIVE` | Points per question are locked to authoritative `QuestionVersion.allocatedPoints` stored in database. | [gradingEngine.ts](file:///d:/Project/WebSite/ND%20Labs/src/eduspace/engine/grading/gradingEngine.ts#L67-L75) |
-| **Timer Tampering** | `SERVER-AUTHORITATIVE` | Expiration calculated using server clock (`serverNow + duration + 30s`). Client clock manipulation has zero effect. | [sessionService.ts](file:///d:/Project/WebSite/ND%20Labs/src/eduspace/assessment/sessionService.ts#L177-L185) |
-| **Session Hijacking / IDOR** | `SERVER-AUTHORITATIVE` | Checks `session.studentCodeId === userContext.codeId`. Student B cannot resume, autosave, or submit Student A's session. | [sessionService.ts](file:///d:/Project/WebSite/ND%20Labs/src/eduspace/assessment/sessionService.ts#L221-L224) |
-| **Result Tampering** | `SERVER-AUTHORITATIVE` | `Result` document is generated and saved directly by server Admin SDK. Client cannot write or overwrite `results` collection. | [sessionService.ts](file:///d:/Project/WebSite/ND%20Labs/src/eduspace/assessment/sessionService.ts#L412-L425) |
-| **Submission Replay** | `SERVER-AUTHORITATIVE` | Idempotency check returns existing submission status (`isIdempotentReplay: true`) without double-grading. | [sessionService.ts](file:///d:/Project/WebSite/ND%20Labs/src/eduspace/assessment/sessionService.ts#L352-L364) |
-| **AI Finalization Spoofing** | `SERVER-AUTHORITATIVE` | `GradingRegistry` rejects finalizing AI-assisted scores without explicit human `reviewerCodeId`. | [gradingRegistry.ts](file:///d:/Project/WebSite/ND%20Labs/src/eduspace/engine/grading/gradingRegistry.ts#L53-L60) |
+| **Client Score Tampering** | `SERVER-AUTHORITATIVE` | Client-supplied score fields are stripped and discarded. Score is computed 100% on server by `GradingEngine`. | [sessionService.ts](file:///d:/Project/WebSite/ND%20Labs/src/edu/assessment/sessionService.ts#L400-L415) |
+| **Answer Key Exposure** | `SERVER-AUTHORITATIVE` | `sanitizeExecutionPlan()` strips all correct options, acceptable answers, and grading configs before delivering payloads. | [sanitizer.ts](file:///d:/Project/WebSite/ND%20Labs/src/edu/assessment/sanitizer.ts#L14-L47) |
+| **maxPoints Tampering** | `SERVER-AUTHORITATIVE` | Points per question are locked to authoritative `QuestionVersion.allocatedPoints` stored in database. | [gradingEngine.ts](file:///d:/Project/WebSite/ND%20Labs/src/edu/engine/grading/gradingEngine.ts#L67-L75) |
+| **Timer Tampering** | `SERVER-AUTHORITATIVE` | Expiration calculated using server clock (`serverNow + duration + 30s`). Client clock manipulation has zero effect. | [sessionService.ts](file:///d:/Project/WebSite/ND%20Labs/src/edu/assessment/sessionService.ts#L177-L185) |
+| **Session Hijacking / IDOR** | `SERVER-AUTHORITATIVE` | Checks `session.studentCodeId === userContext.codeId`. Student B cannot resume, autosave, or submit Student A's session. | [sessionService.ts](file:///d:/Project/WebSite/ND%20Labs/src/edu/assessment/sessionService.ts#L221-L224) |
+| **Result Tampering** | `SERVER-AUTHORITATIVE` | `Result` document is generated and saved directly by server Admin SDK. Client cannot write or overwrite `results` collection. | [sessionService.ts](file:///d:/Project/WebSite/ND%20Labs/src/edu/assessment/sessionService.ts#L412-L425) |
+| **Submission Replay** | `SERVER-AUTHORITATIVE` | Idempotency check returns existing submission status (`isIdempotentReplay: true`) without double-grading. | [sessionService.ts](file:///d:/Project/WebSite/ND%20Labs/src/edu/assessment/sessionService.ts#L352-L364) |
+| **AI Finalization Spoofing** | `SERVER-AUTHORITATIVE` | `GradingRegistry` rejects finalizing AI-assisted scores without explicit human `reviewerCodeId`. | [gradingRegistry.ts](file:///d:/Project/WebSite/ND%20Labs/src/edu/engine/grading/gradingRegistry.ts#L53-L60) |
 
 ---
 
@@ -342,7 +342,7 @@ Student Browser (HTTP Request)
 
 ### Current Teacher Architecture Inspection
 
-Teacher functionality currently resides in `/eduspace/teacher/` and `/eduspace/taode/` as well as `/admin/edu/index.html`.
+Teacher functionality currently resides in `/edu/teacher/` and `/edu/taode/` as well as `/admin/edu/index.html`.
 
 - **Question & Quiz Creation:** `/admin/edu/index.html` allows teachers to import Word (.docx) files or paste text, extract questions via Gemini AI, edit questions visually, and publish directly to Firestore.
 - **Collection Dual State:**
@@ -430,7 +430,7 @@ V2 data structures are connected to V3 using **read-only runtime adapters**:
 
 ```
 [V2 Student Flow - Currently Active in UI]
-Login ──► Enter /eduspace/exam/?t111 ──► Load Firestore quizzes/T111 ──► Render template.html
+Login ──► Enter /edu/exam/?t111 ──► Load Firestore quizzes/T111 ──► Render template.html
   ──► Local Timer Countdown ──► Select Answers in Browser Memory ──► Submit Exam
   ──► Browser calculates score ──► Write to Firestore attempts collection via Client SDK
 
@@ -465,16 +465,16 @@ The following list contains ONLY verified architectural limitations supported by
 ### Category P0 — Security / Data-Integrity Blockers (Legacy Runner Only)
 
 1. **Client-Authoritative Submission in V2 Exam Runner**
-   - **Evidence:** Line 441 in [eduspace/exam/index.html](file:///d:/Project/WebSite/ND%20Labs/eduspace/exam/index.html#L441-L460) directly executes `setDoc(doc(db, 'attempts', attemptId), { score: score, ... })` from the student browser.
-   - **Affected Component:** `/eduspace/exam/index.html` & `/eduspace/template.html`.
+   - **Evidence:** Line 441 in [eduspace/exam/index.html](file:///d:/Project/WebSite/ND%20Labs/edu/exam/index.html#L441-L460) directly executes `setDoc(doc(db, 'attempts', attemptId), { score: score, ... })` from the student browser.
+   - **Affected Component:** `/edu/exam/index.html` & `/edu/template.html`.
    - **Impact:** Tech-savvy users can modify `score` in browser DevTools before submitting.
    - **Suggested Direction:** Replace V2 exam runner with V3 Server-Authoritative runner calling `/api/v3/exam-sessions/:id/submit`.
 
 ### Category P1 — Functional Blockers
 
 2. **Student UI Not Connected to V3 API**
-   - **Evidence:** Frontend UI pages (`/eduspace/exam/`) still fetch `/eduspace/template.html` and do not invoke Vercel endpoints `/api/v3/exam-sessions`.
-   - **Affected Component:** Student Exam UI (`/eduspace/exam/`).
+   - **Evidence:** Frontend UI pages (`/edu/exam/`) still fetch `/edu/template.html` and do not invoke Vercel endpoints `/api/v3/exam-sessions`.
+   - **Affected Component:** Student Exam UI (`/edu/exam/`).
    - **Impact:** V3 Server Authority API is 100% operational in backend tests (107/107 passing), but students still use V2 runner UI.
    - **Suggested Direction:** Wire Student UI to V3 API endpoints (`POST /api/v3/exam-sessions`).
 
@@ -482,16 +482,16 @@ The following list contains ONLY verified architectural limitations supported by
 
 3. **Dual Authoring Collection Targets**
    - **Evidence:** `/admin/edu/index.html` publishes quizzes to Firestore `quizzes` collection (V2 format), while V3 native engine reads from `exams` and `questionVersions` collections.
-   - **Affected Component:** `/admin/edu/index.html` & `src/eduspace/core/normalizers/v2QuizAdapter.ts`.
+   - **Affected Component:** `/admin/edu/index.html` & `src/edu/core/normalizers/v2QuizAdapter.ts`.
    - **Impact:** System relies on `v2QuizAdapter.ts` for runtime normalization rather than native V3 collection storage.
    - **Suggested Direction:** Add dual-write or native V3 export option to `/admin/edu/index.html`.
 
 ### Category P3 — UX / Cleanup
 
 4. **Redundant Admin Pages**
-   - **Evidence:** `/admin/eduspace/index.html` exists alongside `/admin/edu/index.html`.
+   - **Evidence:** `/admin/edu/index.html` exists alongside `/admin/edu/index.html`.
    - **Impact:** Maintenance overhead having two separate admin authoring interfaces.
-   - **Suggested Direction:** Consolidate `/admin/eduspace/index.html` into `/admin/edu/index.html`.
+   - **Suggested Direction:** Consolidate `/admin/edu/index.html` into `/admin/edu/index.html`.
 
 ---
 
@@ -506,7 +506,7 @@ The following milestones have been verified in codebase history:
 5. **V3 Session Service & Server Authority:** Implemented `ExamSessionService` with server-authoritative timer, 30s technical buffer, 15s grace period, 0% answer key sanitizer (`sanitizer.ts`), and submission idempotency.
 6. **V3 Backend HTTP Adapter:** Built `assessmentBackend.ts` and `/api/v3.js` Vercel function exposing `/api/v3/exam-sessions` REST API.
 7. **V2 Read-Only Adapters:** Implemented `v2QuizAdapter.ts`, `v2AttemptAdapter.ts`, `v2ClassroomAdapter.ts`.
-8. **Automated Verification:** 107 unit and integration tests passing (`tests/eduspace/v3-*.test.ts`).
+8. **Automated Verification:** 107 unit and integration tests passing (`tests/edu/v3-*.test.ts`).
 
 ---
 
@@ -527,19 +527,19 @@ The following implementation boundaries represent natural progression steps for 
 
 ### Boundary 1 — Student V3 Exam Runner UI Integration
 - **Prerequisite:** V3 Server Authority API (`/api/v3/exam-sessions`) is 100% operational.
-- **Affected Files:** `eduspace/exam/index.html`, `eduspace/template.html`, or a new React runner component under `src/eduspace/ui/`.
+- **Affected Files:** `eduspace/exam/index.html`, `eduspace/template.html`, or a new React runner component under `src/edu/ui/`.
 - **Protected Systems:** Firestore Rules for `exam_sessions`, `submissions`, `results`.
 - **Dependencies:** `api/v3.js`, `ExamSessionService`.
 
 ### Boundary 2 — Native V3 Exam Authoring & Question Bank UI
 - **Prerequisite:** `/admin/edu/index.html` is operational for V2 `quizzes`.
-- **Affected Files:** `admin/edu/index.html`, `src/eduspace/core/repositories/firestoreRepository.ts`.
+- **Affected Files:** `admin/edu/index.html`, `src/edu/core/repositories/firestoreRepository.ts`.
 - **Protected Systems:** Firestore `exams`, `questionBanks`, `questions`, `questionVersions` collections.
 - **Dependencies:** `v2QuizAdapter.ts`, `QuestionRegistry`.
 
 ### Boundary 3 — Teacher V3 Gradebook & Manual Review UI
 - **Prerequisite:** `manualGrade()` endpoint (`POST /api/v3/grading/manual`) is implemented and tested.
-- **Affected Files:** `eduspace/teacher/index.html`, `src/eduspace/assessment/sessionService.ts`.
+- **Affected Files:** `eduspace/teacher/index.html`, `src/edu/assessment/sessionService.ts`.
 - **Protected Systems:** Firestore `grading_records`, `results`.
 - **Dependencies:** `ResultRepository`, `SubmissionRepository`.
 

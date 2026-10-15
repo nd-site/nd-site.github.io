@@ -410,13 +410,13 @@ export const TimetableApp: React.FC = () => {
   const navigateTo = (id: string | null) => {
     setActiveId(id);
     if (id) {
-      const targetUrl = `/eduspace/timetable/${encodeURIComponent(id)}`;
+      const targetUrl = `/edu/timetable/${encodeURIComponent(id)}`;
       window.history.pushState(null, '', targetUrl);
     } else {
       setNotFound(false);
       setIsCheckingExist(false);
       setCurrentTimetable(null);
-      window.history.pushState(null, '', '/eduspace/timetable');
+      window.history.pushState(null, '', '/edu/timetable');
     }
   };
 
@@ -666,9 +666,12 @@ export const TimetableApp: React.FC = () => {
                 syncDocToFirestore(loaded);
               }
 
-              // Realtime collaboration merge: if user is typing in a slot, preserve their active input
+              // Realtime collaboration merge: if user is typing or has pending debounced save, preserve active input
               setCurrentTimetable((prev) => {
                 if (!prev) return loaded;
+                if (debounceSyncTimerRef.current) {
+                  return prev;
+                }
                 const focusedKey = activeFocusedKeyRef.current;
                 if (focusedKey && prev.grid?.[focusedKey]) {
                   return {
@@ -909,20 +912,32 @@ export const TimetableApp: React.FC = () => {
 
   // Collaborative Realtime Auto-sync Trigger
   const triggerAutoSync = (updated: TimetableData) => {
-    // Only auto-sync continuously if multiplayer is active (> 1 user online)
-    if (onlineUsers.length > 1) {
-      if (debounceSyncTimerRef.current) {
-        clearTimeout(debounceSyncTimerRef.current);
-      }
-      setSyncStatus('Đang đồng bộ trực tiếp...');
-      debounceSyncTimerRef.current = setTimeout(async () => {
-        const ok = await syncDocToFirestore(updated);
-        if (ok) {
-          setSyncStatus('Đồng bộ thời gian thực');
-          setTimeout(() => setSyncStatus(''), 2000);
-        }
-      }, 400);
+    // Only users with write permission can sync changes to Firestore
+    const role = getEffectiveRole(updated, currentUser);
+    if (role !== 'owner' && role !== 'edit') return;
+
+    // Save immediately to local state and localStorage cache for zero-latency local experience
+    setTimetables((prev) => {
+      const filtered = prev.filter((t) => t.id !== updated.id);
+      const merged = [updated, ...filtered];
+      saveCachedTimetables(merged);
+      return merged;
+    });
+
+    if (debounceSyncTimerRef.current) {
+      clearTimeout(debounceSyncTimerRef.current);
     }
+    setSyncStatus('Đang lưu...');
+    debounceSyncTimerRef.current = setTimeout(async () => {
+      const ok = await syncDocToFirestore(updated);
+      if (ok) {
+        setSyncStatus('Đã đồng bộ');
+        setTimeout(() => setSyncStatus(''), 2500);
+      } else {
+        setSyncStatus('Lỗi đồng bộ');
+      }
+      debounceSyncTimerRef.current = null;
+    }, 500);
   };
 
   // Action: Tạo thời khóa biểu (Kèm chống trùng ID & bắt buộc đăng nhập)
@@ -1033,6 +1048,11 @@ export const TimetableApp: React.FC = () => {
     if (role !== 'owner' && role !== 'edit') {
       alert("Bạn không có quyền chỉnh sửa thời khóa biểu này.");
       return;
+    }
+
+    if (debounceSyncTimerRef.current) {
+      clearTimeout(debounceSyncTimerRef.current);
+      debounceSyncTimerRef.current = null;
     }
 
     // Update state & cache
@@ -1749,14 +1769,14 @@ export const TimetableApp: React.FC = () => {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <a
-              href="/eduspace/timetable"
+              href="/edu/timetable"
               onClick={(e) => {
                 e.preventDefault();
                 navigateTo(null);
               }}
               className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
             >
-              ← /eduspace/timetable
+              ← /edu/timetable
             </a>
 
             {/* Badges */}
@@ -1852,9 +1872,10 @@ export const TimetableApp: React.FC = () => {
                   : '1 người trực tuyến'}
               </span>
 
-              {isMultiplayer && canEdit && (
-                <span className="text-[10px] font-bold px-2 py-0.5 bg-emerald-600 text-white rounded-lg shadow-xs">
-                  ⚡ Đang bật đồng bộ trực tiếp
+              {canEdit && (
+                <span className="text-[10px] font-bold px-2 py-0.5 bg-emerald-600 text-white rounded-lg shadow-xs flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                  Đồng bộ thời gian thực
                 </span>
               )}
             </div>
@@ -3100,7 +3121,7 @@ export const TimetableApp: React.FC = () => {
   }
 
   // ==========================================
-  // VIEW 2: MAIN PAGE (/eduspace/timetable)
+  // VIEW 2: MAIN PAGE (/edu/timetable)
   // ==========================================
   // Filter lists according to tabs
   const publicTimetables = timetables.filter((t) => t.isPublic === true);

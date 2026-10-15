@@ -60,7 +60,7 @@
 
 EduSpace by ND Labs là nền tảng khảo thí và học tập trực tuyến trọng tâm của hệ sinh thái ND Labs. Hệ thống đã trải qua các giai đoạn phát triển:
 - **V1 (Legacy/Original System):** Phiên bản sơ khai tạo dựng nền tảng bài thi trắc nghiệm tĩnh bằng Vanilla HTML/JS.
-- **V2 (Current System):** Hệ thống đang vận hành, sở hữu giao diện được nâng cấp (Glassmorphism, Tailwind CSS, Lucide icons, KaTeX), hỗ trợ chế độ Luyện tập và Thi thử, trình tạo đề nâng cao (`/taode/`), phân quyền kiểm tra Firestore cho giáo viên (`/teacher/`), quản trị trung tâm (`/admin/eduspace/`), đồng thời tương thích với tài khoản định danh Canonical ND Labs.
+- **V2 (Current System):** Hệ thống đang vận hành, sở hữu giao diện được nâng cấp (Glassmorphism, Tailwind CSS, Lucide icons, KaTeX), hỗ trợ chế độ Luyện tập và Thi thử, trình tạo đề nâng cao (`/taode/`), phân quyền kiểm tra Firestore cho giáo viên (`/teacher/`), quản trị trung tâm (`/admin/edu/`), đồng thời tương thích với tài khoản định danh Canonical ND Labs.
 - **V3 (Next-Generation Platform):** Nền tảng thế hệ mới được tái thiết kế hoàn toàn trên kiến trúc **Database-First**, xây dựng bằng **React + TypeScript + Vite + Tailwind CSS**, phân tách mô đun rõ ràng giữa UI, Domain Models, Data Access, Normalization, Exam Engine, Grading Engine và Admin/Teacher Workspaces.
 
 ### Mục tiêu cốt lõi của V3:
@@ -74,7 +74,7 @@ EduSpace by ND Labs là nền tảng khảo thí và học tập trực tuyến 
 
 ### 2.1. Hiện trạng kiến trúc & Các luồng chức năng đang chạy
 
-Khảo sát toàn diện mã nguồn V2 tại thư mục `eduspace/`, `admin/eduspace/`, `assets/js/` và `functions/` cho thấy:
+Khảo sát toàn diện mã nguồn V2 tại thư mục `eduspace/`, `admin/edu/`, `assets/js/` và `functions/` cho thấy:
 
 ```
                   ┌────────────────────────────────────────────────────────┐
@@ -86,7 +86,7 @@ Khảo sát toàn diện mã nguồn V2 tại thư mục `eduspace/`, `admin/edu
 ┌──────────────────┐               ┌───────────────────────┐             ┌──────────────────┐
 │  PORTAL & VIEWER │               │   TEACHER & BUILDER   │             │  ADMIN & BACKEND │
 ├──────────────────┤               ├───────────────────────┤             ├──────────────────┤
-│ eduspace/        │               │ eduspace/teacher/     │             │ admin/eduspace/  │
+│ eduspace/        │               │ eduspace/teacher/     │             │ admin/edu/  │
 │  - index.html    │               │  - Lớp học (JoinCode) │             │  - Tạo bài bằng  │
 │  - beta.html     │               │  - Gán bài & Bảng điểm│             │    Word / AI     │
 │  - template.html │               │ eduspace/taode/       │             │  - Đồng bộ thủ   │
@@ -115,7 +115,7 @@ Khảo sát toàn diện mã nguồn V2 tại thư mục `eduspace/`, `admin/edu
    - Phân tích văn bản tự động từ file Microsoft Word (`.docx`) bằng Mammoth.js và biểu thức chính quy (Regex).
    - Tự động nhận diện cấu trúc đề 3 phần theo định dạng đề minh họa Bộ Giáo dục & Đào tạo.
    - Xuất dữ liệu ra file `data.js` hoặc đẩy trực tiếp lên collection `quizzes` trên Firestore.
-5. **Khu vực Quản trị (`admin/eduspace/index.html`):**
+5. **Khu vực Quản trị (`admin/edu/index.html`):**
    - Giao diện Admin quản trị tập trung tất cả bài giảng và đề thi.
    - Công cụ đồng bộ hàng loạt (Bulk Sync): Đọc toàn bộ danh sách `quizList` tĩnh, fetch các file `data.js` cục bộ, phân tích mã lệnh JavaScript bằng `new Function()` rồi ghi vào Firestore (`eduspace_lessons` và `quizzes`).
 
@@ -183,7 +183,7 @@ Tuân thủ nghiêm ngặt các quy tắc dự án:
 
 | Danh mục | Nơi lưu trữ được phép | Quy định nghiêm ngặt |
 |---|---|---|
-| **Source Code (Mã nguồn ứng dụng)** | Thư mục `src/eduspace/` của Git repository | Chỉ chứa mã TypeScript, React JSX, CSS Tailwind, Schema Types, Adapters, Migration Scripts, Validation rules. Tuyệt đối không chứa file `data.js`, câu hỏi thi, đề thi mẫu, danh sách lớp học thực tế. |
+| **Source Code (Mã nguồn ứng dụng)** | Thư mục `src/edu/` của Git repository | Chỉ chứa mã TypeScript, React JSX, CSS Tailwind, Schema Types, Adapters, Migration Scripts, Validation rules. Tuyệt đối không chứa file `data.js`, câu hỏi thi, đề thi mẫu, danh sách lớp học thực tế. |
 | **Dynamic Content (Dữ liệu người dùng & Khảo thí)** | Cơ sở dữ liệu Cloud Firestore | Môn học, bộ sách, khối lớp, ngân hàng câu hỏi, ma trận đề, đề thi, bài tập lớp học, danh sách thành viên, bài nộp, điểm số, kết quả, log kiểm duyệt. |
 | **Operational Config (Cấu hình vận hành)** | Firestore `system_settings` & Realtime DB `/config/` | Cấu hình bảo mật hệ thống, API Key proxy Gemini, cờ bật tắt tính năng (feature flags), danh sách dạng câu hỏi khả dụng. |
 
@@ -834,7 +834,7 @@ stateDiagram-v2
 
 ## 12. KHÔNG GIAN LÀM VIỆC CỦA GIÁO VIÊN (TEACHER WORKSPACE)
 
-Module `src/eduspace/teacher/` cung cấp hệ thống quản trị chuyên biệt dành riêng cho giáo viên:
+Module `src/edu/teacher/` cung cấp hệ thống quản trị chuyên biệt dành riêng cho giáo viên:
 1. **Quản lý lớp học (Class Management):** Tạo lớp, tạo mã vào lớp nhanh (Join Code), xem danh sách học sinh theo CodeID và NDID, phê duyệt hoặc xóa học sinh khỏi lớp.
 2. **Soạn thảo và Quản lý Đề thi:** Soạn đề thủ công, nhập file Word (`.docx`), chọn câu hỏi từ Ngân hàng đề theo chuẩn YCCĐ GDPT 2018.
 3. **Giao bài và Giám sát:** Giao đề thi cho lớp học kèm thời gian mở đề, hạn chót (deadline). Xem bảng theo dõi thời gian thực: học sinh nào đang làm, học sinh nào đã nộp, tiến độ nộp bài.
@@ -976,10 +976,10 @@ EduSpace V3 được định hướng sẵn sàng cho việc tích hợp bài t�
 
 ## 18. KIẾN TRÚC FRONTEND REACT & TYPESCRIPT MODULAR
 
-Thư mục mã nguồn V3 được phân bổ có tổ chức tại `src/eduspace/`:
+Thư mục mã nguồn V3 được phân bổ có tổ chức tại `src/edu/`:
 
 ```
-src/eduspace/
+src/edu/
 ├── core/                        # Nền tảng cốt lõi
 │   ├── api/                     # Cloud Functions client & HTTP adapters
 │   ├── database/                # Firestore client service

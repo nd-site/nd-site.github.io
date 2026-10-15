@@ -1,5 +1,5 @@
 /**
- * EduSpace — Contact Admin Floating Action Button (Nút liên hệ hỗ trợ nổi)
+ * EduND — Contact Admin Floating Action Button (Nút liên hệ hỗ trợ nổi)
  * 
  * Tác dụng:
  *   • Cung cấp nút hỗ trợ khách hàng nổi (Floating Action Button - FAB) ở góc dưới bên trái màn hình.

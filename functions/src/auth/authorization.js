@@ -198,7 +198,21 @@ async function updateUserRoleAndLevel({
       }
     }
 
+    // Enforce SINGLE OWNER rule: if someone is promoted to owner, demote current owner(s)
     const serverTime = admin.firestore.FieldValue.serverTimestamp();
+    if (newAdminLevel === ADMIN_LEVELS.OWNER && targetContext.adminLevel !== ADMIN_LEVELS.OWNER) {
+      const ownersQuery = db.collection(USERS_COLLECTION)
+        .where('role', '==', ROLES.ADMIN)
+        .where('adminLevel', '==', ADMIN_LEVELS.OWNER)
+        .where('status', '==', 'active');
+      const ownersSnap = await transaction.get(ownersQuery);
+      ownersSnap.forEach(doc => {
+        if (doc.id !== targetCodeId) {
+          transaction.update(doc.ref, { adminLevel: ADMIN_LEVELS.ADMIN, updatedAt: serverTime });
+        }
+      });
+    }
+
     const userRef = db.collection(USERS_COLLECTION).doc(targetCodeId);
 
     const updatePayload = {

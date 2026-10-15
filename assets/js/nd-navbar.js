@@ -21,6 +21,97 @@
     window.location.replace(target);
     return; // Dừng mọi xử lý phía dưới — trang sẽ redirect ngay lập tức
   }
+
+  /* ─── Điều hướng tự động: /eduspace/... → /edu/... ────────────────── */
+  (function redirectEduspaceCurrentPage() {
+    try {
+      const rawPath = window.location.pathname;
+      if (rawPath.startsWith('/eduspace') || rawPath.startsWith('/admin/eduspace') || rawPath === '/eduspace') {
+        const targetPath = rawPath
+          .replace(/^\/admin\/eduspace(\/|$)/, '/admin/edu$1')
+          .replace(/^\/eduspace(\/|$)/, '/edu$1');
+        if (targetPath !== rawPath) {
+          const target = targetPath + window.location.search + window.location.hash;
+          window.location.replace(target);
+          return;
+        }
+      }
+    } catch (_) {}
+  })();
+
+  /* ─── Tự động điều hướng tất cả liên kết trỏ đến /eduspace/... → /edu/... ─── */
+  (function initEduspaceLinkRedirector() {
+    function redirectEduspaceHref(href) {
+      if (!href || typeof href !== 'string') return href;
+      return href
+        .replace(/(^|https?:\/\/[^\/]+)\/admin\/eduspace(\/|$)/g, '$1/admin/edu$2')
+        .replace(/(^|https?:\/\/[^\/]+)\/eduspace(\/|$)/g, '$1/edu$2');
+    }
+
+    function patchAnchor(a) {
+      if (!a || !a.getAttribute) return;
+      const href = a.getAttribute('href');
+      if (href && (href.includes('/eduspace') || href.includes('/admin/eduspace'))) {
+        const newHref = redirectEduspaceHref(href);
+        if (newHref !== href) {
+          a.setAttribute('href', newHref);
+        }
+      }
+    }
+
+    function scanAllLinks(root) {
+      try {
+        const doc = root || document;
+        const links = doc.querySelectorAll ? doc.querySelectorAll('a[href*="eduspace"]') : [];
+        links.forEach(patchAnchor);
+      } catch (_) {}
+    }
+
+    // Quét ngay khi khởi tạo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => scanAllLinks(document));
+    } else {
+      scanAllLinks(document);
+    }
+
+    // Tự động quét và chuẩn hóa các liên kết được render động (DOM mutations)
+    if (typeof MutationObserver !== 'undefined' && document.documentElement) {
+      const observer = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          if (m.type === 'childList') {
+            m.addedNodes.forEach(node => {
+              if (node.nodeType === 1) {
+                if (node.tagName === 'A') patchAnchor(node);
+                scanAllLinks(node);
+              }
+            });
+          } else if (m.type === 'attributes' && m.attributeName === 'href') {
+            patchAnchor(m.target);
+          }
+        }
+      });
+      observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['href']
+      });
+    }
+
+    // Bắt sự kiện click trực tiếp (capture phase) để đảm bảo mọi cú nhấp chuột đều được điều hướng
+    document.addEventListener('click', function (e) {
+      const anchor = e.target && e.target.closest ? e.target.closest('a') : null;
+      if (!anchor) return;
+      const href = anchor.getAttribute('href');
+      if (href && (href.includes('/eduspace') || href.includes('/admin/eduspace'))) {
+        const newHref = redirectEduspaceHref(href);
+        if (newHref !== href) {
+          anchor.setAttribute('href', newHref);
+        }
+      }
+    }, true);
+  })();
+
   /* ─── Tự động nạp font.js và nd-accounts.js cho toàn bộ hệ thống ───── */
   if (!document.querySelector('script[src*="font.js"]')) {
     const fontScript = document.createElement('script');
@@ -47,8 +138,8 @@
         id: 'edu_ai',
         name: 'EduAI Assistant',
         script: '/assets/js/edu_ai.js',
-        // Chỉ áp dụng cho các trang thuộc phân hệ EduSpace
-        matcher: (p) => p.startsWith('/eduspace') || p.includes('/admin/eduspace') || p.includes('/admin/edu')
+        // Chỉ áp dụng cho các trang thuộc phân hệ EduND
+        matcher: (p) => p.startsWith('/edu') || p.includes('/admin/edu') || p.includes('/admin/edu')
       },
       {
         id: 'nd_ai',
@@ -115,16 +206,12 @@
   }
   metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
 
-  const NAV_H = 50; // navbar height in px — single source of truth
+  const NAV_H = 52; // navbar height in px — single source of truth
 
   const NAV_LINKS = [
     { href: '/', label: 'Trang Chủ', icon: 'ph-house-simple' },
-    { href: '/chat/', label: 'ChatND', icon: 'ph-chat-circle-dots' },
-    { href: '/eduspace/', label: 'EduSpace', icon: 'ph-graduation-cap' },
-    { href: '/games/', label: 'Game', icon: 'ph-game-controller' },
-    { href: '/media/', label: 'Media', icon: 'ph-film-strip' },
-    { href: '/utils/', label: 'Tiện Ích', icon: 'ph-wrench' },
-    { href: '/psychology/', label: 'Psychology Demo', icon: 'ph-brain' },
+    { href: '/edu/', label: 'EduND', icon: 'ph-graduation-cap' },
+    { href: 'https://dnaai-site.vercel.app', label: 'HeartSpace', icon: 'ph-heart', external: true },
   ];
 
   const path = window.location.pathname;
@@ -181,7 +268,7 @@
     #nd-navbar-brand {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
       text-decoration: none;
       color: #0070f3;
       font-weight: 800;
@@ -192,10 +279,17 @@
       white-space: nowrap;
     }
     #nd-navbar-brand img {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
       flex-shrink: 0;
+    }
+    #nd-brand-name {
+      background: linear-gradient(to right, #2563eb, #0ea5e9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     /* ── Divider ── */
@@ -366,54 +460,22 @@
       }
     }
 
-    /* ── Floating Tool FAB ── */
-    #nd-tools-fab {
-      position: fixed !important;
-      top: 95px !important;
-      left: 20px !important;
-      bottom: auto !important;
-      right: auto !important;
-      width: 42px !important;
-      height: 42px !important;
-      border-radius: 12px !important;
-      background: rgba(255, 255, 255, 0.85) !important;
-      backdrop-filter: blur(12px) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
-      border: 1.5px solid rgba(226, 232, 240, 0.8) !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
-      z-index: 99999 !important;
-      cursor: pointer !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      color: #64748b !important;
-    }
-    #nd-tools-fab:hover {
-      transform: scale(1.05) !important;
-      color: #0070f3 !important;
-      border-color: rgba(0, 112, 243, 0.3) !important;
-      box-shadow: 0 8px 30px rgba(0, 112, 243, 0.15) !important;
-    }
-    #nd-tools-fab i {
-      font-size: 1.25rem !important;
-    }
-    
-    /* ── Panel Wrapper ── */
+    /* ── Tools Dropdown Panel ── */
     #nd-tools-panel {
       position: fixed !important;
-      top: 145px !important;
-      left: 20px !important;
+      top: 56px !important;
+      right: 76px !important;
+      left: auto !important;
       bottom: auto !important;
-      right: auto !important;
-      width: 300px !important;
-      background: rgba(255, 255, 255, 0.95) !important;
+      width: 320px !important;
+      max-width: 92vw !important;
+      background: rgba(255, 255, 255, 0.98) !important;
       backdrop-filter: blur(20px) !important;
       -webkit-backdrop-filter: blur(20px) !important;
       border: 1px solid rgba(226, 232, 240, 1) !important;
       border-radius: 20px !important;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
-      z-index: 99999 !important;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0,0,0,0.05) !important;
+      z-index: 100015 !important;
       overflow: hidden !important;
       display: none;
       flex-direction: column !important;
@@ -422,15 +484,6 @@
     }
     #nd-tools-panel * {
       box-sizing: border-box !important;
-    }
-    
-    /* Shift FAB and Panel down when quiz is active to avoid covering the back button */
-    /* Shift FAB and Panel down when quiz is active to avoid covering the back button */
-    body.quiz-active #nd-tools-fab {
-      bottom: 80px !important;
-    }
-    body.quiz-active #nd-tools-panel {
-      bottom: 130px !important;
     }
     
     /* ── Tabs Header ── */
@@ -630,10 +683,14 @@
   const linksDiv = document.createElement('div');
   linksDiv.id = 'nd-navbar-links';
 
-  NAV_LINKS.forEach(({ href, label, icon }) => {
+  NAV_LINKS.forEach(({ href, label, icon, external }) => {
     const a = document.createElement('a');
     a.className = 'nd-nav-link' + (isActive(href) ? ' nd-active' : '');
     a.href = href;
+    if (external) {
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+    }
     if (isActive(href)) a.setAttribute('aria-current', 'page');
     a.innerHTML = `<i class="ph-duotone ${icon}" aria-hidden="true"></i><span class="nd-lbl">${label}</span>`;
     linksDiv.appendChild(a);
@@ -735,10 +792,10 @@
         const roleBadgeHtml = badges.join('');
 
         let adminLink = '';
-        if (role === 'admin') {
+        if (role === 'admin' || (u && u.adminLevel === 'owner')) {
           adminLink = `
-            <a href="/admin/" class="nd-nav-link nd-admin-link" style="color: #0070f3;" title="Bảng quản trị Admin">
-              <i class="ph-bold ph-shield-checkered"></i><span class="nd-lbl">Admin</span>
+            <a href="/admin/" class="nd-nav-link nd-admin-link" style="color: #b45309; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; font-weight: 700;" title="Hệ thống Quản trị Admin">
+              <i class="ph-bold ph-shield-checkered" style="color: #d97706;"></i><span class="nd-lbl">Quản trị</span>
             </a>
             <button id="nd-admin-reload-btn" class="nd-nav-link nd-admin-reload" style="color: #ef4444; border: none; background: transparent; cursor: pointer; padding: 5px 8px;" title="Yêu cầu tải lại trang cho tất cả">
               <i class="ph-bold ph-arrows-clockwise"></i><span class="nd-lbl">Tải lại</span>
@@ -821,6 +878,11 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid #f1f5f9;">
+              ${(role === 'admin' || (u && u.adminLevel === 'owner')) ? `
+                <a href="/admin/" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #fffbeb; color: #b45309; text-decoration: none; font-size: 12px; font-weight: 700; border: 1px solid #fde68a;">
+                  <i class="ph-bold ph-shield-checkered" style="font-size: 15px; color: #d97706;"></i> Hệ thống Quản trị
+                </a>
+              ` : ''}
               ${allAccounts.length < 10 ? `
                 <a href="/auth/login/?addAccount=true" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: #f8fafc; color: #0070f3; text-decoration: none; font-size: 12px; font-weight: 700; border: 1px dashed #93c5fd;">
                   <i class="ph-bold ph-user-plus" style="font-size: 15px;"></i> Thêm tài khoản khác
@@ -1077,12 +1139,24 @@
     });
   }
 
+  /* ── Quick Tools Button in Navbar ── */
+  const toolsWrapper = document.createElement('div');
+  toolsWrapper.id = 'nd-navbar-tools-wrapper';
+  toolsWrapper.style.cssText = 'position: relative; display: flex; align-items: center; margin-left: auto; flex-shrink: 0;';
+  toolsWrapper.innerHTML = `
+    <button id="nd-navbar-tools-btn" type="button" title="Công cụ tiện ích" style="padding: 6px 10px; border-radius: 12px; border: 1px solid rgba(226,232,240,0.8); background: rgba(255,255,255,0.85); color: #475569; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.2s; font-family: inherit;">
+      <i class="ph-duotone ph-qr-code" style="font-size: 14px; color: #2563eb;"></i>
+      <span class="nd-lbl">Tiện ích</span>
+    </button>
+  `;
+
   inner.appendChild(brand);
   inner.appendChild(sep);
   inner.appendChild(linksWrapper);
-  inner.appendChild(hamburger);
+  inner.appendChild(toolsWrapper);
   inner.appendChild(notifyWrapper);
   inner.appendChild(userSection);
+  inner.appendChild(hamburger);
   nav.appendChild(inner);
 
   /* ─── Spacer: pushes page content below fixed bar ──────── */
@@ -1092,7 +1166,7 @@
 
   /* ─── Mount into DOM ──────────────────────────────────── */
   function mount() {
-    if (document.getElementById('nd-navbar')) return; // idempotent
+    if (document.getElementById('nd-navbar') || document.querySelector('header[data-nd-react-navbar="true"]')) return; // idempotent
     // nav is fixed — insert anywhere (visible immediately)
     document.body.insertBefore(nav, document.body.firstChild);
     document.body.appendChild(notifyModal);
@@ -1111,13 +1185,6 @@
     aScript.defer = true;
     document.head.appendChild(aScript);
 
-    // Create FAB
-    const fab = document.createElement('div');
-    fab.id = 'nd-tools-fab';
-    fab.title = 'Mã QR & Công cụ';
-    fab.innerHTML = `<i class="ph-duotone ph-toolbox"></i>`;
-    document.body.appendChild(fab);
-
     // Create Panel
     const panel = document.createElement('div');
     panel.id = 'nd-tools-panel';
@@ -1127,6 +1194,7 @@
         <button class="nd-tools-tab-btn" id="nd-tab-btn-calc"><i class="ph-duotone ph-calculator"></i>Máy tính</button>
         <button class="nd-tools-tab-btn" id="nd-tab-btn-timer"><i class="ph-duotone ph-timer"></i>Pomodoro</button>
         <button class="nd-tools-tab-btn" id="nd-tab-btn-notes"><i class="ph-duotone ph-note-pencil"></i>Ghi chú</button>
+        <button id="nd-tools-close-btn" style="border: none; background: transparent; cursor: pointer; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 0 8px;">✕</button>
       </div>
       
       <!-- QR Content -->
@@ -1209,119 +1277,41 @@
     `;
     document.body.appendChild(panel);
 
-    // Dragging & Panel Positioning Logic
-    let isDragging = false;
-    let dragStartX = 0;
-    let dragStartY = 0;
-    let buttonStartX = 0;
-    let buttonStartY = 0;
-    let hasDraggedSignificant = false;
-
-    function repositionPanel() {
-      const fabRect = fab.getBoundingClientRect();
-      const panelWidth = 300;
-      const panelHeight = panel.offsetHeight || 330;
-      
-      let newLeft = fabRect.left;
-      let newTop = fabRect.bottom + 8;
-      
-      if (newLeft + panelWidth > window.innerWidth) {
-        newLeft = window.innerWidth - panelWidth - 16;
-      }
-      if (newLeft < 16) {
-        newLeft = 16;
-      }
-      
-      if (newTop + panelHeight > window.innerHeight) {
-        newTop = fabRect.top - panelHeight - 8;
-      }
-      if (newTop < 80) {
-        newTop = 80;
-      }
-
-      panel.style.setProperty('left', newLeft + 'px', 'important');
-      panel.style.setProperty('top', newTop + 'px', 'important');
-      panel.style.setProperty('bottom', 'auto', 'important');
+    // Toggle Tools Panel from Navbar Button
+    const toolsBtn = document.getElementById('nd-navbar-tools-btn');
+    if (toolsBtn) {
+      toolsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isVisible = panel.style.display === 'flex';
+        if (isVisible) {
+          panel.style.display = 'none';
+        } else {
+          // Close other popovers if open
+          const accPopover = document.getElementById('nd-account-switcher-popover');
+          if (accPopover) accPopover.style.display = 'none';
+          if (notifyModal) {
+            notifyModal.style.opacity = '0';
+            setTimeout(() => { notifyModal.style.display = 'none'; }, 200);
+          }
+          panel.style.display = 'flex';
+          const currentUrl = window.location.href;
+          const qrImg = document.getElementById('nd-tools-qr-img');
+          if (qrImg) qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(currentUrl)}`;
+          const qrUrl = document.getElementById('nd-tools-qr-url');
+          if (qrUrl) qrUrl.value = currentUrl;
+        }
+      });
     }
 
-    fab.addEventListener('pointerdown', (e) => {
-      isDragging = true;
-      hasDraggedSignificant = false;
-      dragStartX = e.clientX;
-      dragStartY = e.clientY;
-      
-      const rect = fab.getBoundingClientRect();
-      buttonStartX = rect.left;
-      buttonStartY = rect.top;
-      
-      fab.style.transition = 'none';
-      fab.setPointerCapture(e.pointerId);
-    });
-
-    fab.addEventListener('pointermove', (e) => {
-      if (!isDragging) return;
-      
-      const deltaX = e.clientX - dragStartX;
-      const deltaY = e.clientY - dragStartY;
-      
-      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
-        hasDraggedSignificant = true;
-      }
-      
-      let newLeft = buttonStartX + deltaX;
-      let newTop = buttonStartY + deltaY;
-      
-      const fabSize = 42;
-      const minTop = 80; 
-      const maxTop = window.innerHeight - fabSize - 16;
-      const minLeft = 16;
-      const maxLeft = window.innerWidth - fabSize - 16;
-      
-      newLeft = Math.max(minLeft, Math.min(maxLeft, newLeft));
-      newTop = Math.max(minTop, Math.min(maxTop, newTop));
-      
-      fab.style.setProperty('left', newLeft + 'px', 'important');
-      fab.style.setProperty('top', newTop + 'px', 'important');
-      fab.style.setProperty('bottom', 'auto', 'important');
-      
-      if (panel.style.display === 'flex') {
-        repositionPanel();
-      }
-    });
-
-    fab.addEventListener('pointerup', (e) => {
-      if (!isDragging) return;
-      isDragging = false;
-      fab.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-      fab.releasePointerCapture(e.pointerId);
-      
-      if (hasDraggedSignificant) {
-        e.stopPropagation();
-        e.preventDefault();
-        fab.dataset.dragged = "true";
-      }
-    });
-
-    fab.addEventListener('click', (e) => {
-      if (hasDraggedSignificant) {
-        return;
-      }
-      e.stopPropagation();
-      const isVisible = panel.style.display === 'flex';
-      if (isVisible) {
+    const toolsCloseBtn = document.getElementById('nd-tools-close-btn');
+    if (toolsCloseBtn) {
+      toolsCloseBtn.addEventListener('click', () => {
         panel.style.display = 'none';
-      } else {
-        panel.style.display = 'flex';
-        const currentUrl = window.location.href;
-        document.getElementById('nd-tools-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(currentUrl)}`;
-        document.getElementById('nd-tools-qr-url').value = currentUrl;
-        
-        setTimeout(repositionPanel, 0);
-      }
-    });
+      });
+    }
 
     document.addEventListener('click', (e) => {
-      if (!panel.contains(e.target) && e.target !== fab) {
+      if (!panel.contains(e.target) && !e.target.closest('#nd-navbar-tools-btn')) {
         panel.style.display = 'none';
       }
     });
@@ -1541,66 +1531,185 @@
         });
       }
 
-    // ── Toast Alert & Detail View Dialogs ──
-    function showToastNotification(title, info) {
+    // ── Helper: Rich Text, Formatting & User Tagging Parser ──
+    function formatRichNotification(raw) {
+      if (!raw) return '';
+      let s = String(raw)
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '');
+
+      // Bold: **text**
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      // Italic: *text* (not surrounded by other asterisks)
+      s = s.replace(/(^|[^\*])\*([^\*\n\r]+)\*([^\*]|$)/g, '$1<em>$2</em>$3');
+      // Underline: __text__
+      s = s.replace(/__([^_]+)__/g, '<u>$1</u>');
+      // Markdown links: [label](url)
+      s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #0070f3 !important; text-decoration: underline !important; font-weight: 700 !important;" onclick="event.stopPropagation();">$1</a>');
+      // Raw URLs: https://...
+      s = s.replace(/(^|[^"'])(https?:\/\/[a-zA-Z0-9_\-\.\/\?%&=#+@!:,]+)/g, (match, prefix, url) => {
+        if (prefix.includes('href=') || prefix.includes('src=')) return match;
+        return `${prefix}<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: #0070f3 !important; text-decoration: underline !important; font-weight: 700 !important;" onclick="event.stopPropagation();">${url}</a>`;
+      });
+      // Tagged users: @username (Rule #2 & #3: preserve raw NDID)
+      s = s.replace(/(^|[\s(>])@([a-zA-Z0-9_.-]+)/g, '$1<span class="nd-user-tag" style="background: #eff6ff; color: #1d4ed8; padding: 1px 7px; border-radius: 6px; font-weight: 700; border: 1px solid #bfdbfe; font-size: 0.9em; display: inline-flex; align-items: center; gap: 2px;">@$2</span>');
+      // Auto line breaks if not rich HTML
+      if (!s.includes('<p>') && !s.includes('<div') && !s.includes('<br')) {
+        s = s.replace(/\n/g, '<br>');
+      }
+      return s;
+    }
+
+    // ── Helper: Audience Filtering ──
+    function shouldShowNotification(item, currentUser) {
+      if (!item.target || item.target.type === 'all' || !item.target.type) {
+        return true;
+      }
+      const isUserAdmin = currentUser && (currentUser.role === 'admin' || currentUser.adminLevel === 'owner');
+      if (item.target.type === 'group') {
+        if (isUserAdmin) return true;
+        if (!currentUser) return false;
+        const g = item.target.groupRole;
+        if (g === 'student' && (currentUser.eduRole === 'student' || !currentUser.eduRole)) return true;
+        if (g === 'teacher' && currentUser.eduRole === 'teacher') return true;
+        if (g === 'admin' && currentUser.role === 'admin') return true;
+        if (g === 'member' && currentUser) return true;
+        if (g === 'grade_10' && String(currentUser.grade).includes('10')) return true;
+        if (g === 'grade_11' && String(currentUser.grade).includes('11')) return true;
+        if (g === 'grade_12' && String(currentUser.grade).includes('12')) return true;
+        return false;
+      }
+      if (item.target.type === 'user') {
+        if (isUserAdmin) return true;
+        if (!currentUser) return false;
+        const recipients = item.target.recipients || [];
+        const myNdid = (currentUser.ndid || '').toLowerCase().trim();
+        const myCodeId = (currentUser.codeId || currentUser.uid || '').toLowerCase().trim();
+        return recipients.some(r => {
+          const target = String(r).toLowerCase().trim().replace(/^@/, '');
+          return target === myNdid || target === myCodeId;
+        });
+      }
+      return true;
+    }
+
+    // ── Helper: Sender Badge Renderer ──
+    function renderSenderBadge(sender) {
+      if (!sender) return '';
+      let badgeHtml = '';
+      if (sender.type === 'admin' || sender.adminNdid) {
+        const adminTag = sender.adminNdid ? sender.adminNdid : (sender.name || 'Quản trị viên');
+        badgeHtml = `<span style="display: inline-flex; align-items: center; gap: 4px; background: #fef3c7; color: #92400e; font-weight: 800; font-size: 10px; padding: 2px 7px; border-radius: 6px; border: 1px solid #fde68a;">
+          <i class="ph-bold ph-shield-check" style="font-size: 11px;"></i> ${adminTag}
+        </span>`;
+      } else if (sender.name) {
+        badgeHtml = `<span style="display: inline-flex; align-items: center; gap: 4px; background: #f1f5f9; color: #475569; font-weight: 800; font-size: 10px; padding: 2px 7px; border-radius: 6px; border: 1px solid #e2e8f0;">
+          <i class="ph-bold ph-user" style="font-size: 11px;"></i> ${sender.name}
+        </span>`;
+      }
+      let collabHtml = '';
+      if (sender.collaborators && Array.isArray(sender.collaborators) && sender.collaborators.length > 0) {
+        const collabs = sender.collaborators.map(c => `<span style="background: #eff6ff; color: #1d4ed8; padding: 1px 5px; border-radius: 4px; font-weight: 700; font-size: 9.5px; border: 1px solid #bfdbfe;">@${String(c).replace(/^@/, '')}</span>`).join(' ');
+        collabHtml = `<span style="font-size: 10px; color: #64748b; margin-left: 4px; display: inline-flex; align-items: center; gap: 3px;">cùng ${collabs}</span>`;
+      }
+      if (!badgeHtml && !collabHtml) return '';
+      return `<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 4px;">${badgeHtml}${collabHtml}</div>`;
+    }
+
+    // ── Helper: Target Badge Renderer ──
+    function renderTargetBadge(target) {
+      if (!target || target.type === 'all' || !target.type) {
+        return `<span style="font-size: 9px; font-weight: 800; color: #0284c7; background: #e0f2fe; padding: 2px 6px; border-radius: 6px;">🌐 Tất cả</span>`;
+      }
+      if (target.type === 'group') {
+        const labelMap = {
+          student: 'Học sinh',
+          teacher: 'Giáo viên',
+          admin: 'Quản trị viên',
+          member: 'Thành viên',
+          grade_10: 'Khối 10',
+          grade_11: 'Khối 11',
+          grade_12: 'Khối 12'
+        };
+        const label = labelMap[target.groupRole] || target.groupRole;
+        return `<span style="font-size: 9px; font-weight: 800; color: #7c3aed; background: #f3e8ff; padding: 2px 6px; border-radius: 6px;">👥 Nhóm: ${label}</span>`;
+      }
+      if (target.type === 'user') {
+        return `<span style="font-size: 9px; font-weight: 800; color: #b45309; background: #fef3c7; padding: 2px 6px; border-radius: 6px;">🔒 Cá nhân</span>`;
+      }
+      return '';
+    }
+
+    // ── Toast Alert Dialog ──
+    function showToastNotification(item) {
+      if (!item) return;
+      const title = item.title || 'Thông báo mới';
+      const info = item.info || item.content || '';
+      const image = item.image || '';
+      const textColor = item.textColor || '#0f172a';
+
       let container = document.getElementById('nd-toast-container');
       if (!container) {
         container = document.createElement('div');
         container.id = 'nd-toast-container';
-        container.style.cssText = 'position: fixed; top: 85px; right: 20px; z-index: 100015; display: flex; flex-direction: column; gap: 10px; max-width: 340px; width: 90%; pointer-events: none;';
+        container.style.cssText = 'position: fixed; top: 85px; right: 20px; z-index: 100015; display: flex; flex-direction: column; gap: 10px; max-width: 360px; width: 90%; pointer-events: none;';
         document.body.appendChild(container);
       }
-      
+
       const toast = document.createElement('div');
       toast.style.cssText = `
         background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border-left: 4px solid #0070f3;
+        border-left: 4px solid ${item.color || '#0070f3'};
         border-radius: 16px;
-        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
-        padding: 14px 16px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.12), 0 8px 10px -6px rgba(0,0,0,0.06);
+        padding: 12px 16px;
         display: flex;
-        flex-direction: column;
-        gap: 4px;
+        gap: 12px;
+        align-items: flex-start;
         transform: translateX(120%);
         transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         pointer-events: auto;
         cursor: pointer;
         font-family: 'Plus Jakarta Sans', sans-serif;
       `;
-      
-      const cleanInfo = info.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '$1');
-      
+
+      const cleanInfo = String(info).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '$1').replace(/<[^>]+>/g, '');
+      const imgHtml = image ? `<img src="${image}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 10px; flex-shrink: 0; border: 1px solid #e2e8f0;">` : '';
+
       toast.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;">
-          <span style="font-weight: 800; font-size: 11px; color: #0070f3; display: flex; align-items: center; gap: 6px;">🔔 THÔNG BÁO MỚI</span>
-          <button style="background: transparent; border: none; font-size: 10px; color: #94a3b8; cursor: pointer; padding: 0;">✕</button>
+        ${imgHtml}
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <span style="font-weight: 800; font-size: 10px; color: #0070f3; display: flex; align-items: center; gap: 4px;">🔔 THÔNG BÁO MỚI</span>
+            <button style="background: transparent; border: none; font-size: 10px; color: #94a3b8; cursor: pointer; padding: 0;">✕</button>
+          </div>
+          <div style="font-weight: 800; font-size: 13px; color: ${textColor}; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${title}</div>
+          <div style="font-size: 11px; color: #64748b; line-height: 1.4; max-height: 38px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${cleanInfo}</div>
         </div>
-        <div style="font-weight: 800; font-size: 12.5px; color: #0f172a; margin-top: 2px;">${title}</div>
-        <div style="font-size: 11px; color: #64748b; line-height: 1.4; max-height: 50px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${cleanInfo}</div>
       `;
-      
+
       toast.addEventListener('click', (e) => {
         if (e.target.tagName !== 'BUTTON') {
-          openNotifyModal();
+          showNotificationDetail(item, item.date || 'Hôm nay');
           toast.style.transform = 'translateX(120%)';
           toast.style.opacity = '0';
           setTimeout(() => toast.remove(), 400);
         }
       });
-      
+
       toast.querySelector('button').addEventListener('click', (e) => {
         e.stopPropagation();
         toast.style.transform = 'translateX(120%)';
         toast.style.opacity = '0';
         setTimeout(() => toast.remove(), 400);
       });
-      
+
       container.appendChild(toast);
       void toast.offsetWidth;
       toast.style.transform = 'translateX(0)';
-      
+
       setTimeout(() => {
         if (toast.parentNode) {
           toast.style.transform = 'translateX(120%)';
@@ -1610,7 +1719,9 @@
       }, 8000);
     }
 
-    function showNotificationDetail(title, info, date, time) {
+    // ── Full Detail Modal with Rich Formatting, Sender, Image & Link ──
+    function showNotificationDetail(item, dateStr) {
+      if (!item) return;
       let detailModal = document.getElementById('nd-notify-detail-modal');
       if (!detailModal) {
         detailModal = document.createElement('div');
@@ -1623,51 +1734,88 @@
           align-items: center;
           justify-content: center;
           padding: 16px;
-          background: rgba(15, 23, 42, 0.4);
-          backdrop-filter: blur(6px);
-          -webkit-backdrop-filter: blur(6px);
+          background: rgba(15, 23, 42, 0.45);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
           opacity: 0;
           transition: opacity 0.2s ease;
           box-sizing: border-box;
         `;
         document.body.appendChild(detailModal);
       }
-      
+
+      const title = item.title || 'Thông báo';
+      const bodyContent = formatRichNotification(item.content || item.info || '');
+      const textColor = item.textColor || '#0f172a';
+      const imageHtml = item.image ? `
+        <div style="margin: 14px 0; border-radius: 14px; overflow: hidden; border: 1px solid #e2e8f0; max-height: 260px; background: #f8fafc;">
+          <img src="${item.image}" alt="Banner" style="width: 100%; max-height: 260px; object-fit: contain; display: block;" onerror="this.parentElement.style.display='none';">
+        </div>
+      ` : '';
+
+      const actionButtonHtml = item.link ? `
+        <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
+          <a href="${item.link}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; background: #2563eb; color: #ffffff !important; padding: 8px 18px; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none !important; box-shadow: 0 4px 12px rgba(37,99,235,0.25); transition: opacity 0.2s;">
+            <span>${item.linkText || 'Mở liên kết'}</span>
+            <i class="ph-bold ph-arrow-square-out" style="font-size: 14px;"></i>
+          </a>
+        </div>
+      ` : '';
+
       detailModal.innerHTML = `
         <div style="
           background: #fff;
           border-radius: 24px;
-          max-width: 500px;
+          max-width: 520px;
           width: 100%;
+          max-height: 85vh;
+          overflow-y: auto;
           box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-          padding: 26px 32px;
+          padding: 24px 28px;
           font-family: 'Plus Jakarta Sans', sans-serif;
           transform: scale(0.95);
           transition: transform 0.2s ease;
           box-sizing: border-box;
           text-align: left;
         ">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-            <span style="font-size: 11px; font-weight: 800; color: #94a3b8; font-family: monospace;">📅 ${date} &nbsp; ${time}</span>
-            <button id="nd-notify-detail-close" style="background: #f1f5f9; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 11px; font-weight: bold; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+          <!-- Top Row: Date & Close -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="font-size: 11px; font-weight: 800; color: #94a3b8; font-family: monospace;">📅 ${dateStr} &nbsp; ${item.time || ''}</span>
+              ${renderTargetBadge(item.target)}
+            </div>
+            <button id="nd-notify-detail-close" style="background: #f1f5f9; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 12px; font-weight: bold; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
           </div>
-          <h4 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 12px 0; line-height: 1.4;">${title}</h4>
-          <p style="font-size: 15px; color: #475569; line-height: 1.65; margin: 0; white-space: pre-wrap; word-wrap: break-word;">${parseMarkdownLinks(info)}</p>
+
+          <!-- Sender Badge -->
+          ${renderSenderBadge(item.sender)}
+
+          <!-- Title -->
+          <h4 style="font-size: 18px; font-weight: 800; color: ${textColor}; margin: 8px 0 10px 0; line-height: 1.35;">${title}</h4>
+
+          <!-- Attached Image -->
+          ${imageHtml}
+
+          <!-- Rich Body -->
+          <div style="font-size: 14px; color: #334155; line-height: 1.65; word-wrap: break-word;">${bodyContent}</div>
+
+          <!-- Action Button -->
+          ${actionButtonHtml}
         </div>
       `;
-      
+
       detailModal.style.display = 'flex';
       void detailModal.offsetWidth;
       detailModal.style.opacity = '1';
       detailModal.firstElementChild.style.transform = 'scale(1)';
-      
+
       const closeBtn = detailModal.querySelector('#nd-notify-detail-close');
       closeBtn.onclick = () => {
         detailModal.style.opacity = '0';
         detailModal.firstElementChild.style.transform = 'scale(0.95)';
         setTimeout(() => detailModal.style.display = 'none', 200);
       };
-      
+
       detailModal.onclick = (e) => {
         if (e.target === detailModal) {
           closeBtn.onclick();
@@ -1675,21 +1823,78 @@
       };
     }
 
-    // Initialize Firebase listener with auto-fallback
+    // ── Realtime Synchronization (Firestore Primary + Realtime Database Fallback) ──
     (async () => {
-      let dbUrl = "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app";
-      try {
-        if (typeof getEduKeys === 'function') {
-          const keys = await getEduKeys();
-          if (keys && keys.fbDatabaseURL) {
-            dbUrl = keys.fbDatabaseURL;
-          }
+      let isSynced = false;
+
+      // 1. Try Firestore Real-time Snapshot
+      async function tryFirestoreSync() {
+        if (!window.firebaseFirestore) return false;
+        try {
+          const { collection, onSnapshot, query, orderBy, limit } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+          const q = query(collection(window.firebaseFirestore, 'notifications'), orderBy('createdAt', 'desc'), limit(50));
+          let initialLoad = true;
+
+          onSnapshot(q, (snapshot) => {
+            const notifs = {};
+            snapshot.forEach(doc => {
+              notifs[doc.id] = { id: doc.id, ...doc.data() };
+            });
+            updateNotificationList(notifs);
+
+            if (!initialLoad) {
+              snapshot.docChanges().forEach(change => {
+                if (change.type === 'added') {
+                  const data = change.doc.data();
+                  showToastNotification(data);
+                }
+              });
+            }
+            initialLoad = false;
+            isSynced = true;
+          }, (err) => {
+            console.warn("Firestore notification subscription unavailable:", err);
+            tryRtdbSync();
+          });
+          return true;
+        } catch (e) {
+          return false;
         }
-      } catch (e) {}
+      }
 
-      const cleanDbUrl = dbUrl.endsWith('/') ? dbUrl + 'notifications.json' : dbUrl + '/notifications.json';
+      // 2. Realtime Database / REST fallback
+      async function tryRtdbSync() {
+        let dbUrl = "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app";
+        try {
+          if (typeof getEduKeys === 'function') {
+            const keys = await getEduKeys();
+            if (keys && keys.fbDatabaseURL) dbUrl = keys.fbDatabaseURL;
+          }
+        } catch (e) {}
 
-      function fallbackFetch(url) {
+        const cleanDbUrl = dbUrl.endsWith('/') ? dbUrl + 'notifications.json' : dbUrl + '/notifications.json';
+
+        // Try RTDB event trigger
+        if (window.firebaseDb) {
+          try {
+            const { ref, onValue } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+            const notifRef = ref(window.firebaseDb, 'notifications');
+            onValue(notifRef, (snap) => {
+              const val = snap.val();
+              if (val) {
+                updateNotificationList(val);
+                isSynced = true;
+              }
+            }, () => fetchFallback(cleanDbUrl));
+            return;
+          } catch (_) {}
+        }
+
+        fetchFallback(cleanDbUrl);
+      }
+
+      function fetchFallback(url) {
+        if (isSynced) return;
         const busterUrl = url + (url.includes('?') ? '&' : '?') + 'nocache=' + Date.now();
         fetch(busterUrl)
           .then(res => {
@@ -1697,191 +1902,153 @@
             return res.json();
           })
           .then(data => {
-            updateNotificationList(data);
+            if (data) updateNotificationList(data);
           })
-          .catch(err => {
-            console.error("REST API notification fetch failed", err);
+          .catch(() => {
             const listContainer = document.getElementById('nd-navbar-notify-list');
-            if (listContainer) {
-              listContainer.innerHTML = `<div style="padding: 16px; text-align: center; color: #ef4444; font-size: 10px; font-weight: 700; line-height: 1.4;">⚠️ Không thể kết nối cơ sở dữ liệu. Vui lòng mở quyền đọc (Read Rules) tại nhánh '/notifications' hoặc cấu hình lại Firebase.</div>`;
+            if (listContainer && (!notificationsList || notificationsList.length === 0)) {
+              listContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 11px; font-weight: 600;">Chưa có thông báo mới.</div>`;
             }
           });
       }
 
-      try {
-        const { ref, onValue } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-        let attempts = 0;
-        const checkDb = setInterval(() => {
-          attempts++;
-          if (window.firebaseDb) {
-            clearInterval(checkDb);
-            try {
-              const triggerRef = ref(window.firebaseDb, 'notifications_trigger');
-              let firstLoad = true;
-              onValue(triggerRef, (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.timestamp) {
-                  const busterUrl = cleanDbUrl + (cleanDbUrl.includes('?') ? '&' : '?') + 'nocache=' + Date.now();
-                  fetch(busterUrl)
-                    .then(res => res.json())
-                    .then(newData => {
-                      updateNotificationList(newData);
-                      if (!firstLoad) {
-                        showToastNotification(data.title, data.info);
-                      }
-                      firstLoad = false;
-                    })
-                    .catch(e => console.error("Error fetching notifications on trigger", e));
-                }
-              }, (error) => {
-                console.error("Firebase trigger subscription failed, falling back to REST", error);
-                fallbackFetch(cleanDbUrl);
-              });
-            } catch (e) {
-              console.error("Firebase trigger initialization failed, falling back to REST", e);
-              fallbackFetch(cleanDbUrl);
-            }
-          } else if (attempts > 15) { // ~4.5 seconds timeout
-            clearInterval(checkDb);
-            fallbackFetch(cleanDbUrl);
-          }
-        }, 300);
-      } catch (err) {
-        console.error("Firebase Realtime Database dynamic load failed, using fallback REST API", err);
-        fallbackFetch(cleanDbUrl);
+      // Wait for Firebase readiness
+      const success = await tryFirestoreSync();
+      if (!success) {
+        window.addEventListener('firebase-ready', async () => {
+          const ok = await tryFirestoreSync();
+          if (!ok) tryRtdbSync();
+        }, { once: true });
+        setTimeout(() => { if (!isSynced) tryRtdbSync(); }, 1500);
       }
     })();
   }
 
-    function updateNotificationList(data) {
-      const listContainer = document.getElementById('nd-navbar-notify-list');
-      const badge = document.getElementById('nd-navbar-notify-badge');
-      if (!listContainer) return;
-      
-      if (!data) {
-        listContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 11px; font-weight: 600;">Không có thông báo mới nào.</div>`;
-        if (badge) badge.style.display = 'none';
-        return;
-      }
-      
-      const nowTime = Date.now();
-      notificationsList = Object.values(data).filter(item => {
-        if (item.scheduled) {
-          if (item.scheduledTimestamp) {
-            return item.scheduledTimestamp <= nowTime;
-          }
-          if (item.date && item.time) {
-            try {
-              const dParts = item.date.split('/');
-              const tParts = item.time.split(':');
-              if (dParts.length === 3 && tParts.length === 2) {
-                const sched = new Date(dParts[2], dParts[1] - 1, dParts[0], tParts[0], tParts[1]).getTime();
-                return sched <= nowTime;
-              }
-            } catch(e) {}
-          }
-        }
-        return true;
-      });
-      notificationsList.sort((a, b) => (b.stt || 0) - (a.stt || 0));
-      
-      if (notificationsList.length === 0) {
-        listContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 11px; font-weight: 600;">Không có thông báo mới nào.</div>`;
-        if (badge) badge.style.display = 'none';
-        return;
-      }
-      
-      const lastReadStt = parseInt(localStorage.getItem('nd_last_read_stt') || '0');
-      const maxStt = Math.max(...notificationsList.map(n => n.stt || 0));
-      
-      if (maxStt > lastReadStt) {
-        if (badge) badge.style.display = 'block';
-      } else {
-        if (badge) badge.style.display = 'none';
-      }
-      
-      // Group notifications by date
-      const groups = {};
-      notificationsList.forEach(item => {
-        const dateStr = item.date || 'Thông báo khác';
-        if (!groups[dateStr]) {
-          groups[dateStr] = [];
-        }
-        groups[dateStr].push(item);
-      });
-      
-      listContainer.innerHTML = '';
-      
-      // Get unique dates in order of appearance (latest date first)
-      const uniqueDates = [];
-      notificationsList.forEach(item => {
-        const d = item.date || 'Thông báo khác';
-        if (!uniqueDates.includes(d)) {
-          uniqueDates.push(d);
-        }
-      });
-      
-      function parseMarkdownLinks(text) {
-        if (!text) return '';
-        return text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" style="color: #0070f3 !important; text-decoration: underline !important; font-weight: 800 !important;" onclick="event.stopPropagation();">$1</a>');
-      }
+  // ── Render Notification List in Bell Dropdown ──
+  function updateNotificationList(data) {
+    const listContainer = document.getElementById('nd-navbar-notify-list');
+    const badge = document.getElementById('nd-navbar-notify-badge');
+    if (!listContainer) return;
 
-      uniqueDates.forEach(dateStr => {
-        // Date Group Header
-        const groupHeader = document.createElement('div');
-        groupHeader.style.cssText = 'padding: 8px 16px; background: #f8fafc; font-size: 11px; font-weight: 800; color: #64748b; text-align: left; border-bottom: 1px solid #e2e8f0; border-top: 1px solid #f1f5f9; box-sizing: border-box; width: 100%;';
-        groupHeader.innerHTML = `📅 &nbsp; ${dateStr}`;
-        listContainer.appendChild(groupHeader);
-        
-        // Notifications in this date group
-        groups[dateStr].forEach(item => {
-          const itemEl = document.createElement('div');
-          const borderAccent = item.color || '#0070f3';
-          
-          itemEl.style.cssText = `padding: 14px 18px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 12px; transition: background 0.2s; cursor: pointer; box-sizing: border-box; width: 100%; text-align: left;`;
-          
-          itemEl.onmouseenter = () => { itemEl.style.background = '#f8fafc'; };
-          itemEl.onmouseleave = () => { itemEl.style.background = 'transparent'; };
-          
-          itemEl.innerHTML = `
-            <!-- Left: Hour -->
-            <div style="font-size: 11.5px; font-weight: 800; color: #94a3b8; width: 40px; text-align: right; flex-shrink: 0; padding-top: 1.5px; font-family: monospace;">
-              ${item.time || ''}
-            </div>
-            <!-- Vertical color bar -->
-            <div style="width: 4px; align-self: stretch; background: ${borderAccent}; border-radius: 2px; flex-shrink: 0;"></div>
-            <!-- Right: content -->
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0;">
-              <span class="nd-notify-title-text" style="font-weight: 800; font-size: 13.5px; color: #1e293b; line-height: 1.3; display: flex; align-items: center; flex-wrap: wrap;">${item.title || 'Thông báo'}</span>
-              <p style="font-size: 12px; color: #64748b; line-height: 1.5; margin: 0; white-space: normal; word-wrap: break-word;">${parseMarkdownLinks(item.info || '')}</p>
-            </div>
-          `;
-          
-          // Click handler logic:
-          const hasLinkMatch = item.info && item.info.match(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/);
-          if (hasLinkMatch) {
-            itemEl.title = "Bấm để mở liên kết";
-            const badgeSpan = document.createElement('span');
-            badgeSpan.style.cssText = 'font-size: 9px; font-weight: 800; color: #0070f3; background: #e0f2fe; padding: 2px 6px; border-radius: 6px; margin-left: 6px; display: inline-flex; align-items: center; gap: 2px;';
-            badgeSpan.innerHTML = '🔗 Mở link';
-            itemEl.querySelector('.nd-notify-title-text').appendChild(badgeSpan);
-            
-            itemEl.addEventListener('click', (e) => {
-              if (e.target.tagName !== 'A') {
-                window.open(hasLinkMatch[2], '_blank');
-              }
-            });
-          } else {
-            itemEl.title = "Bấm để xem chi tiết";
-            itemEl.addEventListener('click', () => {
-              showNotificationDetail(item.title, item.info, dateStr, item.time);
-            });
-          }
-          
-          listContainer.appendChild(itemEl);
-        });
-      });
+    if (!data) {
+      listContainer.innerHTML = `<div style="padding: 24px; text-align: center; color: #94a3b8; font-size: 11px; font-weight: 600;">Không có thông báo mới nào.</div>`;
+      if (badge) badge.style.display = 'none';
+      return;
     }
+
+    let currentUser = null;
+    try {
+      const rawUser = localStorage.getItem('nd_user');
+      if (rawUser) currentUser = JSON.parse(rawUser);
+    } catch (_) {}
+
+    const nowTime = Date.now();
+    notificationsList = Object.entries(data).map(([k, item]) => {
+      return { id: item.id || k, ...item };
+    }).filter(item => {
+      // 1. Time scheduling check
+      if (item.scheduled) {
+        if (item.scheduledTimestamp) {
+          if (item.scheduledTimestamp > nowTime) return false;
+        } else if (item.date && item.time) {
+          try {
+            const dParts = item.date.split('/');
+            const tParts = item.time.split(':');
+            if (dParts.length === 3 && tParts.length === 2) {
+              const sched = new Date(dParts[2], dParts[1] - 1, dParts[0], tParts[0], tParts[1]).getTime();
+              if (sched > nowTime) return false;
+            }
+          } catch (_) {}
+        }
+      }
+      // 2. Audience target filtering
+      return shouldShowNotification(item, currentUser);
+    });
+
+    notificationsList.sort((a, b) => (b.createdAt || b.stt || 0) - (a.createdAt || a.stt || 0));
+
+    if (notificationsList.length === 0) {
+      listContainer.innerHTML = `<div style="padding: 24px; text-align: center; color: #94a3b8; font-size: 11px; font-weight: 600;">Không có thông báo mới nào.</div>`;
+      if (badge) badge.style.display = 'none';
+      return;
+    }
+
+    const lastReadStt = parseInt(localStorage.getItem('nd_last_read_stt') || '0', 10);
+    const maxStt = Math.max(...notificationsList.map(n => n.createdAt || n.stt || 0));
+
+    if (maxStt > lastReadStt) {
+      if (badge) badge.style.display = 'block';
+    } else {
+      if (badge) badge.style.display = 'none';
+    }
+
+    // Group notifications by date
+    const groups = {};
+    const uniqueDates = [];
+    notificationsList.forEach(item => {
+      const d = item.date || 'Hôm nay';
+      if (!groups[d]) {
+        groups[d] = [];
+        uniqueDates.push(d);
+      }
+      groups[d].push(item);
+    });
+
+    listContainer.innerHTML = '';
+
+    uniqueDates.forEach(dateStr => {
+      // Date Group Header
+      const groupHeader = document.createElement('div');
+      groupHeader.style.cssText = 'padding: 8px 16px; background: #f8fafc; font-size: 11px; font-weight: 800; color: #64748b; text-align: left; border-bottom: 1px solid #e2e8f0; border-top: 1px solid #f1f5f9; box-sizing: border-box; width: 100%; display: flex; align-items: center; justify-content: space-between;';
+      groupHeader.innerHTML = `<span>📅 &nbsp; ${dateStr}</span>`;
+      listContainer.appendChild(groupHeader);
+
+      // Items in this date group
+      groups[dateStr].forEach(item => {
+        const itemEl = document.createElement('div');
+        const borderAccent = item.color || '#0070f3';
+        const textColor = item.textColor || '#1e293b';
+
+        itemEl.style.cssText = `padding: 12px 16px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 10px; transition: background 0.15s; cursor: pointer; box-sizing: border-box; width: 100%; text-align: left;`;
+
+        itemEl.onmouseenter = () => { itemEl.style.background = '#f8fafc'; };
+        itemEl.onmouseleave = () => { itemEl.style.background = 'transparent'; };
+
+        const thumbHtml = item.image ? `<img src="${item.image}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid #e2e8f0;" onerror="this.style.display='none';">` : '';
+        const linkBadge = item.link ? `<span style="font-size: 9px; font-weight: 800; color: #0070f3; background: #e0f2fe; padding: 2px 6px; border-radius: 6px; margin-left: 6px; display: inline-flex; align-items: center; gap: 2px;">🔗 ${item.linkText || 'Mở link'}</span>` : '';
+
+        itemEl.innerHTML = `
+          <!-- Left: Hour & Color Bar -->
+          <div style="font-size: 11px; font-weight: 800; color: #94a3b8; width: 36px; text-align: right; flex-shrink: 0; padding-top: 2px; font-family: monospace;">
+            ${item.time || ''}
+          </div>
+          <div style="width: 3.5px; align-self: stretch; background: ${borderAccent}; border-radius: 2px; flex-shrink: 0;"></div>
+          <!-- Center: Content -->
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+            ${renderSenderBadge(item.sender)}
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+              <span class="nd-notify-title-text" style="font-weight: 800; font-size: 13px; color: ${textColor}; line-height: 1.35; display: flex; align-items: center; flex-wrap: wrap;">
+                ${item.title || 'Thông báo'}
+                ${linkBadge}
+              </span>
+              ${renderTargetBadge(item.target)}
+            </div>
+            <div style="font-size: 11.5px; color: #64748b; line-height: 1.45; margin: 0; max-height: 38px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+              ${formatRichNotification(item.info || item.content || '')}
+            </div>
+          </div>
+          <!-- Right: Image Thumbnail if any -->
+          ${thumbHtml}
+        `;
+
+        itemEl.addEventListener('click', () => {
+          showNotificationDetail(item, dateStr);
+        });
+
+        listContainer.appendChild(itemEl);
+      });
+    });
+  }
   }
 
   if (document.body) {

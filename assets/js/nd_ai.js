@@ -2,7 +2,7 @@
  * ND Labs — NDAI Assistant (Trợ lý đa năng của ND Labs)
  * 
  * Tác dụng:
- *   • Cung cấp Widget khung chat NDAI Assistant đa năng cho toàn bộ hệ thống ND Labs (ngoại trừ EduSpace).
+ *   • Cung cấp Widget khung chat NDAI Assistant đa năng cho toàn bộ hệ thống ND Labs (ngoại trừ EduND).
  *   • Hỗ trợ giải đáp về Mini World, ChatND, Tiện ích, Công cụ, Giải trí, Kỹ thuật và mọi câu hỏi của người dùng.
  *   • Giao diện hiện đại, bóng bẩy với gradient xanh-tím đặc trưng của ND Labs, hỗ trợ định dạng Markdown.
  */

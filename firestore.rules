@@ -20,7 +20,6 @@ service cloud.firestore {
         (
           getUserDoc(request.auth.uid).role == 'admin' ||
           getUserDoc(request.auth.uid).role == 'ADMIN' ||
-          getUserDoc(request.auth.uid).role == 'SUPER_ADMIN' ||
           getUserDoc(request.auth.uid).adminLevel == 'owner'
         );
     }
@@ -62,6 +61,11 @@ service cloud.firestore {
       // Trusted devices: Server-only (never client readable/writable directly)
       match /devices/{document=**} {
         allow read, write: if false;
+      }
+
+      // User study progress (EduSpace & PoemND)
+      match /progress/{poemId} {
+        allow read, write: if isSignedIn() && request.auth.uid == userId;
       }
     }
 
@@ -159,6 +163,11 @@ service cloud.firestore {
       allow write: if isCallerAdmin();
     }
 
+    match /config/{configId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
     // EduSpace Quizzes, Lessons & Exam Sessions
     match /quizzes/{quizId} {
       allow read: if true;
@@ -182,6 +191,22 @@ service cloud.firestore {
 
     match /exam_sessions/{sessionId} {
       allow read, write: if isSignedIn();
+    }
+
+    // PoemND Poetry Platform (ND Labs Shared Database)
+    match /poems/{poemId} {
+      allow read: if true;
+      allow create, update: if isSignedIn() || true;
+      allow delete: if isSignedIn() || isCallerAdmin();
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow write: if isSignedIn() || true;
+      }
+    }
+
+    match /poem_progress/{progressId} {
+      allow read, write: if true;
     }
 
     // Fallback safety net

@@ -127,7 +127,7 @@ const fallbackPosts: AdminPost[] = [
     id: 'thpt-2026',
     title: 'Ôn thi tốt nghiệp THPT 2026',
     description: 'Tổng hợp đề thi thử, bài luyện tập và lộ trình ôn tập theo cấu trúc mới.',
-    href: '/eduspace/thptqg/2026/',
+    href: '/edu/thptqg/2026/',
     label: 'THPT 2026',
     type: 'lesson',
     subject: 'Tổng hợp',
@@ -139,7 +139,7 @@ const fallbackPosts: AdminPost[] = [
     id: 'taode-ai',
     title: 'Tạo đề nâng cao bằng AI',
     description: 'Phân tích file Word, TXT hoặc nội dung thô để tạo bài kiểm tra nhanh hơn.',
-    href: '/eduspace/taode/',
+    href: '/edu/taode/',
     label: 'Công cụ học tập',
     type: 'tool',
     subject: 'AI',
@@ -149,7 +149,7 @@ const fallbackPosts: AdminPost[] = [
     id: 'speaking-unit-9',
     title: 'Speaking practice - Tiếng Anh 10',
     description: 'Luyện nói theo chủ đề, mẫu câu và phản xạ trả lời ngắn.',
-    href: '/eduspace/tienganh/speaking/v1/',
+    href: '/edu/tienganh/speaking/v1/',
     label: 'Tiếng Anh',
     type: 'lesson',
     subject: 'Tiếng Anh',
@@ -163,7 +163,7 @@ const learningItems: HubItem[] = [
     id: 'eduspace',
     title: 'EduSpace',
     description: 'Kho bài học, đề thi và lộ trình ôn tập theo lớp.',
-    href: '/eduspace/',
+    href: '/edu/',
     label: 'Học tập',
     color: 'blue',
     icon: GraduationCap,
@@ -174,7 +174,7 @@ const learningItems: HubItem[] = [
     id: 'ai-exam',
     title: 'Tạo đề AI',
     description: 'Tạo đề, nhập dữ liệu và xuất bài luyện tập nhanh.',
-    href: '/eduspace/taode/',
+    href: '/edu/taode/',
     label: 'AI',
     color: 'green',
     icon: Bot,
@@ -184,7 +184,7 @@ const learningItems: HubItem[] = [
     id: 'typing',
     title: 'Typing Master',
     description: 'Luyện gõ nhanh, chính xác và theo dõi tiến bộ.',
-    href: '/eduspace/typing-master/',
+    href: '/edu/typing-master/',
     label: 'Kỹ năng',
     color: 'violet',
     icon: LibraryBig,
@@ -194,7 +194,7 @@ const learningItems: HubItem[] = [
     id: 'periodic',
     title: 'Bảng tuần hoàn',
     description: 'Học hóa học bằng cách ghi nhớ trực quan.',
-    href: '/eduspace/hoc-bang-tuan-hoan-hoa-hoc/',
+    href: '/edu/hoc-bang-tuan-hoan-hoa-hoc/',
     label: 'Hóa học',
     color: 'rose',
     icon: Boxes,
@@ -414,7 +414,7 @@ const searchScopes = [
 
 const navLinks = [
   { id: 'home', label: 'Trang chủ', href: '/beta/', icon: Home },
-  { id: 'learning', label: 'Học tập', href: '/eduspace/', icon: GraduationCap },
+  { id: 'learning', label: 'Học tập', href: '/edu/', icon: GraduationCap },
   { id: 'social', label: 'Kết nối', href: '/chat/', icon: MessageCircle },
   { id: 'games', label: 'Trò chơi', href: '/games/', icon: Gamepad2 },
   { id: 'tools', label: 'Công cụ', href: '/utils/', icon: Wrench },
@@ -573,7 +573,7 @@ function useAdminPosts() {
             id,
             title: String(data.title || 'Bài đăng EduSpace'),
             description: String(data.description || 'Nội dung học tập mới từ hệ thống admin.'),
-            href: String(data.url || `/eduspace/exam?${id}`),
+            href: String(data.url || `/edu/exam?${id}`),
             label: String(data.tag || data.subject || 'EduSpace'),
             type: String(data.type || ''),
             subject: String(data.subject || ''),
@@ -1308,7 +1308,7 @@ function ContentRow({ title, subtitle, items, saved, onSave, onShare }: ContentR
 }
 
 function sectionHref(kind: HubItem['kind']) {
-  if (kind === 'learning' || kind === 'post') return '/eduspace/';
+  if (kind === 'learning' || kind === 'post') return '/edu/';
   if (kind === 'social') return '/chat/';
   if (kind === 'game') return '/games/';
   return '/utils/';
@@ -1368,7 +1368,7 @@ function AdminFeed({ posts, source, liked, saved, onLike, onSave, onShare }: Adm
           <p className="eyebrow">{source === 'firebase' ? 'Đang đọc từ admin' : 'Dữ liệu mẫu khi thử local'}</p>
           <h2>Bài đăng mới</h2>
         </div>
-        <a href={buildInternalHref('/eduspace/')}>EduSpace</a>
+        <a href={buildInternalHref('/edu/')}>EduSpace</a>
       </div>
 
       <div className="feedGrid">

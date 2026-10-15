@@ -3,7 +3,7 @@
 ## 1. Tổng quan Mục tiêu
 
 EduSpace Exam V3 Beta là hệ thống thi và đánh giá năng lực thế hệ mới của ND Labs, được triển khai dưới dạng **BETA / THỬ NGHIỆM ĐỘC LẬP** (Isolated Beta):
-- **Độc lập hoàn toàn với hệ thống V2 hiện hành:** URL chạy riêng tại `/eduspace/v3/exam/`, giao diện V2 tại `/eduspace/exam/` và template giữ nguyên 100%.
+- **Độc lập hoàn toàn với hệ thống V2 hiện hành:** URL chạy riêng tại `/edu/v3/exam/`, giao diện V2 tại `/edu/exam/` và template giữ nguyên 100%.
 - **Dùng chung cơ sở dữ liệu Firestore:** V3 không nhân bản dữ liệu, đọc trực tiếp kho đề V2 từ collection `quizzes/{quizId}` thông qua bộ chuyển đổi chuẩn hóa (Normalizer & Compatibility Layer).
 - **Cách ly dữ liệu phiên thi (Session Isolation):** Mọi phiên làm bài, câu trả lời, bản ghi chấm điểm và kết quả chính thức được ghi strictly vào các collection V3 (`exam_sessions`, `submissions`, `grading_records`, `results`). Tuyệt đối không ghi đè hay làm xáo trộn collection `attempts` của V2.
 
@@ -38,7 +38,7 @@ flowchart TD
         AutoGrader["AutoGrader & GDPT 2018 Evaluators"]
     end
 
-    subgraph Client_Runner ["Giao diện Thi React V3 Beta (/eduspace/v3/exam/)"]
+    subgraph Client_Runner ["Giao diện Thi React V3 Beta (/edu/v3/exam/)"]
         RunnerUI["Header (BETA • Thử nghiệm) + Timer + QuestionCard + QuestionMap"]
         AutosaveClient["Tự động lưu đám mây (Debounced)"]
         ResultUI["Bảng điểm chính thức (Raw NDID)"]
@@ -72,12 +72,12 @@ flowchart TD
 
 | Đường dẫn (Route) | Vai trò & Mục đích | Trạng thái |
 | :--- | :--- | :--- |
-| `/eduspace/v3/` | Trung tâm tổng quan V3 Beta (Hub): giới thiệu tính năng, danh mục đề mẫu (A111, A101), liên kết Trình Soạn thảo Visual Exam Builder | Hoàn tất |
-| `/eduspace/v3/author/` | Giao diện Soạn thảo Đề thi Trực quan (Visual Exam Builder): 4 tab nghiệp vụ, cân đối điểm số thời gian thực, AI Soạn đề cho giáo viên | Hoàn tất |
-| `/eduspace/v3/exam/?id={quizId}` | Trình làm bài thi V3 Beta Runner: tải đề trực tiếp từ Firestore, tính giờ server, chống lộ đáp án, hỗ trợ Ngữ liệu chung & Nhóm tự chọn | Hoàn tất |
-| `/eduspace/v3/exam/demo/` | Đường dẫn rút gọn tự động chuyển hướng vào bài thi demo A111 | Hoàn tất |
-| `/eduspace/v3/result/?resultId={resId}` | Bảng điểm và kết quả chính thức do server cấp | Hoàn tất |
-| `/eduspace/exam/?id={quizId}` | Hệ thống V2 hiện hành (giữ nguyên vẹn 100%, không can thiệp) | Ổn định |
+| `/edu/v3/` | Trung tâm tổng quan V3 Beta (Hub): giới thiệu tính năng, danh mục đề mẫu (A111, A101), liên kết Trình Soạn thảo Visual Exam Builder | Hoàn tất |
+| `/edu/v3/author/` | Giao diện Soạn thảo Đề thi Trực quan (Visual Exam Builder): 4 tab nghiệp vụ, cân đối điểm số thời gian thực, AI Soạn đề cho giáo viên | Hoàn tất |
+| `/edu/v3/exam/?id={quizId}` | Trình làm bài thi V3 Beta Runner: tải đề trực tiếp từ Firestore, tính giờ server, chống lộ đáp án, hỗ trợ Ngữ liệu chung & Nhóm tự chọn | Hoàn tất |
+| `/edu/v3/exam/demo/` | Đường dẫn rút gọn tự động chuyển hướng vào bài thi demo A111 | Hoàn tất |
+| `/edu/v3/result/?resultId={resId}` | Bảng điểm và kết quả chính thức do server cấp | Hoàn tất |
+| `/edu/exam/?id={quizId}` | Hệ thống V2 hiện hành (giữ nguyên vẹn 100%, không can thiệp) | Ổn định |
 
 ---
 
@@ -121,6 +121,6 @@ flowchart TD
 - **Unit Tests:** 116/116 tests passed across 40 test suites (bao gồm toàn bộ bài kiểm tra tương thích kho đề V2 và nền tảng đánh giá năng lực nâng cấp).
 - **TypeScript Check:** `tsc --noEmit` hoàn thành với 0 lỗi.
 - **Browser Automation (Puppeteer):**
-  - Mở `/eduspace/v3/author/` -> kiểm tra nhận diện thanh công cụ, điểm cân đối thời gian thực, 4 tab chức năng và drawer AI Soạn đề.
-  - Mở `/eduspace/v3/exam/?id=A111` -> tải thành công đề thi Tiếng Anh 11 từ Firestore V2, hiển thị prompt, chọn đáp án trắc nghiệm, kích hoạt tự động lưu (autosave), mở modal xác nhận nộp bài.
-  - Mở `/eduspace/exam/` -> trang thi V2 hiện hành giữ nguyên vẹn 100%, không bị ảnh hưởng hay hồi quy.
+  - Mở `/edu/v3/author/` -> kiểm tra nhận diện thanh công cụ, điểm cân đối thời gian thực, 4 tab chức năng và drawer AI Soạn đề.
+  - Mở `/edu/v3/exam/?id=A111` -> tải thành công đề thi Tiếng Anh 11 từ Firestore V2, hiển thị prompt, chọn đáp án trắc nghiệm, kích hoạt tự động lưu (autosave), mở modal xác nhận nộp bài.
+  - Mở `/edu/exam/` -> trang thi V2 hiện hành giữ nguyên vẹn 100%, không bị ảnh hưởng hay hồi quy.

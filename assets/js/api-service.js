@@ -1,5 +1,5 @@
 /**
- * EduSpace — AI Connection & API Service (Dịch vụ Lõi kết nối Gemini API)
+ * EduND — AI Connection & API Service (Dịch vụ Lõi kết nối Gemini API)
  * 
  * Tác dụng:
  *   • Chịu trách nhiệm thực hiện tất cả kết nối từ phía Client tới Gemini AI API.

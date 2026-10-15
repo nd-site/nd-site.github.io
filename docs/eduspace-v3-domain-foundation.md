@@ -25,10 +25,10 @@ Phase 3 thiết lập toàn bộ nền tảng mã nguồn TypeScript chuẩn t�
 
 ### PHẦN I: DANH MỤC THỰC THỂ & CẤU TRÚC MIỀN NGHIỆP VỤ
 
-Mã nguồn được tổ chức mô-đun hóa trong thư mục `src/eduspace/core/`:
+Mã nguồn được tổ chức mô-đun hóa trong thư mục `src/edu/core/`:
 
 ```
-src/eduspace/core/
+src/edu/core/
 ├── constants/
 │   └── index.ts                 # Enums & Constants chuẩn tắc
 ├── domain/
@@ -153,7 +153,7 @@ Tất cả các bộ chuyển đổi tương thích (`v2AttemptAdapter`, `v2Clas
 
 ### PHẦN VI: KẾT QUẢ KIỂM THỬ TỰ ĐỘNG (VERIFICATION MATRIX)
 
-Bộ kiểm thử được viết tại `tests/eduspace/v3-domain-foundation.test.ts` và thực thi trực tiếp qua `npx tsx --test`:
+Bộ kiểm thử được viết tại `tests/edu/v3-domain-foundation.test.ts` và thực thi trực tiếp qua `npx tsx --test`:
 
 ```
 ▶ EduSpace V3 Constants & Enums

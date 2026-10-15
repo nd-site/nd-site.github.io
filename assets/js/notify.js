@@ -1,5 +1,5 @@
 /**
- * EduSpace — Custom Toast Notification System (Hệ thống thông báo Toast tùy chỉnh)
+ * EduND — Custom Toast Notification System (Hệ thống thông báo Toast tùy chỉnh)
  * 
  * Tác dụng:
  *   • Thay thế hộp thoại cảnh báo `alert()` mặc định của trình duyệt bằng thông báo dạng Toast sang trọng ở phía dưới màn hình.

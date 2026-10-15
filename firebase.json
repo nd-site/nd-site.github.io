@@ -13,6 +13,26 @@
     "retainedBackups": 1,
     "redirects": [
       {
+        "source": "/eduspace",
+        "destination": "/edu/",
+        "type": 301
+      },
+      {
+        "source": "/eduspace/:path*",
+        "destination": "/edu/:path",
+        "type": 301
+      },
+      {
+        "source": "/admin/eduspace",
+        "destination": "/admin/edu/",
+        "type": 301
+      },
+      {
+        "source": "/admin/eduspace/:path*",
+        "destination": "/admin/edu/:path",
+        "type": 301
+      },
+      {
         "source": "/psychology/**",
         "destination": "/",
         "type": 302
@@ -73,16 +93,24 @@
     ],
     "rewrites": [
       {
-        "source": "/eduspace/timetable/**",
-        "destination": "/eduspace/timetable/index.html"
+        "source": "/edu/timetable/**",
+        "destination": "/edu/timetable/index.html"
       },
       {
-        "source": "/eduspace/timtable/**",
-        "destination": "/eduspace/timetable/index.html"
+        "source": "/edu/timtable/**",
+        "destination": "/edu/timetable/index.html"
       },
       {
-        "source": "/admin/eduspace/timetable/**",
-        "destination": "/eduspace/timetable/index.html"
+        "source": "/admin/edu/timetable/**",
+        "destination": "/edu/timetable/index.html"
+      },
+      {
+        "source": "/edu/poem/**",
+        "destination": "/edu/poem/index.html"
+      },
+      {
+        "source": "/edu/poemnd/**",
+        "destination": "/edu/poem/index.html"
       }
     ]
   },

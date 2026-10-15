@@ -1,5 +1,5 @@
 /**
- * EduSpace / ND Labs — Canonical Auth Client Adapter (Phase 01-C3)
+ * EduND / ND Labs â€” Canonical Auth Client Adapter (Phase 01-C3)
  * 
  * Centralized, authoritative client SDK adapter that coordinates:
  * 1. Server-side registration via /registerUser.
@@ -42,6 +42,8 @@
     getSecurityActivity: `${CLOUD_FUNCTIONS_BASE}/getSecurityActivity`,
     loginWithGoogle: `${CLOUD_FUNCTIONS_BASE}/loginWithGoogle`,
     updateUserRole: `${CLOUD_FUNCTIONS_BASE}/updateUserRole`,
+    updateUserStatus: `${CLOUD_FUNCTIONS_BASE}/updateUserStatus`,
+    deleteUser: `${CLOUD_FUNCTIONS_BASE}/deleteUser`,
     adminGetUsers: `${CLOUD_FUNCTIONS_BASE}/adminGetUsers`,
     sendVerificationEmail: `${CLOUD_FUNCTIONS_BASE}/sendVerificationEmail`,
     verifyEmail: `${CLOUD_FUNCTIONS_BASE}/verifyEmail`,
@@ -343,7 +345,7 @@
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        const errorMsg = data.error?.message || 'Đăng ký không thành công. Vui lòng thử lại.';
+        const errorMsg = data.error?.message || 'ÄÄƒng kĂ½ khĂ´ng thĂ nh cĂ´ng. Vui lĂ²ng thá»­ láº¡i.';
         const err = new Error(errorMsg);
         err.code = data.error?.code || 'REGISTRATION_FAILED';
         throw err;
@@ -352,7 +354,7 @@
       // Step 2: Sign in to Firebase Client SDK using issued Custom Token
       const auth = getFirebaseAuth();
       if (!auth) {
-        throw new Error('Firebase Auth chưa sẵn sàng trên trình duyệt.');
+        throw new Error('Firebase Auth chÆ°a sáºµn sĂ ng trĂªn trĂ¬nh duyá»‡t.');
       }
 
       let userCredential;
@@ -361,14 +363,14 @@
       } else if (window.signInWithCustomToken) {
         userCredential = await window.signInWithCustomToken(auth, data.customToken);
       } else {
-        throw new Error('Không tìm thấy phương thức signInWithCustomToken.');
+        throw new Error('KhĂ´ng tĂ¬m tháº¥y phÆ°Æ¡ng thá»©c signInWithCustomToken.');
       }
 
       // Invariant verification: UID must match returned CodeID
       const signedInUid = userCredential.user ? userCredential.user.uid : auth.currentUser?.uid;
       if (signedInUid !== data.codeId) {
         await auth.signOut();
-        throw new Error('Xác thực danh tính thất bại: Mã người dùng không khớp.');
+        throw new Error('XĂ¡c thá»±c danh tĂ­nh tháº¥t báº¡i: MĂ£ ngÆ°á»i dĂ¹ng khĂ´ng khá»›p.');
       }
 
       // Profile refresh
@@ -401,7 +403,7 @@
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        const errorMsg = data.error?.message || 'Thông tin đăng nhập không chính xác.';
+        const errorMsg = data.error?.message || 'ThĂ´ng tin Ä‘Äƒng nháº­p khĂ´ng chĂ­nh xĂ¡c.';
         const err = new Error(errorMsg);
         err.code = data.error?.code || 'AUTH_CREDENTIALS_INVALID';
         throw err;
@@ -410,7 +412,7 @@
       // Sign in with issued Custom Token
       const auth = getFirebaseAuth();
       if (!auth) {
-        throw new Error('Firebase Auth chưa sẵn sàng trên trình duyệt.');
+        throw new Error('Firebase Auth chÆ°a sáºµn sĂ ng trĂªn trĂ¬nh duyá»‡t.');
       }
 
       let userCredential;
@@ -419,14 +421,14 @@
       } else if (window.signInWithCustomToken) {
         userCredential = await window.signInWithCustomToken(auth, data.customToken);
       } else {
-        throw new Error('Không tìm thấy phương thức signInWithCustomToken.');
+        throw new Error('KhĂ´ng tĂ¬m tháº¥y phÆ°Æ¡ng thá»©c signInWithCustomToken.');
       }
 
       // Invariant verification: UID must match returned CodeID
       const signedInUid = userCredential.user ? userCredential.user.uid : auth.currentUser?.uid;
       if (signedInUid !== data.codeId) {
         await auth.signOut();
-        throw new Error('Xác thực danh tính thất bại: Mã người dùng không khớp.');
+        throw new Error('XĂ¡c thá»±c danh tĂ­nh tháº¥t báº¡i: MĂ£ ngÆ°á»i dĂ¹ng khĂ´ng khá»›p.');
       }
 
       // Profile refresh
@@ -480,7 +482,7 @@
     async changePassword({ currentPassword, newPassword }) {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để thực hiện đổi mật khẩu.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ thá»±c hiá»‡n Ä‘á»•i máº­t kháº©u.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -500,7 +502,7 @@
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        const errorMsg = data.error?.message || 'Không thể đổi mật khẩu. Vui lòng thử lại.';
+        const errorMsg = data.error?.message || 'KhĂ´ng thá»ƒ Ä‘á»•i máº­t kháº©u. Vui lĂ²ng thá»­ láº¡i.';
         const err = new Error(errorMsg);
         err.code = data.error?.code || 'INVALID_REQUEST';
         throw err;
@@ -519,7 +521,7 @@
     async changeNdid({ newNdid }) {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để đổi NDID.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ Ä‘á»•i NDID.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -538,7 +540,7 @@
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        const errorMsg = data.error?.message || 'Không thể đổi NDID. Vui lòng thử lại.';
+        const errorMsg = data.error?.message || 'KhĂ´ng thá»ƒ Ä‘á»•i NDID. Vui lĂ²ng thá»­ láº¡i.';
         const err = new Error(errorMsg);
         err.code = data.error?.code || 'INVALID_REQUEST';
         throw err;
@@ -560,7 +562,7 @@
     async linkGoogle({ googleSubjectId = null, googleEmail = null } = {}) {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để liên kết tài khoản Google.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ liĂªn káº¿t tĂ i khoáº£n Google.');
       }
 
       let resolvedSubjectId = googleSubjectId;
@@ -601,7 +603,7 @@
           }
         } catch (_) {}
 
-        const errorMsg = data.error?.message || 'Không thể liên kết Google. Vui lòng thử lại.';
+        const errorMsg = data.error?.message || 'KhĂ´ng thá»ƒ liĂªn káº¿t Google. Vui lĂ²ng thá»­ láº¡i.';
         const err = new Error(errorMsg);
         err.code = data.error?.code || 'GOOGLE_LINK_FAILED';
         throw err;
@@ -621,7 +623,7 @@
     async unlinkGoogle() {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để hủy liên kết Google.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ há»§y liĂªn káº¿t Google.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -638,7 +640,7 @@
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        const errorMsg = data.error?.message || 'Không thể hủy liên kết Google. Vui lòng thử lại.';
+        const errorMsg = data.error?.message || 'KhĂ´ng thá»ƒ há»§y liĂªn káº¿t Google. Vui lĂ²ng thá»­ láº¡i.';
         const err = new Error(errorMsg);
         err.code = data.error?.code || 'GOOGLE_UNLINK_FAILED';
         throw err;
@@ -675,7 +677,7 @@
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        const errorMsg = data.error?.message || 'Không thể gửi mã khôi phục. Vui lòng thử lại.';
+        const errorMsg = data.error?.message || 'KhĂ´ng thá»ƒ gá»­i mĂ£ khĂ´i phá»¥c. Vui lĂ²ng thá»­ láº¡i.';
         const err = new Error(errorMsg);
         err.code = data.error?.code || 'RECOVERY_REQUEST_FAILED';
         throw err;
@@ -701,7 +703,7 @@
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        const errorMsg = data.error?.message || 'Mã xác thực không hợp lệ.';
+        const errorMsg = data.error?.message || 'MĂ£ xĂ¡c thá»±c khĂ´ng há»£p lá»‡.';
         const err = new Error(errorMsg);
         err.code = data.error?.code || 'VERIFICATION_FAILED';
         throw err;
@@ -729,7 +731,7 @@
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        const errorMsg = data.error?.message || 'Không thể đặt lại mật khẩu. Vui lòng thử lại.';
+        const errorMsg = data.error?.message || 'KhĂ´ng thá»ƒ Ä‘áº·t láº¡i máº­t kháº©u. Vui lĂ²ng thá»­ láº¡i.';
         const err = new Error(errorMsg);
         err.code = data.error?.code || 'RESET_PASSWORD_FAILED';
         throw err;
@@ -738,7 +740,7 @@
       return data;
     },
 
-    // ── PHASE 01-C6: SESSION MANAGEMENT & SECURITY CENTER ───────────────────
+    // â”€â”€ PHASE 01-C6: SESSION MANAGEMENT & SECURITY CENTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     /**
      * Returns the current session ID for this browser tab.
@@ -783,7 +785,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.error?.message || 'Không thể đăng ký phiên.');
+        throw new Error(data.error?.message || 'KhĂ´ng thá»ƒ Ä‘Äƒng kĂ½ phiĂªn.');
       }
       return data.session;
     },
@@ -795,7 +797,7 @@
     async getActiveSessions() {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để xem danh sách phiên.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ xem danh sĂ¡ch phiĂªn.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -810,7 +812,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.error?.message || 'Không thể tải danh sách phiên.');
+        throw new Error(data.error?.message || 'KhĂ´ng thá»ƒ táº£i danh sĂ¡ch phiĂªn.');
       }
       return data.sessions || [];
     },
@@ -824,7 +826,7 @@
     async revokeSession(sessionId) {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để hủy phiên.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ há»§y phiĂªn.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -844,7 +846,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.error?.message || 'Không thể hủy phiên đăng nhập.');
+        throw new Error(data.error?.message || 'KhĂ´ng thá»ƒ há»§y phiĂªn Ä‘Äƒng nháº­p.');
       }
 
       if (data.isCurrentRevoked) {
@@ -861,7 +863,7 @@
     async revokeOtherSessions() {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để đăng xuất các thiết bị khác.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ Ä‘Äƒng xuáº¥t cĂ¡c thiáº¿t bá»‹ khĂ¡c.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -880,7 +882,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.error?.message || 'Không thể đăng xuất các thiết bị khác.');
+        throw new Error(data.error?.message || 'KhĂ´ng thá»ƒ Ä‘Äƒng xuáº¥t cĂ¡c thiáº¿t bá»‹ khĂ¡c.');
       }
       return data;
     },
@@ -892,7 +894,7 @@
     async getTrustedDevices() {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để xem thiết bị tin cậy.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ xem thiáº¿t bá»‹ tin cáº­y.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -907,7 +909,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.error?.message || 'Không thể tải danh sách thiết bị.');
+        throw new Error(data.error?.message || 'KhĂ´ng thá»ƒ táº£i danh sĂ¡ch thiáº¿t bá»‹.');
       }
       return data.devices || [];
     },
@@ -922,7 +924,7 @@
     async registerTrustedDevice({ deviceLabel = null, deviceFingerprint = null } = {}) {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để đăng ký thiết bị tin cậy.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ Ä‘Äƒng kĂ½ thiáº¿t bá»‹ tin cáº­y.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -943,7 +945,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.error?.message || 'Không thể đăng ký thiết bị tin cậy.');
+        throw new Error(data.error?.message || 'KhĂ´ng thá»ƒ Ä‘Äƒng kĂ½ thiáº¿t bá»‹ tin cáº­y.');
       }
       return data.device;
     },
@@ -956,7 +958,7 @@
     async revokeTrustedDevice(deviceId) {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để hủy thiết bị tin cậy.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ há»§y thiáº¿t bá»‹ tin cáº­y.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -974,7 +976,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.error?.message || 'Không thể hủy thiết bị tin cậy.');
+        throw new Error(data.error?.message || 'KhĂ´ng thá»ƒ há»§y thiáº¿t bá»‹ tin cáº­y.');
       }
       return data;
     },
@@ -988,7 +990,7 @@
     async getSecurityActivity({ limit = 20 } = {}) {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để xem nhật ký bảo mật.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ xem nháº­t kĂ½ báº£o máº­t.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -1002,12 +1004,12 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.error?.message || 'Không thể tải nhật ký bảo mật.');
+        throw new Error(data.error?.message || 'KhĂ´ng thá»ƒ táº£i nháº­t kĂ½ báº£o máº­t.');
       }
       return data.events || [];
     },
 
-    // ── PHASE 01-C7: AUTHORIZATION & GOOGLE SIGN-IN ─────────────────────────
+    // â”€â”€ PHASE 01-C7: AUTHORIZATION & GOOGLE SIGN-IN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     /**
      * Authenticates via linked Google Identity (Phase 01-C7).
@@ -1016,7 +1018,7 @@
     async loginWithGoogle() {
       const auth = getFirebaseAuth();
       if (!auth) {
-        throw new Error('Hệ thống xác thực chưa sẵn sàng.');
+        throw new Error('Há»‡ thá»‘ng xĂ¡c thá»±c chÆ°a sáºµn sĂ ng.');
       }
 
       let GoogleAuthProviderClass = window.GoogleAuthProvider;
@@ -1030,7 +1032,7 @@
       }
 
       if (!GoogleAuthProviderClass || !signInWithPopupFn) {
-        throw new Error('Trình đăng nhập Google chưa sẵn sàng. Vui lòng tải lại trang.');
+        throw new Error('TrĂ¬nh Ä‘Äƒng nháº­p Google chÆ°a sáºµn sĂ ng. Vui lĂ²ng táº£i láº¡i trang.');
       }
 
       const provider = new GoogleAuthProviderClass();
@@ -1044,11 +1046,11 @@
       try {
         await googleUser.delete();
       } catch (e) {
-        // If deletion fails, ignore – we will sign out anyway
+        // If deletion fails, ignore â€“ we will sign out anyway
       }
       await auth.signOut();
 
-      // Exchange with backend – first attempt without NDID
+      // Exchange with backend â€“ first attempt without NDID
       let response = await fetch(ENDPOINTS.loginWithGoogle, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1077,13 +1079,13 @@
           });
           const provData = await provResp.json();
           if (!provResp.ok || !provData.success) {
-            const err = new Error(provData.error?.message || 'Không thể đăng nhập bằng Google.');
+            const err = new Error(provData.error?.message || 'KhĂ´ng thá»ƒ Ä‘Äƒng nháº­p báº±ng Google.');
             err.code = provData.error?.code || 'AUTH_CREDENTIALS_INVALID';
             throw err;
           }
           data = provData;
         } else {
-          const errorMsg = data.error?.message || 'Không thể đăng nhập bằng Google.';
+          const errorMsg = data.error?.message || 'KhĂ´ng thá»ƒ Ä‘Äƒng nháº­p báº±ng Google.';
           const err = new Error(errorMsg);
           err.code = data.error?.code || 'AUTH_CREDENTIALS_INVALID';
           throw err;
@@ -1097,7 +1099,7 @@
       } else if (window.signInWithCustomToken) {
         userCredential = await window.signInWithCustomToken(auth, data.customToken);
       } else {
-        throw new Error('Không tìm thấy phương thức signInWithCustomToken.');
+        throw new Error('KhĂ´ng tĂ¬m tháº¥y phÆ°Æ¡ng thá»©c signInWithCustomToken.');
       }
 
       const signedInUid = userCredential.user ? userCredential.user.uid : auth.currentUser?.uid;
@@ -1114,9 +1116,9 @@
       // Use a simple window.prompt for now; UI can be enhanced later
       let ndid = null;
       while (!ndid) {
-        ndid = window.prompt('Vui lòng nhập NDID (chỉ chữ thường, số, dấu _ và .) để hoàn tất đăng ký Google:');
+        ndid = window.prompt('Vui lĂ²ng nháº­p NDID (chá»‰ chá»¯ thÆ°á»ng, sá»‘, dáº¥u _ vĂ  .) Ä‘á»ƒ hoĂ n táº¥t Ä‘Äƒng kĂ½ Google:');
         if (ndid === null) { // user cancelled
-          throw new Error('Quá trình đăng ký Google đã bị hủy bởi người dùng.');
+          throw new Error('QuĂ¡ trĂ¬nh Ä‘Äƒng kĂ½ Google Ä‘Ă£ bá»‹ há»§y bá»Ÿi ngÆ°á»i dĂ¹ng.');
         }
         ndid = ndid.trim();
       }
@@ -1131,10 +1133,42 @@
      * @param {string|null} [params.adminLevel=null]
      * @returns {Promise<Object>}
      */
+    async updateUserStatus({ targetCodeId, status }) {
+      const auth = getFirebaseAuth();
+      if (!auth || !auth.currentUser) throw new Error('Yêu cầu đăng nhập.');
+      const idToken = await auth.currentUser.getIdToken();
+      const response = await fetch(ENDPOINTS.updateUserStatus, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': Bearer  },
+        body: JSON.stringify({ targetCodeId, status })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error?.message || 'Cập nhật trạng thái thất bại.');
+      }
+      return data;
+    },
+
+    async deleteUser({ targetCodeId }) {
+      const auth = getFirebaseAuth();
+      if (!auth || !auth.currentUser) throw new Error('Yêu cầu đăng nhập.');
+      const idToken = await auth.currentUser.getIdToken();
+      const response = await fetch(ENDPOINTS.deleteUser, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': Bearer  },
+        body: JSON.stringify({ targetCodeId })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error?.message || 'Xóa người dùng thất bại.');
+      }
+      return data;
+    },
+
     async updateUserRole({ targetCodeId, role, adminLevel = null }) {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để thực hiện thao tác này.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ thá»±c hiá»‡n thao tĂ¡c nĂ y.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -1153,7 +1187,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        const errorMsg = data.error?.message || 'Không thể cập nhật quyền hạn.';
+        const errorMsg = data.error?.message || 'KhĂ´ng thá»ƒ cáº­p nháº­t quyá»n háº¡n.';
         const err = new Error(errorMsg);
         err.code = data.error?.code || 'PRIVILEGE_ESCALATION_DENIED';
         throw err;
@@ -1172,7 +1206,7 @@
     async adminGetUsers({ pageSize = 20, cursor = null, role = null } = {}) {
       const auth = getFirebaseAuth();
       if (!auth || !auth.currentUser) {
-        throw new Error('Bạn cần đăng nhập để thực hiện thao tác này.');
+        throw new Error('Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ thá»±c hiá»‡n thao tĂ¡c nĂ y.');
       }
 
       const idToken = await auth.currentUser.getIdToken();
@@ -1192,7 +1226,7 @@
 
         const data = await response.json();
         if (!response.ok || !data.success) {
-          const errorMsg = data.error?.message || 'Không thể tải danh sách người dùng.';
+          const errorMsg = data.error?.message || 'KhĂ´ng thá»ƒ táº£i danh sĂ¡ch ngÆ°á»i dĂ¹ng.';
           const err = new Error(errorMsg);
           err.code = data.error?.code || 'INVALID_REQUEST';
           throw err;
@@ -1215,7 +1249,7 @@
      */
     async _adminGetUsersDirectFirestore({ pageSize = 20, cursor = null, role = null } = {}) {
       const db = getFirebaseFirestore();
-      if (!db) throw new Error('Firestore chưa sẵn sàng.');
+      if (!db) throw new Error('Firestore chÆ°a sáºµn sĂ ng.');
 
       try {
         let docs = [];
@@ -1266,7 +1300,7 @@
         };
       } catch (err) {
         console.error('[CanonicalAuth] Fallback direct Firestore users query failed:', err);
-        throw new Error('Không thể tải danh sách người dùng: ' + err.message);
+        throw new Error('KhĂ´ng thá»ƒ táº£i danh sĂ¡ch ngÆ°á»i dĂ¹ng: ' + err.message);
       }
     },
 
@@ -1374,7 +1408,7 @@
     async sendVerificationEmail(params = {}) {
       const idToken = await this.getIdToken(true);
       if (!idToken) {
-        throw { code: 'UNAUTHORIZED', message: 'Yêu cầu phiên đăng nhập hợp lệ để gửi email xác thực.' };
+        throw { code: 'UNAUTHORIZED', message: 'YĂªu cáº§u phiĂªn Ä‘Äƒng nháº­p há»£p lá»‡ Ä‘á»ƒ gá»­i email xĂ¡c thá»±c.' };
       }
 
       const response = await fetch(ENDPOINTS.sendVerificationEmail, {
@@ -1388,7 +1422,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        const err = data.error || { code: 'VERIFICATION_FAILED', message: data.message || 'Không thể gửi email xác thực.' };
+        const err = data.error || { code: 'VERIFICATION_FAILED', message: data.message || 'KhĂ´ng thá»ƒ gá»­i email xĂ¡c thá»±c.' };
         throw err;
       }
 
@@ -1402,7 +1436,7 @@
      */
     async verifyEmail(token) {
       if (!token || typeof token !== 'string') {
-        throw { code: 'INVALID_ARGUMENT', message: 'Mã xác thực email không hợp lệ.' };
+        throw { code: 'INVALID_ARGUMENT', message: 'MĂ£ xĂ¡c thá»±c email khĂ´ng há»£p lá»‡.' };
       }
 
       const response = await fetch(ENDPOINTS.verifyEmail, {
@@ -1415,7 +1449,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        const err = data.error || { code: 'VERIFICATION_FAILED', message: data.message || 'Xác thực email thất bại hoặc mã đã hết hạn.' };
+        const err = data.error || { code: 'VERIFICATION_FAILED', message: data.message || 'XĂ¡c thá»±c email tháº¥t báº¡i hoáº·c mĂ£ Ä‘Ă£ háº¿t háº¡n.' };
         throw err;
       }
 
@@ -1434,59 +1468,59 @@
      * @returns {string}
      */
     mapError(err) {
-      if (!err) return 'Đã xảy ra lỗi không xác định.';
+      if (!err) return 'ÄĂ£ xáº£y ra lá»—i khĂ´ng xĂ¡c Ä‘á»‹nh.';
       const code = err.code || '';
       const msg = err.message || '';
 
       switch (code) {
         case 'AUTH_CREDENTIALS_INVALID':
-          return 'Tài khoản hoặc mật khẩu không chính xác.';
+          return 'TĂ i khoáº£n hoáº·c máº­t kháº©u khĂ´ng chĂ­nh xĂ¡c.';
         case 'GOOGLE_NOT_LINKED':
-          return msg || 'Tài khoản Google này chưa được liên kết với NDID nào. Vui lòng đăng nhập bằng NDID và mật khẩu, sau đó liên kết trong Cài đặt.';
+          return msg || 'TĂ i khoáº£n Google nĂ y chÆ°a Ä‘Æ°á»£c liĂªn káº¿t vá»›i NDID nĂ o. Vui lĂ²ng Ä‘Äƒng nháº­p báº±ng NDID vĂ  máº­t kháº©u, sau Ä‘Ă³ liĂªn káº¿t trong CĂ i Ä‘áº·t.';
         case 'ACCOUNT_LOCKED':
-          return 'Tài khoản đã bị khóa do đăng nhập sai nhiều lần. Vui lòng khôi phục hoặc liên hệ quản trị viên.';
+          return 'TĂ i khoáº£n Ä‘Ă£ bá»‹ khĂ³a do Ä‘Äƒng nháº­p sai nhiá»u láº§n. Vui lĂ²ng khĂ´i phá»¥c hoáº·c liĂªn há»‡ quáº£n trá»‹ viĂªn.';
         case 'ACCOUNT_DISABLED':
-          return 'Tài khoản này đã bị vô hiệu hóa.';
+          return 'TĂ i khoáº£n nĂ y Ä‘Ă£ bá»‹ vĂ´ hiá»‡u hĂ³a.';
         case 'ACCOUNT_BANNED':
-          return 'Tài khoản đang bị tạm khóa.';
+          return 'TĂ i khoáº£n Ä‘ang bá»‹ táº¡m khĂ³a.';
         case 'FORBIDDEN':
-          return 'Bạn không có quyền thực hiện thao tác này.';
+          return 'Báº¡n khĂ´ng cĂ³ quyá»n thá»±c hiá»‡n thao tĂ¡c nĂ y.';
         case 'PRIVILEGE_ESCALATION_DENIED':
-          return 'Thao tác nâng quyền hoặc thay đổi quyền hạn không được phép.';
+          return 'Thao tĂ¡c nĂ¢ng quyá»n hoáº·c thay Ä‘á»•i quyá»n háº¡n khĂ´ng Ä‘Æ°á»£c phĂ©p.';
         case 'IDENTIFIER_UNAVAILABLE':
-          return 'Tên tài khoản hoặc email này đã được sử dụng. Vui lòng chọn tên khác.';
+          return 'TĂªn tĂ i khoáº£n hoáº·c email nĂ y Ä‘Ă£ Ä‘Æ°á»£c sá»­ dá»¥ng. Vui lĂ²ng chá»n tĂªn khĂ¡c.';
         case 'EMAIL_ALREADY_VERIFIED':
-          return 'Địa chỉ email này đã được xác thực trước đó.';
+          return 'Äá»‹a chá»‰ email nĂ y Ä‘Ă£ Ä‘Æ°á»£c xĂ¡c thá»±c trÆ°á»›c Ä‘Ă³.';
         case 'VERIFICATION_TOKEN_EXPIRED':
-          return 'Mã xác thực email đã hết hạn. Vui lòng gửi lại email xác nhận mới.';
+          return 'MĂ£ xĂ¡c thá»±c email Ä‘Ă£ háº¿t háº¡n. Vui lĂ²ng gá»­i láº¡i email xĂ¡c nháº­n má»›i.';
         case 'INVALID_VERIFICATION_TOKEN':
-          return 'Mã xác thực email không hợp lệ hoặc đã được sử dụng.';
+          return 'MĂ£ xĂ¡c thá»±c email khĂ´ng há»£p lá»‡ hoáº·c Ä‘Ă£ Ä‘Æ°á»£c sá»­ dá»¥ng.';
         case 'GOOGLE_IDENTITY_ALREADY_LINKED':
         case 'auth/credential-already-in-use':
-          return 'Tài khoản Google này đã được liên kết với một tài khoản khác.';
+          return 'TĂ i khoáº£n Google nĂ y Ä‘Ă£ Ä‘Æ°á»£c liĂªn káº¿t vá»›i má»™t tĂ i khoáº£n khĂ¡c.';
         case 'auth/popup-closed-by-user':
-          return 'Đã đóng cửa sổ đăng nhập Google trước khi hoàn tất.';
+          return 'ÄĂ£ Ä‘Ă³ng cá»­a sá»• Ä‘Äƒng nháº­p Google trÆ°á»›c khi hoĂ n táº¥t.';
         case 'auth/popup-blocked':
-          return 'Trình duyệt đã chặn cửa sổ đăng nhập. Vui lòng cho phép popup và thử lại.';
+          return 'TrĂ¬nh duyá»‡t Ä‘Ă£ cháº·n cá»­a sá»• Ä‘Äƒng nháº­p. Vui lĂ²ng cho phĂ©p popup vĂ  thá»­ láº¡i.';
         case 'auth/cancelled-popup-request':
-          return 'Yêu cầu đăng nhập Google đã bị hủy.';
+          return 'YĂªu cáº§u Ä‘Äƒng nháº­p Google Ä‘Ă£ bá»‹ há»§y.';
         case 'auth/account-exists-with-different-credential':
-          return 'Email Google này đã được dùng với phương thức đăng nhập khác.';
+          return 'Email Google nĂ y Ä‘Ă£ Ä‘Æ°á»£c dĂ¹ng vá»›i phÆ°Æ¡ng thá»©c Ä‘Äƒng nháº­p khĂ¡c.';
         case 'RATE_LIMIT_EXCEEDED':
-          return 'Bạn đang gửi yêu cầu quá nhanh. Vui lòng chờ 60 giây rồi thử lại.';
+          return 'Báº¡n Ä‘ang gá»­i yĂªu cáº§u quĂ¡ nhanh. Vui lĂ²ng chá» 60 giĂ¢y rá»“i thá»­ láº¡i.';
         case 'SESSION_REVOKED':
-          return 'Phiên đăng nhập đã bị hủy.';
+          return 'PhiĂªn Ä‘Äƒng nháº­p Ä‘Ă£ bá»‹ há»§y.';
         case 'DEVICE_REVOKED':
-          return 'Thiết bị đã bị hủy khỏi danh sách tin cậy.';
+          return 'Thiáº¿t bá»‹ Ä‘Ă£ bá»‹ há»§y khá»i danh sĂ¡ch tin cáº­y.';
         case 'VALIDATION_ERROR':
-          return msg || 'Thông tin nhập vào không hợp lệ.';
+          return msg || 'ThĂ´ng tin nháº­p vĂ o khĂ´ng há»£p lá»‡.';
         case 'UNAUTHORIZED':
-          return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+          return 'PhiĂªn Ä‘Äƒng nháº­p Ä‘Ă£ háº¿t háº¡n. Vui lĂ²ng Ä‘Äƒng nháº­p láº¡i.';
         default:
           if (msg.includes('network') || msg.includes('Failed to fetch')) {
-            return 'Không thể kết nối máy chủ. Vui lòng kiểm tra kết nối mạng.';
+            return 'KhĂ´ng thá»ƒ káº¿t ná»‘i mĂ¡y chá»§. Vui lĂ²ng kiá»ƒm tra káº¿t ná»‘i máº¡ng.';
           }
-          return msg || 'Đã xảy ra sự cố. Vui lòng thử lại sau.';
+          return msg || 'ÄĂ£ xáº£y ra sá»± cá»‘. Vui lĂ²ng thá»­ láº¡i sau.';
       }
     },
   };
@@ -1495,3 +1529,7 @@
   window.canonicalAuth = canonicalAuth;
 
 })(window);
+
+
+
+

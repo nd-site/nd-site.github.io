@@ -1,5 +1,5 @@
 /**
- * EduSpace — Announcement Banner Carousel (Trình chiếu Banner Quảng cáo / Thông báo lớn)
+ * EduND — Announcement Banner Carousel (Trình chiếu Banner Quảng cáo / Thông báo lớn)
  * 
  * Tác dụng:
  *   • Hiển thị các banner quảng cáo lớn (hot news, tính năng mới) trên màn hình khởi đầu (Start Screen).
@@ -11,16 +11,16 @@
 const announcements = [
     {
         title: "Tạo Đề Nâng Cao – Công cụ bóc tách & tạo đề bằng AI",
-        description: "Hệ thống đang được nâng cấp. Vui lòng chờ đón những tính năng đột phá sắp ra mắt!",
+        description: "Hệ thống đang được nâng cấp. Tính năng sẽ sớm ra mắt!",
         link: "#",
         buttonText: "Sắp có",
         tag: "Sắp ra mắt",
-        platform: "EduSpace",
+        platform: "EduND",
         gradient: "from-emerald-600 via-teal-600 to-green-600"
     },
     {
         title: "Scan2Word – Chuyển ảnh & tài liệu thành văn bản cực nhanh ✨",
-        description: "Khám phá ngay công cụ hỗ trợ học tập mới nhất trong hệ sinh thái EduSpace.",
+        description: "Công cụ chuyển đổi ảnh và tài liệu học tập tại EduND.",
         link: "https://web.facebook.com/share/p/1GvdRNu49r/",
         buttonText: "Xem bài viết",
         tag: "Mới cập nhật",
@@ -29,11 +29,11 @@ const announcements = [
     },
     {
         title: "Hệ thống luyện thi THPT Quốc Gia 2026 chính thức ra mắt",
-        description: "Lộ trình ôn tập toàn diện với cấu trúc đề mới nhất từ Bộ Giáo dục.",
-        link: "/eduspace/thptqg/2026",
+        description: "Lộ trình ôn tập với cấu trúc đề mới nhất từ Bộ Giáo dục.",
+        link: "/edu/thptqg/2026",
         buttonText: "Khám phá ngay",
         tag: "Hot News",
-        platform: "EduSpace",
+        platform: "EduND",
         gradient: "from-orange-600 via-rose-500 to-amber-500"
     }
 ];
@@ -55,6 +55,20 @@ class AnnouncementCarousel {
         this.init();
     }
 
+
+    updateData(newData) {
+        if (!newData || newData.length === 0) {
+            const container = document.getElementById(this.containerId);
+            if(container) container.style.display = 'none';
+            return;
+        }
+        this.data = newData;
+        this.currentIndex = 0;
+        const container = document.getElementById(this.containerId);
+        if(container) container.style.display = 'block';
+        this.render();
+    }
+
     init() {
         let container = document.getElementById(this.containerId);
         if (!container) {
@@ -69,7 +83,7 @@ class AnnouncementCarousel {
             }
         }
 
-        container.className = "w-full max-w-4xl mx-auto mt-6 mb-8 overflow-hidden relative touch-pan-y select-none";
+        container.className = "w-full max-w-5xl mx-auto my-2.5 overflow-hidden relative touch-pan-y select-none";
 
         this.renderStructure();
         this.startAutoSlide();

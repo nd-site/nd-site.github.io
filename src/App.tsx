@@ -32,7 +32,7 @@ export default function App() {
             </div>
             <span className="font-display font-bold text-lg tracking-tight text-slate-800">ND Labs</span>
           </div>
-          <p className="text-sm text-slate-500">© 2026 EduSpace by ND Labs. Nâng tầm kiến thức mỗi ngày của bạn.</p>
+          <p className="text-sm text-slate-500">© 2026 EduND by ND Labs. Nâng tầm kiến thức mỗi ngày của bạn.</p>
           <div className="flex items-center gap-6">
              <a href="#" className="text-xs font-bold text-slate-400 hover:text-blue-600 transition-all uppercase tracking-widest">Privacy</a>
              <a href="#" className="text-xs font-bold text-slate-400 hover:text-blue-600 transition-all uppercase tracking-widest">Terms</a>

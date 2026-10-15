@@ -57,23 +57,23 @@ d:\Project\WebSite\ND Labs\
 │       ├── bundle.js               # Compiled JavaScript bundle (Rollup output)
 │       └── style.css               # Compiled Tailwind CSS styles
 ├── vite.timetable.config.ts        # Vite build configuration (outputs to assets/timetable-dist)
-└── firebase.json                   # Hosting rewrite rules routing to /eduspace/timetable/index.html
+└── firebase.json                   # Hosting rewrite rules routing to /edu/timetable/index.html
 ```
 
 ### 2.2 Hosting & Routing Configuration (`firebase.json`)
 ```json
 "rewrites": [
   {
-    "source": "/eduspace/timetable/**",
-    "destination": "/eduspace/timetable/index.html"
+    "source": "/edu/timetable/**",
+    "destination": "/edu/timetable/index.html"
   },
   {
-    "source": "/eduspace/timtable/**",
-    "destination": "/eduspace/timetable/index.html"
+    "source": "/edu/timtable/**",
+    "destination": "/edu/timetable/index.html"
   },
   {
-    "source": "/admin/eduspace/timetable/**",
-    "destination": "/eduspace/timetable/index.html"
+    "source": "/admin/edu/timetable/**",
+    "destination": "/edu/timetable/index.html"
   }
 ]
 ```
@@ -291,8 +291,8 @@ The project specification mandates the following URL contracts for TimeTable:
 |---|---|---|
 | `/timetable/{CodeID}` | User Timetable Dashboard / Primary Timetable | `{CodeID}` = Immutable Account Business ID (e.g. `/timetable/0000`) |
 | `/timetable/{CodeID}/{timetableId}` | Specific Timetable View & Edit | `{CodeID}` = Owner CodeID, `{timetableId}` = Unique ID within user scope |
-| `/eduspace/timetable/` | Legacy / General Browser Route | Supported via rewrite rule |
-| `/eduspace/timetable/{timetableId}` | Existing Route | Preserved for backward compatibility |
+| `/edu/timetable/` | Legacy / General Browser Route | Supported via rewrite rule |
+| `/edu/timetable/{timetableId}` | Existing Route | Preserved for backward compatibility |
 
 **Rule on URL Immutability:**  
 Because `CodeID` is permanent, the URL `/timetable/0000/12a1` will never break, even if the owner renames their handle, changes their email, or updates their profile.

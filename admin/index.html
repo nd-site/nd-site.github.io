@@ -1,12 +1,140 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=/admin/dashboard.html" />
-    <title>Redirecting...</title>
-    <script>window.location.href="/admin/dashboard.html";</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng điều khiển - EduND Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/assets/js/nd-navbar.js" defer></script>
+    <script src="/font/font.js"></script>
 </head>
-<body>
-    <p>Redirecting to the new admin dashboard...</p>
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col pt-[50px]">
+
+    <!-- Loading Gate -->
+    <div id="admin-loading" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+        <p class="text-sm font-semibold text-gray-600">Đang kiểm tra quyền hạn...</p>
+    </div>
+
+    <!-- Denied Screen -->
+    <div id="admin-denied" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-gray-100 p-4">
+        <div class="max-w-md w-full bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
+            <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                <i class="ph-bold ph-shield-warning"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2 text-gray-800">Quyền truy cập bị từ chối</h2>
+            <p class="text-gray-600 mb-6">Bạn không có quyền truy cập vào trang quản trị này. Yêu cầu quyền Giáo viên hoặc Quản trị viên.</p>
+            <a href="/" class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition">
+                Về trang chủ
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="admin-content" class="hidden flex-1 container mx-auto px-4 py-8 max-w-5xl">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                <i class="ph-fill ph-circles-four text-blue-600"></i>
+                Trung tâm quản lý
+            </h1>
+            <p class="text-gray-500 mt-2">Chọn phân hệ quản trị để tiếp tục.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Owner Panel -->
+            <a href="/admin/owner/" id="btn-nav-owner" class="hidden flex-col bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition hover:border-blue-300 group">
+                <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-blue-100 transition">
+                    <i class="ph-fill ph-hard-drives"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Owner</h3>
+                <p class="text-sm text-gray-500">Quản lý toàn bộ người dùng, quyền hạn, và cấu hình hệ thống.</p>
+            </a>
+
+            <!-- Admin Panel (Locked) -->
+            <div class="flex flex-col bg-gray-50 rounded-2xl shadow-sm border border-gray-200 p-6 opacity-75 cursor-not-allowed">
+                <div class="w-14 h-14 bg-gray-200 text-gray-500 rounded-xl flex items-center justify-center text-2xl mb-4">
+                    <i class="ph-fill ph-shield-star"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2 flex items-center justify-between">
+                    Admin
+                    <span class="text-xs font-semibold bg-gray-200 text-gray-600 px-2 py-1 rounded-md flex items-center gap-1">
+                        <i class="ph-bold ph-lock"></i> Khóa
+                    </span>
+                </h3>
+                <p class="text-sm text-gray-500">Phân hệ quản trị chung (Tạm thời đang khóa bảo trì).</p>
+            </div>
+
+            <!-- Teacher Panel -->
+            <a href="/admin/edu/" id="btn-nav-teacher" class="flex flex-col bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition hover:border-green-300 group">
+                <div class="w-14 h-14 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-green-100 transition">
+                    <i class="ph-fill ph-chalkboard-teacher"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Teacher</h3>
+                <p class="text-sm text-gray-500">Quản lý khóa học, bài giảng và tiến độ học tập của học sinh.</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/assets/js/config.js"></script>
+    <script type="module" src="/assets/js/firebase-init.js"></script>
+    <script src="/assets/js/canonical-auth.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function initAuth() {
+                if (!window.canonicalAuth) {
+                    setTimeout(initAuth, 100);
+                    return;
+                }
+
+                window.canonicalAuth.onAuthStateChanged(async (authData) => {
+                    const state = typeof authData === 'string' ? authData : (authData?.state || 'unauthenticated');
+                    if (state === 'unauthenticated' || state === 'error') {
+                        window.location.href = '/auth/login/?redirect=/admin/';
+                        return;
+                    }
+                    
+                    if (state === 'authenticated') {
+                        const profile = authData.profile;
+                        if (!profile) {
+                            window.location.href = '/auth/login/?redirect=/admin/';
+                            return;
+                        }
+
+                        const role = profile.role || 'member';
+                        const eduRole = profile.eduRole || '';
+
+                        // Phân quyền truy cập trang /admin (Giáo viên hoặc Admin)
+                        const isTeacher = eduRole === 'teacher' || role === 'teacher';
+                        const isAdmin = role === 'admin';
+                        const isOwner = role === 'admin' || profile.ndid === 'admin'; // Hoặc có thể định nghĩa cụ thể theo ý user
+
+                        if (!isTeacher && !isAdmin && !isOwner) {
+                            document.getElementById('admin-loading').classList.add('hidden');
+                            document.getElementById('admin-denied').classList.remove('hidden');
+                            document.getElementById('admin-denied').classList.add('flex');
+                            return;
+                        }
+
+                        // Hiển thị giao diện chính
+                        document.getElementById('admin-loading').classList.add('hidden');
+                        document.getElementById('admin-content').classList.remove('hidden');
+
+                        // Hiển thị nút Owner nếu có quyền
+                        if (isOwner) {
+                            const ownerBtn = document.getElementById('btn-nav-owner');
+                            ownerBtn.classList.remove('hidden');
+                            ownerBtn.classList.add('flex');
+                        }
+                    }
+                });
+            }
+
+            initAuth();
+        });
+    </script>
 </body>
 </html>

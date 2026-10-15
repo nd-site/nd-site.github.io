@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build:eduspace && node -e \"const fs=require('fs');fs.mkdirSync('dist',{recursive:true});fs.writeFileSync('dist/index.html','')\"",
+  "buildCommand": "npm run build:edu && node -e \"const fs=require('fs');fs.mkdirSync('dist',{recursive:true});fs.writeFileSync('dist/index.html','')\"",
   "outputDirectory": "dist",
   "redirects": [
     {
@@ -30,10 +30,6 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/api/v3/(.*)",
-      "destination": "/api/v3?endpoint=$1"
-    },
     {
       "source": "/api/(.*)",
       "destination": "/api/auth?action=$1"
