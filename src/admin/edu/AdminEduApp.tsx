@@ -23,6 +23,7 @@ import { AIReviewModal } from './components/modals/AIReviewModal';
 import { AIExplanationModal } from './components/modals/AIExplanationModal';
 import { GeminiKeyModal } from './components/modals/GeminiKeyModal';
 import { CategoryManagerModal } from './components/modals/CategoryManagerModal';
+import { ContactSettingsModal } from './components/modals/ContactSettingsModal';
 import {
   listenToAdminAuth,
   subscribeToQuizzesRealtime,
@@ -43,6 +44,7 @@ import type {
   PassageContext,
   EduCategoriesConfig,
   ToastMessage,
+  ExamProctoringConfig,
 } from './types';
 
 const ADMIN_DRAFT_KEY = 'edu_admin_editor_draft_v3';
@@ -66,6 +68,7 @@ export const AdminEduApp: React.FC = () => {
 
   // Category Manager modal
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   // Editor metadata state
   const [pubId, setPubId] = useState<string>('');
@@ -78,12 +81,25 @@ export const AdminEduApp: React.FC = () => {
   const [pubTag, setPubTag] = useState<string>('');
   const [metaAuthor, setMetaAuthor] = useState<string>('');
   const [collaborators, setCollaborators] = useState<string[]>([]);
+  const [collaboratorCodeIds, setCollaboratorCodeIds] = useState<string[]>([]);
+  const [accessType, setAccessType] = useState<'all' | 'restricted'>('all');
+  const [allowedCodeIds, setAllowedCodeIds] = useState<string[]>([]);
   const [metaYear, setMetaYear] = useState<string>('');
-  const [metaSchool, setMetaSchool] = useState<string>('');
+  const [metaSchool, setMetaSchool] = useState<string>('EduND by ND Labs');
   const [metaBook, setMetaBook] = useState<string>('');
   const [pubDesc, setPubDesc] = useState<string>('');
   const [pubHot, setPubHot] = useState<boolean>(false);
   const [pubComingSoon, setPubComingSoon] = useState<boolean>(false);
+  const [editorViewMode, setEditorViewMode] = useState<'visual' | 'json'>('visual');
+  const [proctoring, setProctoring] = useState<ExamProctoringConfig>({
+    enabled: false,
+    appliedModes: 'exam_only',
+    requireLogin: true,
+    requireCamera: true,
+    recordAudio: true,
+    recordScreenLog: true,
+    randomSnapshots: true,
+  });
 
   // Structure & Passages & Questions
   const [structure, setStructure] = useState<ExamStructure>({
@@ -101,6 +117,9 @@ export const AdminEduApp: React.FC = () => {
     matching: 1.0,
     cloze: 1.0,
     ordering: 1.0,
+    multiselect: 1.0,
+    grouping: 1.0,
+    error_identification: 0.5,
   });
   const [passages, setPassages] = useState<PassageContext[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -150,6 +169,7 @@ export const AdminEduApp: React.FC = () => {
         if (d.pubDesc) setPubDesc(d.pubDesc);
         if (d.pubHot !== undefined) setPubHot(d.pubHot);
         if (d.pubComingSoon !== undefined) setPubComingSoon(d.pubComingSoon);
+        if (d.proctoring) setProctoring(d.proctoring);
         if (d.structure) setStructure(d.structure);
         if (d.structPoints) setStructPoints(d.structPoints);
         if (Array.isArray(d.passages)) setPassages(d.passages);
@@ -179,6 +199,7 @@ export const AdminEduApp: React.FC = () => {
           pubDesc,
           pubHot,
           pubComingSoon,
+          proctoring,
           structure,
           structPoints,
           passages,
@@ -222,6 +243,16 @@ export const AdminEduApp: React.FC = () => {
       setIsAuthorized(authorized);
       setAuthChecking(false);
       if (err) setAuthError(err);
+
+      // Mặc định gắn thẻ bản thân cho người tạo đề nếu chưa có
+      if (authedUser) {
+        setMetaAuthor((prev) => {
+          if (!prev || prev.trim() === '') {
+            return authedUser.ndid || authedUser.displayName || authedUser.uid || 'Nhật Đăng - Admin';
+          }
+          return prev;
+        });
+      }
     }).then((u) => {
       unsubAuth = u;
     });
@@ -334,6 +365,10 @@ export const AdminEduApp: React.FC = () => {
         fullDuration,
         author: metaAuthor.trim(),
         collaborators,
+        creatorCodeId: user?.codeId || user?.uid || '',
+        collaboratorCodeIds,
+        accessType,
+        allowedCodeIds,
         year: metaYear.trim(),
         school: metaSchool.trim(),
         book: metaBook.trim(),
@@ -348,7 +383,9 @@ export const AdminEduApp: React.FC = () => {
           matrixDuration,
           fullDuration,
           examLayout,
+          proctoring,
         },
+        proctoring,
         passages,
         questions,
       };
@@ -357,8 +394,13 @@ export const AdminEduApp: React.FC = () => {
         id: id.toUpperCase(),
         creatorUid: user?.uid || '',
         creatorNdid: user?.ndid || '',
+        creatorCodeId: user?.codeId || user?.uid || '',
         author: metaAuthor.trim(),
         collaborators,
+        collaboratorCodeIds,
+        school: metaSchool.trim(),
+        accessType,
+        allowedCodeIds,
         title: pubTitle.trim(),
         description: pubDesc.trim(),
         grade: pubClass.trim(),
@@ -372,6 +414,7 @@ export const AdminEduApp: React.FC = () => {
         isHot: pubHot,
         isComingSoon: pubComingSoon,
         visibility: 'public',
+        proctoring,
         passages,
         quizData: quizDataObj,
       };
@@ -443,12 +486,30 @@ export const AdminEduApp: React.FC = () => {
       setPubTag(record.tag || '');
       setMetaAuthor(record.author || qData.author || '');
       setCollaborators(Array.isArray(record.collaborators) ? record.collaborators : []);
+      setCollaboratorCodeIds(
+        Array.isArray(record.collaboratorCodeIds)
+          ? record.collaboratorCodeIds
+          : Array.isArray(qData.collaboratorCodeIds)
+          ? qData.collaboratorCodeIds
+          : []
+      );
+      setAccessType(record.accessType || qData.accessType || 'all');
+      setAllowedCodeIds(
+        Array.isArray(record.allowedCodeIds)
+          ? record.allowedCodeIds
+          : Array.isArray(qData.allowedCodeIds)
+          ? qData.allowedCodeIds
+          : []
+      );
       setMetaYear(qData.year || '');
-      setMetaSchool(qData.school || '');
+      setMetaSchool(record.school || qData.school || 'EduND by ND Labs');
       setMetaBook(qData.book || '');
       setPubDesc(record.description || qData.description || '');
       setPubHot(Boolean(record.isHot));
       setPubComingSoon(Boolean(record.isComingSoon));
+      if (record.proctoring || qData.proctoring || qData.config?.proctoring) {
+        setProctoring(record.proctoring || qData.proctoring || qData.config?.proctoring);
+      }
 
       if (qData.examStructure) {
         setStructure(qData.examStructure);
@@ -619,6 +680,18 @@ export const AdminEduApp: React.FC = () => {
               <span>Quản lý danh mục</span>
             </button>
 
+            {/* Owner Contact & Social Media Config */}
+            {isOwner && (
+              <button
+                onClick={() => setIsContactModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 font-extrabold text-xs rounded-xl border border-purple-200 transition-all cursor-pointer shadow-sm"
+                title="Cấu hình kênh chat hỗ trợ duyệt giáo viên và tài khoản mạng xã hội"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+                <span>Kênh Hỗ Trợ &amp; MXH</span>
+              </button>
+            )}
+
             {/* Link to Teacher Portal */}
             <a
               href="/edu/teacher/exam"
@@ -684,6 +757,7 @@ export const AdminEduApp: React.FC = () => {
             quizzes={quizzes}
             user={user}
             isRealtimeConnected={isRealtimeConnected}
+            isAdminView={true}
             onLoadToEditor={handleLoadPostToEditor}
             onDeleteQuiz={handleDeletePost}
             onCopyShareLink={handleCopyShareLink}
@@ -717,6 +791,12 @@ export const AdminEduApp: React.FC = () => {
             setMetaAuthor={setMetaAuthor}
             collaborators={collaborators}
             setCollaborators={setCollaborators}
+            collaboratorCodeIds={collaboratorCodeIds}
+            setCollaboratorCodeIds={setCollaboratorCodeIds}
+            accessType={accessType}
+            setAccessType={setAccessType}
+            allowedCodeIds={allowedCodeIds}
+            setAllowedCodeIds={setAllowedCodeIds}
             metaYear={metaYear}
             setMetaYear={setMetaYear}
             metaSchool={metaSchool}
@@ -729,6 +809,8 @@ export const AdminEduApp: React.FC = () => {
             setPubHot={setPubHot}
             pubComingSoon={pubComingSoon}
             setPubComingSoon={setPubComingSoon}
+            proctoring={proctoring}
+            setProctoring={setProctoring}
             structure={structure}
             setStructure={setStructure}
             structPoints={structPoints}
@@ -745,6 +827,13 @@ export const AdminEduApp: React.FC = () => {
             onOpenAIReview={() => setIsAIReviewOpen(true)}
             onOpenAIExplanation={() => setIsAIExplanationOpen(true)}
             onToast={addToast}
+            editorViewMode={editorViewMode}
+            setEditorViewMode={setEditorViewMode}
+            onClearDraft={() => {
+              try {
+                localStorage.removeItem(ADMIN_DRAFT_KEY);
+              } catch (_) {}
+            }}
           />
         )}
 
@@ -758,6 +847,7 @@ export const AdminEduApp: React.FC = () => {
             fullDuration={fullDuration}
             editorStructure={structure}
             passages={passages}
+            proctoring={proctoring}
             onToast={addToast}
             onBackToEditor={() => setActiveTab('editor')}
           />
@@ -773,16 +863,40 @@ export const AdminEduApp: React.FC = () => {
         onToast={addToast}
       />
 
+      {/* Owner Contact Settings Modal */}
+      <ContactSettingsModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+        onSaved={() => addToast('Đã lưu danh sách kênh hỗ trợ và mạng xã hội thành công!')}
+      />
+
       {/* AI Modals */}
       <AIGenModal
         isOpen={isAIGenOpen}
         onClose={() => setIsAIGenOpen(false)}
-        onAddQuestions={(newQs) => {
+        onAddQuestions={(newQs, passage) => {
+          if (passage) {
+            setPassages((prev) => [...prev, passage]);
+          }
           setQuestions((prev) => [...prev, ...newQs]);
-          addToast(`Đã thêm thành công ${newQs.length} câu hỏi do AI tạo vào đề thi!`);
+          addToast(
+            `Đã thêm thành công ${newQs.length} câu hỏi${
+              passage ? ' và 1 ngữ liệu đọc hiểu' : ''
+            } do AI tạo vào đề thi!`
+          );
         }}
         currentGrade={pubClass}
         currentSubject={pubSubject}
+        examTitle={pubTitle}
+        examType={examType}
+        matrixDuration={matrixDuration}
+        structure={structure}
+        structPoints={structPoints}
+        onSwitchToJsonMode={() => {
+          setActiveTab('editor');
+          setEditorViewMode('json');
+        }}
+        onToast={addToast}
       />
 
       <AIReviewModal

@@ -8,11 +8,15 @@ import {
   listenToAdminAuth,
   fetchQuizById,
   canUserViewQuiz,
+  canUserTakeQuiz,
+  getStudentAttemptCount,
+  submitStudentExam,
 } from './services/firebaseService';
-import type { QuizRecord, AdminUser, ToastMessage } from './types';
+import type { QuizRecord, AdminUser, ToastMessage, StudentSubmissionRecord } from './types';
 
 export const StudentExamApp: React.FC = () => {
   const [user, setUser] = useState<AdminUser | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [examId, setExamId] = useState<string>('');
   const [quiz, setQuiz] = useState<QuizRecord | null>(null);
   const [loading, setLoading] = useState(true);
@@ -41,6 +45,7 @@ export const StudentExamApp: React.FC = () => {
     let unsubAuth: (() => void) | null = null;
     listenToAdminAuth((authedUser) => {
       setUser(authedUser);
+      setAuthLoading(false);
     }).then((u) => {
       unsubAuth = u;
     });
@@ -50,8 +55,10 @@ export const StudentExamApp: React.FC = () => {
     };
   }, []);
 
-  // 2. Parse Exam ID from URL
+  // 2. Parse Exam ID from URL & load exam only after Auth is resolved
   useEffect(() => {
+    if (authLoading) return;
+
     const search = window.location.search.substring(1);
     let id = '';
     if (search.startsWith('id=')) {
@@ -67,10 +74,10 @@ export const StudentExamApp: React.FC = () => {
     }
 
     setExamId(id);
-    loadExamData(id);
-  }, []);
+    loadExamData(id, user);
+  }, [authLoading]);
 
-  const loadExamData = async (id: string) => {
+  const loadExamData = async (id: string, currentUser: AdminUser | null) => {
     setLoading(true);
     setError('');
     try {
@@ -80,13 +87,38 @@ export const StudentExamApp: React.FC = () => {
         return;
       }
 
+      // Tất cả các bài khi làm đều phải đăng nhập tài khoản NDID
+      if (!currentUser) {
+        setError('Vui lòng đăng nhập tài khoản NDID để làm bài kiểm tra.');
+        return;
+      }
+
       // Check view permissions
       if (record.visibility === 'private') {
-        const canView = canUserViewQuiz(user, record);
+        const canView = canUserViewQuiz(currentUser, record);
         if (!canView) {
           setError('Đề thi này được cài đặt ở chế độ riêng tư bởi người ra đề.');
           return;
         }
+      }
+
+      // Check access permission (giới hạn người làm đề theo CodeID)
+      const canTake = canUserTakeQuiz(currentUser, record);
+      if (!canTake) {
+        setError('Đề thi này được giới hạn danh sách người làm bài. Tài khoản của bạn không nằm trong danh sách được cấp quyền.');
+        return;
+      }
+
+      // Check maxAttempts limit if user is logged in
+      const qProctoring = record.proctoring || record.quizData?.proctoring || record.quizData?.config?.proctoring;
+      if (qProctoring?.maxAttempts && qProctoring.maxAttempts > 0 && currentUser?.ndid) {
+        try {
+          const attempts = await getStudentAttemptCount(record.id, currentUser.ndid);
+          if (attempts >= qProctoring.maxAttempts) {
+            setError(`Bạn đã làm bài thi này ${attempts}/${qProctoring.maxAttempts} lần và đã đạt giới hạn tối đa cho phép của giáo viên.`);
+            return;
+          }
+        } catch (_) {}
       }
 
       setQuiz(record);
@@ -221,11 +253,15 @@ export const StudentExamApp: React.FC = () => {
           subject={quiz.subject || qData.subject}
           examType={quiz.examType || qData.examType}
           author={quiz.author || qData.author}
+          school={quiz.school || qData.school}
+          year={quiz.year || qData.year}
+          createdAt={quiz.createdAt || qData.createdAt}
           matrixDuration={matrixDuration}
           fullDuration={fullDuration}
           structure={struct}
           passages={passages}
           questions={questions}
+          proctoring={quiz.proctoring || qData.proctoring || qData.config?.proctoring}
           isStudentMode={true}
           initialSamplingMode={samplingMode}
           initialRunnerMode={runnerMode}
@@ -233,6 +269,35 @@ export const StudentExamApp: React.FC = () => {
             setAppStep('start-screen');
           }}
           onToast={addToast}
+          onFinishSubmission={async (subData) => {
+            if (!quiz?.id) return;
+            try {
+              const studentNdid = user?.ndid || 'Thí sinh tự do';
+              const studentName = user?.fullname || user?.displayName || user?.ndid || 'Học sinh';
+              await submitStudentExam({
+                examId: quiz.id,
+                examTitle: quiz.title || qData.title || 'Đề thi trực tuyến',
+                studentNdid,
+                studentName,
+                studentCodeId: user?.codeId || user?.uid || '',
+                score10: parseFloat(subData.final10) || 0,
+                achievedPoints: subData.achieved,
+                totalPoints: subData.possible,
+                correctCount: subData.correct,
+                wrongCount: subData.wrong,
+                totalQuestions: questions.length,
+                timeSpentSecs: subData.timeSpentSecs,
+                answers: subData.userAnswers,
+                userAnswers: subData.userAnswers,
+                proctoringLogs: subData.proctoringLogs,
+                runnerMode: subData.runnerMode,
+                testSamplingMode: subData.testSamplingMode,
+              });
+              addToast('Đã lưu kết quả bài thi thành công vào hệ thống!', false);
+            } catch (err: any) {
+              console.warn('Lỗi lưu bài thi học sinh:', err);
+            }
+          }}
         />
       </div>
     </div>

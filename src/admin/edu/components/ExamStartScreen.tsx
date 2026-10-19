@@ -81,7 +81,11 @@ export const ExamStartScreen: React.FC<ExamStartScreenProps> = ({
   const qData = quiz.quizData || (quiz as any);
   const examInfo = qData.examInfo || (quiz as any).examInfo || {};
   const author = quiz.author || qData.author || examInfo.author || '';
-  const school = quiz.school || qData.school || examInfo.school || '';
+  let rawSchool = quiz.school || qData.school || examInfo.school || '';
+  if (!rawSchool || rawSchool === 'EduSpace by ND Labs') {
+    rawSchool = 'EduND by ND Labs';
+  }
+  const school = rawSchool;
   const grade =
     quiz.grade || quiz.class || qData.grade || qData.class || examInfo.grade || examInfo.class || '';
   const subject = quiz.subject || qData.subject || examInfo.subject || '';
@@ -92,9 +96,29 @@ export const ExamStartScreen: React.FC<ExamStartScreenProps> = ({
   const examName = quiz.examName || qData.examName || examInfo.examName || '';
   const attempt = quiz.attempt || qData.attempt || examInfo.attempt || '';
 
+  // Format created date
+  let createdDateStr = '';
+  const rawCreatedAt = quiz.createdAt || qData.createdAt || quiz.updatedAt || qData.updatedAt;
+  if (rawCreatedAt) {
+    try {
+      if (typeof rawCreatedAt.toDate === 'function') {
+        createdDateStr = rawCreatedAt.toDate().toLocaleDateString('vi-VN');
+      } else if (rawCreatedAt.seconds) {
+        createdDateStr = new Date(rawCreatedAt.seconds * 1000).toLocaleDateString('vi-VN');
+      } else {
+        const d = new Date(rawCreatedAt);
+        if (!isNaN(d.getTime())) {
+          createdDateStr = d.toLocaleDateString('vi-VN');
+        }
+      }
+    } catch {
+      createdDateStr = '';
+    }
+  }
+
   const metaFields = [
     { label: 'Tác giả', value: author, icon: '👤' },
-    { label: 'Trường', value: school, icon: '🏫' },
+    { label: 'Nơi tạo đề', value: school, icon: '🏫' },
     { label: 'Đơn vị', value: department, icon: '🏛️' },
     { label: 'Kỳ thi', value: examName, icon: '📋' },
     { label: 'Loại đề', value: attempt, icon: '📄' },
@@ -103,6 +127,7 @@ export const ExamStartScreen: React.FC<ExamStartScreenProps> = ({
     { label: 'Sách giáo khoa', value: book, icon: '📖' },
     { label: 'Bài học', value: lesson, icon: '📝' },
     { label: 'Năm học', value: year, icon: '📅' },
+    { label: 'Ngày tạo đề', value: createdDateStr, icon: '🕒' },
   ].filter((f) => f.value && String(f.value).trim() !== '');
 
   const questions = qData.questions || quiz.questions || [];
@@ -214,7 +239,7 @@ export const ExamStartScreen: React.FC<ExamStartScreenProps> = ({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
             <button
               type="button"
-              onClick={() => setStep('sampling-select')}
+              onClick={() => setStep('mode-select')}
               className="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-2xl shadow-xl shadow-blue-500/25 transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center gap-2"
             >
               <span>Bắt đầu làm bài</span>
@@ -277,16 +302,97 @@ export const ExamStartScreen: React.FC<ExamStartScreenProps> = ({
         </div>
       )}
 
-      {/* Sampling / Structure Selector Step */}
-      {step === 'sampling-select' && (
+      {/* Bước 1 / 2: Chọn Chế độ làm bài (Luyện tập hoặc Thi thử) */}
+      {step === 'mode-select' && (
         <div className="w-full max-w-2xl bg-white/95 backdrop-blur-xl border border-white/80 shadow-2xl shadow-blue-500/10 rounded-3xl p-6 md:p-10 text-center relative overflow-hidden transition-all duration-300">
-          <div className="inline-flex items-center gap-2 bg-blue-50 px-3.5 py-1 rounded-full border border-blue-100 text-xs font-black text-blue-700 uppercase mb-4">
-            <span>Bước 1 / 2 • Cấu trúc đề</span>
+          <div className="inline-flex items-center gap-2 bg-purple-50 px-3.5 py-1 rounded-full border border-purple-100 text-xs font-black text-purple-700 uppercase mb-3">
+            <span>Bước 1 / 2 • Chế độ làm bài</span>
           </div>
 
-          <h2 className="text-2xl font-black text-slate-900 mb-2">Chọn cách kiểm tra</h2>
+          <h2 className="text-2xl font-black text-slate-900 mb-2">Chọn dạng làm bài</h2>
           <p className="text-slate-500 text-xs md:text-sm mb-6">
-            Bạn muốn làm bài theo ma trận đề hay toàn bộ ngân hàng câu hỏi?
+            Chọn mục tiêu ôn tập hoặc thi thử của bạn trước khi chọn cấu trúc đề
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-4 text-left">
+            {/* Practice Mode */}
+            <div
+              onClick={() => {
+                setSelectedMode('practice');
+                setStep('sampling-select');
+              }}
+              className="p-5 rounded-3xl border-2 border-slate-200 hover:border-emerald-500 bg-white hover:bg-emerald-50/30 hover:shadow-xl hover:shadow-emerald-500/10 transition-all cursor-pointer group flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center mb-4 text-2xl group-hover:scale-110 transition-transform">
+                  📖
+                </div>
+                <h3 className="text-lg font-black text-slate-900 mb-1.5">Luyện tập</h3>
+                <p className="text-slate-500 text-xs leading-relaxed mb-4">
+                  Kiểm tra đáp án ngay từng câu. Cho phép xem giải thích chi tiết và làm lại câu chưa đúng.
+                </p>
+              </div>
+              <div className="flex items-center text-emerald-600 font-extrabold text-xs">
+                <span>Chọn chế độ Luyện tập</span>
+                <span className="ml-2 group-hover:translate-x-1.5 transition-transform">→</span>
+              </div>
+            </div>
+
+            {/* Exam Mode */}
+            <div
+              onClick={() => {
+                setSelectedMode('exam');
+                setStep('sampling-select');
+              }}
+              className="p-5 rounded-3xl border-2 border-slate-200 hover:border-rose-500 bg-white hover:bg-rose-50/30 hover:shadow-xl hover:shadow-rose-500/10 transition-all cursor-pointer group flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center mb-4 text-2xl group-hover:scale-110 transition-transform">
+                  ⏱️
+                </div>
+                <h3 className="text-lg font-black text-slate-900 mb-1.5">Thi thử</h3>
+                <p className="text-slate-500 text-xs leading-relaxed mb-4">
+                  Mô phỏng kỳ thi nghiêm túc. Cấm AI, cấm làm lại, cấm xem trước đáp án cho đến khi nộp bài.
+                </p>
+              </div>
+              <div className="flex items-center text-rose-600 font-extrabold text-xs">
+                <span>Chọn chế độ Thi thử</span>
+                <span className="ml-2 group-hover:translate-x-1.5 transition-transform">→</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setStep('start')}
+            className="mt-6 text-slate-400 hover:text-slate-700 font-bold text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Quay lại thông tin đề</span>
+          </button>
+        </div>
+      )}
+
+      {/* Bước 2 / 2: Chọn Cách kiểm tra (Ma trận hoặc Tất cả câu) */}
+      {step === 'sampling-select' && (
+        <div className="w-full max-w-2xl bg-white/95 backdrop-blur-xl border border-white/80 shadow-2xl shadow-blue-500/10 rounded-3xl p-6 md:p-10 text-center relative overflow-hidden transition-all duration-300">
+          <div className="inline-flex items-center gap-2 bg-blue-50 px-3.5 py-1 rounded-full border border-blue-100 text-xs font-black text-blue-700 uppercase mb-3">
+            <span>Bước 2 / 2 • Cấu trúc đề</span>
+          </div>
+
+          <div className="mb-3">
+            <span className={`text-xs font-extrabold px-3.5 py-1 rounded-full border ${
+              selectedMode === 'exam'
+                ? 'bg-rose-50 text-rose-700 border-rose-200'
+                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+            }`}>
+              Chế độ đã chọn: {selectedMode === 'exam' ? '⏱️ Thi thử nghiêm túc' : '📖 Luyện tập tự do'}
+            </span>
+          </div>
+
+          <h2 className="text-2xl font-black text-slate-900 mb-2">Chọn loại ma trận câu hỏi</h2>
+          <p className="text-slate-500 text-xs md:text-sm mb-6">
+            Bạn muốn làm bài rút gọn theo ma trận chuẩn hay toàn bộ câu hỏi?
           </p>
 
           <div className="grid md:grid-cols-2 gap-4 text-left">
@@ -294,7 +400,7 @@ export const ExamStartScreen: React.FC<ExamStartScreenProps> = ({
             <div
               onClick={() => {
                 setSelectedSampling('matrix');
-                setStep('mode-select');
+                onStartExam(selectedMode, 'matrix');
               }}
               className="p-5 rounded-3xl border-2 border-slate-200 hover:border-blue-500 bg-white hover:bg-blue-50/30 hover:shadow-xl hover:shadow-blue-500/10 transition-all cursor-pointer group flex flex-col justify-between"
             >
@@ -309,11 +415,11 @@ export const ExamStartScreen: React.FC<ExamStartScreenProps> = ({
                   </span>
                 </div>
                 <p className="text-slate-500 text-xs leading-relaxed mb-4">
-                  Lọc số lượng câu hỏi theo cấu hình ma trận chuẩn của đề thi. Thời gian làm bài theo cấu hình kiểm tra ({matrixDuration} phút).
+                  Rút trích số lượng câu theo cấu hình ma trận chuẩn. Thời gian làm bài theo cấu hình kiểm tra ({matrixDuration} phút).
                 </p>
               </div>
               <div className="flex items-center text-blue-600 font-extrabold text-xs">
-                <span>Chọn cấu trúc này</span>
+                <span>Vào làm bài ngay</span>
                 <span className="ml-2 group-hover:translate-x-1.5 transition-transform">→</span>
               </div>
             </div>
@@ -322,7 +428,7 @@ export const ExamStartScreen: React.FC<ExamStartScreenProps> = ({
             <div
               onClick={() => {
                 setSelectedSampling('full');
-                setStep('mode-select');
+                onStartExam(selectedMode, 'full');
               }}
               className="p-5 rounded-3xl border-2 border-slate-200 hover:border-indigo-500 bg-white hover:bg-indigo-50/30 hover:shadow-xl hover:shadow-indigo-500/10 transition-all cursor-pointer group flex flex-col justify-between"
             >
@@ -341,7 +447,7 @@ export const ExamStartScreen: React.FC<ExamStartScreenProps> = ({
                 </p>
               </div>
               <div className="flex items-center text-indigo-600 font-extrabold text-xs">
-                <span>Chọn cấu trúc này</span>
+                <span>Vào làm bài ngay</span>
                 <span className="ml-2 group-hover:translate-x-1.5 transition-transform">→</span>
               </div>
             </div>
@@ -349,82 +455,11 @@ export const ExamStartScreen: React.FC<ExamStartScreenProps> = ({
 
           <button
             type="button"
-            onClick={() => setStep('start')}
+            onClick={() => setStep('mode-select')}
             className="mt-6 text-slate-400 hover:text-slate-700 font-bold text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Quay lại thông tin đề</span>
-          </button>
-        </div>
-      )}
-
-      {/* Mode Selector Step */}
-      {step === 'mode-select' && (
-        <div className="w-full max-w-2xl bg-white/95 backdrop-blur-xl border border-white/80 shadow-2xl shadow-blue-500/10 rounded-3xl p-6 md:p-10 text-center relative overflow-hidden transition-all duration-300">
-          <div className="inline-flex items-center gap-2 bg-purple-50 px-3.5 py-1 rounded-full border border-purple-100 text-xs font-black text-purple-700 uppercase mb-3">
-            <span>Bước 2 / 2 • Chế độ làm bài</span>
-          </div>
-
-          <div className="mb-3">
-            <span className="text-xs font-extrabold text-indigo-700 bg-indigo-50 border border-indigo-100 px-3.5 py-1 rounded-full">
-              Cấu trúc đã chọn: {selectedSampling === 'matrix' ? 'Theo ma trận đề' : 'Tất cả câu hỏi'} ({selectedSampling === 'matrix' ? matrixCount : questions.length} câu • {selectedSampling === 'matrix' ? matrixDuration : fullDuration} phút)
-            </span>
-          </div>
-
-          <h2 className="text-2xl font-black text-slate-900 mb-2">Chọn chế độ làm bài</h2>
-          <p className="text-slate-500 text-xs md:text-sm mb-6">
-            Phù hợp với mục tiêu ôn tập hoặc thi thử của bạn
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-4 text-left">
-            {/* Practice Mode */}
-            <div
-              onClick={() => onStartExam('practice', selectedSampling)}
-              className="p-5 rounded-3xl border-2 border-slate-200 hover:border-emerald-500 bg-white hover:bg-emerald-50/30 hover:shadow-xl hover:shadow-emerald-500/10 transition-all cursor-pointer group flex flex-col justify-between"
-            >
-              <div>
-                <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center mb-4 text-2xl group-hover:scale-110 transition-transform">
-                  📖
-                </div>
-                <h3 className="text-lg font-black text-slate-900 mb-1.5">Luyện tập</h3>
-                <p className="text-slate-500 text-xs leading-relaxed mb-4">
-                  Làm bài với tính năng kiểm tra đáp án ngay. Có lời giải chi tiết và hỗ trợ từ EduAI.
-                </p>
-              </div>
-              <div className="flex items-center text-emerald-600 font-extrabold text-xs">
-                <span>Vào làm bài luyện tập</span>
-                <span className="ml-2 group-hover:translate-x-1.5 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* Exam Mode */}
-            <div
-              onClick={() => onStartExam('exam', selectedSampling)}
-              className="p-5 rounded-3xl border-2 border-slate-200 hover:border-rose-500 bg-white hover:bg-rose-50/30 hover:shadow-xl hover:shadow-rose-500/10 transition-all cursor-pointer group flex flex-col justify-between"
-            >
-              <div>
-                <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center mb-4 text-2xl group-hover:scale-110 transition-transform">
-                  ⏱️
-                </div>
-                <h3 className="text-lg font-black text-slate-900 mb-1.5">Thi thử</h3>
-                <p className="text-slate-500 text-xs leading-relaxed mb-4">
-                  Mô phỏng kỳ thi thực tế. Chỉ biết kết quả sau khi nộp bài. Có đồng hồ đếm ngược áp lực.
-                </p>
-              </div>
-              <div className="flex items-center text-rose-600 font-extrabold text-xs">
-                <span>Vào làm bài thi thử</span>
-                <span className="ml-2 group-hover:translate-x-1.5 transition-transform">→</span>
-              </div>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setStep('sampling-select')}
-            className="mt-6 text-slate-400 hover:text-slate-700 font-bold text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Quay lại chọn cách kiểm tra</span>
+            <span>Quay lại chọn dạng làm bài</span>
           </button>
         </div>
       )}

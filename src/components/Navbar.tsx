@@ -20,7 +20,10 @@ import {
   Timer,
   FileText,
   Copy,
-  Check
+  Check,
+  Bot,
+  Sparkles,
+  Headset,
 } from 'lucide-react';
 
 export interface UserSession {
@@ -95,6 +98,30 @@ export default function Navbar() {
   const [selectedNotif, setSelectedNotif] = useState<NotificationItem | null>(null);
   const [toolsOpen, setToolsOpen] = useState(false);
   const [activeToolTab, setActiveToolTab] = useState<'qr' | 'calc' | 'timer' | 'notes'>('qr');
+  const [supportModalOpen, setSupportModalOpen] = useState(false);
+  const [contactLinks, setContactLinks] = useState<any[]>([
+    {
+      name: "ChatND với Admin (Xin duyệt Giáo viên)",
+      url: "/chat?admin",
+      icon: "message-square",
+      logo: "/assets/images/logo.png",
+      color: "#0284c7"
+    },
+    {
+      name: "Facebook ND Labs",
+      url: "https://facebook.com/ndlabs.nd",
+      icon: "facebook",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg",
+      color: "#1877F2"
+    },
+    {
+      name: "Messenger ND Labs",
+      url: "https://m.me/ndlabs.nd",
+      icon: "message-circle",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg",
+      color: "#0084FF"
+    }
+  ]);
   
   // Realtime notifications state
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
@@ -472,6 +499,38 @@ export default function Navbar() {
               <QrCode size={16} />
               <span className="hidden lg:inline text-[11px]">Tiện ích</span>
             </button>
+
+            {/* Support / Chat Admin Button (Xin duyệt giáo viên / Liên hệ) */}
+            <button
+              type="button"
+              onClick={() => setSupportModalOpen(true)}
+              title="Hỗ trợ & Xin duyệt Giáo viên"
+              className="p-2 rounded-xl border border-slate-200/80 bg-white/80 hover:bg-slate-100 text-slate-700 hover:text-blue-600 transition-all flex items-center gap-1.5 font-bold cursor-pointer"
+            >
+              <Headset size={16} className="text-blue-600" />
+              <span className="hidden lg:inline text-[11px]">Hỗ trợ</span>
+            </button>
+
+            {/* NDAI AI Button (Trừ khi đang ở chế độ kiểm tra exam) */}
+            {!(window as any).eduAIExamModeGate && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof (window as any).EduAI_Assistant?.toggle === 'function') {
+                    (window as any).EduAI_Assistant.toggle();
+                  } else if (typeof (window as any).NDAI_Assistant?.toggle === 'function') {
+                    (window as any).NDAI_Assistant.toggle();
+                  } else if (typeof (window as any).ndAI_open === 'function') {
+                    (window as any).ndAI_open();
+                  }
+                }}
+                title="Trợ lý Học tập NDAI"
+                className="p-2 rounded-xl border border-blue-200 bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 shadow-xs hover:shadow-md transition-all flex items-center gap-1.5 font-bold cursor-pointer"
+              >
+                <Sparkles size={15} className="text-amber-300" />
+                <span className="hidden sm:inline text-[11px] font-black">NDAI</span>
+              </button>
+            )}
 
             {/* Notification Bell */}
             <div className="relative">
@@ -1064,6 +1123,79 @@ export default function Navbar() {
                 </a>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Support & Teacher Verification Channels Modal */}
+      {supportModalOpen && (
+        <div className="fixed inset-0 z-[100030] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <Headset size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-slate-900">
+                    Liên hệ Hỗ trợ &amp; Duyệt Giáo viên
+                  </h3>
+                  <p className="text-[11px] text-slate-400 font-medium">
+                    Chọn kênh kết nối trực tiếp với Quản trị viên ND Labs
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSupportModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 text-sm font-bold p-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-3 bg-blue-50/70 border border-blue-100 rounded-2xl text-xs text-blue-900 space-y-1">
+              <span className="font-extrabold block">Quy trình cấp quyền Giáo viên:</span>
+              <p className="text-[11px] text-blue-800 leading-relaxed font-normal">
+                Để đăng bài thi, giao bài tập cho lớp và quản trị học sinh, bạn vui lòng nhắn tin cho Admin kèm <strong>NDID</strong> và thông tin trường/lớp để được duyệt quyền nhanh chóng.
+              </p>
+            </div>
+
+            <div className="space-y-2 pt-1">
+              {contactLinks.map((contact, idx) => (
+                <a
+                  key={idx}
+                  href={contact.url}
+                  target={contact.url.startsWith('/') ? '_self' : '_blank'}
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-3.5 rounded-2xl border border-slate-200 hover:border-blue-500 hover:bg-slate-50 transition-all group cursor-pointer"
+                >
+                  <div className="flex items-center gap-3">
+                    {contact.logo ? (
+                      <img src={contact.logo} alt="" className="w-6 h-6 object-contain shrink-0" />
+                    ) : (
+                      <div className="w-6 h-6 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-black text-xs shrink-0">
+                        💬
+                      </div>
+                    )}
+                    <span className="text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                      {contact.name}
+                    </span>
+                  </div>
+                  <ExternalLink size={14} className="text-slate-400 group-hover:text-blue-600 transition-colors shrink-0" />
+                </a>
+              ))}
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => setSupportModalOpen(false)}
+                className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer"
+              >
+                Đóng
+              </button>
+            </div>
           </div>
         </div>
       )}

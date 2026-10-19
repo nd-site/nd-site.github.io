@@ -32,10 +32,17 @@ import {
   Copy,
   Upload,
   AlertCircle,
-  Printer,
   Database,
   BarChart3,
   Award,
+  Square,
+  Search,
+  Filter,
+  ChevronDown,
+  ChevronUp,
+  Check,
+  X,
+  ListChecks,
 } from 'lucide-react';
 import { LatexRenderer } from './LatexRenderer';
 import { AudioPlayer } from './AudioPlayer';
@@ -44,11 +51,11 @@ import { ExamLivePreview } from './ExamLivePreview';
 import { JsonCodeEditor } from './JsonCodeEditor';
 import { TableModal } from './modals/TableModal';
 import { PassageManagerModal } from './modals/PassageManagerModal';
-import { ExportPdfModal } from './modals/ExportPdfModal';
 import { QuestionBankModal } from './modals/QuestionBankModal';
 import { ExamAnalyticsModal } from './modals/ExamAnalyticsModal';
 import { RubricModal } from './modals/RubricModal';
-import { saveQuestionToBank } from '../services/firebaseService';
+import { ProctoringConfigModal } from './modals/ProctoringConfigModal';
+import { saveQuestionToBank, lookupUserByNdid } from '../services/firebaseService';
 import {
   extractTextFromDocx,
   parseQuestionsWithRegex,
@@ -62,6 +69,7 @@ import type {
   PassageContext,
   EduCategoriesConfig,
   AdminUser,
+  ExamProctoringConfig,
 } from '../types';
 
 interface EditorTabProps {
@@ -89,6 +97,12 @@ interface EditorTabProps {
   setMetaAuthor: (val: string) => void;
   collaborators: string[];
   setCollaborators: React.Dispatch<React.SetStateAction<string[]>>;
+  collaboratorCodeIds?: string[];
+  setCollaboratorCodeIds?: React.Dispatch<React.SetStateAction<string[]>>;
+  accessType?: 'all' | 'restricted';
+  setAccessType?: (val: 'all' | 'restricted') => void;
+  allowedCodeIds?: string[];
+  setAllowedCodeIds?: React.Dispatch<React.SetStateAction<string[]>>;
   metaYear: string;
   setMetaYear: (val: string) => void;
   metaSchool: string;
@@ -101,6 +115,8 @@ interface EditorTabProps {
   setPubHot: (val: boolean) => void;
   pubComingSoon: boolean;
   setPubComingSoon: (val: boolean) => void;
+  proctoring?: ExamProctoringConfig;
+  setProctoring?: React.Dispatch<React.SetStateAction<ExamProctoringConfig>>;
 
   // Structure state
   structure: ExamStructure;
@@ -113,6 +129,9 @@ interface EditorTabProps {
     matching?: number;
     cloze?: number;
     ordering?: number;
+    multiselect?: number;
+    grouping?: number;
+    error_identification?: number;
   };
   setStructPoints: React.Dispatch<
     React.SetStateAction<{
@@ -123,6 +142,9 @@ interface EditorTabProps {
       matching?: number;
       cloze?: number;
       ordering?: number;
+      multiselect?: number;
+      grouping?: number;
+      error_identification?: number;
     }>
   >;
 
@@ -143,6 +165,11 @@ interface EditorTabProps {
   onOpenAIReview: () => void;
   onOpenAIExplanation: () => void;
   onToast: (msg: string, isError?: boolean) => void;
+
+  // View mode and clear draft props
+  editorViewMode?: 'visual' | 'json';
+  setEditorViewMode?: (val: 'visual' | 'json') => void;
+  onClearDraft?: () => void;
 }
 
 export const EditorTab: React.FC<EditorTabProps> = ({
@@ -168,6 +195,12 @@ export const EditorTab: React.FC<EditorTabProps> = ({
   setMetaAuthor,
   collaborators,
   setCollaborators,
+  collaboratorCodeIds = [],
+  setCollaboratorCodeIds,
+  accessType = 'all',
+  setAccessType,
+  allowedCodeIds = [],
+  setAllowedCodeIds,
   metaYear,
   setMetaYear,
   metaSchool,
@@ -180,6 +213,8 @@ export const EditorTab: React.FC<EditorTabProps> = ({
   setPubHot,
   pubComingSoon,
   setPubComingSoon,
+  proctoring,
+  setProctoring,
   structure,
   setStructure,
   structPoints,
@@ -196,18 +231,92 @@ export const EditorTab: React.FC<EditorTabProps> = ({
   onOpenAIReview,
   onOpenAIExplanation,
   onToast,
+  editorViewMode,
+  setEditorViewMode,
+  onClearDraft,
 }) => {
-  // Mode switcher: Visual Form vs JSON Code Editor
-  const [editorViewMode, setEditorViewMode] = useState<'visual' | 'json'>('visual');
+  // Mode switcher: Visual Form vs JSON Code Editor (supports controlled or uncontrolled mode)
+  const [internalEditorViewMode, setInternalEditorViewMode] = useState<'visual' | 'json'>('visual');
+  const activeEditorViewMode = editorViewMode !== undefined ? editorViewMode : internalEditorViewMode;
+  const handleToggleViewMode = (mode: 'visual' | 'json') => {
+    if (setEditorViewMode) {
+      setEditorViewMode(mode);
+    } else {
+      setInternalEditorViewMode(mode);
+    }
+  };
+
+  const [isProctoringModalOpen, setIsProctoringModalOpen] = useState(false);
   const [collaboratorInput, setCollaboratorInput] = useState('');
   const [isPassageModalOpen, setIsPassageModalOpen] = useState(false);
   const [tableTargetIdx, setTableTargetIdx] = useState<number | null>(null);
 
   // New feature modals state
-  const [isExportPdfOpen, setIsExportPdfOpen] = useState(false);
   const [isQuestionBankOpen, setIsQuestionBankOpen] = useState(false);
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [rubricTargetIdx, setRubricTargetIdx] = useState<number | null>(null);
+  const [isClearExamModalOpen, setIsClearExamModalOpen] = useState(false);
+
+  // Xóa toàn bộ đề đang tạo và xóa sạch cache trình duyệt
+  const handleClearExamAndCache = () => {
+    setQuestions([]);
+    setPassages([]);
+    setPubTitle('');
+    setPubDesc('');
+    setPubTag('');
+    setPubId('');
+    setCollaborators([]);
+    setStructure({
+      enabled: true,
+      counts: { multiple: 12, truefalse: 4, short: 6, essay: 0 },
+      shuffleWithinType: true,
+      matrixDuration: 90,
+      fullDuration: 90,
+    });
+
+    // Xóa LocalStorage draft keys
+    try {
+      localStorage.removeItem('edu_admin_editor_draft_v3');
+      localStorage.removeItem('edu_teacher_editor_draft_v3');
+      localStorage.removeItem('edu_exam_draft');
+      localStorage.removeItem('quiz_history');
+
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && (k.startsWith('edu_') || k.startsWith('draft_') || k.includes('exam_draft'))) {
+          keysToRemove.push(k);
+        }
+      }
+      keysToRemove.forEach((k) => localStorage.removeItem(k));
+    } catch (_) {}
+
+    // Xóa SessionStorage
+    try {
+      sessionStorage.clear();
+    } catch (_) {}
+
+    if (onClearDraft) {
+      onClearDraft();
+    }
+
+    setIsClearExamModalOpen(false);
+    onToast('Đã xóa toàn bộ đề thi đang soạn thảo và dọn sạch bộ nhớ cache trình duyệt.');
+  };
+
+  // Batch selection, filters, collapse & clear exam
+  const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
+  const [showClearAllModal, setShowClearAllModal] = useState(false);
+  const [showBatchDeleteModal, setShowBatchDeleteModal] = useState(false);
+  const [filterQuery, setFilterQuery] = useState('');
+  const [filterType, setFilterType] = useState<string>('all');
+  const [filterLevel, setFilterLevel] = useState<string>('all');
+  const [collapsedIndices, setCollapsedIndices] = useState<Record<number, boolean>>({});
+  const [isAllCollapsed, setIsAllCollapsed] = useState(false);
+  const [showBatchPointsPopover, setShowBatchPointsPopover] = useState(false);
+  const [showBatchCognitivePopover, setShowBatchCognitivePopover] = useState(false);
+  const [showBatchPassagePopover, setShowBatchPassagePopover] = useState(false);
+  const [customPointsInput, setCustomPointsInput] = useState<string>('0.5');
 
   // Drag & Drop / Word Upload state
   const [isProcessingDocx, setIsProcessingDocx] = useState(false);
@@ -257,8 +366,12 @@ export const EditorTab: React.FC<EditorTabProps> = ({
     }
   };
 
-  // Add collaborator
-  const handleAddCollaborator = () => {
+  // State for allowed student input
+  const [allowedUserInput, setAllowedUserInput] = useState('');
+  const [isValidatingUser, setIsValidatingUser] = useState(false);
+
+  // Add collaborator: Verify NDID exists and store CodeID
+  const handleAddCollaborator = async () => {
     const trimmed = collaboratorInput.trim();
     if (!trimmed) return;
 
@@ -269,18 +382,85 @@ export const EditorTab: React.FC<EditorTabProps> = ({
       return;
     }
 
-    if (collaborators.includes(trimmed)) {
-      onToast('Cộng tác viên này đã có trong danh sách.', true);
+    setIsValidatingUser(true);
+    try {
+      const userRes = await lookupUserByNdid(trimmed);
+      if (!userRes || !userRes.exists) {
+        onToast(`Không tìm thấy người dùng có NDID "${trimmed}" trong hệ thống.`, true);
+        return;
+      }
+
+      const verifiedCodeId = userRes.codeId || trimmed;
+      const verifiedNdid = userRes.ndid || trimmed;
+
+      if (collaboratorCodeIds.includes(verifiedCodeId) || collaborators.includes(verifiedNdid)) {
+        onToast('Cộng tác viên này đã có trong danh sách.', true);
+        return;
+      }
+
+      setCollaborators((prev) => [...prev, verifiedNdid]);
+      if (setCollaboratorCodeIds) {
+        setCollaboratorCodeIds((prev) => [...prev, verifiedCodeId]);
+      }
+      setCollaboratorInput('');
+      onToast(`Đã thêm cộng tác viên: ${verifiedNdid} (Mã: ${verifiedCodeId})`);
+    } catch (err: any) {
+      onToast('Lỗi xác thực người dùng: ' + (err?.message || err), true);
+    } finally {
+      setIsValidatingUser(false);
+    }
+  };
+
+  const handleRemoveCollaborator = (ndid: string, index?: number) => {
+    setCollaborators((prev) => prev.filter((c, idx) => (index !== undefined ? idx !== index : c !== ndid)));
+    if (setCollaboratorCodeIds && index !== undefined) {
+      setCollaboratorCodeIds((prev) => prev.filter((_, idx) => idx !== index));
+    }
+  };
+
+  // Add allowed student: Verify NDID exists and store CodeID
+  const handleAddAllowedUser = async () => {
+    const trimmed = allowedUserInput.trim();
+    if (!trimmed) return;
+
+    const ndidRegex = /^[a-zA-Z0-9_.]+$/;
+    if (!ndidRegex.test(trimmed)) {
+      onToast('NDID chỉ được chứa các ký tự chữ, số, dấu gạch dưới và dấu chấm.', true);
       return;
     }
 
-    setCollaborators((prev) => [...prev, trimmed]);
-    setCollaboratorInput('');
-    onToast(`Đã thêm cộng tác viên: ${trimmed}`);
+    setIsValidatingUser(true);
+    try {
+      const userRes = await lookupUserByNdid(trimmed);
+      if (!userRes || !userRes.exists) {
+        onToast(`Không tìm thấy người dùng có NDID "${trimmed}" trong hệ thống.`, true);
+        return;
+      }
+
+      const verifiedCodeId = userRes.codeId || trimmed;
+      const verifiedNdid = userRes.ndid || trimmed;
+
+      if (allowedCodeIds.includes(verifiedCodeId)) {
+        onToast('Người học này đã có trong danh sách được phép.', true);
+        return;
+      }
+
+      if (setAllowedCodeIds) {
+        setAllowedCodeIds((prev) => [...prev, verifiedCodeId]);
+      }
+      setAllowedUserInput('');
+      onToast(`Đã cấp quyền làm bài cho: ${verifiedNdid} (Mã: ${verifiedCodeId})`);
+    } catch (err: any) {
+      onToast('Lỗi xác thực người dùng: ' + (err?.message || err), true);
+    } finally {
+      setIsValidatingUser(false);
+    }
   };
 
-  const handleRemoveCollaborator = (ndid: string) => {
-    setCollaborators((prev) => prev.filter((c) => c !== ndid));
+  const handleRemoveAllowedUser = (codeId: string) => {
+    if (setAllowedCodeIds) {
+      setAllowedCodeIds((prev) => prev.filter((id) => id !== codeId));
+    }
   };
 
   // Upload Word .docx via Mammoth
@@ -413,6 +593,45 @@ export const EditorTab: React.FC<EditorTabProps> = ({
         points: structPoints.ordering || 1.0,
         explanation: '',
       };
+    } else if (type === 'multiselect') {
+      newQ = {
+        type: 'multiselect',
+        question: 'Những phương án nào sau đây là đúng? (Chọn các phương án đúng)',
+        options: ['Phương án 1', 'Phương án 2', 'Phương án 3', 'Phương án 4'],
+        correct: [0, 1],
+        partialCredit: true,
+        points: structPoints.multiselect || 1.0,
+        explanation: '',
+      };
+    } else if (type === 'grouping') {
+      newQ = {
+        type: 'grouping',
+        question: 'Phân loại các mục sau vào đúng nhóm tương ứng:',
+        categories: [
+          { id: 'cat_1', name: 'Nhóm A' },
+          { id: 'cat_2', name: 'Nhóm B' },
+        ],
+        items: [
+          { id: 'item_1', text: 'Mục 1', categoryId: 'cat_1' },
+          { id: 'item_2', text: 'Mục 2', categoryId: 'cat_2' },
+        ],
+        points: structPoints.grouping || 1.0,
+        explanation: '',
+      };
+    } else if (type === 'error_identification') {
+      newQ = {
+        type: 'error_identification',
+        question: 'Tìm lỗi sai và sửa lại cho đúng trong câu sau:\nVí dụ câu có vị trí [A], [B], [C], [D]',
+        underlines: [
+          { id: 'A', text: 'từ A', isError: false },
+          { id: 'B', text: 'từ B', isError: true },
+          { id: 'C', text: 'từ C', isError: false },
+          { id: 'D', text: 'từ D', isError: false },
+        ],
+        correctCorrection: 'từ sửa đúng',
+        points: structPoints.error_identification || 0.5,
+        explanation: '',
+      };
     } else {
       newQ = {
         type: 'essay',
@@ -479,6 +698,130 @@ export const EditorTab: React.FC<EditorTabProps> = ({
 
   const handleRemoveQuestion = (idx: number) => {
     setQuestions((prev) => prev.filter((_, i) => i !== idx));
+    setSelectedIndices((prev) => prev.filter((i) => i !== idx).map((i) => (i > idx ? i - 1 : i)));
+  };
+
+  // Clear entire exam
+  const handleClearAllExam = () => {
+    setQuestions([]);
+    setPassages([]);
+    setSelectedIndices([]);
+    setShowClearAllModal(false);
+    onToast('Đã xóa toàn bộ câu hỏi và ngữ liệu trong đề thi.');
+  };
+
+  // Selection handlers
+  const handleToggleSelectQuestion = (idx: number) => {
+    setSelectedIndices((prev) =>
+      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
+    );
+  };
+
+  const handleSelectAll = () => {
+    setSelectedIndices(questions.map((_, i) => i));
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedIndices([]);
+  };
+
+  const handleInvertSelect = () => {
+    setSelectedIndices((prev) =>
+      questions.map((_, i) => i).filter((i) => !prev.includes(i))
+    );
+  };
+
+  // Batch operations
+  const handleBatchDelete = () => {
+    if (selectedIndices.length === 0) return;
+    const remaining = questions.filter((_, idx) => !selectedIndices.includes(idx));
+    setQuestions(remaining);
+    setSelectedIndices([]);
+    setShowBatchDeleteModal(false);
+    onToast(`Đã xóa ${selectedIndices.length} câu hỏi đã chọn.`);
+  };
+
+  const handleBatchDuplicate = () => {
+    if (selectedIndices.length === 0) return;
+    const toClone = selectedIndices
+      .slice()
+      .sort((a, b) => a - b)
+      .map((i) => JSON.parse(JSON.stringify(questions[i])));
+    setQuestions((prev) => [...prev, ...toClone]);
+    onToast(`Đã nhân bản ${toClone.length} câu hỏi.`);
+  };
+
+  const handleBatchSetCognitiveLevel = (level: string) => {
+    if (selectedIndices.length === 0) return;
+    setQuestions((prev) =>
+      prev.map((q, idx) =>
+        selectedIndices.includes(idx)
+          ? { ...q, cognitiveLevel: level ? (level as any) : undefined }
+          : q
+      )
+    );
+    setShowBatchCognitivePopover(false);
+    onToast(`Đã gán mức độ nhận thức cho ${selectedIndices.length} câu hỏi.`);
+  };
+
+  const handleBatchSetPassage = (pId: string) => {
+    if (selectedIndices.length === 0) return;
+    setQuestions((prev) =>
+      prev.map((q, idx) =>
+        selectedIndices.includes(idx)
+          ? { ...q, passageId: pId ? pId : undefined }
+          : q
+      )
+    );
+    setShowBatchPassagePopover(false);
+    onToast(
+      pId
+        ? `Đã liên kết ${selectedIndices.length} câu vào ngữ liệu.`
+        : `Đã tách ${selectedIndices.length} câu thành câu độc lập.`
+    );
+  };
+
+  const handleBatchSetPoints = (pts: number) => {
+    if (selectedIndices.length === 0) return;
+    setQuestions((prev) =>
+      prev.map((q, idx) =>
+        selectedIndices.includes(idx) ? { ...q, points: pts } : q
+      )
+    );
+    setShowBatchPointsPopover(false);
+    onToast(`Đã gán ${pts} điểm cho ${selectedIndices.length} câu hỏi.`);
+  };
+
+  const handleBatchDistributePoints = (totalTarget: number = 10.0) => {
+    if (selectedIndices.length === 0) return;
+    const perQ = Math.round((totalTarget / selectedIndices.length) * 100) / 100;
+    setQuestions((prev) =>
+      prev.map((q, idx) =>
+        selectedIndices.includes(idx) ? { ...q, points: perQ } : q
+      )
+    );
+    setShowBatchPointsPopover(false);
+    onToast(`Đã chia đều ${totalTarget} điểm cho ${selectedIndices.length} câu hỏi (~${perQ} đ/câu).`);
+  };
+
+  // Collapse / Expand
+  const handleToggleCollapseAll = () => {
+    if (isAllCollapsed) {
+      setCollapsedIndices({});
+      setIsAllCollapsed(false);
+    } else {
+      const allCol: Record<number, boolean> = {};
+      questions.forEach((_, i) => (allCol[i] = true));
+      setCollapsedIndices(allCol);
+      setIsAllCollapsed(true);
+    }
+  };
+
+  const handleToggleSingleCollapse = (idx: number) => {
+    setCollapsedIndices((prev) => ({
+      ...prev,
+      [idx]: !prev[idx],
+    }));
   };
 
   const handleMoveQuestion = (idx: number, dir: -1 | 1) => {
@@ -515,6 +858,9 @@ export const EditorTab: React.FC<EditorTabProps> = ({
     const matchCount = questions.filter((q) => q.type === 'matching').length;
     const clozeCount = questions.filter((q) => q.type === 'cloze').length;
     const orderCount = questions.filter((q) => q.type === 'ordering').length;
+    const multiSelCount = questions.filter((q) => q.type === 'multiselect').length;
+    const groupCount = questions.filter((q) => q.type === 'grouping').length;
+    const errIdCount = questions.filter((q) => q.type === 'error_identification').length;
     const eCount = questions.filter((q) => q.type === 'essay').length;
 
     let targetM = 0.25;
@@ -523,6 +869,9 @@ export const EditorTab: React.FC<EditorTabProps> = ({
     let targetMatch = 1.0;
     let targetCloze = 1.0;
     let targetOrder = 1.0;
+    let targetMultiSel = 1.0;
+    let targetGroup = 1.0;
+    let targetErrId = 0.5;
     let targetE = 2.0;
 
     const standardTotal =
@@ -532,6 +881,9 @@ export const EditorTab: React.FC<EditorTabProps> = ({
       matchCount * targetMatch +
       clozeCount * targetCloze +
       orderCount * targetOrder +
+      multiSelCount * targetMultiSel +
+      groupCount * targetGroup +
+      errIdCount * targetErrId +
       eCount * targetE;
 
     if (standardTotal > 0) {
@@ -542,10 +894,14 @@ export const EditorTab: React.FC<EditorTabProps> = ({
       targetMatch = Math.round(targetMatch * ratio * 100) / 100;
       targetCloze = Math.round(targetCloze * ratio * 100) / 100;
       targetOrder = Math.round(targetOrder * ratio * 100) / 100;
+      targetMultiSel = Math.round(targetMultiSel * ratio * 100) / 100;
+      targetGroup = Math.round(targetGroup * ratio * 100) / 100;
+      targetErrId = Math.round(targetErrId * ratio * 100) / 100;
       targetE = Math.round(targetE * ratio * 100) / 100;
     }
 
-    setStructPoints({
+    setStructPoints((prev) => ({
+      ...prev,
       multiple: targetM,
       truefalse: targetTf,
       short: targetS,
@@ -553,7 +909,10 @@ export const EditorTab: React.FC<EditorTabProps> = ({
       matching: targetMatch,
       cloze: targetCloze,
       ordering: targetOrder,
-    });
+      multiselect: targetMultiSel,
+      grouping: targetGroup,
+      error_identification: targetErrId,
+    }));
 
     setQuestions((prev) =>
       prev.map((q) => {
@@ -563,6 +922,9 @@ export const EditorTab: React.FC<EditorTabProps> = ({
         else if (q.type === 'matching') p = targetMatch;
         else if (q.type === 'cloze') p = targetCloze;
         else if (q.type === 'ordering') p = targetOrder;
+        else if (q.type === 'multiselect') p = targetMultiSel;
+        else if (q.type === 'grouping') p = targetGroup;
+        else if (q.type === 'error_identification') p = targetErrId;
         else if (q.type === 'essay') p = targetE;
         return { ...q, points: p };
       })
@@ -585,6 +947,12 @@ export const EditorTab: React.FC<EditorTabProps> = ({
         ? (structPoints.cloze || 1.0)
         : q.type === 'ordering'
         ? (structPoints.ordering || 1.0)
+        : q.type === 'multiselect'
+        ? (structPoints.multiselect || 1.0)
+        : q.type === 'grouping'
+        ? (structPoints.grouping || 1.0)
+        : q.type === 'error_identification'
+        ? (structPoints.error_identification || 0.5)
         : q.type === 'essay'
         ? structPoints.essay
         : structPoints.multiple;
@@ -600,9 +968,9 @@ export const EditorTab: React.FC<EditorTabProps> = ({
         <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl w-fit">
           <button
             type="button"
-            onClick={() => setEditorViewMode('visual')}
+            onClick={() => handleToggleViewMode('visual')}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-extrabold text-xs transition-all cursor-pointer ${
-              editorViewMode === 'visual'
+              activeEditorViewMode === 'visual'
                 ? 'bg-white text-blue-600 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
@@ -613,9 +981,9 @@ export const EditorTab: React.FC<EditorTabProps> = ({
 
           <button
             type="button"
-            onClick={() => setEditorViewMode('json')}
+            onClick={() => handleToggleViewMode('json')}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-extrabold text-xs transition-all cursor-pointer ${
-              editorViewMode === 'json'
+              activeEditorViewMode === 'json'
                 ? 'bg-white text-purple-600 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
@@ -627,6 +995,17 @@ export const EditorTab: React.FC<EditorTabProps> = ({
 
         {/* Global Action Buttons */}
         <div className="flex items-center gap-2 flex-wrap">
+          {/* Clear Exam & Cache button */}
+          <button
+            type="button"
+            onClick={() => setIsClearExamModalOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-xs rounded-xl border border-rose-200 transition-all cursor-pointer"
+            title="Xóa toàn bộ đề thi đang soạn thảo và dọn sạch bộ nhớ cache trình duyệt"
+          >
+            <Trash2 className="w-4 h-4 text-rose-600" />
+            <span>Xóa đề &amp; Cache</span>
+          </button>
+
           {/* Test in runner simulator */}
           <button
             type="button"
@@ -637,23 +1016,12 @@ export const EditorTab: React.FC<EditorTabProps> = ({
             <span>Thử làm đề này</span>
           </button>
 
-          {/* Export / Print PDF */}
-          <button
-            type="button"
-            onClick={() => setIsExportPdfOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer"
-            title="In hoặc xuất file PDF đề thi và phiếu làm bài chuẩn"
-          >
-            <Printer className="w-4 h-4 text-slate-600" />
-            <span>In / Xuất PDF</span>
-          </button>
-
           {/* Question Bank */}
           <button
             type="button"
             onClick={() => setIsQuestionBankOpen(true)}
             className="flex items-center gap-1.5 px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-xl border border-indigo-200 transition-all cursor-pointer"
-            title="Mở thư viện ngân hàng câu hỏi"
+            title="Mở thư viện ngân hàng câu hỏi dùng chung"
           >
             <Database className="w-4 h-4 text-indigo-600" />
             <span>Ngân hàng câu hỏi</span>
@@ -664,10 +1032,10 @@ export const EditorTab: React.FC<EditorTabProps> = ({
             type="button"
             onClick={() => setIsAnalyticsOpen(true)}
             className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold text-xs rounded-xl border border-amber-200 transition-all cursor-pointer"
-            title="Phân tích độ phân hóa và phổ điểm dự báo"
+            title="Phân tích phổ điểm, độ phân hóa và thống kê câu hỏi"
           >
             <BarChart3 className="w-4 h-4 text-amber-600" />
-            <span>Phổ điểm dự báo</span>
+            <span>Phân tích phổ điểm</span>
           </button>
 
           {/* Export JSON */}
@@ -698,7 +1066,7 @@ export const EditorTab: React.FC<EditorTabProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
         {/* LEFT COLUMN: Visual Builder OR JSON Code Editor */}
         <div className="space-y-4">
-          {editorViewMode === 'json' ? (
+          {activeEditorViewMode === 'json' ? (
             <JsonCodeEditor
               quizTitle={pubTitle}
               grade={pubClass}
@@ -827,9 +1195,14 @@ export const EditorTab: React.FC<EditorTabProps> = ({
                   {/* Author */}
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="text-[11px] font-bold text-slate-600">
-                        Tác giả / Người ra đề
-                      </label>
+                      <div>
+                        <label className="text-[11px] font-bold text-slate-600 block">
+                          Tác giả / Người ra đề
+                        </label>
+                        <span className="text-[9.5px] text-slate-400 block font-normal">
+                          Cách hiển thị với người xem
+                        </span>
+                      </div>
                       <button
                         type="button"
                         onClick={handleTagMyself}
@@ -843,11 +1216,28 @@ export const EditorTab: React.FC<EditorTabProps> = ({
                       type="text"
                       value={metaAuthor}
                       onChange={(e) => setMetaAuthor(e.target.value)}
-                      placeholder="Có thể để trống hoặc tên tác giả..."
+                      placeholder="VD: Nguyễn Văn A hoặc Nhật Đăng..."
                       className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
 
+                  {/* School / Institution (Nơi tạo ra đề) */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      Trường / Cơ sở (Nơi tạo ra đề)
+                    </label>
+                    <input
+                      type="text"
+                      value={metaSchool}
+                      onChange={(e) => setMetaSchool(e.target.value)}
+                      placeholder="VD: THPT Chuyên Hà Nội - Amsterdam hoặc EduND by ND Labs..."
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Collaborators & Access Permission */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                   {/* Collaborators */}
                   <div>
                     <label className="block text-[11px] font-bold text-slate-600 mb-1">
@@ -857,6 +1247,7 @@ export const EditorTab: React.FC<EditorTabProps> = ({
                       <input
                         type="text"
                         value={collaboratorInput}
+                        disabled={isValidatingUser}
                         onChange={(e) => setCollaboratorInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAddCollaborator()}
                         placeholder="Nhập NDID cộng tác viên..."
@@ -864,32 +1255,108 @@ export const EditorTab: React.FC<EditorTabProps> = ({
                       />
                       <button
                         type="button"
+                        disabled={isValidatingUser}
                         onClick={handleAddCollaborator}
-                        className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-xl transition-all cursor-pointer"
+                        className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-xl transition-all cursor-pointer disabled:opacity-50"
                       >
-                        Thêm
+                        {isValidatingUser ? 'Kiểm tra...' : 'Thêm'}
                       </button>
                     </div>
 
                     {/* Collaborator chips */}
                     {collaborators.length > 0 && (
                       <div className="flex flex-wrap gap-1.5 mt-2">
-                        {collaborators.map((c) => (
+                        {collaborators.map((c, idx) => (
                           <span
-                            key={c}
+                            key={c + idx}
                             className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold"
                           >
                             <Users className="w-3 h-3 text-blue-500" />
                             <span>{c}</span>
                             <button
                               type="button"
-                              onClick={() => handleRemoveCollaborator(c)}
+                              onClick={() => handleRemoveCollaborator(c, idx)}
                               className="hover:text-rose-600 ml-0.5"
                             >
                               ×
                             </button>
                           </span>
                         ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Who can take the exam */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      Ai có thể làm đề thi này?
+                    </label>
+                    <div className="flex items-center gap-3 mb-2">
+                      <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="accessType"
+                          value="all"
+                          checked={accessType === 'all'}
+                          onChange={() => setAccessType && setAccessType('all')}
+                          className="text-blue-600 focus:ring-blue-500"
+                        />
+                        <span>Tất cả người dùng</span>
+                      </label>
+                      <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="accessType"
+                          value="restricted"
+                          checked={accessType === 'restricted'}
+                          onChange={() => setAccessType && setAccessType('restricted')}
+                          className="text-blue-600 focus:ring-blue-500"
+                        />
+                        <span>Chỉ định người làm (theo NDID)</span>
+                      </label>
+                    </div>
+
+                    {accessType === 'restricted' && (
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <input
+                            type="text"
+                            value={allowedUserInput}
+                            disabled={isValidatingUser}
+                            onChange={(e) => setAllowedUserInput(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleAddAllowedUser()}
+                            placeholder="Nhập NDID người được phép thi..."
+                            className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                          <button
+                            type="button"
+                            disabled={isValidatingUser}
+                            onClick={handleAddAllowedUser}
+                            className="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-extrabold text-xs rounded-xl transition-all cursor-pointer disabled:opacity-50"
+                          >
+                            Cấp quyền
+                          </button>
+                        </div>
+
+                        {allowedCodeIds.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mt-2">
+                            {allowedCodeIds.map((cid) => (
+                              <span
+                                key={cid}
+                                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold"
+                              >
+                                <span>CodeID: {cid}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveAllowedUser(cid)}
+                                  className="hover:text-rose-600 ml-0.5"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -922,6 +1389,27 @@ export const EditorTab: React.FC<EditorTabProps> = ({
                     </label>
                   </div>
                 )}
+                {/* Quản lý giám sát thi & Chống gian lận AI */}
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-slate-700">Chế độ giám sát:</span>
+                    {proctoring?.enabled ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-black">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
+                        <span>Đang kích hoạt ({proctoring.appliedModes === 'both' ? 'Cả hai' : proctoring.appliedModes === 'exam_only' ? 'Chỉ thi' : 'Chỉ luyện tập'})</span>
+                      </span>
+                    ) : (
+                      <span className="text-[11px] text-slate-400 font-medium">Tắt</span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsProctoringModalOpen(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-extrabold text-xs rounded-xl transition-all cursor-pointer"
+                  >
+                    <span>🛡️ Cài đặt giám sát & AI riêng</span>
+                  </button>
+                </div>
               </div>
 
               {/* Ma trận kiểm tra (Mặc định hiển thị, cấu hình số phút tách riêng) */}
@@ -1399,123 +1887,430 @@ export const EditorTab: React.FC<EditorTabProps> = ({
               </div>
 
               {/* Questions List Header */}
-              <div className="flex items-center justify-between px-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-extrabold text-slate-900 text-sm">
-                    Danh Sách Câu Hỏi ({questions.length})
-                  </h3>
-                  <span
-                    className={`px-2.5 py-0.5 rounded-full text-[11px] font-black ${
-                      Math.abs(roundedPoints - 10.0) < 0.01
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : 'bg-amber-100 text-amber-800'
-                    }`}
-                  >
-                    Tổng: {roundedPoints} / 10.0 điểm
-                  </span>
+              {/* Questions List Header */}
+              <div className="space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-extrabold text-slate-900 text-sm">
+                      Danh Sách Câu Hỏi ({questions.length})
+                    </h3>
+                    <span
+                      className={`px-2.5 py-0.5 rounded-full text-[11px] font-black ${
+                        Math.abs(roundedPoints - 10.0) < 0.01
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-amber-100 text-amber-800'
+                      }`}
+                    >
+                      Tổng: {roundedPoints} / 10.0 điểm
+                    </span>
+                    {questions.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowClearAllModal(true)}
+                        className="flex items-center gap-1.5 px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-[11px] font-extrabold rounded-lg transition-all cursor-pointer"
+                        title="Xóa toàn bộ câu hỏi và ngữ liệu đang soạn"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                        <span>Xóa toàn bộ đề</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Quick Add Buttons */}
+                  <div className="flex items-center gap-1 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuestion('multiple')}
+                      className="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-extrabold text-[11px] rounded-lg cursor-pointer"
+                    >
+                      + Trắc nghiệm
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuestion('truefalse')}
+                      className="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-extrabold text-[11px] rounded-lg cursor-pointer"
+                    >
+                      + Đúng/Sai
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuestion('short')}
+                      className="px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 font-extrabold text-[11px] rounded-lg cursor-pointer"
+                    >
+                      + Điền số
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuestion('matching')}
+                      className="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 font-extrabold text-[11px] rounded-lg border border-amber-200 cursor-pointer"
+                    >
+                      + Nối cặp
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuestion('cloze')}
+                      className="px-2 py-1 bg-teal-50 hover:bg-teal-100 text-teal-800 font-extrabold text-[11px] rounded-lg border border-teal-200 cursor-pointer"
+                    >
+                      + Điền khuyết
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuestion('ordering')}
+                      className="px-2 py-1 bg-cyan-50 hover:bg-cyan-100 text-cyan-800 font-extrabold text-[11px] rounded-lg border border-cyan-200 cursor-pointer"
+                    >
+                      + Sắp xếp
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuestion('essay')}
+                      className="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-extrabold text-[11px] rounded-lg cursor-pointer"
+                    >
+                      + Tự luận
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuestion('multiselect')}
+                      className="px-2 py-1 bg-violet-50 hover:bg-violet-100 text-violet-700 font-extrabold text-[11px] rounded-lg border border-violet-200 cursor-pointer"
+                    >
+                      + Nhiều đáp án
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuestion('grouping')}
+                      className="px-2 py-1 bg-orange-50 hover:bg-orange-100 text-orange-700 font-extrabold text-[11px] rounded-lg border border-orange-200 cursor-pointer"
+                    >
+                      + Phân loại
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuestion('error_identification')}
+                      className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-[11px] rounded-lg border border-rose-200 cursor-pointer"
+                    >
+                      + Tìm lỗi sai
+                    </button>
+                  </div>
                 </div>
 
-                {/* Quick Add Buttons */}
-                <div className="flex items-center gap-1 flex-wrap">
-                  <button
-                    type="button"
-                    onClick={() => handleAddQuestion('multiple')}
-                    className="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-extrabold text-[11px] rounded-lg cursor-pointer"
-                  >
-                    + Trắc nghiệm
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleAddQuestion('truefalse')}
-                    className="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-extrabold text-[11px] rounded-lg cursor-pointer"
-                  >
-                    + Đúng/Sai
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleAddQuestion('short')}
-                    className="px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 font-extrabold text-[11px] rounded-lg cursor-pointer"
-                  >
-                    + Điền số
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleAddQuestion('matching')}
-                    className="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 font-extrabold text-[11px] rounded-lg border border-amber-200 cursor-pointer"
-                  >
-                    + Nối cặp
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleAddQuestion('cloze')}
-                    className="px-2 py-1 bg-teal-50 hover:bg-teal-100 text-teal-800 font-extrabold text-[11px] rounded-lg border border-teal-200 cursor-pointer"
-                  >
-                    + Điền khuyết
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleAddQuestion('ordering')}
-                    className="px-2 py-1 bg-cyan-50 hover:bg-cyan-100 text-cyan-800 font-extrabold text-[11px] rounded-lg border border-cyan-200 cursor-pointer"
-                  >
-                    + Sắp xếp
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleAddQuestion('essay')}
-                    className="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-extrabold text-[11px] rounded-lg cursor-pointer"
-                  >
-                    + Tự luận
-                  </button>
-                </div>
+                {/* Search, Filter & Quick Selection Toolbar */}
+                {questions.length > 0 && (
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs">
+                    {/* Left: Search & Filter */}
+                    <div className="flex items-center gap-2 flex-wrap flex-1">
+                      <div className="relative flex-1 min-w-[180px] max-w-xs">
+                        <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="text"
+                          value={filterQuery}
+                          onChange={(e) => setFilterQuery(e.target.value)}
+                          placeholder="Tìm kiếm nội dung..."
+                          className="w-full pl-8 pr-2.5 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        {filterQuery && (
+                          <button
+                            type="button"
+                            onClick={() => setFilterQuery('')}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+
+                      <select
+                        value={filterType}
+                        onChange={(e) => setFilterType(e.target.value)}
+                        className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-700 cursor-pointer"
+                      >
+                        <option value="all">Mọi dạng câu hỏi</option>
+                        <option value="multiple">Trắc nghiệm</option>
+                        <option value="truefalse">Đúng / Sai</option>
+                        <option value="short">Điền số</option>
+                        <option value="matching">Nối cặp</option>
+                        <option value="cloze">Điền khuyết</option>
+                        <option value="ordering">Sắp xếp</option>
+                        <option value="essay">Tự luận</option>
+                        <option value="multiselect">Nhiều đáp án</option>
+                        <option value="grouping">Phân loại</option>
+                        <option value="error_identification">Tìm lỗi sai</option>
+                      </select>
+
+                      <select
+                        value={filterLevel}
+                        onChange={(e) => setFilterLevel(e.target.value)}
+                        className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-700 cursor-pointer"
+                      >
+                        <option value="all">Mọi mức độ nhận thức</option>
+                        <option value="nhan_biet">Nhận biết</option>
+                        <option value="thong_hieu">Thông hiểu</option>
+                        <option value="van_dung">Vận dụng</option>
+                        <option value="van_dung_cao">Vận dụng cao</option>
+                      </select>
+                    </div>
+
+                    {/* Right: Select & Collapse controls */}
+                    <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={handleToggleCollapseAll}
+                        className="px-2.5 py-1.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-bold rounded-xl flex items-center gap-1 text-[11px] cursor-pointer"
+                      >
+                        {isAllCollapsed ? (
+                          <>
+                            <ChevronDown className="w-3.5 h-3.5 text-blue-600" />
+                            <span>Mở rộng tất cả</span>
+                          </>
+                        ) : (
+                          <>
+                            <ChevronUp className="w-3.5 h-3.5 text-slate-500" />
+                            <span>Thu gọn tất cả</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={selectedIndices.length === questions.length ? handleDeselectAll : handleSelectAll}
+                        className="px-2.5 py-1.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-bold rounded-xl flex items-center gap-1.5 text-[11px] cursor-pointer"
+                      >
+                        {selectedIndices.length === questions.length ? (
+                          <>
+                            <CheckSquare className="w-3.5 h-3.5 text-blue-600" />
+                            <span>Bỏ chọn tất cả</span>
+                          </>
+                        ) : (
+                          <>
+                            <Square className="w-3.5 h-3.5 text-slate-400" />
+                            <span>Chọn tất cả ({questions.length})</span>
+                          </>
+                        )}
+                      </button>
+
+                      {selectedIndices.length > 0 && selectedIndices.length < questions.length && (
+                        <button
+                          type="button"
+                          onClick={handleInvertSelect}
+                          className="px-2 py-1.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-600 font-bold rounded-xl text-[11px] cursor-pointer"
+                        >
+                          Đảo chọn
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Batch Actions Bar (when at least 1 question is selected) */}
+                {selectedIndices.length > 0 && (
+                  <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-400/80 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm animate-in fade-in slide-in-from-top-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-7 h-7 rounded-xl bg-blue-600 text-white font-black text-xs flex items-center justify-center shadow-xs">
+                        {selectedIndices.length}
+                      </span>
+                      <span className="font-extrabold text-blue-950 text-xs">
+                        Đang chọn {selectedIndices.length} câu hỏi
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleDeselectAll}
+                        className="text-[11px] text-blue-600 hover:text-blue-800 font-bold underline ml-1 cursor-pointer"
+                      >
+                        Hủy chọn
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {/* Batch Cognitive Level */}
+                      <select
+                        onChange={(e) => {
+                          if (e.target.value !== '') {
+                            handleBatchSetCognitiveLevel(e.target.value === '__none__' ? '' : e.target.value);
+                            e.target.value = '';
+                          }
+                        }}
+                        defaultValue=""
+                        className="px-2.5 py-1.5 bg-white border border-blue-300 text-blue-900 rounded-xl text-xs font-bold cursor-pointer hover:border-blue-500 shadow-xs"
+                      >
+                        <option value="" disabled>🎯 Gán mức độ nhận thức...</option>
+                        <option value="nhan_biet">Nhận biết</option>
+                        <option value="thong_hieu">Thông hiểu</option>
+                        <option value="van_dung">Vận dụng</option>
+                        <option value="van_dung_cao">Vận dụng cao</option>
+                        <option value="__none__">Xóa gán mức độ</option>
+                      </select>
+
+                      {/* Batch Passage Assignment */}
+                      <select
+                        onChange={(e) => {
+                          if (e.target.value !== '') {
+                            handleBatchSetPassage(e.target.value === '__independent__' ? '' : e.target.value);
+                            e.target.value = '';
+                          }
+                        }}
+                        defaultValue=""
+                        className="px-2.5 py-1.5 bg-white border border-indigo-300 text-indigo-900 rounded-xl text-xs font-bold cursor-pointer hover:border-indigo-500 shadow-xs"
+                      >
+                        <option value="" disabled>📖 Gán ngữ liệu...</option>
+                        <option value="__independent__">Tách thành câu độc lập</option>
+                        {passages.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            Gán vào: {p.title || p.id}
+                          </option>
+                        ))}
+                      </select>
+
+                      {/* Batch Points */}
+                      <select
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === '__distribute__') {
+                            handleBatchDistributePoints(10.0);
+                          } else if (val !== '') {
+                            handleBatchSetPoints(Number(val));
+                          }
+                          e.target.value = '';
+                        }}
+                        defaultValue=""
+                        className="px-2.5 py-1.5 bg-white border border-amber-300 text-amber-900 rounded-xl text-xs font-bold cursor-pointer hover:border-amber-500 shadow-xs"
+                      >
+                        <option value="" disabled>⚖️ Gán điểm số...</option>
+                        <option value="0.25">0.25 điểm</option>
+                        <option value="0.5">0.5 điểm</option>
+                        <option value="1.0">1.0 điểm</option>
+                        <option value="2.0">2.0 điểm</option>
+                        <option value="__distribute__">Chia đều tổng 10.0 điểm</option>
+                      </select>
+
+                      {/* Batch Duplicate */}
+                      <button
+                        type="button"
+                        onClick={handleBatchDuplicate}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-extrabold text-xs rounded-xl shadow-xs cursor-pointer"
+                        title="Nhân bản các câu đang chọn"
+                      >
+                        <Copy className="w-3.5 h-3.5 text-blue-600" />
+                        <span>Nhân bản ({selectedIndices.length})</span>
+                      </button>
+
+                      {/* Batch Delete */}
+                      <button
+                        type="button"
+                        onClick={() => setShowBatchDeleteModal(true)}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs rounded-xl shadow-xs shadow-rose-600/20 cursor-pointer"
+                        title="Xóa các câu đang chọn"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Xóa ({selectedIndices.length})</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Question Cards */}
               <div className="space-y-4">
-                {questions.map((q, idx) => (
-                  <div
-                    key={idx}
-                    className={`bg-white rounded-3xl p-5 border shadow-sm space-y-3 transition-all ${
-                      q.passageId ? 'border-indigo-200 ring-1 ring-indigo-100' : 'border-slate-200/90'
-                    }`}
-                  >
-                    {/* Header banner if question belongs to a passage */}
-                    {q.passageId && (
-                      <div className="flex items-center justify-between px-4 py-2 bg-indigo-50/90 border-b border-indigo-100 text-xs font-bold text-indigo-950 -mx-5 -mt-5 mb-3 rounded-t-3xl">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <BookOpen className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                          <span>
-                            Thuộc ngữ liệu: <b>{passages.find((p) => p.id === q.passageId)?.title || q.passageId}</b>
-                          </span>
-                          <span className="text-[10px] text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-full font-semibold">
-                            Hiển thị chung một trang cùng bài đọc
-                          </span>
-                        </div>
+                {(() => {
+                  const filteredQuestions = questions
+                    .map((q, originalIdx) => ({ q, originalIdx }))
+                    .filter(({ q }) => {
+                      if (filterType !== 'all' && q.type !== filterType) return false;
+                      if (filterLevel !== 'all' && (q.cognitiveLevel || '') !== filterLevel) return false;
+                      if (filterQuery.trim()) {
+                        const query = filterQuery.toLowerCase();
+                        const matchQ = (q.question || '').toLowerCase().includes(query);
+                        const matchExp = (q.explanation || '').toLowerCase().includes(query);
+                        if (!matchQ && !matchExp) return false;
+                      }
+                      return true;
+                    });
+
+                  if (filteredQuestions.length === 0 && questions.length > 0) {
+                    return (
+                      <div className="p-8 text-center bg-white rounded-3xl border border-slate-200/90 shadow-sm space-y-3">
+                        <p className="text-xs font-bold text-slate-600">
+                          Không tìm thấy câu hỏi nào phù hợp với từ khóa hoặc bộ lọc đã chọn.
+                        </p>
                         <button
                           type="button"
                           onClick={() => {
-                            setQuestions((prev) => {
-                              const next = [...prev];
-                              next[idx] = { ...next[idx], passageId: undefined };
-                              return next;
-                            });
+                            setFilterQuery('');
+                            setFilterType('all');
+                            setFilterLevel('all');
                           }}
-                          className="text-[10px] text-indigo-600 hover:text-rose-600 font-bold underline cursor-pointer"
+                          className="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-extrabold rounded-xl transition-all cursor-pointer"
                         >
-                          Tách thành câu độc lập
+                          Xóa bộ lọc
                         </button>
                       </div>
-                    )}
+                    );
+                  }
 
-                    {/* Header of question card */}
-                    <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="w-6 h-6 rounded-lg bg-blue-600 text-white font-black text-xs flex items-center justify-center">
-                          {idx + 1}
-                        </span>
-                        <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md text-[10px] font-extrabold uppercase">
-                          {q.type === 'multiple'
-                            ? 'Trắc nghiệm'
-                            : q.type === 'truefalse'
+                  return filteredQuestions.map(({ q, originalIdx }) => {
+                    const idx = originalIdx;
+                    const isSelected = selectedIndices.includes(idx);
+                    const isCollapsed = Boolean(collapsedIndices[idx]);
+
+                    return (
+                      <div
+                        key={idx}
+                        className={`bg-white rounded-3xl p-5 border shadow-sm space-y-3 transition-all ${
+                          isSelected
+                            ? 'border-blue-500 ring-2 ring-blue-400/80 bg-blue-50/10'
+                            : q.passageId
+                            ? 'border-indigo-200 ring-1 ring-indigo-100'
+                            : 'border-slate-200/90'
+                        }`}
+                      >
+                        {/* Header banner if question belongs to a passage */}
+                        {q.passageId && (
+                          <div className="flex items-center justify-between px-4 py-2 bg-indigo-50/90 border-b border-indigo-100 text-xs font-bold text-indigo-950 -mx-5 -mt-5 mb-3 rounded-t-3xl">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <BookOpen className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                              <span>
+                                Thuộc ngữ liệu: <b>{passages.find((p) => p.id === q.passageId)?.title || q.passageId}</b>
+                              </span>
+                              <span className="text-[10px] text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-full font-semibold">
+                                Hiển thị chung một trang cùng bài đọc
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setQuestions((prev) => {
+                                  const next = [...prev];
+                                  next[idx] = { ...next[idx], passageId: undefined };
+                                  return next;
+                                });
+                              }}
+                              className="text-[10px] text-indigo-600 hover:text-rose-600 font-bold underline cursor-pointer"
+                            >
+                              Tách thành câu độc lập
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Header of question card */}
+                        <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {/* Checkbox select question */}
+                            <button
+                              type="button"
+                              onClick={() => handleToggleSelectQuestion(idx)}
+                              className="cursor-pointer text-slate-400 hover:text-blue-600 transition-colors"
+                              title={isSelected ? 'Bỏ chọn câu này' : 'Chọn câu này'}
+                            >
+                              {isSelected ? (
+                                <CheckSquare className="w-5 h-5 text-blue-600" />
+                              ) : (
+                                <Square className="w-5 h-5 text-slate-300 hover:text-slate-500" />
+                              )}
+                            </button>
+
+                            <span className="w-6 h-6 rounded-lg bg-blue-600 text-white font-black text-xs flex items-center justify-center">
+                              {idx + 1}
+                            </span>
+                            <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md text-[10px] font-extrabold uppercase">
+                              {q.type === 'multiple'
+                                ? 'Trắc nghiệm'
+                                : q.type === 'truefalse'
                             ? 'Đúng / Sai'
                             : q.type === 'short'
                             ? 'Điền số'
@@ -1525,8 +2320,36 @@ export const EditorTab: React.FC<EditorTabProps> = ({
                             ? 'Điền khuyết'
                             : q.type === 'ordering'
                             ? 'Sắp xếp'
+                            : q.type === 'multiselect'
+                            ? 'Nhiều đáp án'
+                            : q.type === 'grouping'
+                            ? 'Phân loại nhóm'
+                            : q.type === 'error_identification'
+                            ? 'Tìm lỗi sai'
                             : 'Tự luận'}
                         </span>
+
+                        {q.cognitiveLevel && (
+                          <span
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase border ${
+                              q.cognitiveLevel === 'nhan_biet'
+                                ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                : q.cognitiveLevel === 'thong_hieu'
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                : q.cognitiveLevel === 'van_dung'
+                                ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                : 'bg-purple-50 text-purple-700 border-purple-200'
+                            }`}
+                          >
+                            {q.cognitiveLevel === 'nhan_biet'
+                              ? 'Nhận biết'
+                              : q.cognitiveLevel === 'thong_hieu'
+                              ? 'Thông hiểu'
+                              : q.cognitiveLevel === 'van_dung'
+                              ? 'Vận dụng'
+                              : 'Vận dụng cao'}
+                          </span>
+                        )}
 
                         {/* Passage Picker: always available */}
                         <select
@@ -1618,9 +2441,35 @@ export const EditorTab: React.FC<EditorTabProps> = ({
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
+                        <button
+                          type="button"
+                          onClick={() => handleToggleSingleCollapse(idx)}
+                          className="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center cursor-pointer ml-1"
+                          title={isCollapsed ? 'Mở rộng chi tiết' : 'Thu gọn câu hỏi'}
+                        >
+                          {isCollapsed ? (
+                            <ChevronDown className="w-4 h-4 text-blue-600" />
+                          ) : (
+                            <ChevronUp className="w-4 h-4" />
+                          )}
+                        </button>
                       </div>
                     </div>
 
+                    {isCollapsed ? (
+                      <div
+                        onClick={() => handleToggleSingleCollapse(idx)}
+                        className="py-1.5 px-3 bg-slate-50/70 hover:bg-slate-100 rounded-2xl transition-all flex items-center justify-between gap-3 cursor-pointer border border-slate-100"
+                      >
+                        <p className="text-xs text-slate-700 font-medium truncate flex-1">
+                          {q.question ? q.question.replace(/\n/g, ' ') : '(Chưa nhập nội dung câu hỏi)'}
+                        </p>
+                        <span className="text-[11px] text-blue-600 font-extrabold shrink-0">
+                          Mở rộng ▼
+                        </span>
+                      </div>
+                    ) : (
+                      <>
                     {/* Question Content & Insertion Tools */}
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
@@ -2197,9 +3046,338 @@ export const EditorTab: React.FC<EditorTabProps> = ({
                         />
                       </div>
                     )}
+
+                    {q.type === 'multiselect' && (
+                      <div className="space-y-2 pt-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-slate-500">
+                            Các lựa chọn (tích chọn các đáp án ĐÚNG):
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setQuestions((prev) => {
+                                const next = [...prev];
+                                const curOpts = [...((next[idx] as any).options || [])];
+                                curOpts.push(`Phương án ${String.fromCharCode(65 + curOpts.length)}`);
+                                next[idx] = { ...next[idx], options: curOpts } as any;
+                                return next;
+                              });
+                            }}
+                            className="text-[11px] font-bold text-blue-600 hover:underline cursor-pointer"
+                          >
+                            + Thêm lựa chọn
+                          </button>
+                        </div>
+
+                        {((q as any).options || []).map((opt: string, oIdx: number) => {
+                          const curCorrect: number[] = Array.isArray((q as any).correct)
+                            ? (q as any).correct
+                            : [];
+                          const isCorrect = curCorrect.includes(oIdx);
+
+                          return (
+                            <div key={oIdx} className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setQuestions((prev) => {
+                                    const next = [...prev];
+                                    const nextCorrect = isCorrect
+                                      ? curCorrect.filter((c) => c !== oIdx)
+                                      : [...curCorrect, oIdx].sort((a, b) => a - b);
+                                    next[idx] = { ...next[idx], correct: nextCorrect } as any;
+                                    return next;
+                                  });
+                                }}
+                                className={`w-6 h-6 rounded-lg text-xs font-black flex items-center justify-center transition-all cursor-pointer ${
+                                  isCorrect
+                                    ? 'bg-emerald-600 text-white shadow-sm'
+                                    : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+                                }`}
+                                title={isCorrect ? 'Đáp án đúng' : 'Nhấn để chọn là đáp án đúng'}
+                              >
+                                {String.fromCharCode(65 + oIdx)}
+                              </button>
+                              <input
+                                type="text"
+                                value={opt}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  setQuestions((prev) => {
+                                    const next = [...prev];
+                                    const curOpts = [...((next[idx] as any).options || [])];
+                                    curOpts[oIdx] = val;
+                                    next[idx] = { ...next[idx], options: curOpts } as any;
+                                    return next;
+                                  });
+                                }}
+                                placeholder={`Phương án ${String.fromCharCode(65 + oIdx)}...`}
+                                className="flex-1 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800"
+                              />
+                              {((q as any).options || []).length > 2 && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setQuestions((prev) => {
+                                      const next = [...prev];
+                                      const curOpts = ((next[idx] as any).options || []).filter(
+                                        (_: any, i: number) => i !== oIdx
+                                      );
+                                      const nextCorrect = curCorrect
+                                        .filter((c) => c !== oIdx)
+                                        .map((c) => (c > oIdx ? c - 1 : c));
+                                      next[idx] = {
+                                        ...next[idx],
+                                        options: curOpts,
+                                        correct: nextCorrect,
+                                      } as any;
+                                      return next;
+                                    });
+                                  }}
+                                  className="w-7 h-7 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center cursor-pointer"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {q.type === 'grouping' && (
+                      <div className="space-y-3 pt-1">
+                        <div>
+                          <div className="flex items-center justify-between mb-1.5">
+                            <span className="text-[11px] font-bold text-slate-500">
+                              Các nhóm phân loại:
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setQuestions((prev) => {
+                                  const next = [...prev];
+                                  const curCats = [...((next[idx] as any).categories || [])];
+                                  curCats.push({
+                                    id: `cat_${curCats.length + 1}`,
+                                    name: `Nhóm ${curCats.length + 1}`,
+                                  });
+                                  next[idx] = { ...next[idx], categories: curCats } as any;
+                                  return next;
+                                });
+                              }}
+                              className="text-[11px] font-bold text-blue-600 hover:underline cursor-pointer"
+                            >
+                              + Thêm nhóm
+                            </button>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {((q as any).categories || []).map((cat: any, cIdx: number) => (
+                              <div key={cat.id || cIdx} className="flex items-center gap-1.5">
+                                <span className="w-5 font-bold text-xs text-orange-600">
+                                  N{cIdx + 1}:
+                                </span>
+                                <input
+                                  type="text"
+                                  value={cat.name || ''}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    setQuestions((prev) => {
+                                      const next = [...prev];
+                                      const curCats = [...((next[idx] as any).categories || [])];
+                                      curCats[cIdx] = { ...curCats[cIdx], name: val };
+                                      next[idx] = { ...next[idx], categories: curCats } as any;
+                                      return next;
+                                    });
+                                  }}
+                                  placeholder="Tên nhóm..."
+                                  className="flex-1 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between mb-1.5">
+                            <span className="text-[11px] font-bold text-slate-500">
+                              Các thẻ phần tử cần phân loại:
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setQuestions((prev) => {
+                                  const next = [...prev];
+                                  const curItems = [...((next[idx] as any).items || [])];
+                                  const cats = (next[idx] as any).categories || [];
+                                  curItems.push({
+                                    id: `item_${curItems.length + 1}`,
+                                    text: `Mục ${curItems.length + 1}`,
+                                    categoryId: cats[0]?.id || '',
+                                  });
+                                  next[idx] = { ...next[idx], items: curItems } as any;
+                                  return next;
+                                });
+                              }}
+                              className="text-[11px] font-bold text-blue-600 hover:underline cursor-pointer"
+                            >
+                              + Thêm thẻ
+                            </button>
+                          </div>
+                          <div className="space-y-1.5">
+                            {((q as any).items || []).map((item: any, iIdx: number) => (
+                              <div key={item.id || iIdx} className="flex items-center gap-2">
+                                <span className="w-5 font-bold text-xs text-slate-500">
+                                  {iIdx + 1}.
+                                </span>
+                                <input
+                                  type="text"
+                                  value={item.text || ''}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    setQuestions((prev) => {
+                                      const next = [...prev];
+                                      const curItems = [...((next[idx] as any).items || [])];
+                                      curItems[iIdx] = { ...curItems[iIdx], text: val };
+                                      next[idx] = { ...next[idx], items: curItems } as any;
+                                      return next;
+                                    });
+                                  }}
+                                  placeholder="Nội dung thẻ..."
+                                  className="flex-1 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800"
+                                />
+                                <span className="text-[10px] font-bold text-slate-500">Thuộc:</span>
+                                <select
+                                  value={item.categoryId || ''}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    setQuestions((prev) => {
+                                      const next = [...prev];
+                                      const curItems = [...((next[idx] as any).items || [])];
+                                      curItems[iIdx] = { ...curItems[iIdx], categoryId: val };
+                                      next[idx] = { ...next[idx], items: curItems } as any;
+                                      return next;
+                                    });
+                                  }}
+                                  className="px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-orange-700"
+                                >
+                                  {((q as any).categories || []).map((cat: any) => (
+                                    <option key={cat.id} value={cat.id}>
+                                      {cat.name}
+                                    </option>
+                                  ))}
+                                </select>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setQuestions((prev) => {
+                                      const next = [...prev];
+                                      const curItems = ((next[idx] as any).items || []).filter(
+                                        (_: any, i: number) => i !== iIdx
+                                      );
+                                      next[idx] = { ...next[idx], items: curItems } as any;
+                                      return next;
+                                    });
+                                  }}
+                                  className="w-7 h-7 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center cursor-pointer"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {q.type === 'error_identification' && (
+                      <div className="space-y-2 pt-1">
+                        <span className="text-[11px] font-bold text-slate-500 block">
+                          Các vị trí gạch chân (chọn vị trí BỊ SAI và nhập từ sửa đúng):
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {((q as any).underlines || []).map((und: any, uIdx: number) => (
+                            <div
+                              key={uIdx}
+                              className={`p-2 rounded-xl border flex items-center gap-2 ${
+                                und.isError
+                                  ? 'bg-rose-50/70 border-rose-300'
+                                  : 'bg-slate-50 border-slate-200'
+                              }`}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setQuestions((prev) => {
+                                    const next = [...prev];
+                                    const curUnds = (
+                                      (next[idx] as any).underlines || []
+                                    ).map((u: any, i: number) => ({
+                                      ...u,
+                                      isError: i === uIdx,
+                                    }));
+                                    next[idx] = { ...next[idx], underlines: curUnds } as any;
+                                    return next;
+                                  });
+                                }}
+                                className={`w-6 h-6 rounded-lg text-xs font-black flex items-center justify-center transition-all cursor-pointer ${
+                                  und.isError
+                                    ? 'bg-rose-600 text-white shadow-sm'
+                                    : 'bg-white text-slate-600 border border-slate-300'
+                                }`}
+                                title={und.isError ? 'Vị trí lỗi sai' : 'Đánh dấu là vị trí sai'}
+                              >
+                                {und.id || ['A', 'B', 'C', 'D'][uIdx]}
+                              </button>
+                              <input
+                                type="text"
+                                value={und.text || ''}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  setQuestions((prev) => {
+                                    const next = [...prev];
+                                    const curUnds = [...((next[idx] as any).underlines || [])];
+                                    curUnds[uIdx] = { ...curUnds[uIdx], text: val };
+                                    next[idx] = { ...next[idx], underlines: curUnds } as any;
+                                    return next;
+                                  });
+                                }}
+                                placeholder="Từ / cụm từ gạch chân..."
+                                className="flex-1 px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs text-slate-800"
+                              />
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center gap-2 pt-1">
+                          <span className="text-[11px] font-bold text-rose-700">
+                            Từ / cụm từ sửa lại cho đúng:
+                          </span>
+                          <input
+                            type="text"
+                            value={(q as any).correctCorrection || ''}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setQuestions((prev) => {
+                                const next = [...prev];
+                                next[idx] = { ...next[idx], correctCorrection: val } as any;
+                                return next;
+                              });
+                            }}
+                            placeholder="Nhập từ hoặc cách sửa đúng..."
+                            className="flex-1 px-3 py-1.5 bg-rose-50/50 border border-rose-200 rounded-xl text-xs font-bold text-rose-900"
+                          />
+                        </div>
+                      </div>
+                    )}
+                      </>
+                    )}
                   </div>
-                ))}
-              </div>
+                );
+              });
+            })()}
+          </div>
             </>
           )}
         </div>
@@ -2253,20 +3431,6 @@ export const EditorTab: React.FC<EditorTabProps> = ({
         }}
       />
 
-      {/* Export / Print PDF Modal */}
-      <ExportPdfModal
-        isOpen={isExportPdfOpen}
-        onClose={() => setIsExportPdfOpen(false)}
-        title={pubTitle}
-        grade={pubClass}
-        subject={pubSubject}
-        examType={examType}
-        duration={matrixDuration || 45}
-        schoolName={metaSchool || 'SỞ GIÁO DỤC VÀ ĐÀO TẠO'}
-        passages={passages}
-        questions={questions}
-      />
-
       {/* Question Bank Modal */}
       <QuestionBankModal
         isOpen={isQuestionBankOpen}
@@ -2284,6 +3448,7 @@ export const EditorTab: React.FC<EditorTabProps> = ({
       <ExamAnalyticsModal
         isOpen={isAnalyticsOpen}
         onClose={() => setIsAnalyticsOpen(false)}
+        examId={pubId}
         examTitle={pubTitle}
         questions={questions}
       />
@@ -2306,6 +3471,108 @@ export const EditorTab: React.FC<EditorTabProps> = ({
               return next;
             });
             onToast('Đã cập nhật tiêu chí chấm Rubric cho câu hỏi!');
+          }}
+        />
+      )}
+      {/* Clear All Exam & Browser Cache Confirmation Modal */}
+      {(showClearAllModal || isClearExamModalOpen) && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150 space-y-4">
+            <div className="flex items-center gap-3 text-rose-600">
+              <div className="w-11 h-11 rounded-2xl bg-rose-50 flex items-center justify-center shrink-0">
+                <Trash2 className="w-6 h-6 text-rose-600" />
+              </div>
+              <div>
+                <h3 className="text-base font-black text-slate-900">Xóa Toàn Bộ Đề &amp; Dọn Sạch Cache</h3>
+                <p className="text-[11px] text-slate-500 font-medium">Hành động này không thể hoàn tác</p>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-rose-50/70 border border-rose-200/80 rounded-2xl text-xs text-rose-900 space-y-1.5 leading-relaxed">
+              <p className="font-extrabold text-xs">Hệ thống sẽ thực hiện xóa sạch:</p>
+              <ul className="list-disc list-inside space-y-1 text-[11px] text-rose-800 font-medium">
+                <li>Toàn bộ <b>{questions.length} câu hỏi</b> đang soạn</li>
+                <li>Toàn bộ <b>{passages.length} bài đọc hiểu / ngữ liệu</b></li>
+                <li>Tiêu đề, mô tả, thẻ phân loại đề thi</li>
+                <li>Toàn bộ bản nháp lưu tự động (cache) trong trình duyệt (localStorage &amp; sessionStorage)</li>
+              </ul>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowClearAllModal(false);
+                  setIsClearExamModalOpen(false);
+                }}
+                className="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-xl transition-all cursor-pointer"
+              >
+                Hủy bỏ
+              </button>
+              <button
+                type="button"
+                onClick={handleClearExamAndCache}
+                className="flex-1 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs rounded-xl shadow-md shadow-rose-600/20 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Xác nhận xóa sạch</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Batch Delete Confirmation Modal */}
+      {showBatchDeleteModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl border border-slate-100 text-center animate-in fade-in zoom-in-95 duration-150">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 mx-auto flex items-center justify-center mb-3">
+              <Trash2 className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-black text-slate-900 mb-2">Xóa {selectedIndices.length} câu hỏi đã chọn?</h3>
+            <p className="text-xs text-slate-500 mb-6 leading-relaxed">
+              Bạn có chắc chắn muốn xóa <b>{selectedIndices.length}</b> câu hỏi đang được chọn khỏi đề thi không?
+            </p>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowBatchDeleteModal(false)}
+                className="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-xl transition-all cursor-pointer"
+              >
+                Hủy bỏ
+              </button>
+              <button
+                type="button"
+                onClick={handleBatchDelete}
+                className="flex-1 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs rounded-xl shadow-md shadow-rose-600/20 transition-all cursor-pointer"
+              >
+                Xác nhận xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Proctoring Configuration Modal */}
+      {isProctoringModalOpen && (
+        <ProctoringConfigModal
+          isOpen={isProctoringModalOpen}
+          onClose={() => setIsProctoringModalOpen(false)}
+          config={
+            proctoring || {
+              enabled: false,
+              appliedModes: 'exam_only',
+              requireLogin: true,
+              requireCamera: true,
+              recordAudio: true,
+              recordScreenLog: true,
+              randomSnapshots: true,
+            }
+          }
+          onChange={(newConf) => {
+            if (setProctoring) {
+              setProctoring(newConf);
+            }
           }}
         />
       )}

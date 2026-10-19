@@ -12,14 +12,17 @@ import {
   CheckCircle,
   Users,
   Settings2,
+  BarChart3,
 } from 'lucide-react';
-import { canUserEditQuiz, canUserDeleteQuiz } from '../services/firebaseService';
+import { canUserEditQuiz, canUserDeleteQuiz, canUserSeeQuizInList } from '../services/firebaseService';
+import { ExamAnalyticsModal } from './modals/ExamAnalyticsModal';
 import type { QuizRecord, AdminUser } from '../types';
 
 interface PostsTabProps {
   quizzes: QuizRecord[];
   user: AdminUser | null;
   isRealtimeConnected: boolean;
+  isAdminView?: boolean;
   onLoadToEditor: (id: string) => void;
   onDeleteQuiz: (id: string) => void;
   onCopyShareLink: (id: string) => void;
@@ -32,6 +35,7 @@ export const PostsTab: React.FC<PostsTabProps> = ({
   quizzes,
   user,
   isRealtimeConnected,
+  isAdminView = false,
   onLoadToEditor,
   onDeleteQuiz,
   onCopyShareLink,
@@ -43,14 +47,20 @@ export const PostsTab: React.FC<PostsTabProps> = ({
   const [selectedSubject, setSelectedSubject] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<'all' | 'verified' | 'hot' | 'mine'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [analyzingQuiz, setAnalyzingQuiz] = useState<QuizRecord | null>(null);
 
   const isAdmin =
     user?.adminLevel === 'owner' || user?.role === 'admin' || user?.adminLevel === 'admin';
 
-  // Extract dynamic grades with counts from realtime quizzes
+  // Base list of quizzes visible to this user
+  const visibleQuizzes = useMemo(() => {
+    return quizzes.filter((item) => canUserSeeQuizInList(user, item, isAdminView));
+  }, [quizzes, user, isAdminView]);
+
+  // Extract dynamic grades with counts from visible quizzes
   const gradeFacets = useMemo(() => {
     const map = new Map<string, number>();
-    quizzes.forEach((q) => {
+    visibleQuizzes.forEach((q) => {
       const g = (q.grade || q.class || q.quizData?.grade || q.quizData?.class || '').trim();
       if (g) {
         map.set(g, (map.get(g) || 0) + 1);
@@ -60,23 +70,23 @@ export const PostsTab: React.FC<PostsTabProps> = ({
     return Array.from(map.entries())
       .map(([grade, count]) => ({ grade, count }))
       .sort((a, b) => a.grade.localeCompare(b.grade, undefined, { numeric: true }));
-  }, [quizzes]);
+  }, [visibleQuizzes]);
 
   // Extract dynamic subjects
   const subjectOptions = useMemo(() => {
     const set = new Set<string>();
-    quizzes.forEach((q) => {
+    visibleQuizzes.forEach((q) => {
       const s = (q.subject || q.quizData?.subject || '').trim();
       if (s) set.add(s);
     });
     return Array.from(set).sort();
-  }, [quizzes]);
+  }, [visibleQuizzes]);
 
   // Filter quizzes
   const filteredQuizzes = useMemo(() => {
     const qLower = searchQuery.trim().toLowerCase();
 
-    return quizzes.filter((item) => {
+    return visibleQuizzes.filter((item) => {
       const g = (item.grade || item.class || item.quizData?.grade || item.quizData?.class || '').trim();
       const s = (item.subject || item.quizData?.subject || '').trim();
       const title = (item.title || item.quizData?.title || '').toLowerCase();
@@ -91,12 +101,7 @@ export const PostsTab: React.FC<PostsTabProps> = ({
       if (selectedStatus === 'verified' && !item.isVerified) return false;
       if (selectedStatus === 'hot' && !item.isHot) return false;
       if (selectedStatus === 'mine') {
-        const isMine =
-          (item.creatorUid && item.creatorUid === user?.uid) ||
-          (item.creatorNdid && user?.ndid && item.creatorNdid.toLowerCase() === user.ndid.toLowerCase()) ||
-          (Array.isArray(item.collaborators) &&
-            user?.ndid &&
-            item.collaborators.some((c) => c.toLowerCase() === user.ndid?.toLowerCase()));
+        const isMine = canUserEditQuiz(user, item);
         if (!isMine) return false;
       }
 
@@ -113,7 +118,7 @@ export const PostsTab: React.FC<PostsTabProps> = ({
 
       return true;
     });
-  }, [quizzes, selectedGrade, selectedSubject, selectedStatus, searchQuery, user]);
+  }, [visibleQuizzes, selectedGrade, selectedSubject, selectedStatus, searchQuery, user]);
 
   return (
     <div className="space-y-4 animate-in fade-in">
@@ -323,7 +328,7 @@ export const PostsTab: React.FC<PostsTabProps> = ({
                 )}
 
                 {/* Metadata details */}
-                <div className="flex items-center gap-3 text-[11px] font-bold text-slate-400 pt-1">
+                <div className="flex items-center gap-2.5 text-[11px] font-bold text-slate-400 pt-1 flex-wrap">
                   <span className="flex items-center gap-1 text-slate-600">
                     <Clock className="w-3.5 h-3.5 text-blue-500" />
                     <span>{displayDuration} phút</span>
@@ -336,12 +341,39 @@ export const PostsTab: React.FC<PostsTabProps> = ({
                   {authorName && (
                     <>
                       <span>•</span>
-                      <span className="truncate max-w-[120px] text-slate-600" title={`Tác giả: ${authorName}`}>
+                      <span className="truncate max-w-[140px] text-slate-600" title={`Tác giả: ${authorName}`}>
                         {authorName}
                       </span>
                     </>
                   )}
                 </div>
+
+                {/* Extended Details: Nơi tạo đề, Năm học, Ngày tạo */}
+                {(() => {
+                  const rawSchool = quiz.school || qData.school || '';
+                  const schoolName = (!rawSchool || rawSchool === 'EduSpace by ND Labs') ? 'EduND by ND Labs' : rawSchool;
+                  const yearStr = quiz.year || qData.year || '';
+                  const rawDate = quiz.createdAt || qData.createdAt || quiz.updatedAt;
+                  let dateStr = '';
+                  if (rawDate) {
+                    try {
+                      if (typeof rawDate.toDate === 'function') dateStr = rawDate.toDate().toLocaleDateString('vi-VN');
+                      else if (rawDate.seconds) dateStr = new Date(rawDate.seconds * 1000).toLocaleDateString('vi-VN');
+                      else {
+                        const d = new Date(rawDate);
+                        if (!isNaN(d.getTime())) dateStr = d.toLocaleDateString('vi-VN');
+                      }
+                    } catch { dateStr = ''; }
+                  }
+
+                  return (
+                    <div className="flex items-center gap-2 text-[10.5px] text-slate-500 font-medium flex-wrap pt-0.5">
+                      {schoolName && <span title="Nơi tạo đề">🏫 {schoolName}</span>}
+                      {yearStr && <span>• 📅 {yearStr}</span>}
+                      {dateStr && <span>• 🕒 {dateStr}</span>}
+                    </div>
+                  );
+                })()}
 
                 {hasCollaborators && (
                   <div className="text-[10px] text-indigo-600 font-semibold flex items-center gap-1">
@@ -420,7 +452,7 @@ export const PostsTab: React.FC<PostsTabProps> = ({
 
                   {/* Open Student Exam in new tab */}
                   <a
-                    href={`/edu/exam?${quiz.id}`}
+                    href={`/edu/exam?id=${encodeURIComponent(quiz.id)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all"
@@ -428,6 +460,17 @@ export const PostsTab: React.FC<PostsTabProps> = ({
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
+
+                  {/* View Analytics & Differentiation */}
+                  <button
+                    type="button"
+                    onClick={() => setAnalyzingQuiz(quiz)}
+                    className="flex items-center gap-1 px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold text-xs rounded-xl border border-amber-200 transition-all cursor-pointer"
+                    title="Xem phổ điểm và phân tích câu sai thực tế"
+                  >
+                    <BarChart3 className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Phổ điểm</span>
+                  </button>
                 </div>
 
                 {/* Delete button (Admin can delete all; teacher can only delete their own) */}
@@ -453,6 +496,17 @@ export const PostsTab: React.FC<PostsTabProps> = ({
           <p className="font-extrabold text-sm text-slate-700">Không tìm thấy đề thi phù hợp</p>
           <p className="text-xs">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm.</p>
         </div>
+      )}
+
+      {/* Realtime Exam Analytics Modal */}
+      {analyzingQuiz && (
+        <ExamAnalyticsModal
+          isOpen={true}
+          onClose={() => setAnalyzingQuiz(null)}
+          examId={analyzingQuiz.id}
+          examTitle={analyzingQuiz.title || analyzingQuiz.quizData?.title || 'Đề thi'}
+          questions={analyzingQuiz.quizData?.questions || analyzingQuiz.questions || []}
+        />
       )}
     </div>
   );

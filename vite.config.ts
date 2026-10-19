@@ -33,9 +33,23 @@ export default defineConfig(({mode}) => {
               return next();
             }
 
+            // Rewrite dynamic route segments on localhost
+            if (urlPath.startsWith('/edu/teacher/class/') && !urlPath.endsWith('.html')) {
+              req.url = '/edu/teacher/class/index.html' + (rawUrl.includes('?') ? rawUrl.slice(rawUrl.indexOf('?')) : '');
+              return next();
+            }
+            if (urlPath.startsWith('/edu/class/') && !urlPath.endsWith('.html')) {
+              req.url = '/edu/class/index.html' + (rawUrl.includes('?') ? rawUrl.slice(rawUrl.indexOf('?')) : '');
+              return next();
+            }
+
             // Only redirect recognized directory-based routes
             const KNOWN_DIRECTORIES = [
               '/edu',
+              '/edu/teacher',
+              '/edu/teacher/class',
+              '/edu/teacher/exam',
+              '/edu/class',
               '/edu/timetable',
               '/edu/timtable',
               '/psychology',

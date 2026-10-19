@@ -19,6 +19,7 @@ import {
   Keyboard,
   Languages,
   X,
+  Users,
 } from 'lucide-react';
 import { Toast } from './components/Toast';
 import {
@@ -62,12 +63,23 @@ export const EduPortalApp: React.FC = () => {
   // Tools list for EduND portal (extensible for future tools)
   const eduTools = useMemo(() => [
     {
+      id: 'teacher-hub',
+      title: 'Cổng Giáo viên',
+      desc: 'Công cụ soạn đề & lớp học',
+      icon: GraduationCap,
+      href: '/edu/teacher',
+      badge: 'Giáo viên',
+      badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+      iconBg: 'bg-indigo-500/10 text-indigo-600',
+      borderColor: 'hover:border-indigo-400 hover:shadow-indigo-500/10',
+    },
+    {
       id: 'create-exam',
       title: 'Tạo đề thi',
       desc: 'Soạn đề GDPT 2018',
       icon: FileEdit,
       href: '/edu/teacher/exam',
-      badge: 'Giáo viên',
+      badge: 'Soạn đề',
       badgeColor: 'bg-blue-50 text-blue-700 border-blue-200',
       iconBg: 'bg-blue-500/10 text-blue-600',
       borderColor: 'hover:border-blue-400 hover:shadow-blue-500/10',
@@ -82,6 +94,17 @@ export const EduPortalApp: React.FC = () => {
       badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
       iconBg: 'bg-amber-500/10 text-amber-600',
       borderColor: 'hover:border-amber-400 hover:shadow-amber-500/10',
+    },
+    {
+      id: 'classes',
+      title: 'Lớp học của tôi',
+      desc: 'Tìm lớp & nhận bài giao',
+      icon: Users,
+      href: '/edu/class/',
+      badge: 'Lớp học',
+      badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      iconBg: 'bg-emerald-500/10 text-emerald-600',
+      borderColor: 'hover:border-emerald-400 hover:shadow-emerald-500/10',
     },
     {
       id: 'timetable',
@@ -199,11 +222,13 @@ export const EduPortalApp: React.FC = () => {
     });
   }, [quizzes, user]);
 
-  // Filtered quizzes
+  // Filtered quizzes with personalized sorting: lớp đã chọn -> môn yêu thích -> hot hiện trước
   const filteredQuizzes = useMemo(() => {
     const qLower = searchQuery.trim().toLowerCase();
+    const userGrade = (user as any)?.grade || (user as any)?.class || '';
+    const userFavoriteSubject = (user as any)?.favoriteSubject || (user as any)?.favSubject || '';
 
-    return accessibleQuizzes.filter((item) => {
+    const list = accessibleQuizzes.filter((item) => {
       const g = (item.grade || item.class || item.quizData?.grade || item.quizData?.class || '').trim();
       const s = (item.subject || item.quizData?.subject || '').trim();
       const t = (item.examType || item.quizData?.examType || '').trim();
@@ -230,7 +255,40 @@ export const EduPortalApp: React.FC = () => {
 
       return true;
     });
-  }, [accessibleQuizzes, selectedGrade, selectedSubject, selectedExamType, selectedTab, searchQuery]);
+
+    // Sorting algorithm:
+    // 1. Match selectedGrade (hoặc grade của user nếu chưa lọc)
+    // 2. Môn yêu thích (userFavoriteSubject) hiện đầu tiên
+    // 3. Đề nổi bật (isHot) hiện trước
+    // 4. Mới nhất theo thời gian
+    return list.sort((a, b) => {
+      // 1. Grade match preference
+      if (userGrade && !selectedGrade) {
+        const aGradeMatch = String(a.grade || a.class || '').includes(String(userGrade));
+        const bGradeMatch = String(b.grade || b.class || '').includes(String(userGrade));
+        if (aGradeMatch && !bGradeMatch) return -1;
+        if (!aGradeMatch && bGradeMatch) return 1;
+      }
+
+      // 2. Môn yêu thích hiện đầu tiên
+      if (userFavoriteSubject) {
+        const aFav = (a.subject || '').toLowerCase().includes(userFavoriteSubject.toLowerCase());
+        const bFav = (b.subject || '').toLowerCase().includes(userFavoriteSubject.toLowerCase());
+        if (aFav && !bFav) return -1;
+        if (!aFav && bFav) return 1;
+      }
+
+      // 3. Hot hiện trước
+      if (a.isHot && !b.isHot) return -1;
+      if (!a.isHot && b.isHot) return 1;
+
+      // 4. Verified
+      if (a.isVerified && !b.isVerified) return -1;
+      if (!a.isVerified && b.isVerified) return 1;
+
+      return 0;
+    });
+  }, [accessibleQuizzes, selectedGrade, selectedSubject, selectedExamType, selectedTab, searchQuery, user]);
 
   const displayNdid = user?.ndid || user?.displayName || user?.uid || '';
   const isTeacherOrAdmin =
@@ -293,9 +351,9 @@ export const EduPortalApp: React.FC = () => {
                 </div>
               )}
 
-              {/* Link to Teacher Exam Authoring */}
+              {/* Link to Teacher Hub */}
               <a
-                href="/edu/teacher/exam"
+                href="/edu/teacher"
                 className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-xl shadow-sm shadow-blue-500/25 transition-all cursor-pointer"
               >
                 <span>Cổng Giáo Viên</span>
@@ -628,7 +686,7 @@ export const EduPortalApp: React.FC = () => {
                   )}
 
                   {/* Details */}
-                  <div className="flex items-center gap-3 text-[11px] font-bold text-slate-400 pt-1">
+                  <div className="flex items-center gap-2.5 text-[11px] font-bold text-slate-400 pt-1 flex-wrap">
                     <span className="flex items-center gap-1 text-slate-600">
                       <Clock className="w-3.5 h-3.5 text-blue-500" />
                       <span>{displayDuration} phút</span>
@@ -641,12 +699,39 @@ export const EduPortalApp: React.FC = () => {
                     {authorName && (
                       <>
                         <span>•</span>
-                        <span className="truncate max-w-[120px] text-slate-600" title={`Tác giả: ${authorName}`}>
+                        <span className="truncate max-w-[140px] text-slate-600" title={`Tác giả: ${authorName}`}>
                           {authorName}
                         </span>
                       </>
                     )}
                   </div>
+
+                  {/* Extended Details: Nơi tạo đề, Năm học, Ngày tạo */}
+                  {(() => {
+                    const rawSchool = quiz.school || qData.school || '';
+                    const schoolName = (!rawSchool || rawSchool === 'EduSpace by ND Labs') ? 'EduND by ND Labs' : rawSchool;
+                    const yearStr = quiz.year || qData.year || '';
+                    const rawDate = quiz.createdAt || qData.createdAt || quiz.updatedAt;
+                    let dateStr = '';
+                    if (rawDate) {
+                      try {
+                        if (typeof rawDate.toDate === 'function') dateStr = rawDate.toDate().toLocaleDateString('vi-VN');
+                        else if (rawDate.seconds) dateStr = new Date(rawDate.seconds * 1000).toLocaleDateString('vi-VN');
+                        else {
+                          const d = new Date(rawDate);
+                          if (!isNaN(d.getTime())) dateStr = d.toLocaleDateString('vi-VN');
+                        }
+                      } catch { dateStr = ''; }
+                    }
+
+                    return (
+                      <div className="flex items-center gap-2 text-[10.5px] text-slate-500 font-medium flex-wrap pt-0.5">
+                        {schoolName && <span title="Nơi tạo đề">🏫 {schoolName}</span>}
+                        {yearStr && <span>• 📅 {yearStr}</span>}
+                        {dateStr && <span>• 🕒 {dateStr}</span>}
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 {/* Footer Action */}

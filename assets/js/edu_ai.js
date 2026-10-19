@@ -10,7 +10,7 @@
 
 const EduAI_Assistant = (function () {
     const CONFIG = {
-        name: 'EduAI Assistant',
+        name: 'NDAI',
         primary: '#0070f3',
         gradient: 'linear-gradient(135deg, #0070f3 0%, #3291ff 100%)',
         bg: '#f8fafc',
@@ -37,7 +37,7 @@ const EduAI_Assistant = (function () {
                 justify-content: center;
                 cursor: pointer;
                 box-shadow: 0 10px 25px -5px rgba(0, 112, 243, 0.4);
-                z-index: 99000;
+                z-index: 100020;
                 transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 font-family: 'Play', sans-serif !important;
             }
@@ -60,7 +60,7 @@ const EduAI_Assistant = (function () {
                 box-shadow: 0 25px 50px -12px rgba(0, 112, 243, 0.18);
                 display: none;
                 flex-direction: column;
-                z-index: 99001;
+                z-index: 100021;
                 overflow: hidden;
                 animation: eduAiShow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                 font-family: 'Play', sans-serif !important;
@@ -192,7 +192,7 @@ const EduAI_Assistant = (function () {
         if (document.getElementById('edu-ai-widget')) return;
 
         const html = `
-            <div id="ai-toggle" class="edu-ai-toggle" onclick="EduAI_Assistant.toggle()" title="Trợ lý Học tập EduAI">
+            <div id="ai-toggle" class="edu-ai-toggle" onclick="(window.EduAI_Assistant || window.eduspaceAI_UI)?.toggle()" title="Trợ lý Học tập NDAI">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot">
                     <path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>
                 </svg>
@@ -202,25 +202,25 @@ const EduAI_Assistant = (function () {
                 <div class="edu-ai-header">
                     <div style="display:flex; align-items:center; gap:8px;">
                         <span>✨</span>
-                        <span>EduAI Assistant</span>
+                        <span>NDAI</span>
                     </div>
-                    <button onclick="EduAI_Assistant.toggle()" style="background:none; border:none; color:white; font-size:16px; cursor:pointer; font-weight:bold;">✕</button>
+                    <button onclick="(window.EduAI_Assistant || window.eduspaceAI_UI)?.toggle()" style="background:none; border:none; color:white; font-size:16px; cursor:pointer; font-weight:bold;">✕</button>
                 </div>
                 <div id="ai-chat-messages" class="edu-ai-messages">
                     <div id="ai-welcome-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 32px 20px; height: 100%; color: #64748b; font-family: sans-serif; box-sizing: border-box;">
                         <div style="font-size: 32px; margin-bottom: 12px; background: ${CONFIG.gradient}; width: 56px; height: 56px; border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 10px 20px rgba(0,112,243,0.15);">✨</div>
-                        <h3 style="font-size: 15px; font-weight: 800; color: #1e293b; margin: 8px 0 4px;">Chào mừng bạn đến với EduAI Assistant!</h3>
-                        <p style="font-size: 12px; font-weight: 500; line-height: 1.5; margin-bottom: 20px; max-width: 240px; color: #64748b;">Hỏi bất kỳ câu hỏi hoặc bài tập nào để được trợ lý EduAI giải đáp chi tiết.</p>
+                        <h3 style="font-size: 15px; font-weight: 800; color: #1e293b; margin: 8px 0 4px;">Chào mừng bạn đến với NDAI!</h3>
+                        <p style="font-size: 12px; font-weight: 500; line-height: 1.5; margin-bottom: 20px; max-width: 240px; color: #64748b;">Hỏi bất kỳ câu hỏi hoặc bài tập nào để được trợ lý NDAI giải đáp chi tiết, súc tích.</p>
                         <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 260px;">
-                            <div onclick="EduAI_Assistant.useSuggestion('Giải thích ý nghĩa số Pi')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='${CONFIG.primary}'; this.style.color='${CONFIG.primary}'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">💡 Giải thích ý nghĩa số Pi</div>
-                            <div onclick="EduAI_Assistant.useSuggestion('Cách cân bằng phản ứng hóa học?')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='${CONFIG.primary}'; this.style.color='${CONFIG.primary}'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">🧪 Cân bằng phản ứng hóa học</div>
-                            <div onclick="EduAI_Assistant.useSuggestion('Hướng dẫn giải câu hỏi này')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='${CONFIG.primary}'; this.style.color='${CONFIG.primary}'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">📐 Hướng dẫn giải câu hỏi này</div>
+                            <div onclick="(window.EduAI_Assistant || window.eduspaceAI_UI)?.useSuggestion('Giải thích ý nghĩa số Pi')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='${CONFIG.primary}'; this.style.color='${CONFIG.primary}'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">💡 Giải thích ý nghĩa số Pi</div>
+                            <div onclick="(window.EduAI_Assistant || window.eduspaceAI_UI)?.useSuggestion('Cách cân bằng phản ứng hóa học?')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='${CONFIG.primary}'; this.style.color='${CONFIG.primary}'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">🧪 Cân bằng phản ứng hóa học</div>
+                            <div onclick="(window.EduAI_Assistant || window.eduspaceAI_UI)?.useSuggestion('Hướng dẫn phương pháp giải câu hỏi này')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='${CONFIG.primary}'; this.style.color='${CONFIG.primary}'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">📐 Hướng dẫn phương pháp giải câu này</div>
                         </div>
                     </div>
                 </div>
                 <div class="edu-ai-input-area">
-                    <input type="text" id="ai-input" placeholder="Hỏi EduAI Assistant..." onkeypress="if(event.key==='Enter') EduAI_Assistant.send()">
-                    <div onclick="EduAI_Assistant.send()" class="edu-ai-send-btn">
+                    <input type="text" id="ai-input" placeholder="Hỏi NDAI..." onkeypress="if(event.key==='Enter') (window.EduAI_Assistant || window.eduspaceAI_UI)?.send()">
+                    <div onclick="(window.EduAI_Assistant || window.eduspaceAI_UI)?.send()" class="edu-ai-send-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </div>
                 </div>
@@ -231,6 +231,9 @@ const EduAI_Assistant = (function () {
     }
 
     function toggle() {
+        if (!document.getElementById('edu-ai-widget')) {
+            init();
+        }
         const widget = document.getElementById('edu-ai-widget');
         if (!widget) return;
         if (window.eduAIExamModeGate && window.eduAIShowOverride !== true) {
@@ -295,10 +298,15 @@ const EduAI_Assistant = (function () {
         try {
             const context = typeof window.getAIContext === 'function' ? window.getAIContext() : '';
             const greetInstruction = _hasGreeted
-                ? 'Không chào hỏi, không dẫn nhập — trả lời thẳng vào câu hỏi.'
-                : 'Chào người dùng ngắn gọn một câu rồi trả lời ngay.';
+                ? 'Không chào hỏi, không dẫn nhập vòng vo — trả lời trực tiếp, chuẩn xác vào trọng tâm.'
+                : 'Chào bạn ngắn gọn 1 câu rồi giải thích ngay.';
 
-            const systemPrompt = `Bạn là EduAI Assistant — trợ lý học tập thông minh, ngắn gọn, súc tích của EduND (ND Labs). ${greetInstruction} Trả lời tối đa 3-5 câu, mỗi câu là một ý độc lập. Hãy sử dụng định dạng Markdown (in đậm, in nghiêng) và công thức Toán/Lý/Hóa bằng LaTeX (sử dụng dấu đô-la: $...$ cho công thức nội dòng và $$...$$ cho công thức dạng khối).${context ? ' Ngữ cảnh bài tập hiện tại trên màn hình: ' + context : ''}`;
+            const systemPrompt = `Bạn là NDAI — trợ lý gia sư học tập thông minh, chuyên nghiệp và súc tích của EduND (ND Labs).
+Nhiệm vụ của bạn là hỗ trợ học sinh học tập thực chất, giải thích phương pháp giải, làm rõ bản chất định lý/công thức, chỉ ra nguyên nhân chọn đáp án đúng/sai.
+${greetInstruction}
+- Phong cách: Ngắn gọn, chuẩn sư phạm, dễ hiểu, trình bày tối đa 3-5 ý rõ ràng.
+- Định dạng: Bắt buộc dùng Markdown (in đậm ý chính, danh sách gạch đầu dòng) và LaTeX ($...$ cho công thức nội dòng, $$...$$ cho công thức riêng một dòng) đối với Toán, Lý, Hóa, Sinh, Tin học.
+- Tuyệt đối không dùng văn phong lan man dài dòng.${context ? '\n\n[Dữ liệu ngữ cảnh câu hỏi trên màn hình]:\n' + context : ''}`;
 
             const aiCaller = window.eduspaceAI || window.ndAI_API;
             if (!aiCaller || typeof aiCaller.call !== 'function') {
@@ -404,8 +412,11 @@ const EduAI_Assistant = (function () {
         // floating button and the inline "Hỏi EduAI" action from opening an
         // assistant while the learner is in exam mode.
         if (window.eduAIExamModeGate && window.eduAIShowOverride !== true) return;
+        if (!document.getElementById('edu-ai-widget')) {
+            init();
+        }
         const widget = document.getElementById('edu-ai-widget');
-        if (widget && widget.style.display !== 'flex') {
+        if (widget) {
             widget.style.display = 'flex';
         }
         const input = document.getElementById('ai-input');
@@ -536,13 +547,9 @@ const EduAI_Assistant = (function () {
         updateVisibility,
         appendMessage
     };
+    window.EduAI_Assistant = window.eduspaceAI_UI;
+    window.NDAI_Assistant = window.eduspaceAI_UI;
 
-    return {
-        init,
-        toggle,
-        send,
-        useSuggestion,
-        updateVisibility,
-        appendMessage
-    };
+    return window.eduspaceAI_UI;
 })();
+

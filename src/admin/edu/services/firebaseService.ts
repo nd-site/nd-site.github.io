@@ -137,6 +137,7 @@ export async function listenToAdminAuth(
               ...u,
               uid: fbUser.uid,
               ndid: u.ndid || userData.ndid || fbUser.displayName || '',
+              codeId: u.codeId || fbUser.uid,
               customGeminiKey: u.customGeminiKey || '',
             };
             const hasAdminRole =
@@ -165,25 +166,200 @@ export async function listenToAdminAuth(
 }
 
 /**
- * Kiểm tra quyền sửa đề: Owner/Admin HOẶC người tạo HOẶC cộng tác viên
+ * Tra cứu thông tin người dùng qua NDID để xác thực sự tồn tại và lấy CodeID chuẩn
+ */
+export async function lookupUserByNdid(ndid: string): Promise<{ exists: boolean; codeId?: string; ndid?: string; fullname?: string } | null> {
+  if (!ndid || !ndid.trim()) return null;
+  const trimmed = ndid.trim();
+
+  const { db } = await getFirebaseInstance();
+  if (!db) return null;
+
+  try {
+    const { collection, query, where, getDocs, limit, doc, getDoc } = await import(
+      'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js' as any
+    );
+
+    // 1. Kiểm tra collection 'ndids' nếu có
+    try {
+      const ndidSnap = await getDoc(doc(db, 'ndids', trimmed.toLowerCase()));
+      if (ndidSnap.exists()) {
+        const data = ndidSnap.data();
+        const cid = data.codeId || data.uid;
+        if (cid) {
+          // Lấy user doc theo codeId để lấy NDID hiển thị chuẩn
+          const uDoc = await getDoc(doc(db, 'users', cid));
+          if (uDoc.exists()) {
+            const uData = uDoc.data();
+            return {
+              exists: true,
+              codeId: cid,
+              ndid: uData.ndid || trimmed,
+              fullname: uData.fullname || uData.displayName || '',
+            };
+          }
+          return { exists: true, codeId: cid, ndid: trimmed };
+        }
+      }
+    } catch (_) {}
+
+    // 2. Tra cứu trực tiếp users collection bằng query ndid (case insensitive query via exact match)
+    const q = query(collection(db, 'users'), where('ndid', '==', trimmed), limit(1));
+    const snap = await getDocs(q);
+    if (!snap.empty) {
+      const uDoc = snap.docs[0];
+      const uData = uDoc.data();
+      return {
+        exists: true,
+        codeId: uData.codeId || uDoc.id,
+        ndid: uData.ndid || trimmed,
+        fullname: uData.fullname || uData.displayName || '',
+      };
+    }
+
+    // 3. Fallback: Nếu trimmed là codeId (ví dụ 0000 hoặc số UID)
+    const directDoc = await getDoc(doc(db, 'users', trimmed));
+    if (directDoc.exists()) {
+      const uData = directDoc.data();
+      return {
+        exists: true,
+        codeId: uData.codeId || directDoc.id,
+        ndid: uData.ndid || trimmed,
+        fullname: uData.fullname || uData.displayName || '',
+      };
+    }
+
+    return { exists: false };
+  } catch (e) {
+    console.warn('Lỗi tra cứu user theo NDID:', e);
+    return null;
+  }
+}
+
+/**
+ * Tra cứu danh sách NDID mới nhất từ mảng CodeID
+ */
+export async function resolveCodeIdsToNdids(codeIds: string[]): Promise<Record<string, string>> {
+  const result: Record<string, string> = {};
+  if (!codeIds || codeIds.length === 0) return result;
+
+  const { db } = await getFirebaseInstance();
+  if (!db) return result;
+
+  try {
+    const { doc, getDoc } = await import(
+      'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js' as any
+    );
+
+    await Promise.all(
+      codeIds.map(async (cid) => {
+        try {
+          const uDoc = await getDoc(doc(db, 'users', cid));
+          if (uDoc.exists()) {
+            const data = uDoc.data();
+            result[cid] = data.ndid || cid;
+          } else {
+            result[cid] = cid;
+          }
+        } catch (_) {
+          result[cid] = cid;
+        }
+      })
+    );
+  } catch (_) {}
+  return result;
+}
+
+/**
+ * Kiểm tra quyền sửa đề: CHỈ Người tạo HOẶC Cộng tác viên mới có quyền sửa.
+ * ADMIN KHÔNG CÓ QUYỀN SỬA ĐỀ (chỉ có quyền duyệt, gắn hot, xóa).
  */
 export function canUserEditQuiz(user: AdminUser | null, quiz: QuizRecord): boolean {
   if (!user) return false;
-  if (user.adminLevel === 'owner' || user.role === 'admin' || user.adminLevel === 'admin') {
-    return true;
+  const userCid = user.codeId || user.uid;
+  const userNdid = user.ndid ? user.ndid.toLowerCase() : '';
+
+  // 1. Kiểm tra theo CodeID của người tạo
+  if (quiz.creatorCodeId && userCid && quiz.creatorCodeId === userCid) return true;
+  if (quiz.creatorUid && user.uid && quiz.creatorUid === user.uid) return true;
+  if (quiz.creatorNdid && userNdid && quiz.creatorNdid.toLowerCase() === userNdid) return true;
+
+  // 2. Kiểm tra theo danh sách cộng tác viên (CodeID ưu tiên, sau đó fallback NDID)
+  if (Array.isArray(quiz.collaboratorCodeIds) && userCid) {
+    if (quiz.collaboratorCodeIds.includes(userCid)) return true;
   }
-  // Người tạo
-  if (quiz.creatorUid && quiz.creatorUid === user.uid) return true;
-  if (quiz.creatorNdid && user.ndid && quiz.creatorNdid.toLowerCase() === user.ndid.toLowerCase()) {
-    return true;
-  }
-  // Cộng tác viên
-  if (Array.isArray(quiz.collaborators) && user.ndid) {
-    const rawLower = user.ndid.toLowerCase();
-    if (quiz.collaborators.some((c) => String(c).trim().toLowerCase() === rawLower || c === user.uid)) {
+  if (Array.isArray(quiz.collaborators) && (userNdid || user.uid)) {
+    if (quiz.collaborators.some((c) => {
+      const cStr = String(c).trim().toLowerCase();
+      return cStr === userNdid || c === user.uid || c === userCid;
+    })) {
       return true;
     }
   }
+
+  return false;
+}
+
+/**
+ * Kiểm tra quyền xem đề trong danh sách quản lý:
+ * - Admin/Owner: Thấy tất cả các đề tại trang Admin.
+ * - Giáo viên / Người dùng: Chỉ thấy đề do mình tạo hoặc được thêm làm cộng tác viên.
+ */
+export function canUserSeeQuizInList(user: AdminUser | null, quiz: QuizRecord, isAdminView = false): boolean {
+  if (!user) return false;
+  if (isAdminView) {
+    const isSysAdmin = user.adminLevel === 'owner' || user.role === 'admin' || user.adminLevel === 'admin';
+    if (isSysAdmin) return true;
+  }
+  // Tại trang giáo viên hoặc view cá nhân: chỉ người tạo hoặc cộng tác mới thấy
+  const userCid = user.codeId || user.uid;
+  const userNdid = user.ndid ? user.ndid.toLowerCase() : '';
+
+  if (quiz.creatorCodeId && userCid && quiz.creatorCodeId === userCid) return true;
+  if (quiz.creatorUid && user.uid && quiz.creatorUid === user.uid) return true;
+  if (quiz.creatorNdid && userNdid && quiz.creatorNdid.toLowerCase() === userNdid) return true;
+
+  if (Array.isArray(quiz.collaboratorCodeIds) && userCid && quiz.collaboratorCodeIds.includes(userCid)) {
+    return true;
+  }
+  if (Array.isArray(quiz.collaborators) && (userNdid || user.uid)) {
+    if (quiz.collaborators.some((c) => {
+      const cStr = String(c).trim().toLowerCase();
+      return cStr === userNdid || c === user.uid || c === userCid;
+    })) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Kiểm tra quyền làm bài thi:
+ * - Nếu đề 'all' (Tất cả mọi người): ai cũng làm được.
+ * - Nếu đề 'restricted' (Chỉ định người làm): Người dùng phải đăng nhập và có CodeID nằm trong allowedCodeIds,
+ *   hoặc là người tạo / cộng tác viên.
+ */
+export function canUserTakeQuiz(user: AdminUser | { uid: string; ndid?: string; codeId?: string } | null, quiz: QuizRecord): boolean {
+  const accessType = quiz.accessType || quiz.quizData?.accessType || 'all';
+  if (accessType === 'all') return true;
+
+  if (!user) return false;
+  const userCid = user.codeId || user.uid;
+  const userNdid = user.ndid ? user.ndid.toLowerCase() : '';
+
+  // Người tạo và cộng tác viên luôn có quyền làm bài
+  if (quiz.creatorCodeId && userCid && quiz.creatorCodeId === userCid) return true;
+  if (quiz.creatorUid && user.uid && quiz.creatorUid === user.uid) return true;
+  if (quiz.creatorNdid && userNdid && quiz.creatorNdid.toLowerCase() === userNdid) return true;
+  if (Array.isArray(quiz.collaboratorCodeIds) && userCid && quiz.collaboratorCodeIds.includes(userCid)) return true;
+
+  // Kiểm tra danh sách allowedCodeIds
+  const allowed = quiz.allowedCodeIds || quiz.quizData?.allowedCodeIds || [];
+  if (Array.isArray(allowed) && userCid && allowed.includes(userCid)) {
+    return true;
+  }
+
   return false;
 }
 
@@ -198,8 +374,13 @@ export function canUserViewQuiz(user: AdminUser | null, quiz: QuizRecord): boole
   if (user.adminLevel === 'owner' || user.role === 'admin' || user.adminLevel === 'admin') {
     return true;
   }
+  const userCid = user.codeId || user.uid;
+  if (quiz.creatorCodeId && userCid && quiz.creatorCodeId === userCid) return true;
   if (quiz.creatorUid && quiz.creatorUid === user.uid) return true;
   if (quiz.creatorNdid && user.ndid && quiz.creatorNdid.toLowerCase() === user.ndid.toLowerCase()) {
+    return true;
+  }
+  if (Array.isArray(quiz.collaboratorCodeIds) && userCid && quiz.collaboratorCodeIds.includes(userCid)) {
     return true;
   }
   if (Array.isArray(quiz.collaborators) && user.ndid) {
@@ -223,8 +404,13 @@ export function canUserCommentQuiz(user: AdminUser | null, quiz: QuizRecord): bo
   if (user.adminLevel === 'owner' || user.role === 'admin' || user.adminLevel === 'admin') {
     return true;
   }
+  const userCid = user.codeId || user.uid;
+  if (quiz.creatorCodeId && userCid && quiz.creatorCodeId === userCid) return true;
   if (quiz.creatorUid && quiz.creatorUid === user.uid) return true;
   if (quiz.creatorNdid && user.ndid && quiz.creatorNdid.toLowerCase() === user.ndid.toLowerCase()) {
+    return true;
+  }
+  if (Array.isArray(quiz.collaboratorCodeIds) && userCid && quiz.collaboratorCodeIds.includes(userCid)) {
     return true;
   }
   if (Array.isArray(quiz.collaborators) && user.ndid) {
@@ -248,9 +434,11 @@ export function canUserDeleteQuiz(user: AdminUser | null, quiz: QuizRecord): boo
   if (user.adminLevel === 'owner' || user.role === 'admin' || user.adminLevel === 'admin') {
     return true;
   }
+  const userCid = user.codeId || user.uid;
   return Boolean(
+    (quiz.creatorCodeId && userCid && quiz.creatorCodeId === userCid) ||
     (quiz.creatorUid && quiz.creatorUid === user.uid) ||
-      (quiz.creatorNdid && user.ndid && quiz.creatorNdid.toLowerCase() === user.ndid.toLowerCase())
+    (quiz.creatorNdid && user.ndid && quiz.creatorNdid.toLowerCase() === user.ndid.toLowerCase())
   );
 }
 
@@ -352,11 +540,47 @@ export async function subscribeToQuizzesRealtime(
       const records: QuizRecord[] = [];
       snapshot.forEach((docSnap: any) => {
         const data = docSnap.data();
-        records.push({
+        let item: QuizRecord = {
           id: docSnap.id,
           _docId: docSnap.id,
           ...data,
-        });
+        };
+
+        // AUTO-HEAL: Nếu đề chưa có người tạo hoặc có nơi tạo EduSpace by ND Labs
+        let needsHeal = false;
+        const updates: any = {};
+
+        if (!item.creatorCodeId && !item.creatorUid && !item.creatorNdid) {
+          item.creatorCodeId = '0000';
+          item.creatorUid = '0000';
+          item.creatorNdid = '0000';
+          item.author = item.author || 'Nhật Đăng - Admin';
+          item.school = item.school || 'EduND by ND Labs';
+          updates.creatorCodeId = '0000';
+          updates.creatorUid = '0000';
+          updates.creatorNdid = '0000';
+          updates.author = item.author;
+          updates.school = item.school;
+          needsHeal = true;
+        }
+
+        if (item.school === 'EduSpace by ND Labs' || !item.school) {
+          item.school = 'EduND by ND Labs';
+          updates.school = 'EduND by ND Labs';
+          needsHeal = true;
+        }
+
+        if (needsHeal) {
+          try {
+            const { doc, updateDoc } = require && typeof window !== 'undefined'
+              ? (window as any).firestoreModules || {}
+              : {};
+            // Background passive update if permission allows
+            docSnap.ref?.update?.(updates).catch(() => {});
+          } catch (_) {}
+        }
+
+        records.push(item);
       });
 
       // Sắp xếp đề mới nhất lên trước
@@ -375,6 +599,34 @@ export async function subscribeToQuizzesRealtime(
   );
 
   return unsubscribe;
+}
+
+/**
+ * Đệ quy loại bỏ tất cả các trường có giá trị `undefined`
+ * Firestore sẽ quăng lỗi "Function setDoc() called with invalid data. Unsupported field value: undefined"
+ * nếu có bất kỳ property nào có value undefined trong object/nested array.
+ */
+export function sanitizeForFirestore<T = any>(val: T): T {
+  if (val === undefined) {
+    return null as any;
+  }
+  if (val === null || typeof val !== 'object') {
+    return val;
+  }
+  // Giữ nguyên serverTimestamp và FieldValue
+  if ((val as any)?._methodName || (val as any)?.constructor?.name === 'FieldValue') {
+    return val;
+  }
+  if (Array.isArray(val)) {
+    return val.map((item) => sanitizeForFirestore(item)) as any;
+  }
+  const cleanObj: any = {};
+  for (const [key, value] of Object.entries(val)) {
+    if (value !== undefined) {
+      cleanObj[key] = sanitizeForFirestore(value);
+    }
+  }
+  return cleanObj;
 }
 
 /**
@@ -419,14 +671,28 @@ export async function publishQuizToFirestore(
     quizRecord.quizData?.examStructure?.fullDuration ||
     90;
 
+  const schoolName =
+    quizRecord.school?.trim() ||
+    existingData.school ||
+    'EduND by ND Labs';
+
   const docPayload: any = {
     id: targetId,
-    creatorUid: existingData.creatorUid || quizRecord.creatorUid || user?.uid || '',
-    creatorNdid: existingData.creatorNdid || quizRecord.creatorNdid || user?.ndid || '',
-    author: quizRecord.author !== undefined ? quizRecord.author : existingData.author || '',
+    creatorUid: existingData.creatorUid || quizRecord.creatorUid || user?.uid || '0000',
+    creatorNdid: existingData.creatorNdid || quizRecord.creatorNdid || user?.ndid || '0000',
+    creatorCodeId: existingData.creatorCodeId || quizRecord.creatorCodeId || user?.codeId || user?.uid || '0000',
+    author: quizRecord.author !== undefined ? quizRecord.author : (existingData.author || 'Nhật Đăng - Admin'),
+    school: schoolName === 'EduSpace by ND Labs' ? 'EduND by ND Labs' : schoolName,
     collaborators: Array.isArray(quizRecord.collaborators)
       ? quizRecord.collaborators
       : existingData.collaborators || [],
+    collaboratorCodeIds: Array.isArray(quizRecord.collaboratorCodeIds)
+      ? quizRecord.collaboratorCodeIds
+      : existingData.collaboratorCodeIds || [],
+    accessType: quizRecord.accessType || existingData.accessType || 'all',
+    allowedCodeIds: Array.isArray(quizRecord.allowedCodeIds)
+      ? quizRecord.allowedCodeIds
+      : existingData.allowedCodeIds || [],
     viewers: Array.isArray(quizRecord.viewers)
       ? quizRecord.viewers
       : existingData.viewers || [],
@@ -456,6 +722,11 @@ export async function publishQuizToFirestore(
     passages: Array.isArray(quizRecord.passages) ? quizRecord.passages : [],
     quizData: {
       ...quizRecord.quizData,
+      school: schoolName === 'EduSpace by ND Labs' ? 'EduND by ND Labs' : schoolName,
+      creatorCodeId: existingData.creatorCodeId || quizRecord.creatorCodeId || user?.codeId || user?.uid || '0000',
+      collaboratorCodeIds: quizRecord.collaboratorCodeIds || existingData.collaboratorCodeIds || [],
+      accessType: quizRecord.accessType || existingData.accessType || 'all',
+      allowedCodeIds: quizRecord.allowedCodeIds || existingData.allowedCodeIds || [],
       duration: matrixMins,
       matrixDuration: matrixMins,
       fullDuration: fullMins,
@@ -471,7 +742,8 @@ export async function publishQuizToFirestore(
     updatedAt: serverTimestamp(),
   };
 
-  await setDoc(docRef, docPayload, { merge: true });
+  const cleanPayload = sanitizeForFirestore(docPayload);
+  await setDoc(docRef, cleanPayload, { merge: true });
 }
 
 /**
@@ -726,4 +998,194 @@ export async function fetchQuestionBank(
     return [];
   }
 }
+
+/**
+ * Đếm số lần học sinh đã làm đề thi
+ */
+export async function getStudentAttemptCount(examId: string, studentNdid: string): Promise<number> {
+  const { db } = await getFirebaseInstance();
+  if (!db || !examId || !studentNdid) return 0;
+
+  const { collection, getDocs, query, where } = await import(
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js' as any
+  );
+
+  try {
+    const q = query(
+      collection(db, 'edu_submissions'),
+      where('examId', '==', examId.toUpperCase()),
+      where('studentNdid', '==', studentNdid)
+    );
+    const snap = await getDocs(q);
+    return snap.size;
+  } catch (err) {
+    console.warn('Lỗi đếm số lượt thi:', err);
+    return 0;
+  }
+}
+
+/**
+ * Lưu bài làm của học sinh (gồm điểm, câu trả lời, nhật ký giám sát)
+ */
+export async function submitStudentExam(data: Omit<import('../types').StudentSubmissionRecord, 'id' | 'submittedAt'>): Promise<string> {
+  const { db } = await getFirebaseInstance();
+  if (!db) throw new Error('Cơ sở dữ liệu chưa sẵn sàng');
+
+  const { collection, addDoc, serverTimestamp } = await import(
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js' as any
+  );
+
+  const docRef = await addDoc(collection(db, 'edu_submissions'), {
+    ...data,
+    examId: data.examId.toUpperCase(),
+    submittedAt: serverTimestamp(),
+  });
+  return docRef.id;
+}
+
+/**
+ * Tải danh sách bài làm của một đề thi (dành cho Giáo viên & Bảng xếp hạng)
+ */
+export async function fetchSubmissionsByExam(examId: string): Promise<import('../types').StudentSubmissionRecord[]> {
+  const { db } = await getFirebaseInstance();
+  if (!db || !examId) return [];
+
+  const { collection, getDocs, query, where, orderBy, limit } = await import(
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js' as any
+  );
+
+  try {
+    const q = query(
+      collection(db, 'edu_submissions'),
+      where('examId', '==', examId.toUpperCase()),
+      limit(200)
+    );
+    const snap = await getDocs(q);
+    const results: import('../types').StudentSubmissionRecord[] = [];
+    snap.forEach((docSnap: any) => {
+      results.push({
+        id: docSnap.id,
+        ...docSnap.data(),
+      });
+    });
+    // Sắp xếp điểm cao nhất trước
+    results.sort((a, b) => b.score10 - a.score10);
+    return results;
+  } catch (err) {
+    console.warn('Lỗi tải bài làm học sinh:', err);
+    return [];
+  }
+}
+
+/**
+ * Tải danh sách lớp học của giáo viên hoặc học sinh
+ */
+export async function fetchClassGroups(
+  userNdid?: string,
+  isTeacher = true,
+  includePublic = false
+): Promise<import('../types').ClassGroupRecord[]> {
+  const { db } = await getFirebaseInstance();
+  if (!db) return [];
+
+  const { collection, getDocs, query, where, orderBy } = await import(
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js' as any
+  );
+
+  try {
+    const colRef = collection(db, 'edu_classes');
+    const snap = await getDocs(colRef);
+    const list: import('../types').ClassGroupRecord[] = [];
+
+    snap.forEach((docSnap: any) => {
+      const data = docSnap.data();
+      const item: import('../types').ClassGroupRecord = {
+        id: docSnap.id,
+        ...data,
+      };
+
+      const myNdid = (userNdid || '').toLowerCase().trim();
+      const teacherNdid = (data.teacherNdid || '').toLowerCase().trim();
+      const studentNdids = Array.isArray(data.studentNdids)
+        ? data.studentNdids.map((n: string) => String(n).toLowerCase().trim())
+        : [];
+
+      if (isTeacher) {
+        if (!userNdid || teacherNdid === myNdid) {
+          list.push(item);
+        }
+      } else {
+        // Học sinh: lấy các lớp mình đã tham gia, hoặc các lớp công khai
+        const isJoined = myNdid && studentNdids.includes(myNdid);
+        const isPublic = item.visibility === 'public';
+        if (isJoined || (includePublic && isPublic)) {
+          list.push(item);
+        }
+      }
+    });
+
+    return list;
+  } catch (err) {
+    console.warn('Lỗi đọc lớp học từ Firestore:', err);
+    return [];
+  }
+}
+
+/**
+ * Tra cứu thông tin 1 lớp học theo ID
+ */
+export async function fetchClassGroupById(classId: string): Promise<import('../types').ClassGroupRecord | null> {
+  const { db } = await getFirebaseInstance();
+  if (!db || !classId) return null;
+
+  const { doc, getDoc } = await import(
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js' as any
+  );
+
+  try {
+    const snap = await getDoc(doc(db, 'edu_classes', classId));
+    if (snap.exists()) {
+      return { id: snap.id, ...snap.data() } as import('../types').ClassGroupRecord;
+    }
+  } catch (err) {
+    console.warn('Lỗi đọc lớp học theo ID:', err);
+  }
+  return null;
+}
+
+/**
+ * Tạo hoặc cập nhật lớp học
+ */
+export async function saveClassGroup(
+  classData: Partial<import('../types').ClassGroupRecord>,
+  classId?: string
+): Promise<string> {
+  const { db } = await getFirebaseInstance();
+  if (!db) throw new Error('Cơ sở dữ liệu chưa sẵn sàng.');
+
+  const { collection, doc, setDoc, addDoc, serverTimestamp } = await import(
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js' as any
+  );
+
+  const payload: any = {
+    ...classData,
+    visibility: classData.visibility || 'public',
+    updatedAt: serverTimestamp(),
+  };
+
+  if (classId) {
+    const ref = doc(db, 'edu_classes', classId);
+    await setDoc(ref, payload, { merge: true });
+    return classId;
+  } else {
+    // Generate clean unique joinCode if not provided
+    if (!payload.joinCode) {
+      payload.joinCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+    payload.createdAt = serverTimestamp();
+    const ref = await addDoc(collection(db, 'edu_classes'), payload);
+    return ref.id;
+  }
+}
+
 

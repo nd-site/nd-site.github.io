@@ -9,7 +9,7 @@
 
 const NDAI_Assistant = (function () {
     const CONFIG = {
-        name: 'NDAI Assistant',
+        name: 'NDAI',
         primary: '#7928ca',
         gradient: 'linear-gradient(135deg, #0070f3 0%, #7928ca 100%)',
         bg: '#f8fafc',
@@ -186,7 +186,7 @@ const NDAI_Assistant = (function () {
         if (document.getElementById('nd-ai-widget')) return;
 
         const html = `
-            <div id="nd-ai-toggle" class="nd-ai-toggle" onclick="NDAI_Assistant.toggle()" title="Trợ lý NDAI Assistant">
+            <div id="nd-ai-toggle" class="nd-ai-toggle" onclick="NDAI_Assistant.toggle()" title="Trợ lý NDAI">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>
                 </svg>
@@ -196,7 +196,7 @@ const NDAI_Assistant = (function () {
                 <div class="nd-ai-header">
                     <div style="display:flex; align-items:center; gap:8px;">
                         <span>🤖</span>
-                        <span>NDAI Assistant</span>
+                        <span>NDAI</span>
                     </div>
                     <button onclick="NDAI_Assistant.toggle()" style="background:none; border:none; color:white; font-size:16px; cursor:pointer; font-weight:bold;">✕</button>
                 </div>
@@ -208,12 +208,12 @@ const NDAI_Assistant = (function () {
                         <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 270px;">
                             <div onclick="NDAI_Assistant.useSuggestion('Hướng dẫn chơi Mini World và quản lý kinh tế')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#7928ca'; this.style.color='#7928ca'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">🎮 Hướng dẫn Mini World & thuế</div>
                             <div onclick="NDAI_Assistant.useSuggestion('Giới thiệu các tính năng của ChatND')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#7928ca'; this.style.color='#7928ca'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">💬 Khám phá các tính năng ChatND</div>
-                            <div onclick="NDAI_Assistant.useSuggestion('Hệ sinh thái ND Labs gồm những gì?')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#7928ca'; this.style.color='#7928ca'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">🌟 Giới thiệu Hệ sinh thái ND Labs</div>
+                            <div onclick="NDAI_Assistant.useSuggestion('Giới thiệu các công cụ và tiện ích ND Labs')" style="background: white; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #334155; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#7928ca'; this.style.color='#7928ca'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#334155'">🌟 Giới thiệu Công cụ & Tiện ích ND Labs</div>
                         </div>
                     </div>
                 </div>
                 <div class="nd-ai-input-area">
-                    <input type="text" id="nd-ai-input" placeholder="Hỏi NDAI Assistant..." onkeypress="if(event.key==='Enter') NDAI_Assistant.send()">
+                    <input type="text" id="nd-ai-input" placeholder="Hỏi NDAI..." onkeypress="if(event.key==='Enter') NDAI_Assistant.send()">
                     <div onclick="NDAI_Assistant.send()" class="nd-ai-send-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </div>

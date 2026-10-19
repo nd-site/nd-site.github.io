@@ -93,6 +93,14 @@
     ],
     "rewrites": [
       {
+        "source": "/edu/teacher/class/**",
+        "destination": "/edu/teacher/class/index.html"
+      },
+      {
+        "source": "/edu/class/**",
+        "destination": "/edu/class/index.html"
+      },
+      {
         "source": "/edu/timetable/**",
         "destination": "/edu/timetable/index.html"
       },

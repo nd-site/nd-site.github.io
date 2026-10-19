@@ -11,11 +11,13 @@ import {
   Sparkles,
   Key,
   ExternalLink,
+  Users,
 } from 'lucide-react';
 import { Toast } from './components/Toast';
 import { EditorTab } from './components/EditorTab';
 import { PostsTab } from './components/PostsTab';
 import { RunnerTab } from './components/RunnerTab';
+import { ClassManagementTab } from './components/ClassManagementTab';
 import { AIGenModal } from './components/modals/AIGenModal';
 import { AIReviewModal } from './components/modals/AIReviewModal';
 import { AIExplanationModal } from './components/modals/AIExplanationModal';
@@ -38,6 +40,7 @@ import type {
   PassageContext,
   EduCategoriesConfig,
   ToastMessage,
+  ExamProctoringConfig,
 } from './types';
 
 const TEACHER_DRAFT_KEY = 'edu_teacher_editor_draft_v3';
@@ -70,12 +73,25 @@ export const TeacherEduApp: React.FC = () => {
   const [pubTag, setPubTag] = useState<string>('');
   const [metaAuthor, setMetaAuthor] = useState<string>('');
   const [collaborators, setCollaborators] = useState<string[]>([]);
+  const [collaboratorCodeIds, setCollaboratorCodeIds] = useState<string[]>([]);
+  const [accessType, setAccessType] = useState<'all' | 'restricted'>('all');
+  const [allowedCodeIds, setAllowedCodeIds] = useState<string[]>([]);
   const [metaYear, setMetaYear] = useState<string>('');
-  const [metaSchool, setMetaSchool] = useState<string>('');
+  const [metaSchool, setMetaSchool] = useState<string>('EduND by ND Labs');
   const [metaBook, setMetaBook] = useState<string>('');
   const [pubDesc, setPubDesc] = useState<string>('');
   const [pubHot, setPubHot] = useState<boolean>(false);
   const [pubComingSoon, setPubComingSoon] = useState<boolean>(false);
+  const [editorViewMode, setEditorViewMode] = useState<'visual' | 'json'>('visual');
+  const [proctoring, setProctoring] = useState<ExamProctoringConfig>({
+    enabled: false,
+    appliedModes: 'exam_only',
+    requireLogin: true,
+    requireCamera: true,
+    recordAudio: true,
+    recordScreenLog: true,
+    randomSnapshots: true,
+  });
 
   // Structure & Passages & Questions
   const [structure, setStructure] = useState<ExamStructure>({
@@ -93,6 +109,9 @@ export const TeacherEduApp: React.FC = () => {
     matching: 1.0,
     cloze: 1.0,
     ordering: 1.0,
+    multiselect: 1.0,
+    grouping: 1.0,
+    error_identification: 0.5,
   });
   const [passages, setPassages] = useState<PassageContext[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -140,6 +159,7 @@ export const TeacherEduApp: React.FC = () => {
         if (d.metaSchool) setMetaSchool(d.metaSchool);
         if (d.metaBook) setMetaBook(d.metaBook);
         if (d.pubDesc) setPubDesc(d.pubDesc);
+        if (d.proctoring) setProctoring(d.proctoring);
         if (d.structure) setStructure(d.structure);
         if (d.structPoints) setStructPoints(d.structPoints);
         if (Array.isArray(d.passages)) setPassages(d.passages);
@@ -167,6 +187,7 @@ export const TeacherEduApp: React.FC = () => {
           metaSchool,
           metaBook,
           pubDesc,
+          proctoring,
           structure,
           structPoints,
           passages,
@@ -208,6 +229,16 @@ export const TeacherEduApp: React.FC = () => {
       setIsAuthorized(authorized);
       setAuthChecking(false);
       if (err) setAuthError(err);
+
+      // Mặc định gắn thẻ bản thân cho người tạo đề nếu chưa có
+      if (authedUser) {
+        setMetaAuthor((prev) => {
+          if (!prev || prev.trim() === '') {
+            return authedUser.ndid || authedUser.displayName || authedUser.uid || 'Nhật Đăng - Admin';
+          }
+          return prev;
+        });
+      }
     }).then((u) => {
       unsubAuth = u;
     });
@@ -344,9 +375,12 @@ export const TeacherEduApp: React.FC = () => {
         matrixDuration,
         fullDuration,
         author: metaAuthor.trim(),
+        school: metaSchool.trim() || 'EduND by ND Labs',
         collaborators,
+        collaboratorCodeIds,
+        accessType,
+        allowedCodeIds,
         year: metaYear.trim(),
-        school: metaSchool.trim(),
         book: metaBook.trim(),
         totalPoints: calcPoints,
         examStructure: {
@@ -359,17 +393,24 @@ export const TeacherEduApp: React.FC = () => {
           matrixDuration,
           fullDuration,
           examLayout,
+          proctoring,
         },
+        proctoring,
         passages,
         questions,
       };
 
       const quizRecord: QuizRecord = {
         id: id.toUpperCase(),
-        creatorUid: user?.uid || '',
-        creatorNdid: user?.ndid || '',
+        creatorUid: user?.uid || '0000',
+        creatorNdid: user?.ndid || '0000',
+        creatorCodeId: user?.codeId || user?.uid || '0000',
         author: metaAuthor.trim(),
+        school: metaSchool.trim() || 'EduND by ND Labs',
         collaborators,
+        collaboratorCodeIds,
+        accessType,
+        allowedCodeIds,
         title: pubTitle.trim(),
         description: pubDesc.trim(),
         grade: pubClass.trim(),
@@ -383,6 +424,7 @@ export const TeacherEduApp: React.FC = () => {
         isHot: pubHot,
         isComingSoon: pubComingSoon,
         visibility: 'public',
+        proctoring,
         passages,
         quizData: quizDataObj,
       };
@@ -418,12 +460,30 @@ export const TeacherEduApp: React.FC = () => {
       setPubTag(record.tag || '');
       setMetaAuthor(record.author || qData.author || '');
       setCollaborators(Array.isArray(record.collaborators) ? record.collaborators : []);
+      setCollaboratorCodeIds(
+        Array.isArray(record.collaboratorCodeIds)
+          ? record.collaboratorCodeIds
+          : Array.isArray(qData.collaboratorCodeIds)
+          ? qData.collaboratorCodeIds
+          : []
+      );
+      setAccessType(record.accessType || qData.accessType || 'all');
+      setAllowedCodeIds(
+        Array.isArray(record.allowedCodeIds)
+          ? record.allowedCodeIds
+          : Array.isArray(qData.allowedCodeIds)
+          ? qData.allowedCodeIds
+          : []
+      );
       setMetaYear(qData.year || '');
-      setMetaSchool(qData.school || '');
+      setMetaSchool(record.school || qData.school || 'EduND by ND Labs');
       setMetaBook(qData.book || '');
       setPubDesc(record.description || qData.description || '');
       setPubHot(Boolean(record.isHot));
       setPubComingSoon(Boolean(record.isComingSoon));
+      if (record.proctoring || qData.proctoring || qData.config?.proctoring) {
+        setProctoring(record.proctoring || qData.proctoring || qData.config?.proctoring);
+      }
 
       if (qData.examStructure) {
         setStructure(qData.examStructure);
@@ -455,7 +515,7 @@ export const TeacherEduApp: React.FC = () => {
   };
 
   const handleCopyShareLink = (id: string) => {
-    const url = `${window.location.origin}/edu/exam?${id}`;
+    const url = `${window.location.origin}/edu/exam/?id=${encodeURIComponent(id)}`;
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(() => {
         addToast('Đã sao chép liên kết làm bài vào bộ nhớ tạm.');
@@ -498,12 +558,72 @@ export const TeacherEduApp: React.FC = () => {
   const isAdmin =
     user?.adminLevel === 'owner' || user?.role === 'admin' || user?.adminLevel === 'admin';
 
+  const isTeacher =
+    isAdmin ||
+    user?.eduRole === 'teacher' ||
+    user?.role === 'teacher' ||
+    user?.role === 'manager';
+
   if (authChecking) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-xs font-bold text-slate-500">Đang kiểm tra quyền truy cập Cổng Giáo viên...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Require Login
+  if (!user) {
+    return (
+      <div className="min-h-[75vh] flex items-center justify-center px-4 bg-slate-50">
+        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center border border-slate-200/90 shadow-sm space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto text-2xl font-black">
+            🔒
+          </div>
+          <h2 className="text-xl font-black text-slate-900">Yêu cầu đăng nhập</h2>
+          <p className="text-xs text-slate-500 font-medium leading-relaxed">
+            Công cụ soạn và quản lý đề thi chỉ dành cho giáo viên đã đăng nhập tài khoản NDID.
+          </p>
+          <a
+            href={`/auth/login/?redirect=${encodeURIComponent(window.location.pathname)}`}
+            className="inline-block w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black transition-all shadow-xs"
+          >
+            Đăng nhập tài khoản NDID
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  // Require Teacher Role
+  if (!isTeacher) {
+    return (
+      <div className="min-h-[75vh] flex items-center justify-center px-4 bg-slate-50">
+        <div className="bg-white rounded-3xl p-8 max-w-lg w-full text-center border border-amber-200 shadow-sm space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto text-2xl font-black">
+            <GraduationCap className="w-7 h-7" />
+          </div>
+          <h2 className="text-xl font-black text-slate-900">Không có quyền truy cập</h2>
+          <p className="text-xs text-slate-600 font-medium leading-relaxed">
+            Tài khoản <span className="font-bold text-slate-800">{displayNdid}</span> chưa được cấp quyền Giáo viên để sử dụng công cụ soạn đề thi. Vui lòng gửi yêu cầu hỗ trợ tới quản trị viên để được phê duyệt.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <a
+              href="/edu/teacher"
+              className="w-full sm:w-auto px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-xs rounded-xl transition-all"
+            >
+              Về Cổng Giáo viên
+            </a>
+            <a
+              href="/edu/"
+              className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs rounded-xl shadow-xs transition-all"
+            >
+              Về Cổng EduND
+            </a>
+          </div>
         </div>
       </div>
     );
@@ -580,6 +700,26 @@ export const TeacherEduApp: React.FC = () => {
               <Key className="w-3.5 h-3.5 text-amber-600" />
               <span>Gemini Key</span>
             </button>
+
+            {/* Link to Dedicated Class Management */}
+            <a
+              href="/edu/teacher/class"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-extrabold text-xs rounded-xl border border-emerald-200 transition-all shadow-xs"
+              title="Quản lý lớp học và giám sát bài làm"
+            >
+              <Users className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Quản lý Lớp học</span>
+            </a>
+
+            {/* Link to Teacher Hub */}
+            <a
+              href="/edu/teacher"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-xl border border-slate-200 transition-all shadow-xs"
+              title="Về trung tâm công cụ Giáo viên"
+            >
+              <GraduationCap className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Cổng Giáo Viên</span>
+            </a>
 
             {/* Admin Portal Link (if admin) */}
             {isAdmin && (
@@ -670,6 +810,12 @@ export const TeacherEduApp: React.FC = () => {
             setMetaAuthor={setMetaAuthor}
             collaborators={collaborators}
             setCollaborators={setCollaborators}
+            collaboratorCodeIds={collaboratorCodeIds}
+            setCollaboratorCodeIds={setCollaboratorCodeIds}
+            accessType={accessType}
+            setAccessType={setAccessType}
+            allowedCodeIds={allowedCodeIds}
+            setAllowedCodeIds={setAllowedCodeIds}
             metaYear={metaYear}
             setMetaYear={setMetaYear}
             metaSchool={metaSchool}
@@ -682,6 +828,8 @@ export const TeacherEduApp: React.FC = () => {
             setPubHot={setPubHot}
             pubComingSoon={pubComingSoon}
             setPubComingSoon={setPubComingSoon}
+            proctoring={proctoring}
+            setProctoring={setProctoring}
             structure={structure}
             setStructure={setStructure}
             structPoints={structPoints}
@@ -698,6 +846,13 @@ export const TeacherEduApp: React.FC = () => {
             onOpenAIReview={() => setIsAIReviewOpen(true)}
             onOpenAIExplanation={() => setIsAIExplanationOpen(true)}
             onToast={addToast}
+            editorViewMode={editorViewMode}
+            setEditorViewMode={setEditorViewMode}
+            onClearDraft={() => {
+              try {
+                localStorage.removeItem(TEACHER_DRAFT_KEY);
+              } catch (_) {}
+            }}
           />
         )}
 
@@ -722,6 +877,7 @@ export const TeacherEduApp: React.FC = () => {
             fullDuration={fullDuration}
             editorStructure={structure}
             passages={passages}
+            proctoring={proctoring}
             onToast={addToast}
             onBackToEditor={() => setActiveTab('editor')}
           />
@@ -732,12 +888,29 @@ export const TeacherEduApp: React.FC = () => {
       <AIGenModal
         isOpen={isAIGenOpen}
         onClose={() => setIsAIGenOpen(false)}
-        onAddQuestions={(newQs) => {
+        onAddQuestions={(newQs, passage) => {
+          if (passage) {
+            setPassages((prev) => [...prev, passage]);
+          }
           setQuestions((prev) => [...prev, ...newQs]);
-          addToast(`Đã thêm thành công ${newQs.length} câu hỏi do AI tạo vào đề thi!`);
+          addToast(
+            `Đã thêm thành công ${newQs.length} câu hỏi${
+              passage ? ' và 1 ngữ liệu đọc hiểu' : ''
+            } do AI tạo vào đề thi!`
+          );
         }}
         currentGrade={pubClass}
         currentSubject={pubSubject}
+        examTitle={pubTitle}
+        examType={examType}
+        matrixDuration={matrixDuration}
+        structure={structure}
+        structPoints={structPoints}
+        onSwitchToJsonMode={() => {
+          setActiveTab('editor');
+          setEditorViewMode('json');
+        }}
+        onToast={addToast}
       />
 
       <AIReviewModal

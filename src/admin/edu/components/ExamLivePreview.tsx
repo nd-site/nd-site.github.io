@@ -98,8 +98,26 @@ export const ExamLivePreview: React.FC<ExamLivePreviewProps> = ({
                 ? 'Điền khuyết'
                 : q.type === 'ordering'
                 ? 'Sắp xếp'
+                : q.type === 'multiselect'
+                ? 'Nhiều đáp án'
+                : q.type === 'grouping'
+                ? 'Phân nhóm'
+                : q.type === 'error_identification'
+                ? 'Tìm lỗi sai'
                 : 'Tự luận'}
             </span>
+            {q.cognitiveLevel && (
+              <span className={`px-2 py-0.5 text-[10px] font-bold rounded-md uppercase ${
+                q.cognitiveLevel === 'nhan_biet' ? 'bg-sky-100 text-sky-700' :
+                q.cognitiveLevel === 'thong_hieu' ? 'bg-emerald-100 text-emerald-700' :
+                q.cognitiveLevel === 'van_dung' ? 'bg-amber-100 text-amber-700' :
+                'bg-purple-100 text-purple-700'
+              }`}>
+                {q.cognitiveLevel === 'nhan_biet' ? 'Nhận biết' :
+                 q.cognitiveLevel === 'thong_hieu' ? 'Thông hiểu' :
+                 q.cognitiveLevel === 'van_dung' ? 'Vận dụng' : 'Vận dụng cao'}
+              </span>
+            )}
             {q.points !== undefined && (
               <span className="text-[10px] font-bold text-slate-400">({q.points} điểm)</span>
             )}
@@ -415,6 +433,140 @@ export const ExamLivePreview: React.FC<ExamLivePreviewProps> = ({
                 <span>📎 Hỗ trợ đính kèm ảnh bài làm viết tay</span>
               </div>
             )}
+          </div>
+        )}
+
+        {q.type === 'multiselect' && Array.isArray(q.options) && (
+          <div className="space-y-2 pt-1">
+            <span className="text-[11px] font-bold text-slate-500 block">
+              Chọn một hoặc nhiều đáp án đúng:
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {q.options.map((opt: string, optIdx: number) => {
+                const letter = ['A', 'B', 'C', 'D', 'E', 'F'][optIdx] || `${optIdx + 1}`;
+                const curSelected: number[] = Array.isArray(selectedOptions[qIdx]) ? selectedOptions[qIdx] : [];
+                const isChecked = curSelected.includes(optIdx);
+
+                return (
+                  <button
+                    key={optIdx}
+                    type="button"
+                    onClick={() => {
+                      const next = isChecked
+                        ? curSelected.filter((i) => i !== optIdx)
+                        : [...curSelected, optIdx];
+                      handleSelectOption(qIdx, next);
+                    }}
+                    className={`flex items-start gap-2.5 p-3 rounded-xl border text-left text-xs transition-all cursor-pointer ${
+                      isChecked
+                        ? 'bg-indigo-50/80 border-indigo-500 font-bold text-indigo-900 shadow-sm'
+                        : 'bg-slate-50/60 hover:bg-slate-100/80 border-slate-200 text-slate-700'
+                    }`}
+                  >
+                    <div
+                      className={`w-5 h-5 rounded-md font-black text-xs flex items-center justify-center shrink-0 border ${
+                        isChecked
+                          ? 'bg-indigo-600 border-indigo-600 text-white'
+                          : 'bg-white border-slate-300 text-slate-600'
+                      }`}
+                    >
+                      {isChecked ? '✓' : letter}
+                    </div>
+                    <div className="flex-1 pt-0.5 leading-snug">
+                      <LatexRenderer text={opt || `Lựa chọn ${letter}`} />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {q.type === 'grouping' && (
+          <div className="space-y-2 pt-1">
+            <span className="text-[11px] font-bold text-slate-500 block">
+              Phân loại các mục vào đúng nhóm tương ứng:
+            </span>
+            <div className="space-y-2">
+              {(q.items || []).map((item: any, itIdx: number) => {
+                const curCategory = selectedOptions[qIdx]?.[item.id];
+                return (
+                  <div
+                    key={itIdx}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs"
+                  >
+                    <div className="flex items-start gap-1.5 flex-1">
+                      <span className="font-extrabold text-blue-600">•</span>
+                      <span className="font-medium text-slate-800">{item.text}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-slate-400 font-bold">➔</span>
+                      <select
+                        value={curCategory || ''}
+                        onChange={(e) => {
+                          const next = { ...(selectedOptions[qIdx] || {}) };
+                          next[item.id] = e.target.value;
+                          handleSelectOption(qIdx, next);
+                        }}
+                        className="px-2.5 py-1 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-700 max-w-[200px]"
+                      >
+                        <option value="">-- Chọn nhóm --</option>
+                        {(q.categories || []).map((cat: any, cIdx: number) => (
+                          <option key={cIdx} value={cat.id}>
+                            {cat.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {q.type === 'error_identification' && (
+          <div className="space-y-3 pt-1">
+            <span className="text-[11px] font-bold text-slate-500 block">
+              Chọn phần gạch chân bị sai và điền phương án sửa lại:
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {(q.underlines || []).map((und: any, uIdx: number) => {
+                const selectedError = selectedOptions[qIdx]?.selectedUnderline;
+                const isSelected = selectedError === und.id;
+                return (
+                  <button
+                    key={uIdx}
+                    type="button"
+                    onClick={() => {
+                      const next = { ...(selectedOptions[qIdx] || {}), selectedUnderline: und.id };
+                      handleSelectOption(qIdx, next);
+                    }}
+                    className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-rose-50 border-rose-500 text-rose-700 font-bold underline shadow-sm'
+                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span className="font-extrabold mr-1 text-slate-400">[{und.id}]</span>
+                    {und.text}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-2 pt-1">
+              <span className="text-xs font-bold text-slate-600">Sửa lại thành:</span>
+              <input
+                type="text"
+                placeholder="Nhập từ/cụm từ đúng..."
+                value={selectedOptions[qIdx]?.correction || ''}
+                onChange={(e) => {
+                  const next = { ...(selectedOptions[qIdx] || {}), correction: e.target.value };
+                  handleSelectOption(qIdx, next);
+                }}
+                className="flex-1 max-w-xs px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500"
+              />
+            </div>
           </div>
         )}
       </div>

@@ -45,12 +45,28 @@ export const JsonImportModal: React.FC<JsonImportModalProps> = ({
       } else if (parsed && typeof parsed === 'object') {
         if (Array.isArray(parsed.questions)) {
           qList = parsed.questions;
+        } else if (parsed.exam && Array.isArray(parsed.exam.questions)) {
+          qList = parsed.exam.questions;
+        } else if (parsed.quiz && Array.isArray(parsed.quiz.questions)) {
+          qList = parsed.quiz.questions;
         } else if (parsed.quizData && Array.isArray(parsed.quizData.questions)) {
           qList = parsed.quizData.questions;
+        } else if (parsed.data && Array.isArray(parsed.data.questions)) {
+          qList = parsed.data.questions;
+        } else if (Array.isArray(parsed.data)) {
+          qList = parsed.data;
+        } else if (Array.isArray(parsed.exam)) {
+          qList = parsed.exam;
+        } else if (parsed.dethi && Array.isArray(parsed.dethi.questions)) {
+          qList = parsed.dethi.questions;
+        } else if (Array.isArray(parsed.dethi)) {
+          qList = parsed.dethi;
+        } else if (Array.isArray(parsed.cauhoi)) {
+          qList = parsed.cauhoi;
         }
         if (parsed.title) extraMeta.title = parsed.title;
         if (parsed.subject) extraMeta.subject = parsed.subject;
-        const struct = parsed.examStructure || parsed.quizData?.examStructure;
+        const struct = parsed.examStructure || parsed.structure || parsed.quizData?.examStructure;
         if (struct) extraMeta.examStructure = struct;
       }
 

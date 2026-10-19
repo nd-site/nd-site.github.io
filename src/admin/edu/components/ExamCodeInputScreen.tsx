@@ -105,20 +105,44 @@ export const ExamCodeInputScreen: React.FC<ExamCodeInputScreenProps> = ({
             </div>
           )}
 
-          {previewQuiz && !searching && (
-            <div className="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-2xl text-left animate-in fade-in duration-200">
-              <div className="flex items-center gap-1.5 mb-1 text-[10px] font-black text-emerald-700 uppercase tracking-wider">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Tìm thấy đề thi</span>
+          {previewQuiz && !searching && (() => {
+            const pqData = previewQuiz.quizData || (previewQuiz as any);
+            const rawSchool = previewQuiz.school || pqData.school || '';
+            const schoolName = (!rawSchool || rawSchool === 'EduSpace by ND Labs') ? 'EduND by ND Labs' : rawSchool;
+            const yearStr = previewQuiz.year || pqData.year || '';
+            const rawDate = previewQuiz.createdAt || pqData.createdAt || previewQuiz.updatedAt;
+            let dateStr = '';
+            if (rawDate) {
+              try {
+                if (typeof rawDate.toDate === 'function') dateStr = rawDate.toDate().toLocaleDateString('vi-VN');
+                else if (rawDate.seconds) dateStr = new Date(rawDate.seconds * 1000).toLocaleDateString('vi-VN');
+                else {
+                  const d = new Date(rawDate);
+                  if (!isNaN(d.getTime())) dateStr = d.toLocaleDateString('vi-VN');
+                }
+              } catch { dateStr = ''; }
+            }
+
+            return (
+              <div className="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-2xl text-left animate-in fade-in duration-200 space-y-1">
+                <div className="flex items-center gap-1.5 text-[10px] font-black text-emerald-700 uppercase tracking-wider">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Tìm thấy đề thi</span>
+                </div>
+                <h4 className="text-xs font-bold text-slate-900 line-clamp-1">{previewQuiz.title}</h4>
+                <p className="text-[11px] text-slate-600 font-medium">
+                  {[previewQuiz.subject, previewQuiz.grade, previewQuiz.author ? `Tác giả: ${previewQuiz.author}` : '']
+                    .filter(Boolean)
+                    .join(' • ')}
+                </p>
+                <div className="flex items-center gap-2 text-[10px] text-slate-500 font-semibold pt-0.5 flex-wrap">
+                  {schoolName && <span>🏫 {schoolName}</span>}
+                  {yearStr && <span>📅 Năm học {yearStr}</span>}
+                  {dateStr && <span>🕒 {dateStr}</span>}
+                </div>
               </div>
-              <h4 className="text-xs font-bold text-slate-900 line-clamp-1">{previewQuiz.title}</h4>
-              <p className="text-[10px] text-slate-500 mt-1">
-                {[previewQuiz.subject, previewQuiz.grade, previewQuiz.author]
-                  .filter(Boolean)
-                  .join(' • ')}
-              </p>
-            </div>
-          )}
+            );
+          })()}
 
           <button
             type="submit"

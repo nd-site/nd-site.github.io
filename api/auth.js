@@ -661,12 +661,23 @@ async function handleCanonicalAuth(req, res) {
       }
     }
   } catch (err) {
-    const status = err.status || (action === 'loginUser' ? 401 : 400);
+    let status = err.status;
+    let code = err.code || 'INTERNAL_ERROR';
+    let message = err.message || 'Đã xảy ra lỗi máy chủ nội bộ';
+
+    if (String(message).includes('RESOURCE_EXHAUSTED') || code === 8 || code === 'RESOURCE_EXHAUSTED') {
+      status = 503;
+      code = 'RESOURCE_EXHAUSTED';
+      message = 'Hạn mức kết nối cơ sở dữ liệu tạm thời vượt quá giới hạn (Quota exceeded). Vui lòng thử lại sau ít phút.';
+    } else if (!status) {
+      status = (action === 'loginUser' ? 401 : 400);
+    }
+
     sendJson(res, status, {
       success: false,
       error: {
-        code: err.code || 'INTERNAL_ERROR',
-        message: err.message || 'ÄĂ£ xáº£y ra lá»—i mĂ¡y chá»§ ná»™i bá»™',
+        code,
+        message,
       },
     });
   }

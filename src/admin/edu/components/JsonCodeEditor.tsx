@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Code, Check, RefreshCw, Copy, Upload, AlertCircle } from 'lucide-react';
+import { Code, Check, RefreshCw, Copy, Upload, AlertCircle, Sparkles, ExternalLink, X } from 'lucide-react';
+import {
+  robustJsonParse,
+  cleanJsonString,
+  buildGenerateExamPrompt,
+  copyTextToClipboard,
+  openGeminiNotebook,
+} from '../services/aiService';
 import type { Question, ExamStructure, PassageContext } from '../types';
 
 interface JsonCodeEditorProps {
@@ -12,6 +19,7 @@ interface JsonCodeEditorProps {
   matrixDuration: number;
   fullDuration: number;
   structure: ExamStructure;
+  structPoints?: any;
   passages: PassageContext[];
   questions: Question[];
   onApplyJson: (payload: {
@@ -40,6 +48,7 @@ export const JsonCodeEditor: React.FC<JsonCodeEditorProps> = ({
   matrixDuration,
   fullDuration,
   structure,
+  structPoints,
   passages,
   questions,
   onApplyJson,
@@ -47,6 +56,8 @@ export const JsonCodeEditor: React.FC<JsonCodeEditorProps> = ({
 }) => {
   const [jsonText, setJsonText] = useState('');
   const [syntaxError, setSyntaxError] = useState<string | null>(null);
+  const [isAiPromptModalOpen, setIsAiPromptModalOpen] = useState(false);
+  const [aiTopic, setAiTopic] = useState('');
 
   // Sync from props on initial load or reset
   const generateCurrentJson = () => {
@@ -73,10 +84,10 @@ export const JsonCodeEditor: React.FC<JsonCodeEditorProps> = ({
 
   const handleFormat = () => {
     try {
-      const parsed = JSON.parse(jsonText);
+      const parsed = robustJsonParse(jsonText);
       setJsonText(JSON.stringify(parsed, null, 2));
       setSyntaxError(null);
-      onToast('Đã định dạng mã JSON chuẩn.');
+      onToast('Đã làm sạch cú pháp và định dạng mã JSON chuẩn.');
     } catch (e: any) {
       setSyntaxError(e.message);
       onToast('Lỗi cú pháp JSON: ' + e.message, true);
@@ -91,17 +102,59 @@ export const JsonCodeEditor: React.FC<JsonCodeEditorProps> = ({
 
   const handleApply = () => {
     try {
-      const parsed = JSON.parse(jsonText);
+      const parsed = robustJsonParse(jsonText);
       setSyntaxError(null);
 
-      // Support either full payload or questions array directly
+      // Định dạng lại nội dung khung soạn thảo JSON cho chuẩn đẹp
+      try {
+        setJsonText(JSON.stringify(parsed, null, 2));
+      } catch (_) {}
+
+      // Hỗ trợ trích xuất câu hỏi từ nhiều định dạng cấu trúc JSON
       let qs: Question[] = [];
+      let rawPassages: PassageContext[] = [];
+
       if (Array.isArray(parsed)) {
         qs = parsed;
-      } else if (Array.isArray(parsed.questions)) {
-        qs = parsed.questions;
+      } else if (parsed && typeof parsed === 'object') {
+        if (Array.isArray(parsed.questions)) {
+          qs = parsed.questions;
+        } else if (parsed.exam && Array.isArray(parsed.exam.questions)) {
+          qs = parsed.exam.questions;
+        } else if (parsed.quiz && Array.isArray(parsed.quiz.questions)) {
+          qs = parsed.quiz.questions;
+        } else if (parsed.quizData && Array.isArray(parsed.quizData.questions)) {
+          qs = parsed.quizData.questions;
+        } else if (parsed.data && Array.isArray(parsed.data.questions)) {
+          qs = parsed.data.questions;
+        } else if (Array.isArray(parsed.data)) {
+          qs = parsed.data;
+        } else if (Array.isArray(parsed.exam)) {
+          qs = parsed.exam;
+        } else if (parsed.dethi && Array.isArray(parsed.dethi.questions)) {
+          qs = parsed.dethi.questions;
+        } else if (Array.isArray(parsed.dethi)) {
+          qs = parsed.dethi;
+        } else if (Array.isArray(parsed.cauhoi)) {
+          qs = parsed.cauhoi;
+        } else {
+          throw new Error('Dữ liệu JSON phải chứa danh sách câu hỏi (mảng "questions").');
+        }
+
+        if (Array.isArray(parsed.passages)) {
+          rawPassages = parsed.passages;
+        } else if (parsed.passage && typeof parsed.passage === 'object') {
+          rawPassages = [
+            {
+              id: parsed.passage.id || `p_${Date.now().toString(36)}`,
+              title: parsed.passage.title || 'Ngữ liệu đọc hiểu',
+              content: parsed.passage.content || '',
+              shuffleQuestions: true,
+            },
+          ];
+        }
       } else {
-        throw new Error('Dữ liệu JSON phải chứa danh sách câu hỏi (mảng "questions").');
+        throw new Error('Dữ liệu JSON không hợp lệ.');
       }
 
       onApplyJson({
@@ -114,7 +167,7 @@ export const JsonCodeEditor: React.FC<JsonCodeEditorProps> = ({
         matrixDuration: parsed.matrixDuration,
         fullDuration: parsed.fullDuration,
         structure: parsed.examStructure || parsed.structure,
-        passages: parsed.passages,
+        passages: rawPassages.length > 0 ? rawPassages : parsed.passages,
         questions: qs,
       });
 
@@ -141,7 +194,7 @@ export const JsonCodeEditor: React.FC<JsonCodeEditorProps> = ({
     reader.onload = (event) => {
       try {
         const content = event.target?.result as string;
-        const parsed = JSON.parse(content);
+        const parsed = robustJsonParse(content);
         setJsonText(JSON.stringify(parsed, null, 2));
         setSyntaxError(null);
         onToast(`Đã nạp file "${file.name}" vào trình soạn JSON.`);
@@ -152,6 +205,33 @@ export const JsonCodeEditor: React.FC<JsonCodeEditorProps> = ({
     };
     reader.readAsText(file);
     e.target.value = '';
+  };
+
+  const handleGeneratePromptAndOpenGemini = async () => {
+    if (!aiTopic.trim()) {
+      onToast('Vui lòng nhập chi tiết yêu cầu đề thi.', true);
+      return;
+    }
+
+    const promptText = buildGenerateExamPrompt({
+      topic: aiTopic,
+      title: quizTitle,
+      subject,
+      grade,
+      duration: matrixDuration,
+      examType,
+      structureCounts: structure?.counts,
+      structPoints,
+    });
+
+    const success = await copyTextToClipboard(promptText);
+    if (success) {
+      onToast('Đã sao chép Prompt cho Gemini! Hãy dán vào Gemini.');
+      openGeminiNotebook();
+      setIsAiPromptModalOpen(false);
+    } else {
+      onToast('Không thể tự động sao chép. Vui lòng thử lại.', true);
+    }
   };
 
   return (
@@ -175,6 +255,17 @@ export const JsonCodeEditor: React.FC<JsonCodeEditorProps> = ({
             <span>Tải tệp JSON</span>
             <input type="file" accept=".json" onChange={handleFileUpload} className="hidden" />
           </label>
+
+          {/* Quick AI Prompt button */}
+          <button
+            type="button"
+            onClick={() => setIsAiPromptModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-xs rounded-xl border border-purple-200 transition-all cursor-pointer"
+            title="Tạo Prompt AI cho Gemini từ thông tin và ma trận đề này"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+            <span>Tạo Prompt AI từ đề này</span>
+          </button>
 
           <button
             type="button"
@@ -250,6 +341,75 @@ export const JsonCodeEditor: React.FC<JsonCodeEditorProps> = ({
           Nhấn "Áp dụng vào đề" để cập nhật trực tiếp sang cột xem trước →
         </button>
       </div>
+
+      {/* Quick AI Prompt Modal inside JsonCodeEditor */}
+      {isAiPromptModalOpen && (
+        <div className="fixed inset-0 z-[10000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 max-w-xl w-full shadow-2xl border border-slate-100 space-y-4 animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2 text-purple-600 font-black text-sm">
+                <Sparkles className="w-5 h-5" />
+                <span>Tạo Prompt AI Từ Đề &amp; Ma Trận Này</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAiPromptModalOpen(false)}
+                className="p-1 hover:bg-slate-100 rounded-xl text-slate-400 hover:text-slate-600 transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Exam info badge */}
+            <div className="p-3 bg-purple-50/70 border border-purple-200/80 rounded-2xl text-xs space-y-1.5">
+              <div className="flex items-center gap-2 flex-wrap font-bold text-slate-800">
+                <span className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded-lg">{subject || 'Toán học'}</span>
+                <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-lg">Khối {grade || '12'}</span>
+                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-lg">{matrixDuration || 90} phút</span>
+                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-lg">{examType || 'GDPT 2018'}</span>
+              </div>
+              <div className="text-[11px] text-slate-600 font-medium">
+                <b>Đề:</b> {quizTitle || 'Chưa đặt tên'}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                Chi tiết nội dung đề muốn tạo <span className="text-rose-500">*</span>
+              </label>
+              <textarea
+                value={aiTopic}
+                onChange={(e) => setAiTopic(e.target.value)}
+                rows={3}
+                placeholder="Ví dụ: Kiểm tra 1 tiết chương 1 Đạo hàm và ứng dụng khảo sát hàm số, bám sát sách Cánh Diều, có 2 bài toán tối ưu thực tế..."
+                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium"
+              />
+            </div>
+
+            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[11px] text-slate-500 leading-relaxed">
+              💡 <b>Quy trình một chạm:</b> Nhấn <b>Sao chép &amp; Mở Gemini</b> → Dán prompt vào Gemini → Sao chép JSON từ Gemini → Dán thẳng vào ô soạn thảo JSON này và nhấn <b>Áp dụng vào đề</b>. Hệ thống tự động làm sạch markdown và lỗi cú pháp.
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setIsAiPromptModalOpen(false)}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition cursor-pointer"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={handleGeneratePromptAndOpenGemini}
+                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Sao chép &amp; Mở Gemini</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

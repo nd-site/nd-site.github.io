@@ -5,21 +5,32 @@ import type { RubricStep } from '../../types';
 interface RubricModalProps {
   isOpen: boolean;
   onClose: () => void;
-  questionIndex: number;
-  initialRubric: RubricStep[];
-  onSaveRubric: (qIdx: number, rubric: RubricStep[]) => void;
+  questionIndex?: number;
+  questionNumber?: number;
+  questionPoints?: number;
+  initialRubric?: RubricStep[];
+  rubrics?: RubricStep[];
+  onSaveRubric?: (qIdx: number, rubric: RubricStep[]) => void;
+  onSaveRubrics?: (rubrics: RubricStep[]) => void;
 }
 
 export const RubricModal: React.FC<RubricModalProps> = ({
   isOpen,
   onClose,
   questionIndex,
+  questionNumber,
+  questionPoints,
   initialRubric,
+  rubrics,
   onSaveRubric,
+  onSaveRubrics,
 }) => {
+  const displayQNum = questionNumber ?? ((questionIndex ?? 0) + 1);
+  const existingRubric = rubrics || initialRubric;
+
   const [steps, setSteps] = useState<RubricStep[]>(
-    initialRubric && initialRubric.length > 0
-      ? initialRubric
+    existingRubric && existingRubric.length > 0
+      ? existingRubric
       : [
           { step: 1, description: 'Trình bày giả thiết và điều kiện xác định', points: 0.5 },
           { step: 2, description: 'Biến đổi và tính toán bước giải chính', points: 1.0 },
@@ -54,7 +65,12 @@ export const RubricModal: React.FC<RubricModalProps> = ({
   const totalPoints = steps.reduce((sum, s) => sum + (Number(s.points) || 0), 0);
 
   const handleSave = () => {
-    onSaveRubric(questionIndex, steps);
+    if (onSaveRubrics) {
+      onSaveRubrics(steps);
+    }
+    if (onSaveRubric && questionIndex !== undefined) {
+      onSaveRubric(questionIndex, steps);
+    }
     onClose();
   };
 
@@ -69,7 +85,7 @@ export const RubricModal: React.FC<RubricModalProps> = ({
             </div>
             <div>
               <h3 className="font-extrabold text-slate-900 text-sm">
-                Tiêu Chí Chấm Tự Luận (Rubric) – Câu {questionIndex + 1}
+                Tiêu Chí Chấm Tự Luận (Rubric) – Câu {displayQNum}
               </h3>
               <p className="text-[11px] text-slate-500">
                 Lập thang điểm chi tiết cho từng bước làm bài của học sinh

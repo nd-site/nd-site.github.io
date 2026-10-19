@@ -143,7 +143,7 @@
       },
       {
         id: 'nd_ai',
-        name: 'NDAI Assistant',
+        name: 'NDAI',
         script: '/assets/js/nd_ai.js',
         // Áp dụng cho tất cả các trang còn lại của ND Labs
         matcher: () => true
@@ -1150,10 +1150,22 @@
     </button>
   `;
 
+  /* ── NDAI Button in Navbar ── */
+  const aiWrapper = document.createElement('div');
+  aiWrapper.id = 'nd-navbar-ai-wrapper';
+  aiWrapper.style.cssText = 'position: relative; display: flex; align-items: center; margin-left: 6px; flex-shrink: 0;';
+  aiWrapper.innerHTML = `
+    <button id="nd-navbar-ai-btn" type="button" title="Trợ lý NDAI" style="padding: 6px 10px; border-radius: 12px; border: 1px solid rgba(121,40,202,0.3); background: linear-gradient(135deg, rgba(0,112,243,0.08) 0%, rgba(121,40,202,0.12) 100%); color: #7928ca; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.2s; font-family: inherit;">
+      <i class="ph-duotone ph-sparkle" style="font-size: 14px; color: #7928ca;"></i>
+      <span class="nd-lbl">NDAI</span>
+    </button>
+  `;
+
   inner.appendChild(brand);
   inner.appendChild(sep);
   inner.appendChild(linksWrapper);
   inner.appendChild(toolsWrapper);
+  inner.appendChild(aiWrapper);
   inner.appendChild(notifyWrapper);
   inner.appendChild(userSection);
   inner.appendChild(hamburger);
@@ -1299,6 +1311,34 @@
           if (qrImg) qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(currentUrl)}`;
           const qrUrl = document.getElementById('nd-tools-qr-url');
           if (qrUrl) qrUrl.value = currentUrl;
+        }
+      });
+    }
+
+    // Toggle NDAI Assistant from Navbar Button
+    const aiBtn = document.getElementById('nd-navbar-ai-btn');
+    if (aiBtn) {
+      aiBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // If EduAI or NDAI widget is present, invoke toggle
+        if (window.NDAI_Assistant && typeof window.NDAI_Assistant.toggle === 'function') {
+          window.NDAI_Assistant.toggle();
+        } else if (window.eduspaceAI && typeof window.eduspaceAI.toggle === 'function') {
+          window.eduspaceAI.toggle();
+        } else {
+          // Fallback: try clicking toggle button if rendered
+          const toggleEl = document.getElementById('nd-ai-toggle') || document.querySelector('.nd-ai-toggle');
+          if (toggleEl) {
+            toggleEl.click();
+          } else {
+            // Dynamically load script if not loaded
+            const aiScript = document.createElement('script');
+            aiScript.src = '/assets/js/nd_ai.js';
+            aiScript.onload = () => {
+              if (window.NDAI_Assistant) window.NDAI_Assistant.toggle();
+            };
+            document.head.appendChild(aiScript);
+          }
         }
       });
     }

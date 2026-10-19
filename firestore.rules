@@ -168,10 +168,20 @@ service cloud.firestore {
       allow write: if isCallerAdmin();
     }
 
+    match /system_config/{configId} {
+      allow read: if true;
+      allow write: if isCallerAdmin();
+    }
+
     // EduSpace Quizzes, Lessons & Exam Sessions
     match /quizzes/{quizId} {
       allow read: if true;
-      allow write: if isCallerAdmin();
+      allow create, update: if isSignedIn();
+      allow delete: if isSignedIn() && (
+        isCallerAdmin() ||
+        resource.data.creatorUid == request.auth.uid ||
+        resource.data.creatorCodeId == request.auth.uid
+      );
 
       // Native V3 question versions include answer keys. They stay server-only
       // inside the shared quiz aggregate and are read through the Admin SDK.
@@ -182,6 +192,13 @@ service cloud.firestore {
           allow read, write: if false;
         }
       }
+    }
+
+    // Shared Question Bank across teachers
+    match /question_bank/{questionId} {
+      allow read: if true;
+      allow create, update: if isSignedIn();
+      allow delete: if isCallerAdmin() || (isSignedIn() && resource.data.creatorNdid == request.auth.uid);
     }
 
     match /eduspace_lessons/{lessonId} {
@@ -205,8 +222,18 @@ service cloud.firestore {
       }
     }
 
-    match /poem_progress/{progressId} {
-      allow read, write: if true;
+    // EduND Classes & Assignments
+    match /edu_classes/{classId} {
+      allow read: if true;
+      allow create, update: if isSignedIn() || true;
+      allow delete: if isSignedIn() || true;
+    }
+
+    // EduND Exam Submissions & Proctoring
+    match /edu_submissions/{submissionId} {
+      allow read: if true;
+      allow create, update: if isSignedIn() || true;
+      allow delete: if isCallerAdmin();
     }
 
     // Fallback safety net
