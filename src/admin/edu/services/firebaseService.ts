@@ -515,6 +515,54 @@ export async function saveCategoriesToFirestore(
 }
 
 /**
+ * Đọc cấu hình AI từ Firestore (system_config/ai_config)
+ */
+export async function getAIConfig(): Promise<{ geminiApiKey: string; updatedAt?: any; updatedBy?: string } | null> {
+  const { db } = await getFirebaseInstance();
+  if (!db) return null;
+
+  const { doc, getDoc } = await import(
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js' as any
+  );
+
+  try {
+    const snap = await getDoc(doc(db, 'system_config', 'ai_config'));
+    if (snap.exists()) {
+      return snap.data() as any;
+    }
+    return null;
+  } catch (e) {
+    console.warn('Lỗi đọc AI config:', e);
+    return null;
+  }
+}
+
+/**
+ * Lưu cấu hình AI lên Firestore (Chỉ dành cho Owner/Admin)
+ */
+export async function saveAIConfig(
+  geminiApiKey: string,
+  updatedByNdid?: string
+): Promise<void> {
+  const { db } = await getFirebaseInstance();
+  if (!db) throw new Error('Firestore chưa sẵn sàng.');
+
+  const { doc, setDoc, serverTimestamp } = await import(
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js' as any
+  );
+
+  await setDoc(
+    doc(db, 'system_config', 'ai_config'),
+    {
+      geminiApiKey: geminiApiKey.trim(),
+      updatedAt: serverTimestamp(),
+      updatedBy: updatedByNdid || 'Admin',
+    },
+    { merge: true }
+  );
+}
+
+/**
  * ĐĂNG KÝ THEO DÕI REALTIME KHO ĐỀ THI FIRESTORE
  * Tự động cập nhật danh sách ngay khi có bất kỳ thay đổi nào từ DB!
  */

@@ -58,7 +58,7 @@ export function getSharedGeminiApiKey(): string {
     if (wKey && !wKey.includes('PLACEHOLDER') && wKey.trim()) return wKey.trim();
   }
 
-  return "AIzaSyCKqYRA44WIka-dTOwH234LOrcXSUQd04A";
+  return "";
 }
 
 // Call Gemini via REST API (Using shared ND Labs AI key by default)

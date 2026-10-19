@@ -33,6 +33,8 @@ import {
   fetchQuizById,
   toggleQuizHot,
   toggleQuizVerified,
+  getAIConfig,
+  saveAIConfig,
   DEFAULT_CATEGORIES,
 } from './services/firebaseService';
 import { isValidShortDecimalAnswer } from './services/aiService';
@@ -130,6 +132,10 @@ export const AdminEduApp: React.FC = () => {
   const [isAIReviewOpen, setIsAIReviewOpen] = useState(false);
   const [isAIExplanationOpen, setIsAIExplanationOpen] = useState(false);
   const [isGeminiKeyOpen, setIsGeminiKeyOpen] = useState(false);
+  const [isAIConfigOpen, setIsAIConfigOpen] = useState(false);
+  const [aiConfigKey, setAIConfigKey] = useState('');
+  const [aiConfigSaving, setAIConfigSaving] = useState(false);
+  const [aiConfigLastUpdated, setAIConfigLastUpdated] = useState<string>('');
 
   // Toasts
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -692,6 +698,30 @@ export const AdminEduApp: React.FC = () => {
               </button>
             )}
 
+            {/* Owner: Quản lý API AI hệ thống */}
+            {isOwner && (
+              <button
+                onClick={async () => {
+                  setIsAIConfigOpen(true);
+                  try {
+                    const cfg = await getAIConfig();
+                    if (cfg) {
+                      setAIConfigKey(cfg.geminiApiKey || '');
+                      if (cfg.updatedAt) {
+                        const d = cfg.updatedAt.toDate ? cfg.updatedAt.toDate() : new Date(cfg.updatedAt.seconds * 1000);
+                        setAIConfigLastUpdated(`${cfg.updatedBy || 'Admin'} — ${d.toLocaleString('vi-VN')}`);
+                      }
+                    }
+                  } catch (_) {}
+                }}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 font-extrabold text-xs rounded-xl border border-amber-200 transition-all cursor-pointer shadow-sm"
+                title="Quản lý API key AI toàn hệ thống (lưu trên Firestore)"
+              >
+                <Key className="w-3.5 h-3.5 text-amber-600" />
+                <span>API AI</span>
+              </button>
+            )}
+
             {/* Link to Teacher Portal */}
             <a
               href="/edu/teacher/exam"
@@ -922,6 +952,70 @@ export const AdminEduApp: React.FC = () => {
         user={user}
         onKeySaved={() => addToast('Đã lưu khóa cá nhân Gemini thành công!')}
       />
+
+      {/* AI Config Modal (Owner only) */}
+      {isAIConfigOpen && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden">
+            <div className="px-6 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white">
+              <h3 className="font-extrabold text-base flex items-center gap-2">
+                <Key className="w-5 h-5" />
+                Quản lý API AI Hệ Thống
+              </h3>
+              <p className="text-xs opacity-80 mt-1">
+                Thay đổi API key sẽ áp dụng ngay cho toàn bộ hệ thống.
+              </p>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-600 mb-1.5">Gemini API Key</label>
+                <input
+                  type="password"
+                  value={aiConfigKey}
+                  onChange={(e) => setAIConfigKey(e.target.value)}
+                  placeholder="Nhập API key..."
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-mono focus:ring-2 focus:ring-amber-400 focus:border-amber-400 outline-none"
+                />
+              </div>
+              {aiConfigLastUpdated && (
+                <p className="text-xs text-slate-400">
+                  Cập nhật lần cuối: {aiConfigLastUpdated}
+                </p>
+              )}
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={async () => {
+                    if (!aiConfigKey.trim()) {
+                      addToast('Vui lòng nhập API key.', true);
+                      return;
+                    }
+                    setAIConfigSaving(true);
+                    try {
+                      await saveAIConfig(aiConfigKey, user?.ndid || 'Admin');
+                      addToast('Đã lưu API AI thành công! Hệ thống sẽ sử dụng key mới ngay lập tức.');
+                      setIsAIConfigOpen(false);
+                    } catch (err: any) {
+                      addToast('Lỗi lưu: ' + (err?.message || 'Không xác định'), true);
+                    } finally {
+                      setAIConfigSaving(false);
+                    }
+                  }}
+                  disabled={aiConfigSaving}
+                  className="flex-1 px-4 py-2.5 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white font-extrabold text-xs rounded-xl transition-all cursor-pointer"
+                >
+                  {aiConfigSaving ? 'Đang lưu...' : 'Lưu API Key'}
+                </button>
+                <button
+                  onClick={() => setIsAIConfigOpen(false)}
+                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition-all cursor-pointer"
+                >
+                  Đóng
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

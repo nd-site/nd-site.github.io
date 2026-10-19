@@ -135,6 +135,10 @@
                         <i class="ph-bold ph-bell-ringing text-lg"></i>
                         <span>Thông báo</span>
                     </a>
+                    <a href="#/ai-config" class="sidebar-link flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition" data-tab="ai-config">
+                        <i class="ph-bold ph-key text-lg"></i>
+                        <span>Cấu hình API AI</span>
+                    </a>
                 </nav>
             </aside>
 
@@ -673,6 +677,53 @@
                             </table>
                         </div>
                     </div>
+                <!-- Panel 8: AI API Key Configuration -->
+                <div id="panel-ai-config" class="tab-panel">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2.5">
+                            <i class="ph-bold ph-key text-amber-600"></i>
+                            <span>Cấu hình API AI Toàn Hệ Thống</span>
+                        </h1>
+                        <p class="text-sm text-gray-500 mt-0.5">Khóa API Google Gemini lưu trữ an toàn trong Firestore Database (system_config/ai_config). Thay đổi sẽ có hiệu lực tức thì trên toàn bộ hệ thống mà không cần build lại.</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm max-w-2xl">
+                        <div class="space-y-5">
+                            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
+                                <p class="font-bold flex items-center gap-1.5 mb-1 text-amber-900">
+                                    <i class="ph-bold ph-info"></i>
+                                    Cơ chế lưu trữ an toàn
+                                </p>
+                                API Key này được đọc tự động bởi tất cả các dịch vụ AI trong hệ thống (NDAI, EduAI, soạn đề thi, giải thích đề, phân tích bài thơ,...). Key không lưu trong mã nguồn GitHub nên hoàn toàn không sợ bị lộ.
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">Google Gemini API Key</label>
+                                <div class="relative">
+                                    <input type="password" id="owner-ai-api-key" placeholder="Nhập API key Gemini..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-mono focus:outline-none focus:border-amber-500 focus:bg-white transition pr-24">
+                                    <button type="button" id="btn-toggle-ai-key-vis" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-500 hover:text-gray-700 px-2 py-1 rounded bg-gray-200/60">
+                                        Hiện
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="ai-key-status" class="text-xs text-gray-500 flex items-center gap-2">
+                                <span class="inline-block w-2 h-2 rounded-full bg-gray-400" id="ai-key-status-dot"></span>
+                                <span id="ai-key-status-text">Đang tải trạng thái API key...</span>
+                            </div>
+
+                            <div class="pt-2 flex items-center gap-3">
+                                <button type="button" id="btn-save-ai-config" class="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold transition shadow-sm flex items-center gap-2 cursor-pointer">
+                                    <i class="ph-bold ph-floppy-disk text-base"></i>
+                                    <span>Lưu API Key</span>
+                                </button>
+                                <button type="button" id="btn-test-ai-key" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-bold transition flex items-center gap-2 cursor-pointer">
+                                    <i class="ph-bold ph-lightning text-base"></i>
+                                    <span>Kiểm tra kết nối</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
@@ -792,6 +843,8 @@
                     loadAuditLogs();
                 } else if (tabId === 'notifications') {
                     loadAdminNotifications();
+                } else if (tabId === 'ai-config') {
+                    loadOwnerAIConfig();
                 }
             }
 
@@ -1642,6 +1695,148 @@
             btnRefreshUsers.addEventListener('click', () => loadUsers(true));
             btnLoadMore.addEventListener('click', () => loadUsers(false));
             btnRefreshLogs.addEventListener('click', loadAuditLogs);
+
+            // ── AI API Key Management Functions ──
+            async function loadOwnerAIConfig() {
+                const statusDot = document.getElementById('ai-key-status-dot');
+                const statusText = document.getElementById('ai-key-status-text');
+                const keyInput = document.getElementById('owner-ai-api-key');
+
+                statusDot.className = 'inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+                statusText.textContent = 'Đang tải thông tin từ Firestore...';
+
+                try {
+                    // Chờ Firestore
+                    let retries = 0;
+                    while (!window.firebaseFirestore && retries < 25) {
+                        await new Promise(r => setTimeout(r, 100));
+                        retries++;
+                    }
+                    if (!window.firebaseFirestore) {
+                        throw new Error('Chưa kết nối được Firestore');
+                    }
+
+                    const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+                    const snap = await getDoc(doc(window.firebaseFirestore, 'system_config', 'ai_config'));
+
+                    if (snap.exists() && snap.data().geminiApiKey) {
+                        const data = snap.data();
+                        keyInput.value = data.geminiApiKey;
+                        statusDot.className = 'inline-block w-2 h-2 rounded-full bg-green-500';
+                        let timeStr = '';
+                        if (data.updatedAt) {
+                            const d = data.updatedAt.toDate ? data.updatedAt.toDate() : new Date(data.updatedAt.seconds * 1000);
+                            timeStr = ` • Cập nhật: ${d.toLocaleString('vi-VN')} bởi ${data.updatedBy || 'Owner'}`;
+                        }
+                        statusText.textContent = `Đang hoạt động (Firestore system_config/ai_config)${timeStr}`;
+                    } else {
+                        keyInput.value = '';
+                        statusDot.className = 'inline-block w-2 h-2 rounded-full bg-amber-500';
+                        statusText.textContent = 'Chưa thiết lập API Key trong Firestore.';
+                    }
+                } catch (e) {
+                    console.error('Lỗi tải cấu hình AI:', e);
+                    statusDot.className = 'inline-block w-2 h-2 rounded-full bg-red-500';
+                    statusText.textContent = 'Lỗi kết nối Firestore: ' + (e.message || 'Không xác định');
+                }
+            }
+
+            document.getElementById('btn-toggle-ai-key-vis')?.addEventListener('click', () => {
+                const input = document.getElementById('owner-ai-api-key');
+                const btn = document.getElementById('btn-toggle-ai-key-vis');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    btn.textContent = 'Ẩn';
+                } else {
+                    input.type = 'password';
+                    btn.textContent = 'Hiện';
+                }
+            });
+
+            document.getElementById('btn-save-ai-config')?.addEventListener('click', async () => {
+                const keyInput = document.getElementById('owner-ai-api-key');
+                const apiKey = keyInput?.value?.trim();
+
+                if (!apiKey) {
+                    Swal.fire({ icon: 'warning', title: 'Thiếu thông tin', text: 'Vui lòng nhập API Key trước khi lưu.' });
+                    return;
+                }
+
+                const btn = document.getElementById('btn-save-ai-config');
+                const oldText = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<span>Đang lưu...</span>';
+
+                try {
+                    const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+                    await setDoc(
+                        doc(window.firebaseFirestore, 'system_config', 'ai_config'),
+                        {
+                            geminiApiKey: apiKey,
+                            updatedAt: serverTimestamp(),
+                            updatedBy: currentUserData?.ndid || currentUserData?.displayName || 'Owner'
+                        },
+                        { merge: true }
+                    );
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã lưu thành công!',
+                        text: 'API Key AI đã được cập nhật lên Firestore. Toàn hệ thống sẽ dùng key mới này ngay lập tức.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    loadOwnerAIConfig();
+                } catch (e) {
+                    console.error('Lỗi lưu AI key:', e);
+                    Swal.fire({ icon: 'error', title: 'Lỗi', text: e.message || 'Không thể lưu cấu hình.' });
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = oldText;
+                }
+            });
+
+            document.getElementById('btn-test-ai-key')?.addEventListener('click', async () => {
+                const keyInput = document.getElementById('owner-ai-api-key');
+                const apiKey = keyInput?.value?.trim();
+
+                if (!apiKey) {
+                    Swal.fire({ icon: 'warning', title: 'Thiếu key', text: 'Vui lòng nhập API Key để kiểm tra.' });
+                    return;
+                }
+
+                const btn = document.getElementById('btn-test-ai-key');
+                const oldText = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<span>Đang kiểm tra...</span>';
+
+                try {
+                    const testUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+                    const res = await fetch(testUrl);
+                    const data = await res.json();
+
+                    if (!res.ok) {
+                        throw new Error(data.error?.message || `HTTP ${res.status}`);
+                    }
+
+                    const modelCount = data.models ? data.models.length : 0;
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Kết nối thành công!',
+                        text: `API Key hợp lệ! Đã nhận diện được ${modelCount} models từ Google Gemini API.`
+                    });
+                } catch (e) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kết nối thất bại',
+                        text: 'Lỗi kiểm tra API key: ' + (e.message || 'Không xác định')
+                    });
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = oldText;
+                }
+            });
 
             // Logout handlers
             btnLogout.addEventListener('click', async () => {

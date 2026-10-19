@@ -13,7 +13,7 @@ if (window.location.hostname === '127.0.0.1') {
 
 const EDU_CONFIG = {
     // Default config values with fallback for direct web/Firebase Hosting deployment
-    geminiApiKey: "AIzaSyCKqYRA44WIka-dTOwH234LOrcXSUQd04A",
+    geminiApiKey: "",
     firebaseApiKey: "AIzaSyC6h0Uqg34PiT0p9l_cQOT7p7pt6kVHCHk",
     firebaseAuthDomain: "ndlabs-0.firebaseapp.com",
     firebaseDatabaseURL: "https://ndlabs-0-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -147,6 +147,35 @@ async function getEduKeys() {
 window.getEduKeys = getEduKeys;
 
 window.getGeminiApiKey = async () => {
+    if (_cachedKeys.gemini) return _cachedKeys.gemini;
+
+    // Tầng 1: Lấy key từ Firestore system_config/ai_config
+    try {
+        let db = window.firebaseFirestore;
+        if (!db) {
+            for (let i = 0; i < 30 && !window.firebaseFirestore; i++) {
+                await new Promise(r => setTimeout(r, 100));
+            }
+            db = window.firebaseFirestore;
+        }
+        if (db) {
+            const { doc, getDoc } = await import(
+                'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'
+            );
+            const snap = await getDoc(doc(db, 'system_config', 'ai_config'));
+            if (snap.exists()) {
+                const data = snap.data();
+                if (data.geminiApiKey && data.geminiApiKey.trim()) {
+                    _cachedKeys.gemini = data.geminiApiKey.trim();
+                    return _cachedKeys.gemini;
+                }
+            }
+        }
+    } catch (e) {
+        console.warn('[Config] Lỗi lấy AI key từ Firestore:', e);
+    }
+
+    // Tầng 2: Fallback env.json / .env (local dev)
     const keys = await getEduKeys();
     return keys.gemini;
 };

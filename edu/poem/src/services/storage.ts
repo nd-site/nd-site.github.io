@@ -740,7 +740,7 @@ export function getGeminiKey(): string {
 
   if (import.meta.env.VITE_GEMINI_API_KEY) return import.meta.env.VITE_GEMINI_API_KEY;
 
-  return "AIzaSyCKqYRA44WIka-dTOwH234LOrcXSUQd04A";
+  return "";
 }
 
 export function setGeminiKey(key: string): void {
